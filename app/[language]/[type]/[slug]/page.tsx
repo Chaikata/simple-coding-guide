@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import CodeBlock from "@/components/CodeBlock";
 import { addInternalLinks } from "@/lib/internalLinks";
+import Script from "next/script";
 
 type ContentBlock =
   | string
@@ -27,6 +28,7 @@ function formatLabel(value: string) {
       const lower = word.toLowerCase();
       if (lower === "javascript") return "JavaScript";
       if (lower === "typescript") return "TypeScript";
+      if (lower === "python") return "Python";
       if (lower === "sql") return "SQL";
       if (lower === "api") return "API";
       return word.charAt(0).toUpperCase() + word.slice(1);
@@ -45,13 +47,13 @@ export async function generateMetadata({
 
   if (!article) {
     return {
-      title: "Article Not Found | Simple Coding Guide",
+      title: "Article Not Found | Dev Nest Guide",
       description: "The requested article could not be found.",
     };
   }
 
   return {
-    title: `${article.title} | Simple Coding Guide`,
+    title: `${article.title} | Dev Nest Guide`,
     description: article.description,
   };
 }
@@ -71,8 +73,42 @@ export default async function ArticlePage({ params }: PageProps) {
     .filter((a) => a.language === article.language && a.slug !== article.slug)
     .slice(0, 4);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    author: {
+      "@type": "Organization",
+      name: "Dev Nest Guide",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Dev Nest Guide",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://devnestguide.com/${article.language}/${article.type}/${article.slug}`,
+    },
+    url: `https://devnestguide.com/${article.language}/${article.type}/${article.slug}`,
+    articleSection: formatLabel(article.type),
+    keywords: [
+      formatLabel(article.language),
+      formatLabel(article.type),
+      article.title,
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-black px-10 py-10 text-white">
+      <Script
+        id="article-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+      >
+        {JSON.stringify(articleSchema)}
+      </Script>
+
       <div className="mx-auto max-w-3xl">
         <nav className="mb-4 text-sm text-gray-400">
           <Link href="/" className="hover:text-white">
@@ -105,7 +141,7 @@ export default async function ArticlePage({ params }: PageProps) {
                   key={index}
                   className="leading-8 text-gray-200"
                   dangerouslySetInnerHTML={{
-                    __html: addInternalLinks(block),
+                    __html: addInternalLinks(block, article.slug, article.language),
                   }}
                 />
               );
@@ -130,7 +166,11 @@ export default async function ArticlePage({ params }: PageProps) {
                 key={index}
                 className="leading-8 text-gray-200"
                 dangerouslySetInnerHTML={{
-                  __html: addInternalLinks(block.value),
+                  __html: addInternalLinks(
+                    block.value,
+                    article.slug,
+                    article.language
+                  ),
                 }}
               />
             );
