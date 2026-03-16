@@ -1,0 +1,9 @@
+# What is a JavaScript Callback?
+
+A JavaScript callback is a function that you pass as an argument to another function, and it is executed after some kind of event or operation happens. Callbacks allow you to run code asynchronously or to handle tasks after a certain action is completed.
+
+In JavaScript, functions are treated as first-class objects, which means you can pass them around just like any other data. When you pass a function as an argument to another function, that function is called a callback. The receiving function can then call the callback function when it is ready.
+
+For example, if you want to perform an action after some data is loaded from the internet, you can use a callback to execute your code once the loading is finished. This helps in managing asynchronous behavior where you do not want to stop the whole program while waiting for something to complete.
+
+Using callbacks helps keep your code organized and enables you to handle tasks such as waiting for user input, reading files, or working with timers without freezing the program. Understanding callbacks is an important step in learning JavaScript and writing efficient, responsive applications.
