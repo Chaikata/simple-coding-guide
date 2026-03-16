@@ -3,7 +3,7 @@ name: Publish Articles
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 13 * * *"
+  - cron: "0 */6 * * *"
 
 permissions:
   contents: write
@@ -37,6 +37,9 @@ jobs:
 
           git add data/articles.ts generatedArticles.json
 
-          git diff --cached --quiet || git commit -m "Auto-generated articles"
-
-          git push
+          if git diff --cached --quiet; then
+            echo "No new articles generated"
+          else
+            git commit -m "Auto-generated articles"
+            git push
+          fi
