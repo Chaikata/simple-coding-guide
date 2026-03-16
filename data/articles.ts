@@ -1396,5 +1396,245 @@ export const articles: Article[] = [
         "value": "To fix null value errors, always use IS NULL or IS NOT NULL when checking for nulls. Also, use functions like COALESCE or IFNULL to handle null values in calculations or when selecting columns. These functions let you replace null values with a default value, preventing errors during query execution."
       }
     ]
+  },
+  {
+    "slug": "understanding-javascript-loops-for-beginners",
+    "title": "Understanding JavaScript Loops for Beginners",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using loops in JavaScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Loops are a fundamental concept in programming that help you run the same block of code multiple times without rewriting it. In JavaScript, loops are especially useful when you want to repeat an action for each item in a list, or when you want to perform a task a specific number of times."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common type of loop in JavaScript is the 'for' loop. It has three parts: the initialization, the condition, and the increment/decrement. The loop starts by initializing a variable, then checks if the condition is true before running the code inside the loop. After each run, the increment or decrement updates the variable. This process repeats until the condition becomes false."
+      },
+      {
+        "type": "code",
+        "value": "for (let i = 0; i < 5; i++) {\n  console.log('This is loop number ' + i);\n}\n\n// This code will print messages from loop number 0 to loop number 4."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the loop starts with i equal to 0. As long as i is less than 5, it prints a message and then increases i by 1. When i reaches 5, the condition i < 5 is no longer true, and the loop stops. Understanding loops like this will help you automate repetitive tasks easily in your programs."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-unexpected-token-errors-in-javascript",
+    "title": "How to Fix Unexpected Token Errors in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what unexpected token errors mean in JavaScript, why they occur, and how to fix them with easy examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you write JavaScript code, you might come across an error message that says, \"Unexpected token\". This error means that the JavaScript engine found a character or symbol it wasn't expecting while reading your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "An \"Unexpected token\" error happens when there is a mistake in the syntax of your code, such as a missing bracket, an extra comma, or a wrong keyword. The JavaScript engine expects your code to follow certain rules, and when it finds something that breaks those rules, it stops and throws this error."
+      },
+      {
+        "type": "code",
+        "value": "function greet() {\n  console.log('Hello World');\n // Missing closing bracket here\n\n// This will cause: SyntaxError: Unexpected token"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the function is missing a closing curly brace. To fix the error, add the missing bracket so that the JavaScript engine can correctly parse the function."
+      },
+      {
+        "type": "code",
+        "value": "function greet() {\n  console.log('Hello World');\n}\n\n// Now the function is correct and will work without errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "Other common causes include using extra commas, forgetting to close strings with quotes, or using invalid characters. Always check your syntax carefully and consider using code editors that highlight errors to catch these problems early."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, \"Unexpected token\" errors mean there is a syntax mistake in your code. Look for missing brackets, quotes, or extra characters and fix them to resolve the error. With practice, you'll get better at spotting and correcting these issues quickly!"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-set-up-a-typescript-project-in-visual-studio-code",
+    "title": "How to Set Up a TypeScript Project in Visual Studio Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to creating and running a TypeScript project using Visual Studio Code.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a popular programming language that builds on JavaScript by adding type safety and modern features. Visual Studio Code (VS Code) is a widely used code editor that provides great support for TypeScript. This tutorial will guide you step-by-step to set up a TypeScript project in VS Code."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you need to have Node.js installed on your computer because TypeScript runs on Node's ecosystem. You can download it from nodejs.org. Once it's installed, open your terminal or command prompt to install TypeScript globally by running the command `npm install -g typescript`. This makes the TypeScript compiler (tsc) available anywhere on your system."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, create a new folder for your project and open it in VS Code. Initialize a new npm project by running `npm init -y` in the terminal inside your project folder. This creates a package.json file which manages your project dependencies."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, install TypeScript locally in your project with the following command: `npm install typescript --save-dev`. It’s recommended to have a local version to avoid compatibility issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "You need a TypeScript configuration file (tsconfig.json) to specify how TypeScript compiles your code. Run `npx tsc --init` in the terminal. This command generates a tsconfig.json file with many options. The default settings work fine for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s create a simple TypeScript file. Create a file named `index.ts` in the project folder and add the following code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet(\"World\"));"
+      },
+      {
+        "type": "paragraph",
+        "value": "To compile TypeScript to JavaScript, run the command `npx tsc` in the terminal. This generates an `index.js` file which you can run with `node index.js` to see the output."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common error beginners face is the \"Cannot find module\" or \"file not found\" error. This usually means the TypeScript compiler or Node.js cannot find your file or module. Make sure your terminal is inside the project directory, your file names are correct, and your tsconfig.json paths are set properly."
+      },
+      {
+        "type": "paragraph",
+        "value": "You are now ready to write and compile TypeScript code efficiently in Visual Studio Code. The editor also provides useful features like IntelliSense (code completion) and inline error highlighting to assist your coding journey."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-typescript-type-compatibility-errors",
+    "title": "Resolving TypeScript Type Compatibility Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding and fixing TypeScript type compatibility errors.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript helps catch errors at compile time by checking if types match throughout your code. Sometimes, you might get \"type compatibility\" errors which mean TypeScript expected one type but found another that doesn't match exactly. Understanding what these errors mean and how to fix them is important for writing bug-free programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common cause of type compatibility errors is when you try to assign a value of one type to a variable or function parameter of another type, and TypeScript sees them as incompatible. TypeScript uses a structural typing system, meaning it compares the shape of the objects. For example, if an object is missing required properties or has extra properties that are not allowed, it will complain."
+      },
+      {
+        "type": "code",
+        "value": "interface Person {\n  name: string;\n  age: number;\n}\n\nlet person: Person = { name: 'Alice', age: 30 };\n\n// This will cause a type compatibility error because 'height' is not expected\nlet unknownPerson: Person = { name: 'Bob', age: 25, height: 180 };"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, TypeScript throws an error because the object literal with 'height' has an extra property that does not exist in the Person interface. To fix this, you can either remove the extra property or create a new interface/type that includes it. Alternatively, assigning the object to a variable first before the type annotation avoids the extra property check."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-variables-and-data-types-in-python",
+    "title": "Understanding Variables and Data Types in Python",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of variables and data types in Python with clear explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start coding in Python, one of the first things you'll need to learn about is variables. Variables are like containers that store information for your program to use later. Think of a variable as a label attached to a value."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, variables can hold different types of data, such as numbers, text, or more complex things like lists. The type of data a variable holds is called a data type. Some common data types are integers (whole numbers), floats (decimal numbers), strings (text), and booleans (True or False). Python automatically figures out the type based on the value you assign."
+      },
+      {
+        "type": "code",
+        "value": "# Example of variables with different data types\nage = 25           # integer\nprice = 19.99      # float\nname = \"Alice\"     # string\nis_student = True  # boolean\n\nprint(age)         # outputs: 25\nprint(price)       # outputs: 19.99\nprint(name)        # outputs: Alice\nprint(is_student)  # outputs: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you ever get an error related to variables, such as a NameError, it usually means you tried to use a variable that you haven't set yet. For example, if you write `print(x)` but never assigned a value to `x`, Python will complain. To fix this, make sure to assign a value to your variable before using it."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, variables are labels for storing data in your Python programs, and data types tell you what kind of information is stored. Understanding how to use variables and their different data types is a fundamental skill that will help you as you continue to learn programming."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-nameerror-when-using-variables-in-python",
+    "title": "Resolving NameError When Using Variables in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what a NameError is in Python, why it happens, and how to fix it when using variables.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're starting to code in Python, you might encounter an error called \"NameError.\" This error usually happens when you try to use a variable that Python doesn't recognize. Understanding this error is important because variables are the basic way to store and use information in your programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "A NameError occurs if you use a variable name before defining it or if you misspell the variable name. Python keeps track of variables you have created, and if it can't find the name you typed, it raises a NameError to let you know something is wrong. This helps you catch mistakes early and fix your code so it runs correctly."
+      },
+      {
+        "type": "code",
+        "value": "print(message)\n\nmessage = \"Hello, world!\""
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, Python gives a NameError because \"message\" is used before it is created. To fix this, you need to define the variable first and then use it. For example, write the variable assignment before the print statement. This way, Python knows what \"message\" means and can print its value. Always remember to declare and assign variables before you use them."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-data-types-for-beginners",
+    "title": "Understanding SQL Data Types for Beginners",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using SQL data types effectively.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start working with databases, one of the most important things to learn is SQL data types. Data types define the kind of data that can be stored in each column of a database table, such as numbers, text, or dates. Choosing the right data type helps you store data efficiently and avoid errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common SQL data types include INT for integers, VARCHAR for variable-length text, DATE for storing dates, and BOOLEAN for true/false values. Each data type may have some constraints — for example, VARCHAR requires you to specify a maximum length. Using the wrong data type or saving incorrect data can cause errors in queries or even data loss."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n  id INT PRIMARY KEY,\n  username VARCHAR(50) NOT NULL,\n  email VARCHAR(100),\n  signup_date DATE,\n  is_active BOOLEAN DEFAULT TRUE\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding SQL data types allows you to design better tables and prevent common problems like storing text in numeric fields or running out of space for text columns. Always check what kind of data you expect to store and choose the appropriate data type before creating your table."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-resolving-sql-primary-key-violations",
+    "title": "Understanding and Resolving SQL Primary Key Violations",
+    "language": "sql",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding SQL primary key violations, why they occur, and how to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, you often use primary keys to uniquely identify each record in a table. A primary key ensures that no two rows have the same value for that key, which helps keep data organized and reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "A primary key violation happens when you try to insert or update a row in a database table with a value that already exists in the primary key column. This means you're trying to create duplicate keys, which is not allowed because it breaks the uniqueness rule. This error is common when inserting data without checking current values or when multiple sources generate conflicting keys."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n    user_id INT PRIMARY KEY,\n    username VARCHAR(50)\n);\n\n-- This is valid\nINSERT INTO users (user_id, username) VALUES (1, 'Alice');\n\n-- This will cause a primary key violation because user_id 1 already exists\nINSERT INTO users (user_id, username) VALUES (1, 'Bob');"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix a primary key violation, you can ensure that inserted values are unique. Use tools like auto-increment columns or sequences to automate unique key generation. If manually inserting data, check existing keys before adding new ones. Handling this properly prevents errors and keeps your database consistent."
+      }
+    ]
   }
 ];
