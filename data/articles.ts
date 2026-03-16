@@ -1636,5 +1636,509 @@ export const articles: Article[] = [
         "value": "To fix a primary key violation, you can ensure that inserted values are unique. Use tools like auto-increment columns or sequences to automate unique key generation. If manually inserting data, check existing keys before adding new ones. Handling this properly prevents errors and keeps your database consistent."
       }
     ]
+  },
+  {
+    "slug": "understanding-javascript-loops-with-simple-examples",
+    "title": "Understanding JavaScript Loops with Simple Examples",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding loops in JavaScript with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Loops are a fundamental concept in programming that allow you to repeat a block of code multiple times. In JavaScript, loops help automate repetitive tasks so you don't have to write the same code over and over. This tutorial will introduce you to the most common types of loops and explain how they work with simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common loops in JavaScript are the for loop, while loop, and do...while loop. The for loop repeats code a specific number of times, the while loop continues as long as a condition is true, and the do...while loop is similar but runs the code at least once before checking the condition."
+      },
+      {
+        "type": "code",
+        "value": "for (let i = 0; i < 5; i++) {\n  console.log('The number is ' + i);\n}\n\n// This will print numbers from 0 to 4 in the console."
+      },
+      {
+        "type": "paragraph",
+        "value": "Loops are very useful for tasks like processing items in an array or running code until something changes. If you make a mistake with your loop conditions, you might create an 'infinite loop' which keeps running forever and can crash your browser or program. For example, if you forget to increase `i` in a for loop, the loop condition might always be true. To fix this, ensure your loop has a clear exit condition and update the variables controlling the loop inside the loop."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, loops let you repeat code efficiently. Start with simple for loops and experiment by changing the conditions and the code inside the loop. Understanding loops well will make your programming easier and more powerful."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-resolving-undefined-is-not-a-function-error",
+    "title": "Understanding and Resolving 'undefined is not a function' Error in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding why the 'undefined is not a function' error occurs and how to fix it in JavaScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start programming with JavaScript, one common error you might encounter is 'undefined is not a function.' This error can be confusing for beginners, but it’s important to understand what it means and how to fix it so your code runs smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error means that you are trying to call something as a function, but that something is actually 'undefined.' In JavaScript, a function is a block of code you can execute by using parentheses, like functionName(). If the variable you are calling does not point to a function—perhaps because it wasn’t declared, misspelled, or hasn’t been assigned properly—JavaScript throws this error because it can’t find a function to run."
+      },
+      {
+        "type": "code",
+        "value": "let sayHello;\nsayHello(); // Throws: undefined is not a function\n\n// Why? Because sayHello is declared but not assigned any function value."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, make sure the variable you want to call as a function is properly assigned to a function first. Double-check the spelling of your function names and confirm that the function exists before you call it. Here’s an example of fixing the previous code:"
+      },
+      {
+        "type": "code",
+        "value": "let sayHello = function() {\n  console.log('Hello!');\n};\nsayHello(); // Works perfectly and prints 'Hello!'"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, 'undefined is not a function' happens when JavaScript tries to execute something as a function but finds 'undefined' instead. Always assign a function to your variables before calling them, and check for typos or missing assignments to avoid this error."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-basic-typescript-types-and-variables",
+    "title": "Understanding Basic TypeScript Types and Variables",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn the fundamentals of TypeScript types and how to declare variables with them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a strongly-typed superset of JavaScript that helps you catch errors early by using types. Understanding basic types and how to declare variables with them is the first step in writing robust TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "In TypeScript, you can declare variables with types like `number`, `string`, and `boolean`. Declaring a type means telling TypeScript what kind of value a variable should hold. This helps prevent bugs by catching mistakes during development. For example, if you say a variable is a number, you can't accidentally assign a string to it."
+      },
+      {
+        "type": "code",
+        "value": "let age: number = 25;\nlet name: string = \"Alice\";\nlet isStudent: boolean = true;\n\n// This line will cause an error:\n// age = \"twenty-five\"; // Error: Type 'string' is not assignable to type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, `age` is a number, `name` is a string, and `isStudent` is a boolean. If you try to assign a value of the wrong type, TypeScript will give you an error. This error means that the value you are trying to assign does not match the type you declared. To fix it, make sure you assign a value that matches the variable's type."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-typescript-type-undefined-is-not-assignable-to-type-errors",
+    "title": "Resolving TypeScript 'undefined' is not assignable to type Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding and fixing the TypeScript error 'undefined is not assignable to type'.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When learning TypeScript, you may encounter the error message: \"Type 'undefined' is not assignable to type ...\". This error can be confusing at first, but it occurs because TypeScript's strict typing system is preventing you from accidentally using a value that might be undefined where a definite value is expected."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error often happens when you declare a variable or function parameter with a specific type, but TypeScript detects that the value could potentially be 'undefined'. For example, if a function expects a string but you pass a variable that might be undefined, TypeScript will warn you to handle this case explicitly. The error helps catch bugs early by forcing you to think about and handle the undefined state."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log('Hello, ' + name.toUpperCase());\n}\n\nlet userName: string | undefined = undefined;\n\ngreet(userName); // Error: Type 'undefined' is not assignable to type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you have several options. You can provide a default value, check if the variable is undefined before using it, or update the type to explicitly allow undefined. Here's how you could fix the example above by adding a check before calling the 'greet' function:"
+      },
+      {
+        "type": "code",
+        "value": "if (userName !== undefined) {\n  greet(userName); // No error now\n} else {\n  console.log('No user name provided');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding that this error means TypeScript wants you to explicitly handle the 'undefined' case, you can write safer and more predictable code. Always consider when a value might be undefined, and handle it accordingly by checks, default values, or updating types."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-install-python-and-set-up-your-first-project",
+    "title": "How to Install Python and Set Up Your First Project",
+    "language": "python",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to installing Python and creating your first Python project.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a popular programming language that is easy to learn and widely used in many areas such as web development, data science, and automation. This tutorial will guide you through installing Python on your computer and setting up your first simple Python project."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you need to install Python. Visit the official Python website at python.org and download the latest version for your operating system (Windows, macOS, or Linux). During installation, make sure to check the option that says 'Add Python to PATH'—this makes it easier to run Python commands from your terminal or command prompt."
+      },
+      {
+        "type": "paragraph",
+        "value": "After installing Python, you can verify it is set up correctly by opening your terminal or command prompt and typing: python --version. If you see the Python version number, it means the installation is successful. Next, let's create a folder for your project and write a simple program."
+      },
+      {
+        "type": "code",
+        "value": "mkdir my_python_project\ncd my_python_project\n\n# Create a new file called main.py with this content:\nprint('Hello, Python world!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Run your program by typing python main.py in the terminal while inside your project folder. You should see the message 'Hello, Python world!' printed. If you get an error like 'python is not recognized,' it means Python wasn't added to your PATH during installation. Reinstall Python and make sure to check the box to add it to PATH, or you can manually add the Python installation directory to your system's PATH environment variable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now that Python is installed and you have run your first script, you have successfully set up your Python environment. You can now explore writing more complex programs and learning Python concepts step-by-step!"
+      }
+    ]
+  },
+  {
+    "slug": "solving-indentationerror-in-python-step-by-step",
+    "title": "Solving IndentationError in Python Step by Step",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to understand and fix the common IndentationError in Python with clear explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to Python, you might have encountered an error called IndentationError. This is one of the most common mistakes beginners face since Python uses indentation (spaces or tabs) to structure the code instead of brackets or braces."
+      },
+      {
+        "type": "paragraph",
+        "value": "An IndentationError happens when the spaces or tabs used to indent your code are not consistent or are used incorrectly. Python expects blocks of code that belong together to be indented at the same level. For example, the code inside a function or a loop must be indented more than the line that starts it."
+      },
+      {
+        "type": "code",
+        "value": "def greet(name):\nprint('Hello, ' + name)\n\n# This will cause an IndentationError because the print statement is not indented."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, make sure to indent the block of code correctly using spaces or tabs. The standard in Python is to use 4 spaces per indentation level. Here's the corrected version of the above code:"
+      },
+      {
+        "type": "code",
+        "value": "def greet(name):\n    print('Hello, ' + name)\n\n# Now the print statement is indented properly, so the function works fine."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember these tips to avoid IndentationErrors:\n1. Use either spaces or tabs consistently (PEP 8 recommends spaces).\n2. Indent code blocks that belong to a function, loop, condition, or class.\n3. Use an editor that shows invisible characters or helps with indentation.\nBy following these, you'll write cleaner Python code and avoid indentation problems."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-data-types-for-new-programmers",
+    "title": "Understanding SQL Data Types for New Programmers",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding SQL data types and how to use them effectively.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to SQL, one of the first things you'll need to learn about is data types. Data types define the kind of data that can be stored in each column of a database table. Understanding them is essential because they help you manage information correctly and avoid errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL has several common data types, including integers (whole numbers), decimals/floats (numbers with decimals), text types (like VARCHAR or TEXT for strings), dates, and more. Choosing the right data type ensures your database is efficient and accurate. For example, if you want to store a person's age, you should use an integer type, not a text type."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Users (\n  UserID INT PRIMARY KEY,\n  Username VARCHAR(50),\n  Age INT,\n  SignupDate DATE\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we create a table called Users with four columns: UserID as an integer that uniquely identifies each user, Username as a string up to 50 characters, Age as an integer, and SignupDate as a date. Sometimes, if you try to insert data with the wrong type, SQL may give an error like 'Incorrect integer value' or 'Data too long for column.' This means the data you provided doesn't match the column's data type. To fix this, make sure the data you insert matches the expected type, like using numbers for integer columns and shorter text for VARCHAR."
+      }
+    ]
+  },
+  {
+    "slug": "common-sql-server-connection-errors-and-how-to-solve-them",
+    "title": "Common SQL Server Connection Errors and How to Solve Them",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn about common SQL Server connection errors, understand their causes, and discover simple solutions to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to a SQL Server database is a fundamental skill for working with data. However, beginners often face connection errors that can be confusing. This article explains some common SQL Server connection errors, why they occur, and how to resolve them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One frequent error is 'Login failed for user'. This means SQL Server rejected the provided username or password. It usually happens if you have mistyped credentials, the user doesn't exist, or SQL Server authentication mode is incorrect. To fix this, check the username and password, ensure the SQL Server is set to allow SQL Server authentication (not just Windows authentication), and confirm the user has access rights."
+      },
+      {
+        "type": "code",
+        "value": "Server=myServerName;Database=myDataBase;User Id=myUsername;Password=myPassword;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common issue is 'A network-related or instance-specific error occurred while establishing a connection'. This means your client cannot reach the SQL Server instance, often due to incorrect server name, instance name, or server not running. To solve this, verify the server name and instance, make sure SQL Server is running, and check if the SQL Server Browser service is enabled for named instances."
+      },
+      {
+        "type": "paragraph",
+        "value": "You might also encounter the error 'Timeout expired'. This happens when the client cannot connect within the set time, usually because of network delays or server overload. To fix this, try increasing the connection timeout in your connection string or optimize the server and network performance."
+      },
+      {
+        "type": "code",
+        "value": "Server=myServerName;Database=myDataBase;User Id=myUsername;Password=myPassword;Connection Timeout=30;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, connection errors in SQL Server are often caused by incorrect credentials, server accessibility issues, or timeout settings. By carefully checking your connection string, server configuration, and network settings, you can resolve most connection problems and start querying your database successfully."
+      }
+    ]
+  },
+  {
+    "slug": "beginner-guide-to-javascript-arrays-and-their-methods",
+    "title": "Beginner Guide to JavaScript Arrays and Their Methods",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of JavaScript arrays, how to create them, and use common array methods.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Arrays are fundamental data structures in JavaScript that allow you to store multiple values in a single variable. If you're new to programming, understanding arrays and how to work with them is essential. This guide will introduce you to arrays and some of their most useful methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create an array by using square brackets [] and placing values separated by commas inside. You can then access and manipulate these values using array methods like push, pop, shift, unshift, and more. These methods help you add, remove, or modify elements easily."
+      },
+      {
+        "type": "code",
+        "value": "const fruits = ['apple', 'banana', 'orange'];\n\n// Add a fruit to the end\nfruits.push('grape'); // ['apple', 'banana', 'orange', 'grape']\n\n// Remove the last fruit\nconst lastFruit = fruits.pop(); // removes 'grape', fruits is now ['apple', 'banana', 'orange']\n\n// Add a fruit to the beginning\nfruits.unshift('mango'); // ['mango', 'apple', 'banana', 'orange']\n\n// Remove the first fruit\nconst firstFruit = fruits.shift(); // removes 'mango', fruits: ['apple', 'banana', 'orange']"
+      },
+      {
+        "type": "paragraph",
+        "value": "Arrays help keep related data organized and their methods simplify common tasks. Remember to check the length of your array using the .length property, which tells you how many elements it has. If you get errors like 'fruits.push is not a function', it usually means your variable is not an array. To fix this, make sure your variable is declared with square brackets [] or with Array constructor. With practice, arrays and their methods will become easy tools in your JavaScript toolkit."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-cannot-read-property-of-undefined-in-javascript",
+    "title": "Resolving 'Cannot Read Property of Undefined' in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what 'Cannot read property of undefined' error means in JavaScript, why it happens, and how to fix it.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are learning JavaScript, you might have encountered the error message 'Cannot read property of undefined'. This error can be confusing at first, but understanding it is an important step in writing better JavaScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error means that your code is trying to access a property (like a variable inside an object) from something that is currently 'undefined'. Undefined means that the variable or object you are trying to use hasn't been assigned a value yet, or does not exist at the time you try to use it. For example, if you try to get the 'name' property from an object that is actually undefined, JavaScript will throw this error."
+      },
+      {
+        "type": "code",
+        "value": "let person;\nconsole.log(person.name); // Error: Cannot read property 'name' of undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, you can make sure the object exists before trying to access its properties. One way is by checking if the object is not undefined. Here's how you can safely access the property:"
+      },
+      {
+        "type": "code",
+        "value": "let person;\nif (person !== undefined) {\n  console.log(person.name);\n} else {\n  console.log('Person object is undefined');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common solution is using optional chaining (?.) which is a newer feature in JavaScript. It automatically checks if the object is defined before accessing its property and prevents this error."
+      },
+      {
+        "type": "code",
+        "value": "let person;\nconsole.log(person?.name); // Output: undefined, but no error"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'Cannot read property of undefined' error happens when you try to access a property on something that hasn't been defined yet. To fix it, ensure the object exists before accessing its property or use optional chaining to safely access properties."
+      }
+    ]
+  },
+  {
+    "slug": "basic-types-in-typescript-explained-with-examples",
+    "title": "Basic Types in TypeScript Explained with Examples",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn the fundamental data types in TypeScript with clear examples for beginners.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a typed superset of JavaScript that adds static types. Understanding the basic types is essential for writing safe and reliable TypeScript code. These types help you catch errors early and provide better autocompletion in editors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are the most common basic types you will use in TypeScript: number, string, boolean, array, tuple, enum, any, void, null, and undefined. Let's go through some of them with simple examples."
+      },
+      {
+        "type": "code",
+        "value": "let isDone: boolean = false;\nlet age: number = 25;\nlet userName: string = 'Alice';\nlet hobbies: string[] = ['Reading', 'Gaming'];\n\n// Tuple allows you to express an array with fixed number of elements of specific types\nlet address: [string, number] = ['Main Street', 123];\n\n// Enum helps to define a set of named constants\nenum Color {\n  Red,\n  Green,\n  Blue\n}\nlet favoriteColor: Color = Color.Green;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you assign a value of the wrong type, TypeScript will give you an error. For example, if you try to assign a number to a string variable, you'll see an error message. This happens because TypeScript expects the value to match the declared type. To fix it, make sure you assign the correct type as declared."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-typescript-property-does-not-exist-on-type-error",
+    "title": "Resolving TypeScript Property Does Not Exist on Type Error",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what causes the 'Property does not exist on type' error in TypeScript and how to fix it.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start using TypeScript, one common error you might encounter is the \"Property 'x' does not exist on type 'y'\" error. This happens when TypeScript expects an object to have certain properties based on a type or interface but finds that the property you're trying to access is not declared in that type."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error is TypeScript's way of helping you catch mistakes before your code runs. It means you might be trying to access a property that either doesn't exist on the object or you haven't told TypeScript that the object has that property. To fix it, you need to make sure the property is included in the type definition or interface, or use type assertions and other techniques to inform TypeScript that the property is valid."
+      },
+      {
+        "type": "code",
+        "value": "interface Person {\n  name: string;\n  age: number;\n}\n\nconst person: Person = { name: \"Alice\", age: 30 };\n\n// Incorrect: \"email\" is not declared inside Person interface\n// console.log(person.email); // Error: Property 'email' does not exist on type 'Person'\n\n// Fix 1: Add property to interface\ninterface Person {\n  name: string;\n  age: number;\n  email?: string; // optional property\n}\n\nconst personWithEmail: Person = { name: \"Bob\", age: 25, email: \"bob@example.com\" };\nconsole.log(personWithEmail.email); // Works fine\n\n// Fix 2: Use type assertion if you know the property exists\nconst personWithExtra = person as Person & { email: string };\nconsole.log(personWithExtra.email); // Be careful: only use if the property actually exists\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"Property does not exist on type\" error indicates TypeScript cannot verify the existence of a property on an object based on its type. You can fix this issue by updating your type definitions to include the property or by using type assertions carefully when you are sure the property exists. This helps ensure your code is safer and less prone to runtime errors."
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-python-programming",
+    "title": "Getting Started with Python Programming",
+    "language": "python",
+    "type": "tutorials",
+    "description": "A beginner-friendly introduction to Python programming with clear explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a popular programming language known for its simplicity and readability, making it a great choice for beginners. This tutorial will guide you through the basics of Python programming, helping you write your first Python code with ease."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started with Python, you first need to install it on your computer. You can download it from the official Python website: https://www.python.org/downloads/. After installation, you can write Python code using a simple text editor or an Integrated Development Environment (IDE) like VS Code or IDLE."
+      },
+      {
+        "type": "code",
+        "value": "print(\"Hello, world!\")\n\n# This line prints a welcoming message to the screen."
+      },
+      {
+        "type": "paragraph",
+        "value": "The code above uses the print() function to display text on the screen. When you run this code, it outputs 'Hello, world!'. This is often the first program written by beginners because it's simple but shows how to run Python code."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-indentationerror-in-python-code-easily",
+    "title": "Resolving IndentationError in Python Code Easily",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what IndentationError in Python means, why it occurs, and how to fix it with simple steps and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Indentation is very important in Python because it tells the interpreter which code belongs to which block, like inside loops, functions, or conditional statements. If the indentation is inconsistent or incorrect, Python will raise an IndentationError. This can be confusing for beginners, but it's easy to fix once you understand it."
+      },
+      {
+        "type": "paragraph",
+        "value": "An IndentationError occurs when your code has incorrect or inconsistent indentation. Indentation means the spaces or tabs at the beginning of a line. Python expects lines of code that belong together to be indented the same way. For example, all code inside a function or a loop must be indented equally. If there is a mismatch, Python stops running and shows an IndentationError."
+      },
+      {
+        "type": "code",
+        "value": "def greet():\nprint(\"Hello, World!\")\n\n# This will cause IndentationError because print needs to be indented\n\n# Correct indentation:\ndef greet():\n    print(\"Hello, World!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix IndentationError, make sure that all blocks of code are indented properly and consistently. Usually, one level of indentation equals 4 spaces. Avoid mixing tabs and spaces, as this also causes errors. Most code editors have settings to convert tabs to spaces automatically and to show indentation guides, which help avoid these errors."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-basic-sql-commands-select-insert-update-delete",
+    "title": "Understanding Basic SQL Commands: SELECT, INSERT, UPDATE, DELETE",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the fundamental SQL commands SELECT, INSERT, UPDATE, and DELETE to manage data in databases.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is the standard language used to manage and manipulate databases. Four of the most important commands you should know as a beginner are SELECT, INSERT, UPDATE, and DELETE. These commands help you view, add, change, and remove data in database tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "The SELECT command is used to fetch data from a database table. It lets you choose specific columns to view or filter records based on conditions."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees;\n-- This command selects all columns and rows from the employees table."
+      },
+      {
+        "type": "paragraph",
+        "value": "The INSERT command adds new rows of data into a table. You specify the table and the values for each column."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO employees (name, position, salary) VALUES ('Alice', 'Developer', 70000);\n-- Inserts a new employee named Alice into the employees table."
+      },
+      {
+        "type": "paragraph",
+        "value": "UPDATE modifies existing data in a table. You specify which rows to update with WHERE and the new values."
+      },
+      {
+        "type": "code",
+        "value": "UPDATE employees SET salary = 75000 WHERE name = 'Alice';\n-- Updates Alice's salary to 75000."
+      },
+      {
+        "type": "paragraph",
+        "value": "DELETE removes rows from a table. Similar to UPDATE, you use WHERE to specify which rows to delete. Omitting WHERE will delete all rows, which is usually a mistake."
+      },
+      {
+        "type": "code",
+        "value": "DELETE FROM employees WHERE name = 'Alice';\n-- Deletes the record of the employee named Alice."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors beginners might encounter include missing WHERE clauses in UPDATE or DELETE commands. Without WHERE, these commands affect all rows, which often is not what you want. Always double-check your WHERE conditions before running these commands to avoid unintentional data loss."
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, mastering SELECT, INSERT, UPDATE, and DELETE enables you to effectively interact with databases. Start practicing these commands with a sample database to become more comfortable with SQL."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-common-sql-connection-errors",
+    "title": "Resolving Common SQL Connection Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix common SQL connection errors with simple explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to a SQL database is a fundamental step before you can execute queries. However, beginners often face common connection errors that prevent successful communication with the database. This article explains these common errors, why they happen, and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One frequent error is the \"Login failed for user\" message. This error usually happens due to incorrect username or password. SQL Server checks your credentials and denies access if they don't match. To fix this, verify your login information or reset your password if necessary."
+      },
+      {
+        "type": "code",
+        "value": "-- Example of connecting to a SQL Server with login credentials\n-- Make sure to replace USERNAME and PASSWORD with your actual credentials\n-- and SERVER_NAME with your server's address\n\nUSE master;\nGO\n\n-- Test connection string\n-- If connection fails, check username/password\n\n-- Example connection string in SQL Server Management Studio:\n-- Server=SERVER_NAME; Database=master; User Id=USERNAME; Password=PASSWORD;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common issue is \"Cannot open database requested by the login.\" This means the user has connected successfully to the server, but the target database doesn't exist or the user lacks permission. You should check if the database name is correct and ensure the user has appropriate access rights."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you may see the error \"A network-related or instance-specific error occurred while establishing a connection to SQL Server.\" This usually happens if the SQL Server service is not running, the server name is incorrect, or firewall settings block the connection. Ensure the server is up and running, verify the server name or IP address, and check firewall rules on your machine."
+      },
+      {
+        "type": "paragraph",
+        "value": "For local connections, another error might be \"Named Pipes Provider: Could not open a connection to SQL Server.\" This suggests the SQL Server Browser service may be stopped or named pipes protocol is disabled. Starting the SQL Server Browser service or enabling named pipes in SQL Server Configuration Manager can resolve this."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these common SQL connection errors—what they mean, why they occur, and how to fix them—you can troubleshoot connection issues more effectively. Always double-check your credentials, server information, and service status to get your database connections working smoothly."
+      }
+    ]
   }
 ];
