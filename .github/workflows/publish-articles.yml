@@ -3,24 +3,19 @@ name: Publish Articles
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 13 * * *"
+  - cron: "0 */6 * * *"
 
 permissions:
   contents: write
-
-concurrency:
-  group: publish-articles-main
-  cancel-in-progress: true
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout latest main
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
 
       - name: Setup Node
@@ -61,4 +56,6 @@ jobs:
           fi
 
           git commit -m "Auto-generated articles"
-          git push origin main
+
+          git pull --rebase origin main
+          git push origin HEAD:main
