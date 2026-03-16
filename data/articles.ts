@@ -2376,5 +2376,285 @@ export const articles: Article[] = [
         "value": "To resolve these issues, first double-check your connection details. Ensure the SQL server is running and accessible on the network (try pinging the server). Verify that firewalls or antivirus software are not blocking communication. Confirm the user account has the proper permissions and that the database exists. By systematically checking these areas, you can usually fix SQL connection errors and get your application connected correctly."
       }
     ]
+  },
+  {
+    "slug": "writing-your-first-javascript-functions-step-by-step",
+    "title": "Writing Your First JavaScript Functions Step by Step",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to write and use simple JavaScript functions with clear explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript functions are blocks of code designed to perform a particular task. They are one of the fundamental building blocks of any JavaScript program. In this tutorial, we'll learn how to write your first JavaScript function step by step."
+      },
+      {
+        "type": "paragraph",
+        "value": "A function starts with the keyword 'function', followed by a name, a list of parameters inside parentheses, and a block of code inside curly braces. When you call a function, the code inside runs. Functions can optionally return a value back to where they were called."
+      },
+      {
+        "type": "code",
+        "value": "function greet() {\n  console.log('Hello, world!');\n}\ngreet();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, 'greet' is a function that prints 'Hello, world!' to the console when called by 'greet()'. If you see an error like \"greet is not defined\", it usually means you called the function before declaring it or misspelled the function name. Make sure your function is declared before you call it, and names match exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Functions can also accept parameters, which are inputs you provide to customize what the function does. Here's how to write a function that takes a name and greets that person:"
+      },
+      {
+        "type": "code",
+        "value": "function greetPerson(name) {\n  console.log('Hello, ' + name + '!');\n}\ngreetPerson('Alice');"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function greets whoever's name you provide. If you forget to pass an argument when calling this function, the output will be 'Hello, undefined!'. This happens because 'name' has no value. To fix this, always pass the expected arguments when calling functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Functions can also return values using the 'return' keyword. This means the function gives back a result that can be used elsewhere in your code."
+      },
+      {
+        "type": "code",
+        "value": "function add(a, b) {\n  return a + b;\n}\nconst sum = add(5, 3);\nconsole.log(sum); // Outputs: 8"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the 'add' function, two numbers are passed as parameters, added, and the result is returned. If you see an error like 'Unexpected token return', it means the 'return' keyword is used outside a function or misplaced. Always place 'return' inside function blocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding how to declare functions, pass parameters, and return values, you can start writing flexible and reusable code in JavaScript. Keep practicing by writing simple functions, and soon you'll be comfortable creating more complex programs."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-uncaught-typeerror-in-javascript",
+    "title": "How to Fix Uncaught TypeError in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what an Uncaught TypeError means in JavaScript, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are learning JavaScript, you may have encountered an error message like 'Uncaught TypeError'. This error stops your code from running and can be confusing for beginners. In this article, you will learn what this error means, why it happens, and how you can fix it easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "A TypeError usually happens when you try to use a value in a way that is not allowed by its type. For example, you might try to call a method on something that is not an object or try to access a property on undefined or null. JavaScript will throw an 'Uncaught TypeError' to let you know that it cannot perform the operation because the type is wrong."
+      },
+      {
+        "type": "code",
+        "value": "// Example causing an Uncaught TypeError\nlet person = null;\n\n// Trying to access a property of null\nconsole.log(person.name);\n\n// Fix: make sure person is not null before accessing 'name'\nif (person !== null) {\n  console.log(person.name);\n} else {\n  console.log('person is null, cannot access name.');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix an Uncaught TypeError, check where your code tries to use a value and make sure the value is what you expect it to be. Adding checks like 'if' statements or using optional chaining (?.) can help avoid errors when the value might be null or undefined. Understanding the error message and carefully checking your variables will help you write more reliable JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-typescript-for-absolute-beginners",
+    "title": "Getting Started with TypeScript for Absolute Beginners",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "A beginner-friendly introduction to TypeScript, explaining key concepts and showing simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a programming language that builds on JavaScript by adding types. It helps you write safer code by catching errors before you run your program. This tutorial is designed for absolute beginners who want to learn the basics of TypeScript quickly and clearly."
+      },
+      {
+        "type": "paragraph",
+        "value": "One important concept in TypeScript is type annotations. When you create variables, you can specify what kind of values they should hold, like numbers or strings. This makes your code easier to understand and can prevent many common bugs."
+      },
+      {
+        "type": "code",
+        "value": "let age: number = 25;\nlet name: string = \"Alice\";\n\n// This will cause an error:\nage = \"twenty-five\";  // Error: Type 'string' is not assignable to type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we declared a variable 'age' with the type 'number' and assigned it the value 25. If you try to assign a string like \"twenty-five\" to 'age', TypeScript will give an error. This error means you are trying to put a value of the wrong type into a variable. It happens because TypeScript expects 'age' to always be a number. To fix this error, make sure you only assign numbers to 'age', or change the variable's type if different kinds of values are needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using TypeScript gives you immediate feedback about potential mistakes in your code, which helps you catch bugs early. As you learn more, you will discover many other useful features, like interfaces and classes. For now, practicing simple type annotations is a great first step."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-undefined-is-not-a-function-error-in-typescript",
+    "title": "Resolving 'undefined is not a function' Error in TypeScript",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what causes the 'undefined is not a function' error in TypeScript and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're starting with TypeScript, encountering errors can be confusing. One common error you might see is \"undefined is not a function.\" This error means that your code is trying to call something as a function but that value is actually undefined."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error happens because TypeScript (and JavaScript) expect a function when you add parentheses after a variable or expression. If the variable is undefined instead of a function, calling it like a function causes this error. Common reasons include misspelled function names, trying to call a method on an object that doesn’t exist, or using a variable before it has been assigned a function."
+      },
+      {
+        "type": "code",
+        "value": "let myFunc: (() => void) | undefined;\n\nmyFunc(); // Error: undefined is not a function\n\n// Fix by assigning a function before calling\nmyFunc = () => {\n  console.log('Hello, world!');\n};\nmyFunc(); // Works fine"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, check if the function you want to call is correctly assigned and not undefined. Make sure to initialize your functions before calling them, and double-check your spelling or object structure. Adding type checks or using optional chaining (e.g., myFunc?.()) can also help prevent runtime crashes."
+      }
+    ]
+  },
+  {
+    "slug": "easy-python-loops-for-beginners",
+    "title": "Easy Python Loops for Beginners",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of loops in Python with easy examples and explanations.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Loops are a fundamental part of programming that allow you to repeat a block of code multiple times without writing it over and over. In Python, the two most common types of loops are 'for' loops and 'while' loops. They help you automate repetitive tasks efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "A 'for' loop is used when you want to iterate over a sequence of items, such as a list, a string, or a range of numbers. A simple example is printing numbers from 1 to 5. Here's how you can do it with a for loop:"
+      },
+      {
+        "type": "code",
+        "value": "for i in range(1, 6):\n    print(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, Python will print each number from 1 to 5 on a new line. The 'range(1, 6)' function generates numbers starting at 1 up to but not including 6. The variable 'i' takes each value in the range one by one."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another type of loop is the 'while' loop. It keeps running as long as a condition you specify remains True. For example, if you want to print numbers from 1 to 5 again, you can use a 'while' loop like this:"
+      },
+      {
+        "type": "code",
+        "value": "count = 1\nwhile count <= 5:\n    print(count)\n    count += 1"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the code inside the 'while' loop will run as long as the variable 'count' is less than or equal to 5. Don't forget to increase the value of 'count' inside the loop so the condition will eventually become False, or your program will keep running forever (an infinite loop)."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common error beginners face is forgetting to indent the code inside the loop. Python uses indentation to know which lines are inside the loop. Without proper indentation, you'll get an 'IndentationError'. For example:"
+      },
+      {
+        "type": "code",
+        "value": "for i in range(3):\nprint(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This will cause an IndentationError because 'print(i)' is not indented. To fix it, add an indentation (usually 4 spaces) like this:\nfor i in range(3):\n    print(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, loops in Python let you run a block of code multiple times easily. Use 'for' loops when you know how many times you want to iterate, like going through a list or a range of numbers. Use 'while' loops when you want to repeat something until a certain condition changes. Make sure to indent your code correctly and update any variables used in the loop conditions to avoid errors."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-typeerror-string-integer-python",
+    "title": "Resolving TypeError When Adding String and Integer in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Understanding and fixing the TypeError caused by adding strings and integers in Python.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're new to programming in Python, it's common to encounter errors related to combining different types of data. One such error is the TypeError that happens when you try to add a string and an integer together using the '+' operator."
+      },
+      {
+        "type": "paragraph",
+        "value": "This TypeError occurs because Python does not automatically convert between strings and integers. The '+' operator expects both sides to be of compatible types: either both strings (for concatenation) or both numbers (for addition). Trying to add a string and an integer confuses Python, which then raises an error."
+      },
+      {
+        "type": "code",
+        "value": "age = 25\nmessage = \"I am \"\n\n# This will raise TypeError\n# full_message = message + age\n\n# To fix this, convert the integer to a string\nfull_message = message + str(age)\nprint(full_message)  # Output: I am 25"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to explicitly convert the integer to a string using the str() function. This allows Python to concatenate both parts properly. Alternatively, you can convert the string to an integer if you want to perform arithmetic. Understanding and managing data types is an important step in learning Python."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-data-types",
+    "title": "Understanding SQL Data Types",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using SQL data types.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you work with SQL databases, you will often create tables to store data. Each column in a table must have a data type, which tells the database what kind of data that column will hold. Understanding SQL data types is essential for designing efficient databases and avoiding errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL data types can be broadly categorized into numeric types, character types, date and time types, and more. Numeric types store numbers, character types store text, and date/time types handle dates and times. Choosing the right data type helps keep your data consistent and your queries fast."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Employees (\n  EmployeeID INT,\n  FirstName VARCHAR(50),\n  LastName VARCHAR(50),\n  BirthDate DATE,\n  Salary DECIMAL(10, 2)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, EmployeeID uses INT for integers, FirstName and LastName use VARCHAR for variable-length strings, BirthDate uses DATE for storing dates, and Salary uses DECIMAL to store currency values with two decimal places. Using the correct data types helps prevent errors such as trying to store text in a numeric column."
+      }
+    ]
+  },
+  {
+    "slug": "common-causes-of-sql-connection-errors-and-solutions",
+    "title": "Common Causes of SQL Connection Errors and Solutions",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn about typical SQL connection errors, what causes them, and how to fix them with easy explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to an SQL database is a fundamental task when working with databases. However, beginners often encounter connection errors that can be confusing. This article explains some common SQL connection errors, why they happen, and how you can fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error is \"Login failed for user.\" This usually means that the username or password you provided is incorrect or the user does not have permission to access the database. Double-check your credentials and ensure the user has access rights."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM sys.database_principals\nWHERE name = 'your_username';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another frequent issue is the \"Server not found or not accessible\" error. This can happen if the server name is wrong, the SQL Server service is not running, or the firewall is blocking the connection. Make sure your server name is correct, start the SQL Server service if it is stopped, and check firewall settings."
+      },
+      {
+        "type": "paragraph",
+        "value": "Timeout errors happen when the server takes too long to respond. This could be due to network problems or a very busy server. Try increasing the connection timeout setting or troubleshoot network connectivity."
+      },
+      {
+        "type": "code",
+        "value": "sqlcmd -S ServerName -U username -P password -l 30\n-- The '-l 30' option sets the login timeout to 30 seconds"
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, \"Invalid connection string\" errors occur if your connection string has syntax problems or missing parameters. Always verify your connection string format according to the database you are using."
+      },
+      {
+        "type": "code",
+        "value": "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, when you face SQL connection errors, carefully check your credentials, server accessibility, network settings, and connection string format. By understanding these common issues and their solutions, you can quickly resolve connection problems and focus on working with your database."
+      }
+    ]
   }
 ];
