@@ -40,7 +40,7 @@ export default function HomePage() {
     <main className="min-h-screen bg-black px-10 py-10 text-white">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12">
-          <h1 className="mb-4 text-5xl font-bold">codeAtlas</h1>
+          <h1 className="mb-4 text-5xl font-bold">Dev Nest Guide</h1>
           <p className="max-w-3xl text-lg text-gray-400">
             Beginner-friendly coding tutorials and error explanations for
             JavaScript, TypeScript, Python, and SQL.

@@ -13,7 +13,7 @@ export default function Navbar() {
     <header className="border-b border-gray-800 bg-black">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-10 py-4">
         <Link href="/" className="text-xl font-bold text-white">
-          Simple Coding Guide
+          Dev Nest Guide
         </Link>
 
         <nav className="flex flex-wrap gap-5 text-sm text-gray-300">
