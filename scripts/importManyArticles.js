@@ -17,6 +17,36 @@ function getExistingArticles() {
   return eval(match[1]);
 }
 
+function normalizeContent(content) {
+  if (!Array.isArray(content)) return [];
+
+  return content.map((block) => {
+    if (typeof block === "string") {
+      return {
+        type: "paragraph",
+        value: block,
+      };
+    }
+
+    if (
+      block &&
+      typeof block === "object" &&
+      (block.type === "paragraph" || block.type === "code") &&
+      typeof block.value === "string"
+    ) {
+      return {
+        type: block.type,
+        value: block.value,
+      };
+    }
+
+    return {
+      type: "paragraph",
+      value: String(block),
+    };
+  });
+}
+
 function normalizeArticle(article) {
   return {
     slug: article.slug,
@@ -24,7 +54,7 @@ function normalizeArticle(article) {
     language: article.language,
     type: article.type,
     description: article.description,
-    content: Array.isArray(article.content) ? article.content : [],
+    content: normalizeContent(article.content),
   };
 }
 
@@ -46,13 +76,18 @@ function run() {
 
   const updatedArticles = [...existingArticles, ...newArticles];
 
-  const newFileContent = `export type Article = {
+  const newFileContent = `export type ContentBlock = {
+  type: "paragraph" | "code";
+  value: string;
+};
+
+export type Article = {
   slug: string;
   title: string;
   language: string;
   type: string;
   description: string;
-  content: string[];
+  content: ContentBlock[];
 };
 
 export const articles: Article[] = ${JSON.stringify(updatedArticles, null, 2)};

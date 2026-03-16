@@ -3,6 +3,13 @@ import { articles } from "@/data/articles";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
+type ContentBlock =
+  | string
+  | {
+      type: "paragraph" | "code";
+      value: string;
+    };
+
 type PageProps = {
   params: Promise<{
     language: string;
@@ -70,11 +77,32 @@ export default async function ArticlePage({ params }: PageProps) {
         <p className="text-gray-400 mb-8">{article.description}</p>
 
         <div className="space-y-6">
-          {article.content.map((paragraph, index) => (
-            <p key={index} className="text-gray-200 leading-8">
-              {paragraph}
-            </p>
-          ))}
+          {article.content.map((block: ContentBlock, index: number) => {
+            if (typeof block === "string") {
+              return (
+                <p key={index} className="text-gray-200 leading-8">
+                  {block}
+                </p>
+              );
+            }
+
+            if (block.type === "code") {
+              return (
+                <pre
+                  key={index}
+                  className="bg-zinc-900 border border-gray-700 rounded-xl p-4 overflow-x-auto text-sm"
+                >
+                  <code>{block.value}</code>
+                </pre>
+              );
+            }
+
+            return (
+              <p key={index} className="text-gray-200 leading-8">
+                {block.value}
+              </p>
+            );
+          })}
         </div>
 
         <div className="mt-16">

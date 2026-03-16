@@ -1,10 +1,15 @@
+export type ContentBlock = {
+  type: "paragraph" | "code";
+  value: string;
+};
+
 export type Article = {
   slug: string;
   title: string;
   language: string;
   type: string;
   description: string;
-  content: string[];
+  content: ContentBlock[];
 };
 
 export const articles: Article[] = [
@@ -2208,6 +2213,986 @@ export const articles: Article[] = [
       "CREATE INDEX idx_customer ON Orders(CustomerID);",
       "After creating the index, the query will find data faster and is less likely to time out.",
       "In summary, 'Timeout Expired' errors happen when queries take too long to execute. To fix these, try optimizing your SQL queries, such as adding indexes or reducing the amount of data processed. These simple steps can help your database run smoothly and avoid frustrating timeout issues."
+    ]
+  },
+  {
+    "slug": "how-to-write-your-first-javascript-program",
+    "title": "How to Write Your First JavaScript Program",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A simple beginner's guide to writing and running your first JavaScript program.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a popular programming language that helps make websites interactive. If you are new to coding, writing your first JavaScript program is a great way to start learning how programming works."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we will write a simple program that shows a message on the screen. You can run this program using any web browser without needing extra software."
+      },
+      {
+        "type": "code",
+        "value": "alert('Hello, World!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "The code above uses the alert function to display a popup message. When you open an HTML file with this JavaScript, a box will appear showing 'Hello, World!'. This is your first JavaScript program! You can try changing the text inside the quotes to show your own message."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-functions-beginners-guide",
+    "title": "Understanding JavaScript Functions: A Beginner's Guide",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of JavaScript functions, how to create and use them in your code.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Functions are one of the fundamental building blocks in JavaScript. They allow you to group a set of instructions together to perform a specific task. Using functions can help make your code organized, reusable, and easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "A function in JavaScript is defined using the keyword 'function', followed by a name, parentheses, and curly braces. Inside the curly braces, you write the code that runs when the function is called. You can also pass inputs, called parameters, to the function, and it can return an output."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  return 'Hello, ' + name + '!';\n}\n\n// Calling the function\nconsole.log(greet('Alice')); // Output: Hello, Alice!"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we defined a function named 'greet' that takes one parameter 'name'. When we call greet with a name like 'Alice', it returns a greeting message. You can create many different functions to help your program perform tasks efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "introduction-to-javascript-objects-for-new-programmers",
+    "title": "Introduction to JavaScript Objects for New Programmers",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of JavaScript objects, a key concept for organizing and working with data.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript objects are a fundamental part of the language and are used to store and organize data in a structured way. If you are new to programming, understanding objects will help you write better and more organized code."
+      },
+      {
+        "type": "paragraph",
+        "value": "An object in JavaScript is a collection of properties, where each property has a name (also called a key) and a value. These properties can hold different types of data, like numbers, strings, arrays, or even other objects. Objects allow you to group related information together."
+      },
+      {
+        "type": "code",
+        "value": "let person = {\n  name: \"Alice\",\n  age: 25,\n  isStudent: true\n};\n\n// Accessing properties\nconsole.log(person.name); // Outputs: Alice\nconsole.log(person.age);  // Outputs: 25"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we created an object called person with three properties: name, age, and isStudent. You can access these properties using dot notation, like person.name. Objects are very useful for storing information about things in the real world, such as users, products, or places."
+      }
+    ]
+  },
+  {
+    "slug": "beginner-tutorial-handling-events-in-javascript",
+    "title": "Beginner Tutorial: Handling Events in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to handle user interactions in JavaScript using events.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you visit a website, you often click buttons, type in forms, or move your mouse. These actions are called events. In JavaScript, we can write code to respond to these events, making web pages interactive and dynamic."
+      },
+      {
+        "type": "paragraph",
+        "value": "An event in JavaScript is something that happens in the browser, like a click or a key press. To react to an event, you use something called an event listener. The event listener 'listens' for a specific event and runs a function when that event happens."
+      },
+      {
+        "type": "code",
+        "value": "const button = document.getElementById('myButton');\n\nbutton.addEventListener('click', function() {\n  alert('Button was clicked!');\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we first get a button element from the webpage using its ID. Then, we add an event listener that listens for a 'click' event. When the button is clicked, the function runs and shows an alert message. This is the basic way to handle events and start making your web pages interactive."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-javascript-arrays-effectively",
+    "title": "How to Use JavaScript Arrays Effectively",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of JavaScript arrays and how to use them effectively.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Arrays are one of the most useful data structures in JavaScript. They allow you to store multiple values in a single variable, making it easier to organize and manage data. In this tutorial, you will learn what arrays are, how to create them, and how to use some common methods to work with array data."
+      },
+      {
+        "type": "paragraph",
+        "value": "An array is like a list of items, where each item has a position called an index. The first item is at index 0, the second at index 1, and so on. You can create an array with square brackets [] and put items inside, separated by commas."
+      },
+      {
+        "type": "code",
+        "value": "const fruits = ['apple', 'banana', 'cherry'];\n\n// Accessing items\nconsole.log(fruits[0]); // Output: apple\n\n// Adding an item\nfruits.push('date');\nconsole.log(fruits); // Output: ['apple', 'banana', 'cherry', 'date']\n\n// Removing the last item\nfruits.pop();\nconsole.log(fruits); // Output: ['apple', 'banana', 'cherry']"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use arrays effectively, it's important to know some useful methods. For example, .push() adds a new item to the end of the array, and .pop() removes the last item. You can also loop through an array using a for loop or the .forEach() method to work with each item one by one."
+      }
+    ]
+  },
+  {
+    "slug": "step-by-step-guide-to-conditional-statements-in-javascript",
+    "title": "Step-by-Step Guide to Conditional Statements in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use conditional statements in JavaScript to make decisions in your code.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Conditional statements let your JavaScript code make decisions based on different conditions. This means you can run different parts of your code depending on whether something is true or false."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common conditional statements are if, else if, and else. The if statement checks a condition, and if it is true, runs the code inside its block. The else if statement lets you check another condition if the first one was false. The else statement runs code if none of the previous conditions were true."
+      },
+      {
+        "type": "code",
+        "value": "let age = 18;\n\nif (age >= 21) {\n  console.log('You can drink alcohol.');\n} else if (age >= 18) {\n  console.log('You can vote but not drink alcohol.');\n} else {\n  console.log('You are too young to vote or drink.');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, depending on the age, the program prints different messages. Try changing the value of age and see how the output changes. Conditional statements are powerful tools to control the flow of your program based on different situations."
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-dom-manipulation-using-javascript",
+    "title": "Getting Started with DOM Manipulation Using JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using DOM manipulation in JavaScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you visit a website, everything you see on the page is part of the Document Object Model, or DOM. The DOM is a structured representation of the HTML elements on a page. Using JavaScript, you can change the content, style, or structure of your web page by manipulating this DOM."
+      },
+      {
+        "type": "paragraph",
+        "value": "DOM manipulation is useful because it allows you to make interactive and dynamic web pages. For example, you can change a heading's text, update a list, or show and hide elements. To do this, you first select the element you want to work with, and then you change its properties or content."
+      },
+      {
+        "type": "code",
+        "value": "document.getElementById('myHeading').textContent = 'Hello, DOM!';"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the code finds an HTML element with the id 'myHeading' and changes its text to 'Hello, DOM!'. This is a simple but powerful way to update your webpage. As you start practicing DOM manipulation, you can explore other properties like style or methods to add or remove elements from the page."
+      }
+    ]
+  },
+  {
+    "slug": "easy-guide-to-javascript-es6-features-for-beginners",
+    "title": "Easy Guide to JavaScript ES6 Features for Beginners",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly introduction to important JavaScript ES6 features.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript ES6, also known as ECMAScript 2015, introduced many new features that make coding easier and more powerful. If you are new to JavaScript or have only used older versions, understanding ES6 will help you write cleaner and more efficient code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some of the most useful ES6 features: let & const, arrow functions, template literals, and default parameters."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. let & const: These are new ways to declare variables. use let for variables that can change, and const for variables that won’t change."
+      },
+      {
+        "type": "code",
+        "value": "let age = 25;\nconst name = 'Alice';\nage = 26; // This works\n// name = 'Bob'; // This will cause an error"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Arrow Functions: A shorter way to write functions. They help make your code cleaner, especially for simple functions."
+      },
+      {
+        "type": "code",
+        "value": "const greet = (person) => {\n  return `Hello, ${person}!`;\n};\nconsole.log(greet('Bob')); // Output: Hello, Bob!"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Template Literals: Use backticks (` `) instead of quotes to insert variables directly in strings. It’s easier to read and write."
+      },
+      {
+        "type": "code",
+        "value": "const city = 'New York';\nconsole.log(`I live in ${city}.`); // Output: I live in New York."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Default Parameters: You can set default values for function parameters. This avoids errors when you forget to pass an argument."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name = 'Guest') {\n  return `Hello, ${name}!`;\n}\nconsole.log(greet()); // Output: Hello, Guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "These ES6 features are easy to learn and will help you write better JavaScript code. Try them out in your next project to see how they can simplify your work!"
+      }
+    ]
+  },
+  {
+    "slug": "solving-typeerror-undefined-is-not-a-function",
+    "title": "Solving 'TypeError: undefined is not a function' for Beginners",
+    "language": "javascript",
+    "type": "errors",
+    "description": "A simple guide to understand and fix the 'TypeError: undefined is not a function' error in JavaScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you see the error 'TypeError: undefined is not a function' in JavaScript, it means that you are trying to call something as a function, but JavaScript thinks that thing is undefined. This is a very common error that beginners often face."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error happens because the variable or value you are trying to use as a function has not been defined yet or does not actually hold a function. It could happen if you misspell a function name, forget to assign a function to a variable, or try to use a function in a wrong way."
+      },
+      {
+        "type": "code",
+        "value": "let greet;\ngreet(); // TypeError: undefined is not a function\n\n// Fix by defining greet as a function\nlet greet = function() {\n  console.log('Hello!');\n};\ngreet(); // Works fine"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, check your code to make sure the variable or property you call is actually a function. Make sure you spelled the function name correctly, the function is defined before you call it, and you are not overwriting it with undefined values. Careful debugging and using tools like console.log can help you find where the problem is."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-resolving-syntaxerror-unexpected-token-in-javascript",
+    "title": "Understanding and Resolving 'SyntaxError: Unexpected token' in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what the 'SyntaxError: Unexpected token' error means in JavaScript, why it occurs, and how to fix it.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you write JavaScript code, the browser or JavaScript engine first reads it to check for correct syntax before running it. If the code has incorrect syntax, you might see an error called 'SyntaxError: Unexpected token'. This error means JavaScript found a character or word it didn't expect in your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error usually happens because of missing or extra characters like commas, parentheses, brackets, or curly braces. It can also appear if you accidentally put something in the wrong place, like a keyword where an expression is expected."
+      },
+      {
+        "type": "code",
+        "value": "const name = 'Alice';\nconsole.log(name\n// This code causes: SyntaxError: Unexpected token\n\n// Correct version:\nconst name = 'Alice';\nconsole.log(name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, carefully check the code near where the error message points. Look for missing characters like closing parentheses or semicolons. Adding or removing the right tokens will fix the problem and let your code run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "troubleshooting-cannot-read-property-of-undefined-error-in-javascript",
+    "title": "Troubleshooting 'Cannot read property of undefined' Error in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what causes the 'Cannot read property of undefined' error in JavaScript and how to fix it.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "The error message 'Cannot read property of undefined' is a common issue beginners face when coding in JavaScript. It usually happens when you try to access a property or call a method on a variable that is undefined."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error occurs because JavaScript expects an object or value to access properties from, but when the variable is undefined, it does not have any properties to read. Trying to use dot notation on an undefined value leads to this error."
+      },
+      {
+        "type": "code",
+        "value": "let person;\nconsole.log(person.name); // Error: Cannot read property 'name' of undefined\n\n// Fix: Make sure 'person' is defined before accessing 'name'\nlet person = { name: 'Alice' };\nconsole.log(person.name); // Outputs: Alice"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, always confirm your variables are defined and not undefined before accessing their properties. You can also use optional chaining (?.) to safely access properties when you are not sure if the variable exists."
+      }
+    ]
+  },
+  {
+    "slug": "step-by-step-guide-to-fix-javascript-null-pointer-exception",
+    "title": "Step-by-Step Guide to Fix 'JavaScript Null Pointer Exception'",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what a 'null pointer exception' is in JavaScript, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "A 'null pointer exception' in JavaScript usually means that your code is trying to access a property or call a method on a variable that is null or undefined. This is a common error, especially when working with objects or DOM elements."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error happens because JavaScript cannot read properties or invoke methods on null or undefined values. To fix it, you need to check if the variable is not null or undefined before using it."
+      },
+      {
+        "type": "code",
+        "value": "let user = null;\n\n// This will cause an error because 'user' is null\nconsole.log(user.name);\n\n// Fix: Check if user is not null before accessing properties\nif (user !== null && user !== undefined) {\n  console.log(user.name);\n} else {\n  console.log('User is null or undefined');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to fix a null pointer exception in JavaScript, always make sure the variable you want to use is not null or undefined first. Using conditional checks or optional chaining (?.) can help prevent this error and keep your code running smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-debug-typeerror-cannot-set-property-of-null-javascript",
+    "title": "How to Debug 'TypeError: Cannot set property of null' in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Understand what causes the 'TypeError: Cannot set property of null' error in JavaScript and learn how to fix it step-by-step.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you are learning JavaScript or working on a web project, you might see an error like 'TypeError: Cannot set property of null'. This error can be confusing if you're new to programming. In this article, we will explain what this error means, why it happens, and how to fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error means your code is trying to set (change) a property of an object that is currently 'null'. In JavaScript, 'null' means nothing or no value. Usually, this happens when you try to access a part of the webpage (an HTML element) that doesn't exist or was not found by your code. For example, if you try to get an element by its ID but no element has that ID, the result is 'null'. Then, if you try to change a property of this 'null' value, you get this error."
+      },
+      {
+        "type": "code",
+        "value": "const element = document.getElementById('myElement');\n\n// If there is no HTML element with id='myElement', element will be null\n// Trying to set a property on null will cause the error:\n\n// element.style.color = 'red'; // This line will cause 'TypeError: Cannot set property of null'\n\n// To fix it, always check if the element exists:\n\nif (element) {\n  element.style.color = 'red';\n} else {\n  console.log('Element not found');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, always make sure the element you want to use exists before changing it. You can do this by checking if the variable is not null. Also, check that your HTML element's ID or selector is spelled correctly and that your script runs after the webpage elements have loaded. Using simple if-checks or running JavaScript code after the page load helps avoid this error."
+      }
+    ]
+  },
+  {
+    "slug": "fixing-common-javascript-errors-console",
+    "title": "Fixing Common JavaScript Errors in Console: A Beginner's Guide",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn about common JavaScript errors in the console, what they mean, why they happen, and how to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you write JavaScript code and run it in a browser, sometimes errors appear in the console. These errors can seem confusing at first, but understanding what they mean will help you fix issues quickly."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error you may see is 'ReferenceError: variableName is not defined.' This means you are trying to use a variable that has not been declared or is misspelled."
+      },
+      {
+        "type": "code",
+        "value": "console.log(name);\n\n// ReferenceError: name is not defined\n\n// Fix by declaring the variable first:\nconst name = 'John';\nconsole.log(name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another frequent error is 'TypeError: something is not a function.' This happens when you try to call a variable as a function, but it is not a function. For example, you may have assigned a value incorrectly or overwritten a function."
+      },
+      {
+        "type": "code",
+        "value": "let greet = 'hello';\ngreet(); // TypeError: greet is not a function\n\n// Fix by defining greet as a function:\nfunction greet() {\n  console.log('hello');\n}\ngreet();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Syntax errors occur when your code is not written correctly according to JavaScript rules. For example, missing a closing parenthesis or bracket will cause a 'SyntaxError'. Carefully checking your code and using an editor that highlights errors can help you find and fix these mistakes."
+      },
+      {
+        "type": "code",
+        "value": "if (true {\n  console.log('Hello');\n}\n\n// SyntaxError: missing ) after condition\n\n// Fix:\nif (true) {\n  console.log('Hello');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding the error message, identifying where it happens, and carefully checking your code helps you fix JavaScript errors. Practice reading errors and debugging your code to get better at solving problems quickly."
+      }
+    ]
+  },
+  {
+    "slug": "resolve-rangeerror-maximum-call-stack-size-exceeded",
+    "title": "Resolving 'RangeError: Maximum call stack size exceeded' in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what the 'Maximum call stack size exceeded' error means, why it happens, and how to fix it in JavaScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with JavaScript, you might encounter the error 'RangeError: Maximum call stack size exceeded.' This error can be confusing for beginners, but understanding why it happens will help you fix it quickly."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error occurs when a function calls itself too many times without stopping, causing the call stack to grow beyond the allowed limit. This usually happens with recursive functions that don't have a proper base case to end the recursion, or when two functions call each other endlessly."
+      },
+      {
+        "type": "code",
+        "value": "function infiniteRecursion() {\n  infiniteRecursion();\n}\ninfiniteRecursion(); // This causes the 'Maximum call stack size exceeded' error"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, make sure your recursive functions have a clear base case that stops the recursion. For example, here is a function that correctly counts down to zero without exceeding the call stack size:"
+      },
+      {
+        "type": "code",
+        "value": "function countDown(num) {\n  if (num <= 0) {\n    return;\n  }\n  console.log(num);\n  countDown(num - 1);\n}\ncountDown(5);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'RangeError: Maximum call stack size exceeded' error is caused by too many nested function calls, often from infinite recursion. Check your recursive functions and ensure they have proper exit conditions to prevent this error."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-handle-javascript-async-await-errors-for-beginners",
+    "title": "How to Handle JavaScript Async Await Errors for Beginners",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what async/await errors are in JavaScript, why they happen, and simple ways to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with asynchronous code in JavaScript, the async/await syntax helps make your code easier to read and write. However, like other code, async functions can also produce errors. These errors usually happen when a promise rejects or something goes wrong during the asynchronous operation."
+      },
+      {
+        "type": "paragraph",
+        "value": "If an error inside an async function is not handled, it can cause your program to stop or behave unexpectedly. The most common reason async/await errors happen is because code that waits for a promise does not properly catch the errors. Luckily, there are simple ways to catch and handle these errors so your app can run smoothly."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  // Imagine this fetch could fail, for example if there is a network error\n  let response = await fetch('https://api.example.com/data');\n  if (!response.ok) {\n    throw new Error('Network response was not ok');\n  }\n  let data = await response.json();\n  return data;\n}\n\n// Handling errors using try/catch\nasync function getData() {\n  try {\n    const data = await fetchData();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Error fetching data:', error.message);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the async function fetchData might throw an error if the network response fails. Using a try/catch block inside the async function that calls fetchData helps catch and handle these errors. This prevents your app from crashing and lets you respond to errors gracefully, like showing a message to the user."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-fixing-promise-unhandled-rejection-warning",
+    "title": "Understanding and Fixing 'Promise Unhandled Rejection' Warning in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what the 'Promise Unhandled Rejection' warning means, why it happens, and how to fix it in JavaScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with promises in JavaScript, you might see a warning called 'Promise Unhandled Rejection'. This happens when a promise encounters an error, but the error is not caught or handled anywhere in the code."
+      },
+      {
+        "type": "paragraph",
+        "value": "A promise represents an operation that may complete successfully or fail with an error. If a promise is rejected (meaning it failed), and you do not provide code to handle that rejection, the JavaScript engine will show this warning. It is important to handle rejections to prevent unexpected errors and keep your app running smoothly."
+      },
+      {
+        "type": "code",
+        "value": "const myPromise = new Promise((resolve, reject) => {\n  reject('Something went wrong');\n});\n\n// This will cause 'unhandled rejection' warning because no .catch() or try/catch handles the error\n\n// Fix: Add a .catch() to handle the error\nmyPromise.catch(error => {\n  console.log('Error caught:', error);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this warning, always add error handling when working with promises. Use the .catch() method with promises, or use try/catch inside async functions. This ensures you can respond to errors appropriately and avoid unhandled promise rejections."
+      }
+    ]
+  },
+  {
+    "slug": "introduction-to-sql-a-beginners-guide-to-databases",
+    "title": "Introduction to SQL: A Beginner's Guide to Databases",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of SQL and how to interact with databases using simple queries.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL stands for Structured Query Language. It is the standard language used to communicate with databases. Databases store information in tables, which are made up of rows and columns. Learning SQL helps you add, retrieve, and manage data stored in these tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "The basic structure of an SQL query is easy to understand. For example, if you want to get data from a table called 'employees,' you use the SELECT statement. SQL commands are simple English-like words that let you work with data efficiently."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees;\n\n-- This command retrieves all the columns and all the rows from the 'employees' table."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using SQL, you can do many things such as selecting specific columns, filtering data, sorting results, and much more. As you practice writing SQL, you will become more comfortable with how to build queries and manage database information effectively."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-write-your-first-sql-query-step-by-step-tutorial",
+    "title": "How to Write Your First SQL Query: Step-by-Step Tutorial",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A simple guide to help beginners write their first SQL query.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is a programming language used to communicate with databases. If you want to retrieve information stored inside a database, you write SQL queries. In this tutorial, we will learn how to write a basic SQL query step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common SQL command to get data from a database is SELECT. It allows you to choose specific columns from a table. A table is like a spreadsheet with rows and columns that stores related data. For example, imagine a table named 'Customers' that holds customer information like names and cities."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Name, City\nFROM Customers;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query asks the database to give you the 'Name' and 'City' columns from the 'Customers' table. To write your first query, follow these steps: 1) Use SELECT to specify the columns you want. 2) Use FROM to specify the table name. 3) End the query with a semicolon (;). Practice writing this simple query to see your data."
+      }
+    ]
+  },
+  {
+    "slug": "learn-sql-select-statement-simple-examples",
+    "title": "Learn SQL SELECT Statement with Simple Examples",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using the SQL SELECT statement with easy examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL is a language used to communicate with databases. One of the most important commands in SQL is the SELECT statement. It allows you to retrieve data from a database table. Learning how to use SELECT will help you get the information you need from your database."
+      },
+      {
+        "type": "paragraph",
+        "value": "The basic syntax of the SELECT statement is simple. You use SELECT followed by the columns you want, then FROM and the table name. If you want all columns, you can use an asterisk (*). Here is how it looks:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This command will show all the data from the Employees table. You can also choose specific columns to show. For example, if you only want the names and job titles of employees, you write:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT Name, JobTitle FROM Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the SELECT statement is your first step to access data in a database. You can select all columns or just the ones you need. Try these examples on your own database to practice and get comfortable with SQL."
+      }
+    ]
+  },
+  {
+    "slug": "beginners-guide-to-sql-where-clause-for-filtering-data",
+    "title": "Beginner’s Guide to SQL WHERE Clause for Filtering Data",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use the SQL WHERE clause to filter data based on specific conditions.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL is a powerful language used to manage and retrieve data from databases. When working with large tables, you often don't need to see all the data, but only the rows that meet certain conditions. This is where the WHERE clause comes in handy."
+      },
+      {
+        "type": "paragraph",
+        "value": "The WHERE clause is used in SQL to specify a condition that filters the rows returned by a query. It helps you get only the data that you need, saving time and making your results more meaningful."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Employees\nWHERE Department = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the query selects all columns (*) from the Employees table but only includes rows where the Department is 'Sales'. You can use different conditions in the WHERE clause like equals (=), greater than (>), less than (<), and combine multiple conditions using AND or OR."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-sql-joins-inner-join-left-join-right-join-explained",
+    "title": "How to Use SQL JOINs: Inner Join, Left Join, Right Join Explained",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using SQL JOINs: Inner Join, Left Join, and Right Join.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to SQL and want to combine data from two or more tables, JOINs are essential to learn. JOINs help you retrieve related data across tables based on a common column."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore three key types of JOINs: INNER JOIN, LEFT JOIN, and RIGHT JOIN. Understanding these will allow you to select records in different ways, depending on what you want to see."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nINNER JOIN departments ON employees.department_id = departments.id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The INNER JOIN returns only the rows where there is a match in both tables. If an employee belongs to a department, their name and department will show up. If no match exists, that employee won’t appear in the results."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nLEFT JOIN departments ON employees.department_id = departments.id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The LEFT JOIN returns all rows from the left table (employees) and the matching rows from the right table (departments). If there is no matching department for an employee, the department fields will be NULL."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nRIGHT JOIN departments ON employees.department_id = departments.id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The RIGHT JOIN is opposite of LEFT JOIN. It returns all rows from the right table (departments) and the matched rows from the left table (employees). If a department has no employees, the employee fields will be NULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, INNER JOIN shows only matched records, LEFT JOIN shows all records from the left table plus matches, and RIGHT JOIN shows all records from the right table plus matches. These JOIN types help you work effectively with multiple tables in SQL."
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-sql-group-by-and-aggregate-functions",
+    "title": "Getting Started with SQL GROUP BY and Aggregate Functions",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of SQL GROUP BY and aggregate functions to summarize your data easily.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, you often need to summarize data to understand it better. SQL has powerful tools for this, like the GROUP BY clause and aggregate functions such as COUNT, SUM, AVG, MIN, and MAX. This article will introduce you to these concepts with simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "The GROUP BY clause helps you group rows that have the same values in specified columns. Once grouped, you can use aggregate functions to calculate summary values for each group. For example, you might want to know how many orders each customer has placed or the total sales per product."
+      },
+      {
+        "type": "code",
+        "value": "SELECT customer_id, COUNT(*) AS total_orders\nFROM orders\nGROUP BY customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we select the customer ID from an orders table and count how many orders each customer has. The GROUP BY customer_id groups all orders by each unique customer, and COUNT(*) counts the rows in each group. This way, you get a summary of total orders per customer."
+      }
+    ]
+  },
+  {
+    "slug": "introduction-to-sql-insert-update-and-delete-commands",
+    "title": "Introduction to SQL INSERT, UPDATE, and DELETE Commands",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of SQL commands to add, modify, and remove data from a database.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL is a language used to manage data in databases. Three important commands you will often use are INSERT, UPDATE, and DELETE. These commands help you add new data, change existing data, and remove data, respectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "The INSERT command is used to add new rows (records) into a table. The UPDATE command changes data already stored in the table. The DELETE command removes rows from the table. Let's look at examples using a table called `Students` which has columns `id`, `name`, and `age`."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Students (id, name, age) VALUES (1, 'Alice', 20);\n\nUPDATE Students SET age = 21 WHERE id = 1;\n\nDELETE FROM Students WHERE id = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, use INSERT to add new data, UPDATE to modify existing data, and DELETE to remove data. Always remember to use the WHERE clause with UPDATE and DELETE to specify which rows to change or delete, otherwise, all rows might be affected."
+      }
+    ]
+  },
+  {
+    "slug": "creating-and-managing-tables-in-sql-for-beginners",
+    "title": "Creating and Managing Tables in SQL for Beginners",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create and manage tables in SQL with simple examples for beginners.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is a language used to manage data in databases. One of the basic and most important things you need to learn in SQL is how to create and manage tables. Tables store data in rows and columns, much like a spreadsheet."
+      },
+      {
+        "type": "paragraph",
+        "value": "To create a table, you use the CREATE TABLE statement followed by the table name and the definition of columns. Each column has a name and a data type. Common data types include INT for numbers and VARCHAR for text. After creating a table, you can insert, update, delete, or read data."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Students (\n  StudentID INT,\n  FirstName VARCHAR(50),\n  LastName VARCHAR(50),\n  Age INT\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we created a table named Students with four columns: StudentID, FirstName, LastName, and Age. You can now add data to this table and make changes as needed. Managing tables also means you can modify them with commands like ALTER TABLE or remove them with DROP TABLE, but be careful because dropping a table deletes it completely."
+      }
+    ]
+  },
+  {
+    "slug": "basic-sql-functions-every-beginner-should-know",
+    "title": "Basic SQL Functions Every Beginner Should Know",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "An introduction to important SQL functions that beginners should learn to handle data effectively.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is a powerful tool used to communicate with databases. As a beginner, learning some basic SQL functions can help you manipulate and analyze data easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some commonly used SQL functions: COUNT, SUM, AVG, MAX, and MIN. These functions help you calculate totals, averages, maximums, minimums, and count rows of data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT COUNT(*) AS TotalRows FROM Employees;\nSELECT SUM(Salary) AS TotalSalary FROM Employees;\nSELECT AVG(Salary) AS AverageSalary FROM Employees;\nSELECT MAX(Salary) AS HighestSalary FROM Employees;\nSELECT MIN(Salary) AS LowestSalary FROM Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, these functions make it easy to perform basic calculations on your data. Start using them to get useful insights quickly from your database tables."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-sql-syntax-errors-in-beginner-queries",
+    "title": "How to Fix SQL Syntax Errors in Beginner Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL syntax errors mean, why they happen, and how to fix them in beginner-level queries.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you write SQL queries, you might sometimes see error messages that say there is a syntax error. A syntax error means there is a mistake in how the SQL code is written. The database cannot understand the command because it does not follow the rules of SQL language."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common reasons for syntax errors include missing commas, misspelled keywords, wrong order of commands, or missing quotation marks. For example, forgetting a comma between columns or writing 'SELEC' instead of 'SELECT' will cause an error. Fixing these errors means carefully checking the SQL statement and making sure it matches the expected format."
+      },
+      {
+        "type": "code",
+        "value": "SELECT first_name last_name FROM users;\n-- Incorrect: missing comma\n\nSELECT first_name, last_name FROM users;\n-- Correct: comma added"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid syntax errors, always double-check your SQL queries for correct spelling of keywords, proper punctuation, and the right structure. Using a good SQL editor with syntax highlighting can help spot errors quickly. Practice writing simple queries and gradually move to more complex ones to become comfortable with the syntax rules."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-common-null-value-errors-in-sql",
+    "title": "Resolving Common Null Value Errors in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what null value errors in SQL mean, why they occur, and how to fix them with simple solutions.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Null value errors in SQL can be confusing for beginners. These errors often happen when you try to insert, update, or work with data that does not allow NULL values but you provide or encounter a NULL value instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "In SQL, NULL represents missing or unknown data. Some columns in a table may be set to NOT NULL, meaning they must always contain a value. When you try to insert or update a row with a NULL in a NOT NULL column, SQL will return an error. This is to make sure required information is always present."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n  id INT PRIMARY KEY,\n  name VARCHAR(50) NOT NULL,\n  email VARCHAR(100)\n);\n\n-- Trying to insert a user without a name will cause an error\nINSERT INTO users (id, name, email) VALUES (1, NULL, 'test@example.com');"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix null value errors, ensure you provide values for all NOT NULL columns before inserting or updating. You can also set default values for columns or allow NULLs if missing data is acceptable. Using the SQL function COALESCE can help replace NULL values in queries."
+      }
+    ]
+  },
+  {
+    "slug": "tips-to-avoid-and-fix-sql-deadlock-errors",
+    "title": "Tips to Avoid and Fix SQL Deadlock Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL deadlock errors are, why they happen, and simple ways to fix and avoid them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "A deadlock in SQL happens when two or more database transactions are waiting for each other to release locks on resources, such as tables or rows, so they can continue. When this happens, the database system detects the deadlock and stops one of the transactions to let the others continue. This stopped transaction will receive a deadlock error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Deadlocks usually happen because transactions access the same resources but in different orders. For example, if Transaction A locks Table 1 and waits to lock Table 2, while Transaction B locks Table 2 and waits to lock Table 1, neither can proceed, causing a deadlock."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\n-- Transaction A locks Table1\nUPDATE Table1 SET column = value WHERE condition;\n-- Transaction A waits for Table2\nUPDATE Table2 SET column = value WHERE condition;\nCOMMIT;\n\n-- At the same time:\nBEGIN TRANSACTION;\n-- Transaction B locks Table2\nUPDATE Table2 SET column = value WHERE condition;\n-- Transaction B waits for Table1\nUPDATE Table1 SET column = value WHERE condition;\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid deadlocks, keep these tips in mind: access tables in the same order in all transactions, keep transactions short and simple, avoid user interaction during transactions, and use the lowest possible transaction isolation level. If deadlocks still happen, try analyzing and tuning your queries or add indexes to speed up data access."
+      }
+    ]
+  },
+  {
+    "slug": "troubleshooting-column-not-found-errors-in-sql",
+    "title": "Troubleshooting 'Column Not Found' Errors in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what causes the 'Column Not Found' error in SQL and how to fix it easily.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL queries, one common error you might encounter is the 'Column Not Found' error. This error occurs when your query references a column name that doesn’t exist in the table or tables you are querying."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error happens for several reasons, such as typos in the column name, using the wrong table name, or forgetting to specify the table alias in your query. Understanding how to identify and fix this problem will make your SQL coding smoother."
+      },
+      {
+        "type": "code",
+        "value": "SELECT first_name, last_nam FROM employees;\n-- This will cause an error because 'last_nam' is misspelled. The correct column should be 'last_name'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, always double-check the spelling of your column names. You can also review the database schema or use SQL commands like SHOW COLUMNS to confirm column names. Make sure to use the correct table and column names and include any necessary table aliases."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-sql-connection-timeout-errors",
+    "title": "How to Fix SQL Connection Timeout Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL connection timeout errors are, why they happen, and how to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "A SQL Connection Timeout Error occurs when your application or query tries to connect to the SQL database server but the connection takes too long and fails. It means the server did not respond in the expected time frame."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error often happens because the server is busy, the network is slow, the connection settings have a low timeout value, or the server is unreachable due to configuration or firewall issues."
+      },
+      {
+        "type": "code",
+        "value": "-- Example of increasing connection timeout in a SQL connection string\n-- Example in a connection string for SQL Server\nServer=myServerAddress;Database=myDataBase;User Id=myUsername;\nPassword=myPassword;Connection Timeout=30;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix connection timeout errors, you can increase the Connection Timeout setting in your connection string, make sure the SQL Server is online and reachable, check your network connection, and ensure that firewall settings allow traffic to the SQL Server port (usually 1433)."
+      }
+    ]
+  },
+  {
+    "slug": "common-causes-and-fixes-for-sql-duplicate-key-errors",
+    "title": "Common Causes and Fixes for SQL Duplicate Key Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Understand what SQL duplicate key errors mean, why they happen, and how to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "A SQL duplicate key error occurs when you try to insert or update a record with a value that already exists in a column defined to have unique values, usually a primary key or unique constraint."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error happens because SQL databases enforce uniqueness to maintain data integrity. If you attempt to insert a row with a key that already exists in the table, the database will block the operation and show a duplicate key error."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Users (\n  UserID INT PRIMARY KEY,\n  Username VARCHAR(50) UNIQUE\n);\n\n-- Inserting a user\nINSERT INTO Users (UserID, Username) VALUES (1, 'Alice');\n\n-- Trying to insert another user with the same UserID or Username causes an error\nINSERT INTO Users (UserID, Username) VALUES (1, 'Bob'); -- Duplicate key error\nINSERT INTO Users (UserID, Username) VALUES (2, 'Alice'); -- Duplicate key error"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix duplicate key errors, you can: 1) Check existing data before inserting to avoid duplicates, 2) Use SQL commands like INSERT ... ON CONFLICT or MERGE to handle duplicates gracefully, or 3) Clean your input data to ensure unique keys."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-resolve-data-type-mismatch-errors-in-sql",
+    "title": "How to Resolve 'Data Type Mismatch' Errors in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what 'Data Type Mismatch' errors are in SQL, why they occur, and how to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "A 'Data Type Mismatch' error in SQL happens when your query tries to compare or work with two values that have different data types, and these types are not compatible. This is a common error that beginners encounter when performing operations like comparisons, joins, or inserts."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error occurs because SQL expects the data types to match when you use operators such as '=', '<', '>', or functions that require specific data types. For example, trying to compare a text string to a number without converting one to match the other will result in this error."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE employee_id = '123';\n\n-- If employee_id is stored as an integer, comparing it to a string ('123') can cause a data type mismatch.\n\n-- Fix by removing quotes if employee_id is numeric:\nSELECT * FROM employees WHERE employee_id = 123;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix 'Data Type Mismatch' errors, check the data types of the columns involved in your query. Make sure the values you compare or insert have compatible types. When necessary, convert data types explicitly using functions like CAST() or CONVERT() so SQL knows how to handle the values properly."
+      }
+    ]
+  },
+  {
+    "slug": "fixing-foreign-key-constraint-errors-in-sql-databases",
+    "title": "Fixing Foreign Key Constraint Errors in SQL Databases",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what foreign key constraint errors mean in SQL, why they happen, and how to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Foreign key constraints are rules in SQL databases that ensure data in one table matches data in another table. These constraints help keep your database accurate and consistent. A foreign key constraint error happens when you try to insert, update, or delete data that breaks these rules."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common reasons for foreign key errors are: trying to add a record with a foreign key value that doesn't exist in the referenced table, deleting a record that other tables still reference, or updating keys incorrectly. When this happens, the database stops the action to protect your data from inconsistencies."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Suppose you have two tables: Customers and Orders\n-- Customers table has a primary key 'CustomerID'\n-- Orders table has a foreign key 'CustomerID' referencing Customers\n\n-- This statement will fail if there is no CustomerID = 1 in Customers:\nINSERT INTO Orders (OrderID, CustomerID) VALUES (101, 1);\n\n-- To fix, make sure the customer exists:\nINSERT INTO Customers (CustomerID, CustomerName) VALUES (1, 'John Doe');\n\n-- Then try the insert again:\nINSERT INTO Orders (OrderID, CustomerID) VALUES (101, 1);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix foreign key constraint errors, always check the related tables for matching keys before inserting or updating. If you want to delete a record that is referenced elsewhere, either delete the related records first or change the foreign key rules to allow cascading deletes if appropriate. Understanding and respecting these relationships will keep your database safe and error-free."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-handle-and-fix-sql-server-login-failed-errors",
+    "title": "How to Handle and Fix SQL Server Login Failed Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL Server login failed errors mean and how to resolve them easily.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL Server login failed errors occur when you try to connect to a SQL Server database but the server refuses the login attempt. This is a common issue that can be caused by various reasons such as incorrect username or password, disabled accounts, or server settings."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error means that SQL Server did not accept your login credentials. It could happen if you mistyped the username or password, if the login does not exist, or if the SQL Server is set to only accept Windows Authentication and you are trying to use SQL Authentication."
+      },
+      {
+        "type": "code",
+        "value": "USE master;\nGO\n-- Check if the login exists\nSELECT name, is_disabled FROM sys.sql_logins WHERE name = 'YourLoginName';\n\n-- Enable a disabled login\nALTER LOGIN YourLoginName ENABLE;\n\n-- Reset the password if needed\nALTER LOGIN YourLoginName WITH PASSWORD = 'NewStrongPassword';\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the login failed error, first verify that the login name and password are correct. Check if the login exists and is not disabled using SQL queries shown above. Also, ensure that your SQL Server instance allows the authentication mode you are trying to use. Changing the server authentication mode to 'SQL Server and Windows Authentication mode' can fix many login issues."
+      }
+    ]
+  },
+  {
+    "slug": "debugging-and-fixing-sql-query-execution-errors",
+    "title": "Debugging and Fixing SQL Query Execution Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to understand and fix common SQL query errors.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing SQL queries, it is common to encounter errors that stop your query from running correctly. These errors can be due to syntax mistakes, missing tables, wrong column names, or other issues. Understanding what each error means will help you fix your queries faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error is a syntax error. This happens if your query has a typo or incorrect format. For example, missing a keyword or comma can cause this issue. Another usual error occurs when the table or column name does not exist in the database. This might happen if you mistype a name or use the wrong database."
+      },
+      {
+        "type": "code",
+        "value": "-- Example of a syntax error due to missing comma\nSELECT id name FROM users;\n\n-- Corrected version\nSELECT id, name FROM users;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix these errors, carefully read the error message from your database system. It will often point to the exact problem. Check your query for spelling mistakes and verify that all tables and columns exist. If you encounter other errors, such as permission issues or data type mismatches, learn what the error message says and adjust your query or database setup accordingly."
+      }
     ]
   }
 ];
