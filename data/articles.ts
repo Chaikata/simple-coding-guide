@@ -452,5 +452,233 @@ export const articles: Article[] = [
         "value": "To fix these issues, first verify your login credentials and permissions. Ensure the SQL server is running and the server name or IP address is correct. Check your network connection and firewall settings to confirm the SQL server port is open (default is 1433). Finally, increasing the connection timeout value might help if the network is slow. Understanding these causes and solutions will help you quickly troubleshoot and resolve SQL connection problems."
       }
     ]
+  },
+  {
+    "slug": "how-to-write-your-first-javascript-program",
+    "title": "How to Write Your First JavaScript Program",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A simple guide for beginners to write their first JavaScript program and understand basic concepts.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a popular programming language used to make web pages interactive. This tutorial will help you write your very first JavaScript program step by step, even if you have never coded before."
+      },
+      {
+        "type": "paragraph",
+        "value": "We will start by writing a simple program that displays a greeting message. To run JavaScript code, you can use a web browser's console or create an HTML file. The basic command to show a message is `console.log()`. This function prints the message to the console."
+      },
+      {
+        "type": "code",
+        "value": "console.log('Hello, world!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, the message 'Hello, world!' appears in the console. If you see an error like 'console is not defined', it usually means your environment doesn't support it (for example, if you mistakenly used a JavaScript environment other than a browser or Node.js). Make sure to run the code inside a browser console or Node.js. This simple program is the first step towards writing more complex JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-uncaught-referenceerror-in-javascript",
+    "title": "How to Fix Uncaught ReferenceError in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what Uncaught ReferenceError means in JavaScript, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to JavaScript, you might have seen an error message that says Uncaught ReferenceError. This error can be confusing, but it is very common and easy to fix once you understand what it means."
+      },
+      {
+        "type": "paragraph",
+        "value": "An Uncaught ReferenceError happens when your code tries to use a variable or function that hasn't been declared or is not available in the current scope. JavaScript can't find the name you're referencing, so it throws this error. Common causes include typos in variable names, trying to use variables before declaring them, or forgetting to include external scripts."
+      },
+      {
+        "type": "code",
+        "value": "console.log(myVar);\n// Uncaught ReferenceError: myVar is not defined\n\nlet myVar = 10;\nconsole.log(myVar); // This works because myVar is declared"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix Uncaught ReferenceError, first check if the variable or function is spelled correctly. Then make sure it is declared before you use it. If the code depends on external scripts, ensure they are properly loaded. By following these steps, you can prevent this error and make your code run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-set-up-typescript-in-your-project",
+    "title": "How to Set Up TypeScript in Your Project",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to get started with TypeScript in your coding projects.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. It helps catch errors early and makes your code easier to understand. In this tutorial, we'll walk through how to set up TypeScript in a new or existing project."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you need to install TypeScript and create a configuration file. The configuration file (tsconfig.json) tells the TypeScript compiler how to process your code. We'll also look at a simple example to confirm everything is working."
+      },
+      {
+        "type": "code",
+        "value": "npm install -D typescript\nnpx tsc --init\n// This creates a tsconfig.json file\n\n// Example TypeScript file: index.ts\nconst greeting: string = 'Hello, TypeScript!';\nconsole.log(greeting);\n\n// To compile run:\nnpx tsc\n// This converts index.ts to index.js"
+      },
+      {
+        "type": "paragraph",
+        "value": "After running these steps, your TypeScript files will compile to JavaScript. If you see errors during compilation, it usually means your code does not match the expected types. For example, if you try to assign a number to a string variable, TypeScript will alert you to fix the issue. Setting up TypeScript improves code quality and helps prevent bugs before running your code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-typescript-cannot-find-name-error",
+    "title": "How to Fix TypeScript Cannot Find Name Error",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what the 'Cannot find name' error in TypeScript means and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start writing code in TypeScript, you might encounter the error message \"Cannot find name 'X'\". This is a common error that indicates the TypeScript compiler cannot find the definition or declaration of a variable, function, or type that you are trying to use."
+      },
+      {
+        "type": "paragraph",
+        "value": "The \"Cannot find name\" error happens because TypeScript needs you to declare all variables, functions, or types before you use them. This helps catch mistakes like typos or using items that haven’t been created yet. To fix this, you need to make sure you have declared the name properly or imported it if it comes from another file."
+      },
+      {
+        "type": "code",
+        "value": "function greet() {\n  console.log(message);\n}\n\ngreet();\n\n// This will cause error: Cannot find name 'message'.\n// Fix it by declaring the variable:\n\nconst message = \"Hello, world!\";"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the error occurs because the variable 'message' is used before it is declared. To fix this, we declare 'message' with a string value before we use it in the 'greet' function. Always make sure to declare or import your names before using them, and TypeScript's error messages will help guide you to these simple fixes."
+      }
+    ]
+  },
+  {
+    "slug": "python-basics-for-absolute-beginners",
+    "title": "Python Basics for Absolute Beginners",
+    "language": "python",
+    "type": "tutorials",
+    "description": "A simple introduction to Python programming for those who have never coded before.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Welcome to your first Python tutorial! Python is a popular programming language known for its simplicity and readability, making it perfect for beginners. In this tutorial, you will learn the most basic concepts to get started with Python programming."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's begin by understanding how to display text using Python. The most common way to show output is by using the print() function. This function prints whatever you pass inside the parentheses to the screen."
+      },
+      {
+        "type": "code",
+        "value": "print(\"Hello, world!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you run the above code, you should see the message Hello, world! on the screen. This is your first Python program! Now, if you get an error like SyntaxError: EOL while scanning string literal, it means you forgot to close a quote. Always make sure your strings are enclosed in matching quotes, either single ('') or double (\"\")."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's look at variables. Variables are used to store data so you can use it later. You can create a variable by giving it a name and assigning a value with the = sign."
+      },
+      {
+        "type": "code",
+        "value": "name = \"Alice\"\nage = 25\nprint(name)\nprint(age)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we created two variables: name and age. We assigned a string to name and a number to age. When printing these variables, their stored values show up. If you get a NameError like NameError: name 'nme' is not defined, it usually means you misspelled your variable. Double-check your variable names to fix this."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, let's see how to ask the user for input. Use the input() function, which shows a prompt and waits for the user to type something."
+      },
+      {
+        "type": "code",
+        "value": "user_name = input(\"What is your name? \")\nprint(\"Hello, \" + user_name + \"!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, Python waits for you to type your name. Then it prints a personalized greeting. If you forget the closing parenthesis in input function like input(\"What is your name?\" you will get a SyntaxError. Always check your parentheses and quotes carefully to avoid such errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, today you learned how to display output with print(), store data in variables, and get input from the user. These are the building blocks for writing any Python program. Practice these basics and soon you will be ready to explore more exciting Python features!"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-indentationerror-in-python-for-beginners",
+    "title": "How to Fix IndentationError in Python for Beginners",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what causes IndentationError in Python and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python uses indentation (spaces or tabs at the beginning of a line) to define blocks of code. Unlike many other programming languages that use curly braces or keywords, Python’s structure relies on proper indentation. This makes the code easier to read but also means that even small mistakes in indenting can cause errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "IndentationError happens when Python finds inconsistent or unexpected indentation. This means it’s expecting a certain level of indentation but finds something else instead. Common causes include mixing spaces and tabs, missing indentation after a colon (:), or incorrect alignment of code blocks."
+      },
+      {
+        "type": "code",
+        "value": "def greet():\nprint(\"Hello, world!\")  # This line should be indented\n\n# Corrected version:\n\ndef greet():\n    print(\"Hello, world!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix an IndentationError, you need to make sure that all lines inside a block have the same level of indentation. Use either spaces or tabs consistently—Python’s official style guide recommends using 4 spaces per indentation level. Most code editors allow you to set this preference. Check your code blocks carefully after colons and before special statements to ensure proper indentation."
+      }
+    ]
+  },
+  {
+    "slug": "introduction-to-sql-databases-for-beginners",
+    "title": "Introduction to SQL Databases for Beginners",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly introduction to SQL databases, covering basic concepts and example queries.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is a programming language used to manage and manipulate databases. Databases store data in tables, making it easy to organize, retrieve, and update information efficiently. This article introduces you to the fundamentals of SQL databases and guides you through simple commands to get started."
+      },
+      {
+        "type": "paragraph",
+        "value": "A database consists of tables, and each table contains rows and columns. Each column has a specific type of data like text, numbers, or dates. Common SQL commands include SELECT to retrieve data, INSERT to add data, UPDATE to change data, and DELETE to remove data. SQL helps you interact with the database to perform these operations easily."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Students (\n  ID INT PRIMARY KEY,\n  Name VARCHAR(100),\n  Age INT\n);\n\nINSERT INTO Students (ID, Name, Age) VALUES (1, 'Alice', 21);\nINSERT INTO Students (ID, Name, Age) VALUES (2, 'Bob', 22);\n\nSELECT * FROM Students;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example, we created a table named 'Students' with three columns: ID, Name, and Age. The INSERT statements add two records into the table. The SELECT statement retrieves all records from the Students table. Understanding these basics will help you build and interact with your own databases. Remember, errors are common when learning SQL. For example, if you try to insert a record with a duplicate ID, the database will return an error because ID is a primary key and must be unique. To fix such an error, ensure that each ID you insert is unique."
+      }
+    ]
+  },
+  {
+    "slug": "troubleshooting-common-sql-connection-errors",
+    "title": "Troubleshooting Common SQL Connection Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn to identify and fix common SQL connection errors with clear explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to a SQL database is a fundamental step when working with databases in any application. However, beginners often encounter connection errors that can be confusing. This article explains the most common SQL connection errors, why they happen, and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error is \"SQL Server does not exist or access denied.\" This means the client cannot reach the SQL server. It usually happens because of incorrect server name, wrong port number, firewall blocking the connection, or SQL server not running. Another frequent error is \"Login failed for user.\", which occurs if the username or password is incorrect or the user doesn't have permission to access the database."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Connecting to a SQL Server with correct parameters\nDECLARE @server_name VARCHAR(50) = 'localhost';\nDECLARE @database_name VARCHAR(50) = 'ExampleDB';\nDECLARE @username VARCHAR(50) = 'myUser';\nDECLARE @password VARCHAR(50) = 'myPassword';\n\n-- Connection string (used in application code, e.g., C# or Python)\n-- Server=localhost;Database=ExampleDB;User Id=myUser;Password=myPassword;\n\n-- Check if server is reachable\nEXEC sp_serveroption @server_name, 'data access', 'true';"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix connection errors, start by verifying the server name and port number. Ensure the SQL service is running and your username and password are correct. Also, check firewall settings to allow traffic on the SQL port (default 1433). For permission issues, confirm that the user has the necessary roles assigned. By methodically checking these settings, you can resolve most common connection errors and successfully connect to your SQL database."
+      }
+    ]
   }
 ];
