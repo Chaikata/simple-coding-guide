@@ -1,12 +1,1 @@
-{
-  "slug": "what-is-a-javascript-callback",
-  "title": "What is a JavaScript Callback?",
-  "category": "JavaScript",
-  "description": "Learn the basics of JavaScript callbacks and how they work.",
-  "content": [
-    "In JavaScript, a callback is a function that is passed as an argument to another function. This allows the receiving function to call back the passed function at a later time, enabling asynchronous behavior or handling tasks once something else is done.",
-    "Callbacks are commonly used in JavaScript for tasks like handling events, making network requests, or performing operations after a certain action completes. For example, when you click a button, a callback function may be executed to handle that click.",
-    "Here's a simple example: You have a function named greet which takes another function as an argument. When greet runs, it calls the function passed to it. This is how a callback works.",
-    "Understanding callbacks is important because they form the foundation of asynchronous programming in JavaScript, helping to keep your code responsive and efficient."
-  ]
-}
+[]

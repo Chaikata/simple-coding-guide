@@ -1,28 +1,33 @@
 import Link from "next/link";
-import { articles } from "@/data/articles";
+
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/javascript", label: "JavaScript" },
+  { href: "/typescript", label: "TypeScript" },
+  { href: "/python", label: "Python" },
+  { href: "/sql", label: "SQL" },
+];
 
 export default function Navbar() {
-  const languages = Array.from(
-    new Set(articles.map((article) => article.language))
-  );
-
   return (
-    <nav className="border-b border-gray-800 bg-black text-white">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex flex-wrap gap-6 items-center">
-        <Link href="/" className="text-xl font-bold">
+    <header className="border-b border-gray-800 bg-black">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-10 py-4">
+        <Link href="/" className="text-xl font-bold text-white">
           Simple Coding Guide
         </Link>
 
-        {languages.map((language) => (
-          <Link
-            key={language}
-            href={`/${language}`}
-            className="text-gray-300 hover:text-white transition capitalize"
-          >
-            {language}
-          </Link>
-        ))}
+        <nav className="flex flex-wrap gap-5 text-sm text-gray-300">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="transition hover:text-white"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
       </div>
-    </nav>
+    </header>
   );
 }

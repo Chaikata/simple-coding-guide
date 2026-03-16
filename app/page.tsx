@@ -2,90 +2,98 @@ import Link from "next/link";
 import { articles } from "@/data/articles";
 import SearchBar from "@/components/SearchBar";
 
-export default function Home() {
-  const javascriptArticles = articles.filter(
-    (article) => article.language === "javascript"
-  );
+const languages = [
+  {
+    slug: "javascript",
+    name: "JavaScript",
+    description: "Learn JavaScript basics, concepts, and common error fixes.",
+  },
+  {
+    slug: "typescript",
+    name: "TypeScript",
+    description: "Explore TypeScript tutorials and fix common TypeScript errors.",
+  },
+  {
+    slug: "python",
+    name: "Python",
+    description: "Study Python step by step with beginner guides and error help.",
+  },
+  {
+    slug: "sql",
+    name: "SQL",
+    description: "Understand SQL queries, concepts, and common database errors.",
+  },
+];
 
-  const sqlArticles = articles.filter(
-    (article) => article.language === "sql"
-  );
+function getArticleCount(language: string) {
+  return articles.filter((article) => article.language === language).length;
+}
 
-  const tutorialArticles = articles.filter(
-    (article) => article.type === "tutorials"
-  );
+function getLatestArticles(limit = 8) {
+  return [...articles].slice(-limit).reverse();
+}
 
-  const errorArticles = articles.filter(
-    (article) => article.type === "errors"
-  );
+export default function HomePage() {
+  const latestArticles = getLatestArticles(8);
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
-      <div className="max-w-6xl mx-auto">
-        <section className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-6">Simple Coding Guide</h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Beginner-friendly coding tutorials and error fixes for JavaScript, SQL, and more.
+    <main className="min-h-screen bg-black px-10 py-10 text-white">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-12">
+          <h1 className="mb-4 text-5xl font-bold">codeAtlas</h1>
+          <p className="max-w-3xl text-lg text-gray-400">
+            Beginner-friendly coding tutorials and error explanations for
+            JavaScript, TypeScript, Python, and SQL.
           </p>
-        </section>
+        </div>
 
-        <SearchBar />
+        <div className="mb-12">
+          <SearchBar />
+        </div>
 
-        <section className="grid md:grid-cols-2 gap-6 mb-16">
-          <Link
-            href="/javascript"
-            className="border border-gray-700 p-6 rounded-xl hover:border-gray-400 transition"
-          >
-            <h2 className="text-3xl font-semibold mb-2">JavaScript</h2>
-            <p className="text-gray-400">{javascriptArticles.length} articles</p>
-          </Link>
+        <div className="mb-14">
+          <h2 className="mb-6 text-3xl font-bold">Browse by Language</h2>
 
-          <Link
-            href="/sql"
-            className="border border-gray-700 p-6 rounded-xl hover:border-gray-400 transition"
-          >
-            <h2 className="text-3xl font-semibold mb-2">SQL</h2>
-            <p className="text-gray-400">{sqlArticles.length} articles</p>
-          </Link>
-        </section>
-
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6">Latest Tutorials</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {tutorialArticles.slice(0, 6).map((article) => (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {languages.map((language) => (
               <Link
-                key={`${article.language}-${article.type}-${article.slug}`}
-                href={`/${article.language}/${article.type}/${article.slug}`}
-                className="border border-gray-700 p-6 rounded-xl hover:border-gray-400 transition"
+                key={language.slug}
+                href={`/${language.slug}`}
+                className="rounded-xl border border-gray-700 p-6 transition hover:border-gray-400"
               >
-                <h3 className="text-2xl font-semibold mb-2">{article.title}</h3>
-                <p className="text-gray-400">{article.description}</p>
-                <p className="text-sm text-gray-500 mt-3">
-                  {article.language} / {article.type}
+                <h3 className="mb-2 text-2xl font-semibold">{language.name}</h3>
+                <p className="text-sm leading-6 text-gray-400">
+                  {language.description}
+                </p>
+                <p className="mt-4 text-sm text-gray-500">
+                  {getArticleCount(language.slug)} articles
                 </p>
               </Link>
             ))}
           </div>
-        </section>
+        </div>
 
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6">Common Error Fixes</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {errorArticles.slice(0, 6).map((article) => (
+        <div>
+          <h2 className="mb-6 text-3xl font-bold">Latest Articles</h2>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {latestArticles.map((article) => (
               <Link
-                key={`${article.language}-${article.type}-${article.slug}`}
+                key={article.slug}
                 href={`/${article.language}/${article.type}/${article.slug}`}
-                className="border border-gray-700 p-6 rounded-xl hover:border-gray-400 transition"
+                className="rounded-xl border border-gray-700 p-5 transition hover:border-gray-400"
               >
-                <h3 className="text-2xl font-semibold mb-2">{article.title}</h3>
-                <p className="text-gray-400">{article.description}</p>
-                <p className="text-sm text-gray-500 mt-3">
+                <p className="mb-2 text-xs uppercase tracking-wide text-gray-500">
                   {article.language} / {article.type}
+                </p>
+                <h3 className="mb-2 text-xl font-semibold">{article.title}</h3>
+                <p className="text-sm leading-6 text-gray-400">
+                  {article.description}
                 </p>
               </Link>
             ))}
           </div>
-        </section>
+        </div>
       </div>
     </main>
   );

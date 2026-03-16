@@ -3,8 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Simple Coding Guide",
-  description: "Beginner-friendly coding tutorials and error fixes.",
+  title: "codeAtlas",
+  description: "Beginner-friendly coding tutorials and error explanations.",
 };
 
 export default function RootLayout({
