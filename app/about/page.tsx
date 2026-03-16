@@ -18,7 +18,7 @@ export default function AboutPage() {
           <span className="text-gray-500">About</span>
         </nav>
 
-        <h1 className="mb-6 text-4xl font-bold">About Dev Nest Guide</h1>
+        <h1 className="mb-6 text-4xl font-bold">About</h1>
 
         <div className="space-y-6 leading-8 text-gray-300">
           <p>

@@ -27,7 +27,7 @@ export default function ContactPage() {
           </p>
 
           <div className="rounded-lg border border-gray-700 bg-zinc-900 p-4">
-            <p className="font-medium text-white">contact@devnestguide.com</p>
+            <p className="font-medium text-white">contact.devnestguide@gmail.com</p>
           </div>
 
           <p>
