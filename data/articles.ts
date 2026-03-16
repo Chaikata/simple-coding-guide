@@ -2140,5 +2140,241 @@ export const articles: Article[] = [
         "value": "By understanding these common SQL connection errors—what they mean, why they occur, and how to fix them—you can troubleshoot connection issues more effectively. Always double-check your credentials, server information, and service status to get your database connections working smoothly."
       }
     ]
+  },
+  {
+    "slug": "how-to-declare-variables-in-javascript",
+    "title": "How to Declare Variables in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to declaring variables in JavaScript, understanding their differences, and avoiding common errors.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In programming, variables are used to store data that you can use and change later. JavaScript provides multiple ways to declare variables. This article will guide you through the basics of declaring variables and explain the differences between them."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, you can declare variables using var, let, or const. The var keyword was used in older JavaScript versions, but let and const are more modern and recommended. Variables declared with var or let can be updated, while const declares constants that cannot be reassigned after initialization."
+      },
+      {
+        "type": "code",
+        "value": "let age = 25;  // A variable that can be updated\nconst name = 'Alice';  // A constant that cannot be changed\n\nage = 26;  // This works\n// name = 'Bob';  // This will cause an error because name is a constant"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to reassign a value to a constant, JavaScript will throw an error like: \"Uncaught TypeError: Assignment to constant variable.\" This means you cannot change the value of variables declared with const. To fix this error, either avoid reassigning constants or use let if you need to change the variable later."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, use let for variables that need to change and const for values that should stay the same. Avoid using var for better clarity and fewer bugs. Declaring variables correctly helps keep your code readable and reduces unexpected errors."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-unexpected-token-error-in-javascript",
+    "title": "How to Fix Unexpected Token Error in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what the Unexpected Token error means in JavaScript, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to JavaScript, you may have seen an error message like `Unexpected token` when running your code. This error can be confusing because it doesn't always explain exactly what went wrong. In this article, we'll explain what this error means, common reasons why it happens, and how you can fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "The `Unexpected token` error means that JavaScript found a character (or \"token\") where it wasn't expecting one. This usually happens due to a typo, missing punctuation, or incorrect syntax. For example, it can occur if you forget to close a string with quotes, if a bracket is missing, or if you write invalid characters."
+      },
+      {
+        "type": "code",
+        "value": "let name = 'Alice;\nconsole.log(name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, we forgot to close the string with an ending quote after `'Alice`. JavaScript sees the semicolon inside what it thinks is the string and throws an `Unexpected token` error because it finds something unexpected inside the string. To fix it, make sure all strings are properly closed with matching quotes, like this:"
+      },
+      {
+        "type": "code",
+        "value": "let name = 'Alice';\nconsole.log(name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Other common causes for this error include missing commas between items in an array or object, leftover or extra punctuation, or using reserved words incorrectly. Always check the line mentioned in the error message and look for typos or missing syntax. Fixing those mistakes will help your code run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-typescript-variables-and-data-types",
+    "title": "Getting Started with TypeScript Variables and Data Types",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to declare variables and use basic data types in TypeScript with beginner-friendly explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful programming language that builds on JavaScript by adding static types. This means you can define the type of data a variable holds, which helps catch errors early and write more reliable code. In this tutorial, we'll explore how to declare variables and use common data types in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "To declare a variable in TypeScript, you use keywords like `let`, `const`, or `var`, followed by the variable name and optionally specify the type using a colon. TypeScript supports several basic data types such as `number`, `string`, `boolean`, and more. Specifying types is optional, but it helps the compiler understand what kind of data your variables should hold."
+      },
+      {
+        "type": "code",
+        "value": "let age: number = 25;\nconst name: string = 'Alice';\nlet isStudent: boolean = true;\n\n// TypeScript also infers types if you don't specify them:\nlet score = 90; // inferred as number\n\n// An example of a type error:\n// age = 'twenty-five'; // Error: Type 'string' is not assignable to type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we declared variables with specific types. If you try to assign a value of a different type, TypeScript will show an error. This error means you're trying to store incompatible data and can be fixed by ensuring the variable holds only data of the declared type. Using types helps you prevent bugs, improve code readability, and make development easier as your projects grow."
+      }
+    ]
+  },
+  {
+    "slug": "fixing-typescript-argument-of-type-is-not-assignable-to-parameter-error",
+    "title": "Fixing TypeScript's 'Argument of type is not assignable to parameter' Error",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what causes the 'Argument of type is not assignable to parameter' error in TypeScript and how to fix it with clear explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start using TypeScript, you may encounter an error message like: \"Argument of type 'X' is not assignable to parameter of type 'Y'.\" This is a common type error that beginners face, but understanding why it happens can help you fix it quickly."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error means that the value you are passing to a function or method does not match the type expected by the function's parameter. Typescript is strict about types, so if it expects a string but you pass a number, or it expects an object with specific properties but you pass an incorrect object, it will show this error. It helps prevent bugs by ensuring you only pass the right types."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log('Hello, ' + name);\n}\n\ngreet(42); // Error: Argument of type 'number' is not assignable to parameter of type 'string'.\n\n// Fix:\ngreet('Alice');  // Correct usage"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, check the function parameter types and ensure the arguments you pass match those types exactly. If your data types are more complex (like objects), make sure all required properties are present and of correct types. You can also use type assertions or adjust the function's type if appropriate, but always aim for clear and consistent typing to avoid this error."
+      }
+    ]
+  },
+  {
+    "slug": "learning-python-loops-with-easy-examples",
+    "title": "Learning Python Loops with Easy Examples",
+    "language": "python",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using loops in Python with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Loops are fundamental concepts in programming that allow you to repeat a block of code multiple times. They help you automate repetitive tasks without having to write the same code over and over. In Python, there are two main types of loops: for loops and while loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with the for loop. It is used when you know the number of times you want to repeat an action or when you want to iterate over a collection like a list or a range of numbers."
+      },
+      {
+        "type": "code",
+        "value": "for i in range(5):\n    print(\"Number\", i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the for loop will print numbers from 0 to 4. The range(5) function creates a sequence of numbers from 0 up to (but not including) 5. The variable i takes each value in the sequence one by one. Note the indentation—Python uses indentation to group code inside loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, the while loop repeats as long as a specified condition is true. This type of loop is useful when you don't know in advance how many times you need to repeat the code, and the repetition depends on a condition."
+      },
+      {
+        "type": "code",
+        "value": "count = 0\nwhile count < 5:\n    print(\"Count is\", count)\n    count += 1"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the while loop continues to run as long as count is less than 5. Inside the loop, we print the current count and then increase it by 1 using count += 1. If you forget to increase count inside the loop, the condition will always be true, causing an infinite loop. This means your program will keep running forever, which is a common mistake. To fix it, always make sure the condition will eventually become false by updating variables appropriately."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding loops will greatly simplify tasks where you need repetition, such as processing items in lists, performing calculations repeatedly, or handling user input until a condition is met. Practice writing different types of loops and pay careful attention to the loop conditions and increments to avoid common errors."
+      }
+    ]
+  },
+  {
+    "slug": "simple-ways-to-troubleshoot-typeerror-in-python",
+    "title": "Simple Ways to Troubleshoot TypeError in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what TypeError means in Python, why it happens, and easy ways to fix it with examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to Python, encountering errors is normal. One common error you might see is TypeError. This article will help you understand what a TypeError is, why it happens, and easy steps to fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "A TypeError occurs when an operation or function is applied to an object of an inappropriate type. In simple words, you are trying to do something with a value that Python does not allow because the value's type doesn't support the operation. For example, trying to add a number and a text string together causes a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "number = 5\ntext = \"hello\"\nresult = number + text  # This will cause a TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above error happens because Python cannot add an integer (5) and a string (\"hello\"). To fix this, make sure the data types are compatible. For example, convert the number to a string before adding, or only add numbers together."
+      },
+      {
+        "type": "code",
+        "value": "number = 5\ntext = \"hello\"\nresult = str(number) + text  # Correct: converts number to string first\nprint(result)  # Output: 5hello"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, when you see a TypeError in your Python code, check the types of the values involved. Use functions like str(), int(), or float() to convert values if needed. Ensuring type compatibility will help you avoid this common error and make your programs run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-data-types-and-their-uses",
+    "title": "Understanding SQL Data Types and Their Uses",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to SQL data types and how to use them effectively.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, it is essential to understand the different data types available in SQL. Data types define the kind of data that can be stored in each column of a table, such as text, numbers, or dates. Using the correct data type helps ensure your data is stored efficiently and accurately."
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL offers many data types, but for beginners, it's useful to focus on a few common ones: INTEGER for whole numbers, VARCHAR for variable-length text, DATE for dates, and BOOLEAN for true or false values. Choosing the right data type prevents errors and improves database performance."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n  id INTEGER PRIMARY KEY,\n  name VARCHAR(100),\n  email VARCHAR(100),\n  signup_date DATE,\n  is_active BOOLEAN\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the users table stores different data types for each column. The id column uses INTEGER for user IDs, name and email use VARCHAR to store text, signup_date uses DATE to record the registration day, and is_active uses BOOLEAN to represent if the user is currently active. Understanding and applying data types correctly helps you design better databases."
+      }
+    ]
+  },
+  {
+    "slug": "common-causes-of-sql-connection-errors-and-how-to-resolve-them",
+    "title": "Common Causes of SQL Connection Errors and How to Resolve Them",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn about common SQL connection errors, why they happen, and how to fix them effectively.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start working with SQL databases, encountering connection errors is a common challenge. These errors prevent your application from communicating with the database, causing your queries to fail. Understanding why these errors occur and how to fix them is an important skill for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "One typical cause is incorrect connection credentials, such as a wrong username, password, or database name. Another common issue is network problems, like the database server being unreachable or blocked by a firewall. Additionally, your SQL server may not be running, or it might be refusing connections due to its configuration. Permissions can also cause errors if the user doesn't have access rights."
+      },
+      {
+        "type": "code",
+        "value": "-- Example of a basic SQL connection string in SQL Server\n-- Replace placeholders with your own values\nDECLARE @ServerName NVARCHAR(100) = 'your_server_name';\nDECLARE @DatabaseName NVARCHAR(100) = 'your_database';\nDECLARE @User NVARCHAR(100) = 'your_username';\nDECLARE @Password NVARCHAR(100) = 'your_password';\n\n-- Attempt to connect using SQLCMD (run in command prompt as example)\nsqlcmd -S @ServerName -d @DatabaseName -U @User -P @Password\n\n-- Common errors:\n-- 1. Login failed for user: Check username and password\n-- 2. Server not found or not accessible: Check server name, network, or firewall\n-- 3. Database does not exist: Verify the database name\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To resolve these issues, first double-check your connection details. Ensure the SQL server is running and accessible on the network (try pinging the server). Verify that firewalls or antivirus software are not blocking communication. Confirm the user account has the proper permissions and that the database exists. By systematically checking these areas, you can usually fix SQL connection errors and get your application connected correctly."
+      }
+    ]
   }
 ];
