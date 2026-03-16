@@ -8,21 +8,39 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+/*
+LANGUAGES + CONTENT TYPES
+*/
+
 const contentPlans = [
   { language: "javascript", type: "tutorials" },
   { language: "javascript", type: "errors" },
+
+  { language: "typescript", type: "tutorials" },
+  { language: "typescript", type: "errors" },
+
+  { language: "python", type: "tutorials" },
+  { language: "python", type: "errors" },
+
   { language: "sql", type: "tutorials" },
   { language: "sql", type: "errors" },
 ];
 
+/*
+GENERATION LIMITS
+*/
+
 const GENERATION_LIMITS = {
   maxTopicsPerPlan: 10,
-  maxArticlesPerRun: 6,
-  maxPerLanguage: 3,
-  maxPerType: 3,
+  maxArticlesPerRun: 8,
+  maxPerLanguage: 2,
+  maxPerType: 4,
   maxRetries: 2,
-  autoPublish: true,
 };
+
+/*
+UTILS
+*/
 
 function cleanJson(text) {
   return text.replace(/```json/g, "").replace(/```/g, "").trim();
@@ -85,30 +103,18 @@ function incrementCount(map, key) {
 
 function canGenerateArticle(language, type, totalCreated, languageCounts, typeCounts) {
   if (totalCreated >= GENERATION_LIMITS.maxArticlesPerRun) {
-    return {
-      allowed: false,
-      reason: `run limit reached (${GENERATION_LIMITS.maxArticlesPerRun})`,
-    };
+    return false;
   }
 
   if (getCount(languageCounts, language) >= GENERATION_LIMITS.maxPerLanguage) {
-    return {
-      allowed: false,
-      reason: `language limit reached for ${language}`,
-    };
+    return false;
   }
 
   if (getCount(typeCounts, type) >= GENERATION_LIMITS.maxPerType) {
-    return {
-      allowed: false,
-      reason: `type limit reached for ${type}`,
-    };
+    return false;
   }
 
-  return {
-    allowed: true,
-    reason: "",
-  };
+  return true;
 }
 
 async function retry(label, fn) {
@@ -116,18 +122,19 @@ async function retry(label, fn) {
 
   for (let attempt = 1; attempt <= GENERATION_LIMITS.maxRetries + 1; attempt++) {
     try {
-      if (attempt > 1) {
-        console.log(`${label} retry ${attempt - 1}/${GENERATION_LIMITS.maxRetries}...`);
-      }
       return await fn();
     } catch (error) {
       lastError = error;
-      console.error(`${label} failed on attempt ${attempt}:`, error);
+      console.log(`${label} retry ${attempt}`);
     }
   }
 
   throw lastError;
 }
+
+/*
+TOPIC GENERATION
+*/
 
 async function generateTopics(language, type) {
   const prompt = `
@@ -140,25 +147,12 @@ Rules:
 - If type is "tutorials", create beginner-friendly learning topics.
 - If type is "errors", create realistic error-fix topics people search for.
 - Keep topics highly searchable.
-- Avoid duplicate or very similar ideas.
+- Avoid duplicate ideas.
 - Return ONLY valid JSON.
-- Do not use markdown.
-- Do not include any text before or after the JSON.
 
-Use this exact format:
+Format:
 {
-  "topics": [
-    "topic 1",
-    "topic 2",
-    "topic 3",
-    "topic 4",
-    "topic 5",
-    "topic 6",
-    "topic 7",
-    "topic 8",
-    "topic 9",
-    "topic 10"
-  ]
+ "topics": ["topic1","topic2","topic3"]
 }
 `;
 
@@ -170,12 +164,12 @@ Use this exact format:
   const cleaned = cleanJson(response.output_text);
   const data = JSON.parse(cleaned);
 
-  if (!Array.isArray(data.topics)) {
-    throw new Error("Invalid topics response");
-  }
-
   return data.topics.slice(0, GENERATION_LIMITS.maxTopicsPerPlan);
 }
+
+/*
+ARTICLE GENERATION
+*/
 
 async function generateArticle(topic, language, type) {
   const prompt = `
@@ -186,39 +180,22 @@ Language: ${language}
 Type: ${type}
 
 Rules:
-- If type is "tutorials", explain the concept clearly for beginners.
-- If type is "errors", explain what the error means, why it happens, and how to fix it.
-- Keep the writing simple and clear.
-- Include at least one code block when it makes sense.
-- Return ONLY valid JSON.
-- Do not use markdown.
-- Do not include any text before or after the JSON.
+- Tutorials teach concepts
+- Errors explain problem and fix
+- Include at least one code example
+- Return ONLY JSON
 
-Use this exact format:
+Format:
 {
-  "slug": "topic-url-slug",
-  "title": "Article Title",
-  "language": "${language}",
-  "type": "${type}",
-  "description": "Short description",
-  "content": [
-    {
-      "type": "paragraph",
-      "value": "intro paragraph"
-    },
-    {
-      "type": "paragraph",
-      "value": "explanation paragraph"
-    },
-    {
-      "type": "code",
-      "value": "example code here"
-    },
-    {
-      "type": "paragraph",
-      "value": "summary paragraph"
-    }
-  ]
+ "slug":"topic-url-slug",
+ "title":"Article Title",
+ "language":"${language}",
+ "type":"${type}",
+ "description":"Short description",
+ "content":[
+  {"type":"paragraph","value":"text"},
+  {"type":"code","value":"example code"}
+ ]
 }
 `;
 
@@ -240,96 +217,73 @@ Use this exact format:
   };
 }
 
+/*
+MAIN RUNNER
+*/
+
 async function run() {
   const allArticles = [];
   const existingSlugs = getExistingSlugs();
+
   const languageCounts = createCounterMap();
   const typeCounts = createCounterMap();
 
-  console.log("Generation limits:");
-  console.log(`- max topics per plan: ${GENERATION_LIMITS.maxTopicsPerPlan}`);
-  console.log(`- max articles per run: ${GENERATION_LIMITS.maxArticlesPerRun}`);
-  console.log(`- max per language: ${GENERATION_LIMITS.maxPerLanguage}`);
-  console.log(`- max per type: ${GENERATION_LIMITS.maxPerType}`);
-  console.log(`- max retries: ${GENERATION_LIMITS.maxRetries}`);
-  console.log(`- auto publish: ${GENERATION_LIMITS.autoPublish}`);
+  console.log("Starting article generation...");
 
   for (const plan of contentPlans) {
-    if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
-      console.log("Reached max articles for this run. Stopping early.");
-      break;
-    }
+    console.log(`Topics for ${plan.language} / ${plan.type}`);
 
-    console.log(`Generating topics for ${plan.language} / ${plan.type}...`);
-
-    let topics = [];
-
-    try {
-      topics = await retry(
-        `Topic generation for ${plan.language}/${plan.type}`,
-        () => generateTopics(plan.language, plan.type)
-      );
-    } catch (error) {
-      console.error(`Skipping plan ${plan.language}/${plan.type} because topics failed:`, error);
-      continue;
-    }
+    const topics = await generateTopics(plan.language, plan.type);
 
     for (const topic of topics) {
-      const limitCheck = canGenerateArticle(
-        plan.language,
-        plan.type,
-        allArticles.length,
-        languageCounts,
-        typeCounts
-      );
-
-      if (!limitCheck.allowed) {
-        console.log(
-          `Skipping remaining generation for ${plan.language}/${plan.type}: ${limitCheck.reason}`
-        );
+      if (
+        !canGenerateArticle(
+          plan.language,
+          plan.type,
+          allArticles.length,
+          languageCounts,
+          typeCounts
+        )
+      ) {
         break;
       }
 
-      console.log(`Generating article: ${topic}`);
+      console.log(`Generating: ${topic}`);
 
       let article;
 
       try {
-        article = await retry(
-          `Article generation for "${topic}"`,
-          () => generateArticle(topic, plan.language, plan.type)
+        article = await retry(topic, () =>
+          generateArticle(topic, plan.language, plan.type)
         );
       } catch (error) {
-        console.error(`Skipping article after retries: ${topic}`, error);
-        continue;
-      }
-
-      if (!article || !article.slug || !article.title || !article.description) {
-        console.log(`Skipping invalid article payload for topic: ${topic}`);
+        console.log("Skipping after retries");
         continue;
       }
 
       if (existingSlugs.has(article.slug)) {
-        console.log(`Skipping duplicate slug: ${article.slug}`);
+        console.log(`Duplicate skipped: ${article.slug}`);
         continue;
       }
 
       existingSlugs.add(article.slug);
+
       incrementCount(languageCounts, article.language);
       incrementCount(typeCounts, article.type);
+
       allArticles.push(article);
 
       console.log(
-        `Added: ${article.slug} | total=${allArticles.length} | ${article.language}=${getCount(
-          languageCounts,
-          article.language
-        )} | ${article.type}=${getCount(typeCounts, article.type)}`
+        `Added: ${article.slug} | total=${allArticles.length}`
       );
 
       if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
-        console.log("Reached max articles for this run.");
         break;
       }
+    }
+
+    if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
+      break;
     }
   }
 
@@ -338,20 +292,7 @@ async function run() {
     JSON.stringify(allArticles, null, 2)
   );
 
-  console.log("");
   console.log(`Created ${allArticles.length} new articles`);
-  console.log("Language counts:");
-  for (const [language, count] of languageCounts.entries()) {
-    console.log(`- ${language}: ${count}`);
-  }
-
-  console.log("Type counts:");
-  for (const [type, count] of typeCounts.entries()) {
-    console.log(`- ${type}: ${count}`);
-  }
 }
 
-run().catch((error) => {
-  console.error("Generation run failed:", error);
-  process.exit(1);
-});
+run();

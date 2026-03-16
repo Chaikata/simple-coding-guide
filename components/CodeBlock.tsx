@@ -1,10 +1,7 @@
 "use client";
 
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import oneDark from "react-syntax-highlighter/dist/cjs/styles/prism/one-dark";
-import js from "react-syntax-highlighter/dist/cjs/languages/prism/javascript";
-
-SyntaxHighlighter.registerLanguage("javascript", js);
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type CodeBlockProps = {
   code: string;
