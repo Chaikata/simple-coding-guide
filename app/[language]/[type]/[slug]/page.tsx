@@ -3,6 +3,7 @@ import { articles } from "@/data/articles";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import CodeBlock from "@/components/CodeBlock";
+import { addInternalLinks } from "@/lib/internalLinks";
 
 type ContentBlock =
   | string
@@ -100,20 +101,38 @@ export default async function ArticlePage({ params }: PageProps) {
           {article.content.map((block: ContentBlock, index: number) => {
             if (typeof block === "string") {
               return (
-                <p key={index} className="leading-8 text-gray-200">
-                  {block}
-                </p>
+                <p
+                  key={index}
+                  className="leading-8 text-gray-200"
+                  dangerouslySetInnerHTML={{
+                    __html: addInternalLinks(block),
+                  }}
+                />
               );
             }
 
             if (block.type === "code") {
-              return <CodeBlock key={index} code={block.value} language="javascript" />;
+              return (
+                <CodeBlock
+                  key={index}
+                  code={block.value}
+                  language={
+                    article.language === "typescript"
+                      ? "typescript"
+                      : article.language
+                  }
+                />
+              );
             }
 
             return (
-              <p key={index} className="leading-8 text-gray-200">
-                {block.value}
-              </p>
+              <p
+                key={index}
+                className="leading-8 text-gray-200"
+                dangerouslySetInnerHTML={{
+                  __html: addInternalLinks(block.value),
+                }}
+              />
             );
           })}
         </div>
