@@ -1,16 +1,20 @@
 import Link from "next/link";
 import { articles } from "@/data/articles";
+import SearchBar from "@/components/SearchBar";
 
 export default function Home() {
   const javascriptArticles = articles.filter(
     (article) => article.language === "javascript"
   );
+
   const sqlArticles = articles.filter(
     (article) => article.language === "sql"
   );
+
   const tutorialArticles = articles.filter(
     (article) => article.type === "tutorials"
   );
+
   const errorArticles = articles.filter(
     (article) => article.type === "errors"
   );
@@ -25,15 +29,15 @@ export default function Home() {
           </p>
         </section>
 
+        <SearchBar />
+
         <section className="grid md:grid-cols-2 gap-6 mb-16">
           <Link
             href="/javascript"
             className="border border-gray-700 p-6 rounded-xl hover:border-gray-400 transition"
           >
             <h2 className="text-3xl font-semibold mb-2">JavaScript</h2>
-            <p className="text-gray-400">
-              {javascriptArticles.length} articles
-            </p>
+            <p className="text-gray-400">{javascriptArticles.length} articles</p>
           </Link>
 
           <Link
@@ -41,9 +45,7 @@ export default function Home() {
             className="border border-gray-700 p-6 rounded-xl hover:border-gray-400 transition"
           >
             <h2 className="text-3xl font-semibold mb-2">SQL</h2>
-            <p className="text-gray-400">
-              {sqlArticles.length} articles
-            </p>
+            <p className="text-gray-400">{sqlArticles.length} articles</p>
           </Link>
         </section>
 
