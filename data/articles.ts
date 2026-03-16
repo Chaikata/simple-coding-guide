@@ -236,5 +236,221 @@ export const articles: Article[] = [
         "value": "Understanding these common SQL connection errors will make your debugging process easier and help you create stable database connections. Always double-check your credentials, server settings, network status, and security configurations to prevent these errors."
       }
     ]
+  },
+  {
+    "slug": "javascript-basics-for-absolute-beginners",
+    "title": "JavaScript Basics for Absolute Beginners",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the foundational concepts of JavaScript with easy examples and explanations.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is one of the most popular programming languages, mainly used to add interactivity to web pages. If you have never coded before, this tutorial will help you understand the very basics of JavaScript and get started with writing simple programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, you use variables to store data, like numbers or text. You can create variables using keywords like 'let' or 'const'. Here is a simple example that shows how to declare variables and output them."
+      },
+      {
+        "type": "code",
+        "value": "let name = \"Alice\";\nconst age = 25;\nconsole.log(\"Name:\", name);\nconsole.log(\"Age:\", age);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above code, 'let name = \"Alice\";' creates a variable named 'name' and stores the text \"Alice\". We use 'const' for 'age' which means this value should not change later. The 'console.log()' function prints the values to the console, which is a place in your browser or code editor where you can see the output. Getting comfortable with variables and output will help you understand more complex topics in JavaScript."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-undefined-is-not-a-function-error-in-javascript",
+    "title": "How to Fix 'undefined is not a function' Error in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what causes the 'undefined is not a function' error in JavaScript and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start coding in JavaScript, you might encounter errors that can be confusing. One common error is \"undefined is not a function.\" This error means that you are trying to call something as a function, but JavaScript does not recognize it as a function."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error usually happens when you try to call a method or function on a variable that is either undefined or does not actually have that method. For example, this can occur if you misspell a function name, forget to assign a function to a variable, or try to use a method that doesn't exist on an object."
+      },
+      {
+        "type": "code",
+        "value": "let greeting;\ngreeting(); // Error: undefined is not a function\n\n// Fix by assigning a function:\ngreeting = function() {\n  console.log('Hello!');\n};\ngreeting(); // This works and prints 'Hello!'"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, always double-check that the variable you are calling is indeed a function. Make sure you spelled the function name correctly and that the function is properly assigned before you call it. Also, confirm that the methods you use exist on the objects you are working with."
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-typescript-for-beginners",
+    "title": "Getting Started with TypeScript for Beginners",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using TypeScript in your projects.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a programming language developed and maintained by Microsoft. It is a superset of JavaScript, which means it builds on JavaScript by adding static types. This helps you catch errors during development, making your code easier to understand and less error-prone."
+      },
+      {
+        "type": "paragraph",
+        "value": "In TypeScript, you can declare types for variables, function parameters, and return values. For example, instead of just using 'let name = \"John\"', you can specify 'let name: string = \"John\";'. This tells TypeScript that 'name' should only hold a string value. If you try to assign a different type, TypeScript will show an error."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string): string {\n  return 'Hello, ' + name + '!';\n}\n\nlet userName: string = 'Alice';\nconsole.log(greet(userName));"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to pass a number instead of a string to the 'greet' function, TypeScript will show an error. For example, calling 'greet(42)' will raise the error: 'Argument of type 'number' is not assignable to parameter of type 'string'.' This means that the function expects a string, but you gave it a number. To fix this, make sure you pass the correct type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Starting with TypeScript helps improve your coding skills by making your intentions clear and reducing bugs. By adding simple type annotations and leveraging TypeScript's error checking, you can build reliable and maintainable applications more confidently."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-cannot-find-name-error-in-typescript",
+    "title": "How to Fix 'Cannot find name' Error in TypeScript",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what the 'Cannot find name' error means in TypeScript, why it occurs, and simple ways to fix it.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start writing TypeScript code, you might encounter the error message 'Cannot find name'. This error can be confusing for beginners because it doesn't always tell you exactly what is wrong. In this article, we will explore what this error means, why it happens, and how you can fix it easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "The 'Cannot find name' error occurs when TypeScript encounters a word (usually a variable, function, or type name) that it doesn't recognize. This can happen for several reasons: the name has not been declared or imported, there is a typo, or you forgot to install type definitions for external libraries. Essentially, TypeScript is telling you it doesn't know what this name refers to and can't use it."
+      },
+      {
+        "type": "code",
+        "value": "function greet() {\n  console.log(message);\n}\n\ngreet();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, if you run TypeScript, it will say 'Cannot find name 'message''. This is because 'message' is used but never declared. To fix this, you should declare 'message' before using it, like this:"
+      },
+      {
+        "type": "code",
+        "value": "const message = \"Hello, world!\";\n\nfunction greet() {\n  console.log(message);\n}\n\ngreet();"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, the 'Cannot find name' error in TypeScript means the compiler can't find a declaration for the name you used. To fix this error, check for typos, declare the missing variables or functions, and if the name comes from an external library, make sure you have installed and imported the necessary type definitions. With these steps, you can quickly resolve the error and continue coding smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "introduction-to-python-variables-and-data-types",
+    "title": "Introduction to Python Variables and Data Types",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of Python variables and data types to get started with programming.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start programming in Python, one of the first concepts to understand is variables and data types. Variables are like containers that store information, and data types tell Python what kind of information is stored."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, you don't need to declare the type of a variable explicitly. You just assign a value to a variable, and Python figures out the data type automatically. Common data types include integers (whole numbers), floats (decimal numbers), strings (text), and booleans (True or False)."
+      },
+      {
+        "type": "code",
+        "value": "age = 25\nprice = 19.99\nname = \"Alice\"\nis_student = True\n\nprint(type(age))      # Output: <class 'int'>\nprint(type(price))    # Output: <class 'float'>\nprint(type(name))     # Output: <class 'str'>\nprint(type(is_student))  # Output: <class 'bool'>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you might see an error like 'NameError: name 'x' is not defined'. This means you tried to use a variable before giving it a value. To fix it, make sure you assign a value to the variable before using it. For example, writing 'x = 10' before using 'x' in the code will prevent this error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding variables and data types is the foundation of programming in Python. After you feel comfortable with these concepts, you'll be able to store, manipulate, and use data efficiently in your programs."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-syntaxerror-in-python-for-beginners",
+    "title": "How to Fix SyntaxError in Python for Beginners",
+    "language": "python",
+    "type": "errors",
+    "description": "A simple guide to understand and fix SyntaxError in Python programming.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start coding in Python, you might encounter an error called SyntaxError. This error means that there is a problem with the way you've written your code. Python could not understand it because the rules of the language were not followed properly."
+      },
+      {
+        "type": "paragraph",
+        "value": "A SyntaxError usually happens because of missing punctuation, incorrect indentation, or using Python keywords wrongly. For example, forgetting a colon at the end of a loop or function definition will cause this error. Python points to where it detected the problem, which helps you find and fix the mistake."
+      },
+      {
+        "type": "code",
+        "value": "for i in range(5)\n    print(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the code is missing a colon at the end of the for loop line. Python expects a colon ':' to know that the block of code is starting. To fix it, you simply add the colon like this: for i in range(5): print(i). Once fixed, the program will run without SyntaxError."
+      }
+    ]
+  },
+  {
+    "slug": "introduction-to-sql-for-absolute-beginners",
+    "title": "Introduction to SQL for Absolute Beginners",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly introduction to SQL, covering basic concepts and simple queries.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL, or Structured Query Language, is a powerful tool used to communicate with databases. It lets you create, read, update, and delete data stored in tables. If you are new to SQL, this tutorial will guide you through the basics so you can get started with writing simple queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common SQL commands you'll use are SELECT, INSERT, UPDATE, and DELETE. SELECT lets you retrieve data from a database. Databases organize data in tables, which are like spreadsheets with rows and columns. Each row represents a record, and each column represents a piece of information about that record."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users;\n\n-- This query retrieves all columns (*) from the 'users' table."
+      },
+      {
+        "type": "paragraph",
+        "value": "This example query selects all data from a table named 'users'. If you run this query and see an error saying \"table not found,\" it means the database doesn't have a table named 'users'. To fix it, check your table name spelling or create the table first using a CREATE TABLE statement."
+      }
+    ]
+  },
+  {
+    "slug": "troubleshooting-common-sql-connection-issues",
+    "title": "Troubleshooting Common SQL Connection Issues",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify, understand, and fix common SQL connection problems in beginner-friendly steps.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to a SQL database is one of the first steps in working with databases, but sometimes connection issues can arise. These problems can be frustrating for beginners. This article will help you understand the common SQL connection errors, why they happen, and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error is the 'Login failed for user' message. This usually means the username or password provided is incorrect or the user does not have permission to access the database. Another frequent problem is 'Cannot connect to server' which happens when the SQL server is not reachable due to network configuration, server not running, or wrong server address. Finally, the error 'Timeout expired' occurs when the connection attempt takes too long, possibly due to network issues or server overload."
+      },
+      {
+        "type": "code",
+        "value": "/* Example of a basic SQL Server connection string in T-SQL */\n-- Make sure to replace 'ServerName', 'DatabaseName', 'User', and 'Password' with your own info\n-- This string is used by your application to connect to SQL Server\n\nServer=ServerName;Database=DatabaseName;User Id=User;Password=Password;\n\n-- If you see an error here, check the username and password or server address."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix these issues, first verify your login credentials and permissions. Ensure the SQL server is running and the server name or IP address is correct. Check your network connection and firewall settings to confirm the SQL server port is open (default is 1433). Finally, increasing the connection timeout value might help if the network is slow. Understanding these causes and solutions will help you quickly troubleshoot and resolve SQL connection problems."
+      }
+    ]
   }
 ];
