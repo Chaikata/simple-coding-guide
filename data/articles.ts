@@ -2656,5 +2656,245 @@ export const articles: Article[] = [
         "value": "In summary, when you face SQL connection errors, carefully check your credentials, server accessibility, network settings, and connection string format. By understanding these common issues and their solutions, you can quickly resolve connection problems and focus on working with your database."
       }
     ]
+  },
+  {
+    "slug": "how-to-create-your-first-javascript-program",
+    "title": "How to Create Your First JavaScript Program",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to writing and running your first JavaScript program.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a popular programming language used to make websites interactive. If you're new to programming, this tutorial will guide you step by step to create your very first JavaScript program right in your web browser."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll start by writing a simple program that displays a message on the screen. You can write JavaScript code directly in your web browser's console or by creating a file that your browser can run. The code we'll use is very simple and will help you understand how JavaScript commands work."
+      },
+      {
+        "type": "code",
+        "value": "alert('Hello, world!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "The code above uses the alert function to show a popup with the message 'Hello, world!'. This is often the first program beginners write. If you see an error, it usually means there is a typo or missing punctuation. For example, missing the quotes around the message or forgetting the semicolon may cause issues. Always make sure strings are inside quotes and statements end with a semicolon. Now, try running this code, and you'll see your first JavaScript program in action!"
+      }
+    ]
+  },
+  {
+    "slug": "common-causes-of-syntax-errors-in-javascript-and-how-to-fix-them",
+    "title": "Common Causes of Syntax Errors in JavaScript and How to Fix Them",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn about common syntax errors in JavaScript, what they mean, why they occur, and how to fix them with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Syntax errors are one of the most common issues beginners face when learning JavaScript. These errors happen when the code you write does not follow the rules of the language. This article explains some frequent syntax mistakes and how you can fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common syntax error occurs when a semicolon or closing bracket is missing. For instance, forgetting a closing curly brace } can cause JavaScript to throw an error because it expects the block to be properly closed. Another example is missing parentheses () after a function name when calling it."
+      },
+      {
+        "type": "code",
+        "value": "function greet() {\n  console.log('Hello world');\n// Missing closing brace }\n\ngreet; // This is a reference, not a function call, missing parentheses ()"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the first mistake is the missing closing bracket for the greet function. JavaScript reports an error because it can't find the end of the function body. The second error is calling greet without parentheses, which means the function is not executed. To fix these, add the closing brace and parentheses when calling the function."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescript-basic-types-and-variables",
+    "title": "Understanding TypeScript Basic Types and Variables",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to TypeScript basic types and variable declarations.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. This means you can define what type of data a variable can hold, helping you catch errors before running your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "In TypeScript, you declare variables and specify their types using syntax like `let name: string = 'Alice';`. The most common basic types are `string`, `number`, `boolean`, `any`, and `void`. Let's explore how these work."
+      },
+      {
+        "type": "code",
+        "value": "let userName: string = 'Alice';\nlet userAge: number = 25;\nlet isMember: boolean = true;\n\n// The 'any' type allows any value, but using it removes type safety\nlet flexibleValue: any = 42;\nflexibleValue = 'Now a string';\n\n// 'void' is used mostly for functions that do not return a value\nfunction logMessage(message: string): void {\n  console.log(message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to assign a value that doesn’t match the declared type, TypeScript will show an error. For example, `let userName: string = 123;` causes an error because `123` is a number, not a string. This helps you avoid bugs by enforcing consistent types."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescript-type-errors-and-how-to-fix-them",
+    "title": "Understanding TypeScript Type Errors and How to Fix Them",
+    "language": "typescript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding common TypeScript type errors and practical ways to fix them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool that adds type safety to JavaScript code. However, beginners often encounter type errors that can be confusing at first. Understanding what these errors mean and how to resolve them is an essential skill that improves your coding experience and prevents runtime bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "A type error occurs when the TypeScript compiler finds a mismatch between expected and actual values according to the types you’ve defined or inferred. These errors help catch bugs early before you run your code. For example, trying to assign a string to a variable declared as a number will cause a type error."
+      },
+      {
+        "type": "code",
+        "value": "let age: number = 25;\nage = \"thirty\"; // Error: Type 'string' is not assignable to type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the error tells us that we are trying to put a string into a variable that should only hold numbers. To fix this error, make sure you assign a number to `age`. For instance, `age = 30;` will work without any errors. Always check the variable type and provide a matching value, which is the core concept of TypeScript's type checks."
+      }
+    ]
+  },
+  {
+    "slug": "python-if-statements-explained-with-examples",
+    "title": "Python If Statements Explained with Examples",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use if statements in Python to make decisions in your code with easy examples and explanations.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In Python, an if statement allows your program to make decisions by executing certain code only if a condition is true. This helps your programs behave differently based on different inputs or situations."
+      },
+      {
+        "type": "paragraph",
+        "value": "The basic syntax of an if statement in Python is simple: you write the keyword 'if', followed by a condition, then a colon, and then the indented code block that runs if the condition is true. If the condition is false, the code block is skipped."
+      },
+      {
+        "type": "code",
+        "value": "age = 18\nif age >= 18:\n    print(\"You are an adult.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the program checks if the variable 'age' is greater than or equal to 18. Since age is 18, the condition is true, so it prints 'You are an adult.'. Indentation is important in Python here to show which code belongs to the if statement."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors with if statements include forgetting the colon ':' at the end of the if line or incorrect indentation. For example, writing `if age >= 18` without ':' will cause a SyntaxError. This error means Python expected a colon to signify the start of the block. To fix it, just add the colon."
+      },
+      {
+        "type": "code",
+        "value": "if age >= 18  # Missing colon here\n    print(\"You are an adult.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to always add the colon `:` after the condition and indent the following block of code consistently to avoid errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also add an else statement to run code when the if condition is false:"
+      },
+      {
+        "type": "code",
+        "value": "age = 16\nif age >= 18:\n    print(\"You are an adult.\")\nelse:\n    print(\"You are not an adult yet.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, since age is 16, the else block runs, printing \"You are not an adult yet.\". This way, your program can handle both possibilities clearly."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, if statements in Python help your program decide what to do by checking conditions. Always remember the colon and indentation rules, and use else when you want to specify code for when the condition is false."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-nameerror-in-python-common-causes-and-solutions",
+    "title": "Resolving NameError in Python: Common Causes and Solutions",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what a NameError in Python means, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start coding in Python, you might come across an error called NameError. This error happens when Python can't find a variable or function name that you've used in your code. Understanding why this error occurs and how to fix it will help you write better programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "A NameError usually means you tried to use a name (like a variable or a function) before defining it or you made a typo in the name. Python looks for this name in the current program and if it can't find it, it raises a NameError. To fix it, you need to make sure the name is spelled correctly and that it is created before you use it."
+      },
+      {
+        "type": "code",
+        "value": "print(age)\nage = 25\n# This code will cause a NameError because 'age' is used before it is defined."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the above error, define the variable before using it. For example, create the variable 'age' first, then print it. Also, double-check for spelling mistakes in your variable names to avoid NameErrors."
+      },
+      {
+        "type": "code",
+        "value": "age = 25\nprint(age)\n# Now the code works because 'age' is defined before it is used."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, a NameError tells you that Python can't find a name you're trying to use. To solve it, make sure the name exists, is spelled correctly, and is defined before you use it in your code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-write-basic-sql-select-queries",
+    "title": "How to Write Basic SQL Select Queries",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to write simple SQL SELECT queries to retrieve data from a database table.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is used to interact with databases. One of the most common commands in SQL is the SELECT statement, which allows you to retrieve data from a table. This tutorial will help you understand how to write simple SELECT queries to get data from your database."
+      },
+      {
+        "type": "paragraph",
+        "value": "The basic syntax for a SELECT query includes specifying the columns you want to retrieve and the table where the data is stored. For example, SELECT column1, column2 FROM table_name; gets the specified columns from all rows. If you want all columns, you can use SELECT * FROM table_name; The asterisk (*) means 'all columns'."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees;\n-- This query retrieves all columns and all rows from the 'employees' table."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you may get errors when writing SELECT queries. For example, if you misspell the table name, the database will report an error like 'table does not exist'. This means the specified table name is wrong or not found in the current database. To fix this, check the spelling and ensure the table actually exists. Also, missing commas between column names or forgetting the FROM keyword can cause syntax errors. Always double-check your query structure."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, writing basic SELECT queries involves choosing columns and specifying the table's name. Practice by retrieving all data first, then try fetching specific columns. Understanding this foundation will help you explore more advanced SQL features later."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-database-connection-errors-in-sql",
+    "title": "Resolving Database Connection Errors in SQL: A Beginner's Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn common causes of database connection errors in SQL and how to fix them with simple explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to a database is one of the first steps when working with SQL. However, beginners often encounter connection errors that can be confusing. This article will explain common database connection errors, why they happen, and how to resolve them."
+      },
+      {
+        "type": "paragraph",
+        "value": "A database connection error usually means that your application cannot reach the database server or your login credentials are incorrect. Common reasons include wrong hostname or port, incorrect username or password, database server not running, or network issues preventing communication."
+      },
+      {
+        "type": "code",
+        "value": "-- Example of connecting to a MySQL database\n-- Replace 'localhost', 'username', 'password', and 'database_name' with your values\n\nCONNECT TO 'localhost' USER 'username' IDENTIFIED BY 'password';\nUSE database_name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix connection errors, first check if the database server is running and accessible from your machine. Verify the hostname and port are correct. Make sure your username and password are valid and have the right permissions. If you are working on a remote server, ensure network settings and firewalls allow connections. By following these steps, you can usually resolve connection issues and start working with your SQL database successfully."
+      }
+    ]
   }
 ];
