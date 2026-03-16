@@ -1,233 +1,245 @@
 [
   {
-    "slug": "introduction-to-javascript-for-absolute-beginners",
-    "title": "Introduction to JavaScript for Absolute Beginners",
+    "slug": "how-to-use-variables-and-data-types-in-javascript",
+    "title": "How to Use Variables and Data Types in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "A simple and clear introduction to JavaScript programming for those who have never coded before.",
+    "description": "A beginner-friendly guide to understanding variables and data types in JavaScript.",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a popular programming language mainly used to make websites interactive. Whether you want to create animations, handle user inputs, or build games, JavaScript can help you do it directly in the browser."
+        "value": "In JavaScript, variables are containers that store data values. They make your code flexible and reusable because you can store information and use it throughout your program."
       },
       {
         "type": "paragraph",
-        "value": "To start writing JavaScript, you don’t need any special software. You can use a simple text editor and test your code in any web browser. JavaScript code consists of statements that tell the browser what to do, such as displaying messages or doing calculations."
+        "value": "JavaScript has several data types such as strings, numbers, booleans, and more. Understanding these data types helps you choose the right way to store and manipulate data. You declare variables using the keywords var, let, or const."
       },
       {
         "type": "code",
-        "value": "console.log('Hello, world!');"
+        "value": "let username = 'Alice';\nlet age = 25;\nconst isStudent = true;\n\nconsole.log(username); // Outputs: Alice\nconsole.log(age); // Outputs: 25\nconsole.log(isStudent); // Outputs: true"
       },
       {
         "type": "paragraph",
-        "value": "The code above uses the `console.log` function to print a message to the console, which is a special place in the browser where you can see output or errors. To try this yourself, open your browser, press F12 or right-click and select 'Inspect', then go to the 'Console' tab and type the code. Press Enter to run it and see the message."
+        "value": "In this example, we declared three variables with different data types. 'username' holds a string, 'age' holds a number, and 'isStudent' holds a boolean value. Remember, use const for values that won’t change and let for those that will. This helps prevent bugs in your code."
       }
     ]
   },
   {
-    "slug": "common-causes-and-solutions-for-javascript-syntax-errors",
-    "title": "Common Causes and Solutions for JavaScript Syntax Errors",
+    "slug": "how-to-fix-typeerror-in-javascript",
+    "title": "How to Fix TypeError in JavaScript",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn about typical JavaScript syntax errors, why they occur, and how to fix them with simple examples.",
+    "description": "Learn what TypeError means in JavaScript, why it happens, and how to fix it with simple examples.",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you start coding in JavaScript, syntax errors are a common hurdle. A syntax error happens when your code does not follow the rules of JavaScript language. This prevents your code from running because the JavaScript engine cannot understand what you wrote."
+        "value": "When you're learning JavaScript, you might come across an error called 'TypeError'. This error happens when you try to perform an operation on a value that is not of the expected type. Understanding this error will help you write better code and fix bugs faster."
       },
       {
         "type": "paragraph",
-        "value": "One common cause of syntax errors is missing or extra characters such as parentheses, curly braces, or semicolons. For example, forgetting to close a parenthesis can lead to an 'Unexpected token' error. Such errors occur because the JavaScript interpreter expects a certain structure and finds something else instead."
+        "value": "A TypeError occurs because JavaScript expects a particular type of value but receives a wrong type instead. For example, if you try to call a function on something that is not a function or access a property on undefined, JavaScript will throw a TypeError. This prevents your program from running with invalid data."
       },
       {
         "type": "code",
-        "value": "function greet(name) {\n  console.log('Hello, ' + name;\n}\ngreet('World');"
+        "value": "let name = null;\n\n// This will cause a TypeError because 'null' is not an object and has no properties\nconsole.log(name.length);\n\n// Fix: Make sure the variable is a string before accessing 'length'\nname = \"Alice\";\nconsole.log(name.length);"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, there is a missing closing parenthesis in the console.log statement. The correct version should be: console.log('Hello, ' + name);. Adding the missing parenthesis fixes the syntax error, allowing the code to run properly."
+        "value": "To fix TypeErrors, you should check your variables and functions to make sure they have the expected types before using them. Use conditions or type checks like 'typeof' to avoid running code on values that don't support certain operations. This way, you can catch errors early and keep your program running smoothly."
       }
     ]
   },
   {
-    "slug": "understanding-typescript-data-types-and-variables",
-    "title": "Understanding TypeScript Data Types and Variables",
+    "slug": "how-to-set-up-a-typescript-development-environment",
+    "title": "How to Set Up a TypeScript Development Environment",
     "language": "typescript",
     "type": "tutorials",
-    "description": "A beginner-friendly guide to TypeScript data types and variables with examples and error explanations.",
+    "description": "A beginner-friendly guide to setting up your development environment for TypeScript.",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. This means you can define the kind of data a variable can hold, which helps catch errors early and makes your code easier to understand. In this tutorial, we'll learn about the basic data types and how to declare variables in TypeScript."
+        "value": "TypeScript is a powerful programming language that builds on JavaScript by adding static types. Setting up a proper development environment helps you write code more efficiently and catch errors early. In this tutorial, we'll walk through the basic steps to set up TypeScript on your computer."
       },
       {
         "type": "paragraph",
-        "value": "In TypeScript, you can specify types for variables like numbers, strings, booleans, arrays, and more. When you assign a value that doesn't match the specified type, TypeScript will give you an error, helping prevent bugs before running your code."
+        "value": "The first thing you need is Node.js, which includes npm (Node Package Manager). npm lets you install the TypeScript compiler globally on your machine. After installing Node.js, open your terminal and type the following command to install TypeScript:"
       },
       {
         "type": "code",
-        "value": "let age: number = 25;\nlet userName: string = \"Alice\";\nlet isLoggedIn: boolean = true;\n\n// An array of numbers\nlet scores: number[] = [90, 85, 100];\n\n// This will cause an error\n// age = \"twenty-five\"; // Error: Type 'string' is not assignable to type 'number'."
+        "value": "npm install -g typescript"
       },
       {
         "type": "paragraph",
-        "value": "If you see an error like \"Type 'string' is not assignable to type 'number'\", it means you're trying to store a value in a variable of the wrong type. For example, assigning a string to a variable declared as a number. To fix this, make sure the value's type matches the variable’s type declaration."
+        "value": "The '-g' flag installs TypeScript globally, so you can use the 'tsc' command anywhere. To check if the installation worked, run 'tsc --version' in your terminal. This should show the installed TypeScript version."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, you create a TypeScript configuration file to customize how your TypeScript code is compiled to JavaScript. This file is named 'tsconfig.json'. You can generate a basic one by running:"
+      },
+      {
+        "type": "code",
+        "value": "tsc --init"
+      },
+      {
+        "type": "paragraph",
+        "value": "This command creates 'tsconfig.json' with default settings. You can edit this file later to enable strict type-checking or specify output directories."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple TypeScript file named 'index.ts' with the following code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "To compile this code to JavaScript, run this command:"
+      },
+      {
+        "type": "code",
+        "value": "tsc index.ts"
+      },
+      {
+        "type": "paragraph",
+        "value": "This generates an 'index.js' file you can run with Node.js by typing 'node index.js'."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common error beginners face is a message like 'tsc: command not found'. This means TypeScript is not installed globally, or your system's PATH variable does not include the folder where npm installs global packages. To fix this, make sure you installed TypeScript properly with 'npm install -g typescript' and that your PATH includes npm’s bin folder."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these steps, you've set up a basic TypeScript development environment. You can now write typed, error-checked JavaScript code and enjoy the benefits of this popular language."
       }
     ]
   },
   {
-    "slug": "how-to-fix-typescript-cannot-find-module-error",
-    "title": "How to Fix TypeScript Cannot Find Module Error",
+    "slug": "how-to-fix-typescript-compile-errors-for-beginners",
+    "title": "How to Fix TypeScript Compile Errors for Beginners",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn what causes the TypeScript 'cannot find module' error and how to fix it with simple steps.",
+    "description": "A beginner-friendly guide to understanding and fixing common TypeScript compile errors.",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with TypeScript, you might see an error message like \"Cannot find module 'module-name'\". This error happens when TypeScript cannot locate the file or package you are trying to import into your code."
+        "value": "TypeScript helps you catch errors early by checking your code before it runs. But if you are new to TypeScript, compile errors can be confusing. This guide will explain what common errors mean, why they happen, and how to fix them."
       },
       {
         "type": "paragraph",
-        "value": "This issue often occurs because the module does not exist at the specified path, the path is misspelled, TypeScript is missing type declarations, or your project configuration is incorrect. Fixing it usually means checking the module location, installing missing packages, or updating your TypeScript settings."
+        "value": "One common error is the 'Type X is not assignable to type Y' error. It means the variable or function you wrote is expecting a certain type, but you gave it a different one. For example, if a function expects a number but you send a string, TypeScript will report this error to prevent bugs."
       },
       {
         "type": "code",
-        "value": "import { greet } from './utils';\n\nconsole.log(greet('World'));"
+        "value": "function double(x: number) {\n  return x * 2;\n}\n\nconst result = double(\"hello\");  // Error: Argument of type 'string' is not assignable to parameter of type 'number'."
       },
       {
         "type": "paragraph",
-        "value": "In this example, if the file './utils.ts' is missing or the path is wrong, TypeScript will show the 'cannot find module' error. To fix this, make sure './utils.ts' exists and the path is correct. If importing a third-party package, run 'npm install package-name' to add it to your project. Also, you can add a 'types' folder or configure the 'typeRoots' in your tsconfig.json if TypeScript can't find type definitions."
+        "value": "To fix this error, ensure you pass values of the correct type. In this case, change the argument to a number: double(5). This helps TypeScript ensure your program works as expected and reduces runtime errors."
       }
     ]
   },
   {
-    "slug": "python-for-absolute-beginners-step-by-step",
-    "title": "Python for Absolute Beginners: Step by Step",
+    "slug": "python-for-absolute-beginners-getting-started-guide",
+    "title": "Python for Absolute Beginners: Getting Started Guide",
     "language": "python",
     "type": "tutorials",
-    "description": "An easy-to-understand introduction to Python programming for absolute beginners, including concepts, common errors, and examples.",
+    "description": "A friendly introduction to Python programming for complete beginners.",
     "content": [
       {
         "type": "paragraph",
-        "value": "Welcome to your first step in learning Python! This tutorial is designed specifically for absolute beginners with no prior programming experience. We will start from the very basics, helping you understand how Python works and write simple programs."
+        "value": "Python is a popular programming language known for its readability and simplicity, making it a great choice for beginners. In this guide, you'll learn the basics of Python, how to write your first program, and understand some common errors you might encounter."
       },
       {
         "type": "paragraph",
-        "value": "Python is a popular programming language known for its clear syntax and readability. The very first thing we'll learn is how to print messages to the screen using the print() function. This helps you see the output of your code immediately."
+        "value": "To get started, you need to have Python installed on your computer. You can download it from python.org. Once installed, you can write Python code using a text editor or an Integrated Development Environment (IDE) like IDLE, which comes bundled with Python. Let's start with a simple program that prints a message on the screen."
       },
       {
         "type": "code",
-        "value": "print('Hello, world!')"
+        "value": "print(\"Hello, World!\")"
       },
       {
         "type": "paragraph",
-        "value": "Running the above code will display the message Hello, world! This is your first Python program. If you encounter an error like SyntaxError: EOL while scanning string literal, it usually means you forgot to close the quotation marks. Always make sure your strings are enclosed properly in single ('') or double quotes (\"\")."
+        "value": "When you run this code, it will display the message Hello, World! on the screen. The print function tells Python to show whatever is inside the parentheses. If you face an error such as SyntaxError: EOL while scanning string literal, it usually means you forgot to close the quotes around your text. Make sure every opening quote has a matching closing quote."
       },
       {
         "type": "paragraph",
-        "value": "Next, let's learn about variables. Variables store values that you can use and change in your programs. For example, you can store a number and print it later."
-      },
-      {
-        "type": "code",
-        "value": "age = 25\nprint('I am', age, 'years old.')"
-      },
-      {
-        "type": "paragraph",
-        "value": "This code creates a variable named age and assigns it the value 25. Then it prints the message with the value of the variable included. If Python raises a NameError like name 'age' is not defined, it means you tried to use a variable that hasn't been created yet. Make sure you define your variable before using it."
-      },
-      {
-        "type": "paragraph",
-        "value": "Python also has different types of data like numbers, text(strings), and lists. Understanding these will help you write more complex programs."
-      },
-      {
-        "type": "code",
-        "value": "name = 'Alice'\nnumbers = [1, 2, 3, 4]\nprint('Name:', name)\nprint('Numbers:', numbers)"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, name is a string that stores text, and numbers is a list that stores multiple values. Lists are useful to keep collections of items together."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize, Python is beginner-friendly and a great choice to start coding. Begin with print statements, understand variables, and get familiar with data types. Don't worry about errors — they help you learn. Carefully read error messages: they explain what went wrong and how to fix your code. Keep practicing, and you'll get better quickly!"
+        "value": "Now you know how to display text using Python. This simple exercise helps you become comfortable with writing and running Python code. Keep practicing by changing the message inside the quotes, and soon you'll be ready to explore variables, data types, and more!"
       }
     ]
   },
   {
-    "slug": "understanding-and-resolving-nameerror-in-python",
-    "title": "Understanding and Resolving NameError in Python",
+    "slug": "how-to-fix-syntaxerror-in-python-code",
+    "title": "How to Fix SyntaxError in Python Code",
     "language": "python",
     "type": "errors",
-    "description": "Learn what a NameError is in Python, why it happens, and how to fix it with clear examples.",
+    "description": "Learn what SyntaxError means in Python, why it happens, and how to fix it with simple examples.",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you start coding in Python, you might encounter different types of errors. One common error is the NameError. It happens when Python tries to use a variable or function name that it does not recognize. Understanding this error is important because it helps in debugging your code quickly."
+        "value": "When you start writing Python code, you might encounter an error called SyntaxError. This error means that there's something wrong with the way your code is written – Python can't understand it because it doesn't follow the correct rules (syntax)."
       },
       {
         "type": "paragraph",
-        "value": "A NameError means that you areTrying to use a name (like a variable or function) that has not been defined yet or is misspelled. Python raises this error because it doesn't know what you mean by that name. It often happens if you forget to create a variable before using it or if you make a typo in the name."
+        "value": "A SyntaxError happens when you forget something like a missing parenthesis, a colon, or a quotation mark, or when your code structure isn't correct. Python checks your program from top to bottom and if it finds a mistake, it stops running and shows you the SyntaxError along with a message telling you where the problem is."
       },
       {
         "type": "code",
-        "value": "print(my_var)\n\n# Output will be:\n# NameError: name 'my_var' is not defined\n\n# To fix this, define 'my_var' before using it:\nmy_var = 10\nprint(my_var)  # This will print 10 without errors"
+        "value": "print('Hello world'\n\n# This will cause a SyntaxError because the closing parenthesis is missing"
       },
       {
         "type": "paragraph",
-        "value": "To avoid a NameError, always make sure that every variable or function you use is defined before you use it. Check for typos in the names and make sure the scope of your variables is correct (for example, a variable defined inside a function isn't available outside it). By following these simple steps, you can fix and prevent NameErrors in your Python programs."
+        "value": "To fix the above error, make sure all parentheses, quotes, and colons are properly closed or placed. The fixed code looks like this:\n\nprint('Hello world')\n\nAlways carefully check for missing or extra characters and follow Python's syntax rules. This will help you avoid SyntaxError and make your code run smoothly."
       }
     ]
   },
   {
-    "slug": "introduction-to-sql-for-beginners",
-    "title": "Introduction to SQL for Beginners",
+    "slug": "how-to-write-your-first-sql-query",
+    "title": "How to Write Your First SQL Query",
     "language": "sql",
     "type": "tutorials",
-    "description": "A beginner-friendly introduction to SQL, covering basic concepts and example queries.",
+    "description": "A beginner-friendly guide to writing your very first SQL query to retrieve data from a database.",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL stands for Structured Query Language and is used to communicate with databases. If you want to store, retrieve, or manipulate data in a database, SQL is the language you will use. It is widely used in many applications and industries."
+        "value": "SQL (Structured Query Language) is a language used to communicate with databases. If you have data stored in a database, SQL lets you ask questions and get answers from that data. Writing your first SQL query is an exciting step to start managing and analyzing data."
       },
       {
         "type": "paragraph",
-        "value": "A basic SQL query lets you select data from a database table. The most common command is SELECT, which retrieves data based on specific conditions you provide. For beginners, understanding the structure of the SELECT statement is very important."
+        "value": "The most basic SQL query uses the SELECT statement. It tells the database what data you want to see. You usually specify which columns to retrieve and from which table. For example, if you have a table named 'students' and want to see the names of all students, you would write a query selecting the name column from that table."
       },
       {
         "type": "code",
-        "value": "SELECT first_name, last_name FROM employees WHERE department = 'Sales';"
+        "value": "SELECT name FROM students;"
       },
       {
         "type": "paragraph",
-        "value": "This example retrieves the first and last names of employees who work in the Sales department. If you run this query and get an error like \"Unknown column 'first_name'\", it usually means the column name is misspelled or does not exist in the table. To fix this, check your database schema and ensure the column name matches exactly."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, SQL is a powerful and essential language for working with databases. Starting with SELECT queries helps you access your data. Always check your column and table names carefully to avoid common errors."
+        "value": "This query asks the database to return all the values in the 'name' column from the 'students' table. When running your SQL query, if you get an error like 'table does not exist' or 'column not found,' it usually means either the table or column name is misspelled or does not exist in your database. Double-check the names and try again. As you practice writing and running queries, you will get more comfortable exploring your database using SQL."
       }
     ]
   },
   {
-    "slug": "troubleshooting-null-value-issues-in-sql-queries",
-    "title": "Troubleshooting Null Value Issues in SQL Queries",
+    "slug": "resolving-null-value-errors-in-sql-queries",
+    "title": "Resolving Null Value Errors in SQL Queries",
     "language": "sql",
     "type": "errors",
-    "description": "Learn what causes null value issues in SQL queries, why they happen, and how to fix them.",
+    "description": "A beginner-friendly guide to understanding and fixing null value errors in SQL queries.",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing SQL queries, encountering unexpected null values can be confusing, especially for beginners. Null values represent missing or unknown data, and they behave differently from normal values in SQL. Understanding how to handle nulls properly ensures your queries work as expected."
+        "value": "When working with SQL databases, you might encounter errors related to null values. Null values represent missing or unknown data in a database. Understanding how to handle these null values is important to avoid errors and ensure your queries run smoothly."
       },
       {
         "type": "paragraph",
-        "value": "A common source of null value issues is using comparison operators like '=' or '<>' without considering that null is not equal to anything, even another null. This can cause your WHERE clauses or JOIN conditions to exclude rows you expect to see. Another frequent problem is arithmetic operations with null values which result in null, potentially leading to unexpected query results."
+        "value": "A common error is trying to perform operations on columns that contain null values without checking for them. For example, if you try to compare or calculate with a null value, SQL may return unexpected results or an error. This happens because null is not a regular value; it means 'no data' or 'unknown'."
       },
       {
         "type": "code",
-        "value": "SELECT employee_id, bonus_amount\nFROM bonuses\nWHERE bonus_amount <> 0;\n\n-- This query will not return rows where bonus_amount is NULL, because 'NULL <> 0' is unknown, not true.\n\n-- To correctly handle nulls, use IS NULL or IS NOT NULL:\nSELECT employee_id, bonus_amount\nFROM bonuses\nWHERE bonus_amount IS NOT NULL AND bonus_amount <> 0;"
+        "value": "SELECT * FROM employees WHERE department_id = NULL;\n\n-- This query will not work as expected because NULL cannot be compared using '=' operator.\n-- Correct way to check for NULL is using IS NULL:\nSELECT * FROM employees WHERE department_id IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "In summary, null values require special attention when writing SQL queries. Use IS NULL or IS NOT NULL to check for nulls explicitly, and be aware that any comparison with null returns unknown, not true or false. Handling nulls correctly prevents bugs and ensures your query results reflect the data accurately."
+        "value": "To fix null value errors, always use IS NULL or IS NOT NULL when checking for nulls. Also, use functions like COALESCE or IFNULL to handle null values in calculations or when selecting columns. These functions let you replace null values with a default value, preventing errors during query execution."
       }
     ]
   }

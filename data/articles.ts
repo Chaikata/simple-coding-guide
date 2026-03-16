@@ -1152,5 +1152,249 @@ export const articles: Article[] = [
         "value": "In summary, null values require special attention when writing SQL queries. Use IS NULL or IS NOT NULL to check for nulls explicitly, and be aware that any comparison with null returns unknown, not true or false. Handling nulls correctly prevents bugs and ensures your query results reflect the data accurately."
       }
     ]
+  },
+  {
+    "slug": "how-to-use-variables-and-data-types-in-javascript",
+    "title": "How to Use Variables and Data Types in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding variables and data types in JavaScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, variables are containers that store data values. They make your code flexible and reusable because you can store information and use it throughout your program."
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript has several data types such as strings, numbers, booleans, and more. Understanding these data types helps you choose the right way to store and manipulate data. You declare variables using the keywords var, let, or const."
+      },
+      {
+        "type": "code",
+        "value": "let username = 'Alice';\nlet age = 25;\nconst isStudent = true;\n\nconsole.log(username); // Outputs: Alice\nconsole.log(age); // Outputs: 25\nconsole.log(isStudent); // Outputs: true"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we declared three variables with different data types. 'username' holds a string, 'age' holds a number, and 'isStudent' holds a boolean value. Remember, use const for values that won’t change and let for those that will. This helps prevent bugs in your code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-typeerror-in-javascript",
+    "title": "How to Fix TypeError in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what TypeError means in JavaScript, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're learning JavaScript, you might come across an error called 'TypeError'. This error happens when you try to perform an operation on a value that is not of the expected type. Understanding this error will help you write better code and fix bugs faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "A TypeError occurs because JavaScript expects a particular type of value but receives a wrong type instead. For example, if you try to call a function on something that is not a function or access a property on undefined, JavaScript will throw a TypeError. This prevents your program from running with invalid data."
+      },
+      {
+        "type": "code",
+        "value": "let name = null;\n\n// This will cause a TypeError because 'null' is not an object and has no properties\nconsole.log(name.length);\n\n// Fix: Make sure the variable is a string before accessing 'length'\nname = \"Alice\";\nconsole.log(name.length);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix TypeErrors, you should check your variables and functions to make sure they have the expected types before using them. Use conditions or type checks like 'typeof' to avoid running code on values that don't support certain operations. This way, you can catch errors early and keep your program running smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-set-up-a-typescript-development-environment",
+    "title": "How to Set Up a TypeScript Development Environment",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to setting up your development environment for TypeScript.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful programming language that builds on JavaScript by adding static types. Setting up a proper development environment helps you write code more efficiently and catch errors early. In this tutorial, we'll walk through the basic steps to set up TypeScript on your computer."
+      },
+      {
+        "type": "paragraph",
+        "value": "The first thing you need is Node.js, which includes npm (Node Package Manager). npm lets you install the TypeScript compiler globally on your machine. After installing Node.js, open your terminal and type the following command to install TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "npm install -g typescript"
+      },
+      {
+        "type": "paragraph",
+        "value": "The '-g' flag installs TypeScript globally, so you can use the 'tsc' command anywhere. To check if the installation worked, run 'tsc --version' in your terminal. This should show the installed TypeScript version."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, you create a TypeScript configuration file to customize how your TypeScript code is compiled to JavaScript. This file is named 'tsconfig.json'. You can generate a basic one by running:"
+      },
+      {
+        "type": "code",
+        "value": "tsc --init"
+      },
+      {
+        "type": "paragraph",
+        "value": "This command creates 'tsconfig.json' with default settings. You can edit this file later to enable strict type-checking or specify output directories."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple TypeScript file named 'index.ts' with the following code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "To compile this code to JavaScript, run this command:"
+      },
+      {
+        "type": "code",
+        "value": "tsc index.ts"
+      },
+      {
+        "type": "paragraph",
+        "value": "This generates an 'index.js' file you can run with Node.js by typing 'node index.js'."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common error beginners face is a message like 'tsc: command not found'. This means TypeScript is not installed globally, or your system's PATH variable does not include the folder where npm installs global packages. To fix this, make sure you installed TypeScript properly with 'npm install -g typescript' and that your PATH includes npm’s bin folder."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these steps, you've set up a basic TypeScript development environment. You can now write typed, error-checked JavaScript code and enjoy the benefits of this popular language."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-typescript-compile-errors-for-beginners",
+    "title": "How to Fix TypeScript Compile Errors for Beginners",
+    "language": "typescript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding and fixing common TypeScript compile errors.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript helps you catch errors early by checking your code before it runs. But if you are new to TypeScript, compile errors can be confusing. This guide will explain what common errors mean, why they happen, and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error is the 'Type X is not assignable to type Y' error. It means the variable or function you wrote is expecting a certain type, but you gave it a different one. For example, if a function expects a number but you send a string, TypeScript will report this error to prevent bugs."
+      },
+      {
+        "type": "code",
+        "value": "function double(x: number) {\n  return x * 2;\n}\n\nconst result = double(\"hello\");  // Error: Argument of type 'string' is not assignable to parameter of type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, ensure you pass values of the correct type. In this case, change the argument to a number: double(5). This helps TypeScript ensure your program works as expected and reduces runtime errors."
+      }
+    ]
+  },
+  {
+    "slug": "python-for-absolute-beginners-getting-started-guide",
+    "title": "Python for Absolute Beginners: Getting Started Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "A friendly introduction to Python programming for complete beginners.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a popular programming language known for its readability and simplicity, making it a great choice for beginners. In this guide, you'll learn the basics of Python, how to write your first program, and understand some common errors you might encounter."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started, you need to have Python installed on your computer. You can download it from python.org. Once installed, you can write Python code using a text editor or an Integrated Development Environment (IDE) like IDLE, which comes bundled with Python. Let's start with a simple program that prints a message on the screen."
+      },
+      {
+        "type": "code",
+        "value": "print(\"Hello, World!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, it will display the message Hello, World! on the screen. The print function tells Python to show whatever is inside the parentheses. If you face an error such as SyntaxError: EOL while scanning string literal, it usually means you forgot to close the quotes around your text. Make sure every opening quote has a matching closing quote."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now you know how to display text using Python. This simple exercise helps you become comfortable with writing and running Python code. Keep practicing by changing the message inside the quotes, and soon you'll be ready to explore variables, data types, and more!"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-syntaxerror-in-python-code",
+    "title": "How to Fix SyntaxError in Python Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what SyntaxError means in Python, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start writing Python code, you might encounter an error called SyntaxError. This error means that there's something wrong with the way your code is written – Python can't understand it because it doesn't follow the correct rules (syntax)."
+      },
+      {
+        "type": "paragraph",
+        "value": "A SyntaxError happens when you forget something like a missing parenthesis, a colon, or a quotation mark, or when your code structure isn't correct. Python checks your program from top to bottom and if it finds a mistake, it stops running and shows you the SyntaxError along with a message telling you where the problem is."
+      },
+      {
+        "type": "code",
+        "value": "print('Hello world'\n\n# This will cause a SyntaxError because the closing parenthesis is missing"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the above error, make sure all parentheses, quotes, and colons are properly closed or placed. The fixed code looks like this:\n\nprint('Hello world')\n\nAlways carefully check for missing or extra characters and follow Python's syntax rules. This will help you avoid SyntaxError and make your code run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-write-your-first-sql-query",
+    "title": "How to Write Your First SQL Query",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to writing your very first SQL query to retrieve data from a database.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is a language used to communicate with databases. If you have data stored in a database, SQL lets you ask questions and get answers from that data. Writing your first SQL query is an exciting step to start managing and analyzing data."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most basic SQL query uses the SELECT statement. It tells the database what data you want to see. You usually specify which columns to retrieve and from which table. For example, if you have a table named 'students' and want to see the names of all students, you would write a query selecting the name column from that table."
+      },
+      {
+        "type": "code",
+        "value": "SELECT name FROM students;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query asks the database to return all the values in the 'name' column from the 'students' table. When running your SQL query, if you get an error like 'table does not exist' or 'column not found,' it usually means either the table or column name is misspelled or does not exist in your database. Double-check the names and try again. As you practice writing and running queries, you will get more comfortable exploring your database using SQL."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-null-value-errors-in-sql-queries",
+    "title": "Resolving Null Value Errors in SQL Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding and fixing null value errors in SQL queries.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, you might encounter errors related to null values. Null values represent missing or unknown data in a database. Understanding how to handle these null values is important to avoid errors and ensure your queries run smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common error is trying to perform operations on columns that contain null values without checking for them. For example, if you try to compare or calculate with a null value, SQL may return unexpected results or an error. This happens because null is not a regular value; it means 'no data' or 'unknown'."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE department_id = NULL;\n\n-- This query will not work as expected because NULL cannot be compared using '=' operator.\n-- Correct way to check for NULL is using IS NULL:\nSELECT * FROM employees WHERE department_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix null value errors, always use IS NULL or IS NOT NULL when checking for nulls. Also, use functions like COALESCE or IFNULL to handle null values in calculations or when selecting columns. These functions let you replace null values with a default value, preventing errors during query execution."
+      }
+    ]
   }
 ];
