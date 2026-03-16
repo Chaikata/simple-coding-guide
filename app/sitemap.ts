@@ -1,24 +1,11 @@
+import { MetadataRoute } from "next";
 import { articles } from "@/data/articles";
 
-export default function sitemap() {
-  const baseUrl = "https://yourdomain.com";
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://devnestguide.com";
 
-  const articlePages = articles.map((article) => ({
+  const articleUrls = articles.map((article) => ({
     url: `${baseUrl}/${article.language}/${article.type}/${article.slug}`,
-    lastModified: new Date(),
-  }));
-
-  const languagePages = Array.from(
-    new Set(articles.map((article) => article.language))
-  ).map((language) => ({
-    url: `${baseUrl}/${language}`,
-    lastModified: new Date(),
-  }));
-
-  const sectionPages = Array.from(
-    new Set(articles.map((article) => `${article.language}/${article.type}`))
-  ).map((path) => ({
-    url: `${baseUrl}/${path}`,
     lastModified: new Date(),
   }));
 
@@ -27,8 +14,22 @@ export default function sitemap() {
       url: baseUrl,
       lastModified: new Date(),
     },
-    ...languagePages,
-    ...sectionPages,
-    ...articlePages,
+    {
+      url: `${baseUrl}/javascript`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/typescript`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/python`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/sql`,
+      lastModified: new Date(),
+    },
+    ...articleUrls,
   ];
 }
