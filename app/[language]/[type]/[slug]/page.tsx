@@ -2,6 +2,7 @@ import Link from "next/link";
 import { articles } from "@/data/articles";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import CodeBlock from "@/components/CodeBlock";
 
 type ContentBlock =
   | string
@@ -18,16 +19,27 @@ type PageProps = {
   }>;
 };
 
+function formatLabel(value: string) {
+  return value
+    .split("-")
+    .map((word) => {
+      const lower = word.toLowerCase();
+      if (lower === "javascript") return "JavaScript";
+      if (lower === "typescript") return "TypeScript";
+      if (lower === "sql") return "SQL";
+      if (lower === "api") return "API";
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { language, type, slug } = await params;
 
   const article = articles.find(
-    (a) =>
-      a.language === language &&
-      a.type === type &&
-      a.slug === slug
+    (a) => a.language === language && a.type === type && a.slug === slug
   );
 
   if (!article) {
@@ -47,10 +59,7 @@ export default async function ArticlePage({ params }: PageProps) {
   const { language, type, slug } = await params;
 
   const article = articles.find(
-    (a) =>
-      a.language === language &&
-      a.type === type &&
-      a.slug === slug
+    (a) => a.language === language && a.type === type && a.slug === slug
   );
 
   if (!article) {
@@ -58,47 +67,51 @@ export default async function ArticlePage({ params }: PageProps) {
   }
 
   const related = articles
-    .filter(
-      (a) =>
-        a.language === article.language &&
-        a.slug !== article.slug
-    )
+    .filter((a) => a.language === article.language && a.slug !== article.slug)
     .slice(0, 4);
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
-      <div className="max-w-3xl mx-auto">
-        <p className="text-sm text-gray-500 mb-3 uppercase">
-          {article.language} / {article.type}
-        </p>
+    <main className="min-h-screen bg-black px-10 py-10 text-white">
+      <div className="mx-auto max-w-3xl">
+        <nav className="mb-4 text-sm text-gray-400">
+          <Link href="/" className="hover:text-white">
+            Home
+          </Link>
+          <span className="px-2 text-gray-600">/</span>
+          <Link href={`/${article.language}`} className="hover:text-white">
+            {formatLabel(article.language)}
+          </Link>
+          <span className="px-2 text-gray-600">/</span>
+          <Link
+            href={`/${article.language}/${article.type}`}
+            className="hover:text-white"
+          >
+            {formatLabel(article.type)}
+          </Link>
+          <span className="px-2 text-gray-600">/</span>
+          <span className="text-gray-500">{article.title}</span>
+        </nav>
 
-        <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
+        <h1 className="mb-4 text-4xl font-bold">{article.title}</h1>
 
-        <p className="text-gray-400 mb-8">{article.description}</p>
+        <p className="mb-8 text-gray-400">{article.description}</p>
 
         <div className="space-y-6">
           {article.content.map((block: ContentBlock, index: number) => {
             if (typeof block === "string") {
               return (
-                <p key={index} className="text-gray-200 leading-8">
+                <p key={index} className="leading-8 text-gray-200">
                   {block}
                 </p>
               );
             }
 
             if (block.type === "code") {
-              return (
-                <pre
-                  key={index}
-                  className="bg-zinc-900 border border-gray-700 rounded-xl p-4 overflow-x-auto text-sm"
-                >
-                  <code>{block.value}</code>
-                </pre>
-              );
+              return <CodeBlock key={index} code={block.value} language="javascript" />;
             }
 
             return (
-              <p key={index} className="text-gray-200 leading-8">
+              <p key={index} className="leading-8 text-gray-200">
                 {block.value}
               </p>
             );
@@ -106,18 +119,18 @@ export default async function ArticlePage({ params }: PageProps) {
         </div>
 
         <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
+          <h2 className="mb-6 text-2xl font-bold">Related Articles</h2>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid gap-6 md:grid-cols-2">
             {related.map((item) => (
               <Link
                 key={item.slug}
                 href={`/${item.language}/${item.type}/${item.slug}`}
-                className="border border-gray-700 p-4 rounded-lg hover:border-gray-400 transition"
+                className="rounded-lg border border-gray-700 p-4 transition hover:border-gray-400"
               >
                 <h3 className="font-semibold">{item.title}</h3>
-                <p className="text-sm text-gray-400 mt-1">
-                  {item.language} / {item.type}
+                <p className="mt-1 text-sm text-gray-400">
+                  {formatLabel(item.language)} / {formatLabel(item.type)}
                 </p>
               </Link>
             ))}
