@@ -17,13 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">
-        {/* Google Analytics */}
+      <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-FBCSYKF0J8"
           strategy="afterInteractive"
         />
-
         <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -32,7 +30,8 @@ export default function RootLayout({
             gtag('config', 'G-FBCSYKF0J8');
           `}
         </Script>
-
+      </head>
+      <body className="bg-black text-white">
         <div className="flex min-h-screen flex-col">
           <Navbar />
           <div className="flex-1">{children}</div>
