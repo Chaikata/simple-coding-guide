@@ -25,8 +25,6 @@ const contentPlans = [
 const GENERATION_LIMITS = {
   maxTopicsPerPlan: 10,
   maxArticlesPerRun: 8,
-  maxPerLanguage: 2,
-  maxPerType: 4,
   maxRetries: 2,
 };
 
@@ -93,34 +91,6 @@ function normalizeContent(content) {
       value: String(block),
     };
   });
-}
-
-function createCounterMap() {
-  return new Map();
-}
-
-function getCount(map, key) {
-  return map.get(key) || 0;
-}
-
-function incrementCount(map, key) {
-  map.set(key, getCount(map, key) + 1);
-}
-
-function canGenerateArticle(language, type, totalCreated, languageCounts, typeCounts) {
-  if (totalCreated >= GENERATION_LIMITS.maxArticlesPerRun) {
-    return false;
-  }
-
-  if (getCount(languageCounts, language) >= GENERATION_LIMITS.maxPerLanguage) {
-    return false;
-  }
-
-  if (getCount(typeCounts, type) >= GENERATION_LIMITS.maxPerType) {
-    return false;
-  }
-
-  return true;
 }
 
 async function retry(label, fn) {
@@ -254,12 +224,14 @@ Use this exact format:
 async function run() {
   const allArticles = [];
   const existingSlugs = getExistingSlugs();
-  const languageCounts = createCounterMap();
-  const typeCounts = createCounterMap();
 
-  console.log("Starting article generation...");
+  console.log("Starting perfectly balanced article generation...");
 
   for (const plan of contentPlans) {
+    if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
+      break;
+    }
+
     console.log(`Topics for ${plan.language} / ${plan.type}`);
 
     let topics = [];
@@ -273,16 +245,10 @@ async function run() {
       continue;
     }
 
+    let articleAddedForThisPlan = false;
+
     for (const topic of topics) {
-      if (
-        !canGenerateArticle(
-          plan.language,
-          plan.type,
-          allArticles.length,
-          languageCounts,
-          typeCounts
-        )
-      ) {
+      if (articleAddedForThisPlan) {
         break;
       }
 
@@ -304,17 +270,29 @@ async function run() {
         continue;
       }
 
+      if (article.language !== plan.language || article.type !== plan.type) {
+        console.log(
+          `Skipping mismatched article: expected ${plan.language}/${plan.type}, got ${article.language}/${article.type}`
+        );
+        continue;
+      }
+
       if (existingSlugs.has(article.slug)) {
         console.log(`Duplicate skipped: ${article.slug}`);
         continue;
       }
 
       existingSlugs.add(article.slug);
-      incrementCount(languageCounts, article.language);
-      incrementCount(typeCounts, article.type);
       allArticles.push(article);
+      articleAddedForThisPlan = true;
 
-      console.log(`Added: ${article.slug} | total=${allArticles.length}`);
+      console.log(
+        `Added: ${article.slug} | ${article.language}/${article.type} | total=${allArticles.length}`
+      );
+    }
+
+    if (!articleAddedForThisPlan) {
+      console.log(`No valid article added for ${plan.language}/${plan.type}`);
     }
   }
 
@@ -324,6 +302,18 @@ async function run() {
   );
 
   console.log(`Created ${allArticles.length} new articles`);
+
+  const summary = {};
+  for (const article of allArticles) {
+    const key = `${article.language}/${article.type}`;
+    summary[key] = (summary[key] || 0) + 1;
+  }
+
+  console.log("Run summary:");
+  for (const plan of contentPlans) {
+    const key = `${plan.language}/${plan.type}`;
+    console.log(`- ${key}: ${summary[key] || 0}`);
+  }
 }
 
 run().catch((error) => {
