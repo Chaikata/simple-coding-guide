@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Dev Nest Guide",
@@ -17,6 +18,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-black text-white">
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-FBCSYKF0J8"
+          strategy="afterInteractive"
+        />
+
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-FBCSYKF0J8');
+          `}
+        </Script>
+
         <div className="flex min-h-screen flex-col">
           <Navbar />
           <div className="flex-1">{children}</div>
