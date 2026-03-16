@@ -3,19 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "generate:articles": "node scripts/generateTopicsAndArticles.js",
-  "import:articles": "node scripts/importManyArticles.js",
-  "publish:articles": "node scripts/generateTopicsAndArticles.js && node scripts/importManyArticles.js"
-},
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "generate:articles": "node scripts/generateTopicsAndArticles.js",
+    "import:articles": "node scripts/importManyArticles.js",
+    "publish:articles": "node scripts/generateTopicsAndArticles.js && node scripts/importManyArticles.js"
+  },
   "dependencies": {
     "dotenv": "^17.3.1",
     "next": "16.1.6",
     "openai": "^6.29.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.1",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
