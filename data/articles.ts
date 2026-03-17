@@ -5054,5 +5054,277 @@ export const articles: Article[] = [
         "value": "In summary, the \"syntax error near SELECT\" happens because the SQL query isn't correctly written around the SELECT keyword. By carefully reviewing your query structure, ensuring proper use of commas, keywords, and subqueries, you can fix this error and write efficient SQL statements. Learning these basics also improves your understanding of query optimization, data filtering, and database interactions."
       }
     ]
+  },
+  {
+    "slug": "javascript-map-vs-foreach-explained-with-examples",
+    "title": "JavaScript Map vs ForEach Explained with Examples",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between JavaScript map and forEach functions with clear examples. Understand when to use each method for array manipulation and iteration.",
+    "videoUrl": "https://www.youtube.com/watch?v=uOZWH0KEUs4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with arrays in JavaScript, two common methods you will encounter are map and forEach. Both are used to iterate over arrays, but they serve different purposes and behave differently. This article will explain what makes map and forEach unique, show simple practical examples, and help you decide which one to use in your code. Understanding this will also improve your skills with other array methods like filter and reduce."
+      },
+      {
+        "type": "paragraph",
+        "value": "The forEach method executes a provided function once for each element in the array but does not return anything. It's primarily used for performing side effects like logging or updating external variables. On the other hand, map also iterates over each element but creates and returns a new array with the results of applying a transformation function to every element. This key difference means map is useful when you want to produce a new array based on the original values, while forEach is better suited for simple iteration tasks."
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [1, 2, 3, 4];\n\n// Using forEach to log each number\nnumbers.forEach(number => {\n  console.log(number * 2);\n});\n\n// Using map to create a new array with doubled numbers\nconst doubled = numbers.map(number => number * 2);\nconsole.log(doubled); // Output: [2, 4, 6, 8]"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use forEach properly, remember it doesn't return a new array. If you want to transform data, map is the right choice because it returns a new array with the results of your function. For example, if you want to add 1 to every number in an array, map does this effortlessly. Use forEach when you want to execute a function for side effects without changing the original array, such as updating user interface elements or logging data. Also, keep in mind that both methods take callbacks with parameters like the current item, index, and array itself, which can be useful for advanced operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginners make is expecting forEach to return a transformed array like map does, which leads to unexpected undefined results. Another frequent issue is trying to break out of a forEach loop using break or return, which doesn’t work because forEach does not support early termination; in those cases, a for-loop or methods like some or every are more appropriate. Lastly, confusing map and filter can also happen since all three methods—map, forEach, and filter—are array iteration methods but serve different purposes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, both map and forEach are essential tools to iterate over arrays in JavaScript, each fitting different scenarios. Use forEach when you want to execute code for each array element without creating a new array, and use map when you need to transform an array into a new one based on some logic. Becoming comfortable with these methods will build a strong foundation for working with arrays and preparing you to explore other related functions like reduce and filter."
+      }
+    ]
+  },
+  {
+    "slug": "javascript-typeerror-property-does-not-exist-on-type-fix",
+    "title": "TypeScript Property Does Not Exist on Type Fix: A Beginner's Guide",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to fix the TypeScript error 'Property does not exist on type' with easy explanations, examples, and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=V6UgHSOTrC4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start using TypeScript with JavaScript, one of the most common errors you might see is the 'Property does not exist on type' TypeError. This error usually occurs when TypeScript's type checking system detects that you're trying to access a property or method that doesn't exist on the specified object or type. Understanding how TypeScript's type system works along with JavaScript objects and interfaces can help you quickly diagnose and fix this issue."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error 'Property does not exist on type' means TypeScript is enforcing the types you declared, but you are trying to access a property on an object that TypeScript believes does not have that property. This often happens when you are working with typed objects, interfaces, or classes and you mistype a property name, forget to declare a property in the type, or try to access a property on a broader or incompatible type."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = { name: 'Alice', age: 30 };\n// Trying to access the 'email' property which does not exist on User\ntypeof user.email; // Error: Property 'email' does not exist on type 'User'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you can take several approaches. First, make sure the property name is spelled correctly. Then, check if the property should exist on the type's definition — if yes, you need to add it to the interface or type declaration. Sometimes, you may also need to use type assertions or the optional chaining operator if the property might be undefined on some objects. Additionally, knowing when to use unions, intersection types, or index signatures can prevent such errors when working with dynamic or partially known structures."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include assuming a property automatically exists because it exists at runtime in JavaScript, but TypeScript does not know about it without explicit types. Another big mistake is ignoring TypeScript's static typing benefits and using any everywhere to bypass errors. This defeats the purpose of types and makes code less safe. Also, confusing type narrowing or forgetting to check if an object is null or undefined before accessing properties can trigger similar errors or runtime bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'Property does not exist on type' TypeScript error helps catch potential bugs by enforcing type safety around object properties. Fixing it typically involves confirming property names, updating interfaces or types, or using safe access patterns. Understanding the TypeScript type system, object structures, and how they relate to JavaScript objects can help you write better, error-free code and improve your overall development experience."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-generics-explained-with-examples",
+    "title": "TypeScript Generics Explained with Examples: A Beginner's Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how TypeScript generics work with simple, practical examples. Understand generics step-by-step to write flexible, reusable code in TypeScript.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're beginning to learn TypeScript and want your code to be more flexible and reusable, understanding generics is essential. Generics allow you to write functions, classes, and interfaces that work with a variety of types without losing type safety. This tutorial will guide you through what TypeScript generics are, why they matter, and how to use them effectively with straightforward examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a generic is like a placeholder for a type. Instead of explicitly defining the type inside your function or class, you use a generic parameter that is specified later. This means you can write one piece of code that adapts to different data types as needed. Generics work well alongside other TypeScript features like interfaces, type aliases, and type inference, making your code more robust and maintainable."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst num = identity<number>(42); // num is number\nconst str = identity<string>('hello'); // str is string\n\n// Generic with arrays\ntype Box<T> = {\n  contents: T[];\n};\n\nconst numberBox: Box<number> = { contents: [1, 2, 3] };\nconst stringBox: Box<string> = { contents: ['a', 'b', 'c'] };"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use generics properly, start by declaring a generic parameter inside angle brackets, like <T>. You can then use T as a type within your function, class, or interface. When calling or instantiating your generic code, specify the actual type you want, or let TypeScript infer it for you. This approach avoids repeating similar functions for different types and keeps your code DRY (Don't Repeat Yourself). You can also constrain generics to specific types to enforce more precise typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes with generics include not specifying a type parameter, which can lead to the type defaulting to unknown or any, reducing type safety. Another error is overusing generics where simpler types would do, making the code unnecessarily complex. Additionally, forgetting to add constraints when a generic type needs certain properties can cause runtime errors or difficult-to-debug code. Always balance flexibility with clear intent using constraints and type inference."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript generics are a powerful way to write flexible and reusable code while maintaining strong typing. They work hand in hand with other TypeScript concepts like interfaces, type aliases, and type inference. By mastering generics, you can avoid duplication and build more maintainable applications. Keep practicing with simple examples and gradually add complexity once you're comfortable with the basics."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-cannot-read-properties-of-undefined-fix",
+    "title": "TypeScript Cannot Read Properties of Undefined Fix: Step-by-Step Guide",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to fix the common TypeScript error 'cannot read properties of undefined' with clear explanations, practical code examples, and tips on preventing it.",
+    "videoUrl": "https://www.youtube.com/watch?v=xC7h5Vo5zXE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've seen the error message \"TypeError: Cannot read properties of undefined\" in your TypeScript code, you are not alone. This is a very common runtime error that often confuses beginners. In this article, we will explain why this error happens, how you can fix it, and best practices to avoid it. Understanding this will also improve your skills with related concepts like optional chaining, type checking, and null safety in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error \"cannot read properties of undefined\" means that your code is trying to access a property or call a method on a value that is currently undefined. Undefined in JavaScript and TypeScript means the variable exists but hasn't been assigned a value yet, or it's missing in an object. When you attempt to get a property, for example, obj.name, but obj itself is undefined, JavaScript cannot continue and throws this error. This is different from null, but related because both can cause property access issues if not handled properly."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  address?: {\n    street: string;\n  };\n}\n\nconst user: User = {\n  name: \"Alice\"\n};\n\nconsole.log(user.address.street); // Error: Cannot read properties of undefined (reading 'street')"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to ensure that the object or value you are trying to read properties from is not undefined at runtime. One effective way in TypeScript is to use optional chaining (?.), which safely accesses properties even if the value is undefined or null. For example, user.address?.street will return undefined instead of throwing an error if address is missing. You can also use type checking conditions like if(user.address) before accessing nested properties. Additionally, initializing variables properly and using TypeScript features like strict null checks can help catch these problems early."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes that lead to this error include assuming an object or API response always contains nested data, forgetting to initialize variables, or neglecting to handle asynchronous data that might not be loaded yet. Another frequent issue is not distinguishing between null and undefined in your code. Using non-null assertion operators (like !) incorrectly or ignoring TypeScript's strict null checks can also mask these problems and lead to runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"cannot read properties of undefined\" error in TypeScript occurs when you try to access a property on an undefined variable. You can prevent and fix it by understanding undefined values, using TypeScript features like optional chaining and strict null checks, and writing safe and defensive checks in your code. Improving these skills will also help you work confidently with related concepts such as type guards, null safety, and asynchronous data handling."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-async-await-in-python-with-examples",
+    "title": "How to Use Async Await in Python with Examples for Beginners",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use async await in Python with clear explanations and practical examples. Understand asynchronous programming and avoid common mistakes.",
+    "videoUrl": "https://www.youtube.com/watch?v=3E-Ym2mbSCc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to asynchronous programming in Python, you might be wondering how async and await work and how they can help you write faster, more efficient code. This tutorial will explain async await in simple terms and show practical examples so you can start using them confidently. Async programming in Python is essential when working with tasks such as network calls, file I/O, or other operations that can take time and slow down your program."
+      },
+      {
+        "type": "paragraph",
+        "value": "The async and await keywords in Python are used to define and work with asynchronous functions. An async function is a special function that lets your program pause and wait for certain operations without blocking the whole program. This means other tasks can run while waiting for a response, which is especially helpful in event-driven programs or when dealing with APIs. Asyncio, an important related module, helps manage these async tasks and event loops efficiently."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def say_hello():\n    print('Hello...')\n    await asyncio.sleep(1)  # simulate an asynchronous wait, like a network call\n    print('...World!')\n\nasync def main():\n    await say_hello()\n\n# Run the main async function using asyncio\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use async and await properly, you should always define functions with async before their name if they include await calls inside. The await keyword tells Python to pause inside the async function until the awaited task completes, without stopping the entire program. It's important to run async functions inside an event loop, which asyncio.run provides in the example above. This way, Python handles switching between tasks smoothly. When working with async code, you might also use concepts like coroutines or asynchronous iterators, which extend the power of async programming."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes when using async await include forgetting to add await before calling async functions, which results in coroutines that don’t run immediately. Another error is running async code outside an event loop, which can cause runtime exceptions. Beginners also sometimes use blocking functions inside async functions, defeating the purpose of asynchronous programming. To get the most out of async, you should also be familiar with event loops, tasks, and how libraries like aiohttp allow async HTTP requests."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using async and await in Python lets you write non-blocking code that handles tasks concurrently, leading to more efficient programs. Start by defining async functions, using await inside them for I/O tasks, and running these functions with asyncio’s event loop. Remember to avoid common pitfalls like missing awaits and blocking calls. As you grow comfortable with async programming, concepts like coroutines, event loops, and asynchronous generators will further unlock Python’s asynchronous capabilities."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-indentation-error-in-python",
+    "title": "How to Fix Indentation Error in Python: A Beginner's Guide",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what causes the IndentationError in Python and discover simple, practical steps to fix it. Perfect for beginners struggling with Python syntax and structure.",
+    "videoUrl": "https://www.youtube.com/watch?v=wVmYiWuGvQA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python relies heavily on indentation to define code blocks instead of using braces or keywords like other languages. If you are new to Python, seeing an IndentationError can be confusing and frustrating because it stops your program from running. This guide will help you understand what causes an IndentationError and how to fix it step-by-step, so your code runs smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "An IndentationError in Python means that the spaces or tabs used to indent your code are not consistent or are missing where Python expects them. Python uses indentation to separate blocks of code inside loops, conditionals, functions, and classes. Without proper indentation, Python can't figure out which statements belong together, causing this error. It's different from syntax errors that happen when you mistype keywords or forget punctuation."
+      },
+      {
+        "type": "code",
+        "value": "def greet(name):\nprint(\"Hello, \" + name)  # This line is not indented properly\n\nfor i in range(5):\n    print(i)\n  print(\"Done\")  # Incorrect indentation here too"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix indentation errors, always use consistent spacing. The Python standard is to use 4 spaces per indentation level, and never mix tabs and spaces in the same file. Most code editors can convert tabs to spaces automatically. For each block of code inside functions, loops, or conditionals, make sure the inner lines are indented exactly the same amount. Tools like linters can help detect mixed indentation early. Remember, blocks inside loops, if statements, and function definitions must be indented consistently for your code to run."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include mixing tabs and spaces, indenting the wrong amount, or forgetting to indent code inside blocks like if statements or while loops. Sometimes copying code from other sources results in hidden characters or inconsistent indentation that causes errors. Also, be careful when using nested structures such as nested loops or functions, as each level of nesting requires an additional indentation level. Learning how Python treats whitespace and combining that with proper syntax knowledge of conditionals, loops, and functions will help you avoid many of these pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the IndentationError is Python's way of telling you that your code structure is unclear because the indentation is wrong or inconsistent. By always using 4 spaces per indentation level, avoiding mixing tabs with spaces, and properly indenting code inside control flow statements and functions, you can fix these errors quickly. Understanding proper indentation in Python will also improve your grasp of other core concepts like code blocks, control flow, and function definitions, helping make your code clean and error-free."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-window-functions-in-sql-with-examples",
+    "title": "How to Use Window Functions in SQL with Examples",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions with simple examples. This beginner-friendly tutorial explains what window functions do, how to write them, common mistakes to avoid, and practical tips for effective queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions in SQL are powerful tools that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions that group rows into a single output, window functions keep all rows visible and calculate running totals, rankings, averages, and more without collapsing data. This tutorial is designed for beginners who want to understand and start using window functions effectively along with concepts like GROUP BY and JOINs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Simply put, a window function performs a calculation across rows that are defined by a window or frame. The window frame specifies the rows related to the current row within a partition, which is a subset of data grouped by certain column values. This differs from regular aggregate functions because the output row count remains the same, making window functions ideal for scenarios like ranking employees by salary within departments or calculating running totals in time series data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  department_id,\n  salary,\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank,\n  AVG(salary) OVER (PARTITION BY department_id) AS avg_department_salary,\n  SUM(salary) OVER (ORDER BY employee_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM employees;\n\n-- Explanation:\n-- RANK() assigns rank per department based on salary descending.\n-- AVG() calculates average salary per department.\n-- SUM() calculates running total of salaries ordered by employee_id."
+      },
+      {
+        "type": "paragraph",
+        "value": "To use window functions correctly, always specify the OVER() clause which defines the window. You can partition data using PARTITION BY and order it with ORDER BY inside the window. Keep in mind that the frame specification like ROWS BETWEEN or RANGE BETWEEN controls which rows are included in aggregation. Combining window functions with filtering using WHERE works differently because WHERE filters rows before window functions are applied. Instead, use HAVING or a subquery if needed. Understanding window frame boundaries and partitions will help you avoid mistakes and write efficient queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is confusing window functions with group aggregate functions. Unlike GROUP BY which reduces the number of rows, window functions keep all rows. Another error is missing the OVER() clause or incorrectly ordering rows, which can lead to unexpected results. Using window functions inside WHERE clauses is invalid as SQL processes WHERE before window functions. Also, beware of performance issues on large datasets without proper indexing, and remember to check your SQL dialect since window function support details can differ."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, window functions are essential for advanced SQL queries that require calculations across related rows without losing detail. By mastering PARTITION BY, ORDER BY, and frame clauses inside OVER(), alongside understanding aggregate functions and JOINs, you can write flexible queries for ranking, running totals, moving averages, and more. Practice the examples provided and experiment with your own data to deepen your understanding and enhance your SQL skills."
+      }
+    ]
+  },
+  {
+    "slug": "fix-sql-foreign-key-constraint-violation-error",
+    "title": "How to Fix SQL Foreign Key Constraint Violation Error",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what causes SQL foreign key constraint violation errors, see example code, and discover practical ways to fix this common database issue.",
+    "videoUrl": "https://www.youtube.com/watch?v=LHkhXeToCZw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've started working with relational databases and encountered the 'foreign key constraint violation' error, you are not alone. This common SQL error indicates trouble maintaining the relationships between tables. Understanding and fixing this problem is crucial for keeping your data consistent and reliable. In this article, we will explain what this error means, provide clear examples, and guide you step-by-step on how to solve it."
+      },
+      {
+        "type": "paragraph",
+        "value": "A foreign key in SQL is a column that links one table to another, ensuring referential integrity by making sure that every foreign key value matches an existing primary key value in the related table. A foreign key constraint violation error occurs when you try to insert or update a value that doesn’t have a corresponding entry in the referenced table, or try to delete a record that other records depend on. This error helps prevent orphaned records and maintains the consistency of your database."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE departments (\n  department_id INT PRIMARY KEY,\n  department_name VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  employee_name VARCHAR(50) NOT NULL,\n  department_id INT,\n  FOREIGN KEY (department_id) REFERENCES departments(department_id)\n);\n\n-- This will fail if department_id 10 does not exist in departments:\nINSERT INTO employees (employee_id, employee_name, department_id) VALUES (1, 'Alice', 10);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, first ensure that the value you are trying to insert or update in the foreign key column exists in the referenced table. In the example above, before adding an employee with department_id 10, you must insert a department with department_id 10 into the departments table. You can also prevent issues when deleting data by using cascading options or carefully designing your data model. Checking for mismatched data and using commands like INSERT, UPDATE, and DELETE with the correct order and constraints will keep your database error-free. Familiarity with indexes, primary keys, and database normalization concepts also helps troubleshoot these issues efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is trying to insert a foreign key value that does not exist in the parent table or attempting to delete a record referenced by foreign keys without handling dependencies. Another frequent issue is neglecting to create the proper indexes, causing slower checks or errors. Additionally, confusing NULL values with foreign keys can lead to unexpected behavior—foreign key columns must match existing primary keys unless set to allow NULLs. Finally, forgetting about case sensitivity or data type mismatches between foreign key and primary key columns can also cause constraint violations."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the foreign key constraint violation error is your database’s way of protecting data relationships between tables. By understanding how foreign keys link tables, checking that referenced data exists, and following best practices when inserting, updating, or deleting records, you can fix and avoid this error effectively. Concepts like primary keys, indexes, and referential integrity are closely tied to foreign keys, so gaining a good grasp of these will make your SQL coding more robust and error-free."
+      }
+    ]
   }
 ];
