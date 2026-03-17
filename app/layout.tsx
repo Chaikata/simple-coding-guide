@@ -15,9 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">
-        
-        {/* Google Analytics */}
+      <body className="bg-zinc-900 text-white">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-FBCSYKF0J8"
           strategy="afterInteractive"
@@ -31,7 +29,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Google AdSense */}
         <Script
           async
           strategy="afterInteractive"
@@ -39,12 +36,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        <div className="flex min-h-screen flex-col">
+        <div className="flex min-h-screen flex-col bg-zinc-900">
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 bg-zinc-900">{children}</main>
           <Footer />
         </div>
-
       </body>
     </html>
   );
