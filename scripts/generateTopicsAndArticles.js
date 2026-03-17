@@ -203,6 +203,17 @@ Writing rules:
 - Make the title attractive for search users
 - Write a strong description that could work as an SEO meta description
 
+VERY IMPORTANT INTERNAL LINKING RULES:
+- Naturally mention 2 to 4 closely related coding concepts in the paragraph text
+- Mention related concepts as plain text only, not markdown links
+- Use phrases that are likely to match other article topics on the site
+- Good examples of related concepts:
+  - tutorials: arrays, objects, loops, functions, promises, async await, callbacks, map, filter, forEach, joins, group by, where clause, list comprehension, dictionaries, interfaces, types
+  - errors: undefined, null, syntax error, type error, reference error, imports, modules, joins, conditions, indexing, loops
+- Do not force links unnaturally
+- Do not add a separate "related links" section
+- Just mention related concepts naturally inside explanatory paragraphs
+
 Article structure:
 1. Introduction
 2. What it means or what it does
