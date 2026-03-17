@@ -3983,5 +3983,277 @@ export const articles: Article[] = [
         "value": "In summary, syntax errors near the ON clause in SQL are usually caused by incorrect or missing keywords, improper join conditions, or misplacement of related SQL clauses. By carefully writing your JOIN statements, correctly referencing table columns, and keeping filtering separate in WHERE clauses, you can avoid these errors. Regularly testing and formatting your SQL code also helps catch syntax issues early. Mastering SQL joins and their clauses like ON is fundamental when working with multiple tables in databases."
       }
     ]
+  },
+  {
+    "slug": "how-to-implement-debounce-and-throttle-in-javascript-with-examples",
+    "title": "How to Implement Debounce and Throttle in JavaScript with Examples",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to implement debounce and throttle functions in JavaScript with clear examples and best practices to optimize event handling and improve performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=cjIswDCKgu0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building interactive web applications, you often need to respond to user actions like scrolling, typing, or resizing. However, some actions can trigger events many times in quick succession, which might cause performance issues. Debounce and throttle are two useful techniques that help control how often a function runs during these rapid events, improving your app’s performance and user experience. In this tutorial, we'll explain what debounce and throttle mean, how to implement them in JavaScript, and share practical examples you can use right away."
+      },
+      {
+        "type": "paragraph",
+        "value": "Debounce and throttle both limit how frequently a function can execute, but they work in different ways. Debounce delays running a function until a certain time has passed since the last event, which is great for things like search input where you want to wait for the user to finish typing before running a query. Throttle, on the other hand, ensures a function runs at most once every set interval, which is useful for events like scrolling or resizing where you want to update frequently but not too often. These concepts tie into event handling and timing functions like setTimeout and setInterval in JavaScript."
+      },
+      {
+        "type": "code",
+        "value": "// Debounce function implementation\nfunction debounce(func, delay) {\n  let timeoutId;\n  return function(...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => {\n      func.apply(this, args);\n    }, delay);\n  };\n}\n\n// Throttle function implementation\nfunction throttle(func, limit) {\n  let lastFunc;\n  let lastRan;\n  return function(...args) {\n    const context = this;\n    if (!lastRan) {\n      func.apply(context, args);\n      lastRan = Date.now();\n    } else {\n      clearTimeout(lastFunc);\n      lastFunc = setTimeout(function() {\n        if ((Date.now() - lastRan) >= limit) {\n          func.apply(context, args);\n          lastRan = Date.now();\n        }\n      }, limit - (Date.now() - lastRan));\n    }\n  };\n}\n\n// Example usage:\nconst logResizeDebounced = debounce(() => {\n  console.log('Window resized - debounce');\n}, 500);\n\nconst logScrollThrottled = throttle(() => {\n  console.log('Window scrolled - throttle');\n}, 1000);\n\nwindow.addEventListener('resize', logResizeDebounced);\nwindow.addEventListener('scroll', logScrollThrottled);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use debounce and throttle properly, consider the specific use case and choose the technique that matches your event pattern. For example, debounce works best when you need to wait until the user pauses an action — such as stopping typing in a search box — to send a request or update something. Throttle is better for limiting how often a function is called during continuous events, like scrolling or mouse movement, ensuring the browser isn't overwhelmed. You can pass different delay or limit values depending on how responsive you want your UI to be. Understanding closures and how JavaScript handles function scope will also help you write clean and efficient debounce and throttle functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include confusing debounce and throttle, which leads to improper performance behavior. Another frequent error is forgetting to clear previous timers in debounce, resulting in multiple calls instead of one. With throttle, not using timestamps or timers correctly can cause functions to execute too frequently or not at all. Also, forgetting to preserve the context with apply or call can break the meaning of this in your callback functions. These errors often appear when managing asynchronous code or working with callback functions, so reviewing how JavaScript handles event loops and scope is helpful for debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, debounce and throttle are powerful tools in JavaScript to optimize event handling by controlling how often functions execute during rapid events. Debounce waits for inactivity before calling a function, while throttle ensures a function runs at a consistent maximum rate. Implementing these patterns correctly can significantly improve performance in dynamic web applications, especially when combined with other JavaScript concepts like event listeners and asynchronous programming. By practicing these techniques, you'll write more efficient and user-friendly code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-typeerror-cannot-read-property-of-undefined-in-javascript",
+    "title": "How to Fix TypeError: Cannot Read Property of Undefined in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn why the TypeError 'Cannot read property of undefined' occurs in JavaScript and how to fix it with clear examples and tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=UZINZNWAE8Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you have ever seen the error message 'TypeError: Cannot read property of undefined' while coding in JavaScript, you know it can be confusing. This error happens when your code tries to access a property or method on a variable that currently holds the value 'undefined'. In simple terms, JavaScript is telling you that it doesn’t understand what you want because the value you are accessing doesn’t exist. Understanding how to fix this error will make your JavaScript code more reliable and help you avoid common problems with variables and data handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "So what does this error mean exactly? When JavaScript says 'Cannot read property X of undefined', it means you tried to get or use property 'X' on a value that is undefined at that moment. Undefined means no value has been assigned, or the variable points to nothing. This is different from 'null', which is an intentional empty value. Common reasons include trying to access properties of an object that doesn’t exist yet, or mistyping variable names. This error often appears with objects, arrays, or when dealing with asynchronous data like fetching APIs, so understanding variables, scope, and asynchronous programming concepts can help prevent it."
+      },
+      {
+        "type": "code",
+        "value": "const user = {};\nconsole.log(user.name.first); // Error: Cannot read property 'first' of undefined\n\n// Here, 'user.name' is undefined because 'name' property does not exist on user."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to make sure the object or variable is properly defined before you access its properties. One approach is using checks to see if the object exists, such as 'if (user.name) { ... }'. JavaScript also supports optional chaining, which allows safe access to nested properties without throwing an error if some part is undefined. For example, 'user.name?.first' will return 'undefined' instead of throwing an error. Another fix is ensuring variables are correctly initialized or loaded before use, especially when working with asynchronous functions or callbacks where data might not be immediately available."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes that lead to this error include misspelling variable or property names, not initializing objects or arrays before use, and assuming asynchronous data has already loaded. Beginners often forget to handle cases where API responses might not have expected data structure, or they try to access data before it has been fetched. Understanding the difference between undefined and null, how to use logical operators for default values, and learning about promises or async/await helps avoid these mistakes and write safer, cleaner code."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'TypeError: Cannot read property of undefined' is a sign that your code is trying to read a value that doesn’t exist. By learning how to check for variable initialization, using optional chaining, and carefully handling asynchronous data, you can prevent this error. Paying attention to objects, properties, variable scope, and asynchronous programming concepts will improve your debugging skills and make your JavaScript applications run more smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "error-handling-in-typescript-async-functions-explained",
+    "title": "Error Handling in TypeScript Async Functions Explained",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to properly handle errors in TypeScript async functions with practical examples and common pitfalls to avoid.",
+    "videoUrl": "https://www.youtube.com/watch?v=wsoQ-fgaoyQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with asynchronous code in TypeScript, handling errors properly is crucial to building reliable and maintainable applications. Async functions let you write asynchronous code that looks synchronous using the async/await syntax, but errors can still occur during promise resolution or rejection. This article will guide you through understanding how error handling works in TypeScript async functions with clear examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "An async function always returns a Promise, which either resolves successfully or rejects with an error. If an error occurs inside the async function and isn’t caught, the Promise gets rejected. This means you must use techniques like try/catch blocks inside the async function or handle Promise rejections outside the function. This behavior is similar to traditional promise error handling but with clearer, more readable syntax. Understanding this helps when working with related concepts like Promises, callbacks, and synchronous error handling in TypeScript."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData(url: string): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! Status: ${response.status}`);\n    }\n    const data = await response.text();\n    return data;\n  } catch (error) {\n    // Handle the error properly\n    throw new Error(`Fetching data failed: ${error instanceof Error ? error.message : String(error)}`);\n  }\n}\n\n// Usage example with proper error handling\nfetchData('https://example.com/data')\n  .then(data => console.log('Data received:', data))\n  .catch(err => console.error('Error:', err.message));"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle errors correctly in async functions, always use try/catch blocks around your await expressions where errors might occur. If you don't catch errors inside the async function, ensure you handle the returned Promise's rejection with .catch() or another try/catch in an async context. This approach helps avoid unhandled promise rejections that can crash your app or leave bugs unnoticed. It also aligns with TypeScript features like type checking and async iterators, ensuring your async code stays robust and easy to debug."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginners make is forgetting to use try/catch inside async functions or missing the Promise rejection handling when calling them. Another error is mixing synchronous error handling (like throw outside async functions) with asynchronous code, which won’t work as expected. Also, some developers incorrectly assume async functions catch all errors automatically without explicit try/catch, but that’s not true — unhandled errors always reject the Promise and need proper handling with .catch() or try/catch outside."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, error handling in TypeScript async functions relies on understanding that async functions return Promises that can either resolve or reject. Using try/catch blocks inside async functions and handling Promise rejections properly outside ensures your asynchronous code handles errors gracefully. Knowing this alongside concepts like Promises, callback functions, and synchronous error handling will make you a more confident TypeScript developer and improve your code's reliability."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-typescript-error-ts2345-argument-of-type-is-not-assignable",
+    "title": "How to Fix TypeScript Error TS2345: Argument of Type is Not Assignable",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to understand and fix the TypeScript error TS2345: Argument of type is not assignable. This beginner-friendly guide explains why the error happens and how to resolve it with clear examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=E3CZ62w-46k",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've recently started working with TypeScript, you might have encountered the error TS2345, which says \"Argument of type is not assignable to parameter of type.\" This error can be confusing, especially if you're new to type checking, functions, and interfaces in TypeScript. In this article, we'll explain what this error means, why it happens, and show you simple examples to fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "The TS2345 error occurs when you pass an argument to a function or method that doesn't match the expected type declared in the function's parameter. TypeScript uses static type checking to ensure your code is safe, so if you try to send a string where a number is expected, or an object missing required fields, the compiler will raise this error. Understanding TypeScript's type system, including how types, interfaces, and function parameters work, will help you identify and fix these issues more quickly."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log('Hello, ' + name);\n}\n\ngreet(42); // Error: Argument of type 'number' is not assignable to parameter of type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix TS2345, the key is to make sure the argument type matches the parameter type. In the example above, the function greet expects a string, but a number was passed. To correct it, you should pass a string like greet('Alice'). When working with objects, ensure the object matches the interface or type structure expected. If necessary, use type assertions or update the function's parameter types to accept a broader type like a union type. Also, be mindful of optional parameters and default values to avoid mismatches."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake causing TS2345 is mixing up types that look similar but have different structures, such as passing an array when an object is required or confusing optional and required properties in interfaces. Another error is ignoring null or undefined types when strict null checking is enabled, leading to assignments that TypeScript will reject. Always check your function signatures, type declarations, and consider using utility types like Partial or Record to help with flexible typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the TypeScript error TS2345 means your argument's type doesn't match the expected parameter type, and this is caught during compile time thanks to TypeScript's static type checking. By understanding parameter types, function signatures, interfaces, and type compatibility, you can easily fix this error by providing matching types or adjusting your types accordingly. This will improve your code reliability and reduce runtime bugs."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-list-comprehensions-in-python-with-examples",
+    "title": "How to Use List Comprehensions in Python with Examples: A Beginner-Friendly Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use list comprehensions in Python with clear explanations and practical examples. Understand the basics and common mistakes to write cleaner, more efficient code.",
+    "videoUrl": "https://www.youtube.com/watch?v=l8mWvDUwOt4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to Python, you've probably heard about list comprehensions as a powerful way to create lists quickly and cleanly. Instead of writing a multi-line loop to build a list, list comprehensions allow you to write concise, readable code that does the same thing in just one line. This tutorial will help you understand how list comprehensions work, show you practical examples, and explain related topics like loops, conditional statements, and functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "A list comprehension is a compact way to generate a new list by applying an expression to each item in an existing list or any iterable object. It's like a shortcut for for-loops that often include conditionals. Using list comprehensions, you can transform items, filter them, or combine both operations into a single, readable line of code. This concept is closely related to loops in Python, conditional expressions, and how Python handles iterable data types like lists or tuples."
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3, 4, 5]\nsquares = [x**2 for x in numbers]\nprint(squares)  # Output: [1, 4, 9, 16, 25]\n\n# Example with condition to keep only even squares\neven_squares = [x**2 for x in numbers if x % 2 == 0]\nprint(even_squares)  # Output: [4, 16]"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use list comprehensions properly, start by identifying what you want to generate in the list and what input list or iterable you'll use. Write the expression you want applied to each item, followed by the for clause that goes over each element. If needed, add a condition to filter elements. For example, to make a list of uppercase words from an existing list, you'd combine string methods with a conditional. This technique connects well with understanding how Python functions work, as sometimes you can use functions inside your list comprehensions for more complex operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake when learning list comprehensions is trying to fit overly complex logic into a single line, which can hurt readability. Another is forgetting to include the iterable after the for keyword or mixing up syntax such as placing the condition before the for clause. Also, some beginners confuse list comprehensions with generators or forget that list comprehensions always create a new list, which can have performance implications compared to generator expressions or using loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, list comprehensions are a neat, efficient way to create new lists in Python by combining loops and conditionals in a single line. Practicing with simple examples, like creating squares of numbers or filtering items, will help you write clearer Python code. As you continue learning, you'll see list comprehensions often work alongside other concepts like functions, loops, and string manipulation to solve everyday programming tasks more elegantly."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-attributeerror-object-has-no-attribute-in-python",
+    "title": "How to Fix AttributeError: Object Has No Attribute in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what causes the AttributeError 'object has no attribute' in Python and how to fix it with practical examples and common troubleshooting tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=9ZR190RVDx4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to Python programming or even an intermediate coder, encountering the error message \"AttributeError: object has no attribute\" can be confusing. This error occurs when you try to access or use a property or method that doesn’t exist on an object. Understanding why this happens and how to fix it will help you write better Python code and troubleshoot issues with classes, objects, and data structures effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error means you're calling an attribute (a method or variable) on an object, but Python cannot find that attribute in the object’s definition or its inheritance chain. In object-oriented programming, objects have attributes defined by their classes or assigned dynamically at runtime. If you misspell the attribute name, use the wrong object type, or try to access attributes before they are properly set, Python raises this error. This is closely tied to how Python handles classes, object instances, and attribute lookup."
+      },
+      {
+        "type": "code",
+        "value": "class Dog:\n    def __init__(self, name):\n        self.name = name\n\n    def bark(self):\n        return 'Woof!'\nd = Dog('Buddy')\nprint(d.name)   # Works fine\nprint(d.bark()) # Works fine\nprint(d.age)    # AttributeError: 'Dog' object has no attribute 'age'"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, first check if you have a typo in the attribute name. Next, ensure that the attribute is actually defined for the object or its class. If you expect the attribute to be set dynamically, verify the order of your code so the attribute is created before use. Another common fix is to initialize the attribute in the class constructor (the __init__ method) to guarantee it exists. Understanding Python data types, how to define classes, initialize objects, and work with methods will reduce these mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "A frequent mistake is confusing instance attributes with class attributes or mixing variable names. For example, trying to call methods on the wrong data type or forgetting to create the object before attribute access triggers this error. Novices often miss adding self when defining or accessing attributes inside class methods, which leads to attributes not being found on the object. Also, accessing attributes on NoneType usually means a variable wasn’t properly assigned."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the AttributeError 'object has no attribute' means your Python code is trying to access something that does not exist on the object. To fix it, verify attribute names, ensure proper initialization, and review your class and object usage carefully. Becoming comfortable with Python’s class structures, object instantiation, and attribute handling will help you avoid this error and write cleaner, more reliable code."
+      }
+    ]
+  },
+  {
+    "slug": "common-mistakes-in-sql-joins-and-how-to-fix-them",
+    "title": "Common Mistakes in SQL JOINs and How to Fix Them",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn about common SQL JOIN mistakes, why they happen, and how to fix them with practical examples and clear explanations. Perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=YfIp5E-tjzE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL JOINs are powerful tools for combining data from two or more tables based on related columns. However, many beginners make mistakes when writing JOIN queries that can lead to incorrect results or poor performance. In this article, we'll explore common mistakes when using SQL JOINs, explain why they happen, and show you how to fix them with practical examples. Understanding JOINs well also helps improve skills related to query optimization and relational database design."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a JOIN lets you combine rows from two tables based on a condition, usually matching keys. For example, an INNER JOIN returns only rows where there is a match in both tables, while a LEFT JOIN returns all the rows from the left table regardless of matches in the right table. JOINs come in different types such as INNER, LEFT, RIGHT, and FULL OUTER JOINs, each serving different purposes. Mastering the concepts of JOIN conditions, JOIN types, and filtering are crucial to writing correct queries."
+      },
+      {
+        "type": "code",
+        "value": "-- Example of a simple INNER JOIN\nSELECT employees.name, departments.department_name\nFROM employees\nINNER JOIN departments ON employees.department_id = departments.id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the most common mistakes is missing or incorrect JOIN conditions. Forgetting to specify the JOIN ON clause results in a CROSS JOIN, which returns every combination of rows from both tables and can cause huge, unexpected result sets. To fix this, always provide a proper ON condition that specifies how the tables relate, typically matching primary keys to foreign keys. Another mistake is using incorrect column names or mixing up table aliases, leading to errors or wrong data retrieval. Testing JOINs with LIMIT and checking the data helps avoid such errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Beginners also often misuse JOIN types. For example, using an INNER JOIN when a LEFT JOIN is needed to include all rows from the main table can result in missing data. Similarly, filtering in the WHERE clause instead of the JOIN condition may unintentionally turn outer JOINs into inner JOINs, excluding rows you wanted to keep. Understanding how filter conditions affect JOINs, along with concepts like subqueries and indexing, helps write more efficient and correct JOIN queries. Remember to check your JOIN logic carefully, especially when combining multiple tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, SQL JOIN errors usually stem from missing or incorrect JOIN conditions, misunderstanding JOIN types, or misplacing filters. To avoid these mistakes, always specify clear ON clauses, choose the right JOIN type for your needs, and apply filters carefully. Testing your queries step-by-step can help ensure the results match your expectations. Building good habits with JOIN usage not only improves queries but also strengthens your overall SQL skills, including working with subqueries, aggregate functions, and query optimization techniques."
+      }
+    ]
+  },
+  {
+    "slug": "common-sql-server-deadlock-errors-and-prevention",
+    "title": "Common SQL Server Deadlock Errors Explained and How to Prevent Them",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL Server deadlock errors are, why they happen, and practical ways to prevent them with easy-to-understand examples and tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=5uTLRZEbBmU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you work with SQL Server databases, you may have encountered deadlock errors that cause your queries to fail unexpectedly. A deadlock happens when two or more transactions are waiting for each other to release locks on resources, creating a cycle that SQL Server cannot resolve automatically without killing one of the transactions. Understanding deadlocks is essential for database developers and administrators to ensure smooth operations and improve application performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Deadlock errors mean that multiple queries are holding locks on resources like tables or rows, and each is waiting for the other to release them. SQL Server detects these deadlocks and terminates one transaction to break the cycle. The error message usually looks like error 1205 with details about the processes involved. These deadlocks involve locking mechanisms and can be influenced by transaction isolation levels, indexing strategies, and query design."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\nUPDATE Products SET Quantity = Quantity - 1 WHERE ProductID = 1;\n-- Simulate work\nWAITFOR DELAY '00:00:05';\nUPDATE Orders SET Status = 'Processed' WHERE OrderID = 100;\nCOMMIT TRANSACTION;\n\n-- At the same time, another transaction might update Orders first then Products causing a deadlock."
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent deadlocks, you can start by keeping transactions short and accessing tables in the same order across different transactions. Using appropriate indexes reduces full table scans, lowering lock contention. You may also change the transaction isolation level, like using READ COMMITTED SNAPSHOT, to minimize locking conflicts. SQL Server trace flags and deadlock graphs can help identify root causes. Applying retry logic in your application code after a deadlock error is also a good practice."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include holding locks too long by running complex operations inside transactions, accessing tables in different orders, and ignoring proper indexing. Also, not monitoring or analyzing deadlock graphs means underlying issues remain undetected. Avoid using overly restrictive transaction isolation levels if possible, and be careful with explicit locking hints that can escalate conflicts instead of reducing them."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, SQL Server deadlocks occur when transactions block each other in a cycle, causing the server to terminate one transaction to resolve the conflict. Understanding locks, transactions, indexing, and isolation levels will arm you with the tools to prevent deadlocks or handle them gracefully. Always analyze deadlock graphs when errors arise and design your database access patterns to minimize conflicts for better performance and reliability."
+      }
+    ]
   }
 ];
