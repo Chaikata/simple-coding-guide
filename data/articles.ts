@@ -4778,5 +4778,281 @@ export const articles: Article[] = [
         "value": "In summary, the \"SQL syntax error near select\" indicates a problem around how the SELECT keyword is used in your query, often related to subqueries and missing parentheses. By carefully structuring your queries, using parentheses correctly, and paying attention to the order and syntax of clauses, you can fix this error quickly. Becoming familiar with SQL query syntax, including joins, subqueries, and common clauses, will help you write error-free code."
       }
     ]
+  },
+  {
+    "slug": "how-to-use-javascript-promises-for-beginners",
+    "title": "How to Use JavaScript Promises for Beginners: A Simple Tutorial",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript promises for handling asynchronous code easily. This beginner-friendly tutorial explains promises step-by-step with practical examples and tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to JavaScript and want to understand how to work with tasks that take time, like fetching data or reading files, Promises are an essential concept to learn. Promises help you write asynchronous code in a clear and manageable way, avoiding the confusion that can come with callbacks. This tutorial will guide you through what promises are, how they work, and how you can start using them confidently in your JavaScript projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "A JavaScript Promise represents a value that might not be available yet, but will be resolved (or failed) in the future. It has three states: pending (waiting), fulfilled (completed successfully), or rejected (failed). Promises allow you to write better asynchronous code than traditional callback functions. Instead of nesting callbacks, promises let you chain asynchronous operations. They are closely related to concepts like async/await syntax and callbacks, all of which are ways to handle asynchronous programming in JavaScript."
+      },
+      {
+        "type": "code",
+        "value": "const myPromise = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    const success = true; // Simulate operation result\n    if (success) {\n      resolve('Operation successful!');\n    } else {\n      reject('Something went wrong.');\n    }\n  }, 2000);\n});\n\nmyPromise\n  .then(result => {\n    console.log(result); // Logs after 2 seconds: Operation successful!\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "To properly use promises, always handle both the fulfillment and rejection cases by using the .then() and .catch() methods. This prevents unhandled errors and improves code readability. You can chain multiple .then() calls to run operations sequentially. Alternatively, you can use async/await syntax to write asynchronous code that looks like synchronous code, which is easier for beginners to read and understand. Also, avoid creating 'promise hell' by nesting promises; instead, return promises from within .then() handlers for clean chains."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes beginners make with promises include forgetting to return a promise inside a .then() callback, which breaks chaining, or not handling promise rejections properly, leading to uncaught errors. Another error is mixing callbacks and promises in a way that creates confusing code flow. It's also important not to call resolve or reject multiple times inside one promise executor function. Understanding these will save you from debugging headaches."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, JavaScript Promises are a vital tool for managing asynchronous operations in a clean and structured way. By using promises along with related concepts like callbacks and async/await, you can write efficient and readable code that handles tasks like API calls or timers smoothly. Remember to always handle both success and failure states, chain promises carefully, and practice writing simple examples to get comfortable. Mastering promises is a big step toward becoming a strong JavaScript developer."
+      }
+    ]
+  },
+  {
+    "slug": "typeerror-property-does-not-exist-on-type-fix-javascript",
+    "title": "TypeError Property Does Not Exist on Type Fix in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to fix the TypeError 'property does not exist on type' in JavaScript with clear examples and best practices for handling object properties and type checking.",
+    "videoUrl": "https://www.youtube.com/watch?v=T_pVxub7_DY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've encountered the error TypeError: property does not exist on type in JavaScript or TypeScript, you're not alone. This error usually happens when you try to access a property on an object when JavaScript or TypeScript doesn't recognize that property as valid. Understanding why this happens and how to fix it is crucial for writing bug-free code, especially when working with objects, types, or classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error means the code is trying to access a property that the compiler or runtime believes doesn't exist on the type of the object. In TypeScript, this is common because TypeScript uses types to ensure you only access valid properties on objects. In plain JavaScript, it can happen at runtime if the property is truly missing or if you mistyped the property name. To resolve this, you need to understand object structures, type assertions, and possibly extend your types or objects to include the missing property."
+      },
+      {
+        "type": "code",
+        "value": "type User = {\n  name: string;\n  age: number;\n};\n\nconst user: User = { name: 'Alice', age: 25 };\n\n// This line will cause an error:\n// Property 'email' does not exist on type 'User'.\nconsole.log(user.email);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, first confirm if the property should actually exist on the object. If so, update the type definition to include the property. In the example above, adding 'email' to the User type will fix the issue. Alternatively, you can use type assertions or index signatures if you expect dynamic properties. Another common approach in JavaScript is to check if the property exists before accessing it, which helps avoid runtime errors. Remember, understanding the structure of objects, interfaces, and types is key when working with this error."
+      },
+      {
+        "type": "paragraph",
+        "value": "A few common mistakes include misspelling the property name, forgetting to update type definitions when object structures change, or assuming a property exists without runtime checks. In JavaScript, the error can also be caused by trying to access properties on undefined or null values, so always confirm the object exists first. Additionally, confusing JavaScript’s dynamic typing with TypeScript’s static type checking can lead to misinterpretation of this error. Proper use of object keys, interface extension, and optional chaining helps avoid these pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'property does not exist on type' error signals a mismatch between what your code expects and the actual object type structure. By updating type definitions, using type assertions, and performing runtime checks, you can fix this TypeError quickly. This process also improves your understanding of JavaScript objects, TypeScript interfaces, and error handling practices, making your code safer and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-interface-vs-type-differences-explained",
+    "title": "TypeScript Interface vs Type Differences Explained with Examples",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn the key differences between TypeScript interface and type alias with clear explanations and practical code examples to help you choose the right one in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=BTBftM7D9v8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're just starting with TypeScript, you might be confused about when to use an interface vs a type alias. Both are used to describe the shape of data, objects, or function signatures in your code. Understanding their differences helps you write clearer and more maintainable TypeScript code. This article breaks down the differences in simple terms, with examples you can follow along to grasp the concepts quickly."
+      },
+      {
+        "type": "paragraph",
+        "value": "An interface in TypeScript allows you to define the structure of an object or function, focusing mainly on the shape of data. It is extendable and can be merged, which means you can add new properties to an interface even after it's initially declared. On the other hand, a type alias can define not just object shapes but also unions, intersections, primitives, or any other types. Type aliases are more flexible but do not support declaration merging like interfaces. Both play a big role in how you manage types in TypeScript, and are often used alongside other concepts like enums and generics."
+      },
+      {
+        "type": "code",
+        "value": "interface UserInterface {\n  name: string;\n  age: number;\n}\n\n// You can extend interfaces\ninterface ExtendedUserInterface extends UserInterface {\n  email: string;\n}\n\n// Type alias for an object\ntype UserType = {\n  name: string;\n  age: number;\n};\n\n// Type aliases can also create unions\ntype Status = \"active\" | \"inactive\" | \"pending\";\n\n// Example usage\nconst user1: UserInterface = { name: \"Alice\", age: 25 };\nconst user2: UserType = { name: \"Bob\", age: 30 };\nconst currentStatus: Status = \"active\";"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use interface or type properly, consider the scenario first. Use interface when you need to define a contract for objects and want to take advantage of declaration merging or extendability. Interfaces are great for defining object shapes and working with classes. Use type alias when you want to define more complex types such as unions, tuples, or primitives. Also, type aliases are powerful when combining types using intersections or unions. Remember, interfaces can only describe object shapes, but type aliases can describe almost any type, which gives you more flexibility in advanced type manipulations."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginner TypeScript developers make is assuming interfaces and types are interchangeable, which might lead to confusion when trying to extend or merge them. For example, trying to declare merge with type aliases causes errors because type aliases do not merge. Another frequent error is overly complex type aliases that hurt readability. Also, misuse of type unions when an interface inheritance would be clearer can complicate your code. It’s a good practice to keep your types and interfaces simple and meaningful, and leverage other TypeScript concepts like generics and utility types to manage complexity."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, interfaces and type aliases in TypeScript both define types but serve slightly different purposes. Interfaces are best suited for defining the shape of objects, especially when you want to extend or merge them later. Type aliases provide more flexibility by allowing you to represent unions, intersections, primitives, and tuples, which interfaces cannot directly express. Understanding these differences along with how they relate to other TypeScript concepts like generics and enums will make your TypeScript coding much easier and your types more robust."
+      }
+    ]
+  },
+  {
+    "slug": "cannot-read-properties-of-undefined-fix-typescript",
+    "title": "Cannot Read Properties of Undefined Fix in TypeScript: Step-by-Step Guide",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to identify and fix the 'Cannot read properties of undefined' error in TypeScript with clear explanations, practical examples, and common pitfalls to avoid.",
+    "videoUrl": "https://www.youtube.com/watch?v=raMsoLTWCKo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've encountered the error message 'Cannot read properties of undefined' in TypeScript, you're not alone. This error usually means your code is trying to access a property or method on a variable that is currently undefined. This issue is common for developers new to TypeScript or JavaScript when navigating objects or working with asynchronous data. In this article, we'll explain what this error means, show you example code that causes it, and guide you step-by-step on how to fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error 'Cannot read properties of undefined' occurs when you try to access a property (like myObject.property) but the value before the dot is undefined instead of being an object. This might happen if a variable was never initialized, or if a function returned undefined instead of an expected object. It’s important to understand how TypeScript deals with types and null or undefined values, including concepts like optional chaining, type guards, and union types. These tools help prevent this error by making your code safer and more predictable."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age?: number;\n}\n\nfunction getUser(): User | undefined {\n  // Sometimes returns undefined\n  return Math.random() > 0.5 ? { name: 'Alice' } : undefined;\n}\n\nconst user = getUser();\nconsole.log(user.name); // Error: Cannot read properties of undefined (reading 'name')\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to ensure the variable is not undefined before accessing its properties. You can do this by using conditional checks, optional chaining (?.), or type guards. For example, using optional chaining lets you safely access a property only when the object is defined. This is especially helpful combined with strict null checks, which is a recommended TypeScript compiler option. Here’s a fixed version of the above example using optional chaining:"
+      },
+      {
+        "type": "code",
+        "value": "const user = getUser();\n\n// Using optional chaining (?.) to avoid error when user is undefined\nconsole.log(user?.name);\n\n// Or with a traditional check\nif (user !== undefined) {\n  console.log(user.name);\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include ignoring potential undefined values (for example, assuming a value always exists), neglecting asynchronous data returns, or not enabling TypeScript’s strictNullChecks option. Also, confusing null with undefined can cause problems because they represent different states. Understanding type assertions, nullish coalescing, and proper function return types can also help you avoid this error in your projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'Cannot read properties of undefined' error in TypeScript means you’re trying to access properties on a value that isn’t actually there yet. By using TypeScript’s type system, optional chaining, and careful null checks, you can write more robust code that handles undefined values gracefully. Remember to check out related concepts like type guards, union types, and strict null checks to deepen your understanding of safe property access in TypeScript."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-python-decorators-with-practical-examples",
+    "title": "How to Use Python Decorators with Practical Examples",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python decorators with clear explanations and practical examples to enhance your functions and write cleaner code.",
+    "videoUrl": "https://www.youtube.com/watch?v=U-G-mSd4KAE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are learning Python and want to write cleaner, more reusable code, understanding decorators is a great step forward. Decorators are a powerful tool that allows you to modify the behavior of a function or method without changing its actual code. This beginner-friendly tutorial will explain what decorators are, how they work, and provide practical code examples that you can try yourself."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, a decorator is essentially a function that takes another function as an argument and extends or alters its behavior. You often see decorators used for logging, access control, or performance timing. This concept is related to higher-order functions and closures in Python, which allow functions to be passed around as objects and capture local state. Understanding decorators can also help when working with classes, methods, and advanced features like metaprogramming."
+      },
+      {
+        "type": "code",
+        "value": "def simple_decorator(func):\n    def wrapper():\n        print('Before the function runs')\n        func()\n        print('After the function runs')\n    return wrapper\n\n@simple_decorator\ndef say_hello():\n    print('Hello!')\n\nsay_hello()\n\n# Output:\n# Before the function runs\n# Hello!\n# After the function runs"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use decorators properly, define a function (the decorator) that receives the original function and returns a new function (often called a wrapper). Inside the wrapper, you can run code before and after calling the original function. To apply the decorator, place @decorator_name above the function definition you want to modify. This technique keeps your code DRY (Don't Repeat Yourself) and is especially useful to add features like logging, authentication, or caching without cluttering your main logic. When dealing with functions that accept arguments, use *args and **kwargs in your wrapper to handle them flexibly."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake beginners make with decorators is forgetting to use the functools.wraps helper. If you don't import and apply functools.wraps to your wrapper function, the metadata of the decorated function (like its name and docstring) will be lost, which can cause confusion during debugging or when generating documentation. Another pitfall is not handling arguments in the wrapper, which leads to errors if the decorated function requires parameters. Also, avoid complex logic inside decorators — keep them focused on a single responsibility for easier maintenance."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, Python decorators are a clean and effective way to extend the behavior of functions and methods. By learning to write and apply decorators correctly, you can improve your code organization and reuse. Remember to handle function arguments properly, use functools.wraps to keep function metadata intact, and keep your decorator logic simple. With practice, decorators will become a natural part of your Python programming toolkit, enhancing your work with functions, classes, and other advanced concepts."
+      }
+    ]
+  },
+  {
+    "slug": "python-index-error-list-index-out-of-range-fix",
+    "title": "Python IndexError: List Index Out of Range Fix with Examples",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to fix the common Python error 'IndexError: list index out of range' with simple explanations and examples. Understand why it happens and avoid common pitfalls.",
+    "videoUrl": "https://www.youtube.com/watch?v=wpmXETzX6xc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you have ever worked with lists or strings in Python, you might have encountered the error message 'IndexError: list index out of range'. This is a very common error for beginners and can be confusing if you don't understand what it means. In this article, we will explain why this error occurs, show you examples, and teach you how to fix it so your code runs smoothly. Along the way, we will also touch on related concepts such as list indexing, slicing, and loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "'IndexError: list index out of range' happens when your code tries to access an index that does not exist in a list or other indexed data structure like a string or tuple. For example, if a list has 3 elements, their valid indexes are 0, 1, and 2. Trying to access index 3 or higher will cause this error. This is because Python indexes start from 0, not 1, and you cannot access positions outside of the current list length."
+      },
+      {
+        "type": "code",
+        "value": "my_list = ['apple', 'banana', 'cherry']\nprint(my_list[0])  # Output: apple\nprint(my_list[2])  # Output: cherry\nprint(my_list[3])  # This will cause IndexError: list index out of range"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to make sure the index you are trying to access is within the range of the list. You can do this by checking the length of the list using the len() function before accessing any element. Another approach is to use safe loops like for loops, which automatically iterate over all valid indexes, or use try-except blocks to handle errors gracefully. Also, consider using list slicing, which does not raise an IndexError even if you go beyond the list boundary."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake beginners make is forgetting that Python indexing starts at zero, so the last index is always length minus one. Another mistake is using a loop with incorrect range values, such as using range(len(my_list) + 1) instead of range(len(my_list)), which tries to access one index beyond the list. Using negative indexes without understanding can also cause errors if they reference out-of-range positions."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, 'IndexError: list index out of range' means you are trying to access an element beyond the available indexes of a list or similar collection. To avoid this error, always remember how indexing works, use len() to check list size when needed, and prefer safe iteration methods like for loops. Understanding these basics will help you work better with lists, strings, and other iterable data types, making your Python programs more robust and error-free."
+      }
+    ]
+  },
+  {
+    "slug": "common-mistakes-in-sql-group-by-clause",
+    "title": "Common Mistakes in SQL GROUP BY Clause and How to Fix Them",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the most common errors in using the SQL GROUP BY clause, why they happen, and step-by-step solutions to write error-free grouping queries with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=nNrgRVIzeHg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "The SQL GROUP BY clause is an essential tool for summarizing data by grouping rows that share a common value. However, beginners often run into errors or unexpected results when using it. In this article, we'll cover common mistakes made with GROUP BY, explain why they happen, and show you exactly how to fix or avoid them. By the end, you’ll write clearer, more effective SQL queries when grouping data."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, the GROUP BY clause groups rows that have the same values in specified columns so you can apply aggregate functions like COUNT, SUM, AVG, MAX, and MIN on each group. For example, grouping sales data by region or month to get total sales per group. It works closely with SELECT and HAVING clauses to filter and aggregate your data efficiently."
+      },
+      {
+        "type": "code",
+        "value": "SELECT department, COUNT(*) AS employee_count\nFROM employees\nGROUP BY department;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use the GROUP BY clause properly, you need to include in your SELECT statement only columns that are either grouped by or aggregated. Every column in the SELECT list that isn't an aggregate function must be specified in the GROUP BY clause. This rule helps SQL understand how to collapse rows into groups. Understanding how aggregate functions, GROUP BY, ORDER BY, and HAVING clauses work together is crucial to avoid mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the most common mistakes is selecting columns in the query that are not part of either the GROUP BY clause or an aggregate function. This causes errors such as \"column must appear in the GROUP BY clause or be used in an aggregate function.\" Another frequent issue is misunderstanding the difference between WHERE and HAVING clauses. WHERE filters rows before grouping, while HAVING filters groups after aggregation. Forgetting HAVING when filtering aggregated results is a typical beginner challenge."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, mastering the GROUP BY clause requires careful selection of grouped columns and proper use of aggregate functions. Always ensure every non-aggregated column in your SELECT statement is included in the GROUP BY clause. Remember to use HAVING for filtering aggregated results instead of WHERE. Also, be mindful of how joins and subqueries can affect grouping behavior. By avoiding these common pitfalls, your SQL queries will be both correct and perform well when summarizing data."
+      }
+    ]
+  },
+  {
+    "slug": "sql-syntax-error-near-select-explained-with-examples",
+    "title": "SQL Syntax Error Near SELECT Explained with Examples",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn why the SQL syntax error near SELECT occurs, what it means, and how to fix it with practical examples. Perfect for beginners handling SQL query errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=AjxuNgy80Mw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing SQL queries, encountering a \"syntax error near SELECT\" message can be confusing for beginners. This error usually means something is wrong with the way your SQL statement is structured before or around the SELECT keyword. Understanding this error helps you write better queries and avoid issues related to SQL syntax, joins, and subqueries."
+      },
+      {
+        "type": "paragraph",
+        "value": "The \"syntax error near SELECT\" error indicates that the SQL parser found unexpected or misplaced characters right before the SELECT keyword. This often happens when you forget commas, miss keywords like FROM or WHERE, or improperly nest subqueries. Since SELECT is a fundamental part of SQL used to fetch data, any incorrect syntax around it causes the database engine to stop and throw an error."
+      },
+      {
+        "type": "code",
+        "value": "SELECT name, age FROM users WHERE id = 1;\n\n-- Incorrect example leading to 'syntax error near select':\nSELECT name age FROM users WHERE id = 1;\n\n-- Example with a faulty subquery:\nSELECT * FROM (SELECT id name FROM users) AS u;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, carefully check the keywords and punctuation around your SELECT statement. Make sure columns in your SELECT list are separated by commas, and that subqueries are properly wrapped in parentheses with aliases. Correct placement of keywords such as FROM, WHERE, GROUP BY, and ORDER BY is crucial. Also, avoid leaving out essential clauses and ensure every SELECT query has a FROM clause or is structured validly with subqueries or functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes causing this error include missing commas between column names, forgetting to alias subqueries, using reserved words incorrectly, and incomplete statements without FROM clauses. Beginners also often confuse SELECT syntax with other SQL statements like INSERT or UPDATE. Understanding SQL fundamentals like query syntax, subqueries, joins, and keyword order will help you avoid these errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"syntax error near SELECT\" happens because the SQL query isn't correctly written around the SELECT keyword. By carefully reviewing your query structure, ensuring proper use of commas, keywords, and subqueries, you can fix this error and write efficient SQL statements. Learning these basics also improves your understanding of query optimization, data filtering, and database interactions."
+      }
+    ]
   }
 ];
