@@ -36,6 +36,19 @@ function formatLabel(value: string) {
     .join(" ");
 }
 
+function getYoutubeEmbedUrl(videoUrl?: string) {
+  if (!videoUrl) return "";
+
+  try {
+    const url = new URL(videoUrl);
+    const id = url.searchParams.get("v");
+    if (!id) return "";
+    return `https://www.youtube-nocookie.com/embed/${id}`;
+  } catch {
+    return "";
+  }
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -68,6 +81,8 @@ export default async function ArticlePage({ params }: PageProps) {
   if (!article) {
     notFound();
   }
+
+  const embedUrl = getYoutubeEmbedUrl(article.videoUrl);
 
   const related = articles
     .filter((a) => a.language === article.language && a.slug !== article.slug)
@@ -132,6 +147,20 @@ export default async function ArticlePage({ params }: PageProps) {
         <h1 className="mb-4 text-4xl font-bold">{article.title}</h1>
 
         <p className="mb-8 text-gray-400">{article.description}</p>
+
+        {embedUrl && (
+          <div className="mb-10 overflow-hidden rounded-xl border border-gray-700">
+            <div className="aspect-video">
+              <iframe
+                src={embedUrl}
+                title={`${article.title} video`}
+                className="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        )}
 
         <div className="space-y-6">
           {article.content.map((block: ContentBlock, index: number) => {

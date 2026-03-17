@@ -1,7 +1,9 @@
-export type ContentBlock = {
-  type: "paragraph" | "code";
-  value: string;
-};
+export type ContentBlock =
+  | string
+  | {
+      type: "paragraph" | "code";
+      value: string;
+    };
 
 export type Article = {
   slug: string;
@@ -9,6 +11,7 @@ export type Article = {
   language: string;
   type: string;
   description: string;
+  videoUrl?: string;
   content: ContentBlock[];
 };
 

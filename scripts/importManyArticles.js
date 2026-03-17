@@ -1,22 +1,5 @@
 import fs from "fs";
 
-const generatedPath = "generatedArticles.json";
-const articlesPath = "data/articles.ts";
-
-function getExistingArticles() {
-  const articlesFile = fs.readFileSync(articlesPath, "utf-8");
-
-  const match = articlesFile.match(
-    /export const articles: Article\[\] = (\[[\s\S]*\]);/
-  );
-
-  if (!match) {
-    throw new Error("Could not find articles array in data/articles.ts");
-  }
-
-  return eval(match[1]);
-}
-
 function normalizeContent(content) {
   if (!Array.isArray(content)) return [];
 
@@ -54,32 +37,30 @@ function normalizeArticle(article) {
     language: article.language,
     type: article.type,
     description: article.description,
+    ...(article.videoUrl ? { videoUrl: article.videoUrl } : {}),
     content: normalizeContent(article.content),
   };
 }
 
-function run() {
-  const generatedRaw = fs.readFileSync(generatedPath, "utf-8");
-  const generatedArticles = JSON.parse(generatedRaw).map(normalizeArticle);
+function getExistingArticles() {
+  const articlesFile = fs.readFileSync("data/articles.ts", "utf-8");
 
-  const existingArticles = getExistingArticles();
-  const existingSlugs = new Set(existingArticles.map((article) => article.slug));
-
-  const newArticles = generatedArticles.filter(
-    (article) => !existingSlugs.has(article.slug)
+  const match = articlesFile.match(
+    /export const articles: Article\[\] = (\[[\s\S]*\]);/
   );
 
-  if (newArticles.length === 0) {
-    console.log("No new articles to import.");
-    return;
-  }
+  if (!match) return [];
 
-  const updatedArticles = [...existingArticles, ...newArticles];
+  return eval(match[1]);
+}
 
-  const newFileContent = `export type ContentBlock = {
-  type: "paragraph" | "code";
-  value: string;
-};
+function writeArticlesFile(allArticles) {
+  const fileContents = `export type ContentBlock =
+  | string
+  | {
+      type: "paragraph" | "code";
+      value: string;
+    };
 
 export type Article = {
   slug: string;
@@ -87,15 +68,34 @@ export type Article = {
   language: string;
   type: string;
   description: string;
+  videoUrl?: string;
   content: ContentBlock[];
 };
 
-export const articles: Article[] = ${JSON.stringify(updatedArticles, null, 2)};
+export const articles: Article[] = ${JSON.stringify(allArticles, null, 2)};
 `;
 
-  fs.writeFileSync(articlesPath, newFileContent, "utf-8");
+  fs.writeFileSync("data/articles.ts", fileContents);
+}
 
-  console.log("Imported " + newArticles.length + " new articles into data/articles.ts");
+function run() {
+  const generatedArticles = JSON.parse(
+    fs.readFileSync("generatedArticles.json", "utf-8")
+  );
+
+  const existingArticles = getExistingArticles();
+  const existingSlugs = new Set(existingArticles.map((article) => article.slug));
+
+  const newArticles = generatedArticles
+    .map(normalizeArticle)
+    .filter((article) => !existingSlugs.has(article.slug));
+
+  const allArticles = [...existingArticles, ...newArticles];
+
+  writeArticlesFile(allArticles);
+
+  console.log(`Imported ${newArticles.length} new articles`);
+  console.log(`Total articles: ${allArticles.length}`);
 }
 
 run();

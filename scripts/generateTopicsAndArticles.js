@@ -108,6 +108,44 @@ async function retry(label, fn) {
   throw lastError;
 }
 
+async function findYoutubeVideo(topic, language, type) {
+  if (!process.env.YOUTUBE_API_KEY) {
+    console.log("No YOUTUBE_API_KEY found, skipping video lookup.");
+    return "";
+  }
+
+  const query =
+    type === "errors"
+      ? `${topic} ${language} fix tutorial`
+      : `${topic} ${language} tutorial`;
+
+  const url =
+    "https://www.googleapis.com/youtube/v3/search" +
+    `?part=snippet` +
+    `&type=video` +
+    `&maxResults=1` +
+    `&safeSearch=moderate` +
+    `&q=${encodeURIComponent(query)}` +
+    `&key=${process.env.YOUTUBE_API_KEY}`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    console.log(`YouTube search failed for "${topic}" with status ${response.status}`);
+    return "";
+  }
+
+  const data = await response.json();
+  const videoId = data?.items?.[0]?.id?.videoId;
+
+  if (!videoId) {
+    console.log(`No YouTube video found for "${topic}"`);
+    return "";
+  }
+
+  return `https://www.youtube.com/watch?v=${videoId}`;
+}
+
 async function generateTopics(language, type) {
   const prompt = `
 Generate ${GENERATION_LIMITS.maxTopicsPerPlan} highly searchable coding article topics.
@@ -131,20 +169,6 @@ Rules:
 - Avoid duplicate or near-duplicate topics
 - Do NOT use unescaped double quotes inside any topic
 - Prefer clean titles without quotation marks
-
-Examples of good tutorial topics:
-- JavaScript Map vs ForEach Explained
-- Python List Comprehension Explained with Examples
-- SQL GROUP BY Explained with Examples
-- TypeScript Interface vs Type Differences
-- Python Dictionaries Explained for Beginners
-
-Examples of good error topics:
-- How to Fix Cannot Read Properties of Undefined in JavaScript
-- Python IndexError List Index Out of Range Fix
-- SQL Syntax Error Near SELECT Explained
-- TypeScript Property Does Not Exist on Type Fix
-- How to Fix Unexpected Token in JSON in JavaScript
 
 Use this exact format:
 {
@@ -207,12 +231,7 @@ VERY IMPORTANT INTERNAL LINKING RULES:
 - Naturally mention 2 to 4 closely related coding concepts in the paragraph text
 - Mention related concepts as plain text only, not markdown links
 - Use phrases that are likely to match other article topics on the site
-- Good examples of related concepts:
-  - tutorials: arrays, objects, loops, functions, promises, async await, callbacks, map, filter, forEach, joins, group by, where clause, list comprehension, dictionaries, interfaces, types
-  - errors: undefined, null, syntax error, type error, reference error, imports, modules, joins, conditions, indexing, loops
 - Do not force links unnaturally
-- Do not add a separate "related links" section
-- Just mention related concepts naturally inside explanatory paragraphs
 
 Article structure:
 1. Introduction
@@ -239,6 +258,7 @@ Use this exact format:
   "language": "${language}",
   "type": "${type}",
   "description": "Short SEO description",
+  "videoUrl": "",
   "content": [
     {
       "type": "paragraph",
@@ -274,6 +294,7 @@ Use this exact format:
   });
 
   const article = extractJson(response.output_text);
+  const videoUrl = await findYoutubeVideo(topic, language, type);
 
   return {
     slug: article.slug,
@@ -281,6 +302,7 @@ Use this exact format:
     language: article.language,
     type: article.type,
     description: article.description,
+    videoUrl,
     content: normalizeContent(article.content),
   };
 }
@@ -289,7 +311,7 @@ async function run() {
   const allArticles = [];
   const existingSlugs = getExistingSlugs();
 
-  console.log("Starting traffic-focused article generation...");
+  console.log("Starting article generation with YouTube videos...");
 
   for (const plan of contentPlans) {
     if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
@@ -366,18 +388,6 @@ async function run() {
   );
 
   console.log(`Created ${allArticles.length} new articles`);
-
-  const summary = {};
-  for (const article of allArticles) {
-    const key = `${article.language}/${article.type}`;
-    summary[key] = (summary[key] || 0) + 1;
-  }
-
-  console.log("Run summary:");
-  for (const plan of contentPlans) {
-    const key = `${plan.language}/${plan.type}`;
-    console.log(`- ${key}: ${summary[key] || 0}`);
-  }
 }
 
 run().catch((error) => {
