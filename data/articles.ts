@@ -1980,31 +1980,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "resolving-typescript-property-does-not-exist-on-type-error",
-    "title": "Resolving TypeScript Property Does Not Exist on Type Error",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn what causes the 'Property does not exist on type' error in TypeScript and how to fix it.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When you start using TypeScript, one common error you might encounter is the \"Property 'x' does not exist on type 'y'\" error. This happens when TypeScript expects an object to have certain properties based on a type or interface but finds that the property you're trying to access is not declared in that type."
-      },
-      {
-        "type": "paragraph",
-        "value": "This error is TypeScript's way of helping you catch mistakes before your code runs. It means you might be trying to access a property that either doesn't exist on the object or you haven't told TypeScript that the object has that property. To fix it, you need to make sure the property is included in the type definition or interface, or use type assertions and other techniques to inform TypeScript that the property is valid."
-      },
-      {
-        "type": "code",
-        "value": "interface Person {\n  name: string;\n  age: number;\n}\n\nconst person: Person = { name: \"Alice\", age: 30 };\n\n// Incorrect: \"email\" is not declared inside Person interface\n// console.log(person.email); // Error: Property 'email' does not exist on type 'Person'\n\n// Fix 1: Add property to interface\ninterface Person {\n  name: string;\n  age: number;\n  email?: string; // optional property\n}\n\nconst personWithEmail: Person = { name: \"Bob\", age: 25, email: \"bob@example.com\" };\nconsole.log(personWithEmail.email); // Works fine\n\n// Fix 2: Use type assertion if you know the property exists\nconst personWithExtra = person as Person & { email: string };\nconsole.log(personWithExtra.email); // Be careful: only use if the property actually exists\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the \"Property does not exist on type\" error indicates TypeScript cannot verify the existence of a property on an object based on its type. You can fix this issue by updating your type definitions to include the property or by using type assertions carefully when you are sure the property exists. This helps ensure your code is safer and less prone to runtime errors."
-      }
-    ]
-  },
-  {
     "slug": "getting-started-with-python-programming",
     "title": "Getting Started with Python Programming",
     "language": "python",

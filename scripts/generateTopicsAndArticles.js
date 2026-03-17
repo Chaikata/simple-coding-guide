@@ -50,17 +50,39 @@ function extractJson(text) {
   throw new Error("Could not extract valid JSON from model output.");
 }
 
-function getExistingSlugs() {
+function normalizeText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/['"`]/g, "")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeSlug(text) {
+  return normalizeText(text).replace(/\s+/g, "-");
+}
+
+function getExistingArticles() {
   const articlesFile = fs.readFileSync("data/articles.ts", "utf-8");
 
   const match = articlesFile.match(
     /export const articles: Article\[\] = (\[[\s\S]*\]);/
   );
 
-  if (!match) return new Set();
+  if (!match) return [];
 
-  const existingArticles = eval(match[1]);
-  return new Set(existingArticles.map((article) => article.slug));
+  return eval(match[1]);
+}
+
+function getExistingIndexes() {
+  const existingArticles = getExistingArticles();
+
+  return {
+    slugSet: new Set(existingArticles.map((article) => normalizeSlug(article.slug))),
+    titleSet: new Set(existingArticles.map((article) => normalizeText(article.title))),
+    topicSet: new Set(existingArticles.map((article) => normalizeText(article.title))),
+  };
 }
 
 function normalizeContent(content) {
@@ -160,7 +182,7 @@ Rules:
 - Return ONLY valid JSON
 - Do not use markdown
 - Do not include any text before or after the JSON
-- Avoid generic beginner topics like "What is programming"
+- Avoid generic beginner topics
 - Prefer practical searches developers actually type into Google
 - Prefer "how to fix", "explained", "with examples", "vs", and "common mistakes"
 - If type is "tutorials", focus on practical learning topics with examples
@@ -221,7 +243,7 @@ Writing rules:
 - Keep it clear, simple, and useful
 - Explain things like a strong beginner tutorial site would
 - Use natural language, not robotic filler
-- Make paragraphs substantial, not one-line fragments
+- Make paragraphs substantial
 - Include practical code examples when relevant
 - Keep the article focused tightly on the topic
 - Make the title attractive for search users
@@ -309,9 +331,10 @@ Use this exact format:
 
 async function run() {
   const allArticles = [];
-  const existingSlugs = getExistingSlugs();
+  const { slugSet, titleSet, topicSet } = getExistingIndexes();
+  const generatedTopicSet = new Set();
 
-  console.log("Starting article generation with YouTube videos...");
+  console.log("Starting article generation with stronger duplicate protection...");
 
   for (const plan of contentPlans) {
     if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
@@ -336,6 +359,13 @@ async function run() {
     for (const topic of topics) {
       if (articleAddedForThisPlan) {
         break;
+      }
+
+      const normalizedTopic = normalizeText(topic);
+
+      if (topicSet.has(normalizedTopic) || generatedTopicSet.has(normalizedTopic)) {
+        console.log(`Duplicate topic skipped: ${topic}`);
+        continue;
       }
 
       console.log(`Generating: ${topic}`);
@@ -363,12 +393,24 @@ async function run() {
         continue;
       }
 
-      if (existingSlugs.has(article.slug)) {
-        console.log(`Duplicate skipped: ${article.slug}`);
+      const normalizedSlug = normalizeSlug(article.slug);
+      const normalizedTitle = normalizeText(article.title);
+
+      if (slugSet.has(normalizedSlug)) {
+        console.log(`Duplicate slug skipped: ${article.slug}`);
         continue;
       }
 
-      existingSlugs.add(article.slug);
+      if (titleSet.has(normalizedTitle)) {
+        console.log(`Duplicate title skipped: ${article.title}`);
+        continue;
+      }
+
+      slugSet.add(normalizedSlug);
+      titleSet.add(normalizedTitle);
+      topicSet.add(normalizedTopic);
+      generatedTopicSet.add(normalizedTopic);
+
       allArticles.push(article);
       articleAddedForThisPlan = true;
 

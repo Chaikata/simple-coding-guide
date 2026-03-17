@@ -1,5 +1,18 @@
 import fs from "fs";
 
+function normalizeText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/['"`]/g, "")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeSlug(text) {
+  return normalizeText(text).replace(/\s+/g, "-");
+}
+
 function normalizeContent(content) {
   if (!Array.isArray(content)) return [];
 
@@ -84,17 +97,53 @@ function run() {
   );
 
   const existingArticles = getExistingArticles();
-  const existingSlugs = new Set(existingArticles.map((article) => article.slug));
 
-  const newArticles = generatedArticles
-    .map(normalizeArticle)
-    .filter((article) => !existingSlugs.has(article.slug));
+  const existingSlugSet = new Set(
+    existingArticles.map((article) => normalizeSlug(article.slug))
+  );
+  const existingTitleSet = new Set(
+    existingArticles.map((article) => normalizeText(article.title))
+  );
 
-  const allArticles = [...existingArticles, ...newArticles];
+  const dedupedGenerated = [];
+  const seenGeneratedSlugSet = new Set();
+  const seenGeneratedTitleSet = new Set();
+
+  for (const rawArticle of generatedArticles) {
+    const article = normalizeArticle(rawArticle);
+    const normalizedSlug = normalizeSlug(article.slug);
+    const normalizedTitle = normalizeText(article.title);
+
+    if (existingSlugSet.has(normalizedSlug)) {
+      console.log(`Skipping existing slug duplicate: ${article.slug}`);
+      continue;
+    }
+
+    if (existingTitleSet.has(normalizedTitle)) {
+      console.log(`Skipping existing title duplicate: ${article.title}`);
+      continue;
+    }
+
+    if (seenGeneratedSlugSet.has(normalizedSlug)) {
+      console.log(`Skipping generated slug duplicate: ${article.slug}`);
+      continue;
+    }
+
+    if (seenGeneratedTitleSet.has(normalizedTitle)) {
+      console.log(`Skipping generated title duplicate: ${article.title}`);
+      continue;
+    }
+
+    seenGeneratedSlugSet.add(normalizedSlug);
+    seenGeneratedTitleSet.add(normalizedTitle);
+    dedupedGenerated.push(article);
+  }
+
+  const allArticles = [...existingArticles, ...dedupedGenerated];
 
   writeArticlesFile(allArticles);
 
-  console.log(`Imported ${newArticles.length} new articles`);
+  console.log(`Imported ${dedupedGenerated.length} new articles`);
   console.log(`Total articles: ${allArticles.length}`);
 }
 
