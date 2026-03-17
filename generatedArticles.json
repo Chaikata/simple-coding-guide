@@ -1,273 +1,273 @@
 [
   {
-    "slug": "how-to-debounce-input-events-in-javascript-with-examples",
-    "title": "How to Debounce Input Events in JavaScript with Examples",
+    "slug": "how-to-fix-common-errors-with-async-await-in-javascript",
+    "title": "How to Fix Common Errors with Async Await in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to debounce input events in JavaScript to optimize performance and improve user experience with simple examples and step-by-step instructions.",
-    "videoUrl": "https://www.youtube.com/watch?v=cjIswDCKgu0",
+    "description": "Learn how to fix common errors when using async await in JavaScript with clear explanations, code examples, and tips to write clean asynchronous code.",
+    "videoUrl": "https://www.youtube.com/watch?v=qRS_kYCkcEA",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you're building web applications, handling input events efficiently is crucial to maintaining good performance and user experience. For beginners, it’s common to react to every keystroke in an input field, but this can cause your app to slow down or perform unnecessary operations. This is where debouncing comes in. In this tutorial, we'll explore what debouncing is, how it works in JavaScript, and provide easy-to-follow examples so you can add debouncing to your input event handlers."
+        "value": "Async await is a powerful feature in JavaScript that makes writing asynchronous code easier and more readable, especially compared to using callbacks or plain promises. However, beginners often run into common mistakes while using async await, which can cause bugs or unexpected behavior in their programs. In this article, we will go through these common errors and show you how to fix them step-by-step, so you can write smooth asynchronous code with confidence."
       },
       {
         "type": "paragraph",
-        "value": "Debouncing is a programming technique used to limit how often a function is executed. When applied to input events like keypress or input, it ensures that the function runs only after the user has stopped typing for a certain amount of time. Instead of reacting immediately and repeatedly to every event, debouncing waits until the input activity settles down, preventing unnecessary calls and improving performance. This is especially helpful when working with tasks like API calls, search filtering, or input validation, where you don’t want to overload the system with frequent updates."
+        "value": "Async await allows you to write asynchronous code that looks like synchronous code by using the async keyword before a function and the await keyword to pause execution until a promise resolves. When you use await, JavaScript waits for the asynchronous operation to complete before moving on. This makes it easier to work with promises, callbacks, and asynchronous functions, leading to cleaner and more understandable code. Async await is closely related to promises, error handling with try catch, and understanding event loops in JavaScript."
       },
       {
         "type": "code",
-        "value": "function debounce(func, delay) {\n  let timeoutId;\n  return function(...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => {\n      func.apply(this, args);\n    }, delay);\n  };\n}\n\nconst input = document.querySelector('#search');\n\nfunction handleInput(event) {\n  console.log('Search query:', event.target.value);\n}\n\nconst debouncedInput = debounce(handleInput, 300);\n\ninput.addEventListener('input', debouncedInput);"
+        "value": "async function fetchData() {\n  try {\n    let response = await fetch('https://api.example.com/data');\n    let data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}\n\nfetchData();"
       },
       {
         "type": "paragraph",
-        "value": "To use debouncing properly, create a reusable debounce function that takes your event handler and a delay time in milliseconds. The debounce function returns a new version of your handler that postpones execution until after the user has stopped typing for the specified delay. Attach this debounced function to events like 'input' or 'keyup'. This approach avoids unnecessary event handler calls, reduces CPU usage, and can also prevent excessive network requests, such as those done inside fetch calls. By doing this, you can improve responsiveness in your user interfaces and avoid issues commonly related to event handling and callback functions."
+        "value": "To use async await properly and avoid common errors, always declare your function with the async keyword when you want to use await inside it. Also, remember that await only works inside async functions — trying to use await outside an async function will cause a syntax error. Another important tip is to use try catch blocks to handle errors that might occur during the awaited operations. This prevents unhandled promise rejections and makes debugging easier. Understanding how promises work when returned from async functions can also help avoid mistakes like forgetting to return from async functions or mixing callbacks with async await incorrectly."
       },
       {
         "type": "paragraph",
-        "value": "One common mistake is creating a new debounce function inside the event listener or using it incorrectly so that the debounce state resets too often, making it ineffective. Another issue is setting the delay too short, causing the function to run almost immediately and defeating the purpose of debouncing. Also, don’t confuse debouncing with throttling; debouncing delays execution until the event stops, while throttling limits the function to run once every fixed period. Understanding the differences and properly managing closures and this context are important when using debounce in JavaScript events."
+        "value": "Several common mistakes occur when using async await. One is forgetting the async keyword before the function, which makes await unusable inside that function. Another frequent error is attempting to await non-promises or synchronous values — await expects a promise or thenable object. Mixing async await with callbacks without adapting the logic can cause unexpected results. Also, neglecting to handle errors with try catch blocks around awaited code can lead to unhandled rejections and silent failures. Lastly, misunderstanding that async functions always return promises and not raw values can cause confusion when chaining or using returned data."
       },
       {
         "type": "paragraph",
-        "value": "In summary, debouncing is an essential technique to control how often your input event handlers execute, which greatly improves performance and user experience in JavaScript applications. By creating a simple debounce helper and applying it to input events, you avoid redundant function calls and optimize processes like live search, input validation, or API requests. Remember to adjust your debounce delay to fit your app’s needs and avoid common pitfalls like resetting the debounce function every event. Learning debouncing also helps build a stronger foundation in event handling, callback functions, and asynchronous programming concepts in JavaScript."
+        "value": "In summary, async await is a great tool for writing cleaner asynchronous JavaScript, but beginners often face issues like missing async keywords, improper error handling, and misuse of await. By remembering to declare async functions, awaiting only promises, handling errors with try catch, and correctly returning values, you can fix and avoid these common errors. With practice, async await will help you manage asynchronous operations efficiently, complementing your understanding of promises, callbacks, and event-driven programming in JavaScript."
       }
     ]
   },
   {
-    "slug": "how-to-fix-typeerror-undefined-is-not-a-function-in-javascript",
-    "title": "How to Fix TypeError: undefined is not a function in JavaScript",
+    "slug": "typeerror-null-is-not-an-object-explained-with-examples",
+    "title": "TypeError: null is not an object Explained with Examples in JavaScript",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn what causes the JavaScript error 'TypeError: undefined is not a function' and how to fix it with simple, clear examples and best practices.",
-    "videoUrl": "https://www.youtube.com/watch?v=dt4i2i6E9Vc",
+    "description": "Learn what the JavaScript error 'TypeError: null is not an object' means, with simple examples and step-by-step solutions to fix it.",
+    "videoUrl": "https://www.youtube.com/watch?v=MqfCK32nlK0",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you've been coding in JavaScript, you might have run into the error 'TypeError: undefined is not a function.' This happens when your code tries to call something as a function, but JavaScript finds that the value is undefined instead. This article will explain what this error means, show simple examples, and guide you through practical fixes, so you can resolve it quickly and keep your code running smoothly."
+        "value": "If you've been coding in JavaScript and suddenly saw the error message \"TypeError: null is not an object,\" you're not alone. This error can be confusing for beginners, especially when working with DOM elements, objects, or APIs. In this article, we'll break down what this error means, why it happens, and provide clear examples and actionable fixes. Understanding this will also help you get better at handling asynchronous code, object properties, and null safety in JavaScript."
       },
       {
         "type": "paragraph",
-        "value": "This error typically occurs when you call a function on a variable or object property that hasn't been properly defined or initialized. JavaScript expects a function, but instead it finds the value undefined, which is not callable. This can happen for various reasons, such as typos in function names, forgetting to assign a function before calling it, or confusing object properties that do not contain functions. Understanding this error is essential as it often indicates where your code is missing or misusing functions."
+        "value": "The error \"TypeError: null is not an object\" occurs when your code tries to access a property or call a method on a value that is actually null. In JavaScript, null represents the intentional absence of any object value. So when you try to treat null as if it were an object — for example, doing null.property — JavaScript throws this error because null doesn't have properties or methods. This often happens in web development when you try to access DOM elements that don't exist or haven't been loaded yet."
       },
       {
         "type": "code",
-        "value": "const myObject = {};\nmyObject.sayHello(); // TypeError: undefined is not a function\n\nfunction greet() {\n  console.log('Hello!');\n}\n\nlet greetFunc;\ngreetFunc(); // TypeError: undefined is not a function"
+        "value": "const element = document.getElementById('myElement');\nconsole.log(element.innerText); // TypeError: null is not an object if 'myElement' doesn't exist"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, first check that the function you are trying to call is defined before calling it. If you're calling a method on an object, ensure that the method exists on that object and is spelled correctly. If you assigned a function to a variable, confirm the assignment actually happened and the variable is not undefined. Using techniques like console logging, debugger, or checking with typeof before calling can help you avoid this issue. For example, you can test if a variable is a function like this: if (typeof myFunc === 'function') { myFunc(); }"
+        "value": "To fix this error, first check whether the variable you're accessing is null before trying to use its properties or methods. In the DOM example, you can check if the element exists before accessing innerText. This involves simple conditional checks or using optional chaining syntax introduced in modern JavaScript. Additionally, ensure that your JavaScript runs after the DOM has fully loaded to avoid trying to access elements that aren't in the document yet. This relates closely to understanding asynchronous JavaScript and event handling to control when code runs."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes that cause this error include simple typos in function names, forgetting to return a function from another function, or trying to call functions on data types that do not support them like strings or numbers without the proper methods. Another tricky pitfall is asynchronous code where a function may not be ready or assigned yet when you try to call it. Handling such cases carefully will prevent 'undefined is not a function' errors and is closely related to concepts like variable scope, function declarations, and JavaScript objects."
+        "value": "A common mistake beginners make is assuming variables are never null without explicitly checking. Not initializing objects or DOM elements properly, or misspelling element IDs, can cause this error. Also, confusing undefined and null can lead to overlooked issues. Another frequent issue is not waiting for the DOMContentLoaded event or not handling promises correctly when fetching data, causing access to non-existent properties on null values. Strengthening your knowledge in conditional statements, null checks, and asynchronous code will help avoid these mistakes."
       },
       {
         "type": "paragraph",
-        "value": "In summary, 'TypeError: undefined is not a function' means your code expected a function but found undefined instead. The key to fixing it lies in ensuring that your functions are properly declared or assigned before you call them. Checking spelling, object properties, and the order of your code execution will help reduce these errors. Along with understanding JavaScript functions, method calls, and variable assignments, addressing this error will improve your ability to debug and write reliable JavaScript code."
+        "value": "In summary, \"TypeError: null is not an object\" means your code is trying to use something that is actually null as if it were an object. This typically happens when accessing properties or methods of a null value, often due to missing or incorrectly referenced DOM elements or uninitialized objects. To fix it, add proper null checks, use optional chaining, and ensure your script runs at the right time. Learning how to handle null values safely improves your skills with JavaScript objects, DOM manipulation, event listeners, and error handling."
       }
     ]
   },
   {
-    "slug": "how-to-handle-asynchronous-operations-with-async-await-in-typescript",
-    "title": "How to Handle Asynchronous Operations with Async/Await in TypeScript: A Beginner's Guide",
+    "slug": "how-to-use-typescript-generics-with-practical-examples",
+    "title": "How to Use TypeScript Generics with Practical Examples",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to handle asynchronous operations in TypeScript using async and await. This tutorial explains the concept with clear examples, common mistakes, and best practices.",
-    "videoUrl": "https://www.youtube.com/watch?v=li7FzDHYZpc",
+    "description": "Learn how to use TypeScript generics with simple, practical examples. Understand what generics are, how to write them, and common mistakes to avoid, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
     "content": [
       {
         "type": "paragraph",
-        "value": "Understanding asynchronous operations is essential when working with TypeScript, as many tasks like fetching data, reading files, or waiting for timers don't complete instantly. This tutorial will explain how to use the async and await keywords in TypeScript to write clean, readable asynchronous code without getting stuck in complicated callbacks or promise chains."
+        "value": "If you are starting with TypeScript and want to write more flexible and reusable code, understanding generics is essential. Generics allow you to write components or functions that can work with different types, not just one. This tutorial will guide you through what TypeScript generics are, how to use them step-by-step, and show practical code examples. Along the way, you will also see related concepts like type inference and function overloading, which often come up when working with generics."
       },
       {
         "type": "paragraph",
-        "value": "Async/await is a syntax introduced in modern JavaScript and supported in TypeScript that allows you to write asynchronous code as if it were synchronous. When a function is marked with async, it automatically returns a Promise. Inside an async function, you can use the await keyword to pause the execution until the awaited Promise resolves or rejects. This approach helps avoid callback hell and makes working with Promises easier to follow. It relates closely to concepts like Promises, error handling with try/catch, and event loops."
+        "value": "So, what exactly are generics? In TypeScript, generics are a way to create components or functions that can operate on multiple types, with the specific type being decided when the function or class is used. Instead of writing repetitive functions for different types, generics provide one set of logic that adapts to the type provided. This is especially helpful in scenarios like working with arrays, utility functions, or data structures where the element or data type can vary. Generics often work alongside types and interfaces to keep your code both safe and flexible."
       },
       {
         "type": "code",
-        "value": "async function fetchData(): Promise<string> {\n  // Simulate a network request using a Promise\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve('Data fetched successfully');\n    }, 1000);\n  });\n}\n\nasync function main() {\n  console.log('Start fetching data...');\n  const data = await fetchData();  // Pause here until fetchData resolves\n  console.log(data);\n  console.log('Done fetching data');\n}\n\nmain();"
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst numberResult = identity(42);    // Type is number\nconst stringResult = identity('hello'); // Type is string\n\n// Generic with an array type\nfunction getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst first = getFirstElement(['apple', 'banana']); // Type is string\nconst firstNumber = getFirstElement([10, 20, 30]);  // Type is number"
       },
       {
         "type": "paragraph",
-        "value": "To use async/await properly in TypeScript, always mark functions that use await with the async keyword, as this enables Promise-based returns and allows the use of await inside. When awaiting something, ensure that it is a Promise or thenable value, or the code won’t pause correctly. Also, wrapping your await calls in try/catch blocks is important for graceful error handling in asynchronous flows. Understanding how async functions relate to Promises and how TypeScript's type system infers return types will help you write safer and more predictable asynchronous code."
+        "value": "To use generics properly, declare a generic type parameter inside angle brackets <> after the function or class name, commonly named T or another letter that reflects the type role. When you call the generic function, TypeScript usually infers the type automatically based on the argument you passed, so you don’t always have to specify the type manually. It’s also important to constrain generics when you want to limit the kinds of types allowed. You can do this with extends to specify that the generic type must have certain properties or belong to a certain type hierarchy. This technique ties in well with interfaces and type aliases."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes include forgetting to mark functions as async when using await inside, which causes syntax errors. Another mistake is forgetting to handle rejected Promises with try/catch or .catch(), leading to unhandled promise rejections. Developers sometimes misuse await with non-Promise values, thinking it causes blocking behavior, but await only waits for Promise resolutions, making it unnecessary on synchronous values. Mixing callbacks with async/await can also lead to confusing code flow, so it’s best to stick with one asynchronous pattern."
+        "value": "A common mistake when using generics is overcomplicating your type parameters or ignoring type constraints, which can lead to unexpected errors or loss of type safety. Also, forgetting that generics should be consistent throughout your function signature, meaning if you use the same generic multiple places, it should represent the same type. Another pitfall is confusing generics with any type – generics still keep type information, while any disables checking. Lastly, avoid naming generics with vague letters when working on bigger codebases for better readability."
       },
       {
         "type": "paragraph",
-        "value": "In summary, async and await in TypeScript help you manage asynchronous operations in a clear and manageable way, by turning Promise handling into a readable, synchronous-like flow. By mastering these keywords alongside Promises, error handling, and typing mechanisms, you'll write cleaner asynchronous code that is easier to debug and maintain. Practice using async/await with different async tasks like API calls or file operations to gain confidence and write robust TypeScript applications."
+        "value": "In summary, TypeScript generics are a powerful feature for creating reusable and type-safe code components. They let you write functions and classes that can work with any data type, reducing duplication and improving maintainability. By understanding the basics, how to declare generics, and common best practices, you can start leveraging them in your projects effectively. As you continue to explore generics, keep in mind how they relate to other TypeScript features like type inference, interfaces, and constraints to fully unlock their potential."
       }
     ]
   },
   {
-    "slug": "how-to-fix-type-undefined-is-not-assignable-to-type-error-in-typescript",
-    "title": "How to Fix Type 'undefined' is Not Assignable to Type Error in TypeScript",
+    "slug": "how-to-fix-typescript-error-cannot-find-module",
+    "title": "How to Fix TypeScript Error: Cannot Find Module",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn what causes the TypeScript error 'Type undefined is not assignable to type', why it happens, and practical ways to fix it with easy examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=kwEjI_B9WY0",
+    "description": "Learn what causes the TypeScript 'Cannot find module' error and how to fix it with practical solutions and examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=2mvJg_LKPZM",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you've recently started using TypeScript, you might have encountered the error message: \"Type 'undefined' is not assignable to type ...\". This error pops up when TypeScript’s type checker sees that a variable, parameter, or property might be undefined, but is expected to have another type. Understanding why this happens and how to fix it is essential for writing smooth, bug-free TypeScript code. In this article, we'll break down this error step-by-step and show you practical solutions to resolve it."
+        "value": "If you're new to TypeScript and working with imports, you might encounter the error message \"Cannot find module\". This error can be confusing at first, but it usually happens when TypeScript cannot locate the file or package you're trying to import. Understanding this error will help you fix it quickly so you can keep building your app without interruptions."
       },
       {
         "type": "paragraph",
-        "value": "At its core, TypeScript is a typed superset of JavaScript that adds static typing to catch errors before your code runs. When you see the error \"Type 'undefined' is not assignable to type 'SomeType'\", TypeScript is warning you that the variable or value might be undefined, but your type declarations only allow other types. This often happens because of how TypeScript treats undefined values, how union types work, and how strict null checks affect your code. It's important to grasp related concepts like optional properties, type assertions, and default parameters since they often interplay with this error."
+        "value": "The \"Cannot find module\" error means that TypeScript's compiler or language service tried to resolve an import statement, but it couldn't find a matching module based on your project's file structure, module resolution settings, or installed packages. This error often appears when working with ES modules, path aliases, or third-party libraries in your TypeScript or JavaScript projects."
       },
       {
         "type": "code",
-        "value": "function greet(name: string) {\n  console.log('Hello, ' + name.toUpperCase());\n}\n\ngreet(undefined); // Error: Argument of type 'undefined' is not assignable to parameter of type 'string'."
+        "value": "import { myFunction } from './utils/helpers';\n\nmyFunction();"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, you need to handle the possibility that a value might be undefined. One common way is to use union types, which let you explicitly say a variable can be a string or undefined (string | undefined). Then, before using the value, you check if it's defined. Another method is to provide default values through default parameters or by using the nullish coalescing operator (??). Using optional chaining when accessing properties also helps avoid similar errors. If you are certain a value is never undefined but TypeScript complains, you can use a type assertion with the non-null assertion operator (!)."
+        "value": "To fix this error, first check that the file or package you are importing actually exists and the path is correct. TypeScript is sensitive to relative paths like './' and '../', so even a small typo can cause this error. If you're importing from a package, make sure it is installed correctly in your node_modules folder. Another common fix is to configure your tsconfig.json file properly by adjusting 'moduleResolution' or setting up 'baseUrl' and 'paths' correctly if you use path aliases. Running 'npm install' or 'yarn' again can resolve missing packages, and restarting your code editor helps refresh TypeScript's module cache."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake beginners make is ignoring the possibility of undefined values or trying to forcibly cast undefined to another type without proper checks, which can cause runtime errors. Another is mixing strict null checks off with undefined handling, leading to inconsistent behavior. Sometimes, people forget to mark function parameters as optional with a question mark (?), or they don't provide fallback values, resulting in this error. Understanding how TypeScript's strictNullChecks compiler option influences undefined and null handling is also crucial for avoiding confusion."
+        "value": "Common mistakes that lead to this error include using incorrect file extensions, forgetting to add '.ts' or '.tsx' files in your include paths in tsconfig.json, or importing from a location that doesn't exist. Also, not installing type declarations for third-party libraries with '@types/library' can cause TypeScript to fail to recognize module types. Additionally, confusing relative and absolute imports, or misconfiguring module system settings like 'commonjs' vs 'esnext' can trigger this error."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the 'Type undefined is not assignable to type' error happens because TypeScript detects a value might be undefined but you expect a different type. To fix it, explicitly allow undefined using union types, add checks, use default values, or leverage optional properties and parameters. Keeping concepts like type narrowing, type assertions, and strict null checking in mind will help you write safer and cleaner TypeScript code. With practice, handling these errors will become second nature, improving your coding confidence and reducing bugs."
+        "value": "In summary, the 'Cannot find module' error occurs when TypeScript can't find the code you are trying to import. Checking file paths, reinstalling packages, and configuring tsconfig.json settings like module resolution and path aliases are key steps to resolve it. Paying attention to import syntax and project structure will prevent this issue. Understanding this error connects closely to learning about module systems, type declaration files, and configuration options in TypeScript."
       }
     ]
   },
   {
-    "slug": "how-to-use-python-list-comprehensions-with-multiple-if-conditions",
-    "title": "How to Use Python List Comprehensions with Multiple If Conditions",
+    "slug": "how-to-fix-python-list-index-out-of-range-error-with-examples",
+    "title": "How to Fix Python List Index Out of Range Error with Examples",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python list comprehensions with multiple if conditions to filter and transform lists efficiently. Step-by-step beginner-friendly tutorial with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=sB5AdrW_eDo",
+    "description": "Learn how to understand and fix the common Python 'list index out of range' error with simple explanations and practical code examples. Perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=wpmXETzX6xc",
     "content": [
       {
         "type": "paragraph",
-        "value": "List comprehensions are a powerful and elegant way to create new lists in Python by applying expressions and filters to existing lists. When you need to include multiple filtering conditions in a list comprehension, it can seem tricky at first, especially for beginners. This tutorial will guide you step-by-step on how to effectively use multiple if conditions inside a Python list comprehension to filter items based on several rules at the same time."
+        "value": "If you’re new to Python, you might have encountered an error like 'IndexError: list index out of range.' This is a very common issue when working with lists, one of Python's core data structures. In this article, you’ll learn exactly what this error means, why it happens, and how to fix it using simple examples. Understanding this will also help you work better with other Python concepts like loops, conditional statements, and string indexing."
       },
       {
         "type": "paragraph",
-        "value": "Using multiple if conditions in a list comprehension means you apply several filters to each element before it gets included in the new list. These conditions act like a gate that every element must pass to be selected. Unlike a single if condition, multiple conditions can be combined in several ways, such as chaining them with logical operators or writing them sequentially inside the comprehension. Understanding this helps you write cleaner and more readable code when working with lists, sets, or when filtering dictionaries using dictionary comprehensions."
+        "value": "The 'list index out of range' error occurs when you try to access an item at a position or index that doesn’t exist in the list. Python lists are indexed starting from 0, so if your list has 3 items, valid indexes are 0, 1, and 2. Trying to use an index like 3 or higher will cause this error because Python can’t find the item at that position. This error often happens when we loop incorrectly, forget the list length, or manually try to access an incorrect index."
       },
       {
         "type": "code",
-        "value": "numbers = range(20)\n# Select numbers that are even and greater than 10\nfiltered = [n for n in numbers if n % 2 == 0 if n > 10]\nprint(filtered)  # Output: [12, 14, 16, 18]"
+        "value": "my_list = [10, 20, 30]\nprint(my_list[3])  # This will cause IndexError\n\n# Valid indexes are 0, 1, 2 only"
       },
       {
         "type": "paragraph",
-        "value": "To use multiple if conditions properly in your list comprehension, you can place them one after another, as in the example above. Python will check each condition in sequence. Alternatively, you can combine conditions with logical operators like and, or, for more complex checks, for instance: [n for n in numbers if n % 2 == 0 and n > 10]. Both methods work, and choosing one depends on readability and your specific use case. Practicing this will also improve your understanding of logical operators and conditional expressions elsewhere in Python code."
+        "value": "To fix this error, you should always check that the index you use falls within the valid range of the list. Use the len() function to get the correct length of the list, then make sure your index is less than that length. If you are using a for loop to access list items, it’s safer to loop over the range of len(your_list) or directly iterate over the list elements without indexing. Another helpful practice is to use conditional statements to verify that the index exists before accessing it."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake is to confuse how to separate multiple conditions in a list comprehension. Using commas or improperly mixing if with else inside the if clause can cause syntax errors. Also, beginners sometimes try to put multiple conditions inside a single if without linking them properly using logical operators, which leads to bugs or unexpected outputs. Remember that each if clause in a comprehension acts as a separate filter, so stacking them or combining conditions with and/or is the right approach."
+        "value": "A common mistake is assuming that lists automatically resize or that index numbers start at 1 instead of 0, which is not true in Python. Another pitfall is modifying a list inside a loop that iterates over its indexes, which can change the list length unexpectedly, causing the index out of range error. Also, when slicing or accessing elements from other data types like strings or tuples, similar index rules apply, so it’s important to understand indexing thoroughly."
       },
       {
         "type": "paragraph",
-        "value": "In summary, using multiple if conditions in Python list comprehensions helps you filter and select data efficiently and clearly. You can write multiple if statements sequentially or connect them with logical operators inside a single if clause. This technique is especially useful when working with other Python features like loops, functions, or even dictionary comprehensions to build your coding skills progressively. Mastering list comprehensions and conditional filtering will make your Python code more concise and readable."
+        "value": "In summary, the 'list index out of range' error happens because you asked for an index that doesn’t exist in your list. Always remember to check the list's length using len(), be careful when writing loops or accessing elements by index, and use safe programming patterns like iteration over elements instead of manual indexes. Mastering this will make your Python code more reliable and deepen your understanding of list indexing, loops, and error handling."
       }
     ]
   },
   {
-    "slug": "how-to-fix-typeerror-list-object-is-not-callable-in-python",
-    "title": "How to Fix TypeError: 'list' Object is Not Callable in Python",
+    "slug": "how-to-fix-typeerror-nonetype-object-is-not-callable-in-python",
+    "title": "How to Fix TypeError: 'NoneType' Object Is Not Callable in Python",
     "language": "python",
     "type": "errors",
-    "description": "Learn what causes the TypeError: 'list' object is not callable in Python and how to fix it with simple code examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=dQ1SasLjSew",
+    "description": "Learn why the Python error 'TypeError: NoneType object is not callable' happens and how to fix it with clear examples and practical tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=hLnADXliDCU",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you've come across the error message TypeError: 'list' object is not callable in Python, you're not alone. This is a very common error when you are working with lists and functions, especially if you're new to Python. In this article, you'll learn exactly what this error means, why it happens, and how you can quickly fix it so your code runs smoothly."
+        "value": "If you're new to Python, you might have encountered the error: TypeError: 'NoneType' object is not callable. This error can be confusing, but don't worry! It usually happens when you accidentally try to use None like a function. In this article, we'll explain what this error means, why it happens, and how you can fix it, using clear Python code examples. Understanding this will also help you avoid similar issues with other common errors like AttributeError or NameError."
       },
       {
         "type": "paragraph",
-        "value": "The error TypeError: 'list' object is not callable happens when Python thinks you are trying to 'call' a list like a function. In Python, parentheses () after an object usually mean you are calling a function, like print(). However, if you accidentally use parentheses after a list variable, Python gets confused because lists are not functions and cannot be called. This error is often connected to naming issues or trying to use a list like you would use a function or method."
+        "value": "The error TypeError: 'NoneType' object is not callable means you tried to \"call\" an object that is really None. Remember, None is a special data type that represents 'nothing' or 'no value' in Python. Calling means putting parentheses () after something, usually functions. For example, if you write some_var(), you're calling some_var as a function. If some_var is None instead of a function, Python gets confused and gives this error. This often happens when a function or method is expected to return a value but returns None, or if you accidentally overwrite a function variable with None."
       },
       {
         "type": "code",
-        "value": "my_list = [1, 2, 3]\nprint(my_list())  # This will raise TypeError: 'list' object is not callable\n\n# Another example\nlist = [4, 5, 6]\nprint(list(0))  # Also raises the same error"
+        "value": "def greet():\n    print('Hello!')\n\nsay_hello = greet  # Assign function to a variable\n\nsay_hello()  # This works fine and prints 'Hello!'\n\nsay_hello = None  # Now the variable points to None\n\nsay_hello()  # This causes TypeError: 'NoneType' object is not callable"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, the key is to check if you have given your list the same name as a function or if you are mistakenly adding parentheses to a list variable. A frequent cause is naming a variable list, which overrides the built-in list() function, making the original list function unavailable. Avoid using function names as variable names. Instead, use descriptive, unique names for your lists. Also, remember to access list elements using square brackets [] rather than parentheses (). For example, to get the first element of a list, use my_list[0] instead of my_list(0)."
+        "value": "To fix this error, you need to make sure you only call functions or callable objects, not None. Check if any variable or function you call might have been assigned None by mistake. A common fix is renaming variables properly or avoiding overwriting functions with other types. If it comes from a function returning None, double-check your function code or add conditions before calling. Debugging tools like print statements or using the built-in type() function can help you find which variable is None. You can also safeguard your code by adding checks, for example: if my_func is not None: my_func()."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes that lead to this error include overwriting built-in functions like list or sum with variables, accidentally adding parentheses when accessing list elements, or confusing methods like append() which are callable, with list variables. For example, calling my_list() instead of my_list will cause this error. Another common trap is using parentheses when trying to slice or index lists, which should always be done with square brackets. Understanding Python data types like lists, functions, and how to call methods versus access elements helps to avoid these errors."
+        "value": "Many beginners overwrite function names by assigning None or other values to them, causing this error. Another common mistake is forgetting to add a return statement, which results in a function returning None by default. For example, if you expect a function to return another function but it doesn’t explicitly return anything, you might end up trying to call None. Also, be cautious about using built-in functions or methods incorrectly, and understand the difference between variables, functions, and return values, which are important for preventing other errors like TypeErrors or AttributeErrors."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the TypeError: 'list' object is not callable means you tried to use parentheses with a list as if it was a function. The fix is usually as simple as changing parentheses to square brackets or renaming your variable to avoid conflicting with Python built-in functions. Remember that lists are not callable functions, so you can only use parentheses to call actual functions or methods. With careful naming and good understanding of lists, variables, functions, and data types, this is one of the easiest errors to avoid in Python."
+        "value": "In summary, the TypeError 'NoneType' object is not callable in Python occurs when you try to call None as if it were a function. This often results from assigning None to a variable meant to hold a function or from functions that don’t return anything being used incorrectly. By carefully managing your variables, checking function returns, and understanding how function calls work, you can easily avoid and fix this error. Improving your debugging skills with tools like type checks and clear naming conventions will also help you prevent similar issues in your Python programming journey."
       }
     ]
   },
   {
-    "slug": "how-to-optimize-sql-queries-for-large-datasets-with-examples",
-    "title": "How to Optimize SQL Queries for Large Datasets with Examples",
+    "slug": "how-to-write-complex-sql-joins-with-examples",
+    "title": "How to Write Complex SQL Joins with Examples: A Beginner's Guide",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn practical tips and examples to optimize SQL queries for large datasets and improve database performance efficiently.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how to write complex SQL joins with clear examples and practical tips. Understand different join types, combining multiple tables, and avoid common mistakes.",
+    "videoUrl": "https://www.youtube.com/watch?v=Yh4CrPHVBdE",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with large datasets, writing SQL queries that run efficiently is essential to avoid long wait times and high resource usage. In this tutorial, we'll explore simple and effective strategies for optimizing SQL queries, helping you handle big data more smoothly. Understanding query optimization techniques also connects closely to related concepts like indexing, execution plans, and database normalization."
+        "value": "SQL joins are essential for combining data from multiple tables in a database. When you need to analyze information spread across several tables, understanding how to write complex joins helps you fetch exactly what you need. This article breaks down complex SQL joins clearly for beginners, with easy-to-follow examples and practical tips on using related concepts like inner joins, outer joins, subqueries, and aliases."
       },
       {
         "type": "paragraph",
-        "value": "Optimizing SQL queries means making sure your database retrieves the data you need as quickly as possible without unnecessary processing. Large datasets challenge queries by increasing scan times, memory use, and CPU load. Common techniques such as using indexes effectively and limiting row scanning can drastically decrease query execution time. These optimizations relate to database design and writing efficient WHERE conditions or JOINs."
+        "value": "Complex SQL joins mean using more than one join operation in a single query or using advanced join types like LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN, and CROSS JOIN. This lets you connect tables not just based on simple key matches but also for cases where you want to include unmatched rows or combine data in special ways. Joins are fundamental in relational databases along with concepts like filtering with WHERE clauses, group aggregations, and table aliases for clarity."
       },
       {
         "type": "code",
-        "value": "SELECT customer_id, order_date, total_amount \nFROM orders\nWHERE order_date >= '2023-01-01'\nAND total_amount > 100\nORDER BY order_date DESC;"
+        "value": "SELECT e.employee_id, e.name, d.department_name, m.name AS manager_name\nFROM employees e\nINNER JOIN departments d ON e.department_id = d.department_id\nLEFT JOIN employees m ON e.manager_id = m.employee_id\nWHERE d.location = 'New York';"
       },
       {
         "type": "paragraph",
-        "value": "To optimize the example query above for a large orders table, you could create an index on the columns used in the WHERE clause, such as order_date and total_amount. This helps the database locate only relevant rows without scanning the entire table. You should also avoid SELECT * to reduce the amount of data transferred. Another tip is to filter rows as early as possible and use appropriate JOIN techniques to minimize intermediate results. Understanding how to analyze execution plans will also guide you in spotting bottlenecks."
+        "value": "In the example above, we combine three tables from the employees database. First, we use an INNER JOIN to get employees with matching departments. Then a LEFT JOIN lets us include all employees even if they don't have a manager (showing NULL if none). Using table aliases (e, d, m) simplifies reading the SQL and prevents confusion between columns. To use complex joins properly, always decide what type of join you need based on whether unmatched rows should be included, and test your query results carefully."
       },
       {
         "type": "paragraph",
-        "value": "One common mistake is ignoring indexes or overusing them without assessment, which can slow down inserts and updates. Another is writing queries that retrieve unnecessary columns or rows, leading to heavy network and memory usage. Additionally, using functions on columns in WHERE clauses can prevent indexes from being used effectively. Avoid running complex queries without checking execution order or joining tables without proper keys."
+        "value": "Common mistakes when writing complex joins often include forgetting to specify join conditions, causing cartesian products that return huge unintended result sets. Another frequent error is mixing join types without understanding their impact, such as using INNER JOIN when a LEFT JOIN is needed to keep all rows. Beginners also sometimes confuse filter conditions in WHERE versus ON clauses – the WHERE clause filters after the join, while ON limits rows during the join itself. Be mindful of ambiguous column names without aliases, which can cause syntax errors."
       },
       {
         "type": "paragraph",
-        "value": "In summary, optimizing SQL queries for large datasets involves smart use of indexing, careful filtering with WHERE conditions, selecting only necessary columns, and understanding the execution plan to refine your query logic. These steps keep your database responsive even as data grows, and they connect closely with concepts like query optimization, index management, and database schema design. With practice, these skills will enable you to handle big data more efficiently in your projects."
+        "value": "To summarize, mastering complex SQL joins involves understanding different join types and how they interact when combining multiple tables. Use INNER and OUTER joins thoughtfully, apply table aliases for readability, and pay attention to join conditions to avoid accidental cartesian joins. Other SQL concepts like subqueries, aggregations, and filtering complement joins and help you write efficient queries that deliver precise data for analysis."
       }
     ]
   },
   {
-    "slug": "common-sql-deadlock-errors-and-prevention",
-    "title": "Common SQL Deadlock Errors Explained and How to Prevent Them",
+    "slug": "explained-null-value-constraint-violation-sql-examples",
+    "title": "Explained: Null Value Constraint Violation in SQL with Examples",
     "language": "sql",
     "type": "errors",
-    "description": "Learn what SQL deadlock errors mean, why they happen, and practical ways to avoid them with easy-to-understand examples and prevention tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=5uTLRZEbBmU",
+    "description": "Learn what a null value constraint violation error means in SQL, why it happens, and how to fix it with clear examples. A beginner-friendly guide to avoid common mistakes with NOT NULL constraints.",
+    "videoUrl": "https://www.youtube.com/watch?v=-8bYtApJNos",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL deadlock errors can be confusing for beginners but are important to understand if you work with databases, especially when multiple transactions run simultaneously. A deadlock occurs when two or more transactions are waiting on each other to release locks on resources, and none can proceed. This article explains why SQL deadlocks happen, shows example code illustrating a deadlock, and provides practical tips on how to prevent these errors."
+        "value": "When working with SQL databases, you might encounter the error message 'null value constraint violation' or something similar. If you are new to SQL, this error can be confusing. This article explains what the null value constraint violation error means, why it occurs, and how to fix it. Understanding this error is important when working with database constraints like NOT NULL, primary keys, and other data validation rules."
       },
       {
         "type": "paragraph",
-        "value": "A deadlock happens in SQL when two or more transactions create a circular dependency by locking resources such as rows or tables in different orders. When the database detects that each transaction is waiting for a resource locked by another, it raises a deadlock error and terminates one of the transactions to break the cycle. Understanding deadlocks relates closely to concepts like transaction isolation levels, locking mechanisms, and concurrent data access in SQL databases."
+        "value": "A null value constraint violation happens when you try to insert or update a table column that has been defined with a NOT NULL constraint, but you assign or leave a NULL value for that column. The NOT NULL constraint is a common rule used in SQL to ensure that some columns always have actual data. This is different from allowing NULL values, which are treated as unknown or missing data. The database rejects the operation to prevent invalid or incomplete data from being saved."
       },
       {
         "type": "code",
-        "value": "BEGIN TRANSACTION;\n-- Transaction 1 locks row 1\nUPDATE accounts SET balance = balance - 100 WHERE account_id = 1;\n\n-- Simultaneously, Transaction 2 started and locks row 2:\n-- UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;\n\n-- If Transaction 1 now tries to update row 2, and Transaction 2 tries to update row 1,\n-- both transactions wait indefinitely causing a deadlock.\n-- SQL Server or MySQL detects this and kills one transaction with a deadlock error.\n\nCOMMIT;"
+        "value": "CREATE TABLE users (\n  id INT PRIMARY KEY,\n  username VARCHAR(50) NOT NULL,\n  email VARCHAR(100) NOT NULL\n);\n\n-- Trying to insert NULL in username, which has NOT NULL constraint\nINSERT INTO users (id, username, email) VALUES (1, NULL, 'user@example.com');\n\n-- This will cause an error:\n-- ERROR: null value in column \"username\" violates not-null constraint"
       },
       {
         "type": "paragraph",
-        "value": "To prevent deadlocks, you should make sure transactions access resources in a consistent order to avoid cyclic locking patterns. Keep transactions short and efficient to reduce lock time. Using appropriate transaction isolation levels like Read Committed can also help reduce locking conflicts. Additionally, proper indexing and optimizing queries to minimize full table scans decrease the chances of deadlocks. Understanding error handling and retry logic in SQL is important because you might need to catch deadlock exceptions and retry transactions automatically."
+        "value": "To fix a null value constraint violation, you need to provide a valid, non-null value for every column defined with NOT NULL in your INSERT or UPDATE statements. Alternatively, if the column can logically have unknown or missing data, you could remove the NOT NULL constraint, but this should be done carefully in the context of your database design. When inserting data, check your SQL code to make sure all mandatory columns receive proper values. This also relates to understanding default values and how primary key constraints work, since those columns usually don't accept NULL either."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes include holding locks longer than necessary by running long transactions with multiple queries, mixing read and write operations without proper locking hints, and ignoring deadlock errors which leads to application failures or inconsistent data states. Also, not analyzing query execution plans or understanding how indexes impact locking can cause unexpected deadlocks. Avoid nested transactions without clear commit or rollback points, as these can increase complexity in managing locks and isolation."
+        "value": "Common mistakes that cause null value constraint violations include forgetting to specify a required column value during inserts, assuming that the database will fill in default data (which happens only if a DEFAULT value is set), or mistakenly passing NULL variables in application code. Another typical error is when altering table schemas without updating all existing data to conform to new NOT NULL constraints. Knowing how NULL values interact with constraints and understanding data types in SQL is important to avoid these issues."
       },
       {
         "type": "paragraph",
-        "value": "In summary, SQL deadlocks occur when transactions block each other by waiting on locked resources indefinitely, forcing the database to step in and resolve the conflict by terminating a transaction. By learning how transactions, locking, and isolation levels work together, you can prevent deadlocks. Writing clear, efficient, and well-ordered queries along with good database design reduces errors. Handling deadlock exceptions gracefully also ensures smoother application performance during concurrent data operations."
+        "value": "In summary, a null value constraint violation error indicates that your SQL operation tried to put a NULL where the database expects a definite value because of a NOT NULL constraint. Always ensure columns marked NOT NULL have proper data when inserting or updating rows. By understanding SQL constraints, including NOT NULL, primary keys, and default values, you can design databases that prevent incomplete data and avoid these errors in your queries."
       }
     ]
   }
