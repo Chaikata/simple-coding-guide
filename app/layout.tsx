@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-zinc-900 text-white">
+      <body className="bg-zinc-600 text-white">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-FBCSYKF0J8"
           strategy="afterInteractive"
@@ -36,9 +36,9 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        <div className="flex min-h-screen flex-col bg-zinc-900">
+        <div className="flex min-h-screen flex-col bg-zinc-600">
           <Navbar />
-          <main className="flex-1 bg-zinc-900">{children}</main>
+          <main className="flex-1 bg-zinc-600">{children}</main>
           <Footer />
         </div>
       </body>
