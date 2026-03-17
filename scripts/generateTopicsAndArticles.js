@@ -23,7 +23,7 @@ const contentPlans = [
 ];
 
 const GENERATION_LIMITS = {
-  maxTopicsPerPlan: 10,
+  maxTopicsPerPlan: 12,
   maxArticlesPerRun: 8,
   maxRetries: 2,
 };
@@ -110,21 +110,41 @@ async function retry(label, fn) {
 
 async function generateTopics(language, type) {
   const prompt = `
-Generate ${GENERATION_LIMITS.maxTopicsPerPlan} beginner-friendly article topic ideas for a coding website.
+Generate ${GENERATION_LIMITS.maxTopicsPerPlan} highly searchable coding article topics.
 
 Language: ${language}
 Type: ${type}
 
+Goal:
+Create topics that match real Google searches from developers.
+
 Rules:
-- If type is "tutorials", create beginner-friendly learning topics.
-- If type is "errors", create realistic error-fix topics people search for.
-- Keep topics highly searchable.
-- Avoid duplicate ideas.
-- Do NOT use unescaped double quotes inside any topic.
-- Prefer simple clean titles without quotation marks.
-- Return ONLY valid JSON.
-- Do not use markdown.
-- Do not include any text before or after the JSON.
+- Return ONLY valid JSON
+- Do not use markdown
+- Do not include any text before or after the JSON
+- Avoid generic beginner topics like "What is programming"
+- Prefer practical searches developers actually type into Google
+- Prefer "how to fix", "explained", "with examples", "vs", and "common mistakes"
+- If type is "tutorials", focus on practical learning topics with examples
+- If type is "errors", focus on realistic error messages, debugging problems, and fixes
+- Make titles specific and useful
+- Avoid duplicate or near-duplicate topics
+- Do NOT use unescaped double quotes inside any topic
+- Prefer clean titles without quotation marks
+
+Examples of good tutorial topics:
+- JavaScript Map vs ForEach Explained
+- Python List Comprehension Explained with Examples
+- SQL GROUP BY Explained with Examples
+- TypeScript Interface vs Type Differences
+- Python Dictionaries Explained for Beginners
+
+Examples of good error topics:
+- How to Fix Cannot Read Properties of Undefined in JavaScript
+- Python IndexError List Index Out of Range Fix
+- SQL Syntax Error Near SELECT Explained
+- TypeScript Property Does Not Exist on Type Fix
+- How to Fix Unexpected Token in JSON in JavaScript
 
 Use this exact format:
 {
@@ -138,7 +158,9 @@ Use this exact format:
     "topic 7",
     "topic 8",
     "topic 9",
-    "topic 10"
+    "topic 10",
+    "topic 11",
+    "topic 12"
   ]
 }
 `;
@@ -162,19 +184,42 @@ Use this exact format:
 
 async function generateArticle(topic, language, type) {
   const prompt = `
-Write a beginner-friendly coding article.
+Write a beginner-friendly coding article designed to rank for real search queries.
 
 Topic: ${topic}
 Language: ${language}
 Type: ${type}
 
-Rules:
-- Tutorials teach concepts clearly for beginners.
-- Errors explain what the problem means, why it happens, and how to fix it.
-- Include at least one code example when relevant.
-- Return ONLY valid JSON.
-- Do not use markdown.
-- Do not include any text before or after the JSON.
+Goal:
+Create a practical, helpful article for someone who searched this exact topic on Google.
+
+Writing rules:
+- Keep it clear, simple, and useful
+- Explain things like a strong beginner tutorial site would
+- Use natural language, not robotic filler
+- Make paragraphs substantial, not one-line fragments
+- Include practical code examples when relevant
+- Keep the article focused tightly on the topic
+- Make the title attractive for search users
+- Write a strong description that could work as an SEO meta description
+
+Article structure:
+1. Introduction
+2. What it means or what it does
+3. Example code
+4. How to fix it or how to use it properly
+5. Common mistakes
+6. Summary
+
+Content rules:
+- Return ONLY valid JSON
+- Do not use markdown
+- Do not include any text before or after the JSON
+- Use content blocks only
+- Include at least 5 paragraph blocks
+- Include at least 1 code block when relevant
+- For tutorial articles, teach the concept step by step
+- For error articles, explain the error, why it happens, and how to fix it
 
 Use this exact format:
 {
@@ -182,15 +227,15 @@ Use this exact format:
   "title": "Article Title",
   "language": "${language}",
   "type": "${type}",
-  "description": "Short description",
+  "description": "Short SEO description",
   "content": [
     {
       "type": "paragraph",
-      "value": "intro paragraph"
+      "value": "Introduction paragraph"
     },
     {
       "type": "paragraph",
-      "value": "explanation paragraph"
+      "value": "What it means paragraph"
     },
     {
       "type": "code",
@@ -198,7 +243,15 @@ Use this exact format:
     },
     {
       "type": "paragraph",
-      "value": "summary paragraph"
+      "value": "How to fix it or how to use it properly paragraph"
+    },
+    {
+      "type": "paragraph",
+      "value": "Common mistakes paragraph"
+    },
+    {
+      "type": "paragraph",
+      "value": "Summary paragraph"
     }
   ]
 }
@@ -225,7 +278,7 @@ async function run() {
   const allArticles = [];
   const existingSlugs = getExistingSlugs();
 
-  console.log("Starting perfectly balanced article generation...");
+  console.log("Starting traffic-focused article generation...");
 
   for (const plan of contentPlans) {
     if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
