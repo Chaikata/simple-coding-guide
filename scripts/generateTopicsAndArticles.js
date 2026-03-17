@@ -79,9 +79,15 @@ function getExistingIndexes() {
   const existingArticles = getExistingArticles();
 
   return {
-    slugSet: new Set(existingArticles.map((article) => normalizeSlug(article.slug))),
-    titleSet: new Set(existingArticles.map((article) => normalizeText(article.title))),
-    topicSet: new Set(existingArticles.map((article) => normalizeText(article.title))),
+    slugSet: new Set(
+      existingArticles.map((article) => normalizeSlug(article.slug))
+    ),
+    titleSet: new Set(
+      existingArticles.map((article) => normalizeText(article.title))
+    ),
+    topicSet: new Set(
+      existingArticles.map((article) => normalizeText(article.title))
+    ),
   };
 }
 
@@ -153,7 +159,9 @@ async function findYoutubeVideo(topic, language, type) {
   const response = await fetch(url);
 
   if (!response.ok) {
-    console.log(`YouTube search failed for "${topic}" with status ${response.status}`);
+    console.log(
+      `YouTube search failed for "${topic}" with status ${response.status}`
+    );
     return "";
   }
 
@@ -170,27 +178,63 @@ async function findYoutubeVideo(topic, language, type) {
 
 async function generateTopics(language, type) {
   const prompt = `
-Generate ${GENERATION_LIMITS.maxTopicsPerPlan} highly searchable coding article topics.
+Generate ${GENERATION_LIMITS.maxTopicsPerPlan} HIGH-TRAFFIC coding article topics.
 
 Language: ${language}
 Type: ${type}
 
 Goal:
-Create topics that match real Google searches from developers.
+Create topics that match REAL Google searches from developers.
 
-Rules:
+CRITICAL SEO RULES:
 - Return ONLY valid JSON
 - Do not use markdown
 - Do not include any text before or after the JSON
-- Avoid generic beginner topics
-- Prefer practical searches developers actually type into Google
-- Prefer "how to fix", "explained", "with examples", "vs", and "common mistakes"
-- If type is "tutorials", focus on practical learning topics with examples
-- If type is "errors", focus on realistic error messages, debugging problems, and fixes
-- Make titles specific and useful
+- Topics should look like real search queries
+- Prioritize phrases like:
+  - how to fix
+  - explained
+  - with examples
+  - vs
+  - common mistakes
+  - beginner guide
+- Prefer long-tail keywords (4 to 10 words)
+- Avoid generic titles like:
+  - Introduction to ${language}
+  - What is programming
+  - Learn coding basics
+- Prefer practical, specific topics developers actually search
 - Avoid duplicate or near-duplicate topics
 - Do NOT use unescaped double quotes inside any topic
 - Prefer clean titles without quotation marks
+
+If type is "errors":
+- Use real developer problems and real error-style wording
+- Focus on fixes, causes, and debugging
+- Good patterns:
+  - cannot read properties of undefined fix
+  - property does not exist on type fix
+  - index out of range fix
+  - syntax error near select explained
+
+If type is "tutorials":
+- Focus on practical learning topics
+- Prefer "explained", "with examples", "vs", "how to use", or "common mistakes"
+
+Examples of GOOD tutorial topics:
+- JavaScript map vs forEach explained
+- Python list comprehension explained with examples
+- SQL group by explained with examples
+- TypeScript interface vs type differences
+- How to use async await in JavaScript
+- Python dictionaries explained for beginners
+
+Examples of GOOD error topics:
+- How to fix cannot read properties of undefined in JavaScript
+- Python IndexError list index out of range fix
+- SQL syntax error near SELECT explained
+- TypeScript property does not exist on type fix
+- How to fix unexpected token in JSON in JavaScript
 
 Use this exact format:
 {
@@ -243,11 +287,11 @@ Writing rules:
 - Keep it clear, simple, and useful
 - Explain things like a strong beginner tutorial site would
 - Use natural language, not robotic filler
-- Make paragraphs substantial
+- Make paragraphs substantial, not one-line fragments
 - Include practical code examples when relevant
-- Keep the article focused tightly on the topic
-- Make the title attractive for search users
-- Write a strong description that could work as an SEO meta description
+- Keep the article tightly focused on the topic
+- The title MUST be optimized for SEO and look like a real Google result
+- The description should be strong enough to work as an SEO meta description
 
 VERY IMPORTANT INTERNAL LINKING RULES:
 - Naturally mention 2 to 4 closely related coding concepts in the paragraph text
@@ -272,6 +316,12 @@ Content rules:
 - Include at least 1 code block when relevant
 - For tutorial articles, teach the concept step by step
 - For error articles, explain the error, why it happens, and how to fix it
+- Make the title click-worthy but not spammy
+- Prefer titles like:
+  - JavaScript Map vs ForEach Explained
+  - Python IndexError List Index Out of Range Fix
+  - SQL GROUP BY Explained with Examples
+  - TypeScript Property Does Not Exist on Type Fix
 
 Use this exact format:
 {
@@ -334,7 +384,7 @@ async function run() {
   const { slugSet, titleSet, topicSet } = getExistingIndexes();
   const generatedTopicSet = new Set();
 
-  console.log("Starting article generation with stronger duplicate protection...");
+  console.log("Starting SEO-focused article generation with duplicate protection...");
 
   for (const plan of contentPlans) {
     if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) {
