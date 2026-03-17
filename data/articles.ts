@@ -4506,5 +4506,277 @@ export const articles: Article[] = [
         "value": "Deadlock errors can be tricky, but understanding how SQL transactions, locks, and isolation levels interact can help you resolve them effectively. By designing your database operations to minimize lock contention and following consistent access patterns, you can prevent deadlocks and maintain smooth concurrency in your applications. Remember, tools like SQL Server Profiler or extended events, and equivalent in other RDBMS, are invaluable for identifying deadlocks in production systems."
       }
     ]
+  },
+  {
+    "slug": "how-to-use-javascript-promises-with-examples",
+    "title": "How to Use JavaScript Promises with Examples: A Beginner's Guide",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript promises step-by-step with easy-to-understand examples. Understand async code, avoid common mistakes, and improve your JavaScript skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript promises are a powerful way to handle asynchronous operations, like fetching data from an API or reading files. If you have ever struggled with callbacks or wanted a cleaner way to manage asynchronous code, promises can help. In this tutorial, we will explain what promises are, how they work, and show simple examples to make your code more readable and efficient."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a promise represents a value that may not be available yet but will be resolved in the future. It can be in one of three states: pending, fulfilled, or rejected. This makes promises a better alternative to callbacks for handling asynchronous actions because they allow chaining with then, handling errors with catch, and can be combined with async/await syntax. Understanding promises is essential alongside concepts like asynchronous functions, callback hell, and event loops."
+      },
+      {
+        "type": "code",
+        "value": "const getNumber = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const randomNum = Math.random();\n      if (randomNum > 0.5) {\n        resolve(randomNum);\n      } else {\n        reject('Number too low');\n      }\n    }, 1000);\n  });\n};\n\ngetNumber()\n  .then(result => {\n    console.log('Success:', result);\n  })\n  .catch(error => {\n    console.error('Error:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use promises properly, always return a new Promise inside your asynchronous functions where needed, and handle both success and failure using then and catch respectively. You can chain multiple then methods to perform sequential asynchronous operations. Alternatively, modern JavaScript allows you to handle promises with async/await syntax, making your code easier to read and maintain. Remember to always handle errors to avoid unhandled promise rejections, which can cause bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes with promises include forgetting to return the promise inside functions, mixing callbacks with promises unnecessarily, and not handling errors with catch. Another frequent issue is not understanding that promises are lazy until executed, so calling a promise function multiple times may behave unexpectedly if not managed. Also, avoid creating new promises inside then unnecessarily, as it can lead to promise chaining complexity. These mistakes can cause logic errors or unresponsive code."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, JavaScript promises provide a clear and manageable way to work with asynchronous code. Learning how to create, chain, and handle errors in promises will make your JavaScript applications more reliable and easier to understand. Alongside related concepts like async/await, callback functions, and event loops, mastering promises is a fundamental skill for any JavaScript developer working with APIs, timers, or any delayed operations."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-cannot-read-properties-of-undefined-in-javascript",
+    "title": "How to Fix Cannot Read Properties of Undefined in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn why the 'Cannot read properties of undefined' error happens in JavaScript and how to fix it with clear examples and beginner-friendly steps.",
+    "videoUrl": "https://www.youtube.com/watch?v=UZINZNWAE8Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you’ve ever worked with JavaScript, you might have encountered the error message: 'Cannot read properties of undefined.' This can be confusing for beginners because it stops your program from running and doesn’t always clearly indicate what went wrong. In this article, we'll break down what this error means, why it happens, and how you can fix it easily when you are working with objects, variables, and functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "The 'Cannot read properties of undefined' error means that you tried to access a property or method on a variable that is currently undefined. In JavaScript, 'undefined' means a variable exists but hasn’t been assigned a value, or that an object property or array item does not exist. This error usually happens when you assume an object or variable exists but it actually doesn’t, causing your code to break at runtime. Understanding variables, objects, and how JavaScript handles undefined values is key to solving this issue."
+      },
+      {
+        "type": "code",
+        "value": "const user = {};\nconsole.log(user.name.first); // Error: Cannot read properties of undefined (reading 'first')\n\n// Here, user.name is undefined because name property doesn't exist on user object."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to make sure the variable or property you’re trying to access actually exists before you use it. One common way to do this is using optional chaining (?.) introduced in modern JavaScript, which safely accesses nested object properties even if some levels are undefined. You can also use simple conditional checks with if statements or the logical AND (&&) operator. This ensures your code only tries to read properties on variables that are properly defined, avoiding runtime crashes. Additionally, properly initializing variables and knowing about how JavaScript hoists variables can prevent undefined references."
+      },
+      {
+        "type": "paragraph",
+        "value": "A frequent mistake is assuming data is always present, especially when working with API responses or user input. Beginners might also overlook the difference between null and undefined or incorrectly try to access properties on arrays or objects that haven’t been initialized. Not handling asynchronous code properly, such as fetching data before trying to use it, can also cause this error. Being aware of variable scope, falsy values, and basic debugging techniques can help reduce these mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'Cannot read properties of undefined' error occurs when JavaScript tries to access a property of a variable set to undefined. By learning how to check if variables and objects exist using optional chaining, conditionals, and proper initialization, you can easily avoid this error. Understanding related concepts like variable initialization, asynchronous code handling, and truthy/falsy checks will strengthen your ability to write error-free JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-typescript-generics-with-examples",
+    "title": "How to Use TypeScript Generics with Examples: A Beginner's Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics with easy examples to write flexible, reusable code. This beginner-friendly tutorial explains generics, steps to implement them, common mistakes, and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you’re just starting with TypeScript, one powerful feature you should learn is generics. Generics allow you to write reusable and flexible functions, classes, and interfaces that can work with any data type while keeping type safety. In this tutorial, we’ll break down what generics are, how they work, and show you clear step-by-step examples to help you understand how to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics are like placeholders for types. Instead of writing a function or a class that works with only one specific data type, you can create a generic version that works for any type you provide. This means you can write more abstract, reusable code without losing the benefits of TypeScript's strong typing system. Generics are commonly used with functions, interfaces, and classes, and they often come up when learning about type constraints and union types."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst numResult = identity<number>(42);  // numResult is number\nconst strResult = identity<string>('hello'); // strResult is string\n\n// You can also let TypeScript infer the type:\nconst inferredResult = identity(true); // inferredResult is boolean"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use generics properly, you should explicitly declare a generic type parameter using angle brackets <> after the function or class name. Inside the function, use this generic type like a variable representing a type. TypeScript will enforce that your function works consistently with that type. For more complex cases, you can add constraints to generics to restrict what types they accept, which ties nicely into the concepts of interfaces and type aliases."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is to overuse generics when they aren’t necessary, making code harder to read. Another error beginners make is forgetting to specify a type or misuse the generic type parameters, leading to incorrect type inference or loss of type safety. For example, not returning the generic type or mixing it improperly with any types can defeat the purpose. Learning to combine generics with mapped types and conditional types can help avoid many pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript generics empower you to write code that adapts to different types while preserving type safety. By understanding and practicing how to declare and use generics in functions and classes, you’ll write cleaner, more flexible code. Remember to explore related topics like type inference, interfaces, and type constraints to get the most out of generics and TypeScript’s type system."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-property-does-not-exist-on-type-fix",
+    "title": "TypeScript Property Does Not Exist on Type Error Fix",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to fix the common TypeScript error 'Property does not exist on type' with simple explanations and practical examples. Understand why it happens and how to resolve it.",
+    "videoUrl": "https://www.youtube.com/watch?v=zf61XNjeabo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've recently started using TypeScript, you might have encountered the error message: \"Property 'someProperty' does not exist on type 'SomeType'.\" This error can be confusing for beginners, especially if you're coming from JavaScript, where properties can be accessed freely. In this article, we'll explain what this error means, why it happens, and how you can fix it in your TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error \"Property does not exist on type\" occurs because TypeScript uses static typing to check your code before it runs. When you try to access a property that TypeScript doesn't recognize on a specific type or interface, it shows this error. This safety feature helps catch typos, incorrect object shapes, or accessing properties that don’t belong to certain data types. Understanding this error involves knowing about TypeScript types, interfaces, and type checking."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = {\n  name: 'Alice',\n  age: 25\n};\n\nconsole.log(user.email); // Error: Property 'email' does not exist on type 'User'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to make sure the property you're accessing is defined in the type. For example, if you want to access the \"email\" property, add it to the interface. Alternatively, you can use TypeScript’s index signatures or type assertions if you know the property exists but it’s not declared. Another approach is to use optional chaining if the property might not always be present. These techniques involve understanding interfaces, type assertions, and optional properties in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is assuming JavaScript’s flexibility carries over to TypeScript, which uses strict type checking. Beginners often add new properties dynamically without updating the corresponding type declarations. Another pitfall is ignoring type errors by using \"any\", which defeats the purpose of TypeScript’s safety. Also, not using tools like type guards or optional chaining can lead to unsafe property access and runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"Property does not exist on type\" error in TypeScript is a helpful reminder to keep your types and interfaces accurate. By defining all expected properties in your types and using optional chaining or type assertions carefully, you can write safer and clearer code. Understanding this error also strengthens your knowledge of related concepts like interfaces, type checking, and type assertions, making you a more confident TypeScript developer."
+      }
+    ]
+  },
+  {
+    "slug": "python-list-comprehension-explained-with-examples",
+    "title": "Python List Comprehension Explained with Examples for Beginners",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn Python list comprehension with simple explanations and practical examples. Understand how to create lists more efficiently and avoid common mistakes.",
+    "videoUrl": "https://www.youtube.com/watch?v=l8mWvDUwOt4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to Python and want to write cleaner and more efficient code, Python list comprehension is a great feature to learn. It helps you create lists quickly in a concise way, replacing longer for-loops. In this tutorial, we will explain what list comprehension is, show you examples, and guide you on how to use it properly while avoiding common mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a Python list comprehension is a compact way to generate a new list by applying an expression to each item in an existing list or any iterable. Instead of writing multiple lines to loop through items and append results, the list comprehension does this in just one line. This concept is closely related to Python loops, the map function, and conditional statements, enabling clean and readable list generation."
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3, 4, 5]\nsquares = [num * num for num in numbers]\nprint(squares)  # Output: [1, 4, 9, 16, 25]\n\n# List comprehension with condition to filter even numbers:\neven_squares = [num * num for num in numbers if num % 2 == 0]\nprint(even_squares)  # Output: [4, 16]"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use list comprehension properly, always follow the basic structure: start with an expression that defines what each element should look like, then a for-loop to iterate over your iterable, and optionally add an if condition to filter items. It’s important to prefer list comprehension when you want to create new lists rather than modify existing ones, as list comprehensions are not ideal for side effects. Understanding variable scoping in comprehensions and how they differ from generator expressions will also help you in writing effective Python code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Some common mistakes beginners make include trying to use list comprehension for complex logic that requires multiple statements, which reduces readability. Another mistake is forgetting parentheses or using the wrong syntax, resulting in syntax errors. People also sometimes mix up list comprehensions with generator expressions or use them for operations that modify data in place, where a traditional loop may be clearer. If performance is a concern, remember that list comprehensions are generally faster than equivalent for-loops but should be used judiciously."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, Python list comprehensions provide a neat way to build and manipulate lists through an expressive and clean syntax. By mastering list comprehensions alongside basic loops, conditional statements, and understanding related concepts like map and filter functions, you can write more Pythonic and efficient code. Practice by rewriting simple loops into list comprehensions to get comfortable and always prioritize readability in your programs."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-attributeerror-module-has-no-attribute-in-python",
+    "title": "How to Fix AttributeError: module has no attribute in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to understand and fix the AttributeError: module has no attribute in Python with clear examples and practical tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=9ZR190RVDx4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're writing Python code and suddenly see the error message AttributeError: module has no attribute, don't worry—this is a common issue, especially for beginners. This error means Python cannot find a specific function, class, or variable inside the module you're trying to use. In this article, we'll explore what causes this error and how to fix it with easy examples and explanations."
+      },
+      {
+        "type": "paragraph",
+        "value": "An AttributeError happens when Python tries to access an attribute (like a function or a variable) from a module or object but it doesn't exist. For modules, this error often means either the attribute is misspelled, the module version is outdated, or there is some confusion in how you imported the module. It’s closely related to understanding Python modules, imports, and object attributes."
+      },
+      {
+        "type": "code",
+        "value": "import math\nprint(math.square(5))  # Trying to use a function that doesn't exist in math module"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, Python throws AttributeError: module 'math' has no attribute 'square' because the math module does not have a function named \"square.\" To fix this, check the official module documentation to see available functions or use the correct function. Here, math.pow or the exponent operator ** should be used instead. Always double-check your import statements, spelling, and module versions. Using built-in functions or classes incorrectly often leads to this error, so understanding Python object attributes and how imports work is very useful."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes causing this error include naming your script with the same name as the module you want to import, which confuses Python's import system. Another typical error is misspelling the function or attribute, like using 'dumps' instead of 'dump' in the json module. Failing to update third-party libraries can also cause this problem if new attributes were added in later versions. Lastly, mixing variable and module names leads to conflicting references."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the AttributeError: module has no attribute error occurs when Python can't find the requested attribute in a module. The key steps to fix it are to verify the attribute exists, check spelling, avoid naming conflicts, and ensure your modules are up to date. Understanding Python imports, module structures, and attributes will help prevent this error and make your code more reliable. Keeping these tips in mind will make debugging easier as you continue learning Python."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-window-functions-in-sql",
+    "title": "How to Use Window Functions in SQL: A Beginner-Friendly Tutorial",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use window functions in SQL with clear examples and step-by-step explanations. Discover how window functions help you analyze data without grouping and improve your SQL queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions are powerful tools in SQL that let you perform calculations across sets of rows related to the current row without collapsing the results like GROUP BY does. They are essential for running advanced analytics, ranking, running totals, and cumulative statistics right inside your SQL queries. If you've ever wanted to perform aggregate calculations but still keep individual row details visible, window functions are the way to go."
+      },
+      {
+        "type": "paragraph",
+        "value": "A window function works by defining a window, or a subset of rows, around the current row. Unlike aggregate functions that reduce rows, window functions return a value for every row in the original table based on that window. This concept is handy for getting running sums, ranking rows by value, or calculating moving averages. To use window functions effectively, it's helpful to also understand related SQL concepts like partitions, ordering, and frame clauses."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  department_id,\n  salary,\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank,\n  SUM(salary) OVER (PARTITION BY department_id) AS total_department_salary\nFROM employees;\n\n-- This query ranks employees by salary within each department and calculates total salary per department."
+      },
+      {
+        "type": "paragraph",
+        "value": "To use window functions properly, you start with the function name such as RANK(), ROW_NUMBER(), or SUM(), followed by the OVER() clause. Inside OVER(), you can specify PARTITION BY to group rows logically, and ORDER BY to define the row order for ranking or running totals. The frame clauses like ROWS BETWEEN can further control which rows the function considers. Integrating window functions alongside traditional GROUP BY and joins can unlock advanced data analysis without losing row detail."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include forgetting the OVER() clause, which makes the function behave like a regular aggregate and causes errors. Another is mixing window functions with GROUP BY without understanding their different output behaviors. Also, overusing complex window frames without a clear need can degrade performance. Always verify the partitioning and ordering logic to ensure the results match your intended analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, window functions extend SQL's analytical power by letting you calculate values across related rows without collapsing your data. They complement grouping, joins, and subqueries, helping you write more insightful queries. By practicing with functions like RANK(), ROW_NUMBER(), and aggregate window functions, you'll be able to perform running totals, rankings, and other advanced analytics with ease."
+      }
+    ]
+  },
+  {
+    "slug": "sql-syntax-error-near-select-explained",
+    "title": "SQL Syntax Error Near Select Explained: How to Fix This Common Issue",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what the SQL syntax error near 'select' means, why it happens, and how to fix it with clear examples and tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=ERYnHR688Lk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've ever run a SQL query and encountered the error message \"syntax error near 'select'\", you might feel stuck figuring out what went wrong. This error is common, especially for beginners learning SQL syntax and writing nested queries, joins, or subqueries. Understanding why this error occurs can save you time and frustration while improving your skills with writing clean, correct SQL statements."
+      },
+      {
+        "type": "paragraph",
+        "value": "The \"syntax error near 'select'\" message means that there is a problem in your SQL query exactly where the keyword SELECT appears or just before it. This usually indicates that the SQL parser didn't expect a SELECT statement in that part of the code or that an earlier part of the statement is missing or malformed. The error could appear in situations involving subqueries, CTEs (Common Table Expressions), or incorrect use of parentheses. It reveals a syntax mistake, not a logical or runtime error."
+      },
+      {
+        "type": "code",
+        "value": "/* Example of a syntax error near SELECT */\nSELECT id, name\nFROM users\nWHERE id IN\nSELECT user_id FROM orders;\n\n/* Correct version using parentheses to wrap the subquery */\nSELECT id, name\nFROM users\nWHERE id IN (\n  SELECT user_id FROM orders\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the \"syntax error near 'select'\", check that your query structure is correct. For example, when using subqueries with IN, EXISTS, or in the FROM clause, always wrap the subquery in parentheses. Also ensure that commas, keywords like WHERE or FROM, and table aliases are properly used. Keeping SQL formatting clean and readable helps spot these mistakes. Using the correct syntax for joins and subqueries will prevent these errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes that cause this error include forgetting parentheses around subqueries, missing commas between columns, placing SELECT where a value or condition is expected, or mixing clauses out of order. Another typical issue arises when trying to nest queries without proper aliasing or missing keywords such as FROM in derived tables. Reviewing basic SQL concepts like SELECT statement structure, subqueries, joins, and clauses can help avoid syntax errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"SQL syntax error near select\" indicates a problem around how the SELECT keyword is used in your query, often related to subqueries and missing parentheses. By carefully structuring your queries, using parentheses correctly, and paying attention to the order and syntax of clauses, you can fix this error quickly. Becoming familiar with SQL query syntax, including joins, subqueries, and common clauses, will help you write error-free code."
+      }
+    ]
   }
 ];
