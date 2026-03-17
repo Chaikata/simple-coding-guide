@@ -3711,5 +3711,277 @@ export const articles: Article[] = [
         "value": "In summary, a null value constraint violation error indicates that your SQL operation tried to put a NULL where the database expects a definite value because of a NOT NULL constraint. Always ensure columns marked NOT NULL have proper data when inserting or updating rows. By understanding SQL constraints, including NOT NULL, primary keys, and default values, you can design databases that prevent incomplete data and avoid these errors in your queries."
       }
     ]
+  },
+  {
+    "slug": "explained-promise-chaining-and-error-handling-javascript",
+    "title": "Explained: Promise Chaining and Error Handling in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use promise chaining and handle errors in JavaScript with easy-to-understand examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Promises are a key part of asynchronous programming in JavaScript. They allow you to handle actions that take time, like fetching data from a server, without blocking the rest of your code. Promise chaining is a technique used to run multiple asynchronous operations one after another, while error handling helps you manage cases when something goes wrong. In this article, we’ll explain these concepts clearly and show you how to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Promise chaining means connecting multiple promises so that each one starts when the previous promise resolves. Instead of nesting callbacks, chaining keeps your code clean and easy to follow. Error handling in promises usually uses the .catch() method to catch any problems in the chain. This reduces bugs and makes your code more reliable. Understanding promise chaining is also important when working with async functions and callbacks."
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Received data:', data);\n    return data.items;\n  })\n  .then(items => {\n    console.log('Items count:', items.length);\n  })\n  .catch(error => {\n    console.error('Error caught:', error.message);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use promise chaining properly, always return new promises or values inside your .then() callbacks so the next step in the chain can use them. If an error happens anywhere in the chain, the .catch() method will handle it. If you forget to include .catch(), unhandled promise rejections can cause warnings or silent failures. You can also add finally() after catch() for code that should run regardless of success or failure. Keep practicing with related concepts like async/await and callback functions to deepen your understanding."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is to forget returning values or promises from .then(), which breaks chaining. Another is placing .catch() too early, which prevents catching errors from later steps. Sometimes beginners try to mix callbacks with promises incorrectly, which can cause confusion. Also, not validating responses in fetch or other async calls can lead to uncaught errors. Proper error handling ensures your application runs smoothly even when network or logic errors occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, promise chaining and error handling are essential topics for writing clean asynchronous JavaScript code. By chaining promises, you create sequences of actions that are easier to read and maintain. Using .catch() properly will help you manage errors in one place instead of many. When combined with knowledge of callbacks and async/await, mastering promises will improve your programming skills and help you build more robust web applications."
+      }
+    ]
+  },
+  {
+    "slug": "javascript-unexpected-token-error-explained-with-examples",
+    "title": "JavaScript Unexpected Token Error Explained with Examples",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what the JavaScript Unexpected Token error means, why it happens, and how to fix it with clear examples. Perfect for beginners tackling syntax errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=xxhvwruLc4A",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're learning JavaScript, one common error that can confuse beginners is the 'Unexpected Token' error. It often appears when your code has a syntax mistake, and the JavaScript engine cannot understand a character or sequence in your script. This error can show up during parsing, which means before your code even starts running. Understanding why this happens and how to fix it is crucial as you dive deeper into JavaScript concepts like variables, functions, and object literals."
+      },
+      {
+        "type": "paragraph",
+        "value": "The 'Unexpected Token' error means that JavaScript found a character in your code where it didn't expect one. Tokens are the smallest pieces of your code like brackets, commas, or keywords. For example, if you accidentally leave out a closing bracket, add an extra comma, or misspell something, the parser gets confused and throws this error. This error can come up in different places, whether inside loops, conditionals, or even when defining arrays and objects, which are common sources for such syntax issues."
+      },
+      {
+        "type": "code",
+        "value": "let fruits = ['apple', 'banana', 'orange';\nconsole.log(fruits);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the error happens because there is a semicolon instead of a closing bracket on the array definition line. JavaScript expects the ']' token to close the array but found a ';' instead. To fix this, simply replace the semicolon with the correct bracket, like this: let fruits = ['apple', 'banana', 'orange'];. Learning best practices for writing functions, managing scope, and using proper punctuation will help prevent these errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes causing unexpected token errors include missing closing brackets or parentheses, forgetting commas between items in arrays or objects, trying to use reserved words as variable names, or mismatched quotation marks when working with strings. Sometimes, the error may appear because of copy-pasting code that uses invalid characters or incorrect syntax in conditions and loops. Getting familiar with JavaScript syntax and practicing careful typing can reduce these errors significantly."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, the JavaScript Unexpected Token error is your clue that the parser encountered something it cannot understand in your code. It usually relates to syntax, such as missing brackets or misplaced symbols. Paying attention to how you write arrays, objects, loops, and functions will help you avoid this error. With practice, debugging these errors becomes easier, and your knowledge of programming concepts like variables, scope, and control flow will improve."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-type-errors-in-typescript-with-examples",
+    "title": "How to Fix Type Errors in TypeScript with Examples",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to identify and fix common type errors in TypeScript with clear explanations and practical examples. A beginner-friendly guide to improve your TypeScript coding skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that adds type safety on top of JavaScript. However, when types don't match as expected, you will encounter type errors. These errors can be confusing for beginners, but understanding why they happen and how to fix them is key to writing robust TypeScript code. This article will guide you through some common type errors and show you how to solve them with examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "A type error in TypeScript means the compiler has found a mismatch between what type of data is expected and what is actually provided. For example, if a function expects a number but receives a string, TypeScript will generate a type error to alert you. Type errors are part of the static typing system that helps catch bugs early. They don't run in production; instead, they help you fix problems during development."
+      },
+      {
+        "type": "code",
+        "value": "function doubleValue(value: number): number {\n  return value * 2;\n}\n\nconst result = doubleValue('5'); // Type error: Argument of type 'string' is not assignable to parameter of type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix type errors like the one shown above, you need to make sure the values match the expected types. In the example, the function doubleValue expects a number, but we passed a string. Fixing this is simple: pass the correct type or convert the input as needed. Additionally, learning about type annotations, type inference, and union types can help make your code more flexible and avoid common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Some common mistakes that cause type errors include mixing types without proper checks, forgetting to specify return types in functions, and incorrect usage of objects or arrays. It's also common to see errors when using types like any or unknown improperly. To avoid such errors, make sure you understand how TypeScript handles types, use interfaces or types to describe data shapes clearly, and take advantage of type guards when needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, type errors in TypeScript are a helpful feature to prevent bugs by enforcing type correctness during development. By reading error messages carefully and applying techniques like proper type annotations, type checking, and conversions, you can quickly resolve these errors. Improving your understanding of related concepts such as type inference, interfaces, type aliases, and union types will make your code stronger and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-type-string-is-not-assignable-to-type-number",
+    "title": "TypeScript Error Explained: Type 'string' is not assignable to type 'number'",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn why TypeScript shows the error 'Type string is not assignable to type number', what it means, and how to fix it with simple explanations and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=C29TqUbZ4oA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with TypeScript, you might encounter an error that says \"Type 'string' is not assignable to type 'number'\". This is a common mistake for beginners who are learning how TypeScript enforces types. This article will help you understand why this error occurs, what it means in simple terms, and how to resolve it so you can write error-free TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error \"Type 'string' is not assignable to type 'number'\" happens because TypeScript expects a certain data type (in this case, a number), but instead, it is receiving a string value. TypeScript uses static typing, which means it checks the types of your variables, function parameters, and return values at compile time. If a value doesn’t match the expected type, TypeScript throws an error to help catch potential mistakes early. This kind of type checking is very helpful when working with variables, type annotations, and function parameters."
+      },
+      {
+        "type": "code",
+        "value": "let age: number;\nage = \"25\"; // Error: Type 'string' is not assignable to type 'number'\n\nfunction doubleNumber(num: number): number {\n  return num * 2;\n}\n\ndoubleNumber(\"10\"); // Error here as well"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to ensure that the values you assign to variables or pass to functions match the declared type. In the example above, the variable \"age\" should be assigned a number, not a string. If you have a string representation of a number, you can convert it using functions such as Number() or parseInt(). Also, make sure function arguments respect their parameter types. This way, TypeScript won’t complain and your code will be safer and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake when encountering this error is mixing data types accidentally, for example, reading user input from an HTML form which is always a string, then trying to assign or use it as a number without conversion. Another pitfall is not using type assertions or type narrowing correctly. Using union types or type guards are related concepts that help manage variables that might hold multiple types, but trying to assign a string directly to a pure number type always causes this error."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"Type 'string' is not assignable to type 'number'\" error is TypeScript’s way of making sure your code respects type safety. By understanding how types work, managing type annotations properly, and converting values when necessary, you can avoid this error and write cleaner, bug-resistant TypeScript code. Always double-check your declared types and the actual data types to prevent such issues."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-import-error-no-module-named-in-python",
+    "title": "How to Fix ImportError: No Module Named in Python - Beginner's Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to fix the ImportError: No module named error in Python with clear explanations, practical examples, and solutions for beginners. Understand Python imports, modules, and package management.",
+    "videoUrl": "https://www.youtube.com/watch?v=xdRSuuO-7Ps",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start programming in Python, you might encounter an error like ImportError: No module named 'something'. This error can be confusing if you are new to Python modules, imports, or package management. This article will explain what this error means and show you simple ways to fix it so you can keep coding without frustration."
+      },
+      {
+        "type": "paragraph",
+        "value": "The ImportError: No module named occurs when Python can't find the module you're trying to use. Modules in Python are files or packages that contain code you want to include in your program. This error means your Python environment doesn't know where to look for that module—either because it's not installed, the name is wrong, or Python’s module search path doesn’t include it. Understanding how Python imports modules and how package management with tools like pip works is key to solving this."
+      },
+      {
+        "type": "code",
+        "value": "import requests\n\nresponse = requests.get('https://api.example.com/data')\nprint(response.status_code)"
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, if you run this code but get the error ImportError: No module named 'requests', it means the requests library is not installed in your environment. To fix this, you need to install the missing module. You can do this by running pip install requests in your command line or terminal. Make sure you are using the right version of pip that matches your Python interpreter. In some cases, if you have multiple Python versions, you might need to run python3 -m pip install requests or python -m pip install requests. Checking whether your Python path includes the folder where external packages are installed can also help."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include misspelling the module name in the import statement, confusing packages with different names (like 'Pillow' for images but importing 'PIL'), or forgetting to activate a virtual environment where the packages are installed. Also, sometimes the module is installed globally but not accessible to your current project, especially if you're using isolated Python environments. Another frequent issue is trying to import from a file that shares the same name as a standard library module, causing conflicts."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, ImportError: No module named is a common error that happens when Python cannot locate the module you want to use. The most effective fixes are installing missing packages with pip, checking your import statements for correctness, and understanding Python environments and paths. Learning these basics about Python imports, package management, and environment setup will help you avoid this error and write smoother Python code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-python-typeerror-unsupported-operand-type",
+    "title": "How to Fix Python TypeError: unsupported operand type",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what the Python TypeError: unsupported operand type means, why it happens, and how to fix it with clear examples and practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=-4wq2w4JeLM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you’re new to Python programming, you might have encountered the error message TypeError: unsupported operand type(s) when trying to use operators like +, -, *, or /. This error can be confusing at first, but it’s a common issue related to Python’s type system and how it handles operations between different data types. In this article, we’ll explain what causes this error, show examples, and guide you step-by-step on how to fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error TypeError: unsupported operand type means you tried to perform an operation between two objects (operands) that don’t support that operation together. For example, Python doesn’t allow you to add a string and an integer directly because Python doesn’t know how to combine these two different types using the + operator. Understanding Python data types and operator overloading helps clarify why this happens. The error usually occurs with types like strings, integers, lists, or custom objects."
+      },
+      {
+        "type": "code",
+        "value": "number = 10\ntext = \"5\"\nresult = number + text\n# This will raise TypeError: unsupported operand type(s) for +: 'int' and 'str'"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to make sure both operands are compatible with the operation you want to perform. One common solution is to convert types explicitly. In the example above, converting the string '5' to an integer allows the addition to work. Alternatively, if you want to concatenate instead of adding numbers, convert integers to strings. Using built-in functions like int() and str() is key for proper type conversion. This also applies when working with lists or using other operators."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is assuming Python will automatically convert types for you. Python is strict and requires explicit conversions to avoid ambiguity. Another error is mixing incompatible types, like concatenating a list and an integer or trying to multiply a string by a float. Always check variable types using the type() function to debug type errors. Understanding how Python handles arithmetic, strings, and data structures like lists will help prevent these issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the TypeError: unsupported operand type happens because Python can’t perform the requested operation between the given data types. The fix is to ensure compatible types by using explicit conversions or correct operators. Becoming comfortable with Python data types, type casting, and common operations like arithmetic and string manipulation will greatly reduce such errors. Always remember to check your types before performing operations and debug with type() to understand what you’re working with."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-join-multiple-tables-in-sql-with-examples",
+    "title": "How to Join Multiple Tables in SQL: Step-by-Step Tutorial with Examples",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to join multiple tables in SQL with clear examples. This beginner-friendly guide explains table joins, syntax, and common mistakes to avoid when combining data.",
+    "videoUrl": "https://www.youtube.com/watch?v=pPvZQPE-j7A",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, you often need to combine data from more than one table. SQL provides a powerful way to do this using JOINs. This article will explain how to join multiple tables in SQL with easy-to-follow examples, making it perfect for beginners. By the end, you'll understand how to use INNER JOIN, LEFT JOIN, and other types to retrieve comprehensive results across tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "Joining tables means you are combining rows from two or more tables based on a related column between them. Typically, tables are connected by keys such as primary keys and foreign keys. Joining helps you pull relevant data from multiple tables into one result set. Understanding JOINs is crucial for writing complex database queries and working with concepts like subqueries and database normalization."
+      },
+      {
+        "type": "code",
+        "value": "SELECT orders.order_id, customers.customer_name, products.product_name\nFROM orders\nINNER JOIN customers ON orders.customer_id = customers.customer_id\nINNER JOIN products ON orders.product_id = products.product_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To join tables properly, you need to specify the type of join and the condition that relates the tables. INNER JOIN returns rows when there is a match in both tables. LEFT JOIN returns all rows from the left table, and matched rows from the right table, showing NULLs if no match exists. Using WHERE clauses along with JOINs allows you to filter results effectively. Properly indexing keys in tables can improve join performance and query speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is forgetting to specify the join condition, which can lead to a Cartesian product (every row combined with every other row), resulting in huge, incorrect datasets. Another error is mixing join types incorrectly, or misunderstanding when to use LEFT JOIN versus INNER JOIN. Also, aliasing tables without clear names can make your query harder to read, so use meaningful aliases when joining multiple tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, joining multiple tables in SQL is essential for combining data from different sources effectively. Mastering JOIN syntax and understanding how to use keys will help you write efficient and accurate queries. Practice joins alongside learning filtering with WHERE, grouping with GROUP BY, and sorting with ORDER BY to become more confident in SQL querying."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-sql-syntax-errors-near-on-clause",
+    "title": "How to Fix SQL Syntax Errors Near ON Clause: A Beginner's Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix common SQL syntax errors near the ON clause with clear explanations and practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rkqYjcGWO3Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've ever run a SQL query involving JOINs and encountered an error message mentioning a syntax error near the ON clause, you're not alone. This is a common stumbling block for beginners working with SQL joins, especially INNER JOIN, LEFT JOIN, and other related clauses. This article will explain what causes this error, how the ON clause works within SQL joins, and how to fix these syntax problems quickly and confidently."
+      },
+      {
+        "type": "paragraph",
+        "value": "The ON clause in SQL is used to specify the condition that links tables together in a JOIN operation. It tells the database how to match rows from one table with rows in another, typically comparing key columns like IDs. When there is a syntax error near the ON clause, it usually means that there is a problem with how this condition is written. This can be due to missing keywords, incorrect column references, misplaced parentheses, or other SQL syntax issues related to JOINs or WHERE clauses."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nINNER JOIN departments\nON employees.department_id = departments.id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix syntax errors near the ON clause, start by checking that you have the JOIN keyword correctly placed and that the ON clause immediately follows. Also verify that you are using valid table names and column names without typos. Remember that the ON clause needs a valid comparison, such as using the = operator to link foreign keys. Avoid putting WHERE clause conditions inside the ON clause. Using proper indentation and formatting is another helpful practice to prevent and spot syntax issues. If your JOIN involves multiple tables, each JOIN must have its own ON clause or USING clause."
+      },
+      {
+        "type": "paragraph",
+        "value": "Some common mistakes causing syntax errors near ON include missing the ON keyword entirely, writing ON before the JOIN keyword, using incorrect operators like a comma instead of =, or forgetting to qualify columns with their table names when joining multiple tables. Another frequent error is placing filtering conditions that should be in the WHERE clause inside the ON clause, which can cause logic issues even if not always a syntax error. Understanding how JOIN, ON, WHERE, and related SQL clauses interact is critical for writing error-free queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, syntax errors near the ON clause in SQL are usually caused by incorrect or missing keywords, improper join conditions, or misplacement of related SQL clauses. By carefully writing your JOIN statements, correctly referencing table columns, and keeping filtering separate in WHERE clauses, you can avoid these errors. Regularly testing and formatting your SQL code also helps catch syntax issues early. Mastering SQL joins and their clauses like ON is fundamental when working with multiple tables in databases."
+      }
+    ]
   }
 ];
