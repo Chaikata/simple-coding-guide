@@ -1,273 +1,273 @@
 [
   {
-    "slug": "how-to-fix-common-errors-with-async-await-in-javascript",
-    "title": "How to Fix Common Errors with Async Await in JavaScript",
+    "slug": "explained-promise-chaining-and-error-handling-javascript",
+    "title": "Explained: Promise Chaining and Error Handling in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to fix common errors when using async await in JavaScript with clear explanations, code examples, and tips to write clean asynchronous code.",
-    "videoUrl": "https://www.youtube.com/watch?v=qRS_kYCkcEA",
+    "description": "Learn how to use promise chaining and handle errors in JavaScript with easy-to-understand examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
     "content": [
       {
         "type": "paragraph",
-        "value": "Async await is a powerful feature in JavaScript that makes writing asynchronous code easier and more readable, especially compared to using callbacks or plain promises. However, beginners often run into common mistakes while using async await, which can cause bugs or unexpected behavior in their programs. In this article, we will go through these common errors and show you how to fix them step-by-step, so you can write smooth asynchronous code with confidence."
+        "value": "Promises are a key part of asynchronous programming in JavaScript. They allow you to handle actions that take time, like fetching data from a server, without blocking the rest of your code. Promise chaining is a technique used to run multiple asynchronous operations one after another, while error handling helps you manage cases when something goes wrong. In this article, we’ll explain these concepts clearly and show you how to use them effectively."
       },
       {
         "type": "paragraph",
-        "value": "Async await allows you to write asynchronous code that looks like synchronous code by using the async keyword before a function and the await keyword to pause execution until a promise resolves. When you use await, JavaScript waits for the asynchronous operation to complete before moving on. This makes it easier to work with promises, callbacks, and asynchronous functions, leading to cleaner and more understandable code. Async await is closely related to promises, error handling with try catch, and understanding event loops in JavaScript."
+        "value": "Promise chaining means connecting multiple promises so that each one starts when the previous promise resolves. Instead of nesting callbacks, chaining keeps your code clean and easy to follow. Error handling in promises usually uses the .catch() method to catch any problems in the chain. This reduces bugs and makes your code more reliable. Understanding promise chaining is also important when working with async functions and callbacks."
       },
       {
         "type": "code",
-        "value": "async function fetchData() {\n  try {\n    let response = await fetch('https://api.example.com/data');\n    let data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}\n\nfetchData();"
+        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Received data:', data);\n    return data.items;\n  })\n  .then(items => {\n    console.log('Items count:', items.length);\n  })\n  .catch(error => {\n    console.error('Error caught:', error.message);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "To use async await properly and avoid common errors, always declare your function with the async keyword when you want to use await inside it. Also, remember that await only works inside async functions — trying to use await outside an async function will cause a syntax error. Another important tip is to use try catch blocks to handle errors that might occur during the awaited operations. This prevents unhandled promise rejections and makes debugging easier. Understanding how promises work when returned from async functions can also help avoid mistakes like forgetting to return from async functions or mixing callbacks with async await incorrectly."
+        "value": "To use promise chaining properly, always return new promises or values inside your .then() callbacks so the next step in the chain can use them. If an error happens anywhere in the chain, the .catch() method will handle it. If you forget to include .catch(), unhandled promise rejections can cause warnings or silent failures. You can also add finally() after catch() for code that should run regardless of success or failure. Keep practicing with related concepts like async/await and callback functions to deepen your understanding."
       },
       {
         "type": "paragraph",
-        "value": "Several common mistakes occur when using async await. One is forgetting the async keyword before the function, which makes await unusable inside that function. Another frequent error is attempting to await non-promises or synchronous values — await expects a promise or thenable object. Mixing async await with callbacks without adapting the logic can cause unexpected results. Also, neglecting to handle errors with try catch blocks around awaited code can lead to unhandled rejections and silent failures. Lastly, misunderstanding that async functions always return promises and not raw values can cause confusion when chaining or using returned data."
+        "value": "A common mistake is to forget returning values or promises from .then(), which breaks chaining. Another is placing .catch() too early, which prevents catching errors from later steps. Sometimes beginners try to mix callbacks with promises incorrectly, which can cause confusion. Also, not validating responses in fetch or other async calls can lead to uncaught errors. Proper error handling ensures your application runs smoothly even when network or logic errors occur."
       },
       {
         "type": "paragraph",
-        "value": "In summary, async await is a great tool for writing cleaner asynchronous JavaScript, but beginners often face issues like missing async keywords, improper error handling, and misuse of await. By remembering to declare async functions, awaiting only promises, handling errors with try catch, and correctly returning values, you can fix and avoid these common errors. With practice, async await will help you manage asynchronous operations efficiently, complementing your understanding of promises, callbacks, and event-driven programming in JavaScript."
+        "value": "In summary, promise chaining and error handling are essential topics for writing clean asynchronous JavaScript code. By chaining promises, you create sequences of actions that are easier to read and maintain. Using .catch() properly will help you manage errors in one place instead of many. When combined with knowledge of callbacks and async/await, mastering promises will improve your programming skills and help you build more robust web applications."
       }
     ]
   },
   {
-    "slug": "typeerror-null-is-not-an-object-explained-with-examples",
-    "title": "TypeError: null is not an object Explained with Examples in JavaScript",
+    "slug": "javascript-unexpected-token-error-explained-with-examples",
+    "title": "JavaScript Unexpected Token Error Explained with Examples",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn what the JavaScript error 'TypeError: null is not an object' means, with simple examples and step-by-step solutions to fix it.",
-    "videoUrl": "https://www.youtube.com/watch?v=MqfCK32nlK0",
+    "description": "Learn what the JavaScript Unexpected Token error means, why it happens, and how to fix it with clear examples. Perfect for beginners tackling syntax errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=xxhvwruLc4A",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you've been coding in JavaScript and suddenly saw the error message \"TypeError: null is not an object,\" you're not alone. This error can be confusing for beginners, especially when working with DOM elements, objects, or APIs. In this article, we'll break down what this error means, why it happens, and provide clear examples and actionable fixes. Understanding this will also help you get better at handling asynchronous code, object properties, and null safety in JavaScript."
+        "value": "When you're learning JavaScript, one common error that can confuse beginners is the 'Unexpected Token' error. It often appears when your code has a syntax mistake, and the JavaScript engine cannot understand a character or sequence in your script. This error can show up during parsing, which means before your code even starts running. Understanding why this happens and how to fix it is crucial as you dive deeper into JavaScript concepts like variables, functions, and object literals."
       },
       {
         "type": "paragraph",
-        "value": "The error \"TypeError: null is not an object\" occurs when your code tries to access a property or call a method on a value that is actually null. In JavaScript, null represents the intentional absence of any object value. So when you try to treat null as if it were an object — for example, doing null.property — JavaScript throws this error because null doesn't have properties or methods. This often happens in web development when you try to access DOM elements that don't exist or haven't been loaded yet."
+        "value": "The 'Unexpected Token' error means that JavaScript found a character in your code where it didn't expect one. Tokens are the smallest pieces of your code like brackets, commas, or keywords. For example, if you accidentally leave out a closing bracket, add an extra comma, or misspell something, the parser gets confused and throws this error. This error can come up in different places, whether inside loops, conditionals, or even when defining arrays and objects, which are common sources for such syntax issues."
       },
       {
         "type": "code",
-        "value": "const element = document.getElementById('myElement');\nconsole.log(element.innerText); // TypeError: null is not an object if 'myElement' doesn't exist"
+        "value": "let fruits = ['apple', 'banana', 'orange';\nconsole.log(fruits);"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, first check whether the variable you're accessing is null before trying to use its properties or methods. In the DOM example, you can check if the element exists before accessing innerText. This involves simple conditional checks or using optional chaining syntax introduced in modern JavaScript. Additionally, ensure that your JavaScript runs after the DOM has fully loaded to avoid trying to access elements that aren't in the document yet. This relates closely to understanding asynchronous JavaScript and event handling to control when code runs."
+        "value": "In the example above, the error happens because there is a semicolon instead of a closing bracket on the array definition line. JavaScript expects the ']' token to close the array but found a ';' instead. To fix this, simply replace the semicolon with the correct bracket, like this: let fruits = ['apple', 'banana', 'orange'];. Learning best practices for writing functions, managing scope, and using proper punctuation will help prevent these errors."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake beginners make is assuming variables are never null without explicitly checking. Not initializing objects or DOM elements properly, or misspelling element IDs, can cause this error. Also, confusing undefined and null can lead to overlooked issues. Another frequent issue is not waiting for the DOMContentLoaded event or not handling promises correctly when fetching data, causing access to non-existent properties on null values. Strengthening your knowledge in conditional statements, null checks, and asynchronous code will help avoid these mistakes."
+        "value": "Common mistakes causing unexpected token errors include missing closing brackets or parentheses, forgetting commas between items in arrays or objects, trying to use reserved words as variable names, or mismatched quotation marks when working with strings. Sometimes, the error may appear because of copy-pasting code that uses invalid characters or incorrect syntax in conditions and loops. Getting familiar with JavaScript syntax and practicing careful typing can reduce these errors significantly."
       },
       {
         "type": "paragraph",
-        "value": "In summary, \"TypeError: null is not an object\" means your code is trying to use something that is actually null as if it were an object. This typically happens when accessing properties or methods of a null value, often due to missing or incorrectly referenced DOM elements or uninitialized objects. To fix it, add proper null checks, use optional chaining, and ensure your script runs at the right time. Learning how to handle null values safely improves your skills with JavaScript objects, DOM manipulation, event listeners, and error handling."
+        "value": "To summarize, the JavaScript Unexpected Token error is your clue that the parser encountered something it cannot understand in your code. It usually relates to syntax, such as missing brackets or misplaced symbols. Paying attention to how you write arrays, objects, loops, and functions will help you avoid this error. With practice, debugging these errors becomes easier, and your knowledge of programming concepts like variables, scope, and control flow will improve."
       }
     ]
   },
   {
-    "slug": "how-to-use-typescript-generics-with-practical-examples",
-    "title": "How to Use TypeScript Generics with Practical Examples",
+    "slug": "how-to-fix-type-errors-in-typescript-with-examples",
+    "title": "How to Fix Type Errors in TypeScript with Examples",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript generics with simple, practical examples. Understand what generics are, how to write them, and common mistakes to avoid, perfect for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "description": "Learn how to identify and fix common type errors in TypeScript with clear explanations and practical examples. A beginner-friendly guide to improve your TypeScript coding skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you are starting with TypeScript and want to write more flexible and reusable code, understanding generics is essential. Generics allow you to write components or functions that can work with different types, not just one. This tutorial will guide you through what TypeScript generics are, how to use them step-by-step, and show practical code examples. Along the way, you will also see related concepts like type inference and function overloading, which often come up when working with generics."
+        "value": "TypeScript is a powerful language that adds type safety on top of JavaScript. However, when types don't match as expected, you will encounter type errors. These errors can be confusing for beginners, but understanding why they happen and how to fix them is key to writing robust TypeScript code. This article will guide you through some common type errors and show you how to solve them with examples."
       },
       {
         "type": "paragraph",
-        "value": "So, what exactly are generics? In TypeScript, generics are a way to create components or functions that can operate on multiple types, with the specific type being decided when the function or class is used. Instead of writing repetitive functions for different types, generics provide one set of logic that adapts to the type provided. This is especially helpful in scenarios like working with arrays, utility functions, or data structures where the element or data type can vary. Generics often work alongside types and interfaces to keep your code both safe and flexible."
+        "value": "A type error in TypeScript means the compiler has found a mismatch between what type of data is expected and what is actually provided. For example, if a function expects a number but receives a string, TypeScript will generate a type error to alert you. Type errors are part of the static typing system that helps catch bugs early. They don't run in production; instead, they help you fix problems during development."
       },
       {
         "type": "code",
-        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst numberResult = identity(42);    // Type is number\nconst stringResult = identity('hello'); // Type is string\n\n// Generic with an array type\nfunction getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst first = getFirstElement(['apple', 'banana']); // Type is string\nconst firstNumber = getFirstElement([10, 20, 30]);  // Type is number"
+        "value": "function doubleValue(value: number): number {\n  return value * 2;\n}\n\nconst result = doubleValue('5'); // Type error: Argument of type 'string' is not assignable to parameter of type 'number'."
       },
       {
         "type": "paragraph",
-        "value": "To use generics properly, declare a generic type parameter inside angle brackets <> after the function or class name, commonly named T or another letter that reflects the type role. When you call the generic function, TypeScript usually infers the type automatically based on the argument you passed, so you don’t always have to specify the type manually. It’s also important to constrain generics when you want to limit the kinds of types allowed. You can do this with extends to specify that the generic type must have certain properties or belong to a certain type hierarchy. This technique ties in well with interfaces and type aliases."
+        "value": "To fix type errors like the one shown above, you need to make sure the values match the expected types. In the example, the function doubleValue expects a number, but we passed a string. Fixing this is simple: pass the correct type or convert the input as needed. Additionally, learning about type annotations, type inference, and union types can help make your code more flexible and avoid common errors."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake when using generics is overcomplicating your type parameters or ignoring type constraints, which can lead to unexpected errors or loss of type safety. Also, forgetting that generics should be consistent throughout your function signature, meaning if you use the same generic multiple places, it should represent the same type. Another pitfall is confusing generics with any type – generics still keep type information, while any disables checking. Lastly, avoid naming generics with vague letters when working on bigger codebases for better readability."
+        "value": "Some common mistakes that cause type errors include mixing types without proper checks, forgetting to specify return types in functions, and incorrect usage of objects or arrays. It's also common to see errors when using types like any or unknown improperly. To avoid such errors, make sure you understand how TypeScript handles types, use interfaces or types to describe data shapes clearly, and take advantage of type guards when needed."
       },
       {
         "type": "paragraph",
-        "value": "In summary, TypeScript generics are a powerful feature for creating reusable and type-safe code components. They let you write functions and classes that can work with any data type, reducing duplication and improving maintainability. By understanding the basics, how to declare generics, and common best practices, you can start leveraging them in your projects effectively. As you continue to explore generics, keep in mind how they relate to other TypeScript features like type inference, interfaces, and constraints to fully unlock their potential."
+        "value": "In summary, type errors in TypeScript are a helpful feature to prevent bugs by enforcing type correctness during development. By reading error messages carefully and applying techniques like proper type annotations, type checking, and conversions, you can quickly resolve these errors. Improving your understanding of related concepts such as type inference, interfaces, type aliases, and union types will make your code stronger and easier to maintain."
       }
     ]
   },
   {
-    "slug": "how-to-fix-typescript-error-cannot-find-module",
-    "title": "How to Fix TypeScript Error: Cannot Find Module",
+    "slug": "typescript-type-string-is-not-assignable-to-type-number",
+    "title": "TypeScript Error Explained: Type 'string' is not assignable to type 'number'",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn what causes the TypeScript 'Cannot find module' error and how to fix it with practical solutions and examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=2mvJg_LKPZM",
+    "description": "Learn why TypeScript shows the error 'Type string is not assignable to type number', what it means, and how to fix it with simple explanations and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=C29TqUbZ4oA",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to TypeScript and working with imports, you might encounter the error message \"Cannot find module\". This error can be confusing at first, but it usually happens when TypeScript cannot locate the file or package you're trying to import. Understanding this error will help you fix it quickly so you can keep building your app without interruptions."
+        "value": "When working with TypeScript, you might encounter an error that says \"Type 'string' is not assignable to type 'number'\". This is a common mistake for beginners who are learning how TypeScript enforces types. This article will help you understand why this error occurs, what it means in simple terms, and how to resolve it so you can write error-free TypeScript code."
       },
       {
         "type": "paragraph",
-        "value": "The \"Cannot find module\" error means that TypeScript's compiler or language service tried to resolve an import statement, but it couldn't find a matching module based on your project's file structure, module resolution settings, or installed packages. This error often appears when working with ES modules, path aliases, or third-party libraries in your TypeScript or JavaScript projects."
+        "value": "The error \"Type 'string' is not assignable to type 'number'\" happens because TypeScript expects a certain data type (in this case, a number), but instead, it is receiving a string value. TypeScript uses static typing, which means it checks the types of your variables, function parameters, and return values at compile time. If a value doesn’t match the expected type, TypeScript throws an error to help catch potential mistakes early. This kind of type checking is very helpful when working with variables, type annotations, and function parameters."
       },
       {
         "type": "code",
-        "value": "import { myFunction } from './utils/helpers';\n\nmyFunction();"
+        "value": "let age: number;\nage = \"25\"; // Error: Type 'string' is not assignable to type 'number'\n\nfunction doubleNumber(num: number): number {\n  return num * 2;\n}\n\ndoubleNumber(\"10\"); // Error here as well"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, first check that the file or package you are importing actually exists and the path is correct. TypeScript is sensitive to relative paths like './' and '../', so even a small typo can cause this error. If you're importing from a package, make sure it is installed correctly in your node_modules folder. Another common fix is to configure your tsconfig.json file properly by adjusting 'moduleResolution' or setting up 'baseUrl' and 'paths' correctly if you use path aliases. Running 'npm install' or 'yarn' again can resolve missing packages, and restarting your code editor helps refresh TypeScript's module cache."
+        "value": "To fix this error, you need to ensure that the values you assign to variables or pass to functions match the declared type. In the example above, the variable \"age\" should be assigned a number, not a string. If you have a string representation of a number, you can convert it using functions such as Number() or parseInt(). Also, make sure function arguments respect their parameter types. This way, TypeScript won’t complain and your code will be safer and easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes that lead to this error include using incorrect file extensions, forgetting to add '.ts' or '.tsx' files in your include paths in tsconfig.json, or importing from a location that doesn't exist. Also, not installing type declarations for third-party libraries with '@types/library' can cause TypeScript to fail to recognize module types. Additionally, confusing relative and absolute imports, or misconfiguring module system settings like 'commonjs' vs 'esnext' can trigger this error."
+        "value": "A common mistake when encountering this error is mixing data types accidentally, for example, reading user input from an HTML form which is always a string, then trying to assign or use it as a number without conversion. Another pitfall is not using type assertions or type narrowing correctly. Using union types or type guards are related concepts that help manage variables that might hold multiple types, but trying to assign a string directly to a pure number type always causes this error."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the 'Cannot find module' error occurs when TypeScript can't find the code you are trying to import. Checking file paths, reinstalling packages, and configuring tsconfig.json settings like module resolution and path aliases are key steps to resolve it. Paying attention to import syntax and project structure will prevent this issue. Understanding this error connects closely to learning about module systems, type declaration files, and configuration options in TypeScript."
+        "value": "In summary, the \"Type 'string' is not assignable to type 'number'\" error is TypeScript’s way of making sure your code respects type safety. By understanding how types work, managing type annotations properly, and converting values when necessary, you can avoid this error and write cleaner, bug-resistant TypeScript code. Always double-check your declared types and the actual data types to prevent such issues."
       }
     ]
   },
   {
-    "slug": "how-to-fix-python-list-index-out-of-range-error-with-examples",
-    "title": "How to Fix Python List Index Out of Range Error with Examples",
+    "slug": "how-to-fix-import-error-no-module-named-in-python",
+    "title": "How to Fix ImportError: No Module Named in Python - Beginner's Guide",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to understand and fix the common Python 'list index out of range' error with simple explanations and practical code examples. Perfect for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=wpmXETzX6xc",
+    "description": "Learn how to fix the ImportError: No module named error in Python with clear explanations, practical examples, and solutions for beginners. Understand Python imports, modules, and package management.",
+    "videoUrl": "https://www.youtube.com/watch?v=xdRSuuO-7Ps",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you’re new to Python, you might have encountered an error like 'IndexError: list index out of range.' This is a very common issue when working with lists, one of Python's core data structures. In this article, you’ll learn exactly what this error means, why it happens, and how to fix it using simple examples. Understanding this will also help you work better with other Python concepts like loops, conditional statements, and string indexing."
+        "value": "When you start programming in Python, you might encounter an error like ImportError: No module named 'something'. This error can be confusing if you are new to Python modules, imports, or package management. This article will explain what this error means and show you simple ways to fix it so you can keep coding without frustration."
       },
       {
         "type": "paragraph",
-        "value": "The 'list index out of range' error occurs when you try to access an item at a position or index that doesn’t exist in the list. Python lists are indexed starting from 0, so if your list has 3 items, valid indexes are 0, 1, and 2. Trying to use an index like 3 or higher will cause this error because Python can’t find the item at that position. This error often happens when we loop incorrectly, forget the list length, or manually try to access an incorrect index."
+        "value": "The ImportError: No module named occurs when Python can't find the module you're trying to use. Modules in Python are files or packages that contain code you want to include in your program. This error means your Python environment doesn't know where to look for that module—either because it's not installed, the name is wrong, or Python’s module search path doesn’t include it. Understanding how Python imports modules and how package management with tools like pip works is key to solving this."
       },
       {
         "type": "code",
-        "value": "my_list = [10, 20, 30]\nprint(my_list[3])  # This will cause IndexError\n\n# Valid indexes are 0, 1, 2 only"
+        "value": "import requests\n\nresponse = requests.get('https://api.example.com/data')\nprint(response.status_code)"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, you should always check that the index you use falls within the valid range of the list. Use the len() function to get the correct length of the list, then make sure your index is less than that length. If you are using a for loop to access list items, it’s safer to loop over the range of len(your_list) or directly iterate over the list elements without indexing. Another helpful practice is to use conditional statements to verify that the index exists before accessing it."
+        "value": "For example, if you run this code but get the error ImportError: No module named 'requests', it means the requests library is not installed in your environment. To fix this, you need to install the missing module. You can do this by running pip install requests in your command line or terminal. Make sure you are using the right version of pip that matches your Python interpreter. In some cases, if you have multiple Python versions, you might need to run python3 -m pip install requests or python -m pip install requests. Checking whether your Python path includes the folder where external packages are installed can also help."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake is assuming that lists automatically resize or that index numbers start at 1 instead of 0, which is not true in Python. Another pitfall is modifying a list inside a loop that iterates over its indexes, which can change the list length unexpectedly, causing the index out of range error. Also, when slicing or accessing elements from other data types like strings or tuples, similar index rules apply, so it’s important to understand indexing thoroughly."
+        "value": "Common mistakes include misspelling the module name in the import statement, confusing packages with different names (like 'Pillow' for images but importing 'PIL'), or forgetting to activate a virtual environment where the packages are installed. Also, sometimes the module is installed globally but not accessible to your current project, especially if you're using isolated Python environments. Another frequent issue is trying to import from a file that shares the same name as a standard library module, causing conflicts."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the 'list index out of range' error happens because you asked for an index that doesn’t exist in your list. Always remember to check the list's length using len(), be careful when writing loops or accessing elements by index, and use safe programming patterns like iteration over elements instead of manual indexes. Mastering this will make your Python code more reliable and deepen your understanding of list indexing, loops, and error handling."
+        "value": "To summarize, ImportError: No module named is a common error that happens when Python cannot locate the module you want to use. The most effective fixes are installing missing packages with pip, checking your import statements for correctness, and understanding Python environments and paths. Learning these basics about Python imports, package management, and environment setup will help you avoid this error and write smoother Python code."
       }
     ]
   },
   {
-    "slug": "how-to-fix-typeerror-nonetype-object-is-not-callable-in-python",
-    "title": "How to Fix TypeError: 'NoneType' Object Is Not Callable in Python",
+    "slug": "how-to-fix-python-typeerror-unsupported-operand-type",
+    "title": "How to Fix Python TypeError: unsupported operand type",
     "language": "python",
     "type": "errors",
-    "description": "Learn why the Python error 'TypeError: NoneType object is not callable' happens and how to fix it with clear examples and practical tips for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=hLnADXliDCU",
+    "description": "Learn what the Python TypeError: unsupported operand type means, why it happens, and how to fix it with clear examples and practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=-4wq2w4JeLM",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to Python, you might have encountered the error: TypeError: 'NoneType' object is not callable. This error can be confusing, but don't worry! It usually happens when you accidentally try to use None like a function. In this article, we'll explain what this error means, why it happens, and how you can fix it, using clear Python code examples. Understanding this will also help you avoid similar issues with other common errors like AttributeError or NameError."
+        "value": "If you’re new to Python programming, you might have encountered the error message TypeError: unsupported operand type(s) when trying to use operators like +, -, *, or /. This error can be confusing at first, but it’s a common issue related to Python’s type system and how it handles operations between different data types. In this article, we’ll explain what causes this error, show examples, and guide you step-by-step on how to fix it."
       },
       {
         "type": "paragraph",
-        "value": "The error TypeError: 'NoneType' object is not callable means you tried to \"call\" an object that is really None. Remember, None is a special data type that represents 'nothing' or 'no value' in Python. Calling means putting parentheses () after something, usually functions. For example, if you write some_var(), you're calling some_var as a function. If some_var is None instead of a function, Python gets confused and gives this error. This often happens when a function or method is expected to return a value but returns None, or if you accidentally overwrite a function variable with None."
+        "value": "The error TypeError: unsupported operand type means you tried to perform an operation between two objects (operands) that don’t support that operation together. For example, Python doesn’t allow you to add a string and an integer directly because Python doesn’t know how to combine these two different types using the + operator. Understanding Python data types and operator overloading helps clarify why this happens. The error usually occurs with types like strings, integers, lists, or custom objects."
       },
       {
         "type": "code",
-        "value": "def greet():\n    print('Hello!')\n\nsay_hello = greet  # Assign function to a variable\n\nsay_hello()  # This works fine and prints 'Hello!'\n\nsay_hello = None  # Now the variable points to None\n\nsay_hello()  # This causes TypeError: 'NoneType' object is not callable"
+        "value": "number = 10\ntext = \"5\"\nresult = number + text\n# This will raise TypeError: unsupported operand type(s) for +: 'int' and 'str'"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, you need to make sure you only call functions or callable objects, not None. Check if any variable or function you call might have been assigned None by mistake. A common fix is renaming variables properly or avoiding overwriting functions with other types. If it comes from a function returning None, double-check your function code or add conditions before calling. Debugging tools like print statements or using the built-in type() function can help you find which variable is None. You can also safeguard your code by adding checks, for example: if my_func is not None: my_func()."
+        "value": "To fix this error, you need to make sure both operands are compatible with the operation you want to perform. One common solution is to convert types explicitly. In the example above, converting the string '5' to an integer allows the addition to work. Alternatively, if you want to concatenate instead of adding numbers, convert integers to strings. Using built-in functions like int() and str() is key for proper type conversion. This also applies when working with lists or using other operators."
       },
       {
         "type": "paragraph",
-        "value": "Many beginners overwrite function names by assigning None or other values to them, causing this error. Another common mistake is forgetting to add a return statement, which results in a function returning None by default. For example, if you expect a function to return another function but it doesn’t explicitly return anything, you might end up trying to call None. Also, be cautious about using built-in functions or methods incorrectly, and understand the difference between variables, functions, and return values, which are important for preventing other errors like TypeErrors or AttributeErrors."
+        "value": "A common mistake is assuming Python will automatically convert types for you. Python is strict and requires explicit conversions to avoid ambiguity. Another error is mixing incompatible types, like concatenating a list and an integer or trying to multiply a string by a float. Always check variable types using the type() function to debug type errors. Understanding how Python handles arithmetic, strings, and data structures like lists will help prevent these issues."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the TypeError 'NoneType' object is not callable in Python occurs when you try to call None as if it were a function. This often results from assigning None to a variable meant to hold a function or from functions that don’t return anything being used incorrectly. By carefully managing your variables, checking function returns, and understanding how function calls work, you can easily avoid and fix this error. Improving your debugging skills with tools like type checks and clear naming conventions will also help you prevent similar issues in your Python programming journey."
+        "value": "In summary, the TypeError: unsupported operand type happens because Python can’t perform the requested operation between the given data types. The fix is to ensure compatible types by using explicit conversions or correct operators. Becoming comfortable with Python data types, type casting, and common operations like arithmetic and string manipulation will greatly reduce such errors. Always remember to check your types before performing operations and debug with type() to understand what you’re working with."
       }
     ]
   },
   {
-    "slug": "how-to-write-complex-sql-joins-with-examples",
-    "title": "How to Write Complex SQL Joins with Examples: A Beginner's Guide",
+    "slug": "how-to-join-multiple-tables-in-sql-with-examples",
+    "title": "How to Join Multiple Tables in SQL: Step-by-Step Tutorial with Examples",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to write complex SQL joins with clear examples and practical tips. Understand different join types, combining multiple tables, and avoid common mistakes.",
-    "videoUrl": "https://www.youtube.com/watch?v=Yh4CrPHVBdE",
+    "description": "Learn how to join multiple tables in SQL with clear examples. This beginner-friendly guide explains table joins, syntax, and common mistakes to avoid when combining data.",
+    "videoUrl": "https://www.youtube.com/watch?v=pPvZQPE-j7A",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL joins are essential for combining data from multiple tables in a database. When you need to analyze information spread across several tables, understanding how to write complex joins helps you fetch exactly what you need. This article breaks down complex SQL joins clearly for beginners, with easy-to-follow examples and practical tips on using related concepts like inner joins, outer joins, subqueries, and aliases."
+        "value": "When working with databases, you often need to combine data from more than one table. SQL provides a powerful way to do this using JOINs. This article will explain how to join multiple tables in SQL with easy-to-follow examples, making it perfect for beginners. By the end, you'll understand how to use INNER JOIN, LEFT JOIN, and other types to retrieve comprehensive results across tables."
       },
       {
         "type": "paragraph",
-        "value": "Complex SQL joins mean using more than one join operation in a single query or using advanced join types like LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN, and CROSS JOIN. This lets you connect tables not just based on simple key matches but also for cases where you want to include unmatched rows or combine data in special ways. Joins are fundamental in relational databases along with concepts like filtering with WHERE clauses, group aggregations, and table aliases for clarity."
+        "value": "Joining tables means you are combining rows from two or more tables based on a related column between them. Typically, tables are connected by keys such as primary keys and foreign keys. Joining helps you pull relevant data from multiple tables into one result set. Understanding JOINs is crucial for writing complex database queries and working with concepts like subqueries and database normalization."
       },
       {
         "type": "code",
-        "value": "SELECT e.employee_id, e.name, d.department_name, m.name AS manager_name\nFROM employees e\nINNER JOIN departments d ON e.department_id = d.department_id\nLEFT JOIN employees m ON e.manager_id = m.employee_id\nWHERE d.location = 'New York';"
+        "value": "SELECT orders.order_id, customers.customer_name, products.product_name\nFROM orders\nINNER JOIN customers ON orders.customer_id = customers.customer_id\nINNER JOIN products ON orders.product_id = products.product_id;"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, we combine three tables from the employees database. First, we use an INNER JOIN to get employees with matching departments. Then a LEFT JOIN lets us include all employees even if they don't have a manager (showing NULL if none). Using table aliases (e, d, m) simplifies reading the SQL and prevents confusion between columns. To use complex joins properly, always decide what type of join you need based on whether unmatched rows should be included, and test your query results carefully."
+        "value": "To join tables properly, you need to specify the type of join and the condition that relates the tables. INNER JOIN returns rows when there is a match in both tables. LEFT JOIN returns all rows from the left table, and matched rows from the right table, showing NULLs if no match exists. Using WHERE clauses along with JOINs allows you to filter results effectively. Properly indexing keys in tables can improve join performance and query speed."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes when writing complex joins often include forgetting to specify join conditions, causing cartesian products that return huge unintended result sets. Another frequent error is mixing join types without understanding their impact, such as using INNER JOIN when a LEFT JOIN is needed to keep all rows. Beginners also sometimes confuse filter conditions in WHERE versus ON clauses – the WHERE clause filters after the join, while ON limits rows during the join itself. Be mindful of ambiguous column names without aliases, which can cause syntax errors."
+        "value": "A common mistake is forgetting to specify the join condition, which can lead to a Cartesian product (every row combined with every other row), resulting in huge, incorrect datasets. Another error is mixing join types incorrectly, or misunderstanding when to use LEFT JOIN versus INNER JOIN. Also, aliasing tables without clear names can make your query harder to read, so use meaningful aliases when joining multiple tables."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, mastering complex SQL joins involves understanding different join types and how they interact when combining multiple tables. Use INNER and OUTER joins thoughtfully, apply table aliases for readability, and pay attention to join conditions to avoid accidental cartesian joins. Other SQL concepts like subqueries, aggregations, and filtering complement joins and help you write efficient queries that deliver precise data for analysis."
+        "value": "In summary, joining multiple tables in SQL is essential for combining data from different sources effectively. Mastering JOIN syntax and understanding how to use keys will help you write efficient and accurate queries. Practice joins alongside learning filtering with WHERE, grouping with GROUP BY, and sorting with ORDER BY to become more confident in SQL querying."
       }
     ]
   },
   {
-    "slug": "explained-null-value-constraint-violation-sql-examples",
-    "title": "Explained: Null Value Constraint Violation in SQL with Examples",
+    "slug": "how-to-fix-sql-syntax-errors-near-on-clause",
+    "title": "How to Fix SQL Syntax Errors Near ON Clause: A Beginner's Guide",
     "language": "sql",
     "type": "errors",
-    "description": "Learn what a null value constraint violation error means in SQL, why it happens, and how to fix it with clear examples. A beginner-friendly guide to avoid common mistakes with NOT NULL constraints.",
-    "videoUrl": "https://www.youtube.com/watch?v=-8bYtApJNos",
+    "description": "Learn how to identify and fix common SQL syntax errors near the ON clause with clear explanations and practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rkqYjcGWO3Y",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, you might encounter the error message 'null value constraint violation' or something similar. If you are new to SQL, this error can be confusing. This article explains what the null value constraint violation error means, why it occurs, and how to fix it. Understanding this error is important when working with database constraints like NOT NULL, primary keys, and other data validation rules."
+        "value": "If you've ever run a SQL query involving JOINs and encountered an error message mentioning a syntax error near the ON clause, you're not alone. This is a common stumbling block for beginners working with SQL joins, especially INNER JOIN, LEFT JOIN, and other related clauses. This article will explain what causes this error, how the ON clause works within SQL joins, and how to fix these syntax problems quickly and confidently."
       },
       {
         "type": "paragraph",
-        "value": "A null value constraint violation happens when you try to insert or update a table column that has been defined with a NOT NULL constraint, but you assign or leave a NULL value for that column. The NOT NULL constraint is a common rule used in SQL to ensure that some columns always have actual data. This is different from allowing NULL values, which are treated as unknown or missing data. The database rejects the operation to prevent invalid or incomplete data from being saved."
+        "value": "The ON clause in SQL is used to specify the condition that links tables together in a JOIN operation. It tells the database how to match rows from one table with rows in another, typically comparing key columns like IDs. When there is a syntax error near the ON clause, it usually means that there is a problem with how this condition is written. This can be due to missing keywords, incorrect column references, misplaced parentheses, or other SQL syntax issues related to JOINs or WHERE clauses."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE users (\n  id INT PRIMARY KEY,\n  username VARCHAR(50) NOT NULL,\n  email VARCHAR(100) NOT NULL\n);\n\n-- Trying to insert NULL in username, which has NOT NULL constraint\nINSERT INTO users (id, username, email) VALUES (1, NULL, 'user@example.com');\n\n-- This will cause an error:\n-- ERROR: null value in column \"username\" violates not-null constraint"
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nINNER JOIN departments\nON employees.department_id = departments.id;"
       },
       {
         "type": "paragraph",
-        "value": "To fix a null value constraint violation, you need to provide a valid, non-null value for every column defined with NOT NULL in your INSERT or UPDATE statements. Alternatively, if the column can logically have unknown or missing data, you could remove the NOT NULL constraint, but this should be done carefully in the context of your database design. When inserting data, check your SQL code to make sure all mandatory columns receive proper values. This also relates to understanding default values and how primary key constraints work, since those columns usually don't accept NULL either."
+        "value": "To fix syntax errors near the ON clause, start by checking that you have the JOIN keyword correctly placed and that the ON clause immediately follows. Also verify that you are using valid table names and column names without typos. Remember that the ON clause needs a valid comparison, such as using the = operator to link foreign keys. Avoid putting WHERE clause conditions inside the ON clause. Using proper indentation and formatting is another helpful practice to prevent and spot syntax issues. If your JOIN involves multiple tables, each JOIN must have its own ON clause or USING clause."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes that cause null value constraint violations include forgetting to specify a required column value during inserts, assuming that the database will fill in default data (which happens only if a DEFAULT value is set), or mistakenly passing NULL variables in application code. Another typical error is when altering table schemas without updating all existing data to conform to new NOT NULL constraints. Knowing how NULL values interact with constraints and understanding data types in SQL is important to avoid these issues."
+        "value": "Some common mistakes causing syntax errors near ON include missing the ON keyword entirely, writing ON before the JOIN keyword, using incorrect operators like a comma instead of =, or forgetting to qualify columns with their table names when joining multiple tables. Another frequent error is placing filtering conditions that should be in the WHERE clause inside the ON clause, which can cause logic issues even if not always a syntax error. Understanding how JOIN, ON, WHERE, and related SQL clauses interact is critical for writing error-free queries."
       },
       {
         "type": "paragraph",
-        "value": "In summary, a null value constraint violation error indicates that your SQL operation tried to put a NULL where the database expects a definite value because of a NOT NULL constraint. Always ensure columns marked NOT NULL have proper data when inserting or updating rows. By understanding SQL constraints, including NOT NULL, primary keys, and default values, you can design databases that prevent incomplete data and avoid these errors in your queries."
+        "value": "In summary, syntax errors near the ON clause in SQL are usually caused by incorrect or missing keywords, improper join conditions, or misplacement of related SQL clauses. By carefully writing your JOIN statements, correctly referencing table columns, and keeping filtering separate in WHERE clauses, you can avoid these errors. Regularly testing and formatting your SQL code also helps catch syntax issues early. Mastering SQL joins and their clauses like ON is fundamental when working with multiple tables in databases."
       }
     ]
   }
