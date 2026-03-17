@@ -1,269 +1,273 @@
 [
   {
-    "slug": "javascript-async-await-explained-with-examples",
-    "title": "JavaScript Async Await Explained with Practical Examples",
+    "slug": "how-to-debounce-input-events-in-javascript-with-examples",
+    "title": "How to Debounce Input Events in JavaScript with Examples",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn JavaScript async await with simple explanations and practical examples to write cleaner, easier-to-read asynchronous code.",
+    "description": "Learn how to debounce input events in JavaScript to optimize performance and improve user experience with simple examples and step-by-step instructions.",
+    "videoUrl": "https://www.youtube.com/watch?v=cjIswDCKgu0",
     "content": [
       {
         "type": "paragraph",
-        "value": "Understanding asynchronous JavaScript code is essential for modern web development. The async and await keywords offer a clean and straightforward way to handle promises and asynchronous operations, making your code easier to write and debug. In this article, we'll explore what async-await really means, see simple examples, and learn how to avoid common mistakes."
+        "value": "When you're building web applications, handling input events efficiently is crucial to maintaining good performance and user experience. For beginners, it’s common to react to every keystroke in an input field, but this can cause your app to slow down or perform unnecessary operations. This is where debouncing comes in. In this tutorial, we'll explore what debouncing is, how it works in JavaScript, and provide easy-to-follow examples so you can add debouncing to your input event handlers."
       },
       {
         "type": "paragraph",
-        "value": "Async-await is a syntax built on top of promises that allows you to write asynchronous code that looks and behaves like synchronous code. When a function is declared with the async keyword, it means this function will always return a promise. Inside an async function, you can use the await keyword before a promise to pause the execution until that promise resolves, making your code wait without blocking the main thread."
+        "value": "Debouncing is a programming technique used to limit how often a function is executed. When applied to input events like keypress or input, it ensures that the function runs only after the user has stopped typing for a certain amount of time. Instead of reacting immediately and repeatedly to every event, debouncing waits until the input activity settles down, preventing unnecessary calls and improving performance. This is especially helpful when working with tasks like API calls, search filtering, or input validation, where you don’t want to overload the system with frequent updates."
       },
       {
         "type": "code",
-        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}\n\nfetchData();"
+        "value": "function debounce(func, delay) {\n  let timeoutId;\n  return function(...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => {\n      func.apply(this, args);\n    }, delay);\n  };\n}\n\nconst input = document.querySelector('#search');\n\nfunction handleInput(event) {\n  console.log('Search query:', event.target.value);\n}\n\nconst debouncedInput = debounce(handleInput, 300);\n\ninput.addEventListener('input', debouncedInput);"
       },
       {
         "type": "paragraph",
-        "value": "To use async and await properly, always remember to mark your function as async if you want to use await inside it. Handle possible errors by wrapping your awaited code in try/catch blocks to catch rejected promises or network problems. Avoid placing await outside of async functions, as this will cause syntax errors. Also, consider that await pauses execution, so use it wisely inside loops or concurrent operations to avoid unnecessary delays."
+        "value": "To use debouncing properly, create a reusable debounce function that takes your event handler and a delay time in milliseconds. The debounce function returns a new version of your handler that postpones execution until after the user has stopped typing for the specified delay. Attach this debounced function to events like 'input' or 'keyup'. This approach avoids unnecessary event handler calls, reduces CPU usage, and can also prevent excessive network requests, such as those done inside fetch calls. By doing this, you can improve responsiveness in your user interfaces and avoid issues commonly related to event handling and callback functions."
       },
       {
         "type": "paragraph",
-        "value": "Some common mistakes beginners make include: forgetting to add the async keyword to functions where they use await, using await on non-promise values which is unnecessary, and not handling errors with try/catch which can cause unhandled promise rejections. Another typical issue is awaiting in loops without concurrency, slowing down the process. Learning to use Promise.all() with await can solve this in some cases."
+        "value": "One common mistake is creating a new debounce function inside the event listener or using it incorrectly so that the debounce state resets too often, making it ineffective. Another issue is setting the delay too short, causing the function to run almost immediately and defeating the purpose of debouncing. Also, don’t confuse debouncing with throttling; debouncing delays execution until the event stops, while throttling limits the function to run once every fixed period. Understanding the differences and properly managing closures and this context are important when using debounce in JavaScript events."
       },
       {
         "type": "paragraph",
-        "value": "In summary, async and await provide a powerful and readable way to deal with asynchronous JavaScript code. By marking functions as async and awaiting promises inside, you can write code that looks synchronous but runs efficiently without blocking. Always remember error handling and avoid common pitfalls to get the most out of this helpful syntax in your projects."
+        "value": "In summary, debouncing is an essential technique to control how often your input event handlers execute, which greatly improves performance and user experience in JavaScript applications. By creating a simple debounce helper and applying it to input events, you avoid redundant function calls and optimize processes like live search, input validation, or API requests. Remember to adjust your debounce delay to fit your app’s needs and avoid common pitfalls like resetting the debounce function every event. Learning debouncing also helps build a stronger foundation in event handling, callback functions, and asynchronous programming concepts in JavaScript."
       }
     ]
   },
   {
-    "slug": "how-to-fix-cannot-read-property-of-undefined-in-javascript",
-    "title": "How to Fix 'Cannot Read Property of Undefined' Error in JavaScript",
+    "slug": "how-to-fix-typeerror-undefined-is-not-a-function-in-javascript",
+    "title": "How to Fix TypeError: undefined is not a function in JavaScript",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn why the 'Cannot read property of undefined' error happens in JavaScript and how to fix it with easy-to-understand examples and tips.",
+    "description": "Learn what causes the JavaScript error 'TypeError: undefined is not a function' and how to fix it with simple, clear examples and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=dt4i2i6E9Vc",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you are new to JavaScript, encountering the error message 'Cannot read property of undefined' can be frustrating and confusing. This error stops your code from running and usually happens when you try to access a property or method of a variable that hasn’t been set or assigned yet. In this article, we’ll explain exactly what this error means and how you can fix it quickly in your own code."
+        "value": "If you've been coding in JavaScript, you might have run into the error 'TypeError: undefined is not a function.' This happens when your code tries to call something as a function, but JavaScript finds that the value is undefined instead. This article will explain what this error means, show simple examples, and guide you through practical fixes, so you can resolve it quickly and keep your code running smoothly."
       },
       {
         "type": "paragraph",
-        "value": "The error 'Cannot read property of undefined' means that JavaScript was expecting an object to exist but found the value 'undefined' instead. Since 'undefined' has no properties or methods, trying to access any property on it causes this error. It often happens when a variable is supposed to hold an object or array but ends up being undefined because it wasn’t assigned properly or some data didn’t load as expected."
+        "value": "This error typically occurs when you call a function on a variable or object property that hasn't been properly defined or initialized. JavaScript expects a function, but instead it finds the value undefined, which is not callable. This can happen for various reasons, such as typos in function names, forgetting to assign a function before calling it, or confusing object properties that do not contain functions. Understanding this error is essential as it often indicates where your code is missing or misusing functions."
       },
       {
         "type": "code",
-        "value": "let user;\nconsole.log(user.name); // Error: Cannot read property 'name' of undefined\n\nlet users = [];\nconsole.log(users[0].id); // Error: Cannot read property 'id' of undefined"
+        "value": "const myObject = {};\nmyObject.sayHello(); // TypeError: undefined is not a function\n\nfunction greet() {\n  console.log('Hello!');\n}\n\nlet greetFunc;\ngreetFunc(); // TypeError: undefined is not a function"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, always check if your variable is defined before accessing its properties. You can use conditional statements or optional chaining (?.) to prevent the error from occurring. For example, if you’re not sure if 'user' is defined, you can write 'user?.name' instead of 'user.name'. It will safely return undefined rather than throwing an error if 'user' is undefined. Also, make sure variables are properly assigned and your data is loaded correctly before you try to use it."
+        "value": "To fix this error, first check that the function you are trying to call is defined before calling it. If you're calling a method on an object, ensure that the method exists on that object and is spelled correctly. If you assigned a function to a variable, confirm the assignment actually happened and the variable is not undefined. Using techniques like console logging, debugger, or checking with typeof before calling can help you avoid this issue. For example, you can test if a variable is a function like this: if (typeof myFunc === 'function') { myFunc(); }"
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes that lead to this error include trying to access properties on variables that haven’t been initialized, wrongly assuming an array or object has data, or missing asynchronous steps such as waiting for data to load from an API. Another usual cause is typos in variable names or failing to declare variables properly with 'let' or 'const'. Avoid these mistakes by adding checks and debugging with console logs to understand what your variables hold."
+        "value": "Common mistakes that cause this error include simple typos in function names, forgetting to return a function from another function, or trying to call functions on data types that do not support them like strings or numbers without the proper methods. Another tricky pitfall is asynchronous code where a function may not be ready or assigned yet when you try to call it. Handling such cases carefully will prevent 'undefined is not a function' errors and is closely related to concepts like variable scope, function declarations, and JavaScript objects."
       },
       {
         "type": "paragraph",
-        "value": "In summary, 'Cannot read property of undefined' is a common JavaScript error that happens when you try to access properties on undefined values. The best way to fix it is by ensuring your variables are properly assigned and by using safe access methods like optional chaining and null checks. Taking time to carefully check variable values before using them will help you write error-free JavaScript code and improve your debugging skills."
+        "value": "In summary, 'TypeError: undefined is not a function' means your code expected a function but found undefined instead. The key to fixing it lies in ensuring that your functions are properly declared or assigned before you call them. Checking spelling, object properties, and the order of your code execution will help reduce these errors. Along with understanding JavaScript functions, method calls, and variable assignments, addressing this error will improve your ability to debug and write reliable JavaScript code."
       }
     ]
   },
   {
-    "slug": "typescript-enum-vs-union-types-explained-with-examples",
-    "title": "TypeScript Enum vs Union Types Explained with Examples",
+    "slug": "how-to-handle-asynchronous-operations-with-async-await-in-typescript",
+    "title": "How to Handle Asynchronous Operations with Async/Await in TypeScript: A Beginner's Guide",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn the key differences between TypeScript enums and union types with clear explanations and practical examples. Understand when and how to use each in your code.",
+    "description": "Learn how to handle asynchronous operations in TypeScript using async and await. This tutorial explains the concept with clear examples, common mistakes, and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=li7FzDHYZpc",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to TypeScript or exploring different ways to define a set of fixed values, you might have encountered both enums and union types. Both serve a similar purpose: restricting variables to a limited set of values. Understanding the differences between them and when to use each can make your code more readable, maintainable, and even safer."
+        "value": "Understanding asynchronous operations is essential when working with TypeScript, as many tasks like fetching data, reading files, or waiting for timers don't complete instantly. This tutorial will explain how to use the async and await keywords in TypeScript to write clean, readable asynchronous code without getting stuck in complicated callbacks or promise chains."
       },
       {
         "type": "paragraph",
-        "value": "TypeScript enums are a special feature that allow you to define a named set of constants. They create an object with both keys and values at runtime, which makes them useful when you need a meaningful representation for a set of options. On the other hand, union types are a compile-time-only construct that allows you to specify that a variable can be one of several literal types, usually string or number literals. Union types do not exist in the compiled JavaScript output."
+        "value": "Async/await is a syntax introduced in modern JavaScript and supported in TypeScript that allows you to write asynchronous code as if it were synchronous. When a function is marked with async, it automatically returns a Promise. Inside an async function, you can use the await keyword to pause the execution until the awaited Promise resolves or rejects. This approach helps avoid callback hell and makes working with Promises easier to follow. It relates closely to concepts like Promises, error handling with try/catch, and event loops."
       },
       {
         "type": "code",
-        "value": "enum Direction {\n  Up = \"UP\",\n  Down = \"DOWN\",\n  Left = \"LEFT\",\n  Right = \"RIGHT\"\n}\n\n// Usage of Enum\nfunction moveEnum(direction: Direction) {\n  console.log(`Moving: ${direction}`);\n}\n\nmoveEnum(Direction.Up); // Output: Moving: UP\n\n// Using Union Types\ntype DirectionUnion = \"UP\" | \"DOWN\" | \"LEFT\" | \"RIGHT\";\n\nfunction moveUnion(direction: DirectionUnion) {\n  console.log(`Moving: ${direction}`);\n}\n\nmoveUnion(\"LEFT\"); // Output: Moving: LEFT"
+        "value": "async function fetchData(): Promise<string> {\n  // Simulate a network request using a Promise\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve('Data fetched successfully');\n    }, 1000);\n  });\n}\n\nasync function main() {\n  console.log('Start fetching data...');\n  const data = await fetchData();  // Pause here until fetchData resolves\n  console.log(data);\n  console.log('Done fetching data');\n}\n\nmain();"
       },
       {
         "type": "paragraph",
-        "value": "To use enums correctly, you import or declare the enum and then refer to its members with dot notation. This helps reduce typos since you’re accessing predefined named values. Union types are best when you want to keep your code lightweight and don’t need the runtime object that enums produce. With unions, you simply use strings or numbers directly, relying on TypeScript's type checking to prevent invalid assignments."
+        "value": "To use async/await properly in TypeScript, always mark functions that use await with the async keyword, as this enables Promise-based returns and allows the use of await inside. When awaiting something, ensure that it is a Promise or thenable value, or the code won’t pause correctly. Also, wrapping your await calls in try/catch blocks is important for graceful error handling in asynchronous flows. Understanding how async functions relate to Promises and how TypeScript's type system infers return types will help you write safer and more predictable asynchronous code."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake beginners make is confusing enum members with their string values. For example, it's easy to accidentally pass a plain string instead of an enum member, which might not be caught if the enum is not used strictly. Another error is overusing enums when simple union types would suffice, which can add unnecessary complexity or runtime overhead if your project is targeting smaller bundles or strict tree-shaking."
+        "value": "Common mistakes include forgetting to mark functions as async when using await inside, which causes syntax errors. Another mistake is forgetting to handle rejected Promises with try/catch or .catch(), leading to unhandled promise rejections. Developers sometimes misuse await with non-Promise values, thinking it causes blocking behavior, but await only waits for Promise resolutions, making it unnecessary on synchronous values. Mixing callbacks with async/await can also lead to confusing code flow, so it’s best to stick with one asynchronous pattern."
       },
       {
         "type": "paragraph",
-        "value": "In summary, enums and union types are both powerful ways to restrict possible values in TypeScript. Enums provide a convenient, named object at runtime and are useful if you need to reuse values across your code or access them dynamically. Union types are simpler, more lightweight options perfectly suited for defining specific sets of valid literals without adding extra runtime code. Choosing between them depends on your use case, project size, and preference for runtime features versus compile-time checks."
+        "value": "In summary, async and await in TypeScript help you manage asynchronous operations in a clear and manageable way, by turning Promise handling into a readable, synchronous-like flow. By mastering these keywords alongside Promises, error handling, and typing mechanisms, you'll write cleaner asynchronous code that is easier to debug and maintain. Practice using async/await with different async tasks like API calls or file operations to gain confidence and write robust TypeScript applications."
       }
     ]
   },
   {
-    "slug": "how-to-fix-typescript-property-does-not-exist-on-type-error",
-    "title": "How to Fix TypeScript Property Does Not Exist on Type Error",
+    "slug": "how-to-fix-type-undefined-is-not-assignable-to-type-error-in-typescript",
+    "title": "How to Fix Type 'undefined' is Not Assignable to Type Error in TypeScript",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to understand and fix the 'Property does not exist on type' error in TypeScript with simple explanations and practical examples for beginners.",
+    "description": "Learn what causes the TypeScript error 'Type undefined is not assignable to type', why it happens, and practical ways to fix it with easy examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=kwEjI_B9WY0",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to TypeScript, you might have encountered an error that says something like \"Property 'xyz' does not exist on type 'ABC'\". This can be confusing if you're used to JavaScript where you can access any property on an object without errors. This article will explain what this error means, why it happens, and how you can fix it quickly."
+        "value": "If you've recently started using TypeScript, you might have encountered the error message: \"Type 'undefined' is not assignable to type ...\". This error pops up when TypeScript’s type checker sees that a variable, parameter, or property might be undefined, but is expected to have another type. Understanding why this happens and how to fix it is essential for writing smooth, bug-free TypeScript code. In this article, we'll break down this error step-by-step and show you practical solutions to resolve it."
       },
       {
         "type": "paragraph",
-        "value": "The error \"Property does not exist on type\" occurs when TypeScript is checking your code and sees you trying to access a property on an object that hasn't been defined or declared in its type. TypeScript enforces type safety and strict checking, so it prevents you from accessing properties that it knows don't exist on an object type based on the type you gave or inferred for the object."
+        "value": "At its core, TypeScript is a typed superset of JavaScript that adds static typing to catch errors before your code runs. When you see the error \"Type 'undefined' is not assignable to type 'SomeType'\", TypeScript is warning you that the variable or value might be undefined, but your type declarations only allow other types. This often happens because of how TypeScript treats undefined values, how union types work, and how strict null checks affect your code. It's important to grasp related concepts like optional properties, type assertions, and default parameters since they often interplay with this error."
       },
       {
         "type": "code",
-        "value": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = {\n  name: 'Alice',\n  age: 30\n};\n\nconsole.log(user.email); // Error: Property 'email' does not exist on type 'User'."
+        "value": "function greet(name: string) {\n  console.log('Hello, ' + name.toUpperCase());\n}\n\ngreet(undefined); // Error: Argument of type 'undefined' is not assignable to parameter of type 'string'."
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, you need to make sure the property you're trying to access is declared within the type or interface of the object you're using. If you want to add a new property, update the interface or type accordingly. Alternatively, if the property may or may not exist, you can declare it as optional by adding a question mark (?). Another solution is to use type assertions or indexing in cases where you cannot modify the type but know the property exists."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  name: string;\n  age: number;\n  email?: string; // optional property\n}\n\nconst user: User = {\n  name: 'Alice',\n  age: 30\n};\n\n// Now this is valid because email is optional\nconsole.log(user.email);\n\n// Or using type assertion\nconsole.log((user as any).email);"
+        "value": "To fix this error, you need to handle the possibility that a value might be undefined. One common way is to use union types, which let you explicitly say a variable can be a string or undefined (string | undefined). Then, before using the value, you check if it's defined. Another method is to provide default values through default parameters or by using the nullish coalescing operator (??). Using optional chaining when accessing properties also helps avoid similar errors. If you are certain a value is never undefined but TypeScript complains, you can use a type assertion with the non-null assertion operator (!)."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake is trying to access properties that are dynamically added but not declared in the type. Another is forgetting to update interfaces or types when your data structure changes. Avoid using 'any' type frequently to bypass errors because it defeats TypeScript's purpose. Instead, update your types to match your actual data shapes to keep the benefits of type checking."
+        "value": "A common mistake beginners make is ignoring the possibility of undefined values or trying to forcibly cast undefined to another type without proper checks, which can cause runtime errors. Another is mixing strict null checks off with undefined handling, leading to inconsistent behavior. Sometimes, people forget to mark function parameters as optional with a question mark (?), or they don't provide fallback values, resulting in this error. Understanding how TypeScript's strictNullChecks compiler option influences undefined and null handling is also crucial for avoiding confusion."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the 'Property does not exist on type' error is TypeScript's way of telling you that the property you're trying to use isn't part of the object's type definition. Fixing it involves updating your types or interfaces to accurately describe your data or using optional properties when needed. With these steps, you can avoid this error and write safer, more predictable TypeScript code."
+        "value": "In summary, the 'Type undefined is not assignable to type' error happens because TypeScript detects a value might be undefined but you expect a different type. To fix it, explicitly allow undefined using union types, add checks, use default values, or leverage optional properties and parameters. Keeping concepts like type narrowing, type assertions, and strict null checking in mind will help you write safer and cleaner TypeScript code. With practice, handling these errors will become second nature, improving your coding confidence and reducing bugs."
       }
     ]
   },
   {
-    "slug": "python-list-comprehensions-explained-with-examples",
-    "title": "Python List Comprehensions Explained with Examples",
+    "slug": "how-to-use-python-list-comprehensions-with-multiple-if-conditions",
+    "title": "How to Use Python List Comprehensions with Multiple If Conditions",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn Python list comprehensions with simple explanations and practical examples. This beginner-friendly tutorial will help you understand and use list comprehensions effectively.",
+    "description": "Learn how to use Python list comprehensions with multiple if conditions to filter and transform lists efficiently. Step-by-step beginner-friendly tutorial with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=sB5AdrW_eDo",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you are new to Python or programming in general, you might have heard about list comprehensions but aren’t sure what they are or how to use them. List comprehensions are a concise way to create lists in Python, often replacing longer for-loops with cleaner and more readable code. In this tutorial, we’ll explain what list comprehensions are, how they work, and show you practical examples so you can start using them effectively."
+        "value": "List comprehensions are a powerful and elegant way to create new lists in Python by applying expressions and filters to existing lists. When you need to include multiple filtering conditions in a list comprehension, it can seem tricky at first, especially for beginners. This tutorial will guide you step-by-step on how to effectively use multiple if conditions inside a Python list comprehension to filter items based on several rules at the same time."
       },
       {
         "type": "paragraph",
-        "value": "At its core, a Python list comprehension is a compact syntax for generating a new list by applying an expression to each item in an existing list or iterable. Instead of writing multiple lines to fill a list, you can write a single line of Python code that expresses the same idea clearly. This makes your code shorter, faster to write, and often easier to read."
+        "value": "Using multiple if conditions in a list comprehension means you apply several filters to each element before it gets included in the new list. These conditions act like a gate that every element must pass to be selected. Unlike a single if condition, multiple conditions can be combined in several ways, such as chaining them with logical operators or writing them sequentially inside the comprehension. Understanding this helps you write cleaner and more readable code when working with lists, sets, or when filtering dictionaries using dictionary comprehensions."
       },
       {
         "type": "code",
-        "value": "numbers = [1, 2, 3, 4, 5]\nsquares = [x**2 for x in numbers]\nprint(squares)  # Output: [1, 4, 9, 16, 25]"
+        "value": "numbers = range(20)\n# Select numbers that are even and greater than 10\nfiltered = [n for n in numbers if n % 2 == 0 if n > 10]\nprint(filtered)  # Output: [12, 14, 16, 18]"
       },
       {
         "type": "paragraph",
-        "value": "To use list comprehensions properly, start by understanding the syntax: [expression for item in iterable]. This means you take each item from the iterable (like a list) and apply an expression to it, then gather all the results into a new list. You can also add conditions to filter items: [expression for item in iterable if condition]. This lets you build lists based on specific criteria without extra lines of code."
+        "value": "To use multiple if conditions properly in your list comprehension, you can place them one after another, as in the example above. Python will check each condition in sequence. Alternatively, you can combine conditions with logical operators like and, or, for more complex checks, for instance: [n for n in numbers if n % 2 == 0 and n > 10]. Both methods work, and choosing one depends on readability and your specific use case. Practicing this will also improve your understanding of logical operators and conditional expressions elsewhere in Python code."
       },
       {
         "type": "paragraph",
-        "value": "A common mistake beginner programmers make is overcomplicating list comprehensions by including too many expressions or complex logic in one line. While list comprehensions are powerful, if the logic becomes too complicated, it’s better to use a regular for-loop. Also, forgetting to include the square brackets [] will cause an error because that’s what defines the comprehension as a list comprehension. Lastly, be mindful that list comprehensions create new lists and are not the best choice when you just want to process items without storing them."
+        "value": "A common mistake is to confuse how to separate multiple conditions in a list comprehension. Using commas or improperly mixing if with else inside the if clause can cause syntax errors. Also, beginners sometimes try to put multiple conditions inside a single if without linking them properly using logical operators, which leads to bugs or unexpected outputs. Remember that each if clause in a comprehension acts as a separate filter, so stacking them or combining conditions with and/or is the right approach."
       },
       {
         "type": "paragraph",
-        "value": "In summary, Python list comprehensions are a useful tool for writing concise and readable code when creating lists. They help replace traditional loops with a simple one-line format that includes an expression and optional filtering conditions. By practicing with examples and avoiding the common pitfalls, you can quickly master list comprehensions and write Python code that is both elegant and efficient."
+        "value": "In summary, using multiple if conditions in Python list comprehensions helps you filter and select data efficiently and clearly. You can write multiple if statements sequentially or connect them with logical operators inside a single if clause. This technique is especially useful when working with other Python features like loops, functions, or even dictionary comprehensions to build your coding skills progressively. Mastering list comprehensions and conditional filtering will make your Python code more concise and readable."
       }
     ]
   },
   {
-    "slug": "how-to-fix-python-indentationerror-unexpected-indent",
-    "title": "How to Fix Python IndentationError: Unexpected Indent",
+    "slug": "how-to-fix-typeerror-list-object-is-not-callable-in-python",
+    "title": "How to Fix TypeError: 'list' Object is Not Callable in Python",
     "language": "python",
     "type": "errors",
-    "description": "Learn what the Python IndentationError: unexpected indent means, why it happens, and simple step-by-step ways to fix it with clear examples.",
+    "description": "Learn what causes the TypeError: 'list' object is not callable in Python and how to fix it with simple code examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=dQ1SasLjSew",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you've started coding in Python, you might have come across the error message 'IndentationError: unexpected indent'. This error can be confusing for beginners because Python relies on indentation to understand the structure of your code. In this article, we'll explain exactly what this error means, why Python raises it, and how you can fix it easily."
+        "value": "If you've come across the error message TypeError: 'list' object is not callable in Python, you're not alone. This is a very common error when you are working with lists and functions, especially if you're new to Python. In this article, you'll learn exactly what this error means, why it happens, and how you can quickly fix it so your code runs smoothly."
       },
       {
         "type": "paragraph",
-        "value": "The error 'IndentationError: unexpected indent' happens when Python encounters an indentation (a space or tab at the beginning of a line) that it doesn't expect. Unlike many other languages that use braces or keywords to define code blocks, Python uses indentation levels. If your code suddenly has an indentation that doesn't follow the expected pattern, Python will raise this error."
+        "value": "The error TypeError: 'list' object is not callable happens when Python thinks you are trying to 'call' a list like a function. In Python, parentheses () after an object usually mean you are calling a function, like print(). However, if you accidentally use parentheses after a list variable, Python gets confused because lists are not functions and cannot be called. This error is often connected to naming issues or trying to use a list like you would use a function or method."
       },
       {
         "type": "code",
-        "value": "def greet():\nprint(\"Hello\")\n  print(\"Welcome to Python!\")  # This line has an unexpected indent"
+        "value": "my_list = [1, 2, 3]\nprint(my_list())  # This will raise TypeError: 'list' object is not callable\n\n# Another example\nlist = [4, 5, 6]\nprint(list(0))  # Also raises the same error"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, you need to check your code's indentation carefully. Make sure that all lines inside a block are indented by the same number of spaces or tabs. Avoid mixing tabs and spaces, as it can confuse Python. In the example above, the second print statement is indented without a proper block opening. The corrected code should look like this:\n\ndef greet():\n    print(\"Hello\")\n    print(\"Welcome to Python!\")"
+        "value": "To fix this error, the key is to check if you have given your list the same name as a function or if you are mistakenly adding parentheses to a list variable. A frequent cause is naming a variable list, which overrides the built-in list() function, making the original list function unavailable. Avoid using function names as variable names. Instead, use descriptive, unique names for your lists. Also, remember to access list elements using square brackets [] rather than parentheses (). For example, to get the first element of a list, use my_list[0] instead of my_list(0)."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes that cause this error include accidentally adding extra spaces or tabs before a line that shouldn't be indented, or mixing tabs and spaces inconsistently. Using an editor that shows invisible characters can help you spot these issues. Also, be mindful that blank lines should not be indented unless they are part of a block."
+        "value": "Common mistakes that lead to this error include overwriting built-in functions like list or sum with variables, accidentally adding parentheses when accessing list elements, or confusing methods like append() which are callable, with list variables. For example, calling my_list() instead of my_list will cause this error. Another common trap is using parentheses when trying to slice or index lists, which should always be done with square brackets. Understanding Python data types like lists, functions, and how to call methods versus access elements helps to avoid these errors."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the 'unexpected indent' error means that Python found indentation where it wasn't supposed to be. You can fix it by ensuring your code blocks are consistently indented, using the same number of spaces or tabs throughout, and avoiding mixing the two. Checking your editor settings and formatting your code properly will help prevent this error in the future."
+        "value": "In summary, the TypeError: 'list' object is not callable means you tried to use parentheses with a list as if it was a function. The fix is usually as simple as changing parentheses to square brackets or renaming your variable to avoid conflicting with Python built-in functions. Remember that lists are not callable functions, so you can only use parentheses to call actual functions or methods. With careful naming and good understanding of lists, variables, functions, and data types, this is one of the easiest errors to avoid in Python."
       }
     ]
   },
   {
-    "slug": "sql-join-types-explained-with-examples",
-    "title": "SQL JOIN Types Explained with Examples: A Beginner's Guide",
+    "slug": "how-to-optimize-sql-queries-for-large-datasets-with-examples",
+    "title": "How to Optimize SQL Queries for Large Datasets with Examples",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn about different SQL JOIN types with clear explanations and practical examples. Understand INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN to master SQL querying.",
+    "description": "Learn practical tips and examples to optimize SQL queries for large datasets and improve database performance efficiently.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL JOINs are essential for combining data from two or more tables based on a related column. If you’re new to SQL, understanding JOIN types is crucial because they help you build powerful queries to merge relevant data efficiently. This tutorial will explain the four main SQL JOIN types with clear examples, so you can use them confidently in your own projects."
+        "value": "When working with large datasets, writing SQL queries that run efficiently is essential to avoid long wait times and high resource usage. In this tutorial, we'll explore simple and effective strategies for optimizing SQL queries, helping you handle big data more smoothly. Understanding query optimization techniques also connects closely to related concepts like indexing, execution plans, and database normalization."
       },
       {
         "type": "paragraph",
-        "value": "JOINs work by matching rows from different tables using a common key or column, such as an ID. Different JOIN types determine which rows appear in the final result: only matched rows, all rows from one table, or all rows from both tables. The main JOIN types are INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN, each helping you answer different data questions."
+        "value": "Optimizing SQL queries means making sure your database retrieves the data you need as quickly as possible without unnecessary processing. Large datasets challenge queries by increasing scan times, memory use, and CPU load. Common techniques such as using indexes effectively and limiting row scanning can drastically decrease query execution time. These optimizations relate to database design and writing efficient WHERE conditions or JOINs."
       },
       {
         "type": "code",
-        "value": "/* Example tables */\n-- Customers table\nCREATE TABLE Customers (CustomerID INT, Name VARCHAR(50));\nINSERT INTO Customers VALUES (1, 'Alice'), (2, 'Bob'), (3, 'Charlie');\n\n-- Orders table\nCREATE TABLE Orders (OrderID INT, CustomerID INT, Product VARCHAR(50));\nINSERT INTO Orders VALUES (101, 1, 'Laptop'), (102, 2, 'Phone'), (103, 4, 'Tablet');\n\n-- INNER JOIN: shows only matching customers with orders\nSELECT Customers.Name, Orders.Product\nFROM Customers\nINNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;\n\n-- LEFT JOIN: shows all customers and their orders if any\nSELECT Customers.Name, Orders.Product\nFROM Customers\nLEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID;\n\n-- RIGHT JOIN: shows all orders and the matched customer names if any\nSELECT Customers.Name, Orders.Product\nFROM Customers\nRIGHT JOIN Orders ON Customers.CustomerID = Orders.CustomerID;\n\n-- FULL JOIN: shows all customers and all orders, matched where possible\nSELECT Customers.Name, Orders.Product\nFROM Customers\nFULL JOIN Orders ON Customers.CustomerID = Orders.CustomerID;"
+        "value": "SELECT customer_id, order_date, total_amount \nFROM orders\nWHERE order_date >= '2023-01-01'\nAND total_amount > 100\nORDER BY order_date DESC;"
       },
       {
         "type": "paragraph",
-        "value": "To use JOINs correctly, first identify the relationship between tables and the key columns to link them. Use INNER JOIN when you want only the matching records common in both tables. LEFT JOIN is useful when you want all records from the left table regardless of matches in the right table. RIGHT JOIN is the opposite, including all records from the right table. FULL JOIN includes every record from both tables, filling gaps with NULLs where no match exists. Practice writing each JOIN type with your own table examples to solidify your understanding."
+        "value": "To optimize the example query above for a large orders table, you could create an index on the columns used in the WHERE clause, such as order_date and total_amount. This helps the database locate only relevant rows without scanning the entire table. You should also avoid SELECT * to reduce the amount of data transferred. Another tip is to filter rows as early as possible and use appropriate JOIN techniques to minimize intermediate results. Understanding how to analyze execution plans will also guide you in spotting bottlenecks."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes beginners make include forgetting to specify the ON condition or joining tables without a proper key column, which can lead to incorrect or very large result sets. Another error is confusing LEFT and RIGHT JOIN, which are just mirror images but produce different results depending on table order. Also, not handling NULL values after joins can cause logic errors in your application, so always check for NULL when using outer joins like LEFT, RIGHT, or FULL JOIN."
+        "value": "One common mistake is ignoring indexes or overusing them without assessment, which can slow down inserts and updates. Another is writing queries that retrieve unnecessary columns or rows, leading to heavy network and memory usage. Additionally, using functions on columns in WHERE clauses can prevent indexes from being used effectively. Avoid running complex queries without checking execution order or joining tables without proper keys."
       },
       {
         "type": "paragraph",
-        "value": "In summary, understanding SQL JOIN types allows you to combine data from multiple tables meaningfully. INNER JOIN returns only matched rows, LEFT JOIN returns all from the left table plus matches, RIGHT JOIN returns all from the right table plus matches, and FULL JOIN returns all rows from both tables with matches when available. With these core concepts and examples, you can grasp JOINs and apply them to real-world queries easily."
+        "value": "In summary, optimizing SQL queries for large datasets involves smart use of indexing, careful filtering with WHERE conditions, selecting only necessary columns, and understanding the execution plan to refine your query logic. These steps keep your database responsive even as data grows, and they connect closely with concepts like query optimization, index management, and database schema design. With practice, these skills will enable you to handle big data more efficiently in your projects."
       }
     ]
   },
   {
-    "slug": "how-to-fix-sql-syntax-error-near-unexpected-token",
-    "title": "How to Fix SQL Syntax Error Near Unexpected Token: A Simple Guide",
+    "slug": "common-sql-deadlock-errors-and-prevention",
+    "title": "Common SQL Deadlock Errors Explained and How to Prevent Them",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to identify and fix the SQL syntax error caused by unexpected tokens. Step-by-step explanations and examples for beginners to resolve this common issue.",
+    "description": "Learn what SQL deadlock errors mean, why they happen, and practical ways to avoid them with easy-to-understand examples and prevention tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=5uTLRZEbBmU",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you are working with SQL and encounter the error message saying something like 'syntax error near unexpected token,' it can be confusing at first. This error usually indicates that your SQL statement has incorrect syntax or misplaced characters that the database engine can't understand. In this article, we will explain what causes this error and how you can fix it with simple examples."
+        "value": "SQL deadlock errors can be confusing for beginners but are important to understand if you work with databases, especially when multiple transactions run simultaneously. A deadlock occurs when two or more transactions are waiting on each other to release locks on resources, and none can proceed. This article explains why SQL deadlocks happen, shows example code illustrating a deadlock, and provides practical tips on how to prevent these errors."
       },
       {
         "type": "paragraph",
-        "value": "The 'syntax error near unexpected token' means that the SQL parser found a symbol or keyword where it wasn't expecting one. Tokens are basic elements of SQL statements like keywords, operators, or punctuation marks. When tokens appear out of order or when certain characters are missing or extra, the database cannot interpret the command and shows this error."
+        "value": "A deadlock happens in SQL when two or more transactions create a circular dependency by locking resources such as rows or tables in different orders. When the database detects that each transaction is waiting for a resource locked by another, it raises a deadlock error and terminates one of the transactions to break the cycle. Understanding deadlocks relates closely to concepts like transaction isolation levels, locking mechanisms, and concurrent data access in SQL databases."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM users WHERE name = 'John';\n\n-- Incorrect example that will cause the error:\nSELECT * FROM users WHERE name = 'John'\nINSERT INTO orders VALUES (1, 100);\n\n-- Notice there is no semicolon after the first statement and the statements are combined incorrectly."
+        "value": "BEGIN TRANSACTION;\n-- Transaction 1 locks row 1\nUPDATE accounts SET balance = balance - 100 WHERE account_id = 1;\n\n-- Simultaneously, Transaction 2 started and locks row 2:\n-- UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;\n\n-- If Transaction 1 now tries to update row 2, and Transaction 2 tries to update row 1,\n-- both transactions wait indefinitely causing a deadlock.\n-- SQL Server or MySQL detects this and kills one transaction with a deadlock error.\n\nCOMMIT;"
       },
       {
         "type": "paragraph",
-        "value": "To fix this error, you need to carefully check your SQL statement for missing punctuation, misplaced or misspelled keywords, and unmatched quotes. Make sure each statement is properly terminated with a semicolon if your database requires it. Also, avoid putting two separate statements on the same line without appropriate separation. Running one statement at a time helps spot syntax issues easily."
+        "value": "To prevent deadlocks, you should make sure transactions access resources in a consistent order to avoid cyclic locking patterns. Keep transactions short and efficient to reduce lock time. Using appropriate transaction isolation levels like Read Committed can also help reduce locking conflicts. Additionally, proper indexing and optimizing queries to minimize full table scans decrease the chances of deadlocks. Understanding error handling and retry logic in SQL is important because you might need to catch deadlock exceptions and retry transactions automatically."
       },
       {
         "type": "paragraph",
-        "value": "Common mistakes that cause this syntax error include forgetting commas between column names, missing closing brackets for functions or subqueries, using reserved keywords as identifiers without quotes, and mixing SQL dialects which have slightly different syntax rules. Always double-check the SQL reference for your specific database system (like MySQL, PostgreSQL, or SQLite) because each handles syntax slightly differently."
+        "value": "Common mistakes include holding locks longer than necessary by running long transactions with multiple queries, mixing read and write operations without proper locking hints, and ignoring deadlock errors which leads to application failures or inconsistent data states. Also, not analyzing query execution plans or understanding how indexes impact locking can cause unexpected deadlocks. Avoid nested transactions without clear commit or rollback points, as these can increase complexity in managing locks and isolation."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the 'syntax error near unexpected token' is a typical SQL error caused by syntax mistakes like missing semicolons, incorrect placement of keywords or symbols, and unmatched quotes. By carefully reviewing your SQL code, separating statements properly, and testing small portions at a time, you can quickly identify and fix these errors. Practice writing clean and well-structured SQL to avoid encountering such issues in your projects."
+        "value": "In summary, SQL deadlocks occur when transactions block each other by waiting on locked resources indefinitely, forcing the database to step in and resolve the conflict by terminating a transaction. By learning how transactions, locking, and isolation levels work together, you can prevent deadlocks. Writing clear, efficient, and well-ordered queries along with good database design reduces errors. Handling deadlock exceptions gracefully also ensures smoother application performance during concurrent data operations."
       }
     ]
   }
