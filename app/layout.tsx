@@ -4,9 +4,13 @@ import Footer from "@/components/Footer";
 import Script from "next/script";
 
 export const metadata = {
+  icons: {
+    icon: "/favicon_refined.ico",
+  },
   title: "Dev Nest Guide",
   description: "Beginner-friendly coding tutorials and error explanations.",
 };
+
 
 export default function RootLayout({
   children,
