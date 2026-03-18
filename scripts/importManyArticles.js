@@ -107,7 +107,7 @@ function extractArticlesArraySource(fileText) {
 
 function evaluateArticlesArray(arraySource) {
   try {
-    return Function(`"use strict"; return (${arraySource});`)();
+    return Function('"use strict"; return (' + arraySource + ')')();
   } catch (error) {
     throw new Error(`Failed to parse existing articles array: ${error.message}`);
   }
