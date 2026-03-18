@@ -11,30 +11,15 @@ const openai = new OpenAI({
 
 const OUTPUT_DIR = path.join(process.cwd(), "data", "articles");
 
-const CATEGORY_CONFIG = [
-  {
-    category: "javascript",
-    stack: "JavaScript",
-    subcategory: "errors",
-  },
-  {
-    category: "sql",
-    stack: "SQL",
-    subcategory: "errors",
-  },
-  {
-    category: "python",
-    stack: "Python",
-    subcategory: "errors",
-  },
-];
-
 function slugify(input) {
   return String(input)
     .toLowerCase()
     .replace(/['"`]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(/[^a-z0-9/]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/\/+/g, "/")
+    .replace(/^-+|-+$/g, "")
+    .replace(/\/-|-\/$/g, "");
 }
 
 function titleCase(input) {
@@ -72,12 +57,6 @@ function stripHtml(html) {
   return String(html || "")
     .replace(/<pre><code>[\s\S]*?<\/code><\/pre>/gi, " ")
     .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function normalizeWhitespace(text) {
-  return String(text || "")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -123,10 +102,18 @@ Lead with the most likely fix.
 
   if (lower.includes("property does not exist on type")) {
     return `
-Focus on JavaScript/TypeScript object typing mistakes.
+Focus on TypeScript object typing mistakes.
 Include one example with a missing interface property and one example with an incorrect API response assumption.
 Show both broken and fixed code clearly.
 Prioritize immediate fixes over theory.
+`;
+  }
+
+  if (lower.includes("object is possibly undefined")) {
+    return `
+Focus on optional values and union types in TypeScript.
+Include examples with optional chaining, guards, and narrowing.
+Keep the fix practical and immediate.
 `;
   }
 
@@ -168,9 +155,18 @@ Mention that the reported token may not always be the exact root cause.
 `;
   }
 
-  if (lower.includes("javascript") || lower.includes("typescript")) {
+  if (lower.includes("typescript")) {
     return `
-Keep the article tightly focused on the exact JavaScript or TypeScript error.
+Keep the article tightly focused on the exact TypeScript error.
+Lead with the fastest likely fix.
+Use realistic examples involving interfaces, API responses, and union types.
+Avoid long theory sections.
+`;
+  }
+
+  if (lower.includes("javascript")) {
+    return `
+Keep the article tightly focused on the exact JavaScript error.
 Lead with the fastest likely fix.
 Use realistic frontend or API-related examples.
 Avoid long theory sections.
@@ -209,6 +205,23 @@ function buildRelatedLinks(category, currentSlug) {
       {
         anchor: 'How to Fix "Unexpected Token" in JavaScript',
         targetSlug: "/javascript/errors/unexpected-token-javascript-fix",
+      },
+    ],
+    typescript: [
+      {
+        anchor: 'How to Fix "Property Does Not Exist on Type" in TypeScript',
+        targetSlug:
+          "/typescript/errors/property-does-not-exist-on-type-typescript-fix",
+      },
+      {
+        anchor: 'How to Fix "Object Is Possibly Undefined" in TypeScript',
+        targetSlug:
+          "/typescript/errors/object-is-possibly-undefined-typescript-fix",
+      },
+      {
+        anchor: 'How to Fix "Type Is Not Assignable to Type" in TypeScript',
+        targetSlug:
+          "/typescript/errors/type-is-not-assignable-to-type-typescript-fix",
       },
     ],
     sql: [
@@ -352,11 +365,12 @@ Each topic object must look exactly like this:
   "keyword": "exact search phrase",
   "category": "javascript",
   "stack": "JavaScript",
-  "slug": "javascript-errors-example-slug"
+  "slug": "javascript/errors/example-slug"
 }
 
 Allowed categories:
 - javascript
+- typescript
 - sql
 - python
 
@@ -369,13 +383,15 @@ Requirements:
 - Slugs should not start with a slash
 - Slugs should follow this format:
   - javascript/errors/...
+  - typescript/errors/...
   - sql/errors/...
   - python/errors/...
 
 Return exactly 12 topics total:
-- 4 javascript
-- 4 sql
-- 4 python
+- 3 javascript
+- 3 typescript
+- 3 sql
+- 3 python
 
 Avoid anything too similar to these existing titles:
 ${JSON.stringify(existingTitles, null, 2)}
@@ -422,7 +438,9 @@ function sanitizeTopics(rawTopics, existingIndexes) {
       String(topic?.stack || titleCase(category) || "").trim() || "JavaScript";
 
     if (!title || !keyword || !category) continue;
-    if (!["javascript", "sql", "python"].includes(category)) continue;
+    if (!["javascript", "typescript", "sql", "python"].includes(category)) {
+      continue;
+    }
 
     const broadBadPatterns = [
       "tutorial",
@@ -432,6 +450,7 @@ function sanitizeTopics(rawTopics, existingIndexes) {
       "explained",
       "introduction to",
       "guide to javascript",
+      "guide to typescript",
       "guide to sql",
       "guide to python",
       "features",
