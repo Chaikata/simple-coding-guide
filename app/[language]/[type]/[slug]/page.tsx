@@ -163,24 +163,33 @@ export default async function ArticlePage({ params }: PageProps) {
         )}
 
         <div className="space-y-6">
-          {article.content.map((block: ContentBlock, index: number) => {
+          {article.content.map((block, index) => {
+            const safeBlock = block as {
+              type?: "paragraph" | "code";
+              value?: string;
+            };
+
             if (typeof block === "string") {
               return (
                 <p
                   key={index}
                   className="leading-8 text-gray-200"
                   dangerouslySetInnerHTML={{
-                    __html: addInternalLinks(block, article.slug, article.language),
+                    __html: addInternalLinks(
+                      block,
+                      article.slug,
+                      article.language
+                    ),
                   }}
                 />
               );
             }
 
-            if (block.type === "code") {
+            if (safeBlock.type === "code" && safeBlock.value) {
               return (
                 <CodeBlock
                   key={index}
-                  code={block.value}
+                  code={safeBlock.value}
                   language={
                     article.language === "typescript"
                       ? "typescript"
@@ -196,7 +205,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 className="leading-8 text-gray-200"
                 dangerouslySetInnerHTML={{
                   __html: addInternalLinks(
-                    block.value,
+                    safeBlock.value || "",
                     article.slug,
                     article.language
                   ),
