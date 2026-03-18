@@ -1,0 +1,47 @@
+name: Manual Article Cleanup
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Choose what to run"
+        required: true
+        default: "find"
+        type: choice
+        options:
+          - find
+          - delete
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run duplicate finder
+        if: ${{ github.event.inputs.mode == 'find' }}
+        run: node scripts/findLikelyDuplicates.js
+
+      - name: Run selected delete script
+        if: ${{ github.event.inputs.mode == 'delete' }}
+        run: node scripts/deleteSelectedArticles.js
+
+      - name: Commit and push changes
+        if: ${{ github.event.inputs.mode == 'delete' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/articles.ts
+          git add data/articles.backup.*.ts || true
+          git commit -m "Manual article cleanup" || echo "No changes to commit"
+          git push
