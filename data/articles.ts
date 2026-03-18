@@ -416,31 +416,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "how-to-write-your-first-javascript-program",
-    "title": "How to Write Your First JavaScript Program",
-    "language": "javascript",
-    "type": "tutorials",
-    "description": "A simple guide for beginners to write their first JavaScript program and understand basic concepts.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "JavaScript is a popular programming language used to make web pages interactive. This tutorial will help you write your very first JavaScript program step by step, even if you have never coded before."
-      },
-      {
-        "type": "paragraph",
-        "value": "We will start by writing a simple program that displays a greeting message. To run JavaScript code, you can use a web browser's console or create an HTML file. The basic command to show a message is `console.log()`. This function prints the message to the console."
-      },
-      {
-        "type": "code",
-        "value": "console.log('Hello, world!');"
-      },
-      {
-        "type": "paragraph",
-        "value": "When you run this code, the message 'Hello, world!' appears in the console. If you see an error like 'console is not defined', it usually means your environment doesn't support it (for example, if you mistakenly used a JavaScript environment other than a browser or Node.js). Make sure to run the code inside a browser console or Node.js. This simple program is the first step towards writing more complex JavaScript code."
-      }
-    ]
-  },
-  {
     "slug": "how-to-fix-uncaught-referenceerror-in-javascript",
     "title": "How to Fix Uncaught ReferenceError in JavaScript",
     "language": "javascript",
@@ -462,31 +437,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "To fix Uncaught ReferenceError, first check if the variable or function is spelled correctly. Then make sure it is declared before you use it. If the code depends on external scripts, ensure they are properly loaded. By following these steps, you can prevent this error and make your code run smoothly."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-set-up-typescript-in-your-project",
-    "title": "How to Set Up TypeScript in Your Project",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "A beginner-friendly guide to get started with TypeScript in your coding projects.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. It helps catch errors early and makes your code easier to understand. In this tutorial, we'll walk through how to set up TypeScript in a new or existing project."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, you need to install TypeScript and create a configuration file. The configuration file (tsconfig.json) tells the TypeScript compiler how to process your code. We'll also look at a simple example to confirm everything is working."
-      },
-      {
-        "type": "code",
-        "value": "npm install -D typescript\nnpx tsc --init\n// This creates a tsconfig.json file\n\n// Example TypeScript file: index.ts\nconst greeting: string = 'Hello, TypeScript!';\nconsole.log(greeting);\n\n// To compile run:\nnpx tsc\n// This converts index.ts to index.js"
-      },
-      {
-        "type": "paragraph",
-        "value": "After running these steps, your TypeScript files will compile to JavaScript. If you see errors during compilation, it usually means your code does not match the expected types. For example, if you try to assign a number to a string variable, TypeScript will alert you to fix the issue. Setting up TypeScript improves code quality and helps prevent bugs before running your code."
       }
     ]
   },
@@ -565,31 +515,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In the example, we created a table named 'Students' with three columns: ID, Name, and Age. The INSERT statements add two records into the table. The SELECT statement retrieves all records from the Students table. Understanding these basics will help you build and interact with your own databases. Remember, errors are common when learning SQL. For example, if you try to insert a record with a duplicate ID, the database will return an error because ID is a primary key and must be unique. To fix such an error, ensure that each ID you insert is unique."
-      }
-    ]
-  },
-  {
-    "slug": "troubleshooting-common-sql-connection-errors",
-    "title": "Troubleshooting Common SQL Connection Errors",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn to identify and fix common SQL connection errors with clear explanations and examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Connecting to a SQL database is a fundamental step when working with databases in any application. However, beginners often encounter connection errors that can be confusing. This article explains the most common SQL connection errors, why they happen, and how to fix them."
-      },
-      {
-        "type": "paragraph",
-        "value": "One common error is \"SQL Server does not exist or access denied.\" This means the client cannot reach the SQL server. It usually happens because of incorrect server name, wrong port number, firewall blocking the connection, or SQL server not running. Another frequent error is \"Login failed for user.\", which occurs if the username or password is incorrect or the user doesn't have permission to access the database."
-      },
-      {
-        "type": "code",
-        "value": "-- Example: Connecting to a SQL Server with correct parameters\nDECLARE @server_name VARCHAR(50) = 'localhost';\nDECLARE @database_name VARCHAR(50) = 'ExampleDB';\nDECLARE @username VARCHAR(50) = 'myUser';\nDECLARE @password VARCHAR(50) = 'myPassword';\n\n-- Connection string (used in application code, e.g., C# or Python)\n-- Server=localhost;Database=ExampleDB;User Id=myUser;Password=myPassword;\n\n-- Check if server is reachable\nEXEC sp_serveroption @server_name, 'data access', 'true';"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix connection errors, start by verifying the server name and port number. Ensure the SQL service is running and your username and password are correct. Also, check firewall settings to allow traffic on the SQL port (default 1433). For permission issues, confirm that the user has the necessary roles assigned. By methodically checking these settings, you can resolve most common connection errors and successfully connect to your SQL database."
       }
     ]
   },
@@ -701,31 +626,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "Starting with these basic types and error explanations, you can write safer JavaScript code with TypeScript. As you practice, you’ll explore more advanced features like interfaces, enums, and generics to build robust applications."
-      }
-    ]
-  },
-  {
-    "slug": "resolving-typescript-property-does-not-exist-error",
-    "title": "Resolving TypeScript Property Does Not Exist on Type Error",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn what causes the 'Property does not exist on type' error in TypeScript and how to fix it.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When working with TypeScript, you might encounter an error that says, \"Property 'X' does not exist on type 'Y'.\" This error can be confusing for beginners, but it's a helpful feature that ensures you only use properties that are defined on a specific object type."
-      },
-      {
-        "type": "paragraph",
-        "value": "This error happens because TypeScript checks the properties available on the type you're working with. If you try to access a property that TypeScript doesn't recognize on an object, it will throw this error to prevent potential bugs. To fix this, you need to ensure the object type includes the property, or tell TypeScript that the property does exist using techniques like type assertions, interfaces, or index signatures."
-      },
-      {
-        "type": "code",
-        "value": "interface Person {\n  name: string;\n  age: number;\n}\n\nconst person: Person = { name: \"Alice\", age: 25 };\n\n// This will cause the error:\n// console.log(person.address);\n\n// Fix 1: Add the missing property to the interface\ninterface PersonWithAddress extends Person {\n  address: string;\n}\n\nconst personWithAddress: PersonWithAddress = { name: \"Alice\", age: 25, address: \"123 Main St\" };\nconsole.log(personWithAddress.address); // Works fine\n\n// Fix 2: Use an index signature if properties are dynamic\ninterface FlexiblePerson {\n  name: string;\n  age: number;\n  [key: string]: any;  // Allows any extra properties\n}\n\nconst flexiblePerson: FlexiblePerson = { name: \"Bob\", age: 30, address: \"456 Park Ave\" };\nconsole.log(flexiblePerson.address); // Works because of index signature"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the \"Property does not exist on type\" error helps catch mistakes early in your code. To resolve it, double-check that your types include all the properties you want to use, or adjust your type definitions to be more flexible. This will make your code safer and easier to maintain."
       }
     ]
   },
@@ -1346,31 +1246,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "resolving-typescript-type-compatibility-errors",
-    "title": "Resolving TypeScript Type Compatibility Errors",
-    "language": "typescript",
-    "type": "errors",
-    "description": "A beginner-friendly guide to understanding and fixing TypeScript type compatibility errors.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript helps catch errors at compile time by checking if types match throughout your code. Sometimes, you might get \"type compatibility\" errors which mean TypeScript expected one type but found another that doesn't match exactly. Understanding what these errors mean and how to fix them is important for writing bug-free programs."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common cause of type compatibility errors is when you try to assign a value of one type to a variable or function parameter of another type, and TypeScript sees them as incompatible. TypeScript uses a structural typing system, meaning it compares the shape of the objects. For example, if an object is missing required properties or has extra properties that are not allowed, it will complain."
-      },
-      {
-        "type": "code",
-        "value": "interface Person {\n  name: string;\n  age: number;\n}\n\nlet person: Person = { name: 'Alice', age: 30 };\n\n// This will cause a type compatibility error because 'height' is not expected\nlet unknownPerson: Person = { name: 'Bob', age: 25, height: 180 };"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, TypeScript throws an error because the object literal with 'height' has an extra property that does not exist in the Person interface. To fix this, you can either remove the extra property or create a new interface/type that includes it. Alternatively, assigning the object to a variable first before the type annotation avoids the extra property check."
-      }
-    ]
-  },
-  {
     "slug": "understanding-variables-and-data-types-in-python",
     "title": "Understanding Variables and Data Types in Python",
     "language": "python",
@@ -1537,31 +1412,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "understanding-basic-typescript-types-and-variables",
-    "title": "Understanding Basic TypeScript Types and Variables",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn the fundamentals of TypeScript types and how to declare variables with them.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a strongly-typed superset of JavaScript that helps you catch errors early by using types. Understanding basic types and how to declare variables with them is the first step in writing robust TypeScript code."
-      },
-      {
-        "type": "paragraph",
-        "value": "In TypeScript, you can declare variables with types like `number`, `string`, and `boolean`. Declaring a type means telling TypeScript what kind of value a variable should hold. This helps prevent bugs by catching mistakes during development. For example, if you say a variable is a number, you can't accidentally assign a string to it."
-      },
-      {
-        "type": "code",
-        "value": "let age: number = 25;\nlet name: string = \"Alice\";\nlet isStudent: boolean = true;\n\n// This line will cause an error:\n// age = \"twenty-five\"; // Error: Type 'string' is not assignable to type 'number'."
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, `age` is a number, `name` is a string, and `isStudent` is a boolean. If you try to assign a value of the wrong type, TypeScript will give you an error. This error means that the value you are trying to assign does not match the type you declared. To fix it, make sure you assign a value that matches the variable's type."
-      }
-    ]
-  },
-  {
     "slug": "resolving-typescript-type-undefined-is-not-assignable-to-type-errors",
     "title": "Resolving TypeScript 'undefined' is not assignable to type Errors",
     "language": "typescript",
@@ -1657,43 +1507,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "Remember these tips to avoid IndentationErrors:\n1. Use either spaces or tabs consistently (PEP 8 recommends spaces).\n2. Indent code blocks that belong to a function, loop, condition, or class.\n3. Use an editor that shows invisible characters or helps with indentation.\nBy following these, you'll write cleaner Python code and avoid indentation problems."
-      }
-    ]
-  },
-  {
-    "slug": "common-sql-server-connection-errors-and-how-to-solve-them",
-    "title": "Common SQL Server Connection Errors and How to Solve Them",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn about common SQL Server connection errors, understand their causes, and discover simple solutions to fix them.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Connecting to a SQL Server database is a fundamental skill for working with data. However, beginners often face connection errors that can be confusing. This article explains some common SQL Server connection errors, why they occur, and how to resolve them."
-      },
-      {
-        "type": "paragraph",
-        "value": "One frequent error is 'Login failed for user'. This means SQL Server rejected the provided username or password. It usually happens if you have mistyped credentials, the user doesn't exist, or SQL Server authentication mode is incorrect. To fix this, check the username and password, ensure the SQL Server is set to allow SQL Server authentication (not just Windows authentication), and confirm the user has access rights."
-      },
-      {
-        "type": "code",
-        "value": "Server=myServerName;Database=myDataBase;User Id=myUsername;Password=myPassword;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Another common issue is 'A network-related or instance-specific error occurred while establishing a connection'. This means your client cannot reach the SQL Server instance, often due to incorrect server name, instance name, or server not running. To solve this, verify the server name and instance, make sure SQL Server is running, and check if the SQL Server Browser service is enabled for named instances."
-      },
-      {
-        "type": "paragraph",
-        "value": "You might also encounter the error 'Timeout expired'. This happens when the client cannot connect within the set time, usually because of network delays or server overload. To fix this, try increasing the connection timeout in your connection string or optimize the server and network performance."
-      },
-      {
-        "type": "code",
-        "value": "Server=myServerName;Database=myDataBase;User Id=myUsername;Password=myPassword;Connection Timeout=30;"
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize, connection errors in SQL Server are often caused by incorrect credentials, server accessibility issues, or timeout settings. By carefully checking your connection string, server configuration, and network settings, you can resolve most connection problems and start querying your database successfully."
       }
     ]
   },
@@ -1892,43 +1705,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "resolving-common-sql-connection-errors",
-    "title": "Resolving Common SQL Connection Errors",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn how to identify and fix common SQL connection errors with simple explanations and examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Connecting to a SQL database is a fundamental step before you can execute queries. However, beginners often face common connection errors that prevent successful communication with the database. This article explains these common errors, why they happen, and how to fix them."
-      },
-      {
-        "type": "paragraph",
-        "value": "One frequent error is the \"Login failed for user\" message. This error usually happens due to incorrect username or password. SQL Server checks your credentials and denies access if they don't match. To fix this, verify your login information or reset your password if necessary."
-      },
-      {
-        "type": "code",
-        "value": "-- Example of connecting to a SQL Server with login credentials\n-- Make sure to replace USERNAME and PASSWORD with your actual credentials\n-- and SERVER_NAME with your server's address\n\nUSE master;\nGO\n\n-- Test connection string\n-- If connection fails, check username/password\n\n-- Example connection string in SQL Server Management Studio:\n-- Server=SERVER_NAME; Database=master; User Id=USERNAME; Password=PASSWORD;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Another common issue is \"Cannot open database requested by the login.\" This means the user has connected successfully to the server, but the target database doesn't exist or the user lacks permission. You should check if the database name is correct and ensure the user has appropriate access rights."
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes, you may see the error \"A network-related or instance-specific error occurred while establishing a connection to SQL Server.\" This usually happens if the SQL Server service is not running, the server name is incorrect, or firewall settings block the connection. Ensure the server is up and running, verify the server name or IP address, and check firewall rules on your machine."
-      },
-      {
-        "type": "paragraph",
-        "value": "For local connections, another error might be \"Named Pipes Provider: Could not open a connection to SQL Server.\" This suggests the SQL Server Browser service may be stopped or named pipes protocol is disabled. Starting the SQL Server Browser service or enabling named pipes in SQL Server Configuration Manager can resolve this."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding these common SQL connection errors—what they mean, why they occur, and how to fix them—you can troubleshoot connection issues more effectively. Always double-check your credentials, server information, and service status to get your database connections working smoothly."
-      }
-    ]
-  },
-  {
     "slug": "how-to-declare-variables-in-javascript",
     "title": "How to Declare Variables in JavaScript",
     "language": "javascript",
@@ -1987,31 +1763,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "Other common causes for this error include missing commas between items in an array or object, leftover or extra punctuation, or using reserved words incorrectly. Always check the line mentioned in the error message and look for typos or missing syntax. Fixing those mistakes will help your code run smoothly."
-      }
-    ]
-  },
-  {
-    "slug": "getting-started-with-typescript-variables-and-data-types",
-    "title": "Getting Started with TypeScript Variables and Data Types",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to declare variables and use basic data types in TypeScript with beginner-friendly explanations and examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful programming language that builds on JavaScript by adding static types. This means you can define the type of data a variable holds, which helps catch errors early and write more reliable code. In this tutorial, we'll explore how to declare variables and use common data types in TypeScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "To declare a variable in TypeScript, you use keywords like `let`, `const`, or `var`, followed by the variable name and optionally specify the type using a colon. TypeScript supports several basic data types such as `number`, `string`, `boolean`, and more. Specifying types is optional, but it helps the compiler understand what kind of data your variables should hold."
-      },
-      {
-        "type": "code",
-        "value": "let age: number = 25;\nconst name: string = 'Alice';\nlet isStudent: boolean = true;\n\n// TypeScript also infers types if you don't specify them:\nlet score = 90; // inferred as number\n\n// An example of a type error:\n// age = 'twenty-five'; // Error: Type 'string' is not assignable to type 'number'."
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, we declared variables with specific types. If you try to assign a value of a different type, TypeScript will show an error. This error means you're trying to store incompatible data and can be fixed by ensuring the variable holds only data of the declared type. Using types helps you prevent bugs, improve code readability, and make development easier as your projects grow."
       }
     ]
   },
@@ -2552,31 +2303,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, writing basic SELECT queries involves choosing columns and specifying the table's name. Practice by retrieving all data first, then try fetching specific columns. Understanding this foundation will help you explore more advanced SQL features later."
-      }
-    ]
-  },
-  {
-    "slug": "resolving-database-connection-errors-in-sql",
-    "title": "Resolving Database Connection Errors in SQL: A Beginner's Guide",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn common causes of database connection errors in SQL and how to fix them with simple explanations and examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Connecting to a database is one of the first steps when working with SQL. However, beginners often encounter connection errors that can be confusing. This article will explain common database connection errors, why they happen, and how to resolve them."
-      },
-      {
-        "type": "paragraph",
-        "value": "A database connection error usually means that your application cannot reach the database server or your login credentials are incorrect. Common reasons include wrong hostname or port, incorrect username or password, database server not running, or network issues preventing communication."
-      },
-      {
-        "type": "code",
-        "value": "-- Example of connecting to a MySQL database\n-- Replace 'localhost', 'username', 'password', and 'database_name' with your values\n\nCONNECT TO 'localhost' USER 'username' IDENTIFIED BY 'password';\nUSE database_name;"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix connection errors, first check if the database server is running and accessible from your machine. Verify the hostname and port are correct. Make sure your username and password are valid and have the right permissions. If you are working on a remote server, ensure network settings and firewalls allow connections. By following these steps, you can usually resolve connection issues and start working with your SQL database successfully."
       }
     ]
   },
@@ -3254,40 +2980,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, the 'list index out of range' error happens because you asked for an index that doesn’t exist in your list. Always remember to check the list's length using len(), be careful when writing loops or accessing elements by index, and use safe programming patterns like iteration over elements instead of manual indexes. Mastering this will make your Python code more reliable and deepen your understanding of list indexing, loops, and error handling."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-typeerror-nonetype-object-is-not-callable-in-python",
-    "title": "How to Fix TypeError: 'NoneType' Object Is Not Callable in Python",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn why the Python error 'TypeError: NoneType object is not callable' happens and how to fix it with clear examples and practical tips for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=hLnADXliDCU",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you're new to Python, you might have encountered the error: TypeError: 'NoneType' object is not callable. This error can be confusing, but don't worry! It usually happens when you accidentally try to use None like a function. In this article, we'll explain what this error means, why it happens, and how you can fix it, using clear Python code examples. Understanding this will also help you avoid similar issues with other common errors like AttributeError or NameError."
-      },
-      {
-        "type": "paragraph",
-        "value": "The error TypeError: 'NoneType' object is not callable means you tried to \"call\" an object that is really None. Remember, None is a special data type that represents 'nothing' or 'no value' in Python. Calling means putting parentheses () after something, usually functions. For example, if you write some_var(), you're calling some_var as a function. If some_var is None instead of a function, Python gets confused and gives this error. This often happens when a function or method is expected to return a value but returns None, or if you accidentally overwrite a function variable with None."
-      },
-      {
-        "type": "code",
-        "value": "def greet():\n    print('Hello!')\n\nsay_hello = greet  # Assign function to a variable\n\nsay_hello()  # This works fine and prints 'Hello!'\n\nsay_hello = None  # Now the variable points to None\n\nsay_hello()  # This causes TypeError: 'NoneType' object is not callable"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this error, you need to make sure you only call functions or callable objects, not None. Check if any variable or function you call might have been assigned None by mistake. A common fix is renaming variables properly or avoiding overwriting functions with other types. If it comes from a function returning None, double-check your function code or add conditions before calling. Debugging tools like print statements or using the built-in type() function can help you find which variable is None. You can also safeguard your code by adding checks, for example: if my_func is not None: my_func()."
-      },
-      {
-        "type": "paragraph",
-        "value": "Many beginners overwrite function names by assigning None or other values to them, causing this error. Another common mistake is forgetting to add a return statement, which results in a function returning None by default. For example, if you expect a function to return another function but it doesn’t explicitly return anything, you might end up trying to call None. Also, be cautious about using built-in functions or methods incorrectly, and understand the difference between variables, functions, and return values, which are important for preventing other errors like TypeErrors or AttributeErrors."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the TypeError 'NoneType' object is not callable in Python occurs when you try to call None as if it were a function. This often results from assigning None to a variable meant to hold a function or from functions that don’t return anything being used incorrectly. By carefully managing your variables, checking function returns, and understanding how function calls work, you can easily avoid and fix this error. Improving your debugging skills with tools like type checks and clear naming conventions will also help you prevent similar issues in your Python programming journey."
       }
     ]
   },
@@ -4316,40 +4008,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "how-to-fix-attributeerror-module-has-no-attribute-in-python",
-    "title": "How to Fix AttributeError: module has no attribute in Python",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn how to understand and fix the AttributeError: module has no attribute in Python with clear examples and practical tips for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=9ZR190RVDx4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you're writing Python code and suddenly see the error message AttributeError: module has no attribute, don't worry—this is a common issue, especially for beginners. This error means Python cannot find a specific function, class, or variable inside the module you're trying to use. In this article, we'll explore what causes this error and how to fix it with easy examples and explanations."
-      },
-      {
-        "type": "paragraph",
-        "value": "An AttributeError happens when Python tries to access an attribute (like a function or a variable) from a module or object but it doesn't exist. For modules, this error often means either the attribute is misspelled, the module version is outdated, or there is some confusion in how you imported the module. It’s closely related to understanding Python modules, imports, and object attributes."
-      },
-      {
-        "type": "code",
-        "value": "import math\nprint(math.square(5))  # Trying to use a function that doesn't exist in math module"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, Python throws AttributeError: module 'math' has no attribute 'square' because the math module does not have a function named \"square.\" To fix this, check the official module documentation to see available functions or use the correct function. Here, math.pow or the exponent operator ** should be used instead. Always double-check your import statements, spelling, and module versions. Using built-in functions or classes incorrectly often leads to this error, so understanding Python object attributes and how imports work is very useful."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes causing this error include naming your script with the same name as the module you want to import, which confuses Python's import system. Another typical error is misspelling the function or attribute, like using 'dumps' instead of 'dump' in the json module. Failing to update third-party libraries can also cause this problem if new attributes were added in later versions. Lastly, mixing variable and module names leads to conflicting references."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the AttributeError: module has no attribute error occurs when Python can't find the requested attribute in a module. The key steps to fix it are to verify the attribute exists, check spelling, avoid naming conflicts, and ensure your modules are up to date. Understanding Python imports, module structures, and attributes will help prevent this error and make your code more reliable. Keeping these tips in mind will make debugging easier as you continue learning Python."
-      }
-    ]
-  },
-  {
     "slug": "how-to-use-window-functions-in-sql",
     "title": "How to Use Window Functions in SQL: A Beginner-Friendly Tutorial",
     "language": "sql",
@@ -4626,40 +4284,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "common-mistakes-in-sql-group-by-clause",
-    "title": "Common Mistakes in SQL GROUP BY Clause and How to Fix Them",
-    "language": "sql",
-    "type": "tutorials",
-    "description": "Learn the most common errors in using the SQL GROUP BY clause, why they happen, and step-by-step solutions to write error-free grouping queries with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=nNrgRVIzeHg",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "The SQL GROUP BY clause is an essential tool for summarizing data by grouping rows that share a common value. However, beginners often run into errors or unexpected results when using it. In this article, we'll cover common mistakes made with GROUP BY, explain why they happen, and show you exactly how to fix or avoid them. By the end, you’ll write clearer, more effective SQL queries when grouping data."
-      },
-      {
-        "type": "paragraph",
-        "value": "In simple terms, the GROUP BY clause groups rows that have the same values in specified columns so you can apply aggregate functions like COUNT, SUM, AVG, MAX, and MIN on each group. For example, grouping sales data by region or month to get total sales per group. It works closely with SELECT and HAVING clauses to filter and aggregate your data efficiently."
-      },
-      {
-        "type": "code",
-        "value": "SELECT department, COUNT(*) AS employee_count\nFROM employees\nGROUP BY department;"
-      },
-      {
-        "type": "paragraph",
-        "value": "To use the GROUP BY clause properly, you need to include in your SELECT statement only columns that are either grouped by or aggregated. Every column in the SELECT list that isn't an aggregate function must be specified in the GROUP BY clause. This rule helps SQL understand how to collapse rows into groups. Understanding how aggregate functions, GROUP BY, ORDER BY, and HAVING clauses work together is crucial to avoid mistakes."
-      },
-      {
-        "type": "paragraph",
-        "value": "One of the most common mistakes is selecting columns in the query that are not part of either the GROUP BY clause or an aggregate function. This causes errors such as \"column must appear in the GROUP BY clause or be used in an aggregate function.\" Another frequent issue is misunderstanding the difference between WHERE and HAVING clauses. WHERE filters rows before grouping, while HAVING filters groups after aggregation. Forgetting HAVING when filtering aggregated results is a typical beginner challenge."
-      },
-      {
-        "type": "paragraph",
-        "value": "To sum up, mastering the GROUP BY clause requires careful selection of grouped columns and proper use of aggregate functions. Always ensure every non-aggregated column in your SELECT statement is included in the GROUP BY clause. Remember to use HAVING for filtering aggregated results instead of WHERE. Also, be mindful of how joins and subqueries can affect grouping behavior. By avoiding these common pitfalls, your SQL queries will be both correct and perform well when summarizing data."
-      }
-    ]
-  },
-  {
     "slug": "sql-syntax-error-near-select-explained-with-examples",
     "title": "SQL Syntax Error Near SELECT Explained with Examples",
     "language": "sql",
@@ -4898,40 +4522,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "how-to-use-javascript-closures-for-beginners",
-    "title": "How to Use JavaScript Closures for Beginners: A Simple Tutorial",
-    "language": "javascript",
-    "type": "tutorials",
-    "description": "Learn JavaScript closures from scratch with easy explanations and practical examples. Understand how closures work and how to use them effectively in your code.",
-    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you're new to JavaScript, you've probably come across the term 'closure' and wondered what it means. Closures are a fundamental concept that allows functions to remember the environment in which they were created. Understanding closures can help you write cleaner and more efficient code, especially when working with functions, scope, and variables. This tutorial will guide you step-by-step through the basics of closures and how to use them."
-      },
-      {
-        "type": "paragraph",
-        "value": "A closure occurs when a function has access to variables from its outer (enclosing) function scope even after that outer function has finished executing. In simpler terms, a closure lets a function 'remember' the variables that existed when it was created. This is closely related to concepts like scope, lexical environment, and higher-order functions."
-      },
-      {
-        "type": "code",
-        "value": "function outerFunction() {\n  let count = 0;\n  function innerFunction() {\n    count++;\n    console.log(count);\n  }\n  return innerFunction;\n}\n\nconst myCounter = outerFunction();\nmyCounter(); // Output: 1\nmyCounter(); // Output: 2\nmyCounter(); // Output: 3"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, outerFunction creates a variable named count and defines innerFunction inside it. When outerFunction returns innerFunction, the returned function still has access to count, even though outerFunction has finished. This is a closure in action. To use closures properly, ensure you return or pass functions that make use of variables from their outer scope. Closures are especially useful for data privacy and creating function factories."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common mistake beginners make is misunderstanding when variables are updated inside closures, especially within loops. For example, using var inside a loop can cause unexpected behavior because var is function-scoped, not block-scoped. Another pitfall is mismanaging memory by keeping unnecessary references that prevent garbage collection. Also, confuse closures with callbacks or asynchronous functions—while they often appear together, closures specifically refer to how functions retain access to their lexical scope."
-      },
-      {
-        "type": "paragraph",
-        "value": "To sum up, JavaScript closures let you create functions with access to variables from an outer scope, even after the outer function has executed. By mastering closures, you'll better handle scopes, callbacks, and function-based data encapsulation. Practice with closures along with concepts like event listeners, promises, and the this keyword to become a more confident JavaScript developer."
-      }
-    ]
-  },
-  {
     "slug": "typeerror-object-is-not-iterable-fix-javascript",
     "title": "TypeError: Object is Not Iterable Fix in JavaScript Explained with Examples",
     "language": "javascript",
@@ -4962,40 +4552,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, 'TypeError: object is not iterable' means you're trying to loop or spread something that is not designed to be looped over directly. By understanding iterable objects, such as arrays and strings, and using methods like Object.entries() for plain objects, you can fix and avoid this error. Mastering related concepts like the iteration protocol, looping methods, and destructuring will make your JavaScript code much more reliable."
-      }
-    ]
-  },
-  {
-    "slug": "typescript-type-assertion-vs-type-casting-explained",
-    "title": "TypeScript Type Assertion vs Type Casting Explained with Examples",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn the difference between TypeScript type assertion and type casting, with clear examples and best practices for proper usage.",
-    "videoUrl": "https://www.youtube.com/watch?v=lOuaE3nGS4g",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you've started learning TypeScript, you might have come across the terms type assertion and type casting and wondered how they differ. These concepts relate to how we tell the TypeScript compiler about the types of variables and values in our code. This tutorial explains what type assertion and type casting mean, how to use them correctly, and clears up common confusions."
-      },
-      {
-        "type": "paragraph",
-        "value": "In TypeScript, type assertion is a way to tell the compiler, \"Trust me, I know what the type of this value is.\" It doesn't change the runtime value or perform conversion; it only affects the static type checking. Type casting, in general programming, means converting a value from one type to another at runtime. However, TypeScript itself does not perform type casting in the traditional sense because it’s a superset of JavaScript and doesn’t add runtime type conversions. Instead, developers use type assertion to help the compiler during development."
-      },
-      {
-        "type": "code",
-        "value": "let someValue: any = \"Hello, TypeScript!\";\n// Using type assertion to tell TypeScript this is a string\nlet strLength: number = (someValue as string).length;\n\n// Another syntax for type assertion\nlet strLengthAlternative: number = (<string>someValue).length;\n\nconsole.log(strLength); // Output: 18\nconsole.log(strLengthAlternative); // Output: 18"
-      },
-      {
-        "type": "paragraph",
-        "value": "To use type assertion properly, make sure you only assert when you are certain about the underlying type. For example, if you receive data from an API as an unknown type, you can assert it to an interface or type you expect. This is particularly useful along with other TypeScript features like interfaces, types, and union types. Remember that assertion doesn’t transform or validate data, so combining it with runtime checks or type guards ensures safer code."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common mistake is confusing type assertion with actual type conversion. For example, asserting a string to a number type doesn’t convert the string to a number; TypeScript just believes you, and runtime errors can occur. Also, excessive or incorrect use of assertions can defeat TypeScript's purpose by hiding potential bugs. Unlike explicit conversions you might see in JavaScript (like Number('123')), type assertion has no runtime effect—it’s only about compile-time type checking."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, TypeScript type assertion is a way to inform the compiler about the type of a variable without affecting runtime values. It’s different from true runtime type casting, which JavaScript handles with conversion functions. Use type assertions carefully alongside other features like type guards and interfaces. Understanding the distinction improves your code safety and prevents common pitfalls when working with types in TypeScript."
       }
     ]
   },
@@ -5238,40 +4794,6 @@ export const articles = [
     ]
   },
   {
-    "slug": "how-to-fix-python-index-out-of-range-error-with-examples",
-    "title": "How to Fix Python Index Out of Range Error with Examples",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn what the Python IndexError: list index out of range means and how to fix it with beginner-friendly examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=wpmXETzX6xc",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you are just starting with Python, you might have encountered the error message: IndexError: list index out of range. This error is common when working with lists, strings, or other sequence data types. In this article, we will explain what this error means, why it happens, and how to fix it easily. Along the way, you'll also learn useful tips about Python lists, for loops, and basic error handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "The IndexError: list index out of range occurs when you try to access an element of a list or sequence using an index number that does not exist. For example, if a list has 3 items, valid indexes are 0, 1, and 2. Trying to get the element at index 3 or higher causes this error. This happens because Python sequences are zero-indexed, meaning the first element is at position 0. Understanding how indexing works in Python lists, strings, or tuples is essential to avoid this error."
-      },
-      {
-        "type": "code",
-        "value": "my_list = [10, 20, 30]\nprint(my_list[0])  # Outputs 10\nprint(my_list[2])  # Outputs 30\nprint(my_list[3])  # Raises IndexError: list index out of range"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix the index out of range error, you should always check that the index you want to access is within the valid range of the list. Use the len() function to get the length of the list and make sure your index is less than this length. When using loops to iterate over a list, avoid hardcoding index numbers and instead use for loops directly on the list or use range(len(list)) carefully. Another useful technique is to handle exceptions gracefully using try-except blocks if you're unsure whether the index exists."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common mistake beginners make is assuming a list has more elements than it actually does or mixing up positive and negative indexes. Python supports negative indexes to count from the end (-1 is the last item), but they must also stay within range. Another error is modifying a list inside a loop and then accessing indexes that no longer exist due to the change in list size. Being familiar with basic list operations like append, remove, and slicing helps avoid these problems."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the IndexError: list index out of range occurs when trying to access an invalid index in a list or sequence. To fix it, always check your indexes using len() and avoid hardcoding positions without validation. Using Python for loops and understanding how lists, strings, and tuples store data will reduce errors significantly. When working further with sequences, also explore concepts like list comprehension and error handling to make your code more robust and beginner-friendly."
-      }
-    ]
-  },
-  {
     "slug": "how-to-write-efficient-join-queries-in-sql-with-examples",
     "title": "How to Write Efficient Join Queries in SQL with Examples",
     "language": "sql",
@@ -5302,40 +4824,6 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, mastering efficient join queries in SQL requires understanding the types of joins and their purpose, always joining on indexed columns, and writing clear, purposeful conditions. Practicing these basics alongside learning related concepts like SQL indexing, query execution plans, and database normalization will boost both your coding skill and database efficiency. Now, you can confidently write join queries that return the results you need without unnecessary performance costs."
-      }
-    ]
-  },
-  {
-    "slug": "explained-common-sql-deadlock-errors-and-solutions",
-    "title": "Explained: Common SQL Deadlock Errors and How to Fix Them",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn what SQL deadlock errors mean, why they happen, and practical solutions to fix and prevent them in your database applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=QB-1tPVxNek",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you have worked with SQL databases, you might have encountered suddenly failing transactions with an error mentioning a deadlock. This happens when two or more queries block each other forever, waiting for the other to release resources. Understanding SQL deadlocks is essential to maintaining healthy database performance, especially when using transactions, locking mechanisms, and concurrent data operations."
-      },
-      {
-        "type": "paragraph",
-        "value": "A SQL deadlock occurs when two transactions hold locks on resources that the other needs and neither can proceed. For example, Transaction A locks row 1 and tries to lock row 2, while Transaction B has locked row 2 and tries to lock row 1. Neither transaction can complete, so the database engine detects the deadlock and typically rolls back one transaction to break the cycle."
-      },
-      {
-        "type": "code",
-        "value": "BEGIN TRANSACTION;\n-- Transaction A locks row 1\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 1;\n\n-- Simulate some work\nWAITFOR DELAY '00:00:05';\n\n-- Now tries to lock row 2\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 2;\nCOMMIT;\n\n-- Meanwhile, Transaction B starts\nBEGIN TRANSACTION;\n-- Transaction B locks row 2\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 2;\n\n-- Simulate some work\nWAITFOR DELAY '00:00:05';\n\n-- Now tries to lock row 1\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 1;\nCOMMIT;"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix or avoid deadlocks, you can follow several best practices. First, ensure that all transactions acquire locks in the same order to prevent circular waiting. Using shorter transactions reduces lock time and contention. You can also use the appropriate isolation levels like Read Committed Snapshot to minimize locking. Additionally, database systems often allow deadlock detection; configuring retry logic in your application can help automatically handle deadlock rollbacks."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes leading to deadlocks include holding locks longer than necessary, inconsistent locking orders in different parts of your code, and mixing different isolation levels without understanding their locking behaviors. Another typical error is running complex queries within a transaction without considering indexing and query efficiency, which can cause unnecessary locks and increase the chance of deadlocks."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, SQL deadlocks are a natural phenomenon in highly concurrent environments where multiple transactions compete for the same resources. By understanding the locking mechanisms, using consistent locking orders, minimizing transaction scope, and choosing the right isolation levels, you can effectively reduce deadlocks and improve your application's reliability and performance."
       }
     ]
   },
