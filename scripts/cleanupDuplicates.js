@@ -4,8 +4,9 @@ import fs from "fs";
 // CONFIG
 // =========================
 
-const SIMILARITY_THRESHOLD = 0.92; // stricter
-const MODE = "delete"; // "delete" or "merge"
+const SIMILARITY_THRESHOLD = 0.92;
+const MODE = "delete"; // auto delete
+const MAX_DELETIONS = 20; // SAFETY LIMIT
 
 // =========================
 // LOAD / SAVE
@@ -56,21 +57,8 @@ function similarity(a, b) {
   const wordsB = normalize(b).split(" ");
 
   const stopWords = new Set([
-    "how",
-    "to",
-    "fix",
-    "in",
-    "with",
-    "and",
-    "for",
-    "a",
-    "the",
-    "of",
-    "error",
-    "guide",
-    "examples",
-    "beginner",
-    "beginners",
+    "how","to","fix","in","with","and","for","a","the","of",
+    "error","guide","examples","beginner","beginners"
   ]);
 
   const filteredA = wordsA.filter((w) => !stopWords.has(w));
@@ -79,7 +67,7 @@ function similarity(a, b) {
   const keyA = new Set(filteredA);
   const keyB = new Set(filteredB);
 
-  // LANGUAGE CHECK (prevents JS vs Python deletion)
+  // LANGUAGE CHECK
   const languages = ["javascript", "python", "sql", "typescript"];
   for (const lang of languages) {
     if (keyA.has(lang) && !keyB.has(lang)) return 0;
@@ -117,9 +105,11 @@ function cleanup() {
   const removed = new Set();
 
   for (let i = 0; i < articles.length; i++) {
+    if (removed.size >= MAX_DELETIONS) break;
     if (removed.has(i)) continue;
 
     for (let j = i + 1; j < articles.length; j++) {
+      if (removed.size >= MAX_DELETIONS) break;
       if (removed.has(j)) continue;
 
       const a = articles[i];
@@ -127,11 +117,9 @@ function cleanup() {
 
       const score = similarity(a.title, b.title);
 
-      // INTENT CHECK
       const intentA = getIntentType(a.title);
       const intentB = getIntentType(b.title);
 
-      // WORD DIFFERENCE SAFETY
       const wordsA = new Set(normalize(a.title).split(" "));
       const wordsB = new Set(normalize(b.title).split(" "));
 
@@ -141,19 +129,12 @@ function cleanup() {
       if (difference >= 2) continue;
 
       if (score > SIMILARITY_THRESHOLD && intentA === intentB) {
-        console.log(`Duplicate found:\n- ${a.title}\n- ${b.title}\n`);
+        console.log(`Removing duplicate:\n- ${a.title}\n- ${b.title}\n`);
 
-        if (MODE === "delete") {
-          const removeIndex =
-            a.content.length >= b.content.length ? j : i;
+        const removeIndex =
+          a.content.length >= b.content.length ? j : i;
 
-          removed.add(removeIndex);
-        }
-
-        if (MODE === "merge") {
-          a.content = [...a.content, ...b.content];
-          removed.add(j);
-        }
+        removed.add(removeIndex);
       }
     }
   }
