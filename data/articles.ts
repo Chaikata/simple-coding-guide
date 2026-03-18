@@ -6116,5 +6116,565 @@ export const articles = [
         "value": "Window functions are essential but can be tricky with large datasets. Understanding common errors and applying these optimization tips will help you write efficient, error-free queries."
       }
     ]
+  },
+  {
+    "slug": "leveraging-proxy-objects-to-create-reactive-data-models-in-javascript",
+    "title": "Leveraging Proxy Objects to Create Reactive Data Models in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript Proxy objects to create reactive data models that automatically respond to changes, opening the door to building dynamic and responsive applications.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In modern web development, reactivity is a powerful concept that allows your application to automatically respond to data changes. Frameworks like Vue.js and React use this concept heavily under the hood. But what if you want to create a simple reactive data model yourself using plain vanilla JavaScript? That's where the Proxy object comes in. Introduced in ES6, Proxy lets you intercept operations on objects, making it a perfect tool for building reactive models."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore how to create a basic reactive data object using JavaScript Proxy. You will learn how to listen for changes and automatically trigger updates, which can be used to update your UI or trigger side effects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a reactive object that logs when any property changes."
+      },
+      {
+        "type": "code",
+        "value": "function reactive(target) {\n  return new Proxy(target, {\n    set(obj, prop, value) {\n      obj[prop] = value; // update the property\n      console.log(`Property \"${prop}\" changed to \"${value}\"`);\n      // Here you could trigger UI updates or other effects\n      return true; // indicate success\n    },\n    get(obj, prop) {\n      return obj[prop]; // simply return the property value\n    }\n  });\n}\n\nconst person = reactive({ name: 'Alice', age: 25 });\nperson.name = 'Bob'; // Console: Property \"name\" changed to \"Bob\"\nperson.age = 30;    // Console: Property \"age\" changed to \"30\""
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, we created a function called `reactive` that takes an object and returns a Proxy wrapped version of it. Whenever a property is set, the Proxy's `set` handler is called. Here, we log the change to the console. You can replace this with any other logic, such as updating a DOM element."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's enhance this reactive system to allow registering callback functions that run when data updates happen."
+      },
+      {
+        "type": "code",
+        "value": "function reactiveWithEffect(target) {\n  const effects = new Set();\n\n  const proxy = new Proxy(target, {\n    set(obj, prop, value) {\n      obj[prop] = value;\n      effects.forEach(effect => effect());\n      return true;\n    },\n    get(obj, prop) {\n      return obj[prop];\n    }\n  });\n\n  proxy.onChange = function(effect) {\n    effects.add(effect);\n  };\n\n  return proxy;\n}\n\nconst state = reactiveWithEffect({ count: 0 });\n\nstate.onChange(() => {\n  console.log(`Count is now: ${state.count}`);\n});\n\nstate.count = 1; // Console: Count is now: 1\nstate.count = 2; // Console: Count is now: 2"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, we added an `onChange` method to our reactive object that allows multiple effects (callback functions) to be registered. Every time the data changes, all registered effects run, making it easy to keep UI or other parts of your application in sync with your data."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- The JavaScript Proxy object lets you intercept operations on an object (like setting or getting properties).\n- By using the `set` handler, we can detect when a property changes.\n- This lets us create simple reactive data models that automatically trigger effects or UI updates.\n- You can expand this basic pattern to build sophisticated reactive frameworks or applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with the code examples above. Create your own effects and see how easy it is to make your JavaScript objects reactive!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-the-art-of-function-currying-for-cleaner-code",
+    "title": "Mastering the Art of Function Currying for Cleaner Code",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of function currying in JavaScript and how it helps write cleaner, more reusable, and more readable code through simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've started exploring JavaScript beyond the basics, you might have heard about a powerful concept called function currying. It sounds like something from a cooking class, but in programming, currying is a tasty way to write cleaner, reusable functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "So what exactly is currying? In simple terms, currying is a technique of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument. Instead of giving all arguments at once, you give them one at a time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see an example to understand this better."
+      },
+      {
+        "type": "code",
+        "value": "function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(2, 3)); // Output: 5"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `add` takes two arguments `a` and `b` and returns their sum. Now, using currying, we can rewrite `add` so it takes one argument at a time:"
+      },
+      {
+        "type": "code",
+        "value": "function curriedAdd(a) {\n  return function(b) {\n    return a + b;\n  };\n}\n\nconst addTwo = curriedAdd(2);\nconsole.log(addTwo(3)); // Output: 5"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this curried version, `curriedAdd` takes one argument `a` and returns a new function that takes another argument `b`. This lets us create specialized functions like `addTwo`, which adds 2 to any number."
+      },
+      {
+        "type": "paragraph",
+        "value": "Currying becomes very helpful when you want to create flexible and reusable functions, especially in functional programming or when working with higher-order functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a more generic currying helper function that can work with any function:"
+      },
+      {
+        "type": "code",
+        "value": "function curry(fn) {\n  return function curried(...args) {\n    if (args.length >= fn.length) {\n      return fn(...args);\n    } else {\n      return function(...nextArgs) {\n        return curried(...args.concat(nextArgs));\n      };\n    }\n  };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how to use it with a simple multiply function:"
+      },
+      {
+        "type": "code",
+        "value": "function multiply(a, b, c) {\n  return a * b * c;\n}\n\nconst curriedMultiply = curry(multiply);\n\nconsole.log(curriedMultiply(2)(3)(4)); // Output: 24\nconsole.log(curriedMultiply(2, 3)(4)); // Output: 24\nconsole.log(curriedMultiply(2)(3, 4)); // Output: 24"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how our `curriedMultiply` function can be called with arguments one by one or partially applied with multiple arguments at once until all arguments are provided."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why use currying?\n- It makes your functions more flexible and composable.\n- It supports partial application, where you can fix some arguments and reuse functions easily.\n- It helps build cleaner, more readable code especially when working with complex function chains."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nCurrying transforms multi-argument functions into nested single-argument functions. By mastering currying, you can write code that’s modular, reusable, and easier to maintain. Practice by trying to curry your own functions, and you’ll soon see the benefits in your JavaScript projects!"
+      }
+    ]
+  },
+  {
+    "slug": "using-web-workers-to-offload-heavy-computations-in-javascript",
+    "title": "Using Web Workers to Offload Heavy Computations in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use Web Workers in JavaScript to run heavy computations in the background, keeping your web app responsive.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web applications, running heavy tasks like complex calculations can freeze the user interface, making the app feel slow or unresponsive. Web Workers allow us to run such tasks in the background, off the main thread, so the UI stays smooth."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, you'll learn how to create a simple Web Worker that calculates a large Fibonacci number without blocking the main UI thread."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Web Workers?\nWeb Workers are a way to run JavaScript in background threads. They do not have access to the DOM but can communicate with the main script via messages."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Create a Worker Script\nCreate a separate JavaScript file called `worker.js`. This file will contain the code that runs inside the worker."
+      },
+      {
+        "type": "code",
+        "value": "self.onmessage = function(event) {\n  const n = event.data;\n\n  function fibonacci(num) {\n    if (num <= 1) return num;\n    return fibonacci(num - 1) + fibonacci(num - 2);\n  }\n\n  const result = fibonacci(n);\n\n  // Post the result back to main thread\n  self.postMessage(result);\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Using the Worker in Your Main Script\nNow, let's create the main script file (e.g. `main.js`) where you start the worker and listen for messages from it."
+      },
+      {
+        "type": "code",
+        "value": "const worker = new Worker('worker.js');\n\n// Send data to the worker\nworker.postMessage(40);  // Calculate the 40th Fibonacci number\n\n// Listen for messages from the worker\nworker.onmessage = function(event) {\n  console.log('Fibonacci result:', event.data);\n  alert('Fibonacci result: ' + event.data);\n};\n\n// Optional: handle worker errors\nworker.onerror = function(error) {\n  console.error('Worker error:', error.message);\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Putting It All Together in HTML\nFinally, you can create a simple HTML page to test this setup."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Web Worker Demo</title>\n</head>\n<body>\n  <h1>Web Worker Fibonacci Calculator</h1>\n  <button id=\"startBtn\">Start Calculation</button>\n\n  <script src=\"main.js\"></script>\n  <script>\n    const startBtn = document.getElementById('startBtn');\n    const worker = new Worker('worker.js');\n\n    worker.onmessage = function(event) {\n      alert('Fibonacci result: ' + event.data);\n      startBtn.disabled = false;\n    };\n\n    worker.onerror = function(error) {\n      console.error('Worker error:', error.message);\n      startBtn.disabled = false;\n    };\n\n    startBtn.addEventListener('click', () => {\n      startBtn.disabled = true;\n      // Calculate 40th Fibonacci number\n      worker.postMessage(40);\n    });\n  </script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nYou have learned how to use Web Workers to run heavy computing tasks without freezing your web page. This technique makes your applications feel faster and more responsive. Try adapting Web Workers for other long-running tasks like image processing or data parsing!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-async-await-and-generators-for-managing-asynchronous-code",
+    "title": "Comparing Async/Await and Generators for Managing Asynchronous Code in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly tutorial exploring how Async/Await and Generators handle asynchronous code in JavaScript, with explanations and code examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing JavaScript code that deals with async operations like fetching data or reading files, managing the flow of asynchronous code can sometimes feel tricky. Two popular methods to handle this are Async/Await and Generators. In this tutorial, we'll explore both approaches, understand how they work, and see simple examples to help you decide which suits you best."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is a modern, built-in feature in JavaScript designed to make asynchronous code look and behave more like synchronous code. It is built on top of Promises and allows you to write cleaner and more readable async functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example using Async/Await:"
+      },
+      {
+        "type": "code",
+        "value": "function wait(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function asyncExample() {\n  console.log('Start');\n  await wait(1000); // wait for 1 second\n  console.log('1 second later');\n}\n\nasyncExample();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `asyncExample` is an async function that pauses at the `await` keyword until the `wait` promise resolves after 1 second, then continues."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Generators?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators are special functions you can pause and resume. They are declared with a `*` and use the `yield` keyword to pause the execution. They are not specifically designed for async code but can be used to manage async operations in older JavaScript environments before Async/Await existed."
+      },
+      {
+        "type": "paragraph",
+        "value": "A basic generator example looks like this:"
+      },
+      {
+        "type": "code",
+        "value": "function* simpleGenerator() {\n  console.log('Start');\n  yield; // pause here\n  console.log('Resumed');\n}\n\nconst gen = simpleGenerator();\ngen.next(); // logs 'Start'\ngen.next(); // logs 'Resumed'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Generators to Handle Async Code"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use Generators for async code, you usually combine them with helper functions that automatically advance the generator when asynchronous operations complete."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example emulating Async/Await using Generators and Promises:"
+      },
+      {
+        "type": "code",
+        "value": "function wait(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nfunction runGenerator(genFn) {\n  const gen = genFn();\n\n  function step(value) {\n    const result = gen.next(value);\n    if (!result.done) {\n      result.value.then(step);\n    }\n  }\n\n  step();\n}\n\n// Generator-based async function\nfunction* genExample() {\n  console.log('Start');\n  yield wait(1000);\n  console.log('1 second later');\n}\n\nrunGenerator(genExample);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this `runGenerator` function, the generator pauses at each `yield` keyword (which yields a promise), and only continues once the promise resolves."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Comparing Async/Await and Generators"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Syntax:** Async/Await is simpler and more readable, resembling synchronous code. Generators require more boilerplate to work with async flows.\n- **Error Handling:** Async/Await uses standard try/catch blocks, making error handling straightforward. Generator-based async code requires careful error propagation.\n- **Browser Support:** Async/Await is supported in modern environments. Generators are older and supported in many environments but need helpers for async operations.\n- **Use Case:** Async/Await is recommended for new projects. Generators are mainly useful in legacy code or when you want fine control over function execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is the modern, cleaner way to handle asynchronous code in JavaScript, improving readability and simplifying error handling. Generators can manage async workflows but require additional code and are now mostly historical interest or for advanced use cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try to use Async/Await in your projects for easier-to-read asynchronous code, but understanding Generators can give you deeper insight into JavaScript’s asynchronous capabilities."
+      }
+    ]
+  },
+  {
+    "slug": "dynamic-module-loading-optimize-performance-js-imports",
+    "title": "Dynamic Module Loading: How to Optimize Performance with JavaScript Imports",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use dynamic imports in JavaScript to load modules only when needed, improving your web app's performance.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web applications, loading all your JavaScript code upfront can slow down the initial loading time. Dynamic module loading allows you to load parts of your code only when they are needed, making your app faster and more efficient. In this tutorial, we'll explore how to use JavaScript's dynamic import() function to achieve this."
+      },
+      {
+        "type": "paragraph",
+        "value": "## What is Dynamic Module Loading?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Dynamic module loading means you load JavaScript modules during runtime instead of at the start. This way, the browser downloads only the essential code first and fetches other modules later, based on user actions or other conditions."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Static vs Dynamic Imports"
+      },
+      {
+        "type": "paragraph",
+        "value": "Typically, we use static imports like this:"
+      },
+      {
+        "type": "code",
+        "value": "import { greet } from './greet.js';\ngreet();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Static imports load modules before the code runs, which can increase the startup time if the module is large or unused initially."
+      },
+      {
+        "type": "paragraph",
+        "value": "With dynamic imports, you can load the module only when you need it:"
+      },
+      {
+        "type": "code",
+        "value": "button.addEventListener('click', () => {\n  import('./greet.js')\n    .then(module => {\n      module.greet();\n    })\n    .catch(err => {\n      console.error('Failed to load module', err);\n    });\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the greet module is loaded only when the user clicks a button."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Example: Dynamic Import in Action"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you have a simple app where you want to show a greeting only when the user decides to see it."
+      },
+      {
+        "type": "code",
+        "value": "// greet.js\nexport function greet() {\n  alert('Hello! Welcome to dynamic imports!');\n}\n\n// main.js\nconst button = document.createElement('button');\nbutton.textContent = 'Load Greeting';\ndocument.body.appendChild(button);\n\nbutton.addEventListener('click', () => {\n  import('./greet.js')\n    .then(module => {\n      module.greet();\n    })\n    .catch(err => {\n      console.error('Error loading the greeting module:', err);\n    });\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "When the user clicks the \"Load Greeting\" button, only then does the greet.js module load, saving resources when the greeting is not needed immediately."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Benefits of Dynamic Imports"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Improved performance:** Load only what you need, when you need it.\n- **Better user experience:** Faster initial load times.\n- **Code splitting:** Break your code into smaller chunks automatically.\n- **Lazy loading:** Useful for rarely used parts of your app or large libraries."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Key Points to Remember"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Dynamic import() returns a promise.\n- You can use async/await to handle imports more neatly.\n- Errors can occur if the module path is wrong, so always catch errors.\n- Browser support is good in modern browsers but check if you need polyfills or bundler configurations."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Dynamic module loading with JavaScript imports is a powerful way to make your web applications faster and more efficient. By loading code only when needed, you reduce the initial load time and improve the overall user experience. Try incorporating dynamic imports in your next project to see the benefits firsthand!"
+      }
+    ]
+  },
+  {
+    "slug": "creating-custom-iterators-and-generators-for-efficient-data-processing",
+    "title": "Creating Custom Iterators and Generators for Efficient Data Processing",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create custom iterators and generators in JavaScript to efficiently handle and process data step-by-step.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large or complex data sets, sometimes you need to process data one piece at a time instead of loading everything at once. JavaScript offers powerful tools to do this efficiently: custom iterators and generators. They allow you to create sequences of values that you can iterate over, making your code more memory-efficient and easier to manage."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll learn how to create a custom iterator and a generator function. Both provide ways to generate data on the fly but are used in slightly different ways."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is an Iterator?"
+      },
+      {
+        "type": "paragraph",
+        "value": "An iterator is an object with a `next()` method that returns the next value in a sequence along with a `done` property that tells whether the iteration is complete."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple iterator that counts from 1 to 5."
+      },
+      {
+        "type": "code",
+        "value": "function createCounter() {\n  let count = 1;\n  return {\n    next() {\n      if (count <= 5) {\n        return { value: count++, done: false };\n      } else {\n        return { done: true };\n      }\n    }\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter.next()); // { value: 1, done: false }\nconsole.log(counter.next()); // { value: 2, done: false }\n// Keep calling next() till done is true"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Iterators with `for...of`"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use an object with the `for...of` loop, it needs to be iterable. That means it must have a `[Symbol.iterator]()` method that returns an iterator. Let's update our counter to be iterable."
+      },
+      {
+        "type": "code",
+        "value": "const iterableCounter = {\n  count: 1,\n  [Symbol.iterator]() {\n    return {\n      count: this.count,\n      next() {\n        if (this.count <= 5) {\n          return { value: this.count++, done: false };\n        } else {\n          return { done: true };\n        }\n      }\n    };\n  }\n};\n\nfor (const num of iterableCounter) {\n  console.log(num); // 1 2 3 4 5\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Generator?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators offer a simpler way to create iterators. They are functions that can pause their execution by using the `yield` keyword and resume later, producing values one at a time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's write the same counter using a generator function."
+      },
+      {
+        "type": "code",
+        "value": "function* counterGenerator() {\n  for (let i = 1; i <= 5; i++) {\n    yield i;\n  }\n}\n\nconst gen = counterGenerator();\nconsole.log(gen.next()); // { value: 1, done: false }\nconsole.log(gen.next()); // { value: 2, done: false }\n\n// Use in for...of\nfor (const num of counterGenerator()) {\n  console.log(num); // 1 2 3 4 5\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Generators or Custom Iterators?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators and iterators are great when dealing with large data sets or streams of data. Instead of loading everything into memory at once, you can process items one by one. For example, reading lines from a large file or generating an infinite sequence of numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Real-World Example: Processing Data in Chunks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have a large array, and you want to process it chunk-by-chunk."
+      },
+      {
+        "type": "code",
+        "value": "function* chunkGenerator(array, chunkSize) {\n  for (let i = 0; i < array.length; i += chunkSize) {\n    yield array.slice(i, i + chunkSize);\n  }\n}\n\nconst data = [1, 2, 3, 4, 5, 6, 7, 8, 9];\n\nfor (const chunk of chunkGenerator(data, 3)) {\n  console.log(chunk); // [1,2,3] then [4,5,6] then [7,8,9]\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Custom iterators give you control over how data is returned step-by-step, and generators provide a clean and easy syntax to build iterators. Learning to use these features will help you write more efficient and readable JavaScript when dealing with sequences or streams of data."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-build-a-minimalistic-state-management-system-from-scratch",
+    "title": "How to Build a Minimalistic State Management System from Scratch",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple and minimalistic state management system in JavaScript from scratch. This tutorial is perfect for beginners who want to understand the fundamentals of state management without any external libraries.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "State management is an essential concept in modern web development. It helps you keep track of your application's data and how it changes over time. Popular libraries like Redux or MobX manage state for you, but understanding how they work under the hood is crucial for becoming a better developer. In this tutorial, we'll build a minimalistic state management system from scratch using plain JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Our system will have three main features:\n1. A state object to store data.\n2. A way to update the state.\n3. A subscription system to notify when state changes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's get started!"
+      },
+      {
+        "type": "code",
+        "value": "function createStore(initialState) {\n  let state = initialState;\n  const listeners = [];\n\n  // Get the current state\n  function getState() {\n    return state;\n  }\n\n  // Update the state and notify listeners\n  function setState(update) {\n    state = { ...state, ...update };\n    listeners.forEach((listener) => listener());\n  }\n\n  // Subscribe to state changes\n  function subscribe(listener) {\n    listeners.push(listener);\n    // Return an unsubscribe function\n    return () => {\n      const index = listeners.indexOf(listener);\n      if (index > -1) {\n        listeners.splice(index, 1);\n      }\n    };\n  }\n\n  return { getState, setState, subscribe };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a breakdown of this code:\n\n- `createStore` takes an initial state object.\n- `getState` returns the current state.\n- `setState` merges the new updates into the existing state and calls all subscribed listeners.\n- `subscribe` lets other parts of your app listen for changes in the state and returns an unsubscribe function to stop listening."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how to use this store:"
+      },
+      {
+        "type": "code",
+        "value": "// Create a store with an initial state\nconst store = createStore({ count: 0 });\n\n// Create a listener function to respond to state changes\nfunction render() {\n  console.log(\"Count:\", store.getState().count);\n}\n\n// Subscribe the listener\nconst unsubscribe = store.subscribe(render);\n\n// Initial render\nrender();\n\n// Update the state - this will trigger the listener\nstore.setState({ count: store.getState().count + 1 }); // Count: 1\nstore.setState({ count: store.getState().count + 1 }); // Count: 2\n\n// Stop listening to changes\nunsubscribe();\n\n// This update will not trigger the listener\nstore.setState({ count: store.getState().count + 1 });"
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple system shows the core concepts of state management: you create a store, read from it, update it, and react when it changes. You can extend this system by adding features like middleware, action creators, or more complex state updates, but this minimalistic setup is a great starting point."
+      },
+      {
+        "type": "paragraph",
+        "value": "Congratulations! You’ve just built your own minimalistic state management system."
+      }
+    ]
+  },
+  {
+    "slug": "advanced-event-delegation-techniques-for-high-performance-web-apps",
+    "title": "Advanced Event Delegation Techniques for High-Performance Web Apps",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to optimize your web app's event handling with advanced event delegation techniques in JavaScript. Boost performance and scalability by managing events more efficiently.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event delegation is a powerful technique in JavaScript that allows you to handle events efficiently by attaching a single event listener to a parent element instead of multiple listeners to individual child elements. This technique works because of event bubbling, where events triggered on child elements propagate up to their parent nodes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore advanced event delegation techniques that help you build high-performance web applications. Even if you're a beginner, you'll find these patterns useful as your projects grow and require scalable event handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Event Delegation?\n- Improves performance by reducing the number of event listeners.\n- Makes dynamic content easier to manage since new elements can automatically be handled.\n- Simplifies cleanup when removing large components or containers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Event Delegation Setup"
+      },
+      {
+        "type": "code",
+        "value": "const list = document.getElementById('myList');\n\nlist.addEventListener('click', function(event) {\n  const clickedItem = event.target;\n  if (clickedItem.tagName === 'LI') {\n    console.log('List item clicked:', clickedItem.textContent);\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, a single click listener on the parent `<ul>` handles clicks on all child `<li>` elements. But as apps grow, you might want to handle many event types or use more complex delegation logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Advanced Techniques"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Delegating Multiple Event Types:** Instead of adding separate listeners for each event, create a reusable function that delegates based on event type."
+      },
+      {
+        "type": "code",
+        "value": "function delegateEvent(parentSelector, eventType, selector, handler) {\n  const parent = document.querySelector(parentSelector);\n  parent.addEventListener(eventType, function(event) {\n    let targetElement = event.target;\n    while (targetElement && targetElement !== parent) {\n      if (targetElement.matches(selector)) {\n        handler.call(targetElement, event);\n        break;\n      }\n      targetElement = targetElement.parentElement;\n    }\n  });\n}\n\n// Usage example\n// Handles click on all buttons with class 'btn' inside #container\ndelegateEvent('#container', 'click', '.btn', function(e) {\n  console.log('Button clicked:', this.textContent);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "This `delegateEvent` function improves flexibility by allowing delegation on any parent element, event type, and selector."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Using Event Capturing for Early Handling:** By default, event listeners fire during the bubbling phase, but you can listen during the capturing phase to intercept events earlier. This can be useful for certain UI patterns."
+      },
+      {
+        "type": "code",
+        "value": "document.getElementById('parent').addEventListener('click', function(event) {\n  console.log('Capturing phase listener');\n}, true);  // third argument 'true' enables capturing"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Managing Delegated Event Performance:** When you have many event listeners, consider throttling or debouncing your handlers to prevent performance bottlenecks, especially on `scroll`, `resize`, or `mousemove` events."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of debouncing a delegated event handler:"
+      },
+      {
+        "type": "code",
+        "value": "function debounce(func, delay) {\n  let timeoutId;\n  return function(...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => func.apply(this, args), delay);\n  };\n}\n\ndelegateEvent('#container', 'scroll', '.scrollable', debounce(function(e) {\n  console.log('Scroll event debounced fired on:', this);\n}, 200));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced event delegation can greatly improve your web app's performance and maintainability. Use reusable delegation functions, take advantage of event capturing when necessary, and optimize event handler execution by throttling or debouncing. Practice these techniques to build scalable and efficient interactive apps."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding!"
+      }
+    ]
   }
 ];
