@@ -1,3 +1,4 @@
+
 export const articles = [
   {
     "slug": "introduction-to-javascript-variables-and-data-types",
@@ -199,6 +200,31 @@ export const articles = [
     ]
   },
   {
+    "slug": "javascript-basics-for-absolute-beginners",
+    "title": "JavaScript Basics for Absolute Beginners",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the foundational concepts of JavaScript with easy examples and explanations.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is one of the most popular programming languages, mainly used to add interactivity to web pages. If you have never coded before, this tutorial will help you understand the very basics of JavaScript and get started with writing simple programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, you use variables to store data, like numbers or text. You can create variables using keywords like 'let' or 'const'. Here is a simple example that shows how to declare variables and output them."
+      },
+      {
+        "type": "code",
+        "value": "let name = \"Alice\";\nconst age = 25;\nconsole.log(\"Name:\", name);\nconsole.log(\"Age:\", age);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above code, 'let name = \"Alice\";' creates a variable named 'name' and stores the text \"Alice\". We use 'const' for 'age' which means this value should not change later. The 'console.log()' function prints the values to the console, which is a place in your browser or code editor where you can see the output. Getting comfortable with variables and output will help you understand more complex topics in JavaScript."
+      }
+    ]
+  },
+  {
     "slug": "how-to-fix-undefined-is-not-a-function-error-in-javascript",
     "title": "How to Fix 'undefined is not a function' Error in JavaScript",
     "language": "javascript",
@@ -361,6 +387,31 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "This example query selects all data from a table named 'users'. If you run this query and see an error saying \"table not found,\" it means the database doesn't have a table named 'users'. To fix it, check your table name spelling or create the table first using a CREATE TABLE statement."
+      }
+    ]
+  },
+  {
+    "slug": "troubleshooting-common-sql-connection-issues",
+    "title": "Troubleshooting Common SQL Connection Issues",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify, understand, and fix common SQL connection problems in beginner-friendly steps.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to a SQL database is one of the first steps in working with databases, but sometimes connection issues can arise. These problems can be frustrating for beginners. This article will help you understand the common SQL connection errors, why they happen, and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error is the 'Login failed for user' message. This usually means the username or password provided is incorrect or the user does not have permission to access the database. Another frequent problem is 'Cannot connect to server' which happens when the SQL server is not reachable due to network configuration, server not running, or wrong server address. Finally, the error 'Timeout expired' occurs when the connection attempt takes too long, possibly due to network issues or server overload."
+      },
+      {
+        "type": "code",
+        "value": "/* Example of a basic SQL Server connection string in T-SQL */\n-- Make sure to replace 'ServerName', 'DatabaseName', 'User', and 'Password' with your own info\n-- This string is used by your application to connect to SQL Server\n\nServer=ServerName;Database=DatabaseName;User Id=User;Password=Password;\n\n-- If you see an error here, check the username and password or server address."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix these issues, first verify your login credentials and permissions. Ensure the SQL server is running and the server name or IP address is correct. Check your network connection and firewall settings to confirm the SQL server port is open (default is 1433). Finally, increasing the connection timeout value might help if the network is slow. Understanding these causes and solutions will help you quickly troubleshoot and resolve SQL connection problems."
       }
     ]
   },
@@ -621,6 +672,39 @@ export const articles = [
     ]
   },
   {
+    "slug": "getting-started-with-typescript-basics",
+    "title": "Getting Started with TypeScript Basics",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "A beginner-friendly introduction to TypeScript covering basic concepts, syntax, and common errors.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a superset of JavaScript that adds static types to your code. This helps catch errors early and makes your code easier to understand and maintain. In this tutorial, you'll learn the basics of TypeScript and how to write simple typed programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s start by declaring variables with explicit types. TypeScript uses a colon (:) followed by the type to declare the type of a variable. Common types include string, number, and boolean. You can also create functions with typed parameters and return values."
+      },
+      {
+        "type": "code",
+        "value": "let username: string = 'Alice';\nlet age: number = 30;\nlet isAdmin: boolean = true;\n\nfunction greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet(username));"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code shows variables with specific types and a function that accepts and returns a string. TypeScript ensures you can’t assign values with incompatible types. For example, if you try to assign a number to a string variable, TypeScript will give an error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common TypeScript error example: \nIf you write `let title: string = 123;`, TypeScript shows an error: \"Type 'number' is not assignable to type 'string'.\" This means that you tried to assign a number to a variable that expects a string. To fix it, change the value to a string like \"123\" or update the variable type to number if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Starting with these basic types and error explanations, you can write safer JavaScript code with TypeScript. As you practice, you’ll explore more advanced features like interfaces, enums, and generics to build robust applications."
+      }
+    ]
+  },
+  {
     "slug": "resolving-typescript-property-does-not-exist-error",
     "title": "Resolving TypeScript Property Does Not Exist on Type Error",
     "language": "typescript",
@@ -696,6 +780,31 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In the example above, the Dog class has a method called bark, but not meow. If you try to call meow on a Dog object, Python will raise an AttributeError. To fix this, double-check the method or attribute names, ensure you are using the correct object, and verify the attribute exists before calling it."
+      }
+    ]
+  },
+  {
+    "slug": "sql-basics-for-absolute-beginners",
+    "title": "SQL Basics for Absolute Beginners",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the fundamentals of SQL including basic queries, creating tables, and troubleshooting common errors.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL (Structured Query Language) is a powerful language used to manage and manipulate databases. If you are new to coding or databases, this tutorial will guide you through the basics of SQL so you can start writing your own queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the first things to understand is how to create a table in a database. A table stores data in rows and columns, similar to a spreadsheet. Each column has a data type, like text or numbers. After creating a table, you can insert data and run queries to get specific information."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Students (\n  ID INT PRIMARY KEY,\n  Name VARCHAR(50),\n  Age INT\n);\n\nINSERT INTO Students (ID, Name, Age) VALUES (1, 'Alice', 20);\nINSERT INTO Students (ID, Name, Age) VALUES (2, 'Bob', 22);\n\n-- Select all data from the Students table\nSELECT * FROM Students;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example creates a table called 'Students' with three columns: ID, Name, and Age. It inserts two rows of data and then selects the entire table. If you get an error like \"ERROR 1064 (42000): You have an error in your SQL syntax,\" it usually means there is a typo or missing keyword. Double-check your spelling and punctuation such as commas and parentheses to fix it."
       }
     ]
   },
@@ -1022,6 +1131,60 @@ export const articles = [
     ]
   },
   {
+    "slug": "python-for-absolute-beginners-getting-started-guide",
+    "title": "Python for Absolute Beginners: Getting Started Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "A friendly introduction to Python programming for complete beginners.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a popular programming language known for its readability and simplicity, making it a great choice for beginners. In this guide, you'll learn the basics of Python, how to write your first program, and understand some common errors you might encounter."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started, you need to have Python installed on your computer. You can download it from python.org. Once installed, you can write Python code using a text editor or an Integrated Development Environment (IDE) like IDLE, which comes bundled with Python. Let's start with a simple program that prints a message on the screen."
+      },
+      {
+        "type": "code",
+        "value": "print(\"Hello, World!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, it will display the message Hello, World! on the screen. The print function tells Python to show whatever is inside the parentheses. If you face an error such as SyntaxError: EOL while scanning string literal, it usually means you forgot to close the quotes around your text. Make sure every opening quote has a matching closing quote."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now you know how to display text using Python. This simple exercise helps you become comfortable with writing and running Python code. Keep practicing by changing the message inside the quotes, and soon you'll be ready to explore variables, data types, and more!"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-syntaxerror-in-python-code",
+    "title": "How to Fix SyntaxError in Python Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what SyntaxError means in Python, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start writing Python code, you might encounter an error called SyntaxError. This error means that there's something wrong with the way your code is written – Python can't understand it because it doesn't follow the correct rules (syntax)."
+      },
+      {
+        "type": "paragraph",
+        "value": "A SyntaxError happens when you forget something like a missing parenthesis, a colon, or a quotation mark, or when your code structure isn't correct. Python checks your program from top to bottom and if it finds a mistake, it stops running and shows you the SyntaxError along with a message telling you where the problem is."
+      },
+      {
+        "type": "code",
+        "value": "print('Hello world'\n\n# This will cause a SyntaxError because the closing parenthesis is missing"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the above error, make sure all parentheses, quotes, and colons are properly closed or placed. The fixed code looks like this:\n\nprint('Hello world')\n\nAlways carefully check for missing or extra characters and follow Python's syntax rules. This will help you avoid SyntaxError and make your code run smoothly."
+      }
+    ]
+  },
+  {
     "slug": "how-to-write-your-first-sql-query",
     "title": "How to Write Your First SQL Query",
     "language": "sql",
@@ -1208,6 +1371,35 @@ export const articles = [
     ]
   },
   {
+    "slug": "understanding-variables-and-data-types-in-python",
+    "title": "Understanding Variables and Data Types in Python",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of variables and data types in Python with clear explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start coding in Python, one of the first things you'll need to learn about is variables. Variables are like containers that store information for your program to use later. Think of a variable as a label attached to a value."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, variables can hold different types of data, such as numbers, text, or more complex things like lists. The type of data a variable holds is called a data type. Some common data types are integers (whole numbers), floats (decimal numbers), strings (text), and booleans (True or False). Python automatically figures out the type based on the value you assign."
+      },
+      {
+        "type": "code",
+        "value": "# Example of variables with different data types\nage = 25           # integer\nprice = 19.99      # float\nname = \"Alice\"     # string\nis_student = True  # boolean\n\nprint(age)         # outputs: 25\nprint(price)       # outputs: 19.99\nprint(name)        # outputs: Alice\nprint(is_student)  # outputs: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you ever get an error related to variables, such as a NameError, it usually means you tried to use a variable that you haven't set yet. For example, if you write `print(x)` but never assigned a value to `x`, Python will complain. To fix this, make sure to assign a value to your variable before using it."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, variables are labels for storing data in your Python programs, and data types tell you what kind of information is stored. Understanding how to use variables and their different data types is a fundamental skill that will help you as you continue to learn programming."
+      }
+    ]
+  },
+  {
     "slug": "resolving-nameerror-when-using-variables-in-python",
     "title": "Resolving NameError When Using Variables in Python",
     "language": "python",
@@ -1279,6 +1471,35 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "To fix a primary key violation, you can ensure that inserted values are unique. Use tools like auto-increment columns or sequences to automate unique key generation. If manually inserting data, check existing keys before adding new ones. Handling this properly prevents errors and keeps your database consistent."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-loops-with-simple-examples",
+    "title": "Understanding JavaScript Loops with Simple Examples",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding loops in JavaScript with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Loops are a fundamental concept in programming that allow you to repeat a block of code multiple times. In JavaScript, loops help automate repetitive tasks so you don't have to write the same code over and over. This tutorial will introduce you to the most common types of loops and explain how they work with simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common loops in JavaScript are the for loop, while loop, and do...while loop. The for loop repeats code a specific number of times, the while loop continues as long as a condition is true, and the do...while loop is similar but runs the code at least once before checking the condition."
+      },
+      {
+        "type": "code",
+        "value": "for (let i = 0; i < 5; i++) {\n  console.log('The number is ' + i);\n}\n\n// This will print numbers from 0 to 4 in the console."
+      },
+      {
+        "type": "paragraph",
+        "value": "Loops are very useful for tasks like processing items in an array or running code until something changes. If you make a mistake with your loop conditions, you might create an 'infinite loop' which keeps running forever and can crash your browser or program. For example, if you forget to increase `i` in a for loop, the loop condition might always be true. To fix this, ensure your loop has a clear exit condition and update the variables controlling the loop inside the loop."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, loops let you repeat code efficiently. Start with simple for loops and experiment by changing the conditions and the code inside the loop. Understanding loops well will make your programming easier and more powerful."
       }
     ]
   },
@@ -1737,6 +1958,64 @@ export const articles = [
     ]
   },
   {
+    "slug": "how-to-fix-unexpected-token-error-in-javascript",
+    "title": "How to Fix Unexpected Token Error in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what the Unexpected Token error means in JavaScript, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to JavaScript, you may have seen an error message like `Unexpected token` when running your code. This error can be confusing because it doesn't always explain exactly what went wrong. In this article, we'll explain what this error means, common reasons why it happens, and how you can fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "The `Unexpected token` error means that JavaScript found a character (or \"token\") where it wasn't expecting one. This usually happens due to a typo, missing punctuation, or incorrect syntax. For example, it can occur if you forget to close a string with quotes, if a bracket is missing, or if you write invalid characters."
+      },
+      {
+        "type": "code",
+        "value": "let name = 'Alice;\nconsole.log(name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, we forgot to close the string with an ending quote after `'Alice`. JavaScript sees the semicolon inside what it thinks is the string and throws an `Unexpected token` error because it finds something unexpected inside the string. To fix it, make sure all strings are properly closed with matching quotes, like this:"
+      },
+      {
+        "type": "code",
+        "value": "let name = 'Alice';\nconsole.log(name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Other common causes for this error include missing commas between items in an array or object, leftover or extra punctuation, or using reserved words incorrectly. Always check the line mentioned in the error message and look for typos or missing syntax. Fixing those mistakes will help your code run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-typescript-variables-and-data-types",
+    "title": "Getting Started with TypeScript Variables and Data Types",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to declare variables and use basic data types in TypeScript with beginner-friendly explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful programming language that builds on JavaScript by adding static types. This means you can define the type of data a variable holds, which helps catch errors early and write more reliable code. In this tutorial, we'll explore how to declare variables and use common data types in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "To declare a variable in TypeScript, you use keywords like `let`, `const`, or `var`, followed by the variable name and optionally specify the type using a colon. TypeScript supports several basic data types such as `number`, `string`, `boolean`, and more. Specifying types is optional, but it helps the compiler understand what kind of data your variables should hold."
+      },
+      {
+        "type": "code",
+        "value": "let age: number = 25;\nconst name: string = 'Alice';\nlet isStudent: boolean = true;\n\n// TypeScript also infers types if you don't specify them:\nlet score = 90; // inferred as number\n\n// An example of a type error:\n// age = 'twenty-five'; // Error: Type 'string' is not assignable to type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we declared variables with specific types. If you try to assign a value of a different type, TypeScript will show an error. This error means you're trying to store incompatible data and can be fixed by ensuring the variable holds only data of the declared type. Using types helps you prevent bugs, improve code readability, and make development easier as your projects grow."
+      }
+    ]
+  },
+  {
     "slug": "fixing-typescript-argument-of-type-is-not-assignable-to-parameter-error",
     "title": "Fixing TypeScript's 'Argument of type is not assignable to parameter' Error",
     "language": "typescript",
@@ -1832,6 +2111,31 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, when you see a TypeError in your Python code, check the types of the values involved. Use functions like str(), int(), or float() to convert values if needed. Ensuring type compatibility will help you avoid this common error and make your programs run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-data-types-and-their-uses",
+    "title": "Understanding SQL Data Types and Their Uses",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to SQL data types and how to use them effectively.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, it is essential to understand the different data types available in SQL. Data types define the kind of data that can be stored in each column of a table, such as text, numbers, or dates. Using the correct data type helps ensure your data is stored efficiently and accurately."
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL offers many data types, but for beginners, it's useful to focus on a few common ones: INTEGER for whole numbers, VARCHAR for variable-length text, DATE for dates, and BOOLEAN for true or false values. Choosing the right data type prevents errors and improves database performance."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n  id INTEGER PRIMARY KEY,\n  name VARCHAR(100),\n  email VARCHAR(100),\n  signup_date DATE,\n  is_active BOOLEAN\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the users table stores different data types for each column. The id column uses INTEGER for user IDs, name and email use VARCHAR to store text, signup_date uses DATE to record the registration day, and is_active uses BOOLEAN to represent if the user is currently active. Understanding and applying data types correctly helps you design better databases."
       }
     ]
   },
@@ -1992,6 +2296,101 @@ export const articles = [
     ]
   },
   {
+    "slug": "understanding-sql-data-types",
+    "title": "Understanding SQL Data Types",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to understanding and using SQL data types.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you work with SQL databases, you will often create tables to store data. Each column in a table must have a data type, which tells the database what kind of data that column will hold. Understanding SQL data types is essential for designing efficient databases and avoiding errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL data types can be broadly categorized into numeric types, character types, date and time types, and more. Numeric types store numbers, character types store text, and date/time types handle dates and times. Choosing the right data type helps keep your data consistent and your queries fast."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Employees (\n  EmployeeID INT,\n  FirstName VARCHAR(50),\n  LastName VARCHAR(50),\n  BirthDate DATE,\n  Salary DECIMAL(10, 2)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, EmployeeID uses INT for integers, FirstName and LastName use VARCHAR for variable-length strings, BirthDate uses DATE for storing dates, and Salary uses DECIMAL to store currency values with two decimal places. Using the correct data types helps prevent errors such as trying to store text in a numeric column."
+      }
+    ]
+  },
+  {
+    "slug": "common-causes-of-sql-connection-errors-and-solutions",
+    "title": "Common Causes of SQL Connection Errors and Solutions",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn about typical SQL connection errors, what causes them, and how to fix them with easy explanations and examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Connecting to an SQL database is a fundamental task when working with databases. However, beginners often encounter connection errors that can be confusing. This article explains some common SQL connection errors, why they happen, and how you can fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common error is \"Login failed for user.\" This usually means that the username or password you provided is incorrect or the user does not have permission to access the database. Double-check your credentials and ensure the user has access rights."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM sys.database_principals\nWHERE name = 'your_username';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another frequent issue is the \"Server not found or not accessible\" error. This can happen if the server name is wrong, the SQL Server service is not running, or the firewall is blocking the connection. Make sure your server name is correct, start the SQL Server service if it is stopped, and check firewall settings."
+      },
+      {
+        "type": "paragraph",
+        "value": "Timeout errors happen when the server takes too long to respond. This could be due to network problems or a very busy server. Try increasing the connection timeout setting or troubleshoot network connectivity."
+      },
+      {
+        "type": "code",
+        "value": "sqlcmd -S ServerName -U username -P password -l 30\n-- The '-l 30' option sets the login timeout to 30 seconds"
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, \"Invalid connection string\" errors occur if your connection string has syntax problems or missing parameters. Always verify your connection string format according to the database you are using."
+      },
+      {
+        "type": "code",
+        "value": "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, when you face SQL connection errors, carefully check your credentials, server accessibility, network settings, and connection string format. By understanding these common issues and their solutions, you can quickly resolve connection problems and focus on working with your database."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-create-your-first-javascript-program",
+    "title": "How to Create Your First JavaScript Program",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to writing and running your first JavaScript program.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a popular programming language used to make websites interactive. If you're new to programming, this tutorial will guide you step by step to create your very first JavaScript program right in your web browser."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll start by writing a simple program that displays a message on the screen. You can write JavaScript code directly in your web browser's console or by creating a file that your browser can run. The code we'll use is very simple and will help you understand how JavaScript commands work."
+      },
+      {
+        "type": "code",
+        "value": "alert('Hello, world!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "The code above uses the alert function to show a popup with the message 'Hello, world!'. This is often the first program beginners write. If you see an error, it usually means there is a typo or missing punctuation. For example, missing the quotes around the message or forgetting the semicolon may cause issues. Always make sure strings are inside quotes and statements end with a semicolon. Now, try running this code, and you'll see your first JavaScript program in action!"
+      }
+    ]
+  },
+  {
     "slug": "common-causes-of-syntax-errors-in-javascript-and-how-to-fix-them",
     "title": "Common Causes of Syntax Errors in JavaScript and How to Fix Them",
     "language": "javascript",
@@ -2091,6 +2490,39 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, if statements in Python help your program decide what to do by checking conditions. Always remember the colon and indentation rules, and use else when you want to specify code for when the condition is false."
+      }
+    ]
+  },
+  {
+    "slug": "resolving-nameerror-in-python-common-causes-and-solutions",
+    "title": "Resolving NameError in Python: Common Causes and Solutions",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what a NameError in Python means, why it happens, and how to fix it with simple examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start coding in Python, you might come across an error called NameError. This error happens when Python can't find a variable or function name that you've used in your code. Understanding why this error occurs and how to fix it will help you write better programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "A NameError usually means you tried to use a name (like a variable or a function) before defining it or you made a typo in the name. Python looks for this name in the current program and if it can't find it, it raises a NameError. To fix it, you need to make sure the name is spelled correctly and that it is created before you use it."
+      },
+      {
+        "type": "code",
+        "value": "print(age)\nage = 25\n# This code will cause a NameError because 'age' is used before it is defined."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the above error, define the variable before using it. For example, create the variable 'age' first, then print it. Also, double-check for spelling mistakes in your variable names to avoid NameErrors."
+      },
+      {
+        "type": "code",
+        "value": "age = 25\nprint(age)\n# Now the code works because 'age' is defined before it is used."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, a NameError tells you that Python can't find a name you're trying to use. To solve it, make sure the name exists, is spelled correctly, and is defined before you use it in your code."
       }
     ]
   },
@@ -3816,6 +4248,74 @@ export const articles = [
     ]
   },
   {
+    "slug": "typescript-property-does-not-exist-on-type-fix",
+    "title": "TypeScript Property Does Not Exist on Type Error Fix",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to fix the common TypeScript error 'Property does not exist on type' with simple explanations and practical examples. Understand why it happens and how to resolve it.",
+    "videoUrl": "https://www.youtube.com/watch?v=zf61XNjeabo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've recently started using TypeScript, you might have encountered the error message: \"Property 'someProperty' does not exist on type 'SomeType'.\" This error can be confusing for beginners, especially if you're coming from JavaScript, where properties can be accessed freely. In this article, we'll explain what this error means, why it happens, and how you can fix it in your TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error \"Property does not exist on type\" occurs because TypeScript uses static typing to check your code before it runs. When you try to access a property that TypeScript doesn't recognize on a specific type or interface, it shows this error. This safety feature helps catch typos, incorrect object shapes, or accessing properties that don’t belong to certain data types. Understanding this error involves knowing about TypeScript types, interfaces, and type checking."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = {\n  name: 'Alice',\n  age: 25\n};\n\nconsole.log(user.email); // Error: Property 'email' does not exist on type 'User'."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to make sure the property you're accessing is defined in the type. For example, if you want to access the \"email\" property, add it to the interface. Alternatively, you can use TypeScript’s index signatures or type assertions if you know the property exists but it’s not declared. Another approach is to use optional chaining if the property might not always be present. These techniques involve understanding interfaces, type assertions, and optional properties in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is assuming JavaScript’s flexibility carries over to TypeScript, which uses strict type checking. Beginners often add new properties dynamically without updating the corresponding type declarations. Another pitfall is ignoring type errors by using \"any\", which defeats the purpose of TypeScript’s safety. Also, not using tools like type guards or optional chaining can lead to unsafe property access and runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"Property does not exist on type\" error in TypeScript is a helpful reminder to keep your types and interfaces accurate. By defining all expected properties in your types and using optional chaining or type assertions carefully, you can write safer and clearer code. Understanding this error also strengthens your knowledge of related concepts like interfaces, type checking, and type assertions, making you a more confident TypeScript developer."
+      }
+    ]
+  },
+  {
+    "slug": "python-list-comprehension-explained-with-examples",
+    "title": "Python List Comprehension Explained with Examples for Beginners",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn Python list comprehension with simple explanations and practical examples. Understand how to create lists more efficiently and avoid common mistakes.",
+    "videoUrl": "https://www.youtube.com/watch?v=l8mWvDUwOt4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to Python and want to write cleaner and more efficient code, Python list comprehension is a great feature to learn. It helps you create lists quickly in a concise way, replacing longer for-loops. In this tutorial, we will explain what list comprehension is, show you examples, and guide you on how to use it properly while avoiding common mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a Python list comprehension is a compact way to generate a new list by applying an expression to each item in an existing list or any iterable. Instead of writing multiple lines to loop through items and append results, the list comprehension does this in just one line. This concept is closely related to Python loops, the map function, and conditional statements, enabling clean and readable list generation."
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3, 4, 5]\nsquares = [num * num for num in numbers]\nprint(squares)  # Output: [1, 4, 9, 16, 25]\n\n# List comprehension with condition to filter even numbers:\neven_squares = [num * num for num in numbers if num % 2 == 0]\nprint(even_squares)  # Output: [4, 16]"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use list comprehension properly, always follow the basic structure: start with an expression that defines what each element should look like, then a for-loop to iterate over your iterable, and optionally add an if condition to filter items. It’s important to prefer list comprehension when you want to create new lists rather than modify existing ones, as list comprehensions are not ideal for side effects. Understanding variable scoping in comprehensions and how they differ from generator expressions will also help you in writing effective Python code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Some common mistakes beginners make include trying to use list comprehension for complex logic that requires multiple statements, which reduces readability. Another mistake is forgetting parentheses or using the wrong syntax, resulting in syntax errors. People also sometimes mix up list comprehensions with generator expressions or use them for operations that modify data in place, where a traditional loop may be clearer. If performance is a concern, remember that list comprehensions are generally faster than equivalent for-loops but should be used judiciously."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, Python list comprehensions provide a neat way to build and manipulate lists through an expressive and clean syntax. By mastering list comprehensions alongside basic loops, conditional statements, and understanding related concepts like map and filter functions, you can write more Pythonic and efficient code. Practice by rewriting simple loops into list comprehensions to get comfortable and always prioritize readability in your programs."
+      }
+    ]
+  },
+  {
     "slug": "how-to-fix-attributeerror-module-has-no-attribute-in-python",
     "title": "How to Fix AttributeError: module has no attribute in Python",
     "language": "python",
@@ -4228,6 +4728,40 @@ export const articles = [
     ]
   },
   {
+    "slug": "typescript-generics-explained-with-examples",
+    "title": "TypeScript Generics Explained with Examples: A Beginner's Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how TypeScript generics work with simple, practical examples. Understand generics step-by-step to write flexible, reusable code in TypeScript.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're beginning to learn TypeScript and want your code to be more flexible and reusable, understanding generics is essential. Generics allow you to write functions, classes, and interfaces that work with a variety of types without losing type safety. This tutorial will guide you through what TypeScript generics are, why they matter, and how to use them effectively with straightforward examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a generic is like a placeholder for a type. Instead of explicitly defining the type inside your function or class, you use a generic parameter that is specified later. This means you can write one piece of code that adapts to different data types as needed. Generics work well alongside other TypeScript features like interfaces, type aliases, and type inference, making your code more robust and maintainable."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst num = identity<number>(42); // num is number\nconst str = identity<string>('hello'); // str is string\n\n// Generic with arrays\ntype Box<T> = {\n  contents: T[];\n};\n\nconst numberBox: Box<number> = { contents: [1, 2, 3] };\nconst stringBox: Box<string> = { contents: ['a', 'b', 'c'] };"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use generics properly, start by declaring a generic parameter inside angle brackets, like <T>. You can then use T as a type within your function, class, or interface. When calling or instantiating your generic code, specify the actual type you want, or let TypeScript infer it for you. This approach avoids repeating similar functions for different types and keeps your code DRY (Don't Repeat Yourself). You can also constrain generics to specific types to enforce more precise typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes with generics include not specifying a type parameter, which can lead to the type defaulting to unknown or any, reducing type safety. Another error is overusing generics where simpler types would do, making the code unnecessarily complex. Additionally, forgetting to add constraints when a generic type needs certain properties can cause runtime errors or difficult-to-debug code. Always balance flexibility with clear intent using constraints and type inference."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript generics are a powerful way to write flexible and reusable code while maintaining strong typing. They work hand in hand with other TypeScript concepts like interfaces, type aliases, and type inference. By mastering generics, you can avoid duplication and build more maintainable applications. Keep practicing with simple examples and gradually add complexity once you're comfortable with the basics."
+      }
+    ]
+  },
+  {
     "slug": "how-to-use-async-await-in-python-with-examples",
     "title": "How to Use Async Await in Python with Examples for Beginners",
     "language": "python",
@@ -4500,6 +5034,40 @@ export const articles = [
     ]
   },
   {
+    "slug": "how-to-use-async-await-in-python-effectively",
+    "title": "How to Use Async Await in Python Effectively: A Beginner's Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use async and await in Python effectively with clear explanations and practical examples. Master asynchronous programming, event loop basics, coroutines, and proper error handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=3E-Ym2mbSCc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've started exploring Python's asynchronous programming, you might have come across the async and await keywords. These tools help you write code that can handle multiple tasks at the same time, without blocking your program. In this article, we’ll break down how async await works in Python and show you practical ways to use it effectively, especially if you are new to async programming, event loops, or coroutines."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, async and await let Python functions pause and resume while waiting for operations like network requests, file I/O, or timers to complete. When you mark a function with async, it becomes a coroutine, which means it can be paused at await points. The await keyword is used to wait for another coroutine or an asynchronous operation to finish, allowing other tasks to run during that wait. This asynchronous behavior improves performance and responsiveness, especially in applications that need to handle many tasks simultaneously, such as web servers or data processing pipelines."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def fetch_data():\n    print(\"Start fetching data...\")\n    await asyncio.sleep(2)  # Simulate a network operation\n    print(\"Data fetched!\")\n    return {'data': 123}\n\nasync def main():\n    print(\"Before fetching\")\n    data = await fetch_data()\n    print(f\"Received: {data}\")\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use async and await properly, you need to understand the event loop, which manages asynchronous execution in Python. The event loop runs the coroutines and handles pauses and resumes at await points. Always use await inside async functions; attempting to use await outside of them results in errors. When you run your asynchronous code, use asyncio.run() to start the event loop and run your main coroutine. This setup allows you to write non-blocking code that works alongside Python’s threading and multiprocessing tools, especially when managing concurrent I/O or integrating with libraries that support async."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginners make is forgetting to declare a function as async but still using await inside it. This will cause a SyntaxError. Another is calling an async function without awaiting it, which results in a coroutine object that doesn’t run until awaited. Also, mixing synchronous blocking code with async code can lead to performance issues because the event loop gets blocked. Always strive for non-blocking code inside async functions and handle exceptions with try-except to avoid uncaught errors interrupting your async flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, async and await in Python provide a powerful way to write concurrent code that handles many operations efficiently. By understanding how coroutines, event loops, and asyncio work together, you can improve the performance and responsiveness of your applications. Remember to always define async functions properly, use await for asynchronous calls, and monitor your event loop to avoid common pitfalls. Exploring related concepts like Python threading, multiprocessing, and concurrent futures will also help deepen your understanding of Python’s concurrency options."
+      }
+    ]
+  },
+  {
     "slug": "python-keyerror-key-not-found-fix-troubleshooting",
     "title": "Python KeyError Key Not Found Fix and Troubleshooting",
     "language": "python",
@@ -4670,6 +5238,40 @@ export const articles = [
     ]
   },
   {
+    "slug": "how-to-fix-python-index-out-of-range-error-with-examples",
+    "title": "How to Fix Python Index Out of Range Error with Examples",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what the Python IndexError: list index out of range means and how to fix it with beginner-friendly examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=wpmXETzX6xc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are just starting with Python, you might have encountered the error message: IndexError: list index out of range. This error is common when working with lists, strings, or other sequence data types. In this article, we will explain what this error means, why it happens, and how to fix it easily. Along the way, you'll also learn useful tips about Python lists, for loops, and basic error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "The IndexError: list index out of range occurs when you try to access an element of a list or sequence using an index number that does not exist. For example, if a list has 3 items, valid indexes are 0, 1, and 2. Trying to get the element at index 3 or higher causes this error. This happens because Python sequences are zero-indexed, meaning the first element is at position 0. Understanding how indexing works in Python lists, strings, or tuples is essential to avoid this error."
+      },
+      {
+        "type": "code",
+        "value": "my_list = [10, 20, 30]\nprint(my_list[0])  # Outputs 10\nprint(my_list[2])  # Outputs 30\nprint(my_list[3])  # Raises IndexError: list index out of range"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the index out of range error, you should always check that the index you want to access is within the valid range of the list. Use the len() function to get the length of the list and make sure your index is less than this length. When using loops to iterate over a list, avoid hardcoding index numbers and instead use for loops directly on the list or use range(len(list)) carefully. Another useful technique is to handle exceptions gracefully using try-except blocks if you're unsure whether the index exists."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginners make is assuming a list has more elements than it actually does or mixing up positive and negative indexes. Python supports negative indexes to count from the end (-1 is the last item), but they must also stay within range. Another error is modifying a list inside a loop and then accessing indexes that no longer exist due to the change in list size. Being familiar with basic list operations like append, remove, and slicing helps avoid these problems."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the IndexError: list index out of range occurs when trying to access an invalid index in a list or sequence. To fix it, always check your indexes using len() and avoid hardcoding positions without validation. Using Python for loops and understanding how lists, strings, and tuples store data will reduce errors significantly. When working further with sequences, also explore concepts like list comprehension and error handling to make your code more robust and beginner-friendly."
+      }
+    ]
+  },
+  {
     "slug": "how-to-write-efficient-join-queries-in-sql-with-examples",
     "title": "How to Write Efficient Join Queries in SQL with Examples",
     "language": "sql",
@@ -4704,6 +5306,40 @@ export const articles = [
     ]
   },
   {
+    "slug": "explained-common-sql-deadlock-errors-and-solutions",
+    "title": "Explained: Common SQL Deadlock Errors and How to Fix Them",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL deadlock errors mean, why they happen, and practical solutions to fix and prevent them in your database applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=QB-1tPVxNek",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you have worked with SQL databases, you might have encountered suddenly failing transactions with an error mentioning a deadlock. This happens when two or more queries block each other forever, waiting for the other to release resources. Understanding SQL deadlocks is essential to maintaining healthy database performance, especially when using transactions, locking mechanisms, and concurrent data operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "A SQL deadlock occurs when two transactions hold locks on resources that the other needs and neither can proceed. For example, Transaction A locks row 1 and tries to lock row 2, while Transaction B has locked row 2 and tries to lock row 1. Neither transaction can complete, so the database engine detects the deadlock and typically rolls back one transaction to break the cycle."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\n-- Transaction A locks row 1\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 1;\n\n-- Simulate some work\nWAITFOR DELAY '00:00:05';\n\n-- Now tries to lock row 2\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 2;\nCOMMIT;\n\n-- Meanwhile, Transaction B starts\nBEGIN TRANSACTION;\n-- Transaction B locks row 2\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 2;\n\n-- Simulate some work\nWAITFOR DELAY '00:00:05';\n\n-- Now tries to lock row 1\nSELECT * FROM accounts WITH (ROWLOCK, XLOCK) WHERE account_id = 1;\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix or avoid deadlocks, you can follow several best practices. First, ensure that all transactions acquire locks in the same order to prevent circular waiting. Using shorter transactions reduces lock time and contention. You can also use the appropriate isolation levels like Read Committed Snapshot to minimize locking. Additionally, database systems often allow deadlock detection; configuring retry logic in your application can help automatically handle deadlock rollbacks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes leading to deadlocks include holding locks longer than necessary, inconsistent locking orders in different parts of your code, and mixing different isolation levels without understanding their locking behaviors. Another typical error is running complex queries within a transaction without considering indexing and query efficiency, which can cause unnecessary locks and increase the chance of deadlocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, SQL deadlocks are a natural phenomenon in highly concurrent environments where multiple transactions compete for the same resources. By understanding the locking mechanisms, using consistent locking orders, minimizing transaction scope, and choosing the right isolation levels, you can effectively reduce deadlocks and improve your application's reliability and performance."
+      }
+    ]
+  },
+  {
     "slug": "how-to-fix-asynchronous-callback-hell-in-javascript-with-examples",
     "title": "How to Fix Asynchronous Callback Hell in JavaScript with Examples",
     "language": "javascript",
@@ -4734,6 +5370,40 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, callback hell occurs due to deeply nested asynchronous callbacks, making code hard to manage. Using promises and async/await dramatically improves code clarity and error management in asynchronous JavaScript. By practicing these modern techniques and understanding underlying concepts like event loops and promise chaining, beginners can write cleaner, more maintainable asynchronous code. Fixing callback hell not only improves your code's readability but also prepares you for more complex JavaScript programming patterns."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-javascript-typeerror-cannot-read-property-undefined",
+    "title": "How to Fix JavaScript TypeError: Cannot Read Property 'undefined'",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn why the JavaScript TypeError ‘Cannot read property undefined’ happens and how to fix it with easy examples. Perfect for beginners debugging common issues.",
+    "videoUrl": "https://www.youtube.com/watch?v=UZINZNWAE8Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to JavaScript, you may have encountered the error message 'TypeError: Cannot read property undefined'. This error pops up when your code tries to access a property or method of a variable that is either undefined or null. Understanding why this happens and how to fix it is essential for debugging your JavaScript programs effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error means that JavaScript expected an object with certain properties but instead found undefined. When your code tries to read something like variable.property, but variable is undefined, JavaScript throws this TypeError. It often happens when you're working with objects, arrays, or functions that have not been properly initialized or when you mistakenly use wrong variable names."
+      },
+      {
+        "type": "code",
+        "value": "const person = undefined;\nconsole.log(person.name); // TypeError: Cannot read property 'name' of undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, first check if your variable is defined before accessing its properties. You can use conditional statements, the optional chaining operator, or default values. For example, using optional chaining (?.) safely accesses properties by stopping evaluation if the variable is undefined or null. This integrates well with understanding JavaScript variables, object properties, and error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes that cause this error include assuming an asynchronous operation has completed, mistyping a variable or property name, or not initializing an object properly. Sometimes, neglecting to check if nested objects exist before accessing their properties leads to this error, especially when working with JSON or APIs. Understanding variable scope, asynchronous coding, and object structures can help prevent these issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'TypeError: Cannot read property undefined' occurs when JavaScript tries to access a property on an undefined variable. To fix it, ensure variables are correctly initialized and use safe property access methods like optional chaining. Keeping an eye on variable declarations, object initialization, and asynchronous code will greatly reduce such errors and improve your debugging skills."
       }
     ]
   },
@@ -4870,6 +5540,40 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "In summary, recursive queries are a valuable technique for querying hierarchical data using SQL. By leveraging recursive common table expressions, you can write elegant and efficient queries that traverse trees and hierarchies. Remember to build your CTE step-by-step: start with an anchor member, then add the recursive part with clear join conditions and stopping rules. Avoid common mistakes like infinite loops and missing base cases. Mastering recursive queries also boosts your understanding of related concepts like joins, subqueries, and query optimization."
+      }
+    ]
+  },
+  {
+    "slug": "explained-sql-deadlock-errors-with-examples-and-solutions",
+    "title": "Explained SQL Deadlock Errors with Examples and Solutions",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL deadlock errors are, why they happen, and how to fix them with clear examples and practical solutions for database beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=QB-1tPVxNek",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, especially with multiple users or processes accessing data simultaneously, you may encounter SQL deadlock errors. Deadlocks happen when two or more transactions block each other by holding locks on resources the others need, causing the system to halt progress until one transaction is rolled back. Understanding deadlocks is essential for database developers and admins to maintain smooth and efficient database operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, a deadlock in SQL occurs when two transactions each hold a lock on a resource and attempt to acquire a lock on the other's resource. This creates a cycle of dependency that the database engine cannot resolve without intervention. Deadlocks typically show up as errors in logs or client applications with messages like \"deadlock detected\" or \"lock timeout,\" indicating the database had to terminate one transaction to break the cycle. Deadlocks relate closely to locking mechanisms, transactions, and isolation levels in SQL."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\n-- Transaction 1 locks row A\nUPDATE accounts SET balance = balance - 100 WHERE account_id = 1;\n\n-- At the same time, Transaction 2 locks row B\n-- In another session:\nBEGIN TRANSACTION;\nUPDATE accounts SET balance = balance + 100 WHERE account_id = 2;\n\n-- Then Transaction 1 tries to update row B\nUPDATE accounts SET balance = balance - 50 WHERE account_id = 2;\n\n-- And Transaction 2 tries to update row A\nUPDATE accounts SET balance = balance + 50 WHERE account_id = 1;\n\n-- This causes a deadlock because each transaction waits for the other to release locks."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix deadlocks, the key is to design your transactions carefully. Make sure transactions acquire locks in a consistent order, keep transactions short, and reduce user interaction within a transaction. Using appropriate isolation levels can also help; for example, using the READ COMMITTED isolation level often reduces deadlocks compared to SERIALIZABLE. Additionally, you can catch deadlock errors in your application and retry the transaction automatically. Understanding locking hints and deadlock tracing tools in your database system helps analyze and prevent deadlocks more effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include having long-running transactions that hold locks for too long, updating or selecting rows in a different order in concurrent transactions, and not handling deadlock errors in your application code properly. Avoiding these mistakes requires a good grasp of transaction management, locking behavior, and concurrency control concepts, which are foundational topics related to SQL performance tuning and database reliability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, SQL deadlocks are a natural challenge in multi-user database environments caused by cyclic lock dependencies. By understanding how locking and transactions interact, following best practices to order operations consistently, and handling deadlock errors gracefully, you can significantly reduce the impact of deadlocks on your applications. Keep learning about related concepts like transaction isolation levels, lock escalation, and concurrency control to deepen your database skills and build more robust SQL applications."
       }
     ]
   },
