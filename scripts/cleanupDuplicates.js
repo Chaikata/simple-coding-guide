@@ -15,13 +15,23 @@ const MAX_DELETIONS = 20; // SAFETY LIMIT
 function loadArticles() {
   const file = fs.readFileSync("data/articles.ts", "utf-8");
 
-  const match = file.match(
-    /export const articles: Article\[\] = (\[[\s\S]*\]);/
-  );
+  // Try multiple patterns (more flexible)
+  const match =
+    file.match(/export const articles\s*=\s*(\[[\s\S]*\]);/) ||
+    file.match(/articles\s*=\s*(\[[\s\S]*\]);/);
 
-  if (!match) throw new Error("Could not load articles");
+  if (!match) {
+    console.error("❌ Could not match articles structure");
+    console.log(file.slice(0, 500)); // debug preview
+    throw new Error("Could not load articles");
+  }
 
-  return eval(match[1]);
+  try {
+    return eval(match[1]);
+  } catch (err) {
+    console.error("❌ Eval failed");
+    throw err;
+  }
 }
 
 function saveArticles(articles) {
