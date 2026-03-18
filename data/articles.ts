@@ -1,3 +1,19 @@
+export type ContentBlock =
+  | string
+  | {
+      type: "paragraph" | "code";
+      value: string;
+    };
+
+export type Article = {
+  slug: string;
+  title: string;
+  language: string;
+  type: string;
+  description: string;
+  videoUrl?: string;
+  content: ContentBlock[];
+};
 
 export const articles = [
   {
@@ -6674,6 +6690,530 @@ export const articles = [
       {
         "type": "paragraph",
         "value": "Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-javascript-proxies-for-dynamic-data-modeling-in-web-apps",
+    "title": "Mastering JavaScript Proxies for Dynamic Data Modeling in Web Apps",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript Proxies to create dynamic and flexible data models for your web applications. This beginner-friendly tutorial explains Proxies with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=zO6CHvTErxE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript Proxies are a powerful feature that allows you to intercept and customize operations performed on objects, such as getting or setting properties. This enables you to create dynamic data models that can respond to changes or enforce specific behaviors, which is especially useful in modern web applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll cover the basics of JavaScript Proxies and show you how to use them to create a simple dynamic model. We'll start with understanding what a Proxy is and how it works."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy wraps an object and lets you intercept fundamental operations like property access, assignment, enumeration, function invocation, and more. It uses 'traps' which are methods that provide property access. The most common traps are 'get' and 'set'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple Proxy that logs whenever a property on an object is accessed or modified."
+      },
+      {
+        "type": "code",
+        "value": "const user = { name: 'Alice', age: 25 };\n\nconst userProxy = new Proxy(user, {\n  get(target, property) {\n    console.log(`Property '${property}' was accessed.`);\n    return target[property];\n  },\n  set(target, property, value) {\n    console.log(`Property '${property}' changed from '${target[property]}' to '${value}'.`);\n    target[property] = value;\n    return true; // Indicates success\n  }\n});\n\nconsole.log(userProxy.name); // Logs access and then 'Alice'\nuserProxy.age = 26;          // Logs change\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the Proxy intercepts property reads and writes. When you access `userProxy.name`, it logs the access and returns the original value. When you set `userProxy.age = 26`, it logs the change."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's use Proxies to create a dynamic data model that validates data before setting it. For example, imagine you want to enforce only positive ages in a user object."
+      },
+      {
+        "type": "code",
+        "value": "const userData = { age: 30 };\n\nconst validatedUser = new Proxy(userData, {\n  set(target, property, value) {\n    if (property === 'age') {\n      if (typeof value !== 'number' || value <= 0) {\n        throw new Error('Age must be a positive number.');\n      }\n    }\n    target[property] = value;\n    return true;\n  }\n});\n\nvalidatedUser.age = 35;  // Works fine\n// validatedUser.age = -5; // Throws Error: Age must be a positive number.\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern is very useful in web applications where you want to keep your data consistent and validated in one place. Proxies can also be used to auto-update UI, log activities, or implement reactive programming."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, you can nest Proxies to handle complex data models or use them with frameworks to build reactive components. Remember, Proxies are supported in modern browsers and Node.js, so you can confidently use them in your projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "With practice, mastering JavaScript Proxies will allow you to build sophisticated, dynamic web applications that respond to data changes smoothly and efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-type-coercion-pitfalls-in-javascript-comparisons",
+    "title": "Understanding Type Coercion Pitfalls in JavaScript Comparisons",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript's type coercion can cause unexpected results in comparisons and how to avoid common pitfalls.",
+    "videoUrl": "https://www.youtube.com/watch?v=GJQ3flaXIFU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that allows you to compare different types of values using operators like == and ===. However, this flexibility can sometimes lead to confusing bugs. One of the main reasons is type coercion, where JavaScript automatically converts values to compatible types before comparing them."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding how type coercion works is crucial to avoid errors in your code, especially when using comparison operators. Let's explore some common pitfalls and how to write safer comparisons."
+      },
+      {
+        "type": "paragraph",
+        "value": "The double equals operator (==) performs type coercion if the values you're comparing have different types. For example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 == '5'); // true\nconsole.log(false == 0); // true\nconsole.log(null == undefined); // true\nconsole.log('' == 0); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "In these examples, JavaScript converts the types for you behind the scenes, which may lead to unexpected true results even though the types are different."
+      },
+      {
+        "type": "paragraph",
+        "value": "In contrast, the triple equals operator (===) checks both value and type, without coercion. This is often safer and recommended for most comparisons:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 === '5'); // false\nconsole.log(false === 0); // false\nconsole.log(null === undefined); // false\nconsole.log('' === 0); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "Because === does not perform type conversion, your comparisons are more predictable and easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another pitfall appears when comparing objects or arrays. Even if two objects have the same content, comparing them with == or === will usually return false because these operators compare references, not content."
+      },
+      {
+        "type": "code",
+        "value": "const a = [1, 2, 3];\nconst b = [1, 2, 3];\nconsole.log(a == b); // false\nconsole.log(a === b); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "To compare arrays or objects for equality, you need to compare their contents explicitly or use a helper function from a library like Lodash."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, here are some guidelines to avoid pitfalls with type coercion in comparisons:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use === and !== instead of == and != to avoid unexpected coercion.\n- Be cautious when comparing different data types.\n- Understand that objects and arrays are compared by reference, not by their content.\n- Use explicit conversion methods (like Number(), String(), or Boolean()) when necessary before comparison."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keeping these points in mind will help you write clearer and less error-prone JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types-boost-your-code-reusability",
+    "title": "Mastering TypeScript Utility Types: Boost Your Code Reusability",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript utility types to write cleaner, reusable, and more maintainable code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=VXfK4Ett7mA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript provides a powerful set of utility types that help you manipulate and transform types easily. These utility types are built-in generic types that improve code reusability and make your type declarations more flexible and efficient. In this tutorial, we'll explore some of the most commonly used utility types with simple examples to level up your TypeScript skills."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Partial<Type>\nThe `Partial` utility type constructs a type with all properties of the given type set to optional. This is very useful when you want to work with objects that may have only some properties defined."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Without Partial\nconst updateUser = (user: User) => {\n  // ... update logic\n};\n\n// With Partial\nconst updateUserPartial = (user: Partial<User>) => {\n  // Now user can have any subset of User properties\n};\n\nupdateUserPartial({ id: 101 });  // valid\nupdateUserPartial({ name: \"Alice\" });  // valid"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Required<Type>\nThe `Required` utility type turns all optional properties of a type into required properties. This can be helpful to ensure all fields are provided when needed."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: number;\n  name?: string;\n  price?: number;\n}\n\nconst createProduct = (product: Required<Product>) => {\n  // Now 'name' and 'price' must be provided\n};\n\ncreateProduct({ id: 1, name: \"Book\", price: 29.99 });  // valid\n// createProduct({ id: 2 });  // Error: name and price missing"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Pick<Type, Keys>\nThe `Pick` utility type creates a new type by selecting a subset of properties from an existing type. Use this to extract only the needed properties."
+      },
+      {
+        "type": "code",
+        "value": "interface Employee {\n  id: number;\n  name: string;\n  department: string;\n  salary: number;\n}\n\n// Pick only 'id' and 'name'\ntype EmployeeName = Pick<Employee, \"id\" | \"name\">;\n\nconst employee: EmployeeName = {\n  id: 1,\n  name: \"John\"\n  // department and salary are not required\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Omit<Type, Keys>\nThe `Omit` utility type constructs a type by removing specific properties from another type. It’s the inverse of `Pick` and useful when you want to exclude properties."
+      },
+      {
+        "type": "code",
+        "value": "type EmployeeWithoutSalary = Omit<Employee, \"salary\">;\n\nconst employeeNoSalary: EmployeeWithoutSalary = {\n  id: 2,\n  name: \"Sara\",\n  department: \"HR\"\n  // salary is omitted\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Record<Keys, Type>\nThe `Record` utility type creates an object type with specified keys and value types. It's great for creating maps or dictionaries."
+      },
+      {
+        "type": "code",
+        "value": "type PageInfo = {\n  title: string;\n};\n\n// Mapping page names to their info\nconst pages: Record<string, PageInfo> = {\n  home: { title: \"Home Page\" },\n  about: { title: \"About Us\" },\n  contact: { title: \"Contact\" }\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nTypeScript utility types simplify complex type transformations, reduce repetition, and help you write more maintainable code. Early mastery of `Partial`, `Required`, `Pick`, `Omit`, and `Record` will boost your productivity and keep your codebase clean. Try using these utility types in your projects to experience the benefits!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-conditional-types-for-advanced-error-handling",
+    "title": "Mastering TypeScript Conditional Types for Advanced Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript conditional types to create robust and flexible error handling in your applications, perfect for beginners wanting to upgrade their TypeScript skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=jdzLpEnRAqg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful typed superset of JavaScript that helps you catch errors early and write safer code. One of its advanced features, conditional types, allows you to create types that depend on other types. This makes your error handling more precise and flexible, especially when working with different kinds of errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore how to use conditional types to handle errors conditionally, helping you write better TypeScript code that can adapt to various error scenarios. We'll start with a simple example and gradually build up to a more advanced use case."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's begin with a basic example. Suppose you have a function that fetches user data and returns different error shapes depending on the input. Conditional types can help you type these error results accurately."
+      },
+      {
+        "type": "code",
+        "value": "type ApiResponse<T> = T extends 'user'\n  ? { data: { id: string; name: string }; error?: never }\n  : { data?: never; error: { message: string; code: number } };\n\nfunction fetchData<T extends string>(endpoint: T): ApiResponse<T> {\n  if (endpoint === 'user') {\n    return { data: { id: '1', name: 'Alice' } } as ApiResponse<T>;\n  } else {\n    return { error: { message: 'Not Found', code: 404 } } as ApiResponse<T>;\n  }\n}\n\nconst userResponse = fetchData('user');\nconst errorResponse = fetchData('unknown');"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `ApiResponse` type uses a conditional type to determine the shape of the response based on the generic `T`. If `T` extends `'user'`, the response contains data and no error. Otherwise, the response contains an error and no data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's look at a practical way to check errors and handle them safely without risking runtime errors."
+      },
+      {
+        "type": "code",
+        "value": "function isError<T extends string>(response: ApiResponse<T>): response is { error: { message: string; code: number } } {\n  return (response as any).error !== undefined;\n}\n\nif (isError(errorResponse)) {\n  console.log(`Error: ${errorResponse.error.message} (${errorResponse.error.code})`);\n} else {\n  console.log(`User: ${userResponse.data.name}`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `isError` function is a type guard that narrows the type when an error is present. This way, TypeScript helps you safely access the error properties only when they exist."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering TypeScript conditional types for error handling enables you to create smarter and safer code by tightly coupling error structure with data types. This ensures your functions clearly express their possible results, preventing bugs and improving maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Experiment with conditional types in your projects to get comfortable with this exciting feature. Soon you will find your error handling code cleaner and more robust!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-itertools-for-elegant-data-manipulation",
+    "title": "Mastering Python's itertools for Elegant Data Manipulation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's itertools module to handle data efficiently and elegantly with practical examples suitable for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=KrjtC6cBu4Q",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's itertools module is a powerful library for handling iterators and performing complex data manipulation tasks efficiently. Whether you're chaining lists together, cycling through elements, or generating combinations, itertools can simplify your code and improve performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore some of the most useful itertools functions with clear examples to help beginners understand and use them confidently."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's import itertools:"
+      },
+      {
+        "type": "code",
+        "value": "import itertools"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. `chain()` - Combining multiple iterables\n\nIf you have multiple lists or iterables and want to combine them into a single iterator, `chain()` is your friend. It avoids creating an intermediate list, making it memory-efficient."
+      },
+      {
+        "type": "code",
+        "value": "list1 = [1, 2, 3]\nlist2 = ['a', 'b', 'c']\n\ncombined = itertools.chain(list1, list2)\nprint(list(combined))  # Output: [1, 2, 3, 'a', 'b', 'c']"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. `cycle()` - Repeating an Iterable Infinitely\n\nUse `cycle()` when you want to loop through an iterable endlessly. Just be cautious to use it with a break condition or inside a limited loop to avoid infinite loops."
+      },
+      {
+        "type": "code",
+        "value": "counter = 0\nfor item in itertools.cycle(['A', 'B', 'C']):\n    print(item)\n    counter += 1\n    if counter == 6:  # Stop after 6 items\n        break\n# Output: A B C A B C"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. `permutations()` - Generating Order-Sensitive Arrangements\n\nThis function generates all possible order-sensitive arrangements (permutations) of a given length from the iterable."
+      },
+      {
+        "type": "code",
+        "value": "items = ['X', 'Y', 'Z']\nfor p in itertools.permutations(items, 2):\n    print(p)\n# Output:\n# ('X', 'Y')\n# ('X', 'Z')\n# ('Y', 'X')\n# ('Y', 'Z')\n# ('Z', 'X')\n# ('Z', 'Y')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. `combinations()` - Generating Order-Insensitive Groups\n\nUnlike permutations, `combinations()` generates all possible groups where order does not matter."
+      },
+      {
+        "type": "code",
+        "value": "for c in itertools.combinations(items, 2):\n    print(c)\n# Output:\n# ('X', 'Y')\n# ('X', 'Z')\n# ('Y', 'Z')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. `islice()` - Slicing Iterators\n\nJust like slicing lists, `islice()` allows you to slice any iterator without converting it to a list first."
+      },
+      {
+        "type": "code",
+        "value": "numbers = itertools.count(10)  # an infinite iterator starting at 10\nfirst_five = itertools.islice(numbers, 5)\nprint(list(first_five))  # Output: [10, 11, 12, 13, 14]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. `groupby()` - Grouping Consecutive Items\n\nThis groups consecutive elements based on a key function. Note that the data must be sorted by the same key function for meaningful grouping."
+      },
+      {
+        "type": "code",
+        "value": "data = [('apple', 'fruit'), ('banana', 'fruit'), ('carrot', 'vegetable'), ('asparagus', 'vegetable')]\n\n# Sort by category\nsorted_data = sorted(data, key=lambda x: x[1])\n\ngroups = itertools.groupby(sorted_data, key=lambda x: x[1])\n\nfor category, items in groups:\n    print(category)\n    for item in items:\n        print(' ', item[0])\n# Output:\n# fruit\n#   apple\n#   banana\n# vegetable\n#   carrot\n#   asparagus"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nUsing `itertools`, you can perform many common and complex iteration tasks more succinctly, often improving code readability and performance. Start experimenting with these functions in your next Python project and see the magic unfold!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-handling-memory-leaks-in-python-applications",
+    "title": "Understanding and Handling Memory Leaks in Python Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what memory leaks are, how they happen in Python applications, and practical ways to detect and fix them for better app performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=Lem4XksEnzQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks happen when a program keeps using more memory over time without releasing it back to the system. Even though Python has automatic memory management via garbage collection, memory leaks can still occur, especially when references to unused objects are unintentionally kept alive."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, memory leaks usually happen due to lingering references, circular references with __del__ methods, or improper usage of external libraries that manage their own memory. Understanding how to identify and handle these leaks can improve your app’s stability and performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s look at a simple example of a memory leak caused by unintentionally holding references in a list."
+      },
+      {
+        "type": "code",
+        "value": "class DataHolder:\n    def __init__(self, data):\n        self.data = data\n\nleak_list = []\n\nfor i in range(100000):\n    leak_list.append(DataHolder(i))  # Objects are kept alive in leak_list\n\nprint(\"Objects created and stored in leak_list.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the list leak_list keeps growing, holding onto each DataHolder instance. If you forget to clear or remove items, memory usage will increase and cause a leak."
+      },
+      {
+        "type": "paragraph",
+        "value": "How can you detect memory leaks in Python? One useful module is `tracemalloc`, which helps trace memory allocations."
+      },
+      {
+        "type": "code",
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Run some code that may leak memory\nleak_list = []\nfor i in range(10000):\n    leak_list.append(DataHolder(i))\n\nsnapshot = tracemalloc.take_snapshot()\n\nfor stat in snapshot.statistics('filename')[:5]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code tracks the top memory usage lines so you can see where most allocations come from. You can use this info to narrow down leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix leaks in the example, clear the list when its data is no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "leak_list.clear()  # Releases references and frees memory"
+      },
+      {
+        "type": "paragraph",
+        "value": "If memory leaks involve complex situations like circular references, consider using the `gc` module to detect and debug them."
+      },
+      {
+        "type": "code",
+        "value": "import gc\n\nunreachable = gc.collect()\nprint(f\"Unreachable objects collected: {unreachable}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Regularly monitoring memory usage and being mindful of object references ensures your Python apps run efficiently without growing memory over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, memory leaks in Python can happen but are manageable by understanding how references work, using tools like tracemalloc and gc, and carefully releasing references when no longer needed."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-complex-sql-queries-for-real-time-data-analytics",
+    "title": "Optimizing Complex SQL Queries for Real-Time Data Analytics: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn beginner-friendly tips and techniques to optimize complex SQL queries for faster and more efficient real-time data analytics.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time data analytics is essential for making timely decisions, but complex SQL queries can be slow and inefficient. As a beginner, understanding how to optimize these queries will greatly improve performance and reduce waiting times. This tutorial covers foundational techniques to help you optimize your SQL queries for real-time analytics."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use Proper Indexing: Indexes speed up data retrieval. Identify columns used in JOINs, WHERE, and ORDER BY clauses and create indexes on them."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example: Creating an index on the customer_id column for faster lookup."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Avoid SELECT *: Selecting only the columns you need reduces processing time and memory usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE order_date > '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Write:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date, customer_id FROM orders WHERE order_date > '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use WHERE Clause Efficiently: Filtering rows early reduces the dataset size for subsequent operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Optimize JOINs: Use INNER JOINs instead of CROSS JOINs when possible and join on indexed columns."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of an optimized INNER JOIN:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT o.order_id, c.customer_name, o.order_date\nFROM orders o\nINNER JOIN customers c ON o.customer_id = c.customer_id\nWHERE o.order_date > '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Limit Result Sets with LIMIT or TOP: For real-time dashboards, limit returned rows to reduce load."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date FROM orders ORDER BY order_date DESC LIMIT 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Use Query Execution Plans: Most database systems provide execution plans to understand query performance and identify bottlenecks."
+      },
+      {
+        "type": "paragraph",
+        "value": "7. Consider Materialized Views for Repeated Heavy Queries: If the same complex query runs frequently, creating a materialized view can save time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of creating a materialized view to summarize total sales by month:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE MATERIALIZED VIEW monthly_sales AS\nSELECT DATE_TRUNC('month', order_date) AS month, SUM(total_amount) AS total_sales\nFROM orders\nGROUP BY month;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, by creating indexes, selecting only needed columns, filtering early, optimizing joins, limiting results, and using materialized views, you can significantly improve the speed and efficiency of complex SQL queries for real-time data analytics. Practice these tips on your own queries to see performance improvements."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-error-handling-with-try-catch-and-throw",
+    "title": "Mastering SQL Error Handling with TRY...CATCH and THROW for Robust Applications",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use SQL Server's TRY...CATCH and THROW statements to handle errors effectively and make your applications more reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=RFUcXlYn58I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In database programming, errors can occur due to many reasons like constraint violations, syntax errors, or deadlocks. Handling these errors gracefully is crucial for building robust SQL applications. SQL Server provides the TRY...CATCH block along with the THROW statement to help you manage errors effectively. In this article, we'll explore how to use TRY...CATCH and THROW for error handling in SQL Server."
+      },
+      {
+        "type": "paragraph",
+        "value": "The TRY...CATCH construct works similarly to error handling in many programming languages. You write the code that might throw an error inside the TRY block. If an error occurs, control passes to the CATCH block, where you can respond to the error, log it, or correct it."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRY\n    -- This statement will cause a divide-by-zero error\n    SELECT 10 / 0 AS Result;\nEND TRY\nBEGIN CATCH\n    PRINT 'An error occurred.';\n    PRINT ERROR_MESSAGE(); -- Displays the error message\nEND CATCH;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the division by zero causes an error inside the TRY block. Instead of stopping the batch, control moves to the CATCH block where the error message is printed. This prevents your application from crashing and gives you a chance to handle the error gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Inside the CATCH block, SQL Server provides several functions to get details about the error: ERROR_MESSAGE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), and ERROR_PROCEDURE(). These functions help you analyze errors and create meaningful logging or user messages."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRY\n    -- Attempt to insert a duplicate key, causing a primary key violation\n    INSERT INTO Employees (EmployeeID, Name) VALUES (1, 'Alice');\nEND TRY\nBEGIN CATCH\n    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS VARCHAR(10));\n    PRINT 'Error Message: ' + ERROR_MESSAGE();\nEND CATCH;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The THROW statement is used to re-raise an error from inside a CATCH block or to raise a new error. Unlike the older RAISERROR statement, THROW preserves the original error information, making it easier to troubleshoot."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRY\n    -- Fake error by dividing by zero\n    SELECT 1 / 0;\nEND TRY\nBEGIN CATCH\n    PRINT 'Handling error and rethrowing it.';\n    THROW; -- Rethrows the caught error\nEND CATCH;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use THROW to raise custom errors by providing your own error number, message, and state. However, note that the error numbers for custom THROW errors must be 50000 or higher."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRY\n    -- Simulate a custom business logic error\n    THROW 50001, 'Custom error: Invalid operation detected.', 1;\nEND TRY\nBEGIN CATCH\n    PRINT 'Custom error thrown:';\n    PRINT ERROR_MESSAGE();\nEND CATCH;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using TRY...CATCH combined with THROW allows you to build resilient SQL code that can handle unexpected situations and provide meaningful feedback. This improves your database application's reliability and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary:\n- Enclose error-prone code in a TRY block.\n- Capture and handle errors in the CATCH block.\n- Use error functions to get detailed error information.\n- Use THROW to rethrow or create custom errors.\n\nWith these techniques, you can master error handling in SQL Server and create robust, production-ready applications."
       }
     ]
   }

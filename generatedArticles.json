@@ -1,569 +1,525 @@
 [
   {
-    "slug": "leveraging-proxy-objects-to-create-reactive-data-models-in-javascript",
-    "title": "Leveraging Proxy Objects to Create Reactive Data Models in JavaScript",
+    "slug": "mastering-javascript-proxies-for-dynamic-data-modeling-in-web-apps",
+    "title": "Mastering JavaScript Proxies for Dynamic Data Modeling in Web Apps",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to use JavaScript Proxy objects to create reactive data models that automatically respond to changes, opening the door to building dynamic and responsive applications.",
-    "videoUrl": "",
+    "description": "Learn how to use JavaScript Proxies to create dynamic and flexible data models for your web applications. This beginner-friendly tutorial explains Proxies with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=zO6CHvTErxE",
     "content": [
       {
         "type": "paragraph",
-        "value": "In modern web development, reactivity is a powerful concept that allows your application to automatically respond to data changes. Frameworks like Vue.js and React use this concept heavily under the hood. But what if you want to create a simple reactive data model yourself using plain vanilla JavaScript? That's where the Proxy object comes in. Introduced in ES6, Proxy lets you intercept operations on objects, making it a perfect tool for building reactive models."
+        "value": "JavaScript Proxies are a powerful feature that allows you to intercept and customize operations performed on objects, such as getting or setting properties. This enables you to create dynamic data models that can respond to changes or enforce specific behaviors, which is especially useful in modern web applications."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore how to create a basic reactive data object using JavaScript Proxy. You will learn how to listen for changes and automatically trigger updates, which can be used to update your UI or trigger side effects."
+        "value": "In this tutorial, we'll cover the basics of JavaScript Proxies and show you how to use them to create a simple dynamic model. We'll start with understanding what a Proxy is and how it works."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by creating a reactive object that logs when any property changes."
+        "value": "A Proxy wraps an object and lets you intercept fundamental operations like property access, assignment, enumeration, function invocation, and more. It uses 'traps' which are methods that provide property access. The most common traps are 'get' and 'set'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple Proxy that logs whenever a property on an object is accessed or modified."
       },
       {
         "type": "code",
-        "value": "function reactive(target) {\n  return new Proxy(target, {\n    set(obj, prop, value) {\n      obj[prop] = value; // update the property\n      console.log(`Property \"${prop}\" changed to \"${value}\"`);\n      // Here you could trigger UI updates or other effects\n      return true; // indicate success\n    },\n    get(obj, prop) {\n      return obj[prop]; // simply return the property value\n    }\n  });\n}\n\nconst person = reactive({ name: 'Alice', age: 25 });\nperson.name = 'Bob'; // Console: Property \"name\" changed to \"Bob\"\nperson.age = 30;    // Console: Property \"age\" changed to \"30\""
+        "value": "const user = { name: 'Alice', age: 25 };\n\nconst userProxy = new Proxy(user, {\n  get(target, property) {\n    console.log(`Property '${property}' was accessed.`);\n    return target[property];\n  },\n  set(target, property, value) {\n    console.log(`Property '${property}' changed from '${target[property]}' to '${value}'.`);\n    target[property] = value;\n    return true; // Indicates success\n  }\n});\n\nconsole.log(userProxy.name); // Logs access and then 'Alice'\nuserProxy.age = 26;          // Logs change\n"
       },
       {
         "type": "paragraph",
-        "value": "In the code above, we created a function called `reactive` that takes an object and returns a Proxy wrapped version of it. Whenever a property is set, the Proxy's `set` handler is called. Here, we log the change to the console. You can replace this with any other logic, such as updating a DOM element."
+        "value": "In this example, the Proxy intercepts property reads and writes. When you access `userProxy.name`, it logs the access and returns the original value. When you set `userProxy.age = 26`, it logs the change."
       },
       {
         "type": "paragraph",
-        "value": "Next, let's enhance this reactive system to allow registering callback functions that run when data updates happen."
+        "value": "Now, let's use Proxies to create a dynamic data model that validates data before setting it. For example, imagine you want to enforce only positive ages in a user object."
       },
       {
         "type": "code",
-        "value": "function reactiveWithEffect(target) {\n  const effects = new Set();\n\n  const proxy = new Proxy(target, {\n    set(obj, prop, value) {\n      obj[prop] = value;\n      effects.forEach(effect => effect());\n      return true;\n    },\n    get(obj, prop) {\n      return obj[prop];\n    }\n  });\n\n  proxy.onChange = function(effect) {\n    effects.add(effect);\n  };\n\n  return proxy;\n}\n\nconst state = reactiveWithEffect({ count: 0 });\n\nstate.onChange(() => {\n  console.log(`Count is now: ${state.count}`);\n});\n\nstate.count = 1; // Console: Count is now: 1\nstate.count = 2; // Console: Count is now: 2"
+        "value": "const userData = { age: 30 };\n\nconst validatedUser = new Proxy(userData, {\n  set(target, property, value) {\n    if (property === 'age') {\n      if (typeof value !== 'number' || value <= 0) {\n        throw new Error('Age must be a positive number.');\n      }\n    }\n    target[property] = value;\n    return true;\n  }\n});\n\nvalidatedUser.age = 35;  // Works fine\n// validatedUser.age = -5; // Throws Error: Age must be a positive number.\n"
       },
       {
         "type": "paragraph",
-        "value": "Here, we added an `onChange` method to our reactive object that allows multiple effects (callback functions) to be registered. Every time the data changes, all registered effects run, making it easy to keep UI or other parts of your application in sync with your data."
+        "value": "This pattern is very useful in web applications where you want to keep your data consistent and validated in one place. Proxies can also be used to auto-update UI, log activities, or implement reactive programming."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\n- The JavaScript Proxy object lets you intercept operations on an object (like setting or getting properties).\n- By using the `set` handler, we can detect when a property changes.\n- This lets us create simple reactive data models that automatically trigger effects or UI updates.\n- You can expand this basic pattern to build sophisticated reactive frameworks or applications."
+        "value": "Finally, you can nest Proxies to handle complex data models or use them with frameworks to build reactive components. Remember, Proxies are supported in modern browsers and Node.js, so you can confidently use them in your projects."
       },
       {
         "type": "paragraph",
-        "value": "Try experimenting with the code examples above. Create your own effects and see how easy it is to make your JavaScript objects reactive!"
+        "value": "With practice, mastering JavaScript Proxies will allow you to build sophisticated, dynamic web applications that respond to data changes smoothly and efficiently."
       }
     ]
   },
   {
-    "slug": "mastering-the-art-of-function-currying-for-cleaner-code",
-    "title": "Mastering the Art of Function Currying for Cleaner Code",
+    "slug": "understanding-type-coercion-pitfalls-in-javascript-comparisons",
+    "title": "Understanding Type Coercion Pitfalls in JavaScript Comparisons",
     "language": "javascript",
-    "type": "tutorials",
-    "description": "Learn the basics of function currying in JavaScript and how it helps write cleaner, more reusable, and more readable code through simple examples.",
-    "videoUrl": "",
+    "type": "errors",
+    "description": "Learn how JavaScript's type coercion can cause unexpected results in comparisons and how to avoid common pitfalls.",
+    "videoUrl": "https://www.youtube.com/watch?v=GJQ3flaXIFU",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you've started exploring JavaScript beyond the basics, you might have heard about a powerful concept called function currying. It sounds like something from a cooking class, but in programming, currying is a tasty way to write cleaner, reusable functions."
+        "value": "JavaScript is a flexible language that allows you to compare different types of values using operators like == and ===. However, this flexibility can sometimes lead to confusing bugs. One of the main reasons is type coercion, where JavaScript automatically converts values to compatible types before comparing them."
       },
       {
         "type": "paragraph",
-        "value": "So what exactly is currying? In simple terms, currying is a technique of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument. Instead of giving all arguments at once, you give them one at a time."
+        "value": "Understanding how type coercion works is crucial to avoid errors in your code, especially when using comparison operators. Let's explore some common pitfalls and how to write safer comparisons."
       },
       {
         "type": "paragraph",
-        "value": "Let's see an example to understand this better."
+        "value": "The double equals operator (==) performs type coercion if the values you're comparing have different types. For example:"
       },
       {
         "type": "code",
-        "value": "function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(2, 3)); // Output: 5"
+        "value": "console.log(5 == '5'); // true\nconsole.log(false == 0); // true\nconsole.log(null == undefined); // true\nconsole.log('' == 0); // true"
       },
       {
         "type": "paragraph",
-        "value": "Here, `add` takes two arguments `a` and `b` and returns their sum. Now, using currying, we can rewrite `add` so it takes one argument at a time:"
+        "value": "In these examples, JavaScript converts the types for you behind the scenes, which may lead to unexpected true results even though the types are different."
+      },
+      {
+        "type": "paragraph",
+        "value": "In contrast, the triple equals operator (===) checks both value and type, without coercion. This is often safer and recommended for most comparisons:"
       },
       {
         "type": "code",
-        "value": "function curriedAdd(a) {\n  return function(b) {\n    return a + b;\n  };\n}\n\nconst addTwo = curriedAdd(2);\nconsole.log(addTwo(3)); // Output: 5"
+        "value": "console.log(5 === '5'); // false\nconsole.log(false === 0); // false\nconsole.log(null === undefined); // false\nconsole.log('' === 0); // false"
       },
       {
         "type": "paragraph",
-        "value": "In this curried version, `curriedAdd` takes one argument `a` and returns a new function that takes another argument `b`. This lets us create specialized functions like `addTwo`, which adds 2 to any number."
+        "value": "Because === does not perform type conversion, your comparisons are more predictable and easier to understand."
       },
       {
         "type": "paragraph",
-        "value": "Currying becomes very helpful when you want to create flexible and reusable functions, especially in functional programming or when working with higher-order functions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's create a more generic currying helper function that can work with any function:"
+        "value": "Another pitfall appears when comparing objects or arrays. Even if two objects have the same content, comparing them with == or === will usually return false because these operators compare references, not content."
       },
       {
         "type": "code",
-        "value": "function curry(fn) {\n  return function curried(...args) {\n    if (args.length >= fn.length) {\n      return fn(...args);\n    } else {\n      return function(...nextArgs) {\n        return curried(...args.concat(nextArgs));\n      };\n    }\n  };\n}"
+        "value": "const a = [1, 2, 3];\nconst b = [1, 2, 3];\nconsole.log(a == b); // false\nconsole.log(a === b); // false"
       },
       {
         "type": "paragraph",
-        "value": "Here’s how to use it with a simple multiply function:"
-      },
-      {
-        "type": "code",
-        "value": "function multiply(a, b, c) {\n  return a * b * c;\n}\n\nconst curriedMultiply = curry(multiply);\n\nconsole.log(curriedMultiply(2)(3)(4)); // Output: 24\nconsole.log(curriedMultiply(2, 3)(4)); // Output: 24\nconsole.log(curriedMultiply(2)(3, 4)); // Output: 24"
+        "value": "To compare arrays or objects for equality, you need to compare their contents explicitly or use a helper function from a library like Lodash."
       },
       {
         "type": "paragraph",
-        "value": "Notice how our `curriedMultiply` function can be called with arguments one by one or partially applied with multiple arguments at once until all arguments are provided."
+        "value": "In summary, here are some guidelines to avoid pitfalls with type coercion in comparisons:"
       },
       {
         "type": "paragraph",
-        "value": "### Why use currying?\n- It makes your functions more flexible and composable.\n- It supports partial application, where you can fix some arguments and reuse functions easily.\n- It helps build cleaner, more readable code especially when working with complex function chains."
+        "value": "- Use === and !== instead of == and != to avoid unexpected coercion.\n- Be cautious when comparing different data types.\n- Understand that objects and arrays are compared by reference, not by their content.\n- Use explicit conversion methods (like Number(), String(), or Boolean()) when necessary before comparison."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nCurrying transforms multi-argument functions into nested single-argument functions. By mastering currying, you can write code that’s modular, reusable, and easier to maintain. Practice by trying to curry your own functions, and you’ll soon see the benefits in your JavaScript projects!"
+        "value": "Keeping these points in mind will help you write clearer and less error-prone JavaScript code."
       }
     ]
   },
   {
-    "slug": "using-web-workers-to-offload-heavy-computations-in-javascript",
-    "title": "Using Web Workers to Offload Heavy Computations in JavaScript",
-    "language": "javascript",
+    "slug": "mastering-typescript-utility-types-boost-your-code-reusability",
+    "title": "Mastering TypeScript Utility Types: Boost Your Code Reusability",
+    "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use Web Workers in JavaScript to run heavy computations in the background, keeping your web app responsive.",
-    "videoUrl": "",
+    "description": "Learn how to use TypeScript utility types to write cleaner, reusable, and more maintainable code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=VXfK4Ett7mA",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building web applications, running heavy tasks like complex calculations can freeze the user interface, making the app feel slow or unresponsive. Web Workers allow us to run such tasks in the background, off the main thread, so the UI stays smooth."
+        "value": "TypeScript provides a powerful set of utility types that help you manipulate and transform types easily. These utility types are built-in generic types that improve code reusability and make your type declarations more flexible and efficient. In this tutorial, we'll explore some of the most commonly used utility types with simple examples to level up your TypeScript skills."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, you'll learn how to create a simple Web Worker that calculates a large Fibonacci number without blocking the main UI thread."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What are Web Workers?\nWeb Workers are a way to run JavaScript in background threads. They do not have access to the DOM but can communicate with the main script via messages."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 1: Create a Worker Script\nCreate a separate JavaScript file called `worker.js`. This file will contain the code that runs inside the worker."
+        "value": "### 1. Partial<Type>\nThe `Partial` utility type constructs a type with all properties of the given type set to optional. This is very useful when you want to work with objects that may have only some properties defined."
       },
       {
         "type": "code",
-        "value": "self.onmessage = function(event) {\n  const n = event.data;\n\n  function fibonacci(num) {\n    if (num <= 1) return num;\n    return fibonacci(num - 1) + fibonacci(num - 2);\n  }\n\n  const result = fibonacci(n);\n\n  // Post the result back to main thread\n  self.postMessage(result);\n};"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Without Partial\nconst updateUser = (user: User) => {\n  // ... update logic\n};\n\n// With Partial\nconst updateUserPartial = (user: Partial<User>) => {\n  // Now user can have any subset of User properties\n};\n\nupdateUserPartial({ id: 101 });  // valid\nupdateUserPartial({ name: \"Alice\" });  // valid"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Using the Worker in Your Main Script\nNow, let's create the main script file (e.g. `main.js`) where you start the worker and listen for messages from it."
+        "value": "### 2. Required<Type>\nThe `Required` utility type turns all optional properties of a type into required properties. This can be helpful to ensure all fields are provided when needed."
       },
       {
         "type": "code",
-        "value": "const worker = new Worker('worker.js');\n\n// Send data to the worker\nworker.postMessage(40);  // Calculate the 40th Fibonacci number\n\n// Listen for messages from the worker\nworker.onmessage = function(event) {\n  console.log('Fibonacci result:', event.data);\n  alert('Fibonacci result: ' + event.data);\n};\n\n// Optional: handle worker errors\nworker.onerror = function(error) {\n  console.error('Worker error:', error.message);\n};"
+        "value": "interface Product {\n  id: number;\n  name?: string;\n  price?: number;\n}\n\nconst createProduct = (product: Required<Product>) => {\n  // Now 'name' and 'price' must be provided\n};\n\ncreateProduct({ id: 1, name: \"Book\", price: 29.99 });  // valid\n// createProduct({ id: 2 });  // Error: name and price missing"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Putting It All Together in HTML\nFinally, you can create a simple HTML page to test this setup."
+        "value": "### 3. Pick<Type, Keys>\nThe `Pick` utility type creates a new type by selecting a subset of properties from an existing type. Use this to extract only the needed properties."
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Web Worker Demo</title>\n</head>\n<body>\n  <h1>Web Worker Fibonacci Calculator</h1>\n  <button id=\"startBtn\">Start Calculation</button>\n\n  <script src=\"main.js\"></script>\n  <script>\n    const startBtn = document.getElementById('startBtn');\n    const worker = new Worker('worker.js');\n\n    worker.onmessage = function(event) {\n      alert('Fibonacci result: ' + event.data);\n      startBtn.disabled = false;\n    };\n\n    worker.onerror = function(error) {\n      console.error('Worker error:', error.message);\n      startBtn.disabled = false;\n    };\n\n    startBtn.addEventListener('click', () => {\n      startBtn.disabled = true;\n      // Calculate 40th Fibonacci number\n      worker.postMessage(40);\n    });\n  </script>\n</body>\n</html>"
+        "value": "interface Employee {\n  id: number;\n  name: string;\n  department: string;\n  salary: number;\n}\n\n// Pick only 'id' and 'name'\ntype EmployeeName = Pick<Employee, \"id\" | \"name\">;\n\nconst employee: EmployeeName = {\n  id: 1,\n  name: \"John\"\n  // department and salary are not required\n};"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nYou have learned how to use Web Workers to run heavy computing tasks without freezing your web page. This technique makes your applications feel faster and more responsive. Try adapting Web Workers for other long-running tasks like image processing or data parsing!"
+        "value": "### 4. Omit<Type, Keys>\nThe `Omit` utility type constructs a type by removing specific properties from another type. It’s the inverse of `Pick` and useful when you want to exclude properties."
+      },
+      {
+        "type": "code",
+        "value": "type EmployeeWithoutSalary = Omit<Employee, \"salary\">;\n\nconst employeeNoSalary: EmployeeWithoutSalary = {\n  id: 2,\n  name: \"Sara\",\n  department: \"HR\"\n  // salary is omitted\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Record<Keys, Type>\nThe `Record` utility type creates an object type with specified keys and value types. It's great for creating maps or dictionaries."
+      },
+      {
+        "type": "code",
+        "value": "type PageInfo = {\n  title: string;\n};\n\n// Mapping page names to their info\nconst pages: Record<string, PageInfo> = {\n  home: { title: \"Home Page\" },\n  about: { title: \"About Us\" },\n  contact: { title: \"Contact\" }\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nTypeScript utility types simplify complex type transformations, reduce repetition, and help you write more maintainable code. Early mastery of `Partial`, `Required`, `Pick`, `Omit`, and `Record` will boost your productivity and keep your codebase clean. Try using these utility types in your projects to experience the benefits!"
       }
     ]
   },
   {
-    "slug": "comparing-async-await-and-generators-for-managing-asynchronous-code",
-    "title": "Comparing Async/Await and Generators for Managing Asynchronous Code in JavaScript",
-    "language": "javascript",
-    "type": "tutorials",
-    "description": "A beginner-friendly tutorial exploring how Async/Await and Generators handle asynchronous code in JavaScript, with explanations and code examples.",
-    "videoUrl": "",
+    "slug": "mastering-typescript-conditional-types-for-advanced-error-handling",
+    "title": "Mastering TypeScript Conditional Types for Advanced Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript conditional types to create robust and flexible error handling in your applications, perfect for beginners wanting to upgrade their TypeScript skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=jdzLpEnRAqg",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing JavaScript code that deals with async operations like fetching data or reading files, managing the flow of asynchronous code can sometimes feel tricky. Two popular methods to handle this are Async/Await and Generators. In this tutorial, we'll explore both approaches, understand how they work, and see simple examples to help you decide which suits you best."
+        "value": "TypeScript is a powerful typed superset of JavaScript that helps you catch errors early and write safer code. One of its advanced features, conditional types, allows you to create types that depend on other types. This makes your error handling more precise and flexible, especially when working with different kinds of errors."
       },
       {
         "type": "paragraph",
-        "value": "### What is Async/Await?"
+        "value": "In this article, we'll explore how to use conditional types to handle errors conditionally, helping you write better TypeScript code that can adapt to various error scenarios. We'll start with a simple example and gradually build up to a more advanced use case."
       },
       {
         "type": "paragraph",
-        "value": "Async/Await is a modern, built-in feature in JavaScript designed to make asynchronous code look and behave more like synchronous code. It is built on top of Promises and allows you to write cleaner and more readable async functions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s a simple example using Async/Await:"
+        "value": "Let's begin with a basic example. Suppose you have a function that fetches user data and returns different error shapes depending on the input. Conditional types can help you type these error results accurately."
       },
       {
         "type": "code",
-        "value": "function wait(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function asyncExample() {\n  console.log('Start');\n  await wait(1000); // wait for 1 second\n  console.log('1 second later');\n}\n\nasyncExample();"
+        "value": "type ApiResponse<T> = T extends 'user'\n  ? { data: { id: string; name: string }; error?: never }\n  : { data?: never; error: { message: string; code: number } };\n\nfunction fetchData<T extends string>(endpoint: T): ApiResponse<T> {\n  if (endpoint === 'user') {\n    return { data: { id: '1', name: 'Alice' } } as ApiResponse<T>;\n  } else {\n    return { error: { message: 'Not Found', code: 404 } } as ApiResponse<T>;\n  }\n}\n\nconst userResponse = fetchData('user');\nconst errorResponse = fetchData('unknown');"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `asyncExample` is an async function that pauses at the `await` keyword until the `wait` promise resolves after 1 second, then continues."
+        "value": "In this example, the `ApiResponse` type uses a conditional type to determine the shape of the response based on the generic `T`. If `T` extends `'user'`, the response contains data and no error. Otherwise, the response contains an error and no data."
       },
       {
         "type": "paragraph",
-        "value": "### What are Generators?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Generators are special functions you can pause and resume. They are declared with a `*` and use the `yield` keyword to pause the execution. They are not specifically designed for async code but can be used to manage async operations in older JavaScript environments before Async/Await existed."
-      },
-      {
-        "type": "paragraph",
-        "value": "A basic generator example looks like this:"
+        "value": "Now, let's look at a practical way to check errors and handle them safely without risking runtime errors."
       },
       {
         "type": "code",
-        "value": "function* simpleGenerator() {\n  console.log('Start');\n  yield; // pause here\n  console.log('Resumed');\n}\n\nconst gen = simpleGenerator();\ngen.next(); // logs 'Start'\ngen.next(); // logs 'Resumed'"
+        "value": "function isError<T extends string>(response: ApiResponse<T>): response is { error: { message: string; code: number } } {\n  return (response as any).error !== undefined;\n}\n\nif (isError(errorResponse)) {\n  console.log(`Error: ${errorResponse.error.message} (${errorResponse.error.code})`);\n} else {\n  console.log(`User: ${userResponse.data.name}`);\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Using Generators to Handle Async Code"
+        "value": "The `isError` function is a type guard that narrows the type when an error is present. This way, TypeScript helps you safely access the error properties only when they exist."
       },
       {
         "type": "paragraph",
-        "value": "To use Generators for async code, you usually combine them with helper functions that automatically advance the generator when asynchronous operations complete."
+        "value": "To summarize, mastering TypeScript conditional types for error handling enables you to create smarter and safer code by tightly coupling error structure with data types. This ensures your functions clearly express their possible results, preventing bugs and improving maintainability."
       },
       {
         "type": "paragraph",
-        "value": "Here’s an example emulating Async/Await using Generators and Promises:"
-      },
-      {
-        "type": "code",
-        "value": "function wait(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nfunction runGenerator(genFn) {\n  const gen = genFn();\n\n  function step(value) {\n    const result = gen.next(value);\n    if (!result.done) {\n      result.value.then(step);\n    }\n  }\n\n  step();\n}\n\n// Generator-based async function\nfunction* genExample() {\n  console.log('Start');\n  yield wait(1000);\n  console.log('1 second later');\n}\n\nrunGenerator(genExample);"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this `runGenerator` function, the generator pauses at each `yield` keyword (which yields a promise), and only continues once the promise resolves."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Comparing Async/Await and Generators"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Syntax:** Async/Await is simpler and more readable, resembling synchronous code. Generators require more boilerplate to work with async flows.\n- **Error Handling:** Async/Await uses standard try/catch blocks, making error handling straightforward. Generator-based async code requires careful error propagation.\n- **Browser Support:** Async/Await is supported in modern environments. Generators are older and supported in many environments but need helpers for async operations.\n- **Use Case:** Async/Await is recommended for new projects. Generators are mainly useful in legacy code or when you want fine control over function execution."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Async/Await is the modern, cleaner way to handle asynchronous code in JavaScript, improving readability and simplifying error handling. Generators can manage async workflows but require additional code and are now mostly historical interest or for advanced use cases."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try to use Async/Await in your projects for easier-to-read asynchronous code, but understanding Generators can give you deeper insight into JavaScript’s asynchronous capabilities."
+        "value": "Experiment with conditional types in your projects to get comfortable with this exciting feature. Soon you will find your error handling code cleaner and more robust!"
       }
     ]
   },
   {
-    "slug": "dynamic-module-loading-optimize-performance-js-imports",
-    "title": "Dynamic Module Loading: How to Optimize Performance with JavaScript Imports",
-    "language": "javascript",
+    "slug": "mastering-pythons-itertools-for-elegant-data-manipulation",
+    "title": "Mastering Python's itertools for Elegant Data Manipulation",
+    "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use dynamic imports in JavaScript to load modules only when needed, improving your web app's performance.",
-    "videoUrl": "",
+    "description": "Learn how to use Python's itertools module to handle data efficiently and elegantly with practical examples suitable for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=KrjtC6cBu4Q",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building web applications, loading all your JavaScript code upfront can slow down the initial loading time. Dynamic module loading allows you to load parts of your code only when they are needed, making your app faster and more efficient. In this tutorial, we'll explore how to use JavaScript's dynamic import() function to achieve this."
+        "value": "Python's itertools module is a powerful library for handling iterators and performing complex data manipulation tasks efficiently. Whether you're chaining lists together, cycling through elements, or generating combinations, itertools can simplify your code and improve performance."
       },
       {
         "type": "paragraph",
-        "value": "## What is Dynamic Module Loading?"
+        "value": "In this tutorial, we'll explore some of the most useful itertools functions with clear examples to help beginners understand and use them confidently."
       },
       {
         "type": "paragraph",
-        "value": "Dynamic module loading means you load JavaScript modules during runtime instead of at the start. This way, the browser downloads only the essential code first and fetches other modules later, based on user actions or other conditions."
-      },
-      {
-        "type": "paragraph",
-        "value": "## Static vs Dynamic Imports"
-      },
-      {
-        "type": "paragraph",
-        "value": "Typically, we use static imports like this:"
+        "value": "First, let's import itertools:"
       },
       {
         "type": "code",
-        "value": "import { greet } from './greet.js';\ngreet();"
+        "value": "import itertools"
       },
       {
         "type": "paragraph",
-        "value": "Static imports load modules before the code runs, which can increase the startup time if the module is large or unused initially."
-      },
-      {
-        "type": "paragraph",
-        "value": "With dynamic imports, you can load the module only when you need it:"
+        "value": "### 1. `chain()` - Combining multiple iterables\n\nIf you have multiple lists or iterables and want to combine them into a single iterator, `chain()` is your friend. It avoids creating an intermediate list, making it memory-efficient."
       },
       {
         "type": "code",
-        "value": "button.addEventListener('click', () => {\n  import('./greet.js')\n    .then(module => {\n      module.greet();\n    })\n    .catch(err => {\n      console.error('Failed to load module', err);\n    });\n});"
+        "value": "list1 = [1, 2, 3]\nlist2 = ['a', 'b', 'c']\n\ncombined = itertools.chain(list1, list2)\nprint(list(combined))  # Output: [1, 2, 3, 'a', 'b', 'c']"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the greet module is loaded only when the user clicks a button."
-      },
-      {
-        "type": "paragraph",
-        "value": "## Example: Dynamic Import in Action"
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's say you have a simple app where you want to show a greeting only when the user decides to see it."
+        "value": "### 2. `cycle()` - Repeating an Iterable Infinitely\n\nUse `cycle()` when you want to loop through an iterable endlessly. Just be cautious to use it with a break condition or inside a limited loop to avoid infinite loops."
       },
       {
         "type": "code",
-        "value": "// greet.js\nexport function greet() {\n  alert('Hello! Welcome to dynamic imports!');\n}\n\n// main.js\nconst button = document.createElement('button');\nbutton.textContent = 'Load Greeting';\ndocument.body.appendChild(button);\n\nbutton.addEventListener('click', () => {\n  import('./greet.js')\n    .then(module => {\n      module.greet();\n    })\n    .catch(err => {\n      console.error('Error loading the greeting module:', err);\n    });\n});"
+        "value": "counter = 0\nfor item in itertools.cycle(['A', 'B', 'C']):\n    print(item)\n    counter += 1\n    if counter == 6:  # Stop after 6 items\n        break\n# Output: A B C A B C"
       },
       {
         "type": "paragraph",
-        "value": "When the user clicks the \"Load Greeting\" button, only then does the greet.js module load, saving resources when the greeting is not needed immediately."
+        "value": "### 3. `permutations()` - Generating Order-Sensitive Arrangements\n\nThis function generates all possible order-sensitive arrangements (permutations) of a given length from the iterable."
+      },
+      {
+        "type": "code",
+        "value": "items = ['X', 'Y', 'Z']\nfor p in itertools.permutations(items, 2):\n    print(p)\n# Output:\n# ('X', 'Y')\n# ('X', 'Z')\n# ('Y', 'X')\n# ('Y', 'Z')\n# ('Z', 'X')\n# ('Z', 'Y')"
       },
       {
         "type": "paragraph",
-        "value": "## Benefits of Dynamic Imports"
+        "value": "### 4. `combinations()` - Generating Order-Insensitive Groups\n\nUnlike permutations, `combinations()` generates all possible groups where order does not matter."
+      },
+      {
+        "type": "code",
+        "value": "for c in itertools.combinations(items, 2):\n    print(c)\n# Output:\n# ('X', 'Y')\n# ('X', 'Z')\n# ('Y', 'Z')"
       },
       {
         "type": "paragraph",
-        "value": "- **Improved performance:** Load only what you need, when you need it.\n- **Better user experience:** Faster initial load times.\n- **Code splitting:** Break your code into smaller chunks automatically.\n- **Lazy loading:** Useful for rarely used parts of your app or large libraries."
+        "value": "### 5. `islice()` - Slicing Iterators\n\nJust like slicing lists, `islice()` allows you to slice any iterator without converting it to a list first."
+      },
+      {
+        "type": "code",
+        "value": "numbers = itertools.count(10)  # an infinite iterator starting at 10\nfirst_five = itertools.islice(numbers, 5)\nprint(list(first_five))  # Output: [10, 11, 12, 13, 14]"
       },
       {
         "type": "paragraph",
-        "value": "## Key Points to Remember"
+        "value": "### 6. `groupby()` - Grouping Consecutive Items\n\nThis groups consecutive elements based on a key function. Note that the data must be sorted by the same key function for meaningful grouping."
+      },
+      {
+        "type": "code",
+        "value": "data = [('apple', 'fruit'), ('banana', 'fruit'), ('carrot', 'vegetable'), ('asparagus', 'vegetable')]\n\n# Sort by category\nsorted_data = sorted(data, key=lambda x: x[1])\n\ngroups = itertools.groupby(sorted_data, key=lambda x: x[1])\n\nfor category, items in groups:\n    print(category)\n    for item in items:\n        print(' ', item[0])\n# Output:\n# fruit\n#   apple\n#   banana\n# vegetable\n#   carrot\n#   asparagus"
       },
       {
         "type": "paragraph",
-        "value": "- Dynamic import() returns a promise.\n- You can use async/await to handle imports more neatly.\n- Errors can occur if the module path is wrong, so always catch errors.\n- Browser support is good in modern browsers but check if you need polyfills or bundler configurations."
-      },
-      {
-        "type": "paragraph",
-        "value": "## Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Dynamic module loading with JavaScript imports is a powerful way to make your web applications faster and more efficient. By loading code only when needed, you reduce the initial load time and improve the overall user experience. Try incorporating dynamic imports in your next project to see the benefits firsthand!"
+        "value": "### Summary\nUsing `itertools`, you can perform many common and complex iteration tasks more succinctly, often improving code readability and performance. Start experimenting with these functions in your next Python project and see the magic unfold!"
       }
     ]
   },
   {
-    "slug": "creating-custom-iterators-and-generators-for-efficient-data-processing",
-    "title": "Creating Custom Iterators and Generators for Efficient Data Processing",
-    "language": "javascript",
-    "type": "tutorials",
-    "description": "Learn how to create custom iterators and generators in JavaScript to efficiently handle and process data step-by-step.",
-    "videoUrl": "",
+    "slug": "understanding-and-handling-memory-leaks-in-python-applications",
+    "title": "Understanding and Handling Memory Leaks in Python Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what memory leaks are, how they happen in Python applications, and practical ways to detect and fix them for better app performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=Lem4XksEnzQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with large or complex data sets, sometimes you need to process data one piece at a time instead of loading everything at once. JavaScript offers powerful tools to do this efficiently: custom iterators and generators. They allow you to create sequences of values that you can iterate over, making your code more memory-efficient and easier to manage."
+        "value": "Memory leaks happen when a program keeps using more memory over time without releasing it back to the system. Even though Python has automatic memory management via garbage collection, memory leaks can still occur, especially when references to unused objects are unintentionally kept alive."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll learn how to create a custom iterator and a generator function. Both provide ways to generate data on the fly but are used in slightly different ways."
+        "value": "In Python, memory leaks usually happen due to lingering references, circular references with __del__ methods, or improper usage of external libraries that manage their own memory. Understanding how to identify and handle these leaks can improve your app’s stability and performance."
       },
       {
         "type": "paragraph",
-        "value": "### What is an Iterator?"
-      },
-      {
-        "type": "paragraph",
-        "value": "An iterator is an object with a `next()` method that returns the next value in a sequence along with a `done` property that tells whether the iteration is complete."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's create a simple iterator that counts from 1 to 5."
+        "value": "Let’s look at a simple example of a memory leak caused by unintentionally holding references in a list."
       },
       {
         "type": "code",
-        "value": "function createCounter() {\n  let count = 1;\n  return {\n    next() {\n      if (count <= 5) {\n        return { value: count++, done: false };\n      } else {\n        return { done: true };\n      }\n    }\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter.next()); // { value: 1, done: false }\nconsole.log(counter.next()); // { value: 2, done: false }\n// Keep calling next() till done is true"
+        "value": "class DataHolder:\n    def __init__(self, data):\n        self.data = data\n\nleak_list = []\n\nfor i in range(100000):\n    leak_list.append(DataHolder(i))  # Objects are kept alive in leak_list\n\nprint(\"Objects created and stored in leak_list.\")"
       },
       {
         "type": "paragraph",
-        "value": "### Using Iterators with `for...of`"
+        "value": "In this example, the list leak_list keeps growing, holding onto each DataHolder instance. If you forget to clear or remove items, memory usage will increase and cause a leak."
       },
       {
         "type": "paragraph",
-        "value": "To use an object with the `for...of` loop, it needs to be iterable. That means it must have a `[Symbol.iterator]()` method that returns an iterator. Let's update our counter to be iterable."
+        "value": "How can you detect memory leaks in Python? One useful module is `tracemalloc`, which helps trace memory allocations."
       },
       {
         "type": "code",
-        "value": "const iterableCounter = {\n  count: 1,\n  [Symbol.iterator]() {\n    return {\n      count: this.count,\n      next() {\n        if (this.count <= 5) {\n          return { value: this.count++, done: false };\n        } else {\n          return { done: true };\n        }\n      }\n    };\n  }\n};\n\nfor (const num of iterableCounter) {\n  console.log(num); // 1 2 3 4 5\n}"
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Run some code that may leak memory\nleak_list = []\nfor i in range(10000):\n    leak_list.append(DataHolder(i))\n\nsnapshot = tracemalloc.take_snapshot()\n\nfor stat in snapshot.statistics('filename')[:5]:\n    print(stat)"
       },
       {
         "type": "paragraph",
-        "value": "### What is a Generator?"
+        "value": "This code tracks the top memory usage lines so you can see where most allocations come from. You can use this info to narrow down leaks."
       },
       {
         "type": "paragraph",
-        "value": "Generators offer a simpler way to create iterators. They are functions that can pause their execution by using the `yield` keyword and resume later, producing values one at a time."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's write the same counter using a generator function."
+        "value": "To fix leaks in the example, clear the list when its data is no longer needed."
       },
       {
         "type": "code",
-        "value": "function* counterGenerator() {\n  for (let i = 1; i <= 5; i++) {\n    yield i;\n  }\n}\n\nconst gen = counterGenerator();\nconsole.log(gen.next()); // { value: 1, done: false }\nconsole.log(gen.next()); // { value: 2, done: false }\n\n// Use in for...of\nfor (const num of counterGenerator()) {\n  console.log(num); // 1 2 3 4 5\n}"
+        "value": "leak_list.clear()  # Releases references and frees memory"
       },
       {
         "type": "paragraph",
-        "value": "### Why Use Generators or Custom Iterators?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Generators and iterators are great when dealing with large data sets or streams of data. Instead of loading everything into memory at once, you can process items one by one. For example, reading lines from a large file or generating an infinite sequence of numbers."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Real-World Example: Processing Data in Chunks"
-      },
-      {
-        "type": "paragraph",
-        "value": "Imagine you have a large array, and you want to process it chunk-by-chunk."
+        "value": "If memory leaks involve complex situations like circular references, consider using the `gc` module to detect and debug them."
       },
       {
         "type": "code",
-        "value": "function* chunkGenerator(array, chunkSize) {\n  for (let i = 0; i < array.length; i += chunkSize) {\n    yield array.slice(i, i + chunkSize);\n  }\n}\n\nconst data = [1, 2, 3, 4, 5, 6, 7, 8, 9];\n\nfor (const chunk of chunkGenerator(data, 3)) {\n  console.log(chunk); // [1,2,3] then [4,5,6] then [7,8,9]\n}"
+        "value": "import gc\n\nunreachable = gc.collect()\nprint(f\"Unreachable objects collected: {unreachable}\")"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "Regularly monitoring memory usage and being mindful of object references ensures your Python apps run efficiently without growing memory over time."
       },
       {
         "type": "paragraph",
-        "value": "Custom iterators give you control over how data is returned step-by-step, and generators provide a clean and easy syntax to build iterators. Learning to use these features will help you write more efficient and readable JavaScript when dealing with sequences or streams of data."
+        "value": "In summary, memory leaks in Python can happen but are manageable by understanding how references work, using tools like tracemalloc and gc, and carefully releasing references when no longer needed."
       }
     ]
   },
   {
-    "slug": "how-to-build-a-minimalistic-state-management-system-from-scratch",
-    "title": "How to Build a Minimalistic State Management System from Scratch",
-    "language": "javascript",
+    "slug": "optimizing-complex-sql-queries-for-real-time-data-analytics",
+    "title": "Optimizing Complex SQL Queries for Real-Time Data Analytics: A Beginner's Guide",
+    "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to create a simple and minimalistic state management system in JavaScript from scratch. This tutorial is perfect for beginners who want to understand the fundamentals of state management without any external libraries.",
-    "videoUrl": "",
+    "description": "Learn beginner-friendly tips and techniques to optimize complex SQL queries for faster and more efficient real-time data analytics.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "State management is an essential concept in modern web development. It helps you keep track of your application's data and how it changes over time. Popular libraries like Redux or MobX manage state for you, but understanding how they work under the hood is crucial for becoming a better developer. In this tutorial, we'll build a minimalistic state management system from scratch using plain JavaScript."
+        "value": "Real-time data analytics is essential for making timely decisions, but complex SQL queries can be slow and inefficient. As a beginner, understanding how to optimize these queries will greatly improve performance and reduce waiting times. This tutorial covers foundational techniques to help you optimize your SQL queries for real-time analytics."
       },
       {
         "type": "paragraph",
-        "value": "Our system will have three main features:\n1. A state object to store data.\n2. A way to update the state.\n3. A subscription system to notify when state changes."
+        "value": "1. Use Proper Indexing: Indexes speed up data retrieval. Identify columns used in JOINs, WHERE, and ORDER BY clauses and create indexes on them."
       },
       {
         "type": "paragraph",
-        "value": "Let's get started!"
+        "value": "Example: Creating an index on the customer_id column for faster lookup."
       },
       {
         "type": "code",
-        "value": "function createStore(initialState) {\n  let state = initialState;\n  const listeners = [];\n\n  // Get the current state\n  function getState() {\n    return state;\n  }\n\n  // Update the state and notify listeners\n  function setState(update) {\n    state = { ...state, ...update };\n    listeners.forEach((listener) => listener());\n  }\n\n  // Subscribe to state changes\n  function subscribe(listener) {\n    listeners.push(listener);\n    // Return an unsubscribe function\n    return () => {\n      const index = listeners.indexOf(listener);\n      if (index > -1) {\n        listeners.splice(index, 1);\n      }\n    };\n  }\n\n  return { getState, setState, subscribe };\n}"
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
       },
       {
         "type": "paragraph",
-        "value": "Here's a breakdown of this code:\n\n- `createStore` takes an initial state object.\n- `getState` returns the current state.\n- `setState` merges the new updates into the existing state and calls all subscribed listeners.\n- `subscribe` lets other parts of your app listen for changes in the state and returns an unsubscribe function to stop listening."
+        "value": "2. Avoid SELECT *: Selecting only the columns you need reduces processing time and memory usage."
       },
       {
         "type": "paragraph",
-        "value": "Let's see how to use this store:"
+        "value": "Instead of:"
       },
       {
         "type": "code",
-        "value": "// Create a store with an initial state\nconst store = createStore({ count: 0 });\n\n// Create a listener function to respond to state changes\nfunction render() {\n  console.log(\"Count:\", store.getState().count);\n}\n\n// Subscribe the listener\nconst unsubscribe = store.subscribe(render);\n\n// Initial render\nrender();\n\n// Update the state - this will trigger the listener\nstore.setState({ count: store.getState().count + 1 }); // Count: 1\nstore.setState({ count: store.getState().count + 1 }); // Count: 2\n\n// Stop listening to changes\nunsubscribe();\n\n// This update will not trigger the listener\nstore.setState({ count: store.getState().count + 1 });"
+        "value": "SELECT * FROM orders WHERE order_date > '2023-01-01';"
       },
       {
         "type": "paragraph",
-        "value": "This simple system shows the core concepts of state management: you create a store, read from it, update it, and react when it changes. You can extend this system by adding features like middleware, action creators, or more complex state updates, but this minimalistic setup is a great starting point."
+        "value": "Write:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date, customer_id FROM orders WHERE order_date > '2023-01-01';"
       },
       {
         "type": "paragraph",
-        "value": "Congratulations! You’ve just built your own minimalistic state management system."
+        "value": "3. Use WHERE Clause Efficiently: Filtering rows early reduces the dataset size for subsequent operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Optimize JOINs: Use INNER JOINs instead of CROSS JOINs when possible and join on indexed columns."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of an optimized INNER JOIN:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT o.order_id, c.customer_name, o.order_date\nFROM orders o\nINNER JOIN customers c ON o.customer_id = c.customer_id\nWHERE o.order_date > '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Limit Result Sets with LIMIT or TOP: For real-time dashboards, limit returned rows to reduce load."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date FROM orders ORDER BY order_date DESC LIMIT 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Use Query Execution Plans: Most database systems provide execution plans to understand query performance and identify bottlenecks."
+      },
+      {
+        "type": "paragraph",
+        "value": "7. Consider Materialized Views for Repeated Heavy Queries: If the same complex query runs frequently, creating a materialized view can save time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of creating a materialized view to summarize total sales by month:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE MATERIALIZED VIEW monthly_sales AS\nSELECT DATE_TRUNC('month', order_date) AS month, SUM(total_amount) AS total_sales\nFROM orders\nGROUP BY month;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, by creating indexes, selecting only needed columns, filtering early, optimizing joins, limiting results, and using materialized views, you can significantly improve the speed and efficiency of complex SQL queries for real-time data analytics. Practice these tips on your own queries to see performance improvements."
       }
     ]
   },
   {
-    "slug": "advanced-event-delegation-techniques-for-high-performance-web-apps",
-    "title": "Advanced Event Delegation Techniques for High-Performance Web Apps",
-    "language": "javascript",
-    "type": "tutorials",
-    "description": "Learn how to optimize your web app's event handling with advanced event delegation techniques in JavaScript. Boost performance and scalability by managing events more efficiently.",
-    "videoUrl": "",
+    "slug": "mastering-sql-error-handling-with-try-catch-and-throw",
+    "title": "Mastering SQL Error Handling with TRY...CATCH and THROW for Robust Applications",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use SQL Server's TRY...CATCH and THROW statements to handle errors effectively and make your applications more reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=RFUcXlYn58I",
     "content": [
       {
         "type": "paragraph",
-        "value": "Event delegation is a powerful technique in JavaScript that allows you to handle events efficiently by attaching a single event listener to a parent element instead of multiple listeners to individual child elements. This technique works because of event bubbling, where events triggered on child elements propagate up to their parent nodes."
+        "value": "In database programming, errors can occur due to many reasons like constraint violations, syntax errors, or deadlocks. Handling these errors gracefully is crucial for building robust SQL applications. SQL Server provides the TRY...CATCH block along with the THROW statement to help you manage errors effectively. In this article, we'll explore how to use TRY...CATCH and THROW for error handling in SQL Server."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore advanced event delegation techniques that help you build high-performance web applications. Even if you're a beginner, you'll find these patterns useful as your projects grow and require scalable event handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why Use Event Delegation?\n- Improves performance by reducing the number of event listeners.\n- Makes dynamic content easier to manage since new elements can automatically be handled.\n- Simplifies cleanup when removing large components or containers."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Basic Event Delegation Setup"
+        "value": "The TRY...CATCH construct works similarly to error handling in many programming languages. You write the code that might throw an error inside the TRY block. If an error occurs, control passes to the CATCH block, where you can respond to the error, log it, or correct it."
       },
       {
         "type": "code",
-        "value": "const list = document.getElementById('myList');\n\nlist.addEventListener('click', function(event) {\n  const clickedItem = event.target;\n  if (clickedItem.tagName === 'LI') {\n    console.log('List item clicked:', clickedItem.textContent);\n  }\n});"
+        "value": "BEGIN TRY\n    -- This statement will cause a divide-by-zero error\n    SELECT 10 / 0 AS Result;\nEND TRY\nBEGIN CATCH\n    PRINT 'An error occurred.';\n    PRINT ERROR_MESSAGE(); -- Displays the error message\nEND CATCH;"
       },
       {
         "type": "paragraph",
-        "value": "Here, a single click listener on the parent `<ul>` handles clicks on all child `<li>` elements. But as apps grow, you might want to handle many event types or use more complex delegation logic."
+        "value": "In this example, the division by zero causes an error inside the TRY block. Instead of stopping the batch, control moves to the CATCH block where the error message is printed. This prevents your application from crashing and gives you a chance to handle the error gracefully."
       },
       {
         "type": "paragraph",
-        "value": "### Advanced Techniques"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Delegating Multiple Event Types:** Instead of adding separate listeners for each event, create a reusable function that delegates based on event type."
+        "value": "Inside the CATCH block, SQL Server provides several functions to get details about the error: ERROR_MESSAGE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), and ERROR_PROCEDURE(). These functions help you analyze errors and create meaningful logging or user messages."
       },
       {
         "type": "code",
-        "value": "function delegateEvent(parentSelector, eventType, selector, handler) {\n  const parent = document.querySelector(parentSelector);\n  parent.addEventListener(eventType, function(event) {\n    let targetElement = event.target;\n    while (targetElement && targetElement !== parent) {\n      if (targetElement.matches(selector)) {\n        handler.call(targetElement, event);\n        break;\n      }\n      targetElement = targetElement.parentElement;\n    }\n  });\n}\n\n// Usage example\n// Handles click on all buttons with class 'btn' inside #container\ndelegateEvent('#container', 'click', '.btn', function(e) {\n  console.log('Button clicked:', this.textContent);\n});"
+        "value": "BEGIN TRY\n    -- Attempt to insert a duplicate key, causing a primary key violation\n    INSERT INTO Employees (EmployeeID, Name) VALUES (1, 'Alice');\nEND TRY\nBEGIN CATCH\n    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS VARCHAR(10));\n    PRINT 'Error Message: ' + ERROR_MESSAGE();\nEND CATCH;"
       },
       {
         "type": "paragraph",
-        "value": "This `delegateEvent` function improves flexibility by allowing delegation on any parent element, event type, and selector."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Using Event Capturing for Early Handling:** By default, event listeners fire during the bubbling phase, but you can listen during the capturing phase to intercept events earlier. This can be useful for certain UI patterns."
+        "value": "The THROW statement is used to re-raise an error from inside a CATCH block or to raise a new error. Unlike the older RAISERROR statement, THROW preserves the original error information, making it easier to troubleshoot."
       },
       {
         "type": "code",
-        "value": "document.getElementById('parent').addEventListener('click', function(event) {\n  console.log('Capturing phase listener');\n}, true);  // third argument 'true' enables capturing"
+        "value": "BEGIN TRY\n    -- Fake error by dividing by zero\n    SELECT 1 / 0;\nEND TRY\nBEGIN CATCH\n    PRINT 'Handling error and rethrowing it.';\n    THROW; -- Rethrows the caught error\nEND CATCH;"
       },
       {
         "type": "paragraph",
-        "value": "3. **Managing Delegated Event Performance:** When you have many event listeners, consider throttling or debouncing your handlers to prevent performance bottlenecks, especially on `scroll`, `resize`, or `mousemove` events."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example of debouncing a delegated event handler:"
+        "value": "You can also use THROW to raise custom errors by providing your own error number, message, and state. However, note that the error numbers for custom THROW errors must be 50000 or higher."
       },
       {
         "type": "code",
-        "value": "function debounce(func, delay) {\n  let timeoutId;\n  return function(...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => func.apply(this, args), delay);\n  };\n}\n\ndelegateEvent('#container', 'scroll', '.scrollable', debounce(function(e) {\n  console.log('Scroll event debounced fired on:', this);\n}, 200));"
+        "value": "BEGIN TRY\n    -- Simulate a custom business logic error\n    THROW 50001, 'Custom error: Invalid operation detected.', 1;\nEND TRY\nBEGIN CATCH\n    PRINT 'Custom error thrown:';\n    PRINT ERROR_MESSAGE();\nEND CATCH;"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "Using TRY...CATCH combined with THROW allows you to build resilient SQL code that can handle unexpected situations and provide meaningful feedback. This improves your database application's reliability and maintainability."
       },
       {
         "type": "paragraph",
-        "value": "Advanced event delegation can greatly improve your web app's performance and maintainability. Use reusable delegation functions, take advantage of event capturing when necessary, and optimize event handler execution by throttling or debouncing. Practice these techniques to build scalable and efficient interactive apps."
-      },
-      {
-        "type": "paragraph",
-        "value": "Happy coding!"
+        "value": "In summary:\n- Enclose error-prone code in a TRY block.\n- Capture and handle errors in the CATCH block.\n- Use error functions to get detailed error information.\n- Use THROW to rethrow or create custom errors.\n\nWith these techniques, you can master error handling in SQL Server and create robust, production-ready applications."
       }
     ]
   }
