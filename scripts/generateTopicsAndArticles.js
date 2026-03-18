@@ -29,7 +29,28 @@ const GENERATION_LIMITS = {
 };
 
 function cleanJson(text) {
-  return text.replace(/```json/g, "").replace(/```/g, "").trim();
+  return String(text || "")
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+}
+
+function extractResponseText(response) {
+  if (response?.output_text) {
+    return response.output_text;
+  }
+
+  if (!Array.isArray(response?.output)) {
+    return "";
+  }
+
+  return response.output
+    .map((item) => {
+      if (!Array.isArray(item?.content)) return "";
+      return item.content.map((part) => part?.text || "").join("");
+    })
+    .join("")
+    .trim();
 }
 
 function extractJson(text) {
@@ -50,17 +71,29 @@ function extractJson(text) {
   throw new Error("Could not extract valid JSON from model output.");
 }
 
+function slugify(input) {
+  return String(input || "")
+    .toLowerCase()
+    .replace(/['"`]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function getExistingSlugs() {
-  const articlesFile = fs.readFileSync("data/articles.ts", "utf-8");
+  try {
+    const articlesFile = fs.readFileSync("data/articles.ts", "utf-8");
 
-  const match = articlesFile.match(
-    /export const articles: Article\[\] = (\[[\s\S]*\]);/
-  );
+    const match = articlesFile.match(
+      /export const articles: Article\[\] = (\[[\s\S]*\]);/
+    );
 
-  if (!match) return new Set();
+    if (!match) return new Set();
 
-  const existingArticles = eval(match[1]);
-  return new Set(existingArticles.map((article) => article.slug));
+    const existingArticles = eval(match[1]);
+    return new Set(existingArticles.map((article) => article.slug));
+  } catch {
+    return new Set();
+  }
 }
 
 function normalizeContent(content) {
@@ -194,7 +227,8 @@ Use this exact format:
     input: prompt,
   });
 
-  const data = extractJson(response.output_text);
+  const rawText = extractResponseText(response);
+  const data = extractJson(rawText);
 
   if (!Array.isArray(data.topics)) {
     throw new Error("Invalid topics response");
@@ -250,6 +284,8 @@ Content rules:
 - Include at least 1 code block when relevant
 - For tutorial articles, teach the concept step by step
 - For error articles, explain the error, why it happens, and how to fix it
+- Keep the slug clean and URL-friendly
+- The slug must be lowercase and use hyphens only
 
 Use this exact format:
 {
@@ -293,15 +329,18 @@ Use this exact format:
     input: prompt,
   });
 
-  const article = extractJson(response.output_text);
+  const rawText = extractResponseText(response);
+  const article = extractJson(rawText);
   const videoUrl = await findYoutubeVideo(topic, language, type);
 
+  const safeSlug = slugify(article.slug || topic);
+
   return {
-    slug: article.slug,
-    title: article.title,
-    language: article.language,
-    type: article.type,
-    description: article.description,
+    slug: safeSlug,
+    title: String(article.title || topic).trim(),
+    language,
+    type,
+    description: String(article.description || "").trim(),
     videoUrl,
     content: normalizeContent(article.content),
   };
@@ -360,6 +399,11 @@ async function run() {
         console.log(
           `Skipping mismatched article: expected ${plan.language}/${plan.type}, got ${article.language}/${article.type}`
         );
+        continue;
+      }
+
+      if (!Array.isArray(article.content) || article.content.length < 5) {
+        console.log(`Skipping article with weak content: ${article.slug}`);
         continue;
       }
 
