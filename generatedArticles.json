@@ -1,597 +1,589 @@
 [
   {
-    "slug": "mastering-javascript-proxy-how-to-intercept-and-customize-object-behavior",
-    "title": "Mastering JavaScript Proxy: How to Intercept and Customize Object Behavior",
+    "slug": "comparing-event-loop-implementations-in-javascript-engines-v8-vs-spidermonkey",
+    "title": "Comparing Event Loop Implementations in JavaScript Engines: V8 vs SpiderMonkey",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to use JavaScript Proxy to intercept and customize operations on objects. This beginner-friendly guide explains what Proxy is, why it's useful, and walks you through simple examples to get started.",
+    "description": "A beginner-friendly guide that explains how event loops work in JavaScript and compares how two popular JavaScript engines, V8 and SpiderMonkey, implement the event loop.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript Proxy is a powerful feature that allows you to create a wrapper around an object, intercepting and customizing operations performed on it. This can include reading, writing, deleting properties, and more. Proxies are useful for logging, validation, property protection, or creating reactive objects."
+        "value": "JavaScript is famous for being single-threaded and event-driven. This means it uses a mechanism called the \"event loop\" to handle tasks like user interactions, timers, and I/O operations without freezing your application. Two popular JavaScript engines, V8 (used in Chrome and Node.js) and SpiderMonkey (used in Firefox), implement the event loop in slightly different ways. In this tutorial, you'll learn the basics of the event loop and how these two engines compare."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we will explore the basics of Proxy, how it works, and see simple examples that you can understand and use in your own projects."
+        "value": "### What is the Event Loop?"
       },
       {
         "type": "paragraph",
-        "value": "### What is a Proxy?"
+        "value": "The event loop is a loop that waits for messages or events and processes them one by one. It allows JavaScript to perform non-blocking operations despite being single-threaded. When you schedule tasks like setTimeout or handle promises, these get placed in queues that the event loop processes."
       },
       {
         "type": "paragraph",
-        "value": "A Proxy object wraps around another object (called the target) and allows you to intercept operations on the target through functions called traps. These traps can react to actions like getting or setting a property, deleting a property, and more."
+        "value": "### V8's Event Loop (Chrome & Node.js)"
       },
       {
         "type": "paragraph",
-        "value": "The general syntax looks like this:"
+        "value": "V8 uses the libuv library in Node.js to handle the event loop. It manages multiple phases like timers, pending callbacks, idle, poll, check, and close callbacks. In the browser (Chrome), the event loop is integrated into the browser's task scheduling, split mainly into macrotasks (like setTimeout) and microtasks (like promises)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example that demonstrates how microtasks (promises) are executed before macrotasks (setTimeout) in V8:"
       },
       {
         "type": "code",
-        "value": "const proxy = new Proxy(target, handler);"
+        "value": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('setTimeout');\n}, 0);\n\nPromise.resolve().then(() => {\n  console.log('Promise');\n});\n\nconsole.log('End');"
       },
       {
         "type": "paragraph",
-        "value": "Here, `target` is the original object you want to wrap, and `handler` is an object with traps (functions) that intercept operations on the target."
+        "value": "Output in V8:\n\nStart\nEnd\nPromise\nsetTimeout\n"
       },
       {
         "type": "paragraph",
-        "value": "### Example 1: Intercepting Property Access"
+        "value": "### SpiderMonkey's Event Loop (Firefox)"
       },
       {
         "type": "paragraph",
-        "value": "Let's create a simple proxy that logs every time a property is accessed."
+        "value": "SpiderMonkey is Firefox's JavaScript engine. Its event loop is integrated with the Gecko engine, which controls the browser. SpiderMonkey follows the HTML5 specification for task queues and microtasks, just like V8 in browsers. The main difference lies in internal optimizations and the way the browser schedules rendering and style updates."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you run the same code in Firefox's console, you’ll get the same output:"
       },
       {
         "type": "code",
-        "value": "const person = { name: 'Alice', age: 25 };\n\nconst personProxy = new Proxy(person, {\n  get(target, property) {\n    console.log(`Property \"${property}\" was accessed.`);\n    return target[property];\n  }\n});\n\nconsole.log(personProxy.name); // Logs: Property \"name\" was accessed. Then prints: Alice\nconsole.log(personProxy.age);  // Logs: Property \"age\" was accessed. Then prints: 25"
+        "value": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('setTimeout');\n}, 0);\n\nPromise.resolve().then(() => {\n  console.log('Promise');\n});\n\nconsole.log('End');"
       },
       {
         "type": "paragraph",
-        "value": "Whenever you try to access a property on `personProxy`, the `get` trap runs, logging the property name, and then returns the original value from the `person` object."
+        "value": "Output in SpiderMonkey (Firefox):\n\nStart\nEnd\nPromise\nsetTimeout\n"
       },
       {
         "type": "paragraph",
-        "value": "### Example 2: Validating Property Values"
+        "value": "### Key Takeaways"
       },
       {
         "type": "paragraph",
-        "value": "You can also use Proxy to control what values can be assigned to an object’s properties."
-      },
-      {
-        "type": "code",
-        "value": "const user = { name: 'Bob', age: 30 };\n\nconst userProxy = new Proxy(user, {\n  set(target, property, value) {\n    if (property === 'age') {\n      if (typeof value !== 'number' || value <= 0) {\n        throw new Error('Age must be a positive number.');\n      }\n    }\n    target[property] = value;\n    return true; // indicate success\n  }\n});\n\nuserProxy.age = 35; // Works fine\n// userProxy.age = -5; // Throws Error: Age must be a positive number."
+        "value": "- Both V8 and SpiderMonkey follow the HTML5 event loop specification closely, especially in browsers.\n- Microtasks (promises) are executed before macrotasks (setTimeout).\n- Node.js's V8 implementation uses libuv, which has additional event loop phases.\n- Differences appear mostly in internal optimizations, integration with browser rendering, and Node.js-specific APIs.\n\n### Why Should You Care?"
       },
       {
         "type": "paragraph",
-        "value": "Here, the `set` trap intercepts new assignments to properties. If the `age` property is set to a non-positive number or a non-number, an error is thrown."
+        "value": "Understanding the event loop helps you write better asynchronous JavaScript code. Knowing that promises run before timers can avoid bugs and improve performance."
       },
       {
         "type": "paragraph",
-        "value": "### Example 3: Hiding Properties"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can hide certain properties from being accessed or listed."
-      },
-      {
-        "type": "code",
-        "value": "const secretData = { publicInfo: 'Visible', secretInfo: 'Hidden' };\n\nconst proxyData = new Proxy(secretData, {\n  has(target, property) {\n    if (property === 'secretInfo') {\n      return false; // pretend secretInfo does not exist\n    }\n    return property in target;\n  },\n  ownKeys(target) {\n    // Filter out secretInfo from property list\n    return Reflect.ownKeys(target).filter(key => key !== 'secretInfo');\n  },\n  get(target, property) {\n    if (property === 'secretInfo') {\n      return undefined;\n    }\n    return target[property];\n  }\n});\n\nconsole.log('secretInfo' in proxyData); // false\nconsole.log(Object.keys(proxyData)); // ['publicInfo']\nconsole.log(proxyData.secretInfo);    // undefined"
-      },
-      {
-        "type": "paragraph",
-        "value": "The proxy hides the property `secretInfo` completely, so it can’t be accessed, listed, or detected through the `in` operator."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "JavaScript Proxy is a versatile tool that can:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Intercept property access and modification\n- Add validation or logging\n- Hide or protect object properties\n- Customize behavior for method calls or enumeration"
-      },
-      {
-        "type": "paragraph",
-        "value": "By mastering Proxy, you can write more powerful and flexible code. Start by experimenting with these traps and build more complex logic as you get comfortable."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now you’re ready to start using JavaScript Proxy in your own projects!"
+        "value": "Try running the example code snippets in both Chrome and Firefox to see how they behave similarly."
       }
     ]
   },
   {
-    "slug": "understanding-javascript-memory-leaks-in-complex-applications-advanced-analysis",
-    "title": "Understanding JavaScript Memory Leaks in Complex Applications: An Advanced Analysis",
+    "slug": "optimizing-async-await-patterns-for-better-javascript-performance",
+    "title": "Optimizing Async/Await Patterns for Better JavaScript Performance",
     "language": "javascript",
     "type": "errors",
-    "description": "A beginner-friendly yet advanced explanation of JavaScript memory leaks in complex applications, including why they happen, common patterns, and practical tips to identify and fix them.",
+    "description": "A beginner-friendly guide to understanding common mistakes with async/await in JavaScript and how to optimize your code for better performance.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a powerful language widely used for building complex web applications. However, these applications sometimes suffer from memory leaks, which can degrade performance and cause crashes. A memory leak occurs when your program holds onto memory that it no longer needs, preventing the JavaScript engine's garbage collector from freeing it. Understanding how memory leaks happen in complex applications can help you write more efficient and robust code."
+        "value": "Async/await is a powerful feature in JavaScript that makes working with asynchronous code easier to read and write. However, beginners often run into common mistakes that can cause performance issues. This article will cover those errors and show you how to write more efficient async/await patterns."
       },
       {
         "type": "paragraph",
-        "value": "In JavaScript, memory management is mostly automatic. The garbage collector frees memory occupied by objects that are no longer reachable or referenced. But sometimes, references persist unintentionally, especially in larger, more complicated codebases, causing leaks."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here are some common patterns that cause memory leaks in JavaScript applications:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Closures Holding Unnecessary References:** Closures keep references to variables in their outer scopes. If a closure outlives the need for these variables, memory can be unnecessarily retained."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Forgotten Timers or Callbacks:** Timers like `setInterval` or event listeners left active can reference variables and prevent garbage collection."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Detached DOM Nodes:** When DOM nodes are removed but references remain in JavaScript, those nodes cannot be garbage collected."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at an example that demonstrates a common memory leak caused by event listeners and closures:"
+        "value": "One common mistake is running async operations sequentially when they can run in parallel. For example:"
       },
       {
         "type": "code",
-        "value": "function setup() {\n  const largeArray = new Array(1000000).fill('leak');\n\n  function handleClick() {\n    console.log(largeArray[0]);\n  }\n\n  document.getElementById('myButton').addEventListener('click', handleClick);\n  // The largeArray remains in memory as long as handleClick is attached\n}"
+        "value": "async function fetchDataSequential() {\n  const data1 = await fetch('https://api.example.com/data1');\n  const json1 = await data1.json();\n  const data2 = await fetch('https://api.example.com/data2');\n  const json2 = await data2.json();\n  return [json1, json2];\n}"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `largeArray` holds a large amount of data. `handleClick` is a closure that references `largeArray`. As long as the click event listener remains attached to the button, `largeArray` cannot be garbage collected, even if you no longer need it. Over time, if `setup()` is called many times without removing listeners, memory usage increases."
+        "value": "In this example, the second fetch starts only after the first one finishes. This increases the total waiting time unnecessarily."
       },
       {
         "type": "paragraph",
-        "value": "To fix this leak, always remove event listeners when they are no longer needed:"
+        "value": "To optimize, start both fetches at the same time and wait for both promises together using Promise.all():"
       },
       {
         "type": "code",
-        "value": "function setup() {\n  const largeArray = new Array(1000000).fill('leak');\n\n  function handleClick() {\n    console.log(largeArray[0]);\n  }\n\n  const button = document.getElementById('myButton');\n  button.addEventListener('click', handleClick);\n\n  // Later, when you want to clean up:\n  // button.removeEventListener('click', handleClick);\n}"
+        "value": "async function fetchDataParallel() {\n  const promise1 = fetch('https://api.example.com/data1');\n  const promise2 = fetch('https://api.example.com/data2');\n\n  const [data1, data2] = await Promise.all([promise1, promise2]);\n  const json1 = await data1.json();\n  const json2 = await data2.json();\n\n  return [json1, json2];\n}"
       },
       {
         "type": "paragraph",
-        "value": "Other practical tips to avoid memory leaks include:"
+        "value": "By running the fetches in parallel, you reduce the total waiting time. This pattern can be used whenever multiple independent async operations need to happen."
       },
       {
         "type": "paragraph",
-        "value": "- Use browser developer tools to monitor memory usage and heap snapshots.\n- Avoid global variables that persist longer than needed.\n- Clean up timers (clearInterval, clearTimeout) when components unmount.\n- Avoid retaining references to detached DOM elements.\n- Use weak references (WeakMap, WeakSet) when appropriate to allow garbage collection."
+        "value": "Another mistake is forgetting to handle errors properly in async functions, which can cause uncaught exceptions and break your app. Always use try/catch blocks around await statements:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithErrorHandling() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n    return null;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "By understanding these concepts and carefully managing references, you can prevent memory leaks and ensure your complex JavaScript applications run smoothly."
+        "value": "This ensures your program can handle failures gracefully without crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary tips for optimizing async/await performance:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Run independent async operations in parallel with Promise.all() instead of awaiting each one sequentially.\n2. Use try/catch blocks to handle errors and prevent unhandled promise rejections.\n3. Avoid mixing async/await with then/catch unnecessarily, as it can make code confusing.\n4. Remember that 'await' pauses code execution, so minimize unnecessary awaits."
+      },
+      {
+        "type": "paragraph",
+        "value": "Following these simple guidelines will help you write cleaner, more efficient asynchronous JavaScript code."
       }
     ]
   },
   {
-    "slug": "comparing-typescripts-type-guards-vs-user-defined-type-predicates",
-    "title": "Comparing TypeScript’s Type Guards vs User-Defined Type Predicates for Safer Code",
+    "slug": "building-scalable-event-driven-architecture-with-typescript-and-kafka",
+    "title": "Building a Scalable Event-Driven Architecture with TypeScript and Kafka",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn the difference between TypeScript’s built-in type guards and user-defined type predicates, and how to use both to write safer and more precise type-safe code.",
+    "description": "Learn how to build a scalable event-driven architecture using TypeScript and Apache Kafka. This beginner-friendly tutorial covers the basics of event-driven design, setting up Kafka, and writing simple producers and consumers with TypeScript.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with TypeScript, one of the key features you can leverage for safer code is type checking. Sometimes, you need to tell the TypeScript compiler exactly what type a variable is at runtime — this is where type guards and user-defined type predicates come into play."
+        "value": "Event-driven architectures allow applications to react to events and scale seamlessly. Apache Kafka, a popular distributed event streaming platform, fits perfectly for this pattern. In this tutorial, we'll build a simple scalable event-driven system using TypeScript and Kafka."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore the difference between TypeScript’s built-in type guards and custom user-defined type predicates. You'll also learn how to use both effectively to make your code safer and clearer."
+        "value": "### What You Will Learn\n- What is event-driven architecture?\n- Basics of Apache Kafka\n- Writing Kafka producers and consumers in TypeScript\n- Running a simple scalable event-driven system"
       },
       {
         "type": "paragraph",
-        "value": "### What Are Type Guards?"
+        "value": "### Prerequisites\n- Basic knowledge of TypeScript and Node.js\n- Kafka installed locally or access to a Kafka environment\n- Node.js and npm installed"
       },
       {
         "type": "paragraph",
-        "value": "Type guards are expressions that perform a runtime check to guarantee the type of a variable in a specific scope. TypeScript understands these checks and narrows the type accordingly, making your code safer and reducing the chance of errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "Some common built-in type guards are `typeof` and `instanceof`. Here's an example using `typeof`:"
+        "value": "### Step 1: Setup your project\nFirst, create a new Node.js project and install the KafkaJS library — a popular Kafka client for Node.js that works great with TypeScript."
       },
       {
         "type": "code",
-        "value": "function example(value: string | number) {\n  if (typeof value === \"string\") {\n    // TypeScript knows 'value' is a string here\n    console.log(value.toUpperCase());\n  } else {\n    // Here 'value' is a number\n    console.log(value.toFixed(2));\n  }\n}"
+        "value": "mkdir event-driven-ts\ncd event-driven-ts\nnpm init -y\nnpm install kafkajs @types/node typescript ts-node --save"
       },
       {
         "type": "paragraph",
-        "value": "### What Are User-Defined Type Predicates?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes, built-in type guards are not enough to tell TypeScript what type something is, especially when dealing with complex or custom types. This is where user-defined type predicates come in."
-      },
-      {
-        "type": "paragraph",
-        "value": "User-defined type predicates are functions that return a boolean value and help TypeScript narrow down types by indicating something like \"variable is SomeType\"."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's how you define a user-defined type predicate function:"
+        "value": "Create a `tsconfig.json` file to configure TypeScript:"
       },
       {
         "type": "code",
-        "value": "interface Cat {\n  name: string;\n  meow: () => void;\n}\n\ninterface Dog {\n  name: string;\n  bark: () => void;\n}\n\n// User-defined type predicate\nfunction isCat(pet: Cat | Dog): pet is Cat {\n  return (pet as Cat).meow !== undefined;\n}"
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2019\",\n    \"module\": \"commonjs\",\n    \"outDir\": \"dist\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  },\n  \"include\": [\"src/**/*\"]\n}"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `isCat` checks if the provided pet has the `meow` method. Using the `pet is Cat` return type tells TypeScript that inside an if-block where `isCat(pet)` returns true, `pet` should be treated as a `Cat`."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using the User-Defined Type Predicate"
+        "value": "### Step 2: Create a Kafka producer\nLet's create a Kafka producer that sends messages to a topic called `test-topic`."
       },
       {
         "type": "code",
-        "value": "function speak(pet: Cat | Dog) {\n  if (isCat(pet)) {\n    pet.meow(); // Safe to call meow()\n  } else {\n    pet.bark(); // Safe to call bark()\n  }\n}"
+        "value": "import { Kafka } from 'kafkajs';\n\nasync function createProducer() {\n  const kafka = new Kafka({\n    clientId: 'my-producer',\n    brokers: ['localhost:9092']\n  });\n\n  const producer = kafka.producer();\n  await producer.connect();\n\n  const message = { value: 'Hello Kafka from TypeScript!' };\n\n  await producer.send({\n    topic: 'test-topic',\n    messages: [message],\n  });\n\n  console.log('Message sent');\n  await producer.disconnect();\n}\n\ncreateProducer().catch(console.error);"
       },
       {
         "type": "paragraph",
-        "value": "### Summary: When to Use Which?"
+        "value": "### Step 3: Create a Kafka consumer\nNow, let's build a simple consumer that listens to the `test-topic` and prints out any received messages."
+      },
+      {
+        "type": "code",
+        "value": "import { Kafka } from 'kafkajs';\n\nasync function createConsumer() {\n  const kafka = new Kafka({\n    clientId: 'my-consumer',\n    brokers: ['localhost:9092']\n  });\n\n  const consumer = kafka.consumer({ groupId: 'test-group' });\n  await consumer.connect();\n  await consumer.subscribe({ topic: 'test-topic', fromBeginning: true });\n\n  await consumer.run({\n    eachMessage: async ({ topic, partition, message }) => {\n      const receivedValue = message.value?.toString();\n      console.log(`Received message: ${receivedValue}`);\n    }\n  });\n}\n\ncreateConsumer().catch(console.error);"
       },
       {
         "type": "paragraph",
-        "value": "- Use built-in type guards like `typeof` and `instanceof` for simple type checks (strings, numbers, primitives, or class instances).\n- Use user-defined type predicates for custom types or more complex runtime checks.\n\nUnderstanding and combining these two will help you write safer, cleaner, and more maintainable code in TypeScript."
+        "value": "### Step 4: Running the system\nMake sure your Kafka broker is running locally on port 9092 (default). Then run the consumer in one terminal window and the producer in another:"
+      },
+      {
+        "type": "code",
+        "value": "npx ts-node src/consumer.ts\nnpx ts-node src/producer.ts"
       },
       {
         "type": "paragraph",
-        "value": "Try experimenting with these in your own TypeScript projects to see how they help catch bugs early and make your code self-documenting!"
+        "value": "You should see the consumer print the message sent by the producer.\n\n### Why is this scalable?\n- Producers and consumers work independently.\n- Kafka handles message durability and ordering.\n- You can add more consumer instances to scale consumption.\n\n### Next Steps\n- Experiment with multiple topics.\n- Handle message serialization with Avro or JSON Schema.\n- Implement error handling and retries.\n- Deploy Kafka and your services in production environments.\n\nThis simple example demonstrates the power of combining TypeScript and Kafka to create scalable event-driven systems. Happy coding!"
       }
     ]
   },
   {
-    "slug": "deep-dive-into-typescripts-control-flow-analysis-for-error-reduction",
-    "title": "Deep Dive into TypeScript's Control Flow Analysis for Error Reduction",
+    "slug": "deep-dive-into-typescripts-type-inference-failures-and-how-to-analyze-them",
+    "title": "Deep Dive into TypeScript's Type Inference Failures and How to Analyze Them",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how TypeScript's control flow analysis helps catch errors early by understanding how the type system adapts based on your code's flow.",
+    "description": "Explore common situations where TypeScript's type inference can fail, and learn practical strategies to diagnose and fix those issues.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is well-known for adding static types to JavaScript, which helps catch many errors during development. One of the powerful features behind its error-catching ability is called Control Flow Analysis (CFA). This feature allows TypeScript to track how your code flows, and based on that, it narrows down the types of your variables to help avoid common mistakes."
+        "value": "TypeScript is amazing at inferring types automatically, which helps you write less code and catch many errors early. However, sometimes TypeScript's type inference can fail or behave unexpectedly, leading to confusing errors or overly broad types. Understanding why these inference failures happen and how to analyze them will help you become a more confident TypeScript developer."
       },
       {
         "type": "paragraph",
-        "value": "Let's say you have a variable that can hold multiple types, like a string or null. TypeScript's control flow analysis can understand when a variable is checked for null and then safely know it must be a string after that check. This reduces runtime errors like trying to call a string method on null."
+        "value": "In this article, we'll cover some common scenarios where type inference trips up and how to explicitly help TypeScript with your types."
       },
       {
         "type": "paragraph",
-        "value": "Here’s a simple example to demonstrate this:"
+        "value": "### 1. Inference Failure with Empty Arrays"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you initialize an empty array, TypeScript cannot know what type of elements it will hold, so it often infers it as `never[]` which results in errors when you try to push other types later."
       },
       {
         "type": "code",
-        "value": "function greet(name: string | null) {\n  if (name !== null) {\n    // Inside this block, TypeScript knows 'name' is a string.\n    console.log(`Hello, ${name.toUpperCase()}!`);\n  } else {\n    console.log('Hello, guest!');\n  }\n}"
+        "value": "const values = [];\nvalues.push(42); // Error: Argument of type 'number' is not assignable to parameter of type 'never'."
       },
       {
         "type": "paragraph",
-        "value": "In this example, TypeScript understands that inside the `if` block, `name` cannot be `null`. This means you can safely call string methods like `toUpperCase()` without risking an error."
-      },
-      {
-        "type": "paragraph",
-        "value": "Control flow analysis also works well with more complex conditions, such as `typeof` checks or `instanceof`."
+        "value": "To fix this, explicitly declare the array type to let TypeScript know what to expect:"
       },
       {
         "type": "code",
-        "value": "function formatValue(value: string | number) {\n  if (typeof value === 'string') {\n    // Here, TypeScript knows 'value' is a string\n    return value.trim();\n  } else {\n    // Here, 'value' is a number\n    return value.toFixed(2);\n  }\n}"
+        "value": "const values: number[] = [];\nvalues.push(42); // No error"
       },
       {
         "type": "paragraph",
-        "value": "By understanding your code flow, TypeScript helps reduce mistakes by allowing only the valid operations for the determined type, reducing runtime errors and improving your code quality."
+        "value": "### 2. Functions with Multiple Return Types"
       },
       {
         "type": "paragraph",
-        "value": "To sum up, TypeScript's control flow analysis is a behind-the-scenes hero that tracks your code paths and narrows variable types accordingly. As a beginner, knowing this feature helps you write safer and cleaner TypeScript code."
+        "value": "If a function returns different types in different branches, TypeScript will infer a union type. While this is generally good, sometimes the inferred type becomes too complex or too broad."
+      },
+      {
+        "type": "code",
+        "value": "function getValue(flag: boolean) {\n  if (flag) {\n    return 42;\n  } else {\n    return 'hello';\n  }\n}\n\nconst result = getValue(true); // inferred as string | number"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to narrow down the return type intentionally, consider using function overloads or adding explicit return type annotations."
+      },
+      {
+        "type": "code",
+        "value": "function getValue(flag: true): number;\nfunction getValue(flag: false): string;\nfunction getValue(flag: boolean): number | string {\n  if (flag) {\n    return 42;\n  } else {\n    return 'hello';\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Complex Object Literals and Excess Property Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes when assigning an object literal to a typed variable, TypeScript can throw errors about excess properties if there are unexpected properties."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = {\n  name: 'Alice',\n  age: 30,\n  location: 'Earth' // Error: Object literal may only specify known properties\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "This happens because TypeScript performs a strict check on object literals. To fix this, you can either remove the extra property or use a type assertion if you're sure the extra properties are acceptable."
+      },
+      {
+        "type": "code",
+        "value": "const user = {\n  name: 'Alice',\n  age: 30,\n  location: 'Earth'\n} as User;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Improper Generics Usage"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript often infers generic types automatically, but in some cases inference fails because of complex relationships or async functions."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData<T>(url: string): Promise<T> {\n  const response = await fetch(url);\n  return response.json();\n}\n\nconst data = await fetchData('/api/data'); // 'data' is of inferred type 'unknown'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, since TypeScript has no info about what T should be, it defaults to 'unknown'. To fix this, specify the expected type whenever you call the function."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiResponse {\n  id: number;\n  message: string;\n}\n\nconst data = await fetchData<ApiResponse>('/api/data');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Analyze Inference Failures"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you encounter inference errors, here are some tips to analyze them:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Hover your variables in your IDE:** Most editors show inferred types on hover.\n- **Add explicit type annotations:** This helps you understand what TypeScript expects vs. what it inferred.\n- **Simplify complex expressions:** Break down complicated expressions into smaller variables with explicit types.\n- **Use the `--noImplicitAny` and `--strict` flags:** These compiler options help reveal hidden inference problems.\n- **Leverage `as const` for literals:** This narrows types of literals from general types like `string` to exact values."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript's type inference makes coding easier and safer, but sometimes it gets confused or infers overly broad or narrow types. When this happens, giving TypeScript more hints with explicit types, overloads, or assertions can help. Use your IDE tooling and break complex code into simpler parts to better understand how inference works. With practice, analyzing inference failures becomes second nature."
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-uncommon-pitfalls-and-solutions-in-python",
-    "title": "Handling Floating Point Precision: Uncommon Pitfalls and Solutions in Python",
+    "slug": "building-your-first-web-scraper-with-python-step-by-step",
+    "title": "Building Your First Web Scraper with Python: A Step-by-Step Tutorial",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the subtle issues behind floating point precision in Python, discover uncommon pitfalls, and explore how to handle them effectively with practical examples.",
+    "description": "Learn how to create a simple web scraper using Python. This beginner-friendly tutorial guides you through the basics of retrieving and parsing web data using popular libraries like requests and BeautifulSoup.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with numbers in Python, especially decimals, you might expect simple arithmetic to be perfect. But due to the way computers represent floating point numbers, this is not always true. You might see results like 0.1 + 0.2 not exactly equal to 0.3. This happens because floating point numbers are stored in a binary format that can’t precisely represent some decimal fractions."
+        "value": "Welcome to this tutorial on building your first web scraper with Python! Web scraping is a technique used to extract data from websites, which can be useful for data analysis, research, and automating repetitive tasks. In this tutorial, we'll learn how to download a web page and pull out useful information using Python."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore some uncommon pitfalls caused by floating point precision issues and learn practical ways to handle them."
+        "value": "We'll be using two popular Python libraries: `requests` to fetch the webpage content, and `BeautifulSoup` from the `bs4` package to parse the HTML and extract information. Let's get started!"
       },
       {
         "type": "paragraph",
-        "value": "## Pitfall 1: Unexpected Comparison Results"
-      },
-      {
-        "type": "paragraph",
-        "value": "You might try to check if two floating point numbers are equal but get surprising `False` results."
+        "value": "### Step 1: Install Required Libraries\nFirst, make sure you have the necessary packages installed. Open your terminal or command prompt and run the following commands:"
       },
       {
         "type": "code",
-        "value": "a = 0.1 + 0.2\nb = 0.3\nprint(a == b)  # Output: False"
+        "value": "pip install requests beautifulsoup4"
       },
       {
         "type": "paragraph",
-        "value": "Even though mathematically 0.1 + 0.2 equals 0.3, Python stores `a` and `b` slightly differently, causing the comparison to fail."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Solution: Use a tolerance for comparison."
+        "value": "### Step 2: Fetch a Webpage with Requests\nLet's write Python code to download a webpage. For this example, we'll scrape quotes from http://quotes.toscrape.com, a site built specifically for web scraping practice."
       },
       {
         "type": "code",
-        "value": "import math\n\nprint(math.isclose(a, b))  # Output: True"
+        "value": "import requests\n\nurl = 'http://quotes.toscrape.com'\nresponse = requests.get(url)\n\nif response.status_code == 200:\n    print(\"Page downloaded successfully!\")\nelse:\n    print(\"Failed to retrieve the page\")"
       },
       {
         "type": "paragraph",
-        "value": "`math.isclose()` allows you to check if two floating point numbers are almost equal within a small margin, avoiding issues caused by tiny precision differences."
+        "value": "If you run this script, it should print \"Page downloaded successfully!\" if the website is reachable."
       },
       {
         "type": "paragraph",
-        "value": "## Pitfall 2: Accumulation of Rounding Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "When adding many floating point numbers, small errors can accumulate and affect the final result."
+        "value": "### Step 3: Parse the HTML with BeautifulSoup\nNow that we have the page content, let's parse the HTML and extract the quotes."
       },
       {
         "type": "code",
-        "value": "values = [0.1] * 10\nprint(sum(values))  # Expected 1.0 but result might be 0.9999999999999999"
+        "value": "from bs4 import BeautifulSoup\n\nsoup = BeautifulSoup(response.text, 'html.parser')\n\n# Find all quote containers on the page\ndiv_quotes = soup.find_all('div', class_='quote')\n\nprint(f\"Found {len(div_quotes)} quotes on the page.\")"
       },
       {
         "type": "paragraph",
-        "value": "### Solution: Use the `decimal` module for precise decimal arithmetic."
+        "value": "### Step 4: Extract Text from the Quotes\nEach quote container has a quote text and the author's name. Let's loop through the results and print them."
       },
       {
         "type": "code",
-        "value": "from decimal import Decimal\n\nvalues = [Decimal('0.1')] * 10\nprint(sum(values))  # Output: 1.0"
+        "value": "for quote in div_quotes:\n    text = quote.find('span', class_='text').get_text()\n    author = quote.find('small', class_='author').get_text()\n    print(f'{text} — {author}')"
       },
       {
         "type": "paragraph",
-        "value": "The `Decimal` type stores numbers as decimal fractions, which prevents these rounding errors common with binary floating point."
-      },
-      {
-        "type": "paragraph",
-        "value": "## Pitfall 3: Unexpected Results in Formatting"
-      },
-      {
-        "type": "paragraph",
-        "value": "Floating point numbers might print strange extra digits due to precision issues."
+        "value": "### Full Working Script\nHere's the complete script put together."
       },
       {
         "type": "code",
-        "value": "x = 2.675\nprint(f\"{x:.2f}\")  # Output: 2.67 instead of 2.68"
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'http://quotes.toscrape.com'\nresponse = requests.get(url)\n\nif response.status_code == 200:\n    soup = BeautifulSoup(response.text, 'html.parser')\n    quotes = soup.find_all('div', class_='quote')\n    for quote in quotes:\n        text = quote.find('span', class_='text').get_text()\n        author = quote.find('small', class_='author').get_text()\n        print(f'{text} — {author}')\nelse:\n    print(\"Failed to retrieve the page\")"
       },
       {
         "type": "paragraph",
-        "value": "This happens because 2.675 cannot be precisely represented in binary floating point."
+        "value": "### Next Steps\nYou can extend your scraper to navigate multiple pages, save data to a file, or extract other types of information. Always remember to respect the website's terms of use and robots.txt files, and avoid overloading their servers with too many requests."
       },
       {
         "type": "paragraph",
-        "value": "### Solution: Use `Decimal` for accurate rounding when formatting."
-      },
-      {
-        "type": "code",
-        "value": "from decimal import Decimal, ROUND_HALF_UP\n\nx = Decimal('2.675')\nrounded_x = x.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)\nprint(rounded_x)  # Output: 2.68"
-      },
-      {
-        "type": "paragraph",
-        "value": "## Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Floating point precision can cause unexpected results in equality comparisons, summations, and formatting.\n- Use `math.isclose()` for approximate equality checks.\n- Use the `decimal` module for precise decimal arithmetic and rounding.\n- Always be mindful when handling money or exact decimal values in your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Understanding and handling floating point precision issues will save you from many subtle bugs and improve the reliability of your Python programs!"
+        "value": "Congratulations! You've just built your first web scraper using Python! Keep exploring and happy coding."
       }
     ]
   },
   {
-    "slug": "leveraging-pythons-contextlib-to-handle-resource-management-errors-gracefully",
-    "title": "Leveraging Python's contextlib to Handle Resource Management Errors Gracefully",
+    "slug": "designing-resilient-python-systems-handling-memory-leak-errors-effectively",
+    "title": "Designing Resilient Python Systems: Handling Memory Leak Errors Effectively",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to use Python's contextlib module to simplify resource management and handle errors gracefully using context managers.",
+    "description": "Learn how to identify, prevent, and handle memory leak errors in Python to build more resilient and efficient systems.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with resources like files, network connections, or database connections, it's important to ensure they are properly cleaned up after use. Python's built-in context managers, commonly used with the `with` statement, make this easier by automatically handling setup and cleanup tasks. However, when your resource management involves more complex logic or error handling, the `contextlib` module provides helpful tools to make this cleaner and more robust."
+        "value": "Memory leaks can cause Python applications to consume increasing amounts of memory over time, eventually leading to crashes or slow performance. This article introduces beginners to the concept of memory leaks, how to detect them, and best practices for preventing and handling these errors effectively in Python."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll see how to use `contextlib.contextmanager` to create a custom context manager that gracefully handles errors during resource management."
+        "value": "What is a memory leak? Simply put, it's when a program keeps consuming memory without releasing it back to the system, causing memory usage to grow unnecessarily. Python has automatic memory management, but memory leaks can still happen through reference cycles or holding onto resources longer than needed."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by looking at a simple example where we open a file and handle possible errors, ensuring the file always closes even if an error occurs."
+        "value": "### Detecting Memory Leaks\nOne useful tool to detect memory leaks is the `tracemalloc` module that comes with Python. It helps track memory allocations and spot where leaks occur."
       },
       {
         "type": "code",
-        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef open_file(filename, mode):\n    try:\n        f = open(filename, mode)\n        print(\"File opened\")\n        yield f\n    except Exception as e:\n        print(f\"Error occurred: {e}\")\n        raise\n    finally:\n        print(\"Closing file\")\n        f.close()\n\n# Usage\ntry:\n    with open_file('example.txt', 'r') as file:\n        content = file.read()\n        print(content)\nexcept Exception:\n    print(\"Handled file operation error.\")"
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your Python code here\n\nsnapshot1 = tracemalloc.take_snapshot()\n\n# Simulate some code that may leak memory\nleaky_list = []\nfor i in range(10000):\n    leaky_list.append(str(i) * 1000)\n\nsnapshot2 = tracemalloc.take_snapshot()\n\nstats = snapshot2.compare_to(snapshot1, 'lineno')\nfor stat in stats[:5]:\n    print(stat)"
       },
       {
         "type": "paragraph",
-        "value": "### Explanation:\n\n- The `@contextmanager` decorator lets us easily define a generator function that yields exactly once.\n- The code before the `yield` executes when entering the context (`with` block), such as opening the file.\n- The value yielded (`f`) is assigned to the variable after `as` in the `with` statement.\n- After the `yield`, the code in `finally` runs when exiting the context, ensuring cleanup happens even if an error occurs.\n- If an error arises inside the `with` block, it's caught by the except block inside the context manager, where we can log or handle it, then re-raise if needed."
+        "value": "### Common Causes of Memory Leaks\n- **Reference cycles:** Objects that reference each other, preventing garbage collection.\n- **Global variables:** Holding large data longer than necessary.\n- **Unclosed resources:** Files, network connections, or database cursors not properly closed."
       },
       {
         "type": "paragraph",
-        "value": "Using `contextlib` helps keep resource management code clean, readable, and more robust by consolidating error handling and cleanup in one place."
+        "value": "### Preventing Memory Leaks\n1. Use context managers (`with` statements) to ensure resources are closed properly.\n2. Avoid unnecessary global variables.\n3. Break reference cycles by using weak references (`weakref` module) when appropriate.\n4. Regularly test and profile memory usage, especially after changes."
+      },
+      {
+        "type": "code",
+        "value": "# Example of using a context manager to prevent leaking file descriptors\nwith open('data.txt', 'r') as file:\n    data = file.read()\n# file is automatically closed here"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Memory Errors Gracefully\nSometimes, despite precautions, your program may run out of memory. Python raises a `MemoryError`. You can catch this error and handle it gracefully to avoid a crash."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    big_list = [x for x in range(10**9)]  # Intentionally large\nexcept MemoryError:\n    print('MemoryError caught! Cleaning up resources...')\n    # Add cleanup or fallback code here"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Monitor your program’s memory use with tools like `tracemalloc`.\n- Use best practices such as context managers and weak references to avoid leaks.\n- Prepare to catch `MemoryError` to prevent crashes.\nFollowing these tips helps you build Python systems that are more resilient and reliable over time."
       }
     ]
   },
   {
-    "slug": "comparing-window-functions-and-aggregate-functions-in-sql",
-    "title": "Comparing Window Functions and Aggregate Functions in SQL: When and How to Use Each",
+    "slug": "designing-scalable-multi-tenant-databases-with-sql",
+    "title": "Designing Scalable Multi-Tenant Databases with SQL: A Beginner's Guide",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn the differences between Window Functions and Aggregate Functions in SQL, understand when to use each, and see beginner-friendly examples to help you write better, more efficient queries.",
+    "description": "Learn the basics of designing scalable multi-tenant databases using SQL. Understand multi-tenancy models and get started with example schemas to build efficient, maintainable, and scalable applications.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL is a powerful language for managing and analyzing data stored in databases. Two important types of functions you will often encounter are Aggregate Functions and Window Functions. Both help you perform calculations on sets of data, but they serve different purposes and are used in different scenarios."
+        "value": "Multi-tenancy is a software architecture where a single instance of a software application serves multiple customers, called tenants. Each tenant's data is isolated and secure, even though they share the same database infrastructure. Designing your database properly is crucial for scalability and maintainability."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explain what Aggregate Functions and Window Functions are, highlight their differences, and provide simple examples to show how and when you should use each."
+        "value": "There are three common approaches to multi-tenant database design:\n1. Separate Database per Tenant\n2. Shared Database, Separate Schema\n3. Shared Database, Shared Schema"
       },
       {
         "type": "paragraph",
-        "value": "### What are Aggregate Functions?"
+        "value": "In this tutorial, we will focus on the third model - Shared Database, Shared Schema - which is popular for SaaS applications because it balances resource efficiency and ease of management."
       },
       {
         "type": "paragraph",
-        "value": "Aggregate functions group multiple rows of data and return a single result per group. Common aggregate functions include COUNT(), SUM(), AVG(), MAX(), and MIN(). These are often used with the GROUP BY clause to summarize data."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, if you want to find the total sales per department, you'd use an aggregate function like SUM() combined with GROUP BY."
+        "value": "### Step 1: Add a Tenant Identifier Column\nTo distinguish each tenant's data in shared tables, add a `tenant_id` column to your tables."
       },
       {
         "type": "code",
-        "value": "SELECT department, SUM(sales) AS total_sales\nFROM sales_data\nGROUP BY department;"
+        "value": "-- Example: Creating a users table with tenant_id\nCREATE TABLE users (\n    user_id SERIAL PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    username VARCHAR(50) NOT NULL,\n    email VARCHAR(100) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    UNIQUE (tenant_id, username) -- ensure usernames are unique within each tenant\n);"
       },
       {
         "type": "paragraph",
-        "value": "This query groups the data by each department and returns the total sales for each."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What are Window Functions?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Window functions also perform calculations across a set of rows, called a window, but unlike aggregate functions, they do not collapse the rows into a single output. Instead, window functions return a value for every row in the dataset, while considering the related rows in the window."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common window functions include ROW_NUMBER(), RANK(), LAG(), LEAD(), and aggregate functions used with the OVER() clause."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, if you want to calculate the total sales per department but still include each individual sale row in the output, you'd use a window function."
+        "value": "### Step 2: Query Data Filtering by Tenant\nWhen querying data, always filter by the tenant_id to ensure tenants only access their own data."
       },
       {
         "type": "code",
-        "value": "SELECT department, sales,\n       SUM(sales) OVER (PARTITION BY department) AS total_sales_per_dept\nFROM sales_data;"
+        "value": "-- Example: Get users for a specific tenant\nSELECT * FROM users WHERE tenant_id = 1;"
       },
       {
         "type": "paragraph",
-        "value": "Here, the SUM(sales) window function calculates the total sales for each department, but the query returns each individual sale record along with the total sales for that sale's department."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Key Differences:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Aggregate Functions summarize many rows into one result per group, reducing the number of rows.\n2. Window Functions perform calculations across a set of rows but return a value for each individual row, keeping the original row count.\n3. Aggregate functions use GROUP BY to group rows. Window functions use the OVER() clause with optional PARTITION BY and ORDER BY."
-      },
-      {
-        "type": "paragraph",
-        "value": "### When to Use Each?"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use aggregate functions when you want to summarize data into fewer rows, like total sales per customer or average salary per department.\n- Use window functions when you need to perform calculations that require seeing individual rows along with aggregated or ranking information, such as showing each employee's salary along with the average salary in their department or ranking sales by date."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary Example"
+        "value": "### Step 3: Index Tenant Columns\nFor performance, create indexes on the tenant_id column, especially when it’s used in WHERE clauses."
       },
       {
         "type": "code",
-        "value": "-- Using aggregate function with GROUP BY\nSELECT department, AVG(salary) AS avg_salary\nFROM employees\nGROUP BY department;\n\n-- Using window function to show each employee's salary and their department average\nSELECT employee_id, department, salary,\n       AVG(salary) OVER (PARTITION BY department) AS dept_avg_salary\nFROM employees;"
+        "value": "-- Example: Index on tenant_id and username for faster lookups\nCREATE INDEX idx_users_tenant_username ON users (tenant_id, username);"
       },
       {
         "type": "paragraph",
-        "value": "In the first query, you get one row per department with the average salary. In the second, you see all employees with their salary and their department's average salary alongside."
+        "value": "### Step 4: Handle Tenant Joins Carefully\nWhen working with multiple tables, always join on tenant_id to avoid cross-tenant data leaks."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Joining orders with users by tenant\nSELECT o.order_id, o.amount, u.username\nFROM orders o\nJOIN users u ON o.user_id = u.user_id AND o.tenant_id = u.tenant_id\nWHERE o.tenant_id = 1;"
       },
       {
         "type": "paragraph",
-        "value": "Understanding when to use aggregate vs window functions helps you write more efficient and meaningful SQL queries. Try experimenting with your own data to explore the power of both!"
+        "value": "### Step 5: Enforce Data Integrity\nUse constraints that include tenant_id to keep data isolated."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Ensure orders have a valid tenant and user\nCREATE TABLE orders (\n    order_id SERIAL PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    user_id INT NOT NULL,\n    amount DECIMAL(10,2) NOT NULL,\n    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_id, tenant_id) REFERENCES users(user_id, tenant_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nDesigning multi-tenant databases with shared schema involves careful design around the tenant_id columns. This enables you to efficiently serve multiple tenants while maintaining data isolation and optimizing performance with indexes and constraints."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these basics, you can start building scalable multi-tenant applications using SQL!"
       }
     ]
   },
   {
-    "slug": "understanding-data-anomalies-in-sql-data-models-and-how-to-avoid-them",
-    "title": "Understanding Data Anomalies in SQL Data Models and How to Avoid Them",
+    "slug": "optimizing-sql-query-performance-in-large-scale-ecommerce-databases",
+    "title": "Optimizing SQL Query Performance in Large-Scale E-Commerce Databases",
     "language": "sql",
     "type": "errors",
-    "description": "A beginner-friendly guide to identifying common data anomalies in SQL data models and practical steps to prevent them using proper database design techniques.",
+    "description": "Learn how to spot and fix common SQL query errors that slow down performance in large-scale e-commerce databases.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, it's important to have clean and reliable data. However, if a database is not designed properly, you might encounter data anomalies. Data anomalies are errors or inconsistencies that occur when inserting, updating, or deleting data. These can cause incorrect reports and unreliable results."
+        "value": "In large-scale e-commerce platforms, databases often contain millions of records. Slow SQL queries can cause delays in displaying products, processing orders, or generating reports. Beginners frequently make common mistakes that degrade query performance. This article will help you identify and fix these errors to optimize your SQL queries effectively."
       },
       {
         "type": "paragraph",
-        "value": "There are three common types of data anomalies you should know about: Insertion Anomalies, Update Anomalies, and Deletion Anomalies."
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Insertion Anomaly: This happens when you cannot add data to the database because other data doesn’t yet exist. For example, you want to add a new student's grade but you have to enter their course information first, which you don't have yet."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. Update Anomaly: This occurs when you need to change data, but because the same data is stored in multiple places, you might forget to update some of them. This leads to inconsistent data."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. Deletion Anomaly: This happens when deleting data unintentionally removes other important data. For example, deleting a student's last grade might also remove their entire enrollment record."
-      },
-      {
-        "type": "paragraph",
-        "value": "These anomalies often happen in poorly designed tables that mix multiple types of data in one table. To avoid these problems, you should use database normalization. Normalization splits data into smaller, related tables and reduces data redundancy."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at an example of a table with anomalies:"
+        "value": "One typical error is using SELECT * instead of selecting only the columns you need. Retrieving unnecessary data increases I/O and slows the query."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE StudentGrades (\n  StudentID INT,\n  StudentName VARCHAR(100),\n  CourseName VARCHAR(100),\n  Instructor VARCHAR(100),\n  Grade CHAR(1)\n);\n\nINSERT INTO StudentGrades VALUES (1, 'Alice', 'Math', 'Mr. Smith', 'A');\nINSERT INTO StudentGrades VALUES (1, 'Alice', 'Science', 'Mrs. Jones', 'B');"
+        "value": "SELECT * FROM orders WHERE customer_id = 12345;"
       },
       {
         "type": "paragraph",
-        "value": "Here, the student's name is repeated for every course they take. If Alice changes her name, you need to update multiple rows. This is an update anomaly."
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this, separate the student data and the course grades into two tables:"
+        "value": "This can be optimized by selecting only the required columns, for example:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Students (\n  StudentID INT PRIMARY KEY,\n  StudentName VARCHAR(100)\n);\n\nCREATE TABLE Courses (\n  CourseID INT PRIMARY KEY,\n  CourseName VARCHAR(100),\n  Instructor VARCHAR(100)\n);\n\nCREATE TABLE Grades (\n  StudentID INT,\n  CourseID INT,\n  Grade CHAR(1),\n  PRIMARY KEY (StudentID, CourseID),\n  FOREIGN KEY (StudentID) REFERENCES Students(StudentID),\n  FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)\n);\n\n-- Insert sample data\nINSERT INTO Students VALUES (1, 'Alice');\nINSERT INTO Courses VALUES (10, 'Math', 'Mr. Smith');\nINSERT INTO Courses VALUES (20, 'Science', 'Mrs. Jones');\nINSERT INTO Grades VALUES (1, 10, 'A');\nINSERT INTO Grades VALUES (1, 20, 'B');"
+        "value": "SELECT order_id, order_date, total_amount FROM orders WHERE customer_id = 12345;"
       },
       {
         "type": "paragraph",
-        "value": "With this design, each piece of data is stored only once. If Alice changes her name, you update it in one place, avoiding anomalies."
+        "value": "Another common problem is missing indexes on columns used in WHERE, JOIN, or ORDER BY clauses. Without indexes, the database must scan the entire table, which is very slow for large datasets."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
       },
       {
         "type": "paragraph",
-        "value": "In summary, to avoid data anomalies in SQL data models:\n- Use normalization techniques to design your tables.\n- Avoid storing repeating groups or mixed data types in one table.\n- Use primary and foreign keys to relate tables.\n- Keep your data consistent and easy to update."
+        "value": "Improper use of functions in WHERE clauses can also prevent index usage. For example, this query will be slow if order_date is indexed:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE YEAR(order_date) = 2023;"
       },
       {
         "type": "paragraph",
-        "value": "By understanding data anomalies and applying good design principles, you can create reliable and maintainable SQL databases that prevent common data errors."
+        "value": "Instead, rewrite it to allow the index to be used:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE order_date >= '2023-01-01' AND order_date < '2024-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, avoid using NOT IN or NOT EXISTS on large datasets without considering alternatives, as they can cause slow subqueries."
+      },
+      {
+        "type": "code",
+        "value": "SELECT product_id FROM products WHERE product_id NOT IN (SELECT product_id FROM orders);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use LEFT JOIN with IS NULL instead for better performance:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT p.product_id FROM products p LEFT JOIN orders o ON p.product_id = o.product_id WHERE o.product_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By avoiding SELECT *, adding proper indexes, rewriting functions in WHERE clauses, and replacing NOT IN with LEFT JOINs, you can dramatically improve SQL query performance in your large-scale e-commerce database."
       }
     ]
   }
