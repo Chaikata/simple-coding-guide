@@ -7216,5 +7216,462 @@ export const articles = [
         "value": "In summary:\n- Enclose error-prone code in a TRY block.\n- Capture and handle errors in the CATCH block.\n- Use error functions to get detailed error information.\n- Use THROW to rethrow or create custom errors.\n\nWith these techniques, you can master error handling in SQL Server and create robust, production-ready applications."
       }
     ]
+  },
+  {
+    "slug": "designing-scalable-event-driven-systems-with-javascript-and-nodejs",
+    "title": "Designing Scalable Event-Driven Systems with JavaScript and Node.js",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable event-driven systems using JavaScript and Node.js with practical examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture is a powerful design pattern that helps applications handle high loads and scale efficiently. In this tutorial, we'll explore the basics of event-driven systems and how you can implement them using JavaScript and Node.js."
+      },
+      {
+        "type": "paragraph",
+        "value": "In an event-driven system, components communicate by emitting and listening for events instead of using direct calls. This improves scalability and decouples the components, making your system more flexible and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Node.js naturally supports event-driven programming, mainly through its built-in EventEmitter class. Let's start by creating a simple event emitter and listener."
+      },
+      {
+        "type": "code",
+        "value": "const EventEmitter = require('events');\n\n// Create an instance of EventEmitter\nconst eventEmitter = new EventEmitter();\n\n// Define a listener for the 'message' event\neventEmitter.on('message', (data) => {\n  console.log('Message received:', data);\n});\n\n// Emit the 'message' event\neventEmitter.emit('message', 'Hello, event-driven world!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we created an event emitter that listens for a \"message\" event and logs the received data. We then emit the \"message\" event with a string payload. This pattern allows different parts of your app to react to events asynchronously."
+      },
+      {
+        "type": "paragraph",
+        "value": "For scalable systems, events often flow between microservices or distributed components. To handle this, you can use message brokers like RabbitMQ, Apache Kafka, or simple Redis Pub/Sub. These tools help queue and deliver events reliably."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a simple example using Redis Pub/Sub with Node.js to mimic event broadcasting across services."
+      },
+      {
+        "type": "code",
+        "value": "const redis = require('redis');\n\n// Create subscriber and publisher clients\nconst subscriber = redis.createClient();\nconst publisher = redis.createClient();\n\n// Subscribe to the 'notifications' channel\nsubscriber.subscribe('notifications');\n\nsubscriber.on('message', (channel, message) => {\n  console.log(`Received message from ${channel}: ${message}`);\n});\n\n// Publish a message every 3 seconds\nsetInterval(() => {\n  publisher.publish('notifications', 'New notification at ' + new Date());\n}, 3000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the subscriber listens for messages on the 'notifications' channel and prints them out. The publisher sends a message to the same channel every 3 seconds. This demonstrates how Redis can help distribute events in a scalable and decoupled manner."
+      },
+      {
+        "type": "paragraph",
+        "value": "When building event-driven systems in Node.js, keep these best practices in mind:\n\n1. Use asynchronous code to avoid blocking the event loop.\n2. Handle errors and failed events gracefully.\n3. Consider message durability if you need reliable delivery.\n4. Use logging and monitoring to track event flows and system health."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, event-driven systems with JavaScript and Node.js provide a flexible and scalable way to build modern applications. As you grow, integrating message brokers and following best practices will help you handle complex workflows and heavy loads effectively."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-for-high-performance-web-applications",
+    "title": "Mastering TypeScript Generics for High-Performance Web Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to write reusable, type-safe, and efficient code that boosts the performance and maintainability of your web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding strong typing features. One of the most powerful features TypeScript offers is generics. Generics allow you to write flexible, reusable functions, classes, and interfaces that maintain type safety. This tutorial will guide you through the basics of using generics effectively so you can create high-performance web applications with maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you want to create a function that returns the first element of an array. Without generics, you might accept an array of any type and return any type, losing type safety. Let’s first see the non-generic approach."
+      },
+      {
+        "type": "code",
+        "value": "function firstElement(array: any[]): any {\n  return array[0];\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The problem with this is you lose the specific type of the array elements, meaning the compiler can't help catch type-related errors. Now, let’s use generics to fix this."
+      },
+      {
+        "type": "code",
+        "value": "function firstElement<T>(array: T[]): T {\n  return array[0];\n}\n\nconst numbers = [1, 2, 3];\nconst firstNumber = firstElement(numbers); // TypeScript infers firstNumber as number\n\nconst strings = ['a', 'b', 'c'];\nconst firstString = firstElement(strings); // TypeScript infers firstString as string"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, <T> is a generic type parameter. The function works with any array type while preserving the type information of the element it returns. TypeScript infers the type automatically when you call the function."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create reusable generic interfaces and classes. For example, let’s create a simple generic Stack class."
+      },
+      {
+        "type": "code",
+        "value": "class Stack<T> {\n  private items: T[] = [];\n\n  push(item: T) {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n\n  peek(): T | undefined {\n    return this.items[this.items.length - 1];\n  }\n}\n\nconst numberStack = new Stack<number>();\nnumberStack.push(10);\nnumberStack.push(20);\nconsole.log(numberStack.pop()); // 20"
+      },
+      {
+        "type": "paragraph",
+        "value": "This Stack class can now hold any type of data, while type safety is ensured by TypeScript. Using generics like this prevents bugs and makes your code easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can also be constrained to certain types to allow more control. For example, suppose you want a function that accepts only arrays of objects with an id property."
+      },
+      {
+        "type": "code",
+        "value": "interface HasId {\n  id: number;\n}\n\nfunction getById<T extends HasId>(items: T[], id: number): T | undefined {\n  return items.find(item => item.id === id);\n}\n\nconst users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' }\n];\n\nconst user = getById(users, 2);\nconsole.log(user); // { id: 2, name: 'Bob' }"
+      },
+      {
+        "type": "paragraph",
+        "value": "By using <T extends HasId>, TypeScript knows that the items have an id property, so you can access it safely inside the function."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript generics help you to write code that is reusable, type-safe, and expressive. They aid in building scalable and high-performance web applications by preventing runtime errors and improving developer productivity."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start practicing by refactoring your existing JavaScript code with generics in TypeScript. Over time, you’ll write cleaner, safer, and more efficient web applications!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescripts-strict-null-checks-to-traditional-null-handling-patterns",
+    "title": "Comparing TypeScript's Strict Null Checks to Traditional Null Handling Patterns",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's strict null checks feature improves null handling compared to traditional JavaScript patterns, making your code safer and easier to debug.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling `null` and `undefined` values has always been a common source of bugs in JavaScript. Traditional patterns often involve manual checks, which can be error-prone or cumbersome. TypeScript introduces a powerful feature called `strictNullChecks` that helps catch null-related errors at compile time, making your code more robust and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore how traditional null handling in JavaScript compares to using TypeScript with `strictNullChecks` enabled."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Traditional Null Handling Pattern in JavaScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, it is common to check if a value is `null` or `undefined` before accessing its properties or calling its methods. Here's an example:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  if (name !== null && name !== undefined) {\n    console.log(`Hello, ${name}!`);\n  } else {\n    console.log('Hello, guest!');\n  }\n}\n\ngreet('Alice'); // Hello, Alice!\ngreet(null);    // Hello, guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this works, it can become verbose and easy to forget, especially in large codebases."
+      },
+      {
+        "type": "paragraph",
+        "value": "### TypeScript's `strictNullChecks` Feature"
+      },
+      {
+        "type": "paragraph",
+        "value": "When `strictNullChecks` is enabled in TypeScript (usually in your `tsconfig.json`), the compiler treats `null` and `undefined` as separate types that must be explicitly handled. This means you cannot accidentally use a possibly `null` or `undefined` value without checking it first."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a similar example in TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string | null) {\n  if (name === null) {\n    console.log('Hello, guest!');\n  } else {\n    // name is guaranteed to be a string here\n    console.log(`Hello, ${name}!`);\n  }\n}\n\ngreet('Alice'); // Hello, Alice!\ngreet(null);    // Hello, guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to access a method or property on a variable that might be `null` or `undefined` without checking, TypeScript will give you a compile-time error. This helps prevent common runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using `strictNullChecks`"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Early error detection:** You'll catch null-related mistakes during development rather than at runtime.\n- **Clearer code:** Your code clearly expresses when a value can be `null` or `undefined`.\n- **Better tooling:** Editors like VSCode provide improved autocomplete and error checking.\n- **Less defensive programming:** You don’t need as many repetitive null checks sprinkled throughout your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Traditional JavaScript requires manual management of null and undefined values, which may lead to runtime errors. TypeScript's `strictNullChecks` feature enforces explicit handling of these cases, improving code safety and clarity. Enabling this option is highly recommended for all TypeScript projects to catch null-related bugs early and write cleaner, more maintainable code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-cleaner-resource-management",
+    "title": "Mastering Python's Context Managers for Cleaner Resource Management",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's context managers to manage resources efficiently and write cleaner code with real examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Yru62YVvo5A",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with resources like files, network connections, or locks, it's important to properly release them after use. Otherwise, your program might face bugs or resource leaks. Python provides a powerful tool called context managers to handle this cleanly and safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "A context manager ensures that resources are acquired and released properly, even if an error occurs inside the code block that uses the resource. The most common way to use context managers is the \"with\" statement."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example: reading a file. Without a context manager, you have to open the file and remember to close it after finishing. Forgetting to close might cause issues."
+      },
+      {
+        "type": "code",
+        "value": "file = open('example.txt', 'r')\ncontents = file.read()\nfile.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using a context manager, Python automatically closes the file once you exit the \"with\" block, even if an exception happens:"
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'r') as file:\n    contents = file.read()\n# file is automatically closed here"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern works for many built-in operations but you can also create your own context managers using the contextlib module or by defining __enter__ and __exit__ methods in a class."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to create a simple context manager class that prints messages when entering and exiting:"
+      },
+      {
+        "type": "code",
+        "value": "class CustomContext:\n    def __enter__(self):\n        print('Entering the context')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n\n\nwith CustomContext() as ctx:\n    print('Inside the context')"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create context managers easily using the @contextlib.contextmanager decorator. This lets you write a generator function to handle setup and teardown logic."
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef simple_context():\n    print('Start')\n    yield\n    print('End')\n\nwith simple_context():\n    print('Inside')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using context managers makes your code more readable and robust. They guarantee that resources are released correctly, which helps avoid bugs and leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:\n- Use built-in context managers like file handling with \"with\".\n- Create your own by defining __enter__ and __exit__ methods.\n- Use contextlib.contextmanager for simpler generator-based managers.\n\nStart using context managers today for cleaner resource management in Python!"
+      }
+    ]
+  },
+  {
+    "slug": "advanced-data-validation-techniques-python-data-modeling",
+    "title": "Advanced Data Validation Techniques in Python Data Modeling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn advanced data validation techniques in Python for building robust data models that handle common errors and ensure data integrity.",
+    "videoUrl": "https://www.youtube.com/watch?v=XIdQ6gO3Anc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with data models in Python, validating the input data is crucial to prevent errors and maintain data integrity. Beginners often start with simple checks, but as your applications grow, advanced validation techniques help catch complex errors early and make your code more reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we explore some advanced data validation techniques using Python’s popular data modeling libraries and native features. We’ll look at custom validators, error handling, and practical ways to ensure your data models are error-proof."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Pydantic for Advanced Validation\nPydantic is a powerful library that provides data validation using Python type hints. It supports custom validators and detailed error reporting out of the box."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, validator, ValidationError\n\nclass UserModel(BaseModel):\n    name: str\n    age: int\n    email: str\n\n    @validator('age')\n    def age_must_be_positive(cls, v):\n        if v <= 0:\n            raise ValueError('Age must be a positive integer')\n        return v\n\n    @validator('email')\n    def email_must_contain_at_sign(cls, v):\n        if '@' not in v:\n            raise ValueError('Invalid email address')\n        return v\n\ntry:\n    user = UserModel(name='Alice', age=-1, email='aliceexample.com')\nexcept ValidationError as e:\n    print(e.json())"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows custom validators on the `age` and `email` fields. If invalid data is provided, Pydantic throws a `ValidationError` with detailed messages about what went wrong."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Multiple Validation Errors\nSometimes you want to collect all errors instead of stopping at the first one. Pydantic automatically aggregates errors and provides a clear report."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    user = UserModel(name='Bob', age=0, email='bobexample.com')\nexcept ValidationError as e:\n    for error in e.errors():\n        print(f\"Error in field '{error['loc'][0]}': {error['msg']}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach prints each validation error, making it easier to fix multiple issues at once."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using `attrs` for Validation\nAnother useful library is `attrs`, which simplifies attribute management and validation."
+      },
+      {
+        "type": "code",
+        "value": "import attr\n\n@attr.s\nclass Product:\n    name = attr.ib(type=str)\n    price = attr.ib(type=float)\n\n    @price.validator\n    def check_price(self, attribute, value):\n        if value < 0:\n            raise ValueError('Price must be non-negative')\n\n# Usage\ntry:\n    p = Product(name='Laptop', price=-1200)\nexcept ValueError as e:\n    print(e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `attrs` library uses validators tied to attributes, providing an elegant way to enforce constraints on data fields."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Built-in Python Validators and Try/Except\nFor simple cases, you can use Python’s built-in features combined with try/except blocks for validation."
+      },
+      {
+        "type": "code",
+        "value": "def validate_int(value):\n    try:\n        ivalue = int(value)\n        if ivalue <= 0:\n            raise ValueError('Value must be positive')\n        return ivalue\n    except ValueError as e:\n        raise ValueError(f'Invalid input: {e}')\n\n# Usage\ntry:\n    age = validate_int('25')\n    print(f'Age is {age}')\n    age = validate_int('-5')\nexcept ValueError as e:\n    print(e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This manual method works for small scripts but can become cumbersome for larger models, where libraries like Pydantic or attrs shine."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nAdvanced data validation in Python helps catch input errors early and improves code reliability. Libraries such as Pydantic and attrs offer elegant, flexible solutions with clear error reporting. For beginners, starting with these tools can save time and reduce bugs in your data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "Experiment with these techniques in your projects to write cleaner, safer Python code that gracefully handles invalid data!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-in-sql-for-advanced-data-analysis",
+    "title": "Mastering Window Functions in SQL for Advanced Data Analysis",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis with clear, beginner-friendly examples and explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions in SQL allow you to perform calculations across a set of table rows that are somehow related to the current row. Unlike aggregate functions, window functions do not collapse rows into a single output row; instead, they return a value for every row in the result set. This feature makes them extremely useful for advanced reporting and data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding the syntax of a window function. A typical window function looks like this:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT column1, column2, \n       window_function() OVER (PARTITION BY columnX ORDER BY columnY) AS result_column\nFROM table_name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `window_function()` can be functions like `ROW_NUMBER()`, `RANK()`, `SUM()`, `AVG()`, etc. The `OVER` clause defines the window (set of rows) for the function to operate on. `PARTITION BY` divides the rows into groups, and `ORDER BY` defines the order within these partitions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Using ROW_NUMBER()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you have a sales table and want to assign a unique row number to each sale within each salesperson's group, ordered by the sale amount."
+      },
+      {
+        "type": "code",
+        "value": "SELECT salesperson_id, sale_amount, \n       ROW_NUMBER() OVER (PARTITION BY salesperson_id ORDER BY sale_amount DESC) AS sale_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query ranks sales per salesperson by sale amount, with the highest sale getting rank 1."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Calculating a Running Total with SUM()"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can compute a running total of sales within each salesperson's record ordered by sale date."
+      },
+      {
+        "type": "code",
+        "value": "SELECT salesperson_id, sale_date, sale_amount, \n       SUM(sale_amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date \n                              ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This running total adds up the sales amounts from the start up to the current sale date for each salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Using LAG() and LEAD() to Compare Rows"
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions like `LAG()` and `LEAD()` let you compare a row with its previous or next row."
+      },
+      {
+        "type": "code",
+        "value": "SELECT salesperson_id, sale_date, sale_amount,\n       LAG(sale_amount, 1) OVER (PARTITION BY salesperson_id ORDER BY sale_date) AS previous_sale,\n       LEAD(sale_amount, 1) OVER (PARTITION BY salesperson_id ORDER BY sale_date) AS next_sale\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `LAG()` provides the previous sale amount and `LEAD()` the next sale amount for each row within the salesperson's data."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Window Functions?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions excel in analytics where you need to calculate cumulative sums, ranks, running averages, or compare values between neighboring rows without losing the context of individual rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering window functions will elevate your SQL skills and empower you to build powerful, efficient analytic queries."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-multi-tenant-sql-databases-best-practices-and-common-pitfalls",
+    "title": "Designing Scalable Multi-Tenant SQL Databases: Best Practices and Common Pitfalls",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn best practices and avoid common pitfalls when designing scalable multi-tenant SQL databases, with beginner-friendly tips and example code snippets.",
+    "videoUrl": "https://www.youtube.com/watch?v=lWX5mk2adrg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant databases host data for multiple customers (tenants) within a single database instance. This design reduces costs and simplifies management but introduces challenges in scalability and data isolation. Beginners often face errors that can hurt performance or security. This article highlights best practices and common mistakes to create effective multi-tenant SQL databases."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake is mixing tenant data without proper filtering, which can lead to data leaks. Always include a TenantID column to identify which rows belong to which tenant. Here's an example query to retrieve data safely:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders WHERE TenantID = @TenantID;\n-- Always filter by TenantID to protect tenant data"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another pitfall is not indexing TenantID columns. Without indexes, queries filtering by tenant become slow as data grows. To improve performance, create an index on TenantID:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_orders_tenant ON Orders (TenantID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Some beginners try to store all tenants data in a single table without using TenantID, which makes data segregation impossible. Alternatively, using a separate schema or database per tenant can improve isolation but may reduce scalability and increase operational overhead."
+      },
+      {
+        "type": "paragraph",
+        "value": "Be mindful of the row size and table indexing strategies. Multi-tenancy can cause tables to grow fast. Periodic archiving or partitioning by tenant or time helps manage large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always validate TenantID on the application and database layers to prevent accidental cross-tenant data access."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize best practices:\n- Always use a TenantID column.\n- Index TenantID for faster queries.\n- Enforce tenant data isolation with filters.\n- Consider table partitioning for large data.\n- Validate tenant identification at every layer."
+      }
+    ]
   }
 ];
