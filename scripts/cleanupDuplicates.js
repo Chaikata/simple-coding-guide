@@ -4,7 +4,7 @@ const fs = require("fs");
 // CONFIG
 // =========================
 
-const SIMILARITY_THRESHOLD = 0.92;
+const SIMILARITY_THRESHOLD = 0.75;
 const MODE = "delete"; // auto delete
 const MAX_DELETIONS = 20; // SAFETY LIMIT
 
