@@ -6142,5 +6142,545 @@ export const articles: Article[] = [
         "value": "In summary, SQL deadlocks are a natural challenge in multi-user database environments caused by cyclic lock dependencies. By understanding how locking and transactions interact, following best practices to order operations consistently, and handling deadlock errors gracefully, you can significantly reduce the impact of deadlocks on your applications. Keep learning about related concepts like transaction isolation levels, lock escalation, and concurrency control to deepen your database skills and build more robust SQL applications."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-proxies-for-advanced-reactive-programming",
+    "title": "Mastering JavaScript Proxies for Advanced Reactive Programming",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript Proxies to build reactive programs that automatically respond to changes in data, making your code cleaner and more efficient.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript Proxies are a powerful feature that lets you intercept and customize operations performed on objects. They are especially useful in reactive programming, where your app dynamically updates when data changes. In this tutorial, we'll explore how to create reactive data structures using Proxies."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Proxy? \nA Proxy wraps an object and allows you to intercept fundamental operations like getting or setting property values. This helps you track changes or add custom behaviors before the original operation happens."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "const original = { message: 'Hello' };\n\nconst proxy = new Proxy(original, {\n  get(target, prop) {\n    console.log(`Getting property: ${prop}`);\n    return target[prop];\n  },\n  set(target, prop, value) {\n    console.log(`Setting property: ${prop} to ${value}`);\n    target[prop] = value;\n    return true;\n  }\n});\n\nconsole.log(proxy.message);\nproxy.message = 'Hi';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n\nGetting property: message\nHello\nSetting property: message to Hi\n\n\nHere, whenever we access or modify `proxy.message`, the Proxy intercepts these actions and logs the changes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating Reactive Data\nIn reactive programming, you want your UI or logic to automatically update when data changes. Let's make a simple reactive system that calls a function whenever a property changes."
+      },
+      {
+        "type": "code",
+        "value": "function reactive(obj, onChange) {\n  return new Proxy(obj, {\n    set(target, prop, value) {\n      target[prop] = value;\n      onChange(prop, value);\n      return true;\n    }\n  });\n}\n\nconst state = reactive({ count: 0 }, (prop, value) => {\n  console.log(`Property ${prop} changed to ${value}`);\n});\n\nstate.count = 1;\nstate.count = 2;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n\nProperty count changed to 1\nProperty count changed to 2\n\n\nEvery time we update `state.count`, the `onChange` callback runs, letting us react to data changes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Dependency Tracking for Advanced Reactivity\nWe can extend this idea to track which functions depend on which properties and only update those functions when needed. This minimizes unnecessary work."
+      },
+      {
+        "type": "code",
+        "value": "const subscribers = new Map();\n\nfunction subscribe(prop, fn) {\n  if (!subscribers.has(prop)) {\n    subscribers.set(prop, new Set());\n  }\n  subscribers.get(prop).add(fn);\n}\n\nfunction reactive(obj) {\n  return new Proxy(obj, {\n    get(target, prop) {\n      // Could add track logic here\n      return target[prop];\n    },\n    set(target, prop, value) {\n      target[prop] = value;\n      if (subscribers.has(prop)) {\n        subscribers.get(prop).forEach(fn => fn(value));\n      }\n      return true;\n    }\n  });\n}\n\nconst state = reactive({ count: 0 });\n\nsubscribe('count', (val) => {\n  console.log(`Count is now ${val}`);\n});\n\nstate.count = 10;\nstate.count = 20;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n\nCount is now 10\nCount is now 20\n\n\n### Conclusion\nJavaScript Proxies give you a flexible way to build powerful reactive systems by intercepting data access and updates. This is the foundation behind popular frameworks like Vue.js. Start experimenting with Proxies to create your own reactive programs and unlock new possibilities!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-asynchronous-errors-gracefully-large-scale-js-apps",
+    "title": "Handling Asynchronous Errors Gracefully in Large-Scale JavaScript Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to manage and handle asynchronous errors effectively in large JavaScript applications to improve reliability and maintainability.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, asynchronous operations like fetching data, reading files, or timers are common, especially in large-scale applications. Handling errors in these asynchronous tasks correctly can be tricky but is essential for building robust applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are a few common ways to handle asynchronous errors: using callbacks, Promises with `.catch()`, and async/await with try-catch blocks. Let's dive into each approach and best practices to handle errors gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Callbacks with error-first pattern"
+      },
+      {
+        "type": "paragraph",
+        "value": "Older JavaScript code uses callbacks with an error-first convention, where the first argument passed to the callback is an error if one occurred."
+      },
+      {
+        "type": "code",
+        "value": "function readData(callback) {\n  setTimeout(() => {\n    const error = Math.random() > 0.5 ? new Error('Failed to read data') : null;\n    const data = error ? null : { id: 1, name: 'Sample' };\n    callback(error, data);\n  }, 1000);\n}\n\nreadData((error, data) => {\n  if (error) {\n    console.error('Error:', error.message);\n    return;\n  }\n  console.log('Data:', data);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach still works but can get messy with nested callbacks (often called \"callback hell\")."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Promises and `.catch()`"
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises are the modern way to handle async operations and errors more cleanly."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (Math.random() > 0.5) {\n        reject(new Error('Failed to fetch data'));\n      } else {\n        resolve({ id: 1, name: 'Sample' });\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(data => {\n    console.log('Data:', data);\n  })\n  .catch(error => {\n    console.error('Error:', error.message);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `.catch()` helps keep error handling centralized and clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Async/Await with try-catch"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/await syntax, introduced in ES2017, makes asynchronous code look synchronous. You can use `try-catch` blocks to handle errors elegantly."
+      },
+      {
+        "type": "code",
+        "value": "async function getData() {\n  try {\n    const response = await fetchData();\n    console.log('Data:', response);\n  } catch (error) {\n    console.error('Error caught:', error.message);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Large-Scale Apps"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Centralize Error Handling:** Create utility functions or middleware for consistent error handling instead of repeating logic everywhere.\n- **Use Meaningful Error Messages:** Help developers debug faster.\n- **Log Errors:** Send errors to logging services or consoles.\n- **Graceful User Feedback:** Show user-friendly messages instead of raw errors.\n- **Prevent Unhandled Rejections:** Always handle promise rejections to avoid crashes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling asynchronous errors is vital for writing maintainable and robust large-scale JavaScript applications. Embrace Promises and async/await for cleaner, more readable error handling, and always centralize and log your errors for easier debugging and monitoring."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-lazy-loading-in-typescript-for-optimal-application-performance",
+    "title": "Mastering Lazy Loading in TypeScript for Optimal Application Performance",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to implement lazy loading in TypeScript to improve your application's performance by loading code only when it’s truly needed.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web applications, loading all the code at once can slow down your app’s initial load time. Lazy loading is a technique that helps your application load faster by deferring the loading of code until it's actually needed. This is especially useful for large applications, where some features or components are not needed immediately."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore how to easily implement lazy loading in TypeScript. We’ll cover dynamic imports, a modern JavaScript feature supported in TypeScript, and see how this can optimize your application's performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Lazy Loading?\nLazy loading means loading modules, components, or data only when required instead of upfront. This reduces the initial bundle size and speeds up the startup time of your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Dynamic Imports in TypeScript\nTypeScript supports dynamic imports via the `import()` function. Unlike a static `import` statement, `import()` returns a promise that resolves to the module you want to load."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you have a module called `heavyMath.ts` that contains some complex calculations but is not immediately needed when the app starts."
+      },
+      {
+        "type": "code",
+        "value": "export function complexCalculation(a: number, b: number): number {\n  // Simulate heavy calculation\n  return a * b + Math.sqrt(a + b);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of importing this module statically at the top of your file like this:"
+      },
+      {
+        "type": "code",
+        "value": "import { complexCalculation } from './heavyMath';\n\nconst result = complexCalculation(5, 10);\nconsole.log(result);"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use a dynamic import to load the module only when needed:"
+      },
+      {
+        "type": "code",
+        "value": "async function performCalculation() {\n  const heavyMath = await import('./heavyMath');\n  const result = heavyMath.complexCalculation(5, 10);\n  console.log(result);\n}\n\n// Call the function when we actually need it\nperformCalculation();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `heavyMath` module is loaded only when `performCalculation` is called. Until then, it does not add to your app’s initial bundle size."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Lazy Loading\n- **Faster initial loading:** Smaller bundle size means quicker startup.\n- **Better user experience:** Users can interact with the app sooner.\n- **Load on demand:** Only load what the user needs.\n\n### When to Use Lazy Loading\nLazy loading is especially helpful when you have:\n\n- Large or infrequently used modules.\n- Features behind user actions.\n- Routes or pages in single-page applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBy mastering lazy loading with dynamic imports in TypeScript, you improve your application's performance and scalability. Try refactoring your large modules or infrequently used features with dynamic imports to see the benefits in your next project!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-distributed-systems-with-typescript-handling-system-level-failures",
+    "title": "Designing Resilient Distributed Systems with TypeScript: Handling System-Level Failures",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to design distributed systems that recover gracefully from system-level failures using TypeScript. This beginner-friendly guide covers error handling best practices and patterns to build resilient distributed applications.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Distributed systems consist of multiple independent computers (nodes) working together. Because nodes communicate over networks and run independently, system-level failures like network glitches, hardware crashes, or service unavailability can happen anytime. To build resilient distributed systems in TypeScript, it's crucial to anticipate these failures and handle them gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll cover beginner-friendly error handling techniques in TypeScript that help distributed systems keep working even when some parts fail."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Use Try-Catch for Safe Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "When calling distributed services or making network requests, your code should catch errors to avoid crashing the whole program. TypeScript’s `try-catch` helps safely handle failures."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData(url: string): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`Network error: ${response.status}`);\n    }\n    return await response.text();\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n    throw error; // rethrow or handle gracefully\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Implement Retries with Exponential Backoff"
+      },
+      {
+        "type": "paragraph",
+        "value": "Transient failures happen often in distributed systems. To handle temporary issues, try retrying requests with increasing delays (exponential backoff) before giving up."
+      },
+      {
+        "type": "code",
+        "value": "async function retryFetch(url: string, retries = 3, delay = 500): Promise<string> {\n  try {\n    return await fetchData(url);\n  } catch (error) {\n    if (retries === 0) throw error;\n    console.log(`Retrying in ${delay}ms... (${retries} left)`);\n    await new Promise(res => setTimeout(res, delay));\n    return retryFetch(url, retries - 1, delay * 2);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Use Circuit Breaker Pattern"
+      },
+      {
+        "type": "paragraph",
+        "value": "If a service is consistently failing, retrying may waste resources. Circuit breakers stop requests after multiple failures and open a 'cooling' period to allow recovery."
+      },
+      {
+        "type": "code",
+        "value": "class CircuitBreaker {\n  private failures = 0;\n  private threshold: number;\n  private cooldown: number;\n  private nextAttempt: number = 0;\n\n  constructor(threshold: number, cooldown: number) {\n    this.threshold = threshold;\n    this.cooldown = cooldown;\n  }\n\n  canRequest(): boolean {\n    if (Date.now() > this.nextAttempt) {\n      return true;\n    }\n    return false;\n  }\n\n  success() {\n    this.failures = 0;\n  }\n\n  failure() {\n    this.failures++;\n    if (this.failures >= this.threshold) {\n      this.nextAttempt = Date.now() + this.cooldown;\n    }\n  }\n}\n\nasync function protectedFetch(url: string, cb: CircuitBreaker): Promise<string> {\n  if (!cb.canRequest()) {\n    throw new Error('Circuit breaker is open. Skipping request');\n  }\n  try {\n    const result = await fetchData(url);\n    cb.success();\n    return result;\n  } catch (error) {\n    cb.failure();\n    throw error;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Graceful Degradation and Fallbacks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes the best way to handle failure is to provide cached or default data instead of failing completely."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithFallback(url: string, fallbackData: string): Promise<string> {\n  try {\n    return await retryFetch(url);\n  } catch {\n    console.warn('Returning fallback data');\n    return fallbackData;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling system-level failures in distributed systems is crucial for reliability. In TypeScript, use try-catch blocks, retries with exponential backoff, circuit breakers, and fallback strategies to keep your system resilient. These patterns help your system continue working smoothly, even in the face of unpredictable failures."
+      }
+    ]
+  },
+  {
+    "slug": "building-your-first-python-web-scraper-a-step-by-step-guide",
+    "title": "Building Your First Python Web Scraper: A Step-by-Step Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build a simple web scraper in Python to extract information from web pages using libraries like requests and BeautifulSoup.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping is a useful skill when you want to collect data from websites automatically instead of manually copying and pasting. In this tutorial, we'll build a beginner-friendly web scraper using Python. We'll scrape basic information from a sample website using the popular libraries: requests and BeautifulSoup."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 1: Setting up your environment. First, make sure you have Python installed on your computer. Then, install the required libraries by running the following command in your terminal or command prompt:"
+      },
+      {
+        "type": "code",
+        "value": "pip install requests beautifulsoup4"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 2: Import the libraries in your Python script."
+      },
+      {
+        "type": "code",
+        "value": "import requests\nfrom bs4 import BeautifulSoup"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 3: Fetch the webpage content. We'll use requests to download the HTML content of the page."
+      },
+      {
+        "type": "code",
+        "value": "url = 'https://quotes.toscrape.com/'\nresponse = requests.get(url)\nprint(response.status_code)  # Should print 200 if successful\nhtml_content = response.text"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 4: Parse the HTML content using BeautifulSoup."
+      },
+      {
+        "type": "code",
+        "value": "soup = BeautifulSoup(html_content, 'html.parser')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 5: Extract information. For example, let's scrape all the quotes and their authors from the page."
+      },
+      {
+        "type": "code",
+        "value": "quotes = soup.find_all('div', class_='quote')\n\nfor quote in quotes:\n    text = quote.find('span', class_='text').get_text()\n    author = quote.find('small', class_='author').get_text()\n    print(f'\"{text}\" — {author}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 6: Putting it all together, here is the complete script:"
+      },
+      {
+        "type": "code",
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://quotes.toscrape.com/'\nresponse = requests.get(url)\n\nif response.status_code == 200:\n    soup = BeautifulSoup(response.text, 'html.parser')\n    quotes = soup.find_all('div', class_='quote')\n\n    for quote in quotes:\n        text = quote.find('span', class_='text').get_text()\n        author = quote.find('small', class_='author').get_text()\n        print(f'\"{text}\" — {author}')\nelse:\n    print('Failed to retrieve the webpage')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Congratulations! You just built your first web scraper in Python. This scraper gets quotes and authors from a webpage. With similar steps, you can scrape other data from different websites, but always remember to check the website's terms of service and robots.txt to avoid violating any rules."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-typeerror-vs-valueerror",
+    "title": "Understanding Python's TypeError vs ValueError: When and Why They Occur",
+    "language": "python",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding two common Python errors: TypeError and ValueError, explaining when they occur and how to handle them.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start coding in Python, encountering errors is very common. Two errors you'll often see are TypeError and ValueError. Understanding the difference between them helps you write better code and fix bugs faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a TypeError?\nA TypeError happens when you try to use an operation or function on a value of the wrong type. For example, if you try to add a number to a string, Python doesn't know how to do that and raises a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\n\n# This will cause a TypeError because you can't add an int and a str\nresult = num + text"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, Python expects both values to be of compatible types (like two numbers or two strings), but found an integer and a string instead, causing the error."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a ValueError?\nA ValueError happens when a function receives a value of the right type but the value itself is inappropriate or invalid. This often happens when converting strings to numbers."
+      },
+      {
+        "type": "code",
+        "value": "value = \"abc\"\n\n# This will cause a ValueError because \"abc\" is not a valid integer\nnum = int(value)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the function int() expects a string that looks like a number (e.g., \"123\") but got \"abc\", which can't be converted to an integer. This leads to a ValueError."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary:\n- TypeError = you used the wrong type of object.\n- ValueError = the type is correct but the value doesn't make sense.\n\nKnowing these differences helps you debug problems faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling these errors with try-except blocks\nYou can use try-except statements to handle these errors gracefully in your code."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    num = int(input(\"Enter a number: \"))\n    print(f\"You entered {num}\")\nexcept ValueError:\n    print(\"Oops! That was not a valid number.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if the user inputs something that can't be converted to an integer, the program will catch the ValueError and print a friendly message instead of crashing."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-for-advanced-data-analysis",
+    "title": "Mastering SQL Window Functions for Advanced Data Analysis",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics and power of SQL window functions to perform advanced data analysis with ease. This beginner-friendly tutorial introduces key window functions with practical examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions allow you to perform calculations across sets of rows related to the current query row without collapsing the result into a single output row. This means you can calculate running totals, moving averages, ranks, and much more while still viewing all the original rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into some commonly used window functions and see how they work with simple examples using a sample sales table."
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose we have a table called sales_orders with the following columns:\n- order_id\n- customer_id\n- order_date\n- amount"
+      },
+      {
+        "type": "code",
+        "value": "-- Sample Data\nCREATE TABLE sales_orders (\n  order_id INT,\n  customer_id INT,\n  order_date DATE,\n  amount DECIMAL(10,2)\n);\n\nINSERT INTO sales_orders VALUES\n(1, 101, '2024-01-01', 150.00),\n(2, 102, '2024-01-02', 200.00),\n(3, 101, '2024-01-03', 50.00),\n(4, 103, '2024-01-04', 300.00),\n(5, 102, '2024-01-05', 120.00);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### ROW_NUMBER()\nThis function provides a unique sequential integer to rows within a partition of the query result, ordered by specified columns."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  order_id,\n  customer_id,\n  order_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_rank\nFROM sales_orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, ROW_NUMBER() restarts numbering for each customer_id, ordered by order_date. This helps identify the first, second, third order per customer."
+      },
+      {
+        "type": "paragraph",
+        "value": "### RANK() and DENSE_RANK()\nThese help assign ranks to rows within a partition. RANK() skips rank numbers if there are ties; DENSE_RANK() does not."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  customer_id,\n  amount,\n  RANK() OVER (PARTITION BY customer_id ORDER BY amount DESC) AS rank,\n  DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY amount DESC) AS dense_rank\nFROM sales_orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If two orders have the same amount for the same customer, RANK() might produce gaps in numbering, while DENSE_RANK() will not."
+      },
+      {
+        "type": "paragraph",
+        "value": "### SUM(), AVG(), MIN(), MAX() Over Windows\nYou can calculate cumulative sums or averages over a defined window of rows."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  order_id,\n  customer_id,\n  amount,\n  SUM(amount) OVER (PARTITION BY customer_id ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales_orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query calculates a running total of amounts per customer ordered by the order_date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### LAG() and LEAD()\nThese functions let you access data in a previous or next row without self join."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  order_id,\n  customer_id,\n  order_date,\n  amount,\n  LAG(amount, 1) OVER (PARTITION BY customer_id ORDER BY order_date) AS previous_amount,\n  LEAD(amount, 1) OVER (PARTITION BY customer_id ORDER BY order_date) AS next_amount\nFROM sales_orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, LAG() shows the previous order amount per customer, and LEAD() shows the next order amount."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nWindow functions are incredibly useful for advanced analysis like ranking, running totals, comparisons across rows, and statistical calculations—all while maintaining the detail of each row. Practice using these functions with your datasets to uncover deeper insights."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-window-functions-for-large-datasets",
+    "title": "Optimizing SQL Window Functions for Large Datasets",
+    "language": "sql",
+    "type": "errors",
+    "description": "A beginner-friendly guide to common errors and optimization tips when using SQL window functions with large datasets.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools used to perform calculations across sets of rows related to the current query row. They can be very useful for analytics and reporting. However, when working with large datasets, beginners often encounter errors or performance issues. This article explains common errors and provides tips to optimize SQL window functions for large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Errors When Using Window Functions"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Incorrect PARTITION BY or ORDER BY clauses:** Window functions require correct partitioning and ordering to work as expected. Errors happen when these clauses are missing or incorrectly defined."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Using non-deterministic ORDER BY expressions:** If ORDER BY includes columns that can produce different results each run, the output may be unpredictable."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Excessive memory and time consumption:** Running window functions on very large datasets without optimization can lead to slow queries, or even failures."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example causing errors and inefficiencies:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  user_id,\n  event_date,\n  SUM(revenue) OVER (PARTITION BY user_id ORDER BY event_date) AS running_revenue\nFROM large_events_table;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If the `large_events_table` contains millions of rows, this query can be slow or cause resource errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips to Optimize Window Functions for Large Datasets"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Limit data before applying window functions:** Use WHERE clauses or pre-aggregations to reduce dataset size."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Index the columns used in PARTITION BY and ORDER BY:** Proper indexing helps the database sort and partition data efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid complex expressions in window clauses:** Simplify the columns used in PARTITION BY and ORDER BY to minimize computation."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use explicit frame specification if possible:** Specify the window frame (ROWS BETWEEN ...) to limit the number of rows considered."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Optimized query example:"
+      },
+      {
+        "type": "code",
+        "value": "WITH filtered_events AS (\n  SELECT user_id, event_date, revenue\n  FROM large_events_table\n  WHERE event_date >= '2023-01-01'\n)\nSELECT\n  user_id,\n  event_date,\n  SUM(revenue) OVER (\n    PARTITION BY user_id\n    ORDER BY event_date\n    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n  ) AS running_revenue\nFROM filtered_events;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query limits data using a date filter and explicitly defines the window frame to optimize performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions are essential but can be tricky with large datasets. Understanding common errors and applying these optimization tips will help you write efficient, error-free queries."
+      }
+    ]
   }
 ];
