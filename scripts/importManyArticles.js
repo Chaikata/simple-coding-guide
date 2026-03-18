@@ -92,22 +92,61 @@ function createBackupIfFileExists(filePath) {
 }
 
 function extractArticlesArraySource(fileText) {
-  const match = fileText.match(
-    /export\s+const\s+articles\s*(?::\s*Article\[\])?\s*=\s*(\[[\s\S]*?\])\s*;?/
-  );
+  const exportMarker = "export const articles =";
+  const startIndex = fileText.indexOf(exportMarker);
 
-  if (!match) {
+  if (startIndex === -1) {
     throw new Error(
       "Could not find `export const articles = [...]` in data/articles.ts"
     );
   }
 
-  return match[1];
+  const arrayStart = fileText.indexOf("[", startIndex);
+
+  if (arrayStart === -1) {
+    throw new Error("Could not find opening [ for articles array");
+  }
+
+  let depth = 0;
+  let inString = false;
+  let stringChar = "";
+  let escaped = false;
+
+  for (let i = arrayStart; i < fileText.length; i++) {
+    const char = fileText[i];
+
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (char === "\\") {
+        escaped = true;
+      } else if (char === stringChar) {
+        inString = false;
+        stringChar = "";
+      }
+      continue;
+    }
+
+    if (char === '"' || char === "'" || char === "`") {
+      inString = true;
+      stringChar = char;
+      continue;
+    }
+
+    if (char === "[") depth++;
+    if (char === "]") depth--;
+
+    if (depth === 0) {
+      return fileText.slice(arrayStart, i + 1);
+    }
+  }
+
+  throw new Error("Could not find closing ] for articles array");
 }
 
 function evaluateArticlesArray(arraySource) {
   try {
-    return Function('"use strict"; return (' + arraySource + ')')();
+    return Function('"use strict"; return (' + arraySource + ")")();
   } catch (error) {
     throw new Error(`Failed to parse existing articles array: ${error.message}`);
   }
@@ -147,7 +186,13 @@ function readGeneratedArticles() {
   }
 
   const raw = fs.readFileSync(GENERATED_FILE, "utf-8");
-  const parsed = JSON.parse(raw);
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`generatedArticles.json is invalid JSON: ${error.message}`);
+  }
 
   if (!Array.isArray(parsed)) {
     throw new Error("generatedArticles.json must contain an array");
