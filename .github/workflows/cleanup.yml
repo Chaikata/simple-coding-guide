@@ -2,32 +2,35 @@ name: Weekly Duplicate Cleanup
 
 on:
   schedule:
-    - cron: "0 6 * * 0" # every Sunday at 6 AM UTC
-  workflow_dispatch: # lets you run it manually too
+    - cron: "0 10 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "18"
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm install
 
-      - name: Run cleanup script
+      - name: Run cleanup
         run: node scripts/cleanupDuplicates.js
 
-      - name: Commit changes (if any)
+      - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
-          git commit -m "Weekly duplicate cleanup" || echo "No changes to commit"
+          git commit -m "Weekly duplicate cleanup" || echo "No changes"
           git push
