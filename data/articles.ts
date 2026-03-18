@@ -5326,5 +5326,277 @@ export const articles: Article[] = [
         "value": "In summary, the foreign key constraint violation error is your database’s way of protecting data relationships between tables. By understanding how foreign keys link tables, checking that referenced data exists, and following best practices when inserting, updating, or deleting records, you can fix and avoid this error effectively. Concepts like primary keys, indexes, and referential integrity are closely tied to foreign keys, so gaining a good grasp of these will make your SQL coding more robust and error-free."
       }
     ]
+  },
+  {
+    "slug": "how-to-use-javascript-closures-for-beginners",
+    "title": "How to Use JavaScript Closures for Beginners: A Simple Tutorial",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn JavaScript closures from scratch with easy explanations and practical examples. Understand how closures work and how to use them effectively in your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to JavaScript, you've probably come across the term 'closure' and wondered what it means. Closures are a fundamental concept that allows functions to remember the environment in which they were created. Understanding closures can help you write cleaner and more efficient code, especially when working with functions, scope, and variables. This tutorial will guide you step-by-step through the basics of closures and how to use them."
+      },
+      {
+        "type": "paragraph",
+        "value": "A closure occurs when a function has access to variables from its outer (enclosing) function scope even after that outer function has finished executing. In simpler terms, a closure lets a function 'remember' the variables that existed when it was created. This is closely related to concepts like scope, lexical environment, and higher-order functions."
+      },
+      {
+        "type": "code",
+        "value": "function outerFunction() {\n  let count = 0;\n  function innerFunction() {\n    count++;\n    console.log(count);\n  }\n  return innerFunction;\n}\n\nconst myCounter = outerFunction();\nmyCounter(); // Output: 1\nmyCounter(); // Output: 2\nmyCounter(); // Output: 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, outerFunction creates a variable named count and defines innerFunction inside it. When outerFunction returns innerFunction, the returned function still has access to count, even though outerFunction has finished. This is a closure in action. To use closures properly, ensure you return or pass functions that make use of variables from their outer scope. Closures are especially useful for data privacy and creating function factories."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginners make is misunderstanding when variables are updated inside closures, especially within loops. For example, using var inside a loop can cause unexpected behavior because var is function-scoped, not block-scoped. Another pitfall is mismanaging memory by keeping unnecessary references that prevent garbage collection. Also, confuse closures with callbacks or asynchronous functions—while they often appear together, closures specifically refer to how functions retain access to their lexical scope."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, JavaScript closures let you create functions with access to variables from an outer scope, even after the outer function has executed. By mastering closures, you'll better handle scopes, callbacks, and function-based data encapsulation. Practice with closures along with concepts like event listeners, promises, and the this keyword to become a more confident JavaScript developer."
+      }
+    ]
+  },
+  {
+    "slug": "typeerror-object-is-not-iterable-fix-javascript",
+    "title": "TypeError: Object is Not Iterable Fix in JavaScript Explained with Examples",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what the 'TypeError: object is not iterable' means in JavaScript and how to fix it with practical examples. Understand iterable objects, loops, and common mistakes.",
+    "videoUrl": "https://www.youtube.com/watch?v=Kt53XbZzxi4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've ever encountered the error message \"TypeError: object is not iterable\" in JavaScript, you're not alone. This error often occurs when you try to iterate over something that JavaScript doesn't recognize as a valid iterable object, such as using for...of loops, spreading objects, or destructuring assignments. Understanding why this happens and how to fix it is crucial when working with arrays, objects, or other data structures."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, an iterable is an object that implements the iteration protocol, which means it has a method called Symbol.iterator. Arrays, strings, Maps, and Sets are examples of iterable objects. However, plain objects (created with curly braces {}) are not iterable by default, which causes errors when you try to loop over them directly with constructs like for...of or use the spread syntax on them."
+      },
+      {
+        "type": "code",
+        "value": "const obj = { a: 1, b: 2 };\n\n// This will throw TypeError: obj is not iterable\nfor (const item of obj) {\n  console.log(item);\n}\n\n// Correct usage: Object.entries(), Object.keys(), or Object.values()\nfor (const [key, value] of Object.entries(obj)) {\n  console.log(key, value);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, make sure you're iterating over a valid iterable. If you want to loop through the keys or values of a plain object, use Object.keys(), Object.values(), or Object.entries() methods, which return arrays and are iterable. Also, avoid spreading non-iterable objects, and instead convert them into an iterable form if needed. Understanding the differences between iterable and non-iterable objects helps prevent this common mistake."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is assuming all JavaScript objects are iterable like arrays. Another frequent error is trying to destructure or spread non-iterable objects directly, which leads to this TypeError. Also, sometimes functions or API calls return undefined or null, which are not iterable. Always check the data type before looping and use appropriate methods to access object properties."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, 'TypeError: object is not iterable' means you're trying to loop or spread something that is not designed to be looped over directly. By understanding iterable objects, such as arrays and strings, and using methods like Object.entries() for plain objects, you can fix and avoid this error. Mastering related concepts like the iteration protocol, looping methods, and destructuring will make your JavaScript code much more reliable."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-type-assertion-vs-type-casting-explained",
+    "title": "TypeScript Type Assertion vs Type Casting Explained with Examples",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn the difference between TypeScript type assertion and type casting, with clear examples and best practices for proper usage.",
+    "videoUrl": "https://www.youtube.com/watch?v=lOuaE3nGS4g",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've started learning TypeScript, you might have come across the terms type assertion and type casting and wondered how they differ. These concepts relate to how we tell the TypeScript compiler about the types of variables and values in our code. This tutorial explains what type assertion and type casting mean, how to use them correctly, and clears up common confusions."
+      },
+      {
+        "type": "paragraph",
+        "value": "In TypeScript, type assertion is a way to tell the compiler, \"Trust me, I know what the type of this value is.\" It doesn't change the runtime value or perform conversion; it only affects the static type checking. Type casting, in general programming, means converting a value from one type to another at runtime. However, TypeScript itself does not perform type casting in the traditional sense because it’s a superset of JavaScript and doesn’t add runtime type conversions. Instead, developers use type assertion to help the compiler during development."
+      },
+      {
+        "type": "code",
+        "value": "let someValue: any = \"Hello, TypeScript!\";\n// Using type assertion to tell TypeScript this is a string\nlet strLength: number = (someValue as string).length;\n\n// Another syntax for type assertion\nlet strLengthAlternative: number = (<string>someValue).length;\n\nconsole.log(strLength); // Output: 18\nconsole.log(strLengthAlternative); // Output: 18"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use type assertion properly, make sure you only assert when you are certain about the underlying type. For example, if you receive data from an API as an unknown type, you can assert it to an interface or type you expect. This is particularly useful along with other TypeScript features like interfaces, types, and union types. Remember that assertion doesn’t transform or validate data, so combining it with runtime checks or type guards ensures safer code."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is confusing type assertion with actual type conversion. For example, asserting a string to a number type doesn’t convert the string to a number; TypeScript just believes you, and runtime errors can occur. Also, excessive or incorrect use of assertions can defeat TypeScript's purpose by hiding potential bugs. Unlike explicit conversions you might see in JavaScript (like Number('123')), type assertion has no runtime effect—it’s only about compile-time type checking."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript type assertion is a way to inform the compiler about the type of a variable without affecting runtime values. It’s different from true runtime type casting, which JavaScript handles with conversion functions. Use type assertions carefully alongside other features like type guards and interfaces. Understanding the distinction improves your code safety and prevents common pitfalls when working with types in TypeScript."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-cannot-read-properties-of-undefined-in-typescript",
+    "title": "How to Fix Cannot Read Properties of Undefined in TypeScript",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what causes the 'Cannot read properties of undefined' error in TypeScript and how to fix it with practical examples and common mistake explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=raMsoLTWCKo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've ever encountered the error message \"Cannot read properties of undefined\" in TypeScript, you're not alone. This error can be confusing for beginners because it refers to attempting to access a property or method on a variable that has a value of undefined. Understanding why this happens and how to fix it is crucial for writing robust TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error \"Cannot read properties of undefined\" means your code is trying to access something like a property or method on a variable whose value is undefined. This often happens due to uninitialized variables, incorrect assumptions about data structures, or timing issues with asynchronous code. Related TypeScript concepts include type checking, optional chaining, and null safety checks, which all help manage such runtime errors."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age?: number; // age is optional\n}\n\nconst user: User = { name: 'Alice' };\n\n// This will cause the error because age is undefined\nconsole.log(user.age.toString());"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to verify that the variable is not undefined before trying to access its properties. One common method is to use optional chaining (?.), which safely accesses properties and returns undefined if the value is null or undefined. Additionally, adding proper type checks or defaults can prevent this error. In the example above, replacing user.age.toString() with user.age?.toString() stops the error because it only calls toString if age is defined."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include assuming nested objects or optional properties always exist, skipping null or undefined checks, or misunderstanding asynchronous code flow where variables may not be initialized yet. Another frequent pitfall is accessing elements in arrays without confirming the array or index is valid, resulting in similar errors. Understanding type assertions and type guards can help avoid these mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the \"Cannot read properties of undefined\" error in TypeScript is a sign that your code is trying to access a property on an undefined value. Using optional chaining, null checks, and proper type safety measures like interfaces and type guards can resolve and prevent this issue. Being mindful of asynchronous behavior and data initialization helps maintain cleaner and error-free TypeScript code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-async-await-in-python-effectively",
+    "title": "How to Use Async Await in Python Effectively: A Beginner's Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use async and await in Python effectively with clear explanations and practical examples. Master asynchronous programming, event loop basics, coroutines, and proper error handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=3E-Ym2mbSCc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've started exploring Python's asynchronous programming, you might have come across the async and await keywords. These tools help you write code that can handle multiple tasks at the same time, without blocking your program. In this article, we’ll break down how async await works in Python and show you practical ways to use it effectively, especially if you are new to async programming, event loops, or coroutines."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, async and await let Python functions pause and resume while waiting for operations like network requests, file I/O, or timers to complete. When you mark a function with async, it becomes a coroutine, which means it can be paused at await points. The await keyword is used to wait for another coroutine or an asynchronous operation to finish, allowing other tasks to run during that wait. This asynchronous behavior improves performance and responsiveness, especially in applications that need to handle many tasks simultaneously, such as web servers or data processing pipelines."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def fetch_data():\n    print(\"Start fetching data...\")\n    await asyncio.sleep(2)  # Simulate a network operation\n    print(\"Data fetched!\")\n    return {'data': 123}\n\nasync def main():\n    print(\"Before fetching\")\n    data = await fetch_data()\n    print(f\"Received: {data}\")\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use async and await properly, you need to understand the event loop, which manages asynchronous execution in Python. The event loop runs the coroutines and handles pauses and resumes at await points. Always use await inside async functions; attempting to use await outside of them results in errors. When you run your asynchronous code, use asyncio.run() to start the event loop and run your main coroutine. This setup allows you to write non-blocking code that works alongside Python’s threading and multiprocessing tools, especially when managing concurrent I/O or integrating with libraries that support async."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginners make is forgetting to declare a function as async but still using await inside it. This will cause a SyntaxError. Another is calling an async function without awaiting it, which results in a coroutine object that doesn’t run until awaited. Also, mixing synchronous blocking code with async code can lead to performance issues because the event loop gets blocked. Always strive for non-blocking code inside async functions and handle exceptions with try-except to avoid uncaught errors interrupting your async flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, async and await in Python provide a powerful way to write concurrent code that handles many operations efficiently. By understanding how coroutines, event loops, and asyncio work together, you can improve the performance and responsiveness of your applications. Remember to always define async functions properly, use await for asynchronous calls, and monitor your event loop to avoid common pitfalls. Exploring related concepts like Python threading, multiprocessing, and concurrent futures will also help deepen your understanding of Python’s concurrency options."
+      }
+    ]
+  },
+  {
+    "slug": "python-keyerror-key-not-found-fix-troubleshooting",
+    "title": "Python KeyError Key Not Found Fix and Troubleshooting",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to identify, fix, and troubleshoot the Python KeyError caused by a missing dictionary key with clear examples and practical solutions.",
+    "videoUrl": "https://www.youtube.com/watch?v=7u0KZwqr0Ok",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've encountered a Python KeyError saying a key was not found, you’re not alone. This common error happens when you try to access a key in a dictionary that doesn’t exist. Understanding why this error occurs and how to handle it is essential for anyone working with dictionaries, JSON data, or similar key-value structures."
+      },
+      {
+        "type": "paragraph",
+        "value": "A KeyError in Python means the key you’re trying to retrieve from a dictionary does not exist. Dictionaries are collections of key-value pairs, and attempting to access a key that isn’t present causes Python to raise this error. Unlike list index errors where you access an invalid position, KeyError is specifically about missing keys. This can often happen in data lookups, API responses, or when parsing configuration settings."
+      },
+      {
+        "type": "code",
+        "value": "my_dict = {'name': 'Alice', 'age': 25}\nprint(my_dict['email'])  # This will raise a KeyError because 'email' is missing"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the KeyError, you first need to check if the key exists before accessing it. Using methods like .get() on dictionaries returns None (or a default value you specify) instead of raising an error if the key is missing. You can also use the in keyword to check for the key, or handle exceptions to keep your program running smoothly. Using these strategies helps avoid crashes when working with dynamic data sources or user input."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include assuming a key is always present in the dictionary, forgetting to handle missing keys when processing JSON data or API responses, or not using safe-access methods. Another frequent error is mixing up dictionary keys with list or tuple indices, which leads to confusion and additional exceptions like IndexError. Remember that using dictionary methods and understanding error handling are key parts of working with Python data structures effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, Python's KeyError is an expected part of dictionary handling when keys are missing. By learning to check for keys safely using methods like .get(), checking key membership with in, or using try-except blocks, you can write more robust Python code. Combining this knowledge with other Python basics like list handling and error management will improve your overall programming skills and reduce runtime errors in your applications."
+      }
+    ]
+  },
+  {
+    "slug": "sql-group-by-vs-order-by-differences",
+    "title": "SQL GROUP BY vs ORDER BY Differences Explained with Examples",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the key differences between SQL GROUP BY and ORDER BY clauses with clear examples and practical tips. Understand how to use each one correctly in your queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=x2_mOJ3skSc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, two of the most commonly used clauses for organizing query results are GROUP BY and ORDER BY. Although they might seem similar because they both affect how data is displayed, they serve very different purposes. Understanding the distinction between GROUP BY and ORDER BY is essential for beginners learning SQL, especially when dealing with aggregate functions, sorting data, or writing complex queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "GROUP BY is used to arrange identical data into groups. When you want to aggregate data like counting rows, summing values, or finding averages, GROUP BY groups rows that share common values in specified columns before performing the calculations. On the other hand, ORDER BY simply sorts the result set based on one or more columns without grouping the rows. It controls the order in which rows are returned but does not combine them. Together with SELECT statements, these clauses control data aggregation and sorting but in very distinct ways."
+      },
+      {
+        "type": "code",
+        "value": "SELECT department, COUNT(*) AS employee_count\nFROM employees\nGROUP BY department;\n\n-- This query groups employees by department and counts how many employees are in each department.\n\nSELECT employee_name, salary\nFROM employees\nORDER BY salary DESC;\n\n-- This query lists employees sorted by their salary, highest to lowest, without grouping."
+      },
+      {
+        "type": "paragraph",
+        "value": "To use GROUP BY properly, always include columns in the SELECT statement that are part of the grouping or aggregated with functions like COUNT, SUM, or AVG. Avoid selecting columns that are neither grouped nor aggregated, as most SQL engines will throw an error. For ORDER BY, simply specify the column(s) to sort results by, optionally adding ASC for ascending or DESC for descending order. ORDER BY can be combined with GROUP BY in one query to first group the data and then sort the results as needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake beginners make is confusing GROUP BY and ORDER BY, using GROUP BY when only sorting is needed, or vice versa. Another error is forgetting to aggregate non-grouped columns in SELECT when using GROUP BY, which leads to SQL errors. Some also mix the order of clauses, since ORDER BY always comes after GROUP BY if both are used in the same query. Understanding the difference between aggregate functions, filtering with WHERE vs HAVING, and sorting with ORDER BY will help avoid these pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, GROUP BY groups rows to perform aggregate calculations on each group, while ORDER BY sorts the result rows in a specific order. Both are essential for writing advanced SQL queries, but they serve very different functions. Mastering their differences, along with related concepts like aggregate functions and filters, will make your SQL queries more effective and easier to understand."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-sql-deadlock-timeout-error",
+    "title": "How to Fix SQL Deadlock Timeout Error: A Beginner's Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL deadlock timeout errors mean, why they happen, and practical steps to fix them with clear examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=7V1ooqV6Jz4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've encountered a SQL deadlock timeout error while running your queries or transactions, you're not alone. This error can be confusing for beginners, but understanding why it occurs and how to resolve it is essential for writing robust SQL code. In this article, we will explore the causes of SQL deadlock timeout errors and provide clear solutions you can apply right away."
+      },
+      {
+        "type": "paragraph",
+        "value": "A SQL deadlock occurs when two or more transactions hold locks on resources that each transaction needs to continue. Neither transaction can proceed, resulting in a standstill, or deadlock. The database engine detects this cycle and picks one transaction as a deadlock victim, terminating it and throwing a deadlock timeout error. This mechanism prevents indefinite waiting but stops the affected transaction from completing. Deadlocks commonly happen when multiple processes try to update or insert data simultaneously, especially when working with locking and transaction isolation levels."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\n\n-- Transaction 1 locks Row A\nUPDATE Products SET Quantity = Quantity - 1 WHERE ProductID = 1;\n\n-- Meanwhile, Transaction 2 locks Row B\nUPDATE Products SET Quantity = Quantity - 1 WHERE ProductID = 2;\n\n-- Transaction 1 tries to lock Row B (held by Transaction 2)\nUPDATE Products SET Quantity = Quantity - 1 WHERE ProductID = 2;\n\n-- Transaction 2 tries to lock Row A (held by Transaction 1)\nUPDATE Products SET Quantity = Quantity - 1 WHERE ProductID = 1;\n\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix SQL deadlock timeout errors, start by minimizing the transaction scope so locks are held for a shorter time. Keep transactions simple and avoid user input or complex logic inside them. Make sure all concurrent transactions access tables and rows in the same order to reduce deadlock chances. You can also use explicit locking hints and adjust the transaction isolation level to reduce lock contention. Monitoring deadlock graphs and logs helps identify exactly where conflicts happen. Indexes on frequently locked columns also improve performance and reduce lock duration."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include having long-running transactions that hold locks unnecessarily, mixing read and write operations within the same transaction, and not handling deadlock errors in your application code, which can cause poor user experience or lost work. Another issue is not using proper indexes, causing table scans and more locking. Ensure your error handling logic retries deadlock victims gracefully. Avoid escalating locks from row-level to page or table-level implicitly by writing efficient queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, a SQL deadlock timeout error is a natural consequence of concurrent transactions competing for the same data rows. By understanding how transactions, locks, and isolation levels work, you can design your database interactions to minimize deadlocks. Keep transactions short and consistent, use indexing wisely, and handle errors gracefully to ensure your SQL queries run smoothly without interruption."
+      }
+    ]
   }
 ];
