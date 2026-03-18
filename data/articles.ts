@@ -1,21 +1,5 @@
-export type ContentBlock =
-  | string
-  | {
-      type: "paragraph" | "code";
-      value: string;
-    };
 
-export type Article = {
-  slug: string;
-  title: string;
-  language: string;
-  type: string;
-  description: string;
-  videoUrl?: string;
-  content: ContentBlock[];
-};
-
-export const articles: Article[] = [
+export const articles = [
   {
     "slug": "introduction-to-javascript-variables-and-data-types",
     "title": "Introduction to JavaScript Variables and Data Types",
@@ -175,31 +159,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "To fix a NameError, make sure that every name you use is spelled correctly and defined before you use it in your code. If you get this error, check your variables and functions for mistakes, and ensure that they are properly created. This simple step keeps your code running smoothly."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-sql-syntax-errors-for-beginners",
-    "title": "How to Fix SQL Syntax Errors for Beginners",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn common SQL syntax errors, what they mean, why they happen, and how to fix them with simple examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "SQL syntax errors occur when the database cannot understand the command you have written because it does not follow the correct grammar rules of SQL. This is similar to making a spelling or grammar mistake in a sentence. For beginners, understanding these errors is crucial to writing effective SQL queries."
-      },
-      {
-        "type": "paragraph",
-        "value": "One common syntax error is a missing keyword or clause, such as forgetting \"FROM\" in a SELECT statement. Another is using incorrect punctuation, like missing commas or semicolons. For example, if you forget to include the table name after SELECT columns, the database will throw a syntax error. To fix these errors, carefully check your query for missing or misspelled keywords and ensure punctuation is used correctly."
-      },
-      {
-        "type": "code",
-        "value": "SELECT name, age\n-- Missing FROM keyword and table name\n\n-- Incorrect corrected query:\nSELECT name, age FROM users;"
-      },
-      {
-        "type": "paragraph",
-        "value": "To avoid SQL syntax errors, always double-check your keywords, punctuation, and query structure. Use a SQL editor with syntax highlighting and error messages to help quickly identify problems. With practice, you will become more comfortable writing correct SQL queries and understanding error messages."
       }
     ]
   },
@@ -532,31 +491,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "how-to-fix-typescript-cannot-find-name-error",
-    "title": "How to Fix TypeScript Cannot Find Name Error",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn what the 'Cannot find name' error in TypeScript means and how to fix it with simple examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When you start writing code in TypeScript, you might encounter the error message \"Cannot find name 'X'\". This is a common error that indicates the TypeScript compiler cannot find the definition or declaration of a variable, function, or type that you are trying to use."
-      },
-      {
-        "type": "paragraph",
-        "value": "The \"Cannot find name\" error happens because TypeScript needs you to declare all variables, functions, or types before you use them. This helps catch mistakes like typos or using items that haven’t been created yet. To fix this, you need to make sure you have declared the name properly or imported it if it comes from another file."
-      },
-      {
-        "type": "code",
-        "value": "function greet() {\n  console.log(message);\n}\n\ngreet();\n\n// This will cause error: Cannot find name 'message'.\n// Fix it by declaring the variable:\n\nconst message = \"Hello, world!\";"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, the error occurs because the variable 'message' is used before it is declared. To fix this, we declare 'message' with a string value before we use it in the 'greet' function. Always make sure to declare or import your names before using them, and TypeScript's error messages will help guide you to these simple fixes."
-      }
-    ]
-  },
-  {
     "slug": "python-basics-for-absolute-beginners",
     "title": "Python Basics for Absolute Beginners",
     "language": "python",
@@ -606,31 +540,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "To sum up, today you learned how to display output with print(), store data in variables, and get input from the user. These are the building blocks for writing any Python program. Practice these basics and soon you will be ready to explore more exciting Python features!"
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-indentationerror-in-python-for-beginners",
-    "title": "How to Fix IndentationError in Python for Beginners",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn what causes IndentationError in Python and how to fix it with simple examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Python uses indentation (spaces or tabs at the beginning of a line) to define blocks of code. Unlike many other programming languages that use curly braces or keywords, Python’s structure relies on proper indentation. This makes the code easier to read but also means that even small mistakes in indenting can cause errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "IndentationError happens when Python finds inconsistent or unexpected indentation. This means it’s expecting a certain level of indentation but finds something else instead. Common causes include mixing spaces and tabs, missing indentation after a colon (:), or incorrect alignment of code blocks."
-      },
-      {
-        "type": "code",
-        "value": "def greet():\nprint(\"Hello, world!\")  # This line should be indented\n\n# Corrected version:\n\ndef greet():\n    print(\"Hello, world!\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix an IndentationError, you need to make sure that all lines inside a block have the same level of indentation. Use either spaces or tabs consistently—Python’s official style guide recommends using 4 spaces per indentation level. Most code editors allow you to set this preference. Check your code blocks carefully after colons and before special statements to ensure proper indentation."
       }
     ]
   },
@@ -950,31 +859,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "common-causes-and-solutions-for-javascript-syntax-errors",
-    "title": "Common Causes and Solutions for JavaScript Syntax Errors",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn about typical JavaScript syntax errors, why they occur, and how to fix them with simple examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When you start coding in JavaScript, syntax errors are a common hurdle. A syntax error happens when your code does not follow the rules of JavaScript language. This prevents your code from running because the JavaScript engine cannot understand what you wrote."
-      },
-      {
-        "type": "paragraph",
-        "value": "One common cause of syntax errors is missing or extra characters such as parentheses, curly braces, or semicolons. For example, forgetting to close a parenthesis can lead to an 'Unexpected token' error. Such errors occur because the JavaScript interpreter expects a certain structure and finds something else instead."
-      },
-      {
-        "type": "code",
-        "value": "function greet(name) {\n  console.log('Hello, ' + name;\n}\ngreet('World');"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, there is a missing closing parenthesis in the console.log statement. The correct version should be: console.log('Hello, ' + name);. Adding the missing parenthesis fixes the syntax error, allowing the code to run properly."
-      }
-    ]
-  },
-  {
     "slug": "understanding-typescript-data-types-and-variables",
     "title": "Understanding TypeScript Data Types and Variables",
     "language": "typescript",
@@ -996,31 +880,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "If you see an error like \"Type 'string' is not assignable to type 'number'\", it means you're trying to store a value in a variable of the wrong type. For example, assigning a string to a variable declared as a number. To fix this, make sure the value's type matches the variable’s type declaration."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-typescript-cannot-find-module-error",
-    "title": "How to Fix TypeScript Cannot Find Module Error",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn what causes the TypeScript 'cannot find module' error and how to fix it with simple steps.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When working with TypeScript, you might see an error message like \"Cannot find module 'module-name'\". This error happens when TypeScript cannot locate the file or package you are trying to import into your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "This issue often occurs because the module does not exist at the specified path, the path is misspelled, TypeScript is missing type declarations, or your project configuration is incorrect. Fixing it usually means checking the module location, installing missing packages, or updating your TypeScript settings."
-      },
-      {
-        "type": "code",
-        "value": "import { greet } from './utils';\n\nconsole.log(greet('World'));"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, if the file './utils.ts' is missing or the path is wrong, TypeScript will show the 'cannot find module' error. To fix this, make sure './utils.ts' exists and the path is correct. If importing a third-party package, run 'npm install package-name' to add it to your project. Also, you can add a 'types' folder or configure the 'typeRoots' in your tsconfig.json if TypeScript can't find type definitions."
       }
     ]
   },
@@ -1178,31 +1037,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "In this example, we declared three variables with different data types. 'username' holds a string, 'age' holds a number, and 'isStudent' holds a boolean value. Remember, use const for values that won’t change and let for those that will. This helps prevent bugs in your code."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-typeerror-in-javascript",
-    "title": "How to Fix TypeError in JavaScript",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn what TypeError means in JavaScript, why it happens, and how to fix it with simple examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When you're learning JavaScript, you might come across an error called 'TypeError'. This error happens when you try to perform an operation on a value that is not of the expected type. Understanding this error will help you write better code and fix bugs faster."
-      },
-      {
-        "type": "paragraph",
-        "value": "A TypeError occurs because JavaScript expects a particular type of value but receives a wrong type instead. For example, if you try to call a function on something that is not a function or access a property on undefined, JavaScript will throw a TypeError. This prevents your program from running with invalid data."
-      },
-      {
-        "type": "code",
-        "value": "let name = null;\n\n// This will cause a TypeError because 'null' is not an object and has no properties\nconsole.log(name.length);\n\n// Fix: Make sure the variable is a string before accessing 'length'\nname = \"Alice\";\nconsole.log(name.length);"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix TypeErrors, you should check your variables and functions to make sure they have the expected types before using them. Use conditions or type checks like 'typeof' to avoid running code on values that don't support certain operations. This way, you can catch errors early and keep your program running smoothly."
       }
     ]
   },
@@ -1827,31 +1661,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "understanding-sql-data-types-for-new-programmers",
-    "title": "Understanding SQL Data Types for New Programmers",
-    "language": "sql",
-    "type": "tutorials",
-    "description": "A beginner-friendly guide to understanding SQL data types and how to use them effectively.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you're new to SQL, one of the first things you'll need to learn about is data types. Data types define the kind of data that can be stored in each column of a database table. Understanding them is essential because they help you manage information correctly and avoid errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "SQL has several common data types, including integers (whole numbers), decimals/floats (numbers with decimals), text types (like VARCHAR or TEXT for strings), dates, and more. Choosing the right data type ensures your database is efficient and accurate. For example, if you want to store a person's age, you should use an integer type, not a text type."
-      },
-      {
-        "type": "code",
-        "value": "CREATE TABLE Users (\n  UserID INT PRIMARY KEY,\n  Username VARCHAR(50),\n  Age INT,\n  SignupDate DATE\n);"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, we create a table called Users with four columns: UserID as an integer that uniquely identifies each user, Username as a string up to 50 characters, Age as an integer, and SignupDate as a date. Sometimes, if you try to insert data with the wrong type, SQL may give an error like 'Incorrect integer value' or 'Data too long for column.' This means the data you provided doesn't match the column's data type. To fix this, make sure the data you insert matches the expected type, like using numbers for integer columns and shorter text for VARCHAR."
-      }
-    ]
-  },
-  {
     "slug": "common-sql-server-connection-errors-and-how-to-solve-them",
     "title": "Common SQL Server Connection Errors and How to Solve Them",
     "language": "sql",
@@ -2331,31 +2140,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "common-causes-of-sql-connection-errors-and-how-to-resolve-them",
-    "title": "Common Causes of SQL Connection Errors and How to Resolve Them",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn about common SQL connection errors, why they happen, and how to fix them effectively.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When you start working with SQL databases, encountering connection errors is a common challenge. These errors prevent your application from communicating with the database, causing your queries to fail. Understanding why these errors occur and how to fix them is an important skill for beginners."
-      },
-      {
-        "type": "paragraph",
-        "value": "One typical cause is incorrect connection credentials, such as a wrong username, password, or database name. Another common issue is network problems, like the database server being unreachable or blocked by a firewall. Additionally, your SQL server may not be running, or it might be refusing connections due to its configuration. Permissions can also cause errors if the user doesn't have access rights."
-      },
-      {
-        "type": "code",
-        "value": "-- Example of a basic SQL connection string in SQL Server\n-- Replace placeholders with your own values\nDECLARE @ServerName NVARCHAR(100) = 'your_server_name';\nDECLARE @DatabaseName NVARCHAR(100) = 'your_database';\nDECLARE @User NVARCHAR(100) = 'your_username';\nDECLARE @Password NVARCHAR(100) = 'your_password';\n\n-- Attempt to connect using SQLCMD (run in command prompt as example)\nsqlcmd -S @ServerName -d @DatabaseName -U @User -P @Password\n\n-- Common errors:\n-- 1. Login failed for user: Check username and password\n-- 2. Server not found or not accessible: Check server name, network, or firewall\n-- 3. Database does not exist: Verify the database name\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "To resolve these issues, first double-check your connection details. Ensure the SQL server is running and accessible on the network (try pinging the server). Verify that firewalls or antivirus software are not blocking communication. Confirm the user account has the proper permissions and that the database exists. By systematically checking these areas, you can usually fix SQL connection errors and get your application connected correctly."
-      }
-    ]
-  },
-  {
     "slug": "writing-your-first-javascript-functions-step-by-step",
     "title": "Writing Your First JavaScript Functions Step by Step",
     "language": "javascript",
@@ -2405,60 +2189,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "By understanding how to declare functions, pass parameters, and return values, you can start writing flexible and reusable code in JavaScript. Keep practicing by writing simple functions, and soon you'll be comfortable creating more complex programs."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-uncaught-typeerror-in-javascript",
-    "title": "How to Fix Uncaught TypeError in JavaScript",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn what an Uncaught TypeError means in JavaScript, why it happens, and how to fix it with simple examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you are learning JavaScript, you may have encountered an error message like 'Uncaught TypeError'. This error stops your code from running and can be confusing for beginners. In this article, you will learn what this error means, why it happens, and how you can fix it easily."
-      },
-      {
-        "type": "paragraph",
-        "value": "A TypeError usually happens when you try to use a value in a way that is not allowed by its type. For example, you might try to call a method on something that is not an object or try to access a property on undefined or null. JavaScript will throw an 'Uncaught TypeError' to let you know that it cannot perform the operation because the type is wrong."
-      },
-      {
-        "type": "code",
-        "value": "// Example causing an Uncaught TypeError\nlet person = null;\n\n// Trying to access a property of null\nconsole.log(person.name);\n\n// Fix: make sure person is not null before accessing 'name'\nif (person !== null) {\n  console.log(person.name);\n} else {\n  console.log('person is null, cannot access name.');\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix an Uncaught TypeError, check where your code tries to use a value and make sure the value is what you expect it to be. Adding checks like 'if' statements or using optional chaining (?.) can help avoid errors when the value might be null or undefined. Understanding the error message and carefully checking your variables will help you write more reliable JavaScript code."
-      }
-    ]
-  },
-  {
-    "slug": "getting-started-with-typescript-for-absolute-beginners",
-    "title": "Getting Started with TypeScript for Absolute Beginners",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "A beginner-friendly introduction to TypeScript, explaining key concepts and showing simple examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a programming language that builds on JavaScript by adding types. It helps you write safer code by catching errors before you run your program. This tutorial is designed for absolute beginners who want to learn the basics of TypeScript quickly and clearly."
-      },
-      {
-        "type": "paragraph",
-        "value": "One important concept in TypeScript is type annotations. When you create variables, you can specify what kind of values they should hold, like numbers or strings. This makes your code easier to understand and can prevent many common bugs."
-      },
-      {
-        "type": "code",
-        "value": "let age: number = 25;\nlet name: string = \"Alice\";\n\n// This will cause an error:\nage = \"twenty-five\";  // Error: Type 'string' is not assignable to type 'number'."
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, we declared a variable 'age' with the type 'number' and assigned it the value 25. If you try to assign a string like \"twenty-five\" to 'age', TypeScript will give an error. This error means you are trying to put a value of the wrong type into a variable. It happens because TypeScript expects 'age' to always be a number. To fix this error, make sure you only assign numbers to 'age', or change the variable's type if different kinds of values are needed."
-      },
-      {
-        "type": "paragraph",
-        "value": "Using TypeScript gives you immediate feedback about potential mistakes in your code, which helps you catch bugs early. As you learn more, you will discover many other useful features, like interfaces and classes. For now, practicing simple type annotations is a great first step."
       }
     ]
   },
@@ -2682,31 +2412,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "In the example above, the first mistake is the missing closing bracket for the greet function. JavaScript reports an error because it can't find the end of the function body. The second error is calling greet without parentheses, which means the function is not executed. To fix these, add the closing brace and parentheses when calling the function."
-      }
-    ]
-  },
-  {
-    "slug": "understanding-typescript-basic-types-and-variables",
-    "title": "Understanding TypeScript Basic Types and Variables",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "A beginner-friendly guide to TypeScript basic types and variable declarations.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. This means you can define what type of data a variable can hold, helping you catch errors before running your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "In TypeScript, you declare variables and specify their types using syntax like `let name: string = 'Alice';`. The most common basic types are `string`, `number`, `boolean`, `any`, and `void`. Let's explore how these work."
-      },
-      {
-        "type": "code",
-        "value": "let userName: string = 'Alice';\nlet userAge: number = 25;\nlet isMember: boolean = true;\n\n// The 'any' type allows any value, but using it removes type safety\nlet flexibleValue: any = 42;\nflexibleValue = 'Now a string';\n\n// 'void' is used mostly for functions that do not return a value\nfunction logMessage(message: string): void {\n  console.log(message);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you try to assign a value that doesn’t match the declared type, TypeScript will show an error. For example, `let userName: string = 123;` causes an error because `123` is a number, not a string. This helps you avoid bugs by enforcing consistent types."
       }
     ]
   },
@@ -3041,39 +2746,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "In summary, Python list comprehensions are a useful tool for writing concise and readable code when creating lists. They help replace traditional loops with a simple one-line format that includes an expression and optional filtering conditions. By practicing with examples and avoiding the common pitfalls, you can quickly master list comprehensions and write Python code that is both elegant and efficient."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-python-indentationerror-unexpected-indent",
-    "title": "How to Fix Python IndentationError: Unexpected Indent",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn what the Python IndentationError: unexpected indent means, why it happens, and simple step-by-step ways to fix it with clear examples.",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you've started coding in Python, you might have come across the error message 'IndentationError: unexpected indent'. This error can be confusing for beginners because Python relies on indentation to understand the structure of your code. In this article, we'll explain exactly what this error means, why Python raises it, and how you can fix it easily."
-      },
-      {
-        "type": "paragraph",
-        "value": "The error 'IndentationError: unexpected indent' happens when Python encounters an indentation (a space or tab at the beginning of a line) that it doesn't expect. Unlike many other languages that use braces or keywords to define code blocks, Python uses indentation levels. If your code suddenly has an indentation that doesn't follow the expected pattern, Python will raise this error."
-      },
-      {
-        "type": "code",
-        "value": "def greet():\nprint(\"Hello\")\n  print(\"Welcome to Python!\")  # This line has an unexpected indent"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this error, you need to check your code's indentation carefully. Make sure that all lines inside a block are indented by the same number of spaces or tabs. Avoid mixing tabs and spaces, as it can confuse Python. In the example above, the second print statement is indented without a proper block opening. The corrected code should look like this:\n\ndef greet():\n    print(\"Hello\")\n    print(\"Welcome to Python!\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes that cause this error include accidentally adding extra spaces or tabs before a line that shouldn't be indented, or mixing tabs and spaces inconsistently. Using an editor that shows invisible characters can help you spot these issues. Also, be mindful that blank lines should not be indented unless they are part of a block."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the 'unexpected indent' error means that Python found indentation where it wasn't supposed to be. You can fix it by ensuring your code blocks are consistently indented, using the same number of spaces or tabs throughout, and avoiding mixing the two. Checking your editor settings and formatting your code properly will help prevent this error in the future."
       }
     ]
   },
@@ -4198,40 +3870,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "common-sql-server-deadlock-errors-and-prevention",
-    "title": "Common SQL Server Deadlock Errors Explained and How to Prevent Them",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn what SQL Server deadlock errors are, why they happen, and practical ways to prevent them with easy-to-understand examples and tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=5uTLRZEbBmU",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you work with SQL Server databases, you may have encountered deadlock errors that cause your queries to fail unexpectedly. A deadlock happens when two or more transactions are waiting for each other to release locks on resources, creating a cycle that SQL Server cannot resolve automatically without killing one of the transactions. Understanding deadlocks is essential for database developers and administrators to ensure smooth operations and improve application performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "Deadlock errors mean that multiple queries are holding locks on resources like tables or rows, and each is waiting for the other to release them. SQL Server detects these deadlocks and terminates one transaction to break the cycle. The error message usually looks like error 1205 with details about the processes involved. These deadlocks involve locking mechanisms and can be influenced by transaction isolation levels, indexing strategies, and query design."
-      },
-      {
-        "type": "code",
-        "value": "BEGIN TRANSACTION;\nUPDATE Products SET Quantity = Quantity - 1 WHERE ProductID = 1;\n-- Simulate work\nWAITFOR DELAY '00:00:05';\nUPDATE Orders SET Status = 'Processed' WHERE OrderID = 100;\nCOMMIT TRANSACTION;\n\n-- At the same time, another transaction might update Orders first then Products causing a deadlock."
-      },
-      {
-        "type": "paragraph",
-        "value": "To prevent deadlocks, you can start by keeping transactions short and accessing tables in the same order across different transactions. Using appropriate indexes reduces full table scans, lowering lock contention. You may also change the transaction isolation level, like using READ COMMITTED SNAPSHOT, to minimize locking conflicts. SQL Server trace flags and deadlock graphs can help identify root causes. Applying retry logic in your application code after a deadlock error is also a good practice."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes include holding locks too long by running complex operations inside transactions, accessing tables in different orders, and ignoring proper indexing. Also, not monitoring or analyzing deadlock graphs means underlying issues remain undetected. Avoid using overly restrictive transaction isolation levels if possible, and be careful with explicit locking hints that can escalate conflicts instead of reducing them."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, SQL Server deadlocks occur when transactions block each other in a cycle, causing the server to terminate one transaction to resolve the conflict. Understanding locks, transactions, indexing, and isolation levels will arm you with the tools to prevent deadlocks or handle them gracefully. Always analyze deadlock graphs when errors arise and design your database access patterns to minimize conflicts for better performance and reliability."
-      }
-    ]
-  },
-  {
     "slug": "how-to-debounce-a-function-in-javascript-with-examples",
     "title": "How to Debounce a Function in JavaScript with Examples",
     "language": "javascript",
@@ -5090,40 +4728,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "javascript-typeerror-property-does-not-exist-on-type-fix",
-    "title": "TypeScript Property Does Not Exist on Type Fix: A Beginner's Guide",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn how to fix the TypeScript error 'Property does not exist on type' with easy explanations, examples, and best practices for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=V6UgHSOTrC4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When you start using TypeScript with JavaScript, one of the most common errors you might see is the 'Property does not exist on type' TypeError. This error usually occurs when TypeScript's type checking system detects that you're trying to access a property or method that doesn't exist on the specified object or type. Understanding how TypeScript's type system works along with JavaScript objects and interfaces can help you quickly diagnose and fix this issue."
-      },
-      {
-        "type": "paragraph",
-        "value": "The error 'Property does not exist on type' means TypeScript is enforcing the types you declared, but you are trying to access a property on an object that TypeScript believes does not have that property. This often happens when you are working with typed objects, interfaces, or classes and you mistype a property name, forget to declare a property in the type, or try to access a property on a broader or incompatible type."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = { name: 'Alice', age: 30 };\n// Trying to access the 'email' property which does not exist on User\ntypeof user.email; // Error: Property 'email' does not exist on type 'User'."
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this error, you can take several approaches. First, make sure the property name is spelled correctly. Then, check if the property should exist on the type's definition — if yes, you need to add it to the interface or type declaration. Sometimes, you may also need to use type assertions or the optional chaining operator if the property might be undefined on some objects. Additionally, knowing when to use unions, intersection types, or index signatures can prevent such errors when working with dynamic or partially known structures."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes include assuming a property automatically exists because it exists at runtime in JavaScript, but TypeScript does not know about it without explicit types. Another big mistake is ignoring TypeScript's static typing benefits and using any everywhere to bypass errors. This defeats the purpose of types and makes code less safe. Also, confusing type narrowing or forgetting to check if an object is null or undefined before accessing properties can trigger similar errors or runtime bugs."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the 'Property does not exist on type' TypeScript error helps catch potential bugs by enforcing type safety around object properties. Fixing it typically involves confirming property names, updating interfaces or types, or using safe access patterns. Understanding the TypeScript type system, object structures, and how they relate to JavaScript objects can help you write better, error-free code and improve your overall development experience."
-      }
-    ]
-  },
-  {
     "slug": "typescript-generics-explained-with-examples",
     "title": "TypeScript Generics Explained with Examples: A Beginner's Guide",
     "language": "typescript",
@@ -5154,40 +4758,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "In summary, TypeScript generics are a powerful way to write flexible and reusable code while maintaining strong typing. They work hand in hand with other TypeScript concepts like interfaces, type aliases, and type inference. By mastering generics, you can avoid duplication and build more maintainable applications. Keep practicing with simple examples and gradually add complexity once you're comfortable with the basics."
-      }
-    ]
-  },
-  {
-    "slug": "typescript-cannot-read-properties-of-undefined-fix",
-    "title": "TypeScript Cannot Read Properties of Undefined Fix: Step-by-Step Guide",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to fix the common TypeScript error 'cannot read properties of undefined' with clear explanations, practical code examples, and tips on preventing it.",
-    "videoUrl": "https://www.youtube.com/watch?v=xC7h5Vo5zXE",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you've seen the error message \"TypeError: Cannot read properties of undefined\" in your TypeScript code, you are not alone. This is a very common runtime error that often confuses beginners. In this article, we will explain why this error happens, how you can fix it, and best practices to avoid it. Understanding this will also improve your skills with related concepts like optional chaining, type checking, and null safety in TypeScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "The error \"cannot read properties of undefined\" means that your code is trying to access a property or call a method on a value that is currently undefined. Undefined in JavaScript and TypeScript means the variable exists but hasn't been assigned a value yet, or it's missing in an object. When you attempt to get a property, for example, obj.name, but obj itself is undefined, JavaScript cannot continue and throws this error. This is different from null, but related because both can cause property access issues if not handled properly."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  name: string;\n  address?: {\n    street: string;\n  };\n}\n\nconst user: User = {\n  name: \"Alice\"\n};\n\nconsole.log(user.address.street); // Error: Cannot read properties of undefined (reading 'street')"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this error, you need to ensure that the object or value you are trying to read properties from is not undefined at runtime. One effective way in TypeScript is to use optional chaining (?.), which safely accesses properties even if the value is undefined or null. For example, user.address?.street will return undefined instead of throwing an error if address is missing. You can also use type checking conditions like if(user.address) before accessing nested properties. Additionally, initializing variables properly and using TypeScript features like strict null checks can help catch these problems early."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes that lead to this error include assuming an object or API response always contains nested data, forgetting to initialize variables, or neglecting to handle asynchronous data that might not be loaded yet. Another frequent issue is not distinguishing between null and undefined in your code. Using non-null assertion operators (like !) incorrectly or ignoring TypeScript's strict null checks can also mask these problems and lead to runtime errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the \"cannot read properties of undefined\" error in TypeScript occurs when you try to access a property on an undefined variable. You can prevent and fix it by understanding undefined values, using TypeScript features like optional chaining and strict null checks, and writing safe and defensive checks in your code. Improving these skills will also help you work confidently with related concepts such as type guards, null safety, and asynchronous data handling."
       }
     ]
   },
@@ -5600,74 +5170,6 @@ export const articles: Article[] = [
     ]
   },
   {
-    "slug": "javascript-async-await-explained-with-practical-use-cases",
-    "title": "JavaScript Async Await Explained with Practical Use Cases",
-    "language": "javascript",
-    "type": "tutorials",
-    "description": "Learn how JavaScript async await works with simple explanations and practical examples to handle asynchronous code easily and effectively.",
-    "videoUrl": "https://www.youtube.com/watch?v=9j1dZwFEJ-c",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you're starting with modern JavaScript, you might have heard of async and await — two keywords that make working with asynchronous code easier and more readable. Unlike older methods like callbacks or promises alone, async await lets you write code that looks synchronous but works asynchronously under the hood. This article will guide you through what async await really means, how to use it, practical examples, and common mistakes to avoid."
-      },
-      {
-        "type": "paragraph",
-        "value": "Async await is syntax sugar built on top of JavaScript promises. When you declare a function as async, it means the function automatically returns a promise. The await keyword can then be used inside this async function to pause execution until a promise settles (either resolves or rejects). This makes asynchronous code easier to read and debug compared to chaining multiple then() calls or deeply nested callbacks. To fully understand async await, it's useful to be familiar with promises, asynchronous functions, and error handling in JavaScript."
-      },
-      {
-        "type": "code",
-        "value": "async function fetchUserData() {\n  try {\n    const response = await fetch('https://jsonplaceholder.typicode.com/users/1');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const user = await response.json();\n    console.log('User data:', user);\n  } catch (error) {\n    console.error('Error fetching user data:', error);\n  }\n}\n\nfetchUserData();"
-      },
-      {
-        "type": "paragraph",
-        "value": "To use async await properly, always make sure the function where you use await is marked as async. This allows you to wait for asynchronous operations like fetching data from a server or reading files without blocking the main thread. Also, use try-catch blocks to handle errors gracefully because any error thrown inside an awaited promise will bubble up like a normal exception. This is much cleaner than handling errors with .catch() on promises. Combining async await with other modern JavaScript constructs, such as arrow functions and destructuring, can further enhance code clarity."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common mistake beginners make is forgetting to use await when calling a promise inside an async function, which causes unexpected behavior or unresolved promises. Another error is mixing async await inside non-async functions, which will cause syntax errors. Additionally, some developers try to use await outside async functions — this is not supported in traditional scripts (though top-level await exists in some environments). Lastly, not handling promise rejections with try-catch can lead to unhandled promise rejections and bugs that are hard to debug. Understanding event loop basics and callback queues also helps prevent confusion about how asynchronously awaited code executes."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, async await is a powerful feature in JavaScript that simplifies writing and reading asynchronous code. It relies on promises but offers a cleaner, easier-to-follow syntax, especially when combined with try-catch error handling. By mastering async await along with related concepts like promises, callbacks, and error handling, you can write efficient and understandable asynchronous code. Remember to always mark your functions async if you use await and handle errors properly to avoid common pitfalls."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-cannot-read-property-undefined-of-null-in-javascript",
-    "title": "How to Fix 'Cannot Read Property Undefined of Null' Error in JavaScript",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn why the 'Cannot read property undefined of null' error happens in JavaScript and how to fix it with clear examples and tips for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=jLjjYzdwHbU",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you are new to JavaScript, encountering the error message 'Cannot read property undefined of null' can be confusing. This error usually appears when you try to access a property or method on a value that is null, meaning there is nothing there to read from. Understanding why this happens is important for fixing bugs and improving your coding skills, especially when working with objects, variables, and the DOM."
-      },
-      {
-        "type": "paragraph",
-        "value": "In JavaScript, null represents the absence of any value or object. When you see 'Cannot read property undefined of null', it means that your code is attempting to get a property (often by name) from something that is null. This commonly happens with DOM elements not found by query selectors or when you expect an object but the variable is empty. It's related to other JavaScript concepts like object properties, variable assignment, and conditional checks."
-      },
-      {
-        "type": "code",
-        "value": "const obj = null;\nconsole.log(obj.property); // This throws the error: Cannot read property 'property' of null\n\n// Another example with the DOM\nconst button = document.querySelector('.my-button');\nconsole.log(button.textContent); // Error if no element with class 'my-button' exists"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this error, always check if the variable is not null before accessing its properties. You can do this using simple if statements or the optional chaining operator ?. introduced in modern JavaScript. For example, instead of directly accessing object.property, use object?.property. This way, if object is null or undefined, JavaScript won’t throw an error but will return undefined safely. This approach also helps when working with DOM elements returned by query selectors."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes include assuming a value is always an object without checking, not handling cases when variables are null or undefined, and missing null checks before calling methods or properties. Beginners often forget that calling document.querySelector with a selector that does not exist returns null. It's also easy to confuse undefined and null, but both can cause similar errors when accessing properties."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the 'Cannot read property undefined of null' error means your code is trying to access data from nothing (null). Fix it by adding checks for null before accessing properties, using optional chaining, and understanding how variables and objects work in JavaScript. This will improve your code reliability and prevent common runtime errors related to property access and variable initialization."
-      }
-    ]
-  },
-  {
     "slug": "typescript-mapped-types-explained-with-practical-use-cases",
     "title": "TypeScript Mapped Types Explained with Practical Use Cases",
     "language": "typescript",
@@ -5698,40 +5200,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "In summary, TypeScript mapped types are an elegant way to transform existing types by iterating over their properties and creating new variations. They reduce repetitive code when combined with related concepts such as keyof operator, utility types, and generics. With practice, you can use mapped types to build complex and maintainable type systems for your projects. Remember to start simple, test your mappings, and watch out for common syntax pitfalls to leverage the full power of TypeScript’s static typing."
-      }
-    ]
-  },
-  {
-    "slug": "typescript-property-does-not-exist-on-type-explained",
-    "title": "TypeScript 'Property Does Not Exist on Type' Error Explained for Beginners",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn what the TypeScript 'property does not exist on type' error means, why it occurs, and how to fix it with simple code examples and practical tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=WQBJVP3IKuk",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you're new to TypeScript, encountering the 'property does not exist on type' error can be confusing. This error happens when you try to access a property on an object, but TypeScript's type system doesn't recognize that property as part of the object's type. Don't worry—this article will help you understand why this happens, show you clear examples, and guide you on how to fix it. Understanding this error helps improve your use of TypeScript features like interfaces, type checking, and object typing."
-      },
-      {
-        "type": "paragraph",
-        "value": "The 'property does not exist on type' error means TypeScript's static type checking detected a property access on a value whose type definition does not include that property. This error arises because TypeScript enforces type safety by making sure you only access properties guaranteed to exist on a type. For example, if an object is typed as having only a 'name' property, trying to access 'age' will trigger this error. This is very useful for catching typos or incorrect assumptions about your data's shape before running your code."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  name: string;\n}\n\nconst user: User = { name: 'Alice' };\n\nconsole.log(user.age); // Error: Property 'age' does not exist on type 'User'"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this error, you need to ensure the property exists on the object's type definition. You can do this by adding the property to an interface or type, or by using type assertions if you know the value actually has the property. Another tactic is using index signatures if your object can have properties with names unknown in advance. Additionally, you can use optional chaining when a property might or might not exist. Being familiar with TypeScript interfaces, type aliases, and type assertions will help you handle these situations cleanly."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common mistake that leads to this error is trying to access a property that you forgot to define in your type or interface. Another pitfall is assuming JavaScript flexibility applies directly in TypeScript without defining types properly. Sometimes, developers try to access nested properties without confirming their types, which causes errors related to undefined or missing properties. Avoid bypassing TypeScript checks by using type assertions carelessly, as this can eliminate the benefits of type safety."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the 'property does not exist on type' error in TypeScript is a helpful safety feature ensuring you only access valid properties on typed objects. By defining interfaces or types accurately, using optional properties, and understanding type assertions, you can avoid and fix this error easily. Learning related concepts like type checking, interfaces, and structural typing will strengthen your TypeScript skills and help you write more robust code."
       }
     ]
   },
@@ -6038,40 +5506,6 @@ export const articles: Article[] = [
       {
         "type": "paragraph",
         "value": "In summary, the 'list indices must be integers' error is a straightforward issue usually caused by using the wrong type for indexing a list. By making sure to use integers for list indices and understanding the difference between lists and dictionaries, you can avoid this error. Knowing the basics of list indexing, slicing, and data types will help you write error-free Python code and debug faster when errors occur."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-fix-typeerror-unsupported-operand-type-in-python",
-    "title": "How to Fix TypeError: Unsupported Operand Type in Python",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn what causes the Python TypeError: unsupported operand type, see sample code, and get practical tips to fix this error quickly in your programs.",
-    "videoUrl": "https://www.youtube.com/watch?v=yAzSzTryp_0",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "If you're new to Python and trying to work with different data types, you might encounter the error message: TypeError: unsupported operand type(s) for [operation]. This error can be confusing when you expect your code to run but Python complains about incompatible types. In this article, we'll explain what this error means, why it happens, and how you can fix it with practical coding examples."
-      },
-      {
-        "type": "paragraph",
-        "value": "The TypeError: unsupported operand type occurs when you try to perform an operation (like addition, subtraction, multiplication, etc.) between two values that Python doesn't know how to handle together. For example, adding a number to a string without converting the string to a number first will raise this error. Python requires operands to be of compatible types when applying operators. This is closely related to concepts like data types, type conversion, and operator overloading."
-      },
-      {
-        "type": "code",
-        "value": "a = 5\nb = '10'\nresult = a + b  # This will cause TypeError: unsupported operand type(s) for +: 'int' and 'str'"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this error, you need to ensure both operands are of compatible types before performing the operation. You can convert one operand to the other's type using built-in conversion functions like int(), float(), or str(). For instance, if you want to add numbers, convert the string '10' to an integer first. Alternatively, if you want to combine them as strings, convert the number to a string. Understanding type casting and type checking will help prevent these errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common mistake is to assume Python automatically converts types for you, which it generally doesn’t when operators are involved. Another issue is mixing data structures like lists and integers without proper handling, which can also lead to this TypeError. For example, trying to multiply a list by a string instead of an integer will raise the error. Watching out for these pitfalls and learning how Python's dynamic typing system works will improve your coding experience."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, the TypeError: unsupported operand type(s) happens when you use operators on incompatible data types. Fixing it usually involves converting data into compatible types before the operation. Knowing about Python's data types, type conversion, and operators will help you understand and avoid this error. With practice, handling these errors becomes second nature, allowing you to write smoother, bug-free Python code."
       }
     ]
   },
