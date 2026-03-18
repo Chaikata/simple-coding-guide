@@ -5870,5 +5870,277 @@ export const articles: Article[] = [
         "value": "In summary, SQL deadlocks are a natural phenomenon in highly concurrent environments where multiple transactions compete for the same resources. By understanding the locking mechanisms, using consistent locking orders, minimizing transaction scope, and choosing the right isolation levels, you can effectively reduce deadlocks and improve your application's reliability and performance."
       }
     ]
+  },
+  {
+    "slug": "how-to-fix-asynchronous-callback-hell-in-javascript-with-examples",
+    "title": "How to Fix Asynchronous Callback Hell in JavaScript with Examples",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to fix asynchronous callback hell in JavaScript with simple, clear examples and best practices using promises and async/await.",
+    "videoUrl": "https://www.youtube.com/watch?v=vshRASN4Kks",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous code is essential in JavaScript, especially when working with APIs, timers, or file operations. However, beginners often face 'callback hell', where nested callbacks make the code hard to read and maintain. In this article, we'll explore what callback hell is, why it happens, and practical ways to fix it using modern JavaScript techniques like promises and async/await."
+      },
+      {
+        "type": "paragraph",
+        "value": "Callback hell happens when multiple asynchronous operations are nested inside each other, creating a pyramid or ‘arrow’ shape in the code. This occurs because older asynchronous code relies heavily on callbacks for handling success or failure. Even though callbacks enable non-blocking code, excessive nesting makes the logic difficult to follow, debug, or scale. Understanding how asynchronous JavaScript works, along with related concepts like event loops and promise chaining, can help in untangling callback hell."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    callback(null, 'data received');\n  }, 1000);\n}\n\nfunction processData(data, callback) {\n  setTimeout(() => {\n    callback(null, `${data} processed`);\n  }, 1000);\n}\n\nfunction saveData(data, callback) {\n  setTimeout(() => {\n    callback(null, `${data} saved`);\n  }, 1000);\n}\n\n// Callback Hell Example\nfetchData((err, data) => {\n  if (err) {\n    console.error(err);\n  } else {\n    processData(data, (err, processed) => {\n      if (err) {\n        console.error(err);\n      } else {\n        saveData(processed, (err, saved) => {\n          if (err) {\n            console.error(err);\n          } else {\n            console.log(saved);  // Output: data received processed saved\n          }\n        });\n      }\n    });\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix callback hell, JavaScript introduced promises and later async/await syntax, which creates cleaner and more readable asynchronous code. Promises represent future values and allow chaining `.then()` calls rather than nested callbacks, improving readability. The async/await syntax builds on promises, enabling you to write asynchronous code that looks like synchronous code. By using these tools, you simplify handling asynchronous operations, avoid deeply nested structures, and make error handling easier, which relates closely to understanding error handling concepts and using try/catch blocks effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake when fixing callback hell is mixing callback and promise styles, which can cause confusing bugs. Another error is forgetting to return promises in chain functions, breaking the chain and causing unexpected behaviors. Some developers also overlook proper error handling inside async functions, which is essential to avoid unhandled rejections or silent failures. It’s also important not to overuse async/await for operations that don’t depend on each other, where Promise.all might be a better fit to run tasks concurrently."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, callback hell occurs due to deeply nested asynchronous callbacks, making code hard to manage. Using promises and async/await dramatically improves code clarity and error management in asynchronous JavaScript. By practicing these modern techniques and understanding underlying concepts like event loops and promise chaining, beginners can write cleaner, more maintainable asynchronous code. Fixing callback hell not only improves your code's readability but also prepares you for more complex JavaScript programming patterns."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-javascript-typeerror-cannot-read-property-undefined",
+    "title": "How to Fix JavaScript TypeError: Cannot Read Property 'undefined'",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn why the JavaScript TypeError ‘Cannot read property undefined’ happens and how to fix it with easy examples. Perfect for beginners debugging common issues.",
+    "videoUrl": "https://www.youtube.com/watch?v=UZINZNWAE8Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to JavaScript, you may have encountered the error message 'TypeError: Cannot read property undefined'. This error pops up when your code tries to access a property or method of a variable that is either undefined or null. Understanding why this happens and how to fix it is essential for debugging your JavaScript programs effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "This error means that JavaScript expected an object with certain properties but instead found undefined. When your code tries to read something like variable.property, but variable is undefined, JavaScript throws this TypeError. It often happens when you're working with objects, arrays, or functions that have not been properly initialized or when you mistakenly use wrong variable names."
+      },
+      {
+        "type": "code",
+        "value": "const person = undefined;\nconsole.log(person.name); // TypeError: Cannot read property 'name' of undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, first check if your variable is defined before accessing its properties. You can use conditional statements, the optional chaining operator, or default values. For example, using optional chaining (?.) safely accesses properties by stopping evaluation if the variable is undefined or null. This integrates well with understanding JavaScript variables, object properties, and error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes that cause this error include assuming an asynchronous operation has completed, mistyping a variable or property name, or not initializing an object properly. Sometimes, neglecting to check if nested objects exist before accessing their properties leads to this error, especially when working with JSON or APIs. Understanding variable scope, asynchronous coding, and object structures can help prevent these issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'TypeError: Cannot read property undefined' occurs when JavaScript tries to access a property on an undefined variable. To fix it, ensure variables are correctly initialized and use safe property access methods like optional chaining. Keeping an eye on variable declarations, object initialization, and asynchronous code will greatly reduce such errors and improve your debugging skills."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-implement-type-safe-api-calls-in-typescript-with-examples",
+    "title": "How to Implement Type-Safe API Calls in TypeScript with Examples",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to make type-safe API calls in TypeScript with practical examples. Improve your fetch logic with strong typing for safer and easier backend data handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=v_1PMFt3398",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with APIs in TypeScript, one of the best ways to reduce bugs and improve developer experience is by using type-safe API calls. This means you define the shape of the data you expect to send or receive, and TypeScript checks that your code respects these shapes. It helps catch errors early and makes your API interactions more predictable. In this tutorial, we’ll go through what type-safe API calls mean and how to use them effectively with practical code examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type-safe API calls involve combining TypeScript’s strong typing features with asynchronous network requests. Typically, you fetch data with methods like fetch or axios, which return untyped JSON. Without type safety, you risk runtime errors or mismatches between expected and actual response formats. By defining interfaces or types for the request and response objects, and using these throughout your API call code, you get better autocomplete, validation, and easier debugging. This also ties into generic programming and handling promises correctly."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nasync function fetchUser(userId: number): Promise<User> {\n  const response = await fetch(`https://api.example.com/users/${userId}`);\n  if (!response.ok) {\n    throw new Error('Network response was not ok');\n  }\n  const data: User = await response.json();\n  return data;\n}\n\n// Usage example\nfetchUser(1).then(user => {\n  console.log(user.name); // TypeScript knows user has a name string\n}).catch(error => {\n  console.error('Fetch error:', error);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use type-safe API calls properly, start by defining clear interfaces or types for the data your endpoints handle. Use TypeScript’s Promise generic to define the shape of your asynchronous data. When fetching, explicitly type the parsed JSON to match these types. Make sure to handle errors such as failed network requests or malformed data safely with try/catch or conditional checks. Integrating this approach with tools like axios or modern async/await syntax will further streamline your code. Practicing type-safe API calls also prepares you for more advanced topics like generics, type guards, and better state management."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is to skip typing the response and just assign the result of response.json() to an any or unknown variable. This defeats the purpose of type safety and can lead to uncaught bugs. Another pitfall is not verifying the API response shape before using it, which can cause runtime issues if the API changes or sends unexpected data. Avoid overusing type assertions like “as User” without runtime checks. Instead, consider validating data upfront or using helper libraries that ensure data conforms to the expected interface. Also, don’t forget to type your request parameters if your API call sends data."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, implementing type-safe API calls in TypeScript is a vital skill for writing reliable web applications. By clearly defining your data types, properly typing your asynchronous functions, and carefully handling errors, you improve code maintainability and reduce bugs. This approach fits naturally with broader TypeScript concepts like interfaces, generics, and promises, while supporting better tooling and developer productivity. Start applying these patterns today to make your API interactions strong, safe, and easy to manage."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescript-strictnullchecks-and-null-assignment-errors",
+    "title": "Understanding TypeScript strictNullChecks and Null Assignment Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what TypeScript's strictNullChecks option means, why null assignment errors occur, and how to fix them with clear examples and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=kwEjI_B9WY0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you've started using TypeScript and enabled the strictNullChecks compiler option, you might have run into some confusing errors about null or undefined values. These errors are common when working with types that can or cannot accept null or undefined. In this article, we'll break down what strictNullChecks means, why TypeScript complains about null assignments, and how you can fix those errors to write safer, cleaner code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The strictNullChecks setting in TypeScript changes how the compiler treats null and undefined. When strictNullChecks is off, null and undefined are considered valid values for every type, so you can assign null to a string or number without errors. However, when strictNullChecks is enabled, null and undefined are distinct types and are not assignable to other types unless explicitly allowed. This helps catch many common runtime errors related to null values but can cause assignment errors if your types don’t allow null or undefined."
+      },
+      {
+        "type": "code",
+        "value": "let name: string = \"Alice\";\nname = null; // Error: Type 'null' is not assignable to type 'string'.\n\n// With strictNullChecks enabled, we must explicitly allow null:\nlet maybeName: string | null = \"Bob\";\nmaybeName = null; // OK\n\n// Without strictNullChecks, this would not cause an error."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix null assignment errors, you need to explicitly declare if a variable or parameter can be null or undefined by using union types like string | null or number | undefined. This lets TypeScript know you expect these values and forces you to handle them properly in your code, helping avoid unexpected crashes. When reading from or writing to values that could be null, techniques like null checks, optional chaining, and type assertions come in handy. This is closely related to concepts like type guards and non-null assertion operators that help manage types more precisely."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is to disable strictNullChecks just to avoid these errors, but that reduces the safety benefits of TypeScript. Another error is forgetting to check for null before using a variable, which can lead to runtime errors even if the compiler doesn’t complain. Also, mixing strictNullChecks with types like any or unknown without proper checks can introduce subtle bugs. Always be explicit about null and undefined in your types and practice safe null handling patterns."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, strictNullChecks makes TypeScript more reliable by distinguishing null and undefined from other types. When you see null assignment errors, it means you need to be explicit about where null values are allowed. By using union types like string | null and handling possible null values carefully, you can avoid these errors. Understanding strictNullChecks will also help you work better with type guards, type narrowing, and optional chaining—key tools in writing robust TypeScript code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-typeerror-list-indices-must-be-integers-in-python",
+    "title": "How to Fix TypeError: list indices must be integers in Python",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn what causes the TypeError 'list indices must be integers' in Python and how to fix it with clear examples and practical advice.",
+    "videoUrl": "https://www.youtube.com/watch?v=poFPBdzX4u8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to Python programming, you might have encountered the error message 'TypeError: list indices must be integers or slices, not <type>'. This usually happens when trying to access elements of a list with the wrong type of index. Don't worry—this article will explain why this error occurs and show you exactly how to fix it, so you can confidently work with lists and understand related concepts like indexing, slicing, and data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, lists are ordered collections accessed by their indices, which are always integers. When you try to use a non-integer index, such as a string or a float, Python raises the 'TypeError: list indices must be integers or slices' because it expects positions (integers) or slices to specify parts of the list. This error commonly happens when you confuse lists with dictionaries or when variables you think hold integers actually hold other types."
+      },
+      {
+        "type": "code",
+        "value": "my_list = ['apple', 'banana', 'cherry']\nindex = '1'\nprint(my_list[index])  # This will cause TypeError\n\n# Correct way:\nindex = 1  # integer index\nprint(my_list[index])  # Output: banana"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, ensure that the index you use to access list elements is always an integer. If your index comes from user input or another variable, convert it to an integer with the int() function before using it for list indexing. Additionally, if you meant to use a dictionary, check your data structure so you don't accidentally treat a list like a dictionary where keys can be strings. Understanding the differences between lists, dictionaries, and how Python handles indexing and slicing is key to avoiding this error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include using strings instead of integers as indices or forgetting to convert user input to int before indexing a list. Another typical error is mixing up list and dictionary types, then using string keys with lists. Sometimes, beginners also try to use floats or other data types for indexing, which is not allowed. Always remember to check your variable types using the type() function if unsure."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the 'list indices must be integers' error is a straightforward issue usually caused by using the wrong type for indexing a list. By making sure to use integers for list indices and understanding the difference between lists and dictionaries, you can avoid this error. Knowing the basics of list indexing, slicing, and data types will help you write error-free Python code and debug faster when errors occur."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-fix-typeerror-unsupported-operand-type-in-python",
+    "title": "How to Fix TypeError: Unsupported Operand Type in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what causes the Python TypeError: unsupported operand type, see sample code, and get practical tips to fix this error quickly in your programs.",
+    "videoUrl": "https://www.youtube.com/watch?v=yAzSzTryp_0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to Python and trying to work with different data types, you might encounter the error message: TypeError: unsupported operand type(s) for [operation]. This error can be confusing when you expect your code to run but Python complains about incompatible types. In this article, we'll explain what this error means, why it happens, and how you can fix it with practical coding examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "The TypeError: unsupported operand type occurs when you try to perform an operation (like addition, subtraction, multiplication, etc.) between two values that Python doesn't know how to handle together. For example, adding a number to a string without converting the string to a number first will raise this error. Python requires operands to be of compatible types when applying operators. This is closely related to concepts like data types, type conversion, and operator overloading."
+      },
+      {
+        "type": "code",
+        "value": "a = 5\nb = '10'\nresult = a + b  # This will cause TypeError: unsupported operand type(s) for +: 'int' and 'str'"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you need to ensure both operands are of compatible types before performing the operation. You can convert one operand to the other's type using built-in conversion functions like int(), float(), or str(). For instance, if you want to add numbers, convert the string '10' to an integer first. Alternatively, if you want to combine them as strings, convert the number to a string. Understanding type casting and type checking will help prevent these errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is to assume Python automatically converts types for you, which it generally doesn’t when operators are involved. Another issue is mixing data structures like lists and integers without proper handling, which can also lead to this TypeError. For example, trying to multiply a list by a string instead of an integer will raise the error. Watching out for these pitfalls and learning how Python's dynamic typing system works will improve your coding experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the TypeError: unsupported operand type(s) happens when you use operators on incompatible data types. Fixing it usually involves converting data into compatible types before the operation. Knowing about Python's data types, type conversion, and operators will help you understand and avoid this error. With practice, handling these errors becomes second nature, allowing you to write smoother, bug-free Python code."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-write-recursive-queries-in-sql-with-examples",
+    "title": "How to Write Recursive Queries in SQL with Examples",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to write recursive SQL queries with clear examples. This beginner-friendly guide explains recursive common table expressions (CTEs) step-by-step for hierarchical data retrieval.",
+    "videoUrl": "https://www.youtube.com/watch?v=7hZYh9qXxe4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive queries in SQL allow you to work with hierarchical or tree-structured data, such as organizational charts, file systems, or family trees. Many SQL users find recursive queries challenging at first, but once you understand how they work, they become a powerful tool for querying nested data efficiently. In this tutorial, we'll break down the concept of recursive queries, show easy examples, and highlight common pitfalls to avoid."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a recursive query in SQL uses a Common Table Expression (CTE) that references itself. This means the query repeatedly executes with new data until it reaches a stopping condition. Recursive queries are useful when you need to traverse hierarchical data, such as finding all employees under a certain manager or getting all subfolders inside a folder. Understanding recursive CTEs also ties closely to mastering joins, subqueries, and set operations in SQL."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n  -- Anchor member: select the top-level manager\n  SELECT EmployeeID, ManagerID, EmployeeName, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n\n  UNION ALL\n\n  -- Recursive member: select employees reporting to previous level\n  SELECT e.EmployeeID, e.ManagerID, e.EmployeeName, eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use recursive queries properly, always start with a clear anchor query that selects the base data, which usually represents the root of your hierarchy. Then define the recursive part that references the CTE itself and progressively fetches additional rows based on the previous result set. Make sure to include a proper join condition to prevent infinite loops. Also, be aware of the recursion depth limit your database might impose, and use WHERE clauses or other conditions to limit the results if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes when writing recursive queries include missing or incorrect join conditions in the recursive part, which can cause infinite recursion and query failure. Another frequent error is forgetting to include the anchor member in the CTE or mixing up the order of the UNION and UNION ALL operators. Beginners also often overlook the importance of defining clear stopping criteria, which results in very large or incorrect result sets. Familiarity with query optimization and indexing can also help improve the performance of recursive queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, recursive queries are a valuable technique for querying hierarchical data using SQL. By leveraging recursive common table expressions, you can write elegant and efficient queries that traverse trees and hierarchies. Remember to build your CTE step-by-step: start with an anchor member, then add the recursive part with clear join conditions and stopping rules. Avoid common mistakes like infinite loops and missing base cases. Mastering recursive queries also boosts your understanding of related concepts like joins, subqueries, and query optimization."
+      }
+    ]
+  },
+  {
+    "slug": "explained-sql-deadlock-errors-with-examples-and-solutions",
+    "title": "Explained SQL Deadlock Errors with Examples and Solutions",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what SQL deadlock errors are, why they happen, and how to fix them with clear examples and practical solutions for database beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=QB-1tPVxNek",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, especially with multiple users or processes accessing data simultaneously, you may encounter SQL deadlock errors. Deadlocks happen when two or more transactions block each other by holding locks on resources the others need, causing the system to halt progress until one transaction is rolled back. Understanding deadlocks is essential for database developers and admins to maintain smooth and efficient database operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, a deadlock in SQL occurs when two transactions each hold a lock on a resource and attempt to acquire a lock on the other's resource. This creates a cycle of dependency that the database engine cannot resolve without intervention. Deadlocks typically show up as errors in logs or client applications with messages like \"deadlock detected\" or \"lock timeout,\" indicating the database had to terminate one transaction to break the cycle. Deadlocks relate closely to locking mechanisms, transactions, and isolation levels in SQL."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\n-- Transaction 1 locks row A\nUPDATE accounts SET balance = balance - 100 WHERE account_id = 1;\n\n-- At the same time, Transaction 2 locks row B\n-- In another session:\nBEGIN TRANSACTION;\nUPDATE accounts SET balance = balance + 100 WHERE account_id = 2;\n\n-- Then Transaction 1 tries to update row B\nUPDATE accounts SET balance = balance - 50 WHERE account_id = 2;\n\n-- And Transaction 2 tries to update row A\nUPDATE accounts SET balance = balance + 50 WHERE account_id = 1;\n\n-- This causes a deadlock because each transaction waits for the other to release locks."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix deadlocks, the key is to design your transactions carefully. Make sure transactions acquire locks in a consistent order, keep transactions short, and reduce user interaction within a transaction. Using appropriate isolation levels can also help; for example, using the READ COMMITTED isolation level often reduces deadlocks compared to SERIALIZABLE. Additionally, you can catch deadlock errors in your application and retry the transaction automatically. Understanding locking hints and deadlock tracing tools in your database system helps analyze and prevent deadlocks more effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes include having long-running transactions that hold locks for too long, updating or selecting rows in a different order in concurrent transactions, and not handling deadlock errors in your application code properly. Avoiding these mistakes requires a good grasp of transaction management, locking behavior, and concurrency control concepts, which are foundational topics related to SQL performance tuning and database reliability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, SQL deadlocks are a natural challenge in multi-user database environments caused by cyclic lock dependencies. By understanding how locking and transactions interact, following best practices to order operations consistently, and handling deadlock errors gracefully, you can significantly reduce the impact of deadlocks on your applications. Keep learning about related concepts like transaction isolation levels, lock escalation, and concurrency control to deepen your database skills and build more robust SQL applications."
+      }
+    ]
   }
 ];
