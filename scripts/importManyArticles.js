@@ -93,12 +93,12 @@ function createBackupIfFileExists(filePath) {
 
 function extractArticlesArraySource(fileText) {
   const match = fileText.match(
-    /export\s+const\s+articles\s*:\s*Article\[\]\s*=\s*(\[[\s\S]*?\])\s*;?\s*$/
+    /export\s+const\s+articles\s*(?::\s*Article\[\])?\s*=\s*(\[[\s\S]*?\])\s*;?/
   );
 
   if (!match) {
     throw new Error(
-      "Could not find `export const articles: Article[] = [...]` in data/articles.ts"
+      "Could not find `export const articles = [...]` in data/articles.ts"
     );
   }
 
@@ -181,7 +181,7 @@ export type Article = {
   content: ContentBlock[];
 };
 
-export const articles: Article[] = ${JSON.stringify(allArticles, null, 2)};
+export const articles = ${JSON.stringify(allArticles, null, 2)};
 `;
 }
 
@@ -197,7 +197,6 @@ function writeArticlesFileSafely(allArticles) {
 
 function run() {
   const generatedArticles = readGeneratedArticles();
-
   const { articles: existingArticles, fileExists } = getExistingArticles();
 
   if (fileExists && existingArticles.length === 0) {
