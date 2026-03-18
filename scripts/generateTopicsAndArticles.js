@@ -109,15 +109,13 @@ function isTooSimilar(newTitle, existingTitles) {
   const normalize = (str) =>
     str.toLowerCase().replace(/[^a-z0-9 ]/g, "");
 
-  const newWords = normalize(newTitle).split(" ");
+  const newWords = normalize(newTitle).split(" ").filter(Boolean);
 
   return existingTitles.some((title) => {
-    const existingWords = normalize(title).split(" ");
-    const overlap = newWords.filter((w) =>
-      existingWords.includes(w)
-    ).length;
+    const existingWords = normalize(title).split(" ").filter(Boolean);
+    const overlap = newWords.filter((w) => existingWords.includes(w)).length;
 
-    return overlap / newWords.length > 0.7;
+    return newWords.length > 0 && overlap / newWords.length > 0.7;
   });
 }
 
@@ -137,7 +135,7 @@ async function retry(label, fn) {
 }
 
 // =========================
-// TOPIC GENERATOR (FIXED)
+// TOPIC GENERATOR
 // =========================
 
 async function generateTopics(language, type) {
@@ -199,7 +197,7 @@ Return ONLY JSON:
 }
 
 // =========================
-// ARTICLE GENERATOR (UNCHANGED)
+// ARTICLE GENERATOR
 // =========================
 
 async function generateArticle(topic, language, type) {
@@ -238,7 +236,7 @@ Return ONLY JSON:
     language,
     type,
     description: article.description || "",
-    videoUrl: "",
+    videoUrl: article.videoUrl || "",
     content: normalizeContent(article.content),
   };
 }
@@ -258,48 +256,50 @@ async function run() {
     let topics = [];
 
     try {
-      topics = await retry("topics", () =>
+      topics = await retry(`topics ${plan.language}/${plan.type}`, () =>
         generateTopics(plan.language, plan.type)
       );
-    } catch {
+    } catch (e) {
+      console.log(`Failed topic generation for ${plan.language}/${plan.type}`);
       continue;
     }
 
     for (const topic of topics) {
-      let article;
+      if (allArticles.length >= GENERATION_LIMITS.maxArticlesPerRun) break;
 
       try {
-        article = await retry(topic, () =>
+        const article = await retry(`article ${topic}`, () =>
           generateArticle(topic, plan.language, plan.type)
         );
-      } catch {
-        continue;
+
+        if (!article.slug || existingSlugs.has(article.slug)) {
+          console.log(`Skipping duplicate slug: ${article.slug}`);
+          continue;
+        }
+
+        if (existingTitles.has(article.title)) {
+          console.log(`Skipping duplicate title: ${article.title}`);
+          continue;
+        }
+
+        if (isTooSimilar(article.title, [...existingTitles])) {
+          console.log(`Skipping too-similar title: ${article.title}`);
+          continue;
+        }
+
+        existingSlugs.add(article.slug);
+        existingTitles.add(article.title);
+        allArticles.push(article);
+
+        console.log(`Generated: ${article.title}`);
+      } catch (e) {
+        console.log(`Failed article: ${topic}`);
       }
-
-      if (!article || !article.slug) continue;
-
-      if (existingSlugs.has(article.slug)) continue;
-
-      if (isTooSimilar(article.title, Array.from(existingTitles))) {
-        console.log("Skipped near duplicate:", article.title);
-        continue;
-      }
-
-      existingSlugs.add(article.slug);
-      existingTitles.add(article.title);
-      allArticles.push(article);
-
-      console.log("Added:", article.title);
-      break;
     }
   }
 
-  fs.writeFileSync(
-    "generatedArticles.json",
-    JSON.stringify(allArticles, null, 2)
-  );
-
-  console.log(`Created ${allArticles.length} articles`);
+  fs.writeFileSync("generatedArticles.json", JSON.stringify(allArticles, null, 2));
+  console.log(`Saved ${allArticles.length} articles to generatedArticles.json`);
 }
 
 run();
