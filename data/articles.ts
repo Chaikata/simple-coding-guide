@@ -7673,5 +7673,585 @@ export const articles = [
         "value": "To summarize best practices:\n- Always use a TenantID column.\n- Index TenantID for faster queries.\n- Enforce tenant data isolation with filters.\n- Consider table partitioning for large data.\n- Validate tenant identification at every layer."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-closures-advanced-patterns-and-use-cases",
+    "title": "Mastering JavaScript Closures: Advanced Patterns and Use Cases",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to master JavaScript closures with advanced patterns and practical use cases. This beginner-friendly guide helps you understand closures deeply and apply them in real-world scenarios.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript closures are a powerful feature that often confuse beginners, but understanding them can take your coding skills to the next level. In simple terms, a closure gives you access to an outer function's scope from an inner function, even after the outer function has finished executing. This article will guide you through advanced patterns and practical use cases to help you master closures."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's quickly revisit what a closure is with a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "function outer() {\n  let count = 0;\n\n  function inner() {\n    count++;\n    console.log(count);\n  }\n\n  return inner;\n}\n\nconst counter = outer();\ncounter(); // Output: 1\ncounter(); // Output: 2\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the inner function remembers the variable 'count' from the outer function's scope even after 'outer' has executed. This is the essence of closures."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's explore some advanced patterns where closures can be incredibly useful."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Data Privacy with Closures**"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures can be used to create private variables. Unlike traditional object properties, these variables cannot be accessed directly from outside the function."
+      },
+      {
+        "type": "code",
+        "value": "function createSecret(secret) {\n  return {\n    getSecret: function() {\n      return secret;\n    },\n    setSecret: function(newSecret) {\n      secret = newSecret;\n    }\n  };\n}\n\nconst mySecret = createSecret('hidden');\nconsole.log(mySecret.getSecret()); // Output: hidden\nmySecret.setSecret('changed');\nconsole.log(mySecret.getSecret()); // Output: changed\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the variable 'secret' is private and can only be accessed or modified through 'getSecret' and 'setSecret' methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Function Factories**"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures allow you to build factories that generate specialized functions, capturing the environment where they were created."
+      },
+      {
+        "type": "code",
+        "value": "function multiplier(factor) {\n  return function(number) {\n    return number * factor;\n  };\n}\n\nconst double = multiplier(2);\nconst triple = multiplier(3);\n\nconsole.log(double(5)); // Output: 10\nconsole.log(triple(5)); // Output: 15\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the returned functions remember the 'factor' parameter from their creation context."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Maintaining State in Async Callbacks**"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures help maintain state in asynchronous code, such as setTimeout or event handlers."
+      },
+      {
+        "type": "code",
+        "value": "function delayedGreeter(name, delay) {\n  setTimeout(function() {\n    console.log('Hello, ' + name + '!');\n  }, delay);\n}\n\ndelayedGreeter('Alice', 1000); // After 1 second: Hello, Alice!\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "The inner function passed to setTimeout remembers the argument 'name' thanks to closure."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Implementing Modules Using Closures**"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before ES6 modules, developers relied on closures to create module-like structures with private and public parts."
+      },
+      {
+        "type": "code",
+        "value": "const CounterModule = (function() {\n  let count = 0;\n\n  return {\n    increment: function() {\n      count++;\n      console.log(count);\n    },\n    reset: function() {\n      count = 0;\n      console.log('Counter reset');\n    }\n  };\n})();\n\nCounterModule.increment(); // Output: 1\nCounterModule.increment(); // Output: 2\nCounterModule.reset();     // Output: Counter reset\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this module pattern, 'count' is private and can only be changed by the methods inside the returned object."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Tips"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are everywhere in JavaScript — in event handlers, callbacks, and module design. Practice creating and using closures in your projects to get comfortable. Remember, closures capture variables by reference, not value, so be mindful when using them inside loops or asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering closures helps you write cleaner, more modular, and more efficient JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-javascript-memory-usage-for-high-performance-web-apps",
+    "title": "Optimizing JavaScript Memory Usage for High-Performance Web Apps",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to manage and optimize JavaScript memory usage to build faster, more efficient web applications by avoiding common memory-related errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=uEsSye9tKFs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript memory management plays a crucial role in ensuring your web app runs smoothly and efficiently. If your app uses too much memory or leaks memory, it can cause slowdowns and crashes. In this article, we'll discuss beginner-friendly tips on how to optimize JavaScript memory usage and avoid common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Memory Leaks\nA memory leak happens when your app holds onto memory that it no longer needs, preventing the browser's garbage collector from freeing it. Over time, leaked memory accumulates, causing performance issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Causes of Memory Leaks in JavaScript\n- **Global Variables:** Unintentionally creating global variables can keep unnecessary data alive.\n- **Detached DOM Nodes:** Removing DOM elements from the page but keeping references to them in JavaScript.\n- **Closures:** Functions that hold on to variables longer than needed.\n- **Timers and Event Listeners:** Forgetting to clear intervals or remove event listeners."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tip 1: Use Local Variables and Avoid Globals\nAlways declare your variables with `let`, `const`, or `var` within functions or blocks, and avoid polluting the global scope."
+      },
+      {
+        "type": "code",
+        "value": "// Bad: Implicit global variable\nfunction addItem(item) {\n  items.push(item); // items is global if not declared\n}\n\n// Good: Declare with let or const\nconst items = [];\nfunction addItem(item) {\n  items.push(item);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tip 2: Remove Event Listeners When Not Needed\nIf you attach event listeners to DOM elements, make sure to remove them if the element is removed or the listener is no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "const button = document.querySelector('button');\n\nfunction clickHandler() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', clickHandler);\n\n// Later, if you remove the button or no longer need the listener\nbutton.removeEventListener('click', clickHandler);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tip 3: Clear Intervals and Timeouts\nIf you use `setInterval` or `setTimeout`, always clear them when they are no longer needed to avoid keeping references alive."
+      },
+      {
+        "type": "code",
+        "value": "const intervalId = setInterval(() => {\n  console.log('Running...');\n}, 1000);\n\n// When done\nclearInterval(intervalId);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tip 4: Avoid Keeping References to Detached DOM Nodes\nWhen you remove elements from the DOM, avoid keeping JavaScript references to those nodes as this prevents garbage collection."
+      },
+      {
+        "type": "code",
+        "value": "const div = document.getElementById('myDiv');\ndiv.remove();\n// Avoid usage like this\n// let savedDiv = div; // This keeps reference alive and causes a memory leak"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tip 5: Use Tools to Detect Memory Issues\nModern browsers provide developer tools to help monitor memory usage and detect leaks.\nFor example, Chrome DevTools' Memory tab lets you record heap snapshots to find unexpected memory growth."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these simple practices, you can greatly reduce memory-related bugs and improve the performance of your JavaScript web applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-decorators-building-custom-metadata-for-scalable-applications",
+    "title": "Mastering TypeScript Decorators: Building Custom Metadata for Scalable Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript decorators to add custom metadata to your classes and methods, making your applications more scalable and maintainable.",
+    "videoUrl": "https://www.youtube.com/watch?v=QhSMsPoNxnU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators are a powerful feature that allow you to add annotations and meta-programming syntax to classes and their members. They can be used to modify or enhance the behavior of classes, methods, properties, and parameters in a clean and declarative way. In this tutorial, we'll explore how to build custom metadata using decorators to keep our applications scalable and maintainable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before we start, make sure you have TypeScript installed and `experimentalDecorators` enabled in your `tsconfig.json` file like this:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES6\",\n    \"experimentalDecorators\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Decorators?\nDecorators are special functions prefixed with `@` which can be attached to classes, methods, properties, or parameters. When you apply a decorator, TypeScript calls the corresponding decorator function at runtime, giving you a chance to add metadata or modify behavior."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Create a Simple Class Decorator"
+      },
+      {
+        "type": "code",
+        "value": "function Controller(prefix: string) {\n  return function (constructor: Function) {\n    constructor.prototype.prefix = prefix;\n  };\n}\n\n@Controller('/api/users')\nclass UserController {\n  getUsers() {\n    return [\"Alice\", \"Bob\"];\n  }\n}\n\nconst userController = new UserController();\nconsole.log(userController.prefix);  // Output: /api/users"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, we're attaching a `prefix` property to the class prototype using the `@Controller` decorator. This allows us to add custom metadata to the class without modifying its original code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Method Decorators for Adding Metadata"
+      },
+      {
+        "type": "code",
+        "value": "function Get(path: string) {\n  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {\n    if (!target.routes) {\n      target.routes = [];\n    }\n    target.routes.push({ method: 'GET', path, handlerName: propertyKey });\n  };\n}\n\nclass UserController {\n  @Get('/')\n  getUsers() {\n    return [\"Alice\", \"Bob\"];\n  }\n\n  @Get('/:id')\n  getUserById() {\n    return { id: 1, name: \"Alice\" };\n  }\n}\n\nconst controller = new UserController();\nconsole.log(controller.routes);\n// Output: [\n//   { method: 'GET', path: '/', handlerName: 'getUsers' },\n//   { method: 'GET', path: '/:id', handlerName: 'getUserById' }\n// ]"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method decorator stores route metadata on the class instance. Later, a router could use this metadata to register routes automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Property Decorators for Validation Metadata"
+      },
+      {
+        "type": "code",
+        "value": "function Required(target: any, propertyKey: string) {\n  if (!target.requiredProps) {\n    target.requiredProps = [];\n  }\n  target.requiredProps.push(propertyKey);\n}\n\nclass User {\n  @Required\n  name!: string;\n\n  age?: number;\n}\n\nconst user = new User();\nconsole.log(user.requiredProps);  // Output: ['name']"
+      },
+      {
+        "type": "paragraph",
+        "value": "Property decorators are helpful to mark fields for automatic validation or configuration."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Using Reflect Metadata for Advanced Scenarios"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript integrates well with the `reflect-metadata` package, enabling more robust and standardized metadata management."
+      },
+      {
+        "type": "code",
+        "value": "import 'reflect-metadata';\n\nfunction LogType(target: any, propertyKey: string) {\n  const type = Reflect.getMetadata(\"design:type\", target, propertyKey);\n  console.log(`${propertyKey} type: ${type.name}`);\n}\n\nclass Demo {\n  @LogType\n  myNumber!: number;\n  \n  @LogType\n  myString!: string;\n}\n\nconst demo = new Demo();\n// Console Output:\n// myNumber type: Number\n// myString type: String"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example logs the type of the property at runtime—useful for dynamic validation or serialization frameworks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Wrapping Up"
+      },
+      {
+        "type": "paragraph",
+        "value": "Decorators provide a clean and scalable way to add metadata and modify behavior in your applications. Whether you're building REST APIs, adding validation, or designing plugin systems, decorators help keep your code organized and extensible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to enable the `experimentalDecorators` flag and consider using `reflect-metadata` for advanced scenarios. Start experimenting with your own decorators today to unlock new levels of modularity and scalability in your TypeScript projects!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-error-handling-with-custom-error-classes",
+    "title": "Mastering TypeScript Error Handling with Custom Error Classes",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to create and use custom error classes in TypeScript to write clearer and more robust error handling code.",
+    "videoUrl": "https://www.youtube.com/watch?v=xdQkEn3mx1k",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of writing reliable applications. TypeScript enhances JavaScript by adding types, and you can leverage this to create custom error classes that make your error handling more structured and readable. In this article, you'll learn the basics of creating custom error classes in TypeScript and how to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "By default, JavaScript has a built-in Error class that you can throw to represent an error. However, when you want to handle specific types of errors differently, creating your own error classes is the best practice."
+      },
+      {
+        "type": "code",
+        "value": "class CustomError extends Error {\n  constructor(message: string) {\n    super(message); \n    this.name = 'CustomError';\n    Object.setPrototypeOf(this, CustomError.prototype); \n  }\n}\n\n// Usage example\ntry {\n  throw new CustomError('Something went wrong!');\n} catch (error) {\n  if (error instanceof CustomError) {\n    console.log('Caught a custom error:', error.message);\n  } else {\n    console.log('Caught an unknown error');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `CustomError` class extends the built-in `Error` class. The `Object.setPrototypeOf` line is necessary in TypeScript to fix the prototype chain and ensure `instanceof` works correctly. When you throw a `CustomError`, you can specifically check for it in your error handling logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create as many custom error classes as you need for different error scenarios. This makes your errors more descriptive and helps organize your code better."
+      },
+      {
+        "type": "code",
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n    Object.setPrototypeOf(this, ValidationError.prototype);\n  }\n}\n\nclass DatabaseError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'DatabaseError';\n    Object.setPrototypeOf(this, DatabaseError.prototype);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now you can throw specific errors based on the situation, helping developers and users understand what went wrong exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, handling errors becomes cleaner as you can differentiate the type easily:"
+      },
+      {
+        "type": "code",
+        "value": "function processUserInput(input: string) {\n  if (!input) {\n    throw new ValidationError('Input cannot be empty');\n  }\n  // process input...\n}\n\ntry {\n  processUserInput('');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation error occurred:', error.message);\n  } else if (error instanceof DatabaseError) {\n    console.error('Database error:', error.message);\n  } else {\n    console.error('Unknown error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering custom error classes in TypeScript allows you to build more understandable and maintainable error handling. Remember to always extend the built-in `Error` class and set the prototype correctly. This approach improves debugging and makes your application more robust."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-asyncio-for-high-performance-web-scraping",
+    "title": "Mastering Python's Asyncio for High-Performance Web Scraping",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's asyncio library to perform efficient, high-speed web scraping with easy-to-understand examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping is a powerful technique for extracting information from websites. However, traditional scraping methods can be slow because they process one page at a time. Python's asyncio library allows you to write asynchronous code that can handle many tasks concurrently, significantly speeding up your web scraping scripts."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we will explore how to use asyncio along with aiohttp, an asynchronous HTTP client, to scrape multiple web pages efficiently. You will learn how to run multiple network requests simultaneously, handle responses asynchronously, and collect the data you need."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, ensure you have aiohttp installed. You can install it via pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install aiohttp"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a simple asynchronous web scraper that fetches the content of several websites concurrently."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport aiohttp\n\nasync def fetch(session, url):\n    async with session.get(url) as response:\n        return await response.text()\n\nasync def main():\n    urls = [\n        'https://example.com',\n        'https://httpbin.org',\n        'https://python.org'\n    ]\n\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        pages = await asyncio.gather(*tasks)\n\n        for i, page in enumerate(pages):\n            print(f'Content fetched from: {urls[i][:30]}...')\n            print(page[:200], '\\n')\n\nif __name__ == '__main__':\n    asyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s what’s happening in this code:\n\n- We define an async function `fetch` to send an HTTP GET request and return the page content.\n- We create an async `main` function where we list URLs to scrape.\n- Using `aiohttp.ClientSession()` for efficient connection reuse.\n- We create a list of tasks using a list comprehension and pass them to `asyncio.gather()`, which runs them concurrently.\n- Finally, we print a snippet of each page's content."
+      },
+      {
+        "type": "paragraph",
+        "value": "By running network requests asynchronously, this script is much faster than a synchronous version that would wait for each request to finish before starting the next one."
+      },
+      {
+        "type": "paragraph",
+        "value": "To improve and customize your scraper:\n- Handle exceptions to manage network errors gracefully.\n- Use asyncio.Semaphore to limit concurrent connections and avoid overloading target servers.\n- Parse the HTML content with libraries such as BeautifulSoup for extracting specific information."
+      },
+      {
+        "type": "code",
+        "value": "from bs4 import BeautifulSoup\n\nasync def fetch(session, url):\n    try:\n        async with session.get(url) as response:\n            response.raise_for_status()  # Raise error for bad status\n            text = await response.text()\n            return text\n    except aiohttp.ClientError as e:\n        print(f'Failed to fetch {url}: {e}')\n        return None\n\nasync def main():\n    urls = [\n        'https://example.com',\n        'https://httpbin.org',\n        'https://python.org'\n    ]\n\n    semaphore = asyncio.Semaphore(3)  # Limit concurrent requests\n\n    async with aiohttp.ClientSession() as session:\n        async def sem_fetch(url):\n            async with semaphore:\n                return await fetch(session, url)\n\n        tasks = [sem_fetch(url) for url in urls]\n        pages = await asyncio.gather(*tasks)\n\n        for url, page in zip(urls, pages):\n            if page:\n                soup = BeautifulSoup(page, 'html.parser')\n                title = soup.title.string if soup.title else 'No title'\n                print(f'Title of {url}: {title}')\n\nif __name__ == '__main__':\n    asyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "This version:\n- Adds error handling to catch network issues.\n- Uses a semaphore to limit the number of simultaneous connections to 3.\n- Parses each page's title using BeautifulSoup, a popular HTML parsing library."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these basics, you're well on your way to building fast, efficient web scrapers using Python's asyncio. Asynchronous programming might seem tricky initially, but with practice, it becomes a powerful tool in your coding toolbox."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy scraping!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-performance-by-leveraging-lazy-evaluation",
+    "title": "Optimizing Python Code Performance by Leveraging Lazy Evaluation",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to improve your Python code performance using lazy evaluation, a technique that delays computation until necessary, making your programs more efficient and error-free.",
+    "videoUrl": "https://www.youtube.com/watch?v=ROCpGZyolxs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python code, especially with large data sets or complex computations, performance can become a bottleneck. One helpful technique to optimize performance is lazy evaluation. This means delaying the computation of expressions until their values are actually needed. Using lazy evaluation can save memory, avoid unnecessary calculations, and sometimes prevent errors caused by premature or invalid computations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python has built-in support for lazy evaluation in several areas, particularly in generators and iterators. These tools help you process items one at a time instead of loading everything into memory at once. Understanding and using lazy evaluation can make your code faster and more efficient."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example. Suppose you want to process a large list of numbers and square each number. Using a list comprehension, Python computes all squares immediately and stores them in a list, which can be slow and use lots of memory for large lists."
+      },
+      {
+        "type": "code",
+        "value": "numbers = range(1_000_000)\nsquares = [x*x for x in numbers]  # Computes and stores all squares at once"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, using a generator expression, Python computes each square only when it's needed. This means the squares are generated one by one, saving memory and often improving speed."
+      },
+      {
+        "type": "code",
+        "value": "numbers = range(1_000_000)\nsquares_gen = (x*x for x in numbers)  # Lazy evaluation with generator\n\n# Example of using squares_gen:\nfor i, square in enumerate(squares_gen):\n    if i >= 5:\n        break\n    print(square)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, no squares are computed until the for-loop requests the next value. If you only need the first few squares, the rest are never computed—saving time and memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common place lazy evaluation shines is with the built-in function `map()`. When combined with iterators, `map()` returns a lazy iterator instead of an immediate list. This reduces unnecessary computations and prevents errors that might occur if some data can't be processed until certain conditions are met."
+      },
+      {
+        "type": "code",
+        "value": "def safe_divide(x):\n    if x == 0:\n        raise ValueError(\"Division by zero\")\n    return 10 / x\n\nnumbers = [5, 2, 0, 4]\n\n# Using map (lazy evaluation) with try-except inside the loop to handle errors gracefully\nresults = map(safe_divide, numbers)\n\nfor result in results:\n    try:\n        print(result)\n    except ValueError as e:\n        print(f\"Error: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `map` generates values lazily. If an error occurs, we catch it during iteration instead of failing immediately. Without lazy evaluation, all computations would execute upfront, raising an error that stops the program."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Lazy evaluation delays computations until results are needed.\n- Use generator expressions or generator functions for memory-efficient processing.\n- Use built-in lazy iterators like `map()` and `filter()` instead of eager versions like list comprehensions.\n- Lazy evaluation can prevent some runtime errors by deferring problematic computations.\n- Lazy evaluation is a simple but effective tool for optimizing Python code performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "By leveraging lazy evaluation styles, even beginners can write faster, more memory-friendly Python programs that run smoothly with large data or complex workflows. Try these techniques in your next project to see the difference!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-for-optimized-query-performance",
+    "title": "Mastering SQL Window Functions for Optimized Query Performance",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how SQL window functions can improve your query performance and simplify complex data analysis with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across a set of table rows related to the current row without collapsing the result into a single output row. Unlike GROUP BY, window functions provide more granular control, letting you retain all rows while adding aggregated data. Understanding these functions is essential for writing efficient and optimized SQL queries, especially for analytics and reporting."
+      },
+      {
+        "type": "paragraph",
+        "value": "The basic syntax for a window function includes the function name, an OVER() clause, and optional partitioning or ordering inside the parentheses. Common window functions include ROW_NUMBER(), RANK(), DENSE_RANK(), LEAD(), LAG(), and aggregate functions like SUM() or AVG()."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id,\n       department_id,\n       salary,\n       ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, ROW_NUMBER() assigns a rank to employees within each department based on their salary, ordered from highest to lowest. Each employee retains their original row, and the rank is calculated without grouping the data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore a practical use case involving cumulative sums, which can help track running totals—useful in financial reports, sales analysis, or inventory tracking."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id,\n       order_date,\n       customer_id,\n       amount,\n       SUM(amount) OVER (PARTITION BY customer_id ORDER BY order_date) AS running_total\nFROM orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the SUM() window function calculates a running total of orders for each customer over time. The PARTITION BY clause groups data by customer, and the ORDER BY clause ensures the sum is cumulative in the order of order dates."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another example includes using LAG() and LEAD() for comparing rows within a dataset. These functions help you look at previous or next rows without complex self-joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id,\n       order_date,\n       customer_id,\n       amount,\n       LAG(amount, 1) OVER (PARTITION BY customer_id ORDER BY order_date) AS previous_order_amount,\n       LEAD(amount, 1) OVER (PARTITION BY customer_id ORDER BY order_date) AS next_order_amount\nFROM orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query shows each order along with the amount from the previous and next order for the same customer, making trend analysis easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering window functions, you optimize queries by reducing expensive self-joins and aggregate subqueries, thus improving performance and readability."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, start practicing the following window functions:\n- ROW_NUMBER() for ranking rows\n- RANK() and DENSE_RANK() for ordered rankings with ties\n- SUM(), AVG(), COUNT() as windowed aggregates\n- LAG() and LEAD() for accessing neighboring rows\n\nTry experimenting on your dataset to unlock powerful insights with concise, optimized SQL."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-for-advanced-error-handling",
+    "title": "Mastering SQL Window Functions for Advanced Error Handling",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use SQL window functions to detect, analyze, and handle errors effectively in your data workflows.",
+    "videoUrl": "https://www.youtube.com/watch?v=HhvdQhERlH4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of rows related to the current row, without collapsing your result set. They are especially useful for advanced error handling, letting you identify and manage problematic data within your queries without losing context."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore practical ways to use window functions to detect errors like duplicates, data inconsistencies, and missing values, and how to handle those errors right inside your SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Detecting Duplicate Rows with ROW_NUMBER()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Duplicates can cause serious issues in analytics and application logic. The ROW_NUMBER() function can assign a unique rank to rows within partitions, allowing you to find and isolate duplicates easily."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  user_email,\n  ROW_NUMBER() OVER (PARTITION BY user_email ORDER BY id) AS row_num\nFROM users;\n\n-- Rows with row_num > 1 are duplicates for the same user_email."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use this to filter out duplicates or flag them for review."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Identifying Missing Data Using COUNT() and PARTITION"
+      },
+      {
+        "type": "paragraph",
+        "value": "Missing or NULL values can be tricky to spot if you need to consider groups of data. Combining COUNT() as a window function allows you to count how many non-null entries exist in partitions."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  order_id,\n  customer_id,\n  order_date,\n  COUNT(order_date) OVER (PARTITION BY customer_id) AS orders_with_date\nFROM orders;\n\n-- If orders_with_date is less than total orders for customer, some order_date values are missing."
+      },
+      {
+        "type": "paragraph",
+        "value": "This helps you pinpoint customers or groups that may have incomplete data."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Highlighting Errors in Time Series Data Using LAG()"
+      },
+      {
+        "type": "paragraph",
+        "value": "LAG() allows you to compare a row with a previous row in the ordered dataset. This is useful to spot unexpected jumps, missing sequences, or regressions."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  transaction_id,\n  transaction_date,\n  amount,\n  LAG(transaction_date) OVER (ORDER BY transaction_date) AS prev_date,\n  CASE\n    WHEN transaction_date < LAG(transaction_date) OVER (ORDER BY transaction_date) THEN 'ERROR: Date out of order'\n    ELSE 'OK'\n  END AS error_flag\nFROM transactions;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can tag rows where dates go backward, indicating potential data entry errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Combining Window Functions for Complex Error Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Say you want to detect customers who have placed multiple orders with the exact same amount consecutively — which could be either an error or a fraud indicator."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  customer_id,\n  order_id,\n  amount,\n  LAG(amount) OVER (PARTITION BY customer_id ORDER BY order_date) AS prev_amount,\n  CASE\n    WHEN amount = LAG(amount) OVER (PARTITION BY customer_id ORDER BY order_date) THEN 'Duplicate consecutive amount'\n    ELSE NULL\n  END AS error_flag\nFROM orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query flags orders with duplicate consecutive amounts per customer. You can then filter or investigate flagged rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering SQL window functions like ROW_NUMBER(), LAG(), LEAD(), and COUNT() empowers you to perform advanced error detection without losing granular data context. These functions help maintain data quality by letting you filter, flag, or fix errors early in your data pipeline. Practice these patterns to become confident in handling data errors efficiently and effectively."
+      }
+    ]
   }
 ];
