@@ -11370,5 +11370,621 @@ export const articles = [
         "value": "In summary, to avoid common SQL errors in high concurrency systems: use indexes wisely, keep transactions short, select only needed columns, choose suitable isolation levels, and monitor performance continuously. These steps will help keep your database fast and reliable under heavy load."
       }
     ]
+  },
+  {
+    "slug": "handling-floating-point-precision-edge-cases-in-javascript-calculations",
+    "title": "Handling Floating Point Precision Edge Cases in JavaScript Calculations",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to handle floating point precision issues in JavaScript with simple techniques to get accurate calculations every time.",
+    "videoUrl": "https://www.youtube.com/watch?v=0IOsF_N1DIs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with numbers in JavaScript, one common challenge is dealing with floating point precision errors. This happens because JavaScript uses the IEEE 754 standard for representing numbers, which can lead to small rounding errors during calculations. In this tutorial, we'll explore why these issues occur and how to handle them effectively with beginner-friendly techniques."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a classic example. Try adding 0.1 and 0.2 in JavaScript:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(0.1 + 0.2); // Output: 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, the result isn't exactly 0.3 but 0.30000000000000004. This tiny difference happens because the binary system can't precisely represent some decimals. Here's how you can handle this problem:"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Method 1: Using `toFixed()` to Format the Number"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use the `toFixed()` method to round the number to a fixed number of decimal places. For example:"
+      },
+      {
+        "type": "code",
+        "value": "const result = 0.1 + 0.2;\nconsole.log(result.toFixed(2)); // Output: \"0.30\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep in mind, `toFixed()` returns a string, so you may need to convert it back to a number if you want to perform further calculations, like this:"
+      },
+      {
+        "type": "code",
+        "value": "const fixedResult = Number(result.toFixed(2));\nconsole.log(fixedResult); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Method 2: Multiplying and Dividing to Avoid Floating Point Issues"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another way is to remove the decimal part during calculations by multiplying numbers to convert them to integers, perform operations, and then divide back. Here's an example:"
+      },
+      {
+        "type": "code",
+        "value": "const sum = (0.1 * 10 + 0.2 * 10) / 10;\nconsole.log(sum); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "This works because 0.1 * 10 = 1, and 0.2 * 10 = 2, both integers, so you avoid floating point errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Method 3: Using Libraries for Precise Decimal Arithmetic"
+      },
+      {
+        "type": "paragraph",
+        "value": "For more complex calculations, you might want to use libraries like `decimal.js` or `big.js` that handle decimal arithmetic more accurately. Installing and using these libraries might be overkill for simple cases but are excellent for financial or scientific calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a quick example using `decimal.js` (you'd need to install it first):"
+      },
+      {
+        "type": "code",
+        "value": "const Decimal = require('decimal.js');\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\nconsole.log(sum.toString()); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Floating point precision issues are an inherent part of JavaScript number calculations, but by using methods like `toFixed()`, integer math, or dedicated libraries, you can write code that handles these edge cases gracefully. Start with simple rounding techniques and move to libraries when your use case requires high precision."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-data-integrity-in-javascript-best-practices-for-modeling-complex-data-structures",
+    "title": "Mastering Data Integrity in JavaScript: Best Practices for Modeling Complex Data Structures",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to maintain data integrity when working with complex data structures in JavaScript through practical, beginner-friendly techniques and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=lWX5mk2adrg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data integrity is essential when managing complex data structures in JavaScript. It ensures that data remains accurate, consistent, and reliable throughout your application. Beginners often encounter errors when modifying objects or arrays directly, which can lead to bugs and unpredictable behavior. This article will guide you through essential best practices to master data integrity in your JavaScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake is directly mutating objects or arrays. For example, modifying nested properties without care can overwrite important values or break references unexpectedly."
+      },
+      {
+        "type": "code",
+        "value": "const user = {\n  name: 'Alice',\n  address: {\n    city: 'New York',\n    zip: 10001\n  }\n};\n\n// Direct mutation\nuser.address.city = 'San Francisco';\nconsole.log(user.address.city); // 'San Francisco'"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this looks straightforward, direct mutation makes debugging harder as the original data is changed. Instead, use immutable patterns to create new versions of your data without altering the original objects."
+      },
+      {
+        "type": "code",
+        "value": "const updatedUser = {\n  ...user,\n  address: {\n    ...user.address,\n    city: 'San Francisco'\n  }\n};\n\nconsole.log(user.address.city); // 'New York'\nconsole.log(updatedUser.address.city); // 'San Francisco'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the spread operator, we create a new user object with a new address object, preserving the integrity of the original data. This practice helps avoid unexpected side effects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another helpful tip is to validate data shape using utility libraries like Joi, Yup, or manually checking types. This ensures data conforms to expected formats before processing."
+      },
+      {
+        "type": "code",
+        "value": "// Simple manual validation example\nfunction validateUser(user) {\n  if (typeof user.name !== 'string') throw new Error('Name must be a string');\n  if (!user.address || typeof user.address.city !== 'string') throw new Error('Invalid address');\n}\n\ntry {\n  validateUser(user);\n  console.log('User data is valid');\n} catch (error) {\n  console.error(error.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This validation prevents errors and enforces data consistency across your app. For larger projects, consider schema validation libraries to automate and simplify the process."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, organize your data manipulation code by separating pure functions from side effects. Pure functions take inputs and return new data without changing the original, which enforces immutability and makes testing easier."
+      },
+      {
+        "type": "code",
+        "value": "function updateUserCity(user, newCity) {\n  return {\n    ...user,\n    address: {\n      ...user.address,\n      city: newCity\n    }\n  };\n}\n\nconst newUser = updateUserCity(user, 'Chicago');\nconsole.log(user.address.city); // 'New York'\nconsole.log(newUser.address.city); // 'Chicago'"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering data integrity involves avoiding direct mutations, validating data shapes, using immutable updates, and writing pure functions. These best practices help you prevent common errors and write more maintainable JavaScript applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types",
+    "title": "Mastering TypeScript Utility Types for Cleaner, More Maintainable Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript utility types to write cleaner and more maintainable code in this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=YUpNlWJP85g",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. One of its lesser-known but incredibly useful features is its set of utility types. These utilities help you transform and manipulate existing types to make your code more expressive and maintainable. In this tutorial, we'll explore some of the most commonly used TypeScript utility types and see practical examples of how they can simplify your development."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with some foundational utility types that you will frequently encounter: `Partial`, `Required`, `Readonly`, and `Pick`. These utilities allow you to modify the shape or properties of an existing type without rewriting everything from scratch."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Partial<Type>\nThe `Partial` utility makes all properties in a type optional. This is extremely handy when you want to create an object that only updates some properties of an existing type."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Using Partial to create an update object\nfunction updateUser(id: number, newUserData: Partial<User>) {\n  // Imagine this updates user data in a database\n  console.log(`Updating user ${id}`, newUserData);\n}\n\nupdateUser(1, { email: \"newemail@example.com\" }); // Only email needs to be provided"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Required<Type>\nOpposite of `Partial`, the `Required` utility type makes all properties in a type required. If you have some optional properties but want to enforce they are provided in certain contexts, `Required` is your friend."
+      },
+      {
+        "type": "code",
+        "value": "interface Config {\n  apiKey?: string;\n  endpoint?: string;\n}\n\n// Ensure all config properties are present\nconst fullConfig: Required<Config> = {\n  apiKey: \"abc123\",\n  endpoint: \"https://api.example.com\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Readonly<Type>\n`Readonly` makes all properties of a type immutable. This is useful when you want to prevent accidental property changes after the object has been created."
+      },
+      {
+        "type": "code",
+        "value": "interface Point {\n  x: number;\n  y: number;\n}\n\nconst point: Readonly<Point> = { x: 10, y: 20 };\n\n// point.x = 15; // Error: Cannot assign to 'x' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pick<Type, Keys>\n`Pick` constructs a new type by selecting a subset of properties from an existing type. This is useful when you want to work with only certain fields."
+      },
+      {
+        "type": "code",
+        "value": "interface Person {\n  name: string;\n  age: number;\n  location: string;\n}\n\n// Create a type with only name and age\ntype PersonPreview = Pick<Person, \"name\" | \"age\">;\n\nconst preview: PersonPreview = { name: \"Alice\", age: 30 };"
+      },
+      {
+        "type": "paragraph",
+        "value": "These utility types help keep your code DRY (Don't Repeat Yourself) and make your type transformations simple and clear. There are many other utilities like `Omit` (opposite of `Pick`), `Record`, `Exclude`, and `ReturnType` that you can explore as you become more comfortable."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering TypeScript's utility types, you can write cleaner, more expressive type definitions that reduce bugs and improve maintainability. Start by incorporating these utilities into your projects and see the difference they make!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-strict-null-checks-for-safer-code",
+    "title": "Mastering TypeScript's Strict Null Checks for Safer Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's strict null checks help prevent common errors by catching null and undefined values early in your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=tKGiAxLXDxk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool that adds static typing to JavaScript, making your code more predictable and easier to debug. One feature that helps catch common bugs early is called strict null checks. This feature ensures that variables declared without a null or undefined type can't accidentally hold those values. Let's explore what strict null checks do and how to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "By default, in JavaScript and non-strict TypeScript, variables can be null or undefined without much warning. For example:"
+      },
+      {
+        "type": "code",
+        "value": "let name: string = \"Alice\";\nname = null; // No error here if strictNullChecks is off"
+      },
+      {
+        "type": "paragraph",
+        "value": "This can lead to runtime errors if you try to use a variable that unexpectedly holds a null or undefined value. Enabling strict null checks in TypeScript prevents this by making `null` and `undefined` distinct types that variables must explicitly allow."
+      },
+      {
+        "type": "paragraph",
+        "value": "To enable strict null checks, add this line to your `tsconfig.json` file:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "With this option turned on, the previous example will cause a compile error because `name` is declared as a string and cannot be assigned `null`:"
+      },
+      {
+        "type": "code",
+        "value": "let name: string = \"Alice\";\nname = null; // Error: Type 'null' is not assignable to type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want a variable to accept null or undefined values, you must explicitly indicate this using union types. For example:"
+      },
+      {
+        "type": "code",
+        "value": "let name: string | null = \"Alice\";\nname = null; // This is allowed now"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, TypeScript forces you to handle these cases explicitly and catch potential null or undefined errors at compile time rather than at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "When accessing properties or calling methods on variables that can be null or undefined, you need to perform checks to ensure safety. Here is an example using an optional chaining operator (`?.`) to safely access a property:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age?: number | null;\n}\n\nconst user: User = { name: \"Bob\", age: null };\n\n// Safe check for age\nconst userAge = user.age ?? 0; // Uses nullish coalescing to default to 0\n\nconsole.log(userAge);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, enabling strict null checks in TypeScript makes your code more robust by requiring you to explicitly deal with null and undefined values, preventing many common runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "To master strict null checks:\n- Enable `strictNullChecks` in your tsconfig.\n- Use union types (e.g., `string | null`) for nullable variables.\n- Use runtime checks or optional chaining before accessing potentially null or undefined values.\n- Leverage TypeScript’s compiler to catch mistakes early."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these practices, your TypeScript code will be safer, cleaner, and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-practical-guide-resource-management",
+    "title": "Mastering Python Context Managers: A Practical Guide to Resource Management",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python context managers to manage resources efficiently and cleanly. This beginner-friendly guide covers the basics, practical examples, and creating your own context managers.",
+    "videoUrl": "https://www.youtube.com/watch?v=ypyko1Y7zas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with resources like files, network connections, or database sessions in Python, it's important to properly manage their opening and closing to avoid errors or resource leaks. Python's context managers provide a powerful and clean way to handle such resource management."
+      },
+      {
+        "type": "paragraph",
+        "value": "This tutorial will introduce you to the basics of Python context managers, demonstrate their usage with practical examples like file handling, and show you how to create your own context managers using both classes and the handy @contextmanager decorator."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Context Manager?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A context manager is an object that defines setup and teardown actions around a block of code. It is most commonly used with the `with` statement. This helps ensure resources are properly acquired and released, even if errors occur in the block."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, opening a file for reading requires you to close it when done. Forgetting to close a file can lead to resource exhaustion. Context managers take care of such details automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Context Managers with files"
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common example is the built-in file handler. Instead of this:"
+      },
+      {
+        "type": "code",
+        "value": "file = open('example.txt', 'r')\ncontent = file.read()\nfile.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "You use the `with` statement to simplify it:"
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'r') as file:\n    content = file.read()\n# file is automatically closed here"
+      },
+      {
+        "type": "paragraph",
+        "value": "Once the block under with is done, the file is automatically closed without you having to call `close()` explicitly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How Context Managers Work Internally"
+      },
+      {
+        "type": "paragraph",
+        "value": "Context managers must implement two methods: `__enter__` and `__exit__`:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- `__enter__` is called at the start of the with block and returns the resource.\n- `__exit__` is called at the end of the block to clean up, even if an exception occurs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating Your Own Context Manager with a Class"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple context manager that prints messages when entering and exiting the context:"
+      },
+      {
+        "type": "code",
+        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the context')\n        return 'Resource'\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n        if exc_type:\n            print(f'An exception occurred: {exc_value}')\n        return False  # Don't suppress exceptions\n\nwith MyContextManager() as resource:\n    print(f'Inside with block with {resource}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\nEntering the context\nInside with block with Resource\nExiting the context"
+      },
+      {
+        "type": "paragraph",
+        "value": "If an exception is raised inside the with block, `__exit__` gets called with exception details, allowing you to handle them if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Context Manager Using @contextmanager"
+      },
+      {
+        "type": "paragraph",
+        "value": "Python's `contextlib` module offers a decorator, `@contextmanager`, which allows writing context managers with a generator function, which can be simpler than creating classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s the previous example using `@contextmanager`:"
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_context_manager():\n    print('Entering the context')\n    try:\n        yield 'Resource'\n    except Exception as e:\n        print(f'Exception caught: {e}')\n        raise\n    finally:\n        print('Exiting the context')\n\nwith my_context_manager() as resource:\n    print(f'Inside with block with {resource}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Context Managers?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Context managers greatly improve code readability and safety by encapsulating setup and cleanup logic.\n\nThey make your code less error-prone by handling exceptions and ensuring resources like files, locks, or database connections are always properly released."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Context managers use `__enter__` and `__exit__` methods or the `@contextmanager` decorator.\n- They are designed to manage resource acquisition and release.\n- Use them with the `with` statement for clean and safe resource handling.\n- You can create custom context managers for your own resource management needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start mastering context managers today to write cleaner, safer, and more Pythonic code!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-performance-by-profiling-memory-leaks-and-inefficiencies",
+    "title": "Optimizing Python Code Performance by Profiling Memory Leaks and Inefficiencies",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to identify and fix memory leaks and inefficiencies in Python code using profiling tools for better performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=L5pdA1HVhCo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, it's common to encounter performance issues caused by memory leaks or inefficient code. These problems can make your code slower and consume more memory than necessary. Profiling is a way to analyze your program's behavior and find where inefficiencies or leaks occur. This article will guide beginners through the basics of profiling Python code to optimize performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "A memory leak happens when your program keeps holding onto memory it no longer needs. This can cause your program to use more RAM over time and potentially crash. Inefficient code can slow down your program due to redundant operations or poor algorithm choices."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by learning how to profile memory usage using the built-in module `tracemalloc` and an external tool `memory_profiler`. We will also look at how to find inefficient parts of your code using the `cProfile` and `timeit` modules."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using tracemalloc to find memory leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "`tracemalloc` is a built-in Python module that tracks memory allocations and helps identify where memory is being used."
+      },
+      {
+        "type": "code",
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Sample code that may leak memory\nx = []\nfor i in range(10000):\n    x.append(str(i) * 100)\n\nsnapshot = tracemalloc.take_snapshot()\ntop_stats = snapshot.statistics('lineno')\n\nprint(\"Top 5 lines allocating memory:\")\nfor stat in top_stats[:5]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code tracks memory allocations and prints out the top lines where memory is allocated. By analyzing this output, you can identify if any specific part of your code is using more memory than expected."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using memory_profiler to measure memory usage over time"
+      },
+      {
+        "type": "paragraph",
+        "value": "`memory_profiler` is an external tool that lets you track memory usage line by line. You need to install it first using:\n\n\npip install memory_profiler\n\n\nThen you can use the `@profile` decorator to mark the functions to analyze."
+      },
+      {
+        "type": "code",
+        "value": "@profile\ndef my_function():\n    a = [i for i in range(100000)]\n    b = [x * 2 for x in a]\n    return b\n\nif __name__ == '__main__':\n    my_function()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Run your script using:\n\npython -m memory_profiler your_script.py\n\nThis will show the memory usage for each line inside `my_function`, helping you pinpoint lines with unexpected memory consumption."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Profiling code execution time with cProfile"
+      },
+      {
+        "type": "paragraph",
+        "value": "Besides memory, inefficient code can slow down your program. Python's built-in `cProfile` can help identify slow functions."
+      },
+      {
+        "type": "code",
+        "value": "import cProfile\nimport time\n\ndef slow_function():\n    time.sleep(2)\n\n\ndef fast_function():\n    time.sleep(0.1)\n\n\ncProfile.run('slow_function()')\ncProfile.run('fast_function()')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This profiler reveals how much time each function takes to execute, so you can focus on optimizing the slowest parts."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Quick timing with timeit"
+      },
+      {
+        "type": "paragraph",
+        "value": "For small code snippets, the `timeit` module is handy for measuring execution time."
+      },
+      {
+        "type": "code",
+        "value": "import timeit\n\ncode = '''\nresult = [x**2 for x in range(1000)]\n'''\n\nprint(timeit.timeit(code, number=100))"
+      },
+      {
+        "type": "paragraph",
+        "value": "This runs the code 100 times and reports the total time taken, which helps you compare different ways of writing your code to see which is faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize your Python code's performance, start by profiling both memory and execution time. Use `tracemalloc` and `memory_profiler` to detect memory leaks and high memory usage. Use `cProfile` and `timeit` to find and fix slow code. By tackling these issues one step at a time, you will write faster, more efficient Python programs that handle resources well."
+      }
+    ]
+  },
+  {
+    "slug": "handling-null-values-complex-sql-joins",
+    "title": "Handling Null Values in Complex SQL Joins: Best Practices and Techniques",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to manage and handle null values effectively in complex SQL joins with beginner-friendly explanations and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, joins are essential for combining data from multiple tables. However, handling null values—especially in complex joins—can be tricky for beginners. Nulls often appear when records don't have matching rows in the joined tables, which can affect query results and cause confusion. This tutorial introduces best practices and simple techniques to manage null values gracefully in your SQL joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's quickly recap what happens during SQL joins:\n- INNER JOIN returns only matching rows between two tables.\n- LEFT JOIN returns all rows from the left table and matching rows from the right table, with NULLs for missing matches.\n- RIGHT JOIN is similar but returns all rows from the right table.\n- FULL JOIN returns all rows when there is a match in either left or right table."
+      },
+      {
+        "type": "paragraph",
+        "value": "When you use LEFT JOIN or FULL JOIN, you often get NULL values where no corresponding record exists in the joined table. These NULLs can impact functions, conditions, and calculations, so it’s important to handle them properly using built-in SQL functions such as COALESCE or ISNULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Handling Nulls in a LEFT JOIN\nSuppose we have two tables:\n- `employees` (employee_id, name)\n- `sales` (sale_id, employee_id, amount)\n\nWe want to list all employees and their total sales amount. Some employees might not have made any sales, so sales.amount could be NULL."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  e.employee_id,\n  e.name,\n  COALESCE(SUM(s.amount), 0) AS total_sales\nFROM employees e\nLEFT JOIN sales s ON e.employee_id = s.employee_id\nGROUP BY e.employee_id, e.name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, COALESCE is used to replace NULL values returned by SUM when an employee has no sales. Without COALESCE, total_sales for those employees would be NULL, which might cause confusion or errors in your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Handling Nulls in Joins\n- Use COALESCE or ISNULL to replace NULL with default values where necessary.\n- Be mindful of which type of join you use; INNER JOIN excludes unmatched rows, so NULLs don't appear in your result.\n- Use CASE statements if you need custom logic based on NULL values.\n- Always test joins with data where some matches are missing, to see how NULLs affect your output."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Using CASE to Label Missing Data\nYou can add a new column to indicate when there's no matching record in the joined table using a CASE statement."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  e.employee_id,\n  e.name,\n  CASE\n    WHEN s.employee_id IS NULL THEN 'No Sales'\n    ELSE 'Has Sales'\n  END AS sales_status\nFROM employees e\nLEFT JOIN sales s ON e.employee_id = s.employee_id\nGROUP BY e.employee_id, e.name, s.employee_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query helps you spot employees without sales directly in your results, making the data easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these simple methods for handling NULL values in complex joins, you will write clearer, more reliable SQL queries that behave as you expect, even in edge cases."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-by-analyzing-execution-plans",
+    "title": "Optimizing SQL Query Performance by Analyzing Execution Plans",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve SQL query performance by understanding and analyzing execution plans. This beginner-friendly guide covers common errors and practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, slow query performance can be frustrating. Fortunately, SQL databases provide a tool called an execution plan that helps you understand how your queries are processed. Analyzing execution plans is essential to optimize your SQL queries for better speed and efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "An execution plan is a step-by-step description of how the SQL server executes a query. It shows the order of operations, indexes used, join types, and more. By examining these plans, you can identify common issues such as missing indexes, large table scans, or inefficient joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "To view an execution plan in SQL Server Management Studio (SSMS), you can use the command:"
+      },
+      {
+        "type": "code",
+        "value": "SET SHOWPLAN_ALL ON;\nGO\n-- Your SQL query here\nSELECT * FROM Employees WHERE DepartmentID = 3;\nGO\nSET SHOWPLAN_ALL OFF;\nGO"
+      },
+      {
+        "type": "paragraph",
+        "value": "Alternatively, you can click on the \"Include Actual Execution Plan\" button before running your query. This gives you a graphical representation that’s easier to interpret for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "When analyzing the execution plan, watch out for these common errors or inefficiencies:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Table Scan**: This means the entire table is read to find matching rows, which is slow for large tables. Consider adding an index on the filtering column."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Missing Index Warning**: Sometimes the plan indicates a missing index that could improve performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Nested Loops Joins on Large Tables**: Nested loop joins are good for small datasets, but for large tables, hash or merge joins might perform better."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, if you see an execution plan indicating a table scan on the Employees table for the query below:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Employees WHERE DepartmentID = 3;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can improve performance by creating an index on the DepartmentID column:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_departmentid ON Employees(DepartmentID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After creating the index, run the query again and check the execution plan. You should now see an index seek instead of a table scan, which is faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, learning to read and analyze SQL execution plans can help you quickly identify bottlenecks and optimize your queries effectively. Practice by running your queries with execution plans enabled, identify errors like table scans and missing indexes, and apply fixes such as adding indexes or rewriting joins."
+      }
+    ]
   }
 ];
