@@ -9971,5 +9971,423 @@ export const articles = [
         "value": "By following these simple steps, your SQL queries will run faster, more reliably, and with fewer hidden errors."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-async-stack-traces-for-easier-debugging",
+    "title": "Mastering JavaScript Async Stack Traces for Easier Debugging",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to understand and improve JavaScript async stack traces to debug your asynchronous code more effectively and save time.",
+    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging asynchronous JavaScript code can be tricky because errors often come with confusing or incomplete stack traces. Unlike synchronous errors, async stack traces may not show the full sequence of function calls leading to the error. In this article, we'll explain why this happens and how to master async stack traces for easier debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "When you write async code with promises, async/await, or setTimeout, the execution moves to another place in the code, which breaks the usual stack trace. This means you might see an error without knowing exactly where your program went wrong. Modern browsers and Node.js have improved stack traces for async operations, but understanding how they work is important."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example that demonstrates a common async error and its stack trace."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  // Simulate a failed fetch with a rejected promise\n  return Promise.reject(new Error('Failed to fetch data'));\n}\n\nasync function processData() {\n  const data = await fetchData();\n  console.log(data);\n}\n\nprocessData().catch(error => {\n  console.error(error.stack);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, fetchData returns a rejected promise, and processData awaits it. The error stack trace will show where the error occurred inside fetchData, but it may not clearly indicate the call path involving processData and processData's caller."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get better async stack traces, consider these tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use modern environments. Up-to-date browsers and Node.js versions have better async stack trace support, showing the entire async call chain."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use async/await instead of raw promises when possible. This often produces more readable stack traces that resemble synchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Leverage error cause support (supported in newer JS versions) to preserve error context."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  throw new Error('Failed to fetch data');\n}\n\nasync function processData() {\n  try {\n    await fetchData();\n  } catch (e) {\n    // Add more context to the error\n    throw new Error('processData failed', { cause: e });\n  }\n}\n\nprocessData().catch(error => {\n  console.error(error.stack);\n  if (error.cause) {\n    console.error('Caused by:', error.cause.stack);\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. When working with promises without async/await, chain .catch() handlers properly to make sure the error context isn't lost."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Use developer tools in your browser or IDE that support async stack tracing. Chrome DevTools and VSCode debugger have features to inspect async call stacks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding and mastering async stack traces can drastically reduce the time you spend debugging and help you build more reliable JavaScript applications. Keep your environment updated and use modern JS patterns like async/await to make your debugging experience smoother."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-decorators-creating-custom-class-and-method-decorators-for-scalable-applications",
+    "title": "Mastering TypeScript Decorators: Creating Custom Class and Method Decorators for Scalable Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create and use custom TypeScript decorators for classes and methods to build scalable and maintainable applications with clean, reusable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=O6A-u_FoEX8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators are a powerful feature that lets you modify classes, methods, properties, or parameters at design time. They provide a clean way to add reusable behavior and metadata to your code, making it more modular and easier to maintain. In this tutorial, we'll explore how to create custom class and method decorators with practical examples perfect for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's quickly understand what decorators are. A decorator is essentially a special kind of declaration that can be attached to a class, method, or property and receive information about that element. When applied, decorators allow you to run code or modify behavior without changing the original implementation."
+      },
+      {
+        "type": "paragraph",
+        "value": "To enable decorators in your TypeScript project, make sure your `tsconfig.json` includes:\n\n\n{\n  \"compilerOptions\": {\n    \"experimentalDecorators\": true\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Custom Class Decorator\n\nLet's start by creating a simple class decorator that adds a timestamp to a class instance, indicating when it was created."
+      },
+      {
+        "type": "code",
+        "value": "function Timestamped(constructor: Function) {\n  constructor.prototype.createdAt = new Date();\n}\n\n@Timestamped\nclass User {\n  name: string;\n  constructor(name: string) {\n    this.name = name;\n  }\n}\n\nconst user = new User('Alice');\nconsole.log(user.name); // Alice\nconsole.log((user as any).createdAt); // Current date and time"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `Timestamped` decorator adds a `createdAt` property to every instance of the decorated class. This can be useful for tracking when an object was created."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Method Decorator\n\nNext, we’ll create a method decorator that logs when a method is called. This is useful for debugging or analytics purposes."
+      },
+      {
+        "type": "code",
+        "value": "function Log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    console.log(`Calling ${propertyKey} with arguments:`, args);\n    const result = originalMethod.apply(this, args);\n    console.log(`${propertyKey} returned:`, result);\n    return result;\n  };\n  return descriptor;\n}\n\nclass Calculator {\n  @Log\n  add(a: number, b: number): number {\n    return a + b;\n  }\n}\n\nconst calc = new Calculator();\ncalc.add(2, 3);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `Log` decorator wraps the original method and logs its call along with arguments and return value. This helps track method usage without modifying the core logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Decorators?\n\nDecorators enable you to separate concerns cleanly. For example, validation, logging, or authorization can be handled by decorators rather than cluttering business logic. This approach fosters code reuse and scalability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices\n\n- Keep decorators focused on a single responsibility.\n- Avoid side effects inside decorators unless intentional.\n- Use decorators to implement cross-cutting concerns like caching, logging, or error handling.\n\n### Final Thoughts\n\nDecorators are a versatile tool in TypeScript that, when used properly, can greatly enhance your application's maintainability and readability. Start with simple decorators like the ones above, then experiment with more complex scenarios like parameter decorators or property decorators as you build scalable applications."
+      }
+    ]
+  },
+  {
+    "slug": "handling-unexpected-union-types-in-typescript-best-practices-for-edge-cases",
+    "title": "Handling Unexpected Union Types in TypeScript: Best Practices for Edge Cases",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to effectively manage unexpected union types in TypeScript with simple techniques that improve your error handling and code safety.",
+    "videoUrl": "https://www.youtube.com/watch?v=nZuWCo52wTg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript's union types allow variables to hold multiple types, which is very powerful. However, when dealing with unexpected or edge case values inside these unions, your code can encounter runtime errors if these cases aren't properly handled. This article focuses on best practices for managing unexpected union types in TypeScript to keep your code safe and predictable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you have a union type for a function argument that can accept either a string or a number. Usually, you handle both cases explicitly, but what if another type sneaks in during development, causing errors? We will discuss how to safely handle these scenarios."
+      },
+      {
+        "type": "code",
+        "value": "type Input = string | number;\n\nfunction processInput(input: Input) {\n  if (typeof input === 'string') {\n    console.log('String input:', input.toUpperCase());\n  } else if (typeof input === 'number') {\n    console.log('Number input:', input.toFixed(2));\n  } else {\n    // Unexpected case - this should never happen\n    console.error('Unexpected input type:', input);\n  }\n}\n\nprocessInput('hello');\nprocessInput(42);\n// @ts-expect-error simulating unexpected input\nprocessInput(true);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To catch such unexpected cases at compile time, TypeScript's type narrowing and exhaustive checking patterns come in handy. One common pattern is to use the never type with a helper function to ensure all cases in a union type are handled properly."
+      },
+      {
+        "type": "code",
+        "value": "function assertNever(x: never): never {\n  throw new Error(\"Unexpected value: \" + x);\n}\n\nfunction processInputExhaustive(input: Input) {\n  if (typeof input === 'string') {\n    console.log('String input:', input.toUpperCase());\n  } else if (typeof input === 'number') {\n    console.log('Number input:', input.toFixed(2));\n  } else {\n    assertNever(input); // This line helps ensure that all union types are handled\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this approach, if you add a new type to the `Input` union in the future (for example, `boolean`), TypeScript will enforce that you update the function to handle the new case, helping prevent runtime errors from unhandled types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Also, when you expect to receive union types that might be broader or external (like user input or API responses), it's good practice to validate and sanitize data before processing it. Type guards, custom type predicates, or libraries like `zod` can make this easier."
+      },
+      {
+        "type": "code",
+        "value": "function isString(input: unknown): input is string {\n  return typeof input === 'string';\n}\n\nfunction safeProcess(input: unknown) {\n  if (isString(input)) {\n    console.log('Safe string input:', input.toUpperCase());\n  } else {\n    console.error('Invalid input type!');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, handling unexpected union types involves explicit type checking, exhaustive handling using the `never` type, and validating inputs. These practices enhance your TypeScript code’s robustness, making your applications less prone to bugs caused by unforeseen edge cases."
+      }
+    ]
+  },
+  {
+    "slug": "handling-large-file-processing-efficiently-in-python-edge-case-strategies",
+    "title": "Handling Large File Processing Efficiently in Python: Edge Case Strategies",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to efficiently process large files in Python with practical strategies that handle edge cases and optimize performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=Jd7nX23Qi_I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Processing large files in Python can be tricky, especially if you want to avoid running out of memory or slowing down your program. When working with big data files, reading the entire file at once might not be practical. In this tutorial, we will explore beginner-friendly strategies to handle large file processing efficiently, focusing on edge cases that you might encounter."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common edge case is when a file contains extremely long lines or malformed data. Instead of reading the whole file into memory with methods like `read()` or `readlines()`, a better approach is to read the file line-by-line. This keeps memory usage low and prevents your program from crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of how to safely read and process a large file line-by-line:"
+      },
+      {
+        "type": "code",
+        "value": "def process_large_file(file_path):\n    with open(file_path, 'r', encoding='utf-8') as file:\n        for line_number, line in enumerate(file, start=1):\n            line = line.strip()\n            if not line:\n                # Skip empty lines\n                continue\n            try:\n                # Example: process the line (e.g., parse data)\n                print(f\"Line {line_number}: {line[:50]}...\")  # Preview first 50 chars\n            except Exception as e:\n                print(f\"Error processing line {line_number}: {e}\")\n\n# Usage\n# process_large_file('path/to/large_file.txt')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach handles empty lines gracefully and catches exceptions that may occur if a line contains unexpected data. It also uses `enumerate()` to keep track of line numbers, which helps with debugging issues in specific parts of the file."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case involves processing files with very long lines that might cause slowdowns when using default buffering. You can use the `io` module to fine-tune buffer size and improve performance."
+      },
+      {
+        "type": "code",
+        "value": "import io\n\ndef process_file_with_buffer(file_path, buffer_size=1024*1024):  # 1MB buffer\n    with io.open(file_path, 'r', buffering=buffer_size, encoding='utf-8') as file:\n        for line in file:\n            # Process each line\n            pass\n\n# Usage\n# process_file_with_buffer('path/to/large_file.txt')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using a larger buffer size can reduce the number of disk reads, making the program faster when dealing with huge files. However, be careful not to set the buffer too large if your system has limited RAM."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, sometimes you need to process files that can't be read line-by-line straightforwardly, such as binary files or files with custom delimiters. In those cases, reading fixed-size chunks can help you handle edge cases effectively."
+      },
+      {
+        "type": "code",
+        "value": "def process_file_in_chunks(file_path, chunk_size=4096):\n    with open(file_path, 'rb') as file:\n        while True:\n            chunk = file.read(chunk_size)\n            if not chunk:\n                break\n            # Process binary chunk here\n            print(f\"Read chunk of size {len(chunk)} bytes\")\n\n# Usage\n# process_file_in_chunks('path/to/large_binary_file.bin')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Reading files in chunks helps keep your memory footprint low and gives you control over how much data you handle at once, which is useful for both text and binary files."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to efficiently handle large file processing in Python while managing edge cases:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Read files line-by-line using a `for` loop to avoid high memory use.\n- Use exception handling to catch errors from malformed lines.\n- Adjust buffer sizes with the `io` module for improved performance.\n- Read files in fixed-size chunks when dealing with binary files or custom formats."
+      },
+      {
+        "type": "paragraph",
+        "value": "These simple strategies will help you write robust and efficient Python programs that can handle large files without hassle."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-memory-leaks-in-large-scale-system-design",
+    "title": "Understanding Python Memory Leaks in Large-Scale System Design",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what causes memory leaks in Python, especially in large-scale systems, and how to detect and prevent them with beginner-friendly explanations and code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=D4-p4hhqpjw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks happen when a program keeps using more and more memory without releasing it, eventually causing slowdowns or crashes. In Python, memory leaks are less common than in low-level languages, but they can still occur in large-scale system design. Understanding how and why memory leaks happen in Python can help you build more efficient and reliable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common cause of memory leaks in Python is lingering references. Python uses automatic garbage collection to free memory, but if your code keeps references to objects that are no longer needed, those objects won't be released. This especially happens with global variables, circular references, or caching mechanisms."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example where a memory leak might happen if we are not careful. Imagine we keep adding objects to a global list but never remove them:"
+      },
+      {
+        "type": "code",
+        "value": "leaky_list = []\n\ndef add_data(data):\n    # Adding data to a global list that never gets cleared\n    leaky_list.append(data)\n\nfor i in range(1000000):\n    add_data(str(i))  # This keeps growing the list, increasing memory usage"
+      },
+      {
+        "type": "paragraph",
+        "value": "In large-scale systems, memory leaks can also occur when objects reference each other in cycles, preventing Python's garbage collector from freeing them. For example:"
+      },
+      {
+        "type": "code",
+        "value": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.reference = None\n\nnode1 = Node(1)\nnode2 = Node(2)\n\nnode1.reference = node2\nnode2.reference = node1  # Circular reference"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though Python’s garbage collector can usually handle circular references, if your objects define a __del__ method, they might not get collected, causing a memory leak."
+      },
+      {
+        "type": "paragraph",
+        "value": "To detect and fix memory leaks, use Python's modules like `gc` and `tracemalloc`:"
+      },
+      {
+        "type": "code",
+        "value": "import gc\nimport tracemalloc\n\n# Enable garbage collection debug\ngc.set_debug(gc.DEBUG_LEAK)\n\n# Start tracking memory allocations\ntracemalloc.start()\n\n# Your code here...\n\n# Take a snapshot\nsnapshot = tracemalloc.take_snapshot()\n\n# Display top 5 memory blocks\nfor stat in snapshot.statistics('lineno')[:5]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent memory leaks, follow these tips: \n- Avoid holding references to objects longer than needed.\n- Use weak references (`weakref` module) when appropriate.\n- Be cautious with global variables and caching.\n- Break circular references if objects implement __del__.\n- Regularly profile your application's memory usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding how memory leaks occur and using the right tools, you can ensure your Python applications remain performant and stable, especially when scaling to larger systems."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-inventory-management-system-with-sql-server",
+    "title": "Building a Scalable Inventory Management System with SQL Server",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design and implement a scalable inventory management system using SQL Server with beginner-friendly explanations and practical SQL code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=kbKty5ZVKMY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Managing inventory efficiently is crucial for businesses of all sizes. In this tutorial, we'll walk you through building a scalable inventory management system using SQL Server. Whether you're new to SQL or just want to understand how to create a solid foundation for inventory tracking, this guide will help you take your first steps."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll start by designing the database schema — the structure of tables that will hold your inventory data. Then, we'll explore basic SQL commands like creating tables, inserting data, updating quantities, and querying stock levels."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into creating the core tables. The main entities we need to track are Products, Warehouses, and Inventory (which links products to warehouses and tracks stock levels)."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Products (\n    ProductID INT IDENTITY(1,1) PRIMARY KEY,\n    ProductName NVARCHAR(100) NOT NULL,\n    Description NVARCHAR(255),\n    Price DECIMAL(10, 2) NOT NULL\n);\n\nCREATE TABLE Warehouses (\n    WarehouseID INT IDENTITY(1,1) PRIMARY KEY,\n    WarehouseName NVARCHAR(100) NOT NULL,\n    Location NVARCHAR(255)\n);\n\nCREATE TABLE Inventory (\n    InventoryID INT IDENTITY(1,1) PRIMARY KEY,\n    ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ProductID),\n    WarehouseID INT NOT NULL FOREIGN KEY REFERENCES Warehouses(WarehouseID),\n    Quantity INT NOT NULL CHECK (Quantity >= 0)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After setting up the schema, let's insert sample data for products and warehouses."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Products (ProductName, Description, Price) VALUES\n('Wireless Mouse', 'Ergonomic wireless mouse', 25.99),\n('Mechanical Keyboard', 'Backlit mechanical keyboard', 79.99),\n('USB-C Cable', '1 meter USB-C to USB-C cable', 9.99);\n\nINSERT INTO Warehouses (WarehouseName, Location) VALUES\n('Main Warehouse', 'New York'),\n('Backup Warehouse', 'Los Angeles');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, add inventory quantities showing how many of each product are available in each warehouse."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Inventory (ProductID, WarehouseID, Quantity) VALUES\n(1, 1, 100), -- 100 Wireless Mice in Main Warehouse\n(2, 1, 50),  -- 50 Mechanical Keyboards in Main Warehouse\n(3, 2, 200); -- 200 USB-C Cables in Backup Warehouse"
+      },
+      {
+        "type": "paragraph",
+        "value": "To check stock levels for a product across all warehouses, you can use the following query:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT p.ProductName, SUM(i.Quantity) AS TotalQuantity\nFROM Inventory i\nJOIN Products p ON i.ProductID = p.ProductID\nWHERE p.ProductName = 'Wireless Mouse'\nGROUP BY p.ProductName;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to update inventory after shipping or receiving stock, use an UPDATE statement. For example, if 10 wireless mice were sold from the Main Warehouse:"
+      },
+      {
+        "type": "code",
+        "value": "UPDATE Inventory\nSET Quantity = Quantity - 10\nWHERE ProductID = 1 AND WarehouseID = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To ensure scalability as your system grows, consider indexing frequently searched columns such as ProductID and WarehouseID, and implement stored procedures for repetitive operations to improve performance and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, this beginner-friendly inventory system covers basic table design, data insertion, querying, and updating to track product stock across warehouses using SQL Server. With this solid foundation, you can extend features by adding order management, supplier details, or reporting capabilities as your needs grow."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding and inventory managing!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-sql-schemas-for-multi-tenant-systems-to-prevent-data-corruption",
+    "title": "Designing SQL Schemas for Multi-Tenant Systems to Prevent Data Corruption",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to design SQL schemas for multi-tenant applications that keep tenant data isolated and prevent accidental data corruption.",
+    "videoUrl": "https://www.youtube.com/watch?v=cqr2-kCNj7I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant systems allow multiple customers (tenants) to share the same database while keeping their data separate. A key challenge in designing these systems is preventing data corruption caused by mixing or leaking tenant data. This article covers best practices for designing SQL schemas to maintain data isolation and integrity, especially for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common approach to achieve tenant data isolation is adding a tenant identifier column to every table storing tenant-specific data. This tenant_id column helps ensure queries and updates only affect data belonging to the intended tenant."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example simplified schema for a multi-tenant customer management system:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE tenants (\n  tenant_id INT PRIMARY KEY,\n  name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE customers (\n  tenant_id INT NOT NULL,\n  customer_id INT NOT NULL,\n  name VARCHAR(100) NOT NULL,\n  email VARCHAR(100) NOT NULL,\n  PRIMARY KEY (tenant_id, customer_id),\n  FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this schema, every customer row is linked to a specific tenant using tenant_id. The PRIMARY KEY is a composite key containing tenant_id and customer_id, which prevents customer IDs from conflicting across tenants and keeps each tenant’s customers isolated."
+      },
+      {
+        "type": "paragraph",
+        "value": "Important best practices to prevent data corruption in multi-tenant schemas include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always include tenant_id in relevant tables and indexes to filter data correctly."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use composite primary keys (like tenant_id + entity_id) to avoid ID clashes between tenants."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Implement foreign key constraints on tenant_id columns to enforce tenant ownership across related tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Always include tenant_id in WHERE conditions in queries to ensure tenants cannot access or modify other tenants’ data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of a safe SELECT query to get customers for a specific tenant:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT customer_id, name, email\nFROM customers\nWHERE tenant_id = ?; -- replace ? with actual tenant_id"
+      },
+      {
+        "type": "paragraph",
+        "value": "Ignoring tenant_id in queries or schema design can result in data leakage or corruption. For example, a DELETE query missing tenant_id might delete data for all tenants instead of one."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, carefully designing your SQL schema with tenant_id columns, composite keys, and foreign keys is essential to safely sharing a database across tenants while preventing data corruption."
+      }
+    ]
   }
 ];
