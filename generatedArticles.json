@@ -1,541 +1,541 @@
 [
   {
-    "slug": "building-scalable-event-driven-architectures-with-javascript-and-nodejs",
-    "title": "Building Scalable Event-Driven Architectures with JavaScript and Node.js",
+    "slug": "mastering-asynchronous-patterns-in-javascript-promises-async-await-and-callbacks-explained",
+    "title": "Mastering Asynchronous Patterns in JavaScript: Promises, Async/Await, and Callbacks Explained",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to create scalable and efficient event-driven applications using JavaScript and Node.js with practical examples and beginner-friendly steps.",
-    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "description": "Learn how to handle asynchronous operations in JavaScript using callbacks, promises, and async/await with clear, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "Event-driven architecture (EDA) is a powerful way to build scalable and responsive applications. It allows different parts of your system to communicate through events, which can improve performance and flexibility. In this tutorial, we'll explore how to build a simple event-driven system using JavaScript and Node.js."
+        "value": "JavaScript is single-threaded, meaning it executes code line by line. However, many tasks like fetching data, reading files, or timers require waiting without freezing the whole program. That's where asynchronous programming comes in. This tutorial will help you understand three main asynchronous patterns in JavaScript: callbacks, promises, and async/await."
       },
       {
         "type": "paragraph",
-        "value": "Node.js is inherently well-suited for event-driven programming because of its asynchronous nature and built-in event handling capabilities. To get started, we'll create an event emitter that allows different modules to react to events without tight coupling."
+        "value": "### Callbacks - The Traditional Way"
       },
       {
         "type": "paragraph",
-        "value": "First, let's use the built-in `EventEmitter` class from the `events` module to create a simple event-driven system."
+        "value": "A callback is a function passed as an argument to another function, which gets called after some operation completes. This was the earliest way to handle async operations."
       },
       {
         "type": "code",
-        "value": "const EventEmitter = require('events');\n\nclass MyEmitter extends EventEmitter {}\n\nconst myEmitter = new MyEmitter();\n\n// Register an event listener\nmyEmitter.on('orderPlaced', (order) => {\n  console.log(`Order received: ${order.id} for ${order.product}`);\n});\n\n// Emit an event\nmyEmitter.emit('orderPlaced', { id: 1, product: 'Book' });"
+        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    callback('Data loaded');\n  }, 1000);\n}\n\nfetchData(function(result) {\n  console.log(result); // Logs \"Data loaded\" after 1 second\n});"
       },
       {
         "type": "paragraph",
-        "value": "In this example, we create a new event emitter instance called `myEmitter`. We listen for the `orderPlaced` event and log the order details when the event happens. Then, we emit the `orderPlaced` event with an order object. This pattern decouples the event producer and consumer, making the application more scalable."
+        "value": "Callbacks work but can lead to \"callback hell\" when multiple async operations are chained, making code hard to read and maintain."
       },
       {
         "type": "paragraph",
-        "value": "For more complex applications, you might want to handle multiple events asynchronously or scale across multiple services. For these cases, message brokers like RabbitMQ, Apache Kafka, or Redis pub/sub can be integrated with Node.js to handle event communication between services."
+        "value": "### Promises - Cleaner Asynchronous Handling"
       },
       {
         "type": "paragraph",
-        "value": "Here's a basic example showing how you can use the `redis` package to implement a pub/sub model for event-driven communication."
+        "value": "A Promise is an object representing an operation that hasn't completed yet but will in the future. Promises allow chaining with `.then()` and `.catch()` to handle success and errors."
       },
       {
         "type": "code",
-        "value": "// Install redis package first with: npm install redis\n\nconst redis = require('redis');\n\n// Publisher\nconst publisher = redis.createClient();\n\npublisher.connect();\n\n// Subscriber\nconst subscriber = redis.createClient();\n\nsubscriber.connect();\n\n(async () => {\n  await subscriber.subscribe('orders', (message) => {\n    console.log(`Received order via Redis: ${message}`);\n  });\n\n  setTimeout(() => {\n    publisher.publish('orders', JSON.stringify({ id: 2, product: 'Laptop' }));\n  }, 1000);\n})();"
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      resolve('Data loaded');\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(result => {\n    console.log(result); // Logs \"Data loaded\"\n  })\n  .catch(error => {\n    console.error(error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the subscriber listens for messages on the `orders` channel, and the publisher sends a new order message after a short delay. This approach allows your services or modules to communicate asynchronously over network boundaries, making your architecture scalable and flexible."
+        "value": "Promises improve readability and help with error handling compared to callbacks."
       },
       {
         "type": "paragraph",
-        "value": "To sum up, building event-driven architectures with Node.js is beginner-friendly thanks to its built-in events module and the large ecosystem of tools like Redis. Start with simple local event emitters to understand the pattern, then move on to distributed message brokers for building scalable systems."
+        "value": "### Async/Await - The Modern Syntax"
       },
       {
         "type": "paragraph",
-        "value": "Happy coding, and keep experimenting with events to build scalable, maintainable applications!"
+        "value": "Async/await is a syntax built on top of promises that makes asynchronous code look and behave like synchronous code, increasing readability."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise(resolve => {\n    setTimeout(() => {\n      resolve('Data loaded');\n    }, 1000);\n  });\n}\n\nasync function getData() {\n  try {\n    const result = await fetchData();\n    console.log(result); // Logs \"Data loaded\"\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using async/await, you can write asynchronous code that’s easier to read and maintain, especially when multiple async operations depend on each other."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Callbacks are the old-school way to handle async tasks but can get messy.\n- Promises provide a better approach with chaining and error handling.\n- Async/await offers the cleanest syntax, making async code easier to write and understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start using these patterns today to make your JavaScript programs more efficient and maintainable!"
       }
     ]
   },
   {
-    "slug": "mastering-javascript-data-modeling-best-practices-for-error-resilient-structures",
-    "title": "Mastering JavaScript Data Modeling: Best Practices for Error-Resilient Structures",
+    "slug": "mastering-data-normalization-techniques-in-javascript-for-cleaner-data-models",
+    "title": "Mastering Data Normalization Techniques in JavaScript for Cleaner Data Models",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to build error-resilient data models in JavaScript with best practices that make your code more reliable and easier to maintain.",
-    "videoUrl": "https://www.youtube.com/watch?v=EbcRGFV8xGU",
+    "description": "Learn beginner-friendly data normalization techniques in JavaScript to create efficient, error-free, and maintainable data models.",
+    "videoUrl": "https://www.youtube.com/watch?v=di5yzFGmHYk",
     "content": [
       {
         "type": "paragraph",
-        "value": "Data modeling is a crucial part of programming, especially in JavaScript where data often flows between various parts of an app. Proper data modeling means defining and structuring your data clearly to avoid bugs and unexpected errors. In this beginner-friendly guide, we'll explore how to create error-resilient data models in JavaScript to keep your application stable and easy to maintain."
+        "value": "Data normalization is a crucial technique to keep your data models clean, efficient, and easy to work with. In JavaScript, this means transforming messy, nested data into a flat structure that reduces redundancy and avoids common errors like duplicated entries or confusing nested relationships."
       },
       {
         "type": "paragraph",
-        "value": "### Why Focus on Error-Resilient Data Models?\nJavaScript is a dynamically typed language, meaning that variables can hold any type of data. While this is flexible, it can lead to runtime errors if data is not validated or structured properly. Error-resilient data models help catch problems early, make your code predictable, and simplify debugging."
+        "value": "Imagine you receive data from an API with deeply nested objects and arrays, making it hard to update or reference specific items. Without normalization, you risk inconsistent updates and bugs. This guide will help you master simple normalization strategies using JavaScript, enhancing your app’s maintainability and performance."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Define Clear Data Structures Using Objects\nStart by representing complex data with objects. Define the expected properties and data types. This clarity helps you and other developers understand what data should look like."
+        "value": "Let's consider a basic example of nested data that contains posts and their authors:"
       },
       {
         "type": "code",
-        "value": "const user = {\n  id: 1,\n  name: \"Alice\",\n  email: \"alice@example.com\",\n  isActive: true\n};"
+        "value": "const posts = [\n  {\n    id: 1,\n    title: \"Post One\",\n    author: { id: 1, name: \"Alice\" }\n  },\n  {\n    id: 2,\n    title: \"Post Two\",\n    author: { id: 2, name: \"Bob\" }\n  },\n  {\n    id: 3,\n    title: \"Post Three\",\n    author: { id: 1, name: \"Alice\" }\n  }\n];"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Validate Data Before Use\nAlways check that your data matches the expected structure before processing it. This reduces unexpected errors and allows you to give meaningful error messages."
+        "value": "Notice how the author data repeats for each post. This redundancy leads to potential errors if one instance of an author is updated but others are not. Normalizing this data structure means separating authors into their own dictionary so that updates happen in one place."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to normalize the posts and authors into separate objects, referencing authors by their IDs:"
       },
       {
         "type": "code",
-        "value": "function isValidUser(user) {\n  return typeof user.id === 'number' &&\n         typeof user.name === 'string' &&\n         typeof user.email === 'string' &&\n         typeof user.isActive === 'boolean';\n}\n\nconst input = getUserInput();\nif (isValidUser(input)) {\n  console.log(\"User is valid\", input);\n} else {\n  console.error(\"Invalid user data\", input);\n}"
+        "value": "function normalizeData(posts) {\n  const authors = {};\n  const normalizedPosts = posts.map(post => {\n    const { author, ...postData } = post;\n    authors[author.id] = author; // store author separately\n    return { ...postData, authorId: author.id };\n  });\n\n  return { posts: normalizedPosts, authors };\n}\n\nconst normalized = normalizeData(posts);\nconsole.log(normalized);"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Use Default Values to Avoid Undefined\nWhen data is missing or incomplete, use default values or fallback logic to keep your app running smoothly."
-      },
-      {
-        "type": "code",
-        "value": "function createUser(data) {\n  return {\n    id: data.id || 0,\n    name: data.name || \"Anonymous\",\n    email: data.email || \"no-email@example.com\",\n    isActive: data.isActive !== undefined ? data.isActive : false\n  };\n}\n\nconst newUser = createUser({ name: \"Bob\" });\nconsole.log(newUser);"
+        "value": "Output:\n\n\n{\n  posts: [\n    { id: 1, title: \"Post One\", authorId: 1 },\n    { id: 2, title: \"Post Two\", authorId: 2 },\n    { id: 3, title: \"Post Three\", authorId: 1 }\n  ],\n  authors: {\n    \"1\": { id: 1, name: \"Alice\" },\n    \"2\": { id: 2, name: \"Bob\" }\n  }\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "### 4. Handle Errors Gracefully with Try-Catch\nWrap risky data operations in try-catch blocks. This helps to catch errors and prevent your application from crashing unexpectedly."
-      },
-      {
-        "type": "code",
-        "value": "try {\n  const data = JSON.parse(userInputString);\n  if (!isValidUser(data)) {\n    throw new Error(\"User data is invalid\");\n  }\n  processUser(data);\n} catch (error) {\n  console.error(\"Failed to process user:\", error.message);\n}"
+        "value": "Notice how authors are now stored in a separate object using their IDs as keys. Posts only store a reference to the author ID, making updates easier and safer."
       },
       {
         "type": "paragraph",
-        "value": "### 5. Use Arrays and Maps Intentionally\nWhen representing collections of data, decide on using arrays or maps depending on your access patterns. Maps provide easy key-based access while arrays are good for ordered lists."
-      },
-      {
-        "type": "code",
-        "value": "const usersArray = [user1, user2, user3];\n\nconst userMap = new Map();\nuserMap.set(user1.id, user1);\nuserMap.set(user2.id, user2);"
+        "value": "Common errors during normalization include duplicates in your entities or incorrect references. Always ensure your keys (like author IDs) are unique and consistently used across your data structures. Additionally, avoid mutating the original data to prevent bugs; use methods like `map` and object spread (`...`) to create copies instead."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nTo master JavaScript data modeling with error-resilience, always:\n- Define clear data structures\n- Validate data before usage\n- Provide default values\n- Use try-catch blocks for error handling\n- Choose the right data collections for your needs\n\nBy following these best practices, your applications will become more robust and easier to maintain even as they grow."
+        "value": "Data normalization pays off especially when working with large datasets, complex relationships, or when integrating with state management libraries like Redux, which rely on normalized state shapes for efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to master data normalization in JavaScript:\n\n1. Identify nested or repetitive data.\n2. Separate entities into their own objects indexed by unique IDs.\n3. Replace nested objects with ID references.\n4. Avoid mutating original data.\n5. Validate data integrity by checking for unique keys.\n\nBy following these steps, you reduce errors and improve your code's clarity and maintainability."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-generics-for-scalable-codebases",
-    "title": "Mastering TypeScript Generics for Scalable Codebases",
+    "slug": "building-robust-domain-models-typescript-step-by-step",
+    "title": "Building Robust Domain Models in TypeScript: A Step-by-Step Tutorial",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript generics to build reusable and scalable code with practical examples and beginner-friendly explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "description": "Learn how to build clean and robust domain models in TypeScript with practical steps, examples, and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=J1berVAFz5M",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript generics are powerful tools that allow you to write flexible, reusable code components while maintaining strong type safety. For beginners, generics might seem tricky, but once understood, they can greatly improve the maintainability and scalability of your projects."
+        "value": "Creating a robust domain model is an important step when developing maintainable and clear software applications. Domain models represent real-world concepts and business logic in a way that's easy to understand and extend. In this TypeScript tutorial, we'll learn how to build strong domain models from scratch using classes, interfaces, and basic design principles. Let's get started!"
       },
       {
         "type": "paragraph",
-        "value": "Generics enable you to create functions, classes, and interfaces that work with any data type, without losing type information. This means instead of writing repetitive code for different data types, you write it once and reuse it safely."
+        "value": "### What is a Domain Model?\nA domain model is an abstract representation of the main concepts and entities in your problem domain. For example, if you’re building an e-commerce app, domain models might represent Products, Orders, and Customers. These models encapsulate both data and behaviors related to these entities."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a simple example: a function that returns the argument it receives. Normally we could type it as any, but that loses type safety."
+        "value": "### Step 1: Define the Core Entity Interface\nFirst, define the shape of your core entity using a TypeScript interface. This helps describe the data properties consistently."
       },
       {
         "type": "code",
-        "value": "function identity(arg: any): any {\n  return arg;\n}"
+        "value": "interface ProductProps {\n  id: string;\n  name: string;\n  price: number;\n  availableStock: number;\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "The issue is that using `any` disables type checking, so you lose the benefits TypeScript provides. Here's how to rewrite this function using generics:"
+        "value": "### Step 2: Create the Domain Model Class\nUse a class to build the domain model. It holds the data (properties) and behaviors (methods). Make properties private or readonly when needed for encapsulation and data integrity."
       },
       {
         "type": "code",
-        "value": "function identity<T>(arg: T): T {\n  return arg;\n}"
+        "value": "class Product {\n  private availableStock: number;\n\n  constructor(\n    public readonly id: string,\n    public name: string,\n    public price: number,\n    availableStock: number\n  ) {\n    this.availableStock = availableStock;\n  }\n\n  // Business logic: check if the product is in stock\n  isInStock(): boolean {\n    return this.availableStock > 0;\n  }\n\n  // Business logic: reduce stock when product is sold\n  reduceStock(quantity: number): void {\n    if(quantity <= 0) {\n      throw new Error('Quantity must be positive');\n    }\n\n    if(this.availableStock < quantity) {\n      throw new Error('Insufficient stock');\n    }\n\n    this.availableStock -= quantity;\n  }\n\n  // Method to get current stock\n  getStock(): number {\n    return this.availableStock;\n  }\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `<T>` is the generic type parameter. `T` acts as a placeholder for the actual type that will be used when calling the function. TypeScript infers the type based on the argument you pass, making your function flexible and type-safe."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example:"
+        "value": "### Step 3: Use the Domain Model\nNow let’s instantiate the Product class and interact with it using its methods."
       },
       {
         "type": "code",
-        "value": "const numberOutput = identity(42);      // Type inferred as number\nconst stringOutput = identity('hello'); // Type inferred as string"
+        "value": "const product = new Product('p1', 'Laptop', 1500, 10);\n\nconsole.log(product.isInStock());  // true\nconsole.log(product.getStock());   // 10\n\nproduct.reduceStock(3);\nconsole.log(product.getStock());   // 7\n\n// product.reduceStock(20);  // Throws error: Insufficient stock\n"
       },
       {
         "type": "paragraph",
-        "value": "You can also explicitly specify the type if you want:"
+        "value": "### Step 4: Extend with Validation and Immutability\nRobust domain models often protect their internal state from invalid changes. You can add validation in the constructor and use `readonly` properties where suitable."
       },
       {
         "type": "code",
-        "value": "const explicitOutput = identity<number>(100);"
+        "value": "class SafeProduct {\n  private availableStock: number;\n\n  constructor(\n    public readonly id: string,\n    public readonly name: string,\n    public readonly price: number,\n    availableStock: number\n  ) {\n    if(price <= 0) {\n      throw new Error('Price must be greater than zero');\n    }\n\n    if(availableStock < 0) {\n      throw new Error('Stock cannot be negative');\n    }\n\n    this.availableStock = availableStock;\n  }\n\n  isInStock(): boolean {\n    return this.availableStock > 0;\n  }\n\n  reduceStock(quantity: number): void {\n    if(quantity <= 0) {\n      throw new Error('Quantity must be positive');\n    }\n\n    if(this.availableStock < quantity) {\n      throw new Error('Insufficient stock');\n    }\n\n    this.availableStock -= quantity;\n  }\n\n  getStock(): number {\n    return this.availableStock;\n  }\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "Generics are also useful in interfaces and classes to create flexible data structures. Here's an example of a generic interface for a container:"
-      },
-      {
-        "type": "code",
-        "value": "interface Container<T> {\n  value: T;\n  getValue(): T;\n}\n\nclass Box<T> implements Container<T> {\n  constructor(public value: T) {}\n\n  getValue(): T {\n    return this.value;\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can create instances of `Box` with any type, ensuring consistency throughout your code:"
-      },
-      {
-        "type": "code",
-        "value": "const numberBox = new Box<number>(123);\nconst stringBox = new Box<string>('TypeScript');"
-      },
-      {
-        "type": "paragraph",
-        "value": "To sum up, mastering generics helps you write scalable, maintainable, and type-safe TypeScript code by reducing duplication and improving flexibility. Practice by converting your existing functions or classes to use generics where applicable."
+        "value": "### Summary\nBy following these simple steps, you can build domain models in TypeScript that are clean, maintainable, and resilient. Start by defining clear interfaces, encapsulate data with classes, add business logic inside methods, and protect internal state with validation and readonly properties. This foundation will help your application code stay organized and flexible."
       }
     ]
   },
   {
-    "slug": "mastering-typescripts-type-guards-for-cleaner-error-handling",
-    "title": "Mastering TypeScript's Type Guards for Cleaner Error Handling",
+    "slug": "designing-typescript-systems-to-handle-asynchronous-error-propagation-gracefully",
+    "title": "Designing TypeScript Systems to Handle Asynchronous Error Propagation Gracefully",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript's type guards to write safer, cleaner error handling code in your projects.",
-    "videoUrl": "https://www.youtube.com/watch?v=xdQkEn3mx1k",
+    "description": "Learn how to effectively handle and propagate asynchronous errors in TypeScript with beginner-friendly patterns and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=jCeXv16D_Ow",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is a crucial part of any application, and TypeScript offers powerful tools to help us manage errors more effectively. One such tool is 'type guards.' Type guards allow us to check and narrow down the types of variables, enabling safer and clearer error handling. In this article, we'll explore what type guards are, why they are helpful, and how to use them effectively for error handling in TypeScript."
+        "value": "Handling errors in asynchronous code can be tricky, especially for those new to TypeScript or JavaScript. When dealing with promises or async/await patterns, it's important to catch and propagate errors properly without breaking the flow of your application. This article will guide you through designing TypeScript systems that handle asynchronous error propagation gracefully and in a beginner-friendly way."
       },
       {
         "type": "paragraph",
-        "value": "In JavaScript, errors are often handled by catching exceptions. However, the 'error' caught can be of any type—this can make it tricky to access its properties safely. TypeScript's type system doesn't automatically know the shape of the error, which means we might encounter type errors or unsafe assumptions about the error's structure. That's where type guards come in!"
+        "value": "The key to managing asynchronous errors is to use try/catch blocks within your async functions and to propagate errors to calling functions so they can be handled appropriately. TypeScript’s type system can also help you by making error handling more explicit and predictable."
       },
       {
         "type": "paragraph",
-        "value": "A simple example of a type guard is using the 'typeof' operator to check if a value is a string or a number. When it comes to error handling, a common use case is to check if an error is an instance of the built-in Error class or some custom error type."
+        "value": "Here is a simple example of an asynchronous function using async/await with proper error handling:"
       },
       {
         "type": "code",
-        "value": "try {\n  // Code that might throw an error\n  throw new Error('Something went wrong!');\n} catch (error) {\n  if (error instanceof Error) {\n    console.log('Caught an error:', error.message);\n  } else {\n    console.log('Caught something unexpected:', error);\n  }\n}"
+        "value": "async function fetchData(url: string): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.text();\n    return data;\n  } catch (error) {\n    // Here you can log the error or transform it\n    console.error('fetchData error:', error);\n    throw error; // Re-throw to propagate error\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In the snippet above, the 'instanceof' operator lets TypeScript understand that inside the 'if' block, 'error' is indeed an 'Error' object. This means you can safely access properties like 'message' without TypeScript showing any errors."
+        "value": "In the example above, errors from the fetch call or any other part of the function are caught inside the catch block. The error is logged and then re-thrown to propagate it to the caller. This way, the caller knows that the async operation failed and can handle the error accordingly."
       },
       {
         "type": "paragraph",
-        "value": "You can also create custom type guards when working with errors that may have different shapes. For example, let's define a custom error interface and a type guard function to check if an error matches that interface."
+        "value": "Let's see how to call this function safely, also handling errors properly:"
       },
       {
         "type": "code",
-        "value": "interface NetworkError {\n  code: number;\n  message: string;\n}\n\nfunction isNetworkError(error: any): error is NetworkError {\n  return (\n    error &&\n    typeof error.code === 'number' &&\n    typeof error.message === 'string'\n  );\n}\n\ntry {\n  throw { code: 404, message: 'Not Found' };\n} catch (error) {\n  if (isNetworkError(error)) {\n    console.log(`Network error with code: ${error.code}`);\n  } else if (error instanceof Error) {\n    console.log('General error:', error.message);\n  } else {\n    console.log('Unknown error:', error);\n  }\n}"
+        "value": "async function handleData() {\n  try {\n    const data = await fetchData('https://jsonplaceholder.typicode.com/posts/1');\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Error handling data:', error);\n    // Display friendly message or recover gracefully\n  }\n}\n\nhandleData();"
       },
       {
         "type": "paragraph",
-        "value": "Here, the custom type guard function 'isNetworkError' helps TypeScript understand when an error has the 'NetworkError' shape. This way, you can handle different types of errors differently and with type safety."
+        "value": "To make your error handling system more robust and maintainable, consider defining custom error types. This helps you distinguish between different failure cases and respond appropriately."
+      },
+      {
+        "type": "code",
+        "value": "class NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NetworkError';\n  }\n}\n\nasync function fetchWithCustomError(url: string): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new NetworkError(`Failed with status ${response.status}`);\n    }\n    return await response.text();\n  } catch (error) {\n    if (error instanceof NetworkError) {\n      // Handle specific network error\n      console.error('NetworkError caught:', error.message);\n    }\n    throw error; // re-throw to propagate\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, using TypeScript's type guards for error handling allows your code to be more robust and readable. It helps avoid runtime surprises by making the types explicit and helps you write cleaner code when checking for different error types."
+        "value": "Finally, for advanced scenarios or larger projects, you might want to introduce utility functions or libraries that wrap asynchronous calls and return an object indicating success or failure, instead of throwing errors directly. This pattern is often called Result or Either."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> = { data: T; error: null } | { data: null; error: Error };\n\nasync function fetchResult(url: string): Promise<Result<string>> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      return { data: null, error: new Error(`HTTP error: ${response.status}`) };\n    }\n    const data = await response.text();\n    return { data, error: null };\n  } catch (error) {\n    return { data: null, error: error instanceof Error ? error : new Error('Unknown error') };\n  }\n}\n\n(async () => {\n  const result = await fetchResult('https://jsonplaceholder.typicode.com/posts/1');\n\n  if (result.error) {\n    console.error('Fetch failed:', result.error.message);\n  } else {\n    console.log('Fetch succeeded:', result.data);\n  }\n})();"
       },
       {
         "type": "paragraph",
-        "value": "With practice, mastering type guards will become a natural part of your TypeScript development workflow, especially when it comes to error handling in applications."
+        "value": "This approach lets you handle success and error results uniformly without using try/catch at every call site, improving readability and control flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to design TypeScript systems that handle asynchronous error propagation gracefully, use try/catch blocks in async functions, consider defining custom error classes, and explore result wrapper patterns for more complex scenarios. These techniques allow your applications to be more robust, readable, and easier to maintain."
       }
     ]
   },
   {
-    "slug": "master-pythons-itertools-for-elegant-data-manipulation",
-    "title": "Master Python's itertools for Elegant Data Manipulation",
+    "slug": "mastering-python-asyncio-boosting-io-performance",
+    "title": "Mastering Python's Asyncio: Boosting I/O Performance with Real-World Examples",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python's powerful itertools module to manipulate data efficiently with simple and elegant solutions.",
-    "videoUrl": "https://www.youtube.com/watch?v=KrjtC6cBu4Q",
+    "description": "Learn how to use Python's asyncio library to improve I/O performance with beginner-friendly explanations and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're working with data in Python, the itertools module is a treasure trove of tools that help you process iterators quickly and elegantly. Designed for efficient looping and data combination tasks, itertools can make your code shorter, faster, and more readable."
+        "value": "Python's asyncio module is a powerful tool for writing concurrent code using the async/await syntax. It is especially useful when dealing with I/O-bound operations such as network requests, file reading/writing, or database queries. Instead of blocking the whole program while waiting for these operations to complete, asyncio allows other tasks to run concurrently, boosting your program’s efficiency."
       },
       {
         "type": "paragraph",
-        "value": "In this beginner-friendly tutorial, we'll explore some of the most useful functions from itertools, such as `count`, `cycle`, `chain`, `combinations`, and `groupby`. You'll see practical examples that you can easily adapt to your own projects."
+        "value": "In this tutorial, we'll explore the basics of asyncio, how to write asynchronous functions, and demonstrate real-world use cases like making multiple web requests concurrently."
       },
       {
         "type": "paragraph",
-        "value": "First, let's import the module:"
+        "value": "Let's start by understanding the key concepts:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. An `async` function is defined using the `async def` syntax and returns a coroutine.\n2. The `await` keyword is used inside an async function to pause execution until the awaited coroutine completes.\n3. The event loop drives execution, scheduling and running coroutines."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of an async function that simulates waiting for an I/O operation:"
       },
       {
         "type": "code",
-        "value": "import itertools"
+        "value": "import asyncio\n\nasync def say_hello():\n    print(\"Hello...\")\n    await asyncio.sleep(1)  # Simulate I/O delay\n    print(\"...World!\")\n\nasync def main():\n    await say_hello()\n\nasyncio.run(main())"
       },
       {
         "type": "paragraph",
-        "value": "### 1. count(): Create an infinite sequence of numbers\n\nThis function generates consecutive integers, starting from a specified value. It's like a simple counter."
+        "value": "In this code, `asyncio.sleep(1)` acts like a non-blocking delay for 1 second. While awaiting this, the event loop can run other tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's improve I/O performance by running multiple tasks concurrently. Imagine you want to fetch data from many URLs. Instead of fetching them one-by-one, we can fetch them asynchronously."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll use the popular `aiohttp` library for async HTTP requests. First, install it with:\n\nbash\npip install aiohttp\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a practical example of asynchronously fetching multiple URLs:"
       },
       {
         "type": "code",
-        "value": "for num in itertools.count(10):\n    if num > 15:\n        break\n    print(num)"
+        "value": "import asyncio\nimport aiohttp\n\nurls = [\n    'https://jsonplaceholder.typicode.com/posts/1',\n    'https://jsonplaceholder.typicode.com/posts/2',\n    'https://jsonplaceholder.typicode.com/posts/3',\n]\n\nasync def fetch(session, url):\n    async with session.get(url) as response:\n        data = await response.json()\n        print(f\"Fetched {url}: {data['title']}\")\n        return data\n\nasync def main():\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        results = await asyncio.gather(*tasks)\n\nasyncio.run(main())"
       },
       {
         "type": "paragraph",
-        "value": "Output:\n\n10\n11\n12\n13\n14\n15\n"
+        "value": "In this example, `asyncio.gather()` runs all fetch tasks concurrently, which significantly reduces total waiting time compared to sequential requests."
       },
       {
         "type": "paragraph",
-        "value": "### 2. cycle(): Repeat elements of an iterable infinitely\n\nGood for rotating through a fixed set of values."
-      },
-      {
-        "type": "code",
-        "value": "colors = ['red', 'green', 'blue']\ncount = 0\nfor color in itertools.cycle(colors):\n    if count == 6:\n        break\n    print(color)\n    count += 1"
+        "value": "To summarize, mastering asyncio involves:\n\n- Writing async functions with `async def`.\n- Using `await` to pause coroutines without blocking.\n- Scheduling multiple coroutines concurrently.\n- Leveraging libraries like `aiohttp` for async I/O operations.\n\nWith these skills, you can build responsive, high-performance Python applications."
       },
       {
         "type": "paragraph",
-        "value": "Output:\n\nred\ngreen\nblue\nred\ngreen\nblue\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. chain(): Combine multiple iterables into one\n\nUseful when you want to process multiple lists or ranges as a single iterable."
-      },
-      {
-        "type": "code",
-        "value": "list1 = [1, 2, 3]\nlist2 = [4, 5]\nlist3 = [6, 7, 8]\ncombined = itertools.chain(list1, list2, list3)\nfor item in combined:\n    print(item)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Output:\n\n1\n2\n3\n4\n5\n6\n7\n8\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. combinations(): Generate all possible combinations from an iterable\n\nGreat for tasks like generating pairs, triplets, or any group of items without repetition."
-      },
-      {
-        "type": "code",
-        "value": "items = ['a', 'b', 'c']\nfor combo in itertools.combinations(items, 2):\n    print(combo)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Output:\n\n('a', 'b')\n('a', 'c')\n('b', 'c')\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 5. groupby(): Group consecutive items by a key function\n\nThis function groups consecutive elements that have the same key, which is useful for categorizing data."
-      },
-      {
-        "type": "code",
-        "value": "data = [\n    ('animal', 'dog'),\n    ('animal', 'cat'),\n    ('plant', 'tree'),\n    ('plant', 'flower'),\n    ('animal', 'lion')\n]\n\n# Note: groupby requires sorted data to work as expected\nfrom operator import itemgetter\n\nsorted_data = sorted(data, key=itemgetter(0))\n\nfor key, group in itertools.groupby(sorted_data, key=itemgetter(0)):\n    print(key, list(group))"
-      },
-      {
-        "type": "paragraph",
-        "value": "Output:\n\nanimal [('animal', 'dog'), ('animal', 'cat'), ('animal', 'lion')]\nplant [('plant', 'tree'), ('plant', 'flower')]\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\n\nThe itertools module provides efficient tools for handling data iteration patterns. With just a few lines of code, you can create counters, cycle through values, combine iterables, generate combinations, and group data for analysis. Start experimenting with these functions to write cleaner, more elegant Python code!"
+        "value": "Try these concepts on your own projects and watch your program’s I/O handling improve remarkably!"
       }
     ]
   },
   {
-    "slug": "mastering-python-tracebacks-reading-and-debugging-complex-error-chains",
-    "title": "Mastering Python Tracebacks: Reading and Debugging Complex Error Chains",
+    "slug": "understanding-and-handling-data-integrity-errors-in-python-data-models",
+    "title": "Understanding and Handling Data Integrity Errors in Python Data Models",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to read and debug Python tracebacks effectively, helping beginners understand error chains and fix their code with confidence.",
-    "videoUrl": "",
+    "description": "Learn how to identify, handle, and prevent data integrity errors in Python data models with practical examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=0-6HSiixzc4",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you're learning Python, encountering errors is inevitable. But don't worry! Python provides helpful information called a traceback that shows where something went wrong in your code. Understanding how to read these tracebacks is a vital skill for debugging your programs efficiently."
+        "value": "When working with data models in Python, especially with databases or data validation libraries, maintaining data integrity is crucial. Data integrity errors occur when the data does not meet expected formats, uniqueness constraints, or relationships, which can lead to bugs or data loss."
       },
       {
         "type": "paragraph",
-        "value": "A traceback is a report that Python prints when an error (also known as an exception) occurs. It shows the call stack at the moment the error happened, listing the functions involved and pinpointing the exact line causing the issue."
+        "value": "In this article, we'll explore what data integrity errors are, common causes, and how to handle them effectively using Python. We'll focus on simple examples using custom classes and the popular `pydantic` library, which helps validate data models."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at a simple example that raises an error and then break down its traceback."
+        "value": "### What Are Data Integrity Errors?\n\nData integrity errors happen when data violates the rules your application or database expects. For example, trying to insert a duplicate user ID when IDs must be unique, or a string being too long for a field."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Simple Python Class With Validation"
       },
       {
         "type": "code",
-        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)"
+        "value": "class User:\n    def __init__(self, user_id, name):\n        if not isinstance(user_id, int):\n            raise ValueError(\"user_id must be an integer\")\n        if not name:\n            raise ValueError(\"name cannot be empty\")\n        self.user_id = user_id\n        self.name = name\n\n# Usage:\ntry:\n    user = User(\"abc\", \"Alice\")  # This will raise an error\nexcept ValueError as e:\n    print(f\"Data integrity error: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "Running this code will produce a traceback like this:"
+        "value": "In this example, the constructor checks if `user_id` is an integer and if the `name` is not empty. If these conditions fail, it raises a `ValueError`, which we catch and handle gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Pydantic to Manage Data Integrity"
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic is a powerful library that automatically performs data validation using Python type hints, raising clear errors when data integrity rules fail."
       },
       {
         "type": "code",
-        "value": "Traceback (most recent call last):\n  File \"example.py\", line 4, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+        "value": "from pydantic import BaseModel, ValidationError, constr\n\nclass UserModel(BaseModel):\n    user_id: int\n    name: constr(min_length=1)  # Name must not be empty\n\ntry:\n    user = UserModel(user_id=\"abc\", name=\"\")  # Invalid data\nexcept ValidationError as e:\n    print(\"Data integrity errors:\", e.errors())"
       },
       {
         "type": "paragraph",
-        "value": "Here's how to read this traceback step-by-step:\n\n- The most recent call is at the bottom, showing the error: `ZeroDivisionError: division by zero`.\n- The error originated inside the `divide` function at line 2, inside the file \"example.py\".\n- This function was called from line 4, in the main part of the script."
+        "value": "Pydantic automatically checks that `user_id` is an integer and that the name is at least one character. When invalid data is passed, it throws a `ValidationError` with detailed info."
       },
       {
         "type": "paragraph",
-        "value": "Python tracebacks can become more complex if you have multiple nested function calls or exceptions inside exceptions. Let's explore an example with nested functions:"
+        "value": "### Handling Unique Constraints (Simple Example)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common data integrity rule is uniqueness — for example, user IDs must be unique in a system. Here's a simple example that tracks existing IDs and raises an error if a duplicate is added."
       },
       {
         "type": "code",
-        "value": "def multiply(x, y):\n    return x * y\n\ndef divide(a, b):\n    return a / b\n\ndef calculate():\n    mul = multiply(10, 5)\n    div = divide(mul, 0)\n    return div\n\ncalculate()"
+        "value": "class UserRegistry:\n    def __init__(self):\n        self.users = {}\n\n    def add_user(self, user_id, name):\n        if user_id in self.users:\n            raise ValueError(f\"User ID {user_id} already exists.\")\n        self.users[user_id] = name\n\nregistry = UserRegistry()\ntry:\n    registry.add_user(1, \"Alice\")\n    registry.add_user(1, \"Bob\")  # Duplicate ID\nexcept ValueError as e:\n    print(f\"Data integrity error: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "When you run this code, the traceback might look like this:"
-      },
-      {
-        "type": "code",
-        "value": "Traceback (most recent call last):\n  File \"example.py\", line 13, in <module>\n    calculate()\n  File \"example.py\", line 10, in calculate\n    div = divide(mul, 0)\n  File \"example.py\", line 5, in divide\n    return a / b\nZeroDivisionError: division by zero"
+        "value": "### Summary\nHandling data integrity errors early prevents broken logic and corrupted data. You can use simple validation within your classes or leverage libraries like Pydantic for automatic checking. Also, be mindful of application-wide rules like uniqueness, and enforce those with checks and clear exception handling."
       },
       {
         "type": "paragraph",
-        "value": "This traceback tells us:\n\n- The call to `calculate()` caused the error at line 13.\n- Inside `calculate()` (line 10), the `divide` function was called.\n- The error happened inside `divide` at line 5, where division by zero occurs.\n\nSuch multi-level tracebacks help track down the flow of your program to the original error source."
-      },
-      {
-        "type": "paragraph",
-        "value": "Tips for debugging tracebacks:\n\n1. **Start from the bottom:** The last line tells you the error type and message.\n2. **Read upwards:** Follow the calls leading to the error.\n3. **Look for your code files and lines:** Identify which part of your code caused the error.\n4. **Google the error message:** Many errors have common causes and solutions.\n\nBy practicing reading tracebacks, you'll better understand your code's behavior and fix bugs faster."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, mastering Python tracebacks allows you to decode error messages easily and efficiently debug your programs. Whenever you encounter an error, take a moment to examine the traceback — it's your best guide to resolving issues!"
+        "value": "By understanding why data might be invalid and coding defensive checks, you make your Python data models more robust and reliable — giving you confidence in your data's correctness."
       }
     ]
   },
   {
-    "slug": "beginners-guide-to-sql-window-functions-with-practical-examples",
-    "title": "Beginner’s Guide to SQL Window Functions with Practical Examples",
+    "slug": "mastering-window-functions-in-sql-for-advanced-data-analysis",
+    "title": "Mastering Window Functions in SQL for Advanced Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn the basics of SQL window functions with simple explanations and practical examples to improve your data analysis skills.",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis with ease. This beginner-friendly guide explains the basics with practical examples.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions allow you to perform calculations across a set of table rows that are related to the current row. Unlike aggregate functions, window functions do not group your results into a single output row, which means you can keep the detailed row data while adding summary information."
+        "value": "Window functions in SQL are powerful tools for performing advanced data analysis. Unlike aggregate functions that collapse rows, window functions allow you to perform calculations across a set of rows related to the current row without losing row-level details. This makes it easy to calculate running totals, rankings, moving averages, and more."
       },
       {
         "type": "paragraph",
-        "value": "In this guide, we will introduce some of the most common window functions like ROW_NUMBER(), RANK(), SUM(), and AVG() with simple examples to help you get started."
-      },
-      {
-        "type": "paragraph",
-        "value": "Assume we have a sales table with columns: `sales_id`, `employee_id`, `sale_amount`, and `sale_date`."
+        "value": "Before diving in, let's clarify the syntax of a window function. A window function typically looks like this:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n  sales_id INT,\n  employee_id INT,\n  sale_amount DECIMAL(10, 2),\n  sale_date DATE\n);"
+        "value": "FUNCTION_NAME(column) OVER (PARTITION BY column ORDER BY column ROWS BETWEEN ...)"
       },
       {
         "type": "paragraph",
-        "value": "Let’s look at the ROW_NUMBER() function which assigns a unique sequential number to rows within a partition of a result set."
+        "value": "Here’s what the parts mean:\n- FUNCTION_NAME: The window function you want (e.g., ROW_NUMBER(), RANK(), SUM(), AVG())\n- PARTITION BY: Divides the data into groups, similar to GROUP BY but without collapsing rows\n- ORDER BY: Orders rows within each partition\n- ROWS BETWEEN: Defines the frame of rows considered for the function (e.g., for moving averages)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some common window functions with practical examples, assuming we have a table called sales with these columns: `sales_date`, `sales_person`, and `sales_amount`."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. ROW_NUMBER(): Assigns a unique sequential number within each partition."
       },
       {
         "type": "code",
-        "value": "SELECT \n  employee_id,\n  sale_amount,\n  ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY sale_date) AS sale_rank\nFROM sales;"
+        "value": "SELECT sales_person,\n       sales_date,\n       sales_amount,\n       ROW_NUMBER() OVER (PARTITION BY sales_person ORDER BY sales_date) AS sale_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "This query numbers each sale for every employee ordered by the sale date. The PARTITION BY clause groups rows by employee, and the ORDER BY clause controls the numbering inside each group."
+        "value": "This query numbers sales for each salesperson by date. The first sale will have sale_rank = 1, the second = 2, and so on."
       },
       {
         "type": "paragraph",
-        "value": "Another useful function is RANK(), which assigns ranks to rows within a partition. Rows with the same value receive the same rank, leaving gaps in the sequence."
+        "value": "2. RANK(): Assigns a rank to each row within the partition, with gaps when there are ties."
       },
       {
         "type": "code",
-        "value": "SELECT \n  employee_id,\n  sale_amount,\n  RANK() OVER (PARTITION BY employee_id ORDER BY sale_amount DESC) AS sale_rank\nFROM sales;"
+        "value": "SELECT sales_person,\n       sales_date,\n       sales_amount,\n       RANK() OVER (PARTITION BY sales_person ORDER BY sales_amount DESC) AS sales_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "Here, sales are ranked within each employee group by sale amount in descending order."
+        "value": "This ranks sales amounts for each salesperson. If two sales have the same amount, they get the same rank but the next rank number will skip accordingly."
       },
       {
         "type": "paragraph",
-        "value": "Window functions like SUM() and AVG() can calculate running totals or averages without collapsing rows."
+        "value": "3. SUM() with OVER(): Calculates running totals."
       },
       {
         "type": "code",
-        "value": "SELECT \n  employee_id,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY employee_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+        "value": "SELECT sales_person,\n       sales_date,\n       sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY sales_person ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "This query computes a running total of sales for each employee ordered by the sale date."
+        "value": "This gives a running total of sales for each salesperson ordered by date."
       },
       {
         "type": "paragraph",
-        "value": "Similarly, you can calculate moving averages or other cumulative metrics easily."
+        "value": "4. AVG() with OVER(): Finds moving averages over a specific window."
+      },
+      {
+        "type": "code",
+        "value": "SELECT sales_person,\n       sales_date,\n       sales_amount,\n       AVG(sales_amount) OVER (PARTITION BY sales_person ORDER BY sales_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, SQL window functions help you perform advanced analytics without losing the detail level of your data. Key takeaways for beginners include:"
+        "value": "This calculates the average sales amount for the current row and the two previous rows for each salesperson."
       },
       {
         "type": "paragraph",
-        "value": "- Use `OVER()` clause to define the window \n- `PARTITION BY` groups rows for the function\n- `ORDER BY` defines row sequence inside the window\n- Common functions: ROW_NUMBER(), RANK(), SUM(), AVG()"
+        "value": "5. LAG() and LEAD(): Access values from previous or next rows."
+      },
+      {
+        "type": "code",
+        "value": "SELECT sales_person,\n       sales_date,\n       sales_amount,\n       LAG(sales_amount, 1) OVER (PARTITION BY sales_person ORDER BY sales_date) AS previous_sale,\n       LEAD(sales_amount, 1) OVER (PARTITION BY sales_person ORDER BY sales_date) AS next_sale\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "With practice, window functions become powerful tools for reporting, ranking, and running calculations on your datasets."
+        "value": "LAG() returns the previous row’s sales amount and LEAD() returns the next row’s sales amount per salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions can be combined and tailored for many analysis needs. Start with simple partitioning and ordering, then explore framing options for advanced calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering window functions, you’ll elevate your SQL skills and unlock advanced insights while keeping your queries readable and efficient."
       }
     ]
   },
   {
-    "slug": "understanding-nulls-in-sql-best-practices-and-common-pitfalls",
-    "title": "Understanding NULLs in SQL: Best Practices and Common Pitfalls",
+    "slug": "optimizing-sql-queries-for-high-concurrency-system-designs",
+    "title": "Optimizing SQL Queries for High-Concurrency System Designs: Avoid Common Errors",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to handle NULL values effectively in SQL. This beginner-friendly guide explains what NULL means, common errors when using it, and best practices to avoid them.",
-    "videoUrl": "https://www.youtube.com/watch?v=NVNPxKBDJUI",
+    "description": "Learn practical tips to optimize SQL queries for high-concurrency systems and avoid common errors that slow down performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "In SQL, NULL represents missing or unknown data. Unlike a zero or an empty string, NULL means that the value is simply absent. Understanding how NULL works is essential because it can lead to unexpected results if not handled properly."
+        "value": "When designing systems that handle many simultaneous users, writing efficient SQL queries is crucial. Poorly optimized queries can cause slow responses, locking issues, and database errors under high concurrency. This article explains common SQL errors beginners make in high-concurrency environments and how to fix them."
       },
       {
         "type": "paragraph",
-        "value": "One common mistake is comparing values directly to NULL using the equals (=) operator. Because NULL means unknown, any comparison with NULL will not return true or false but rather unknown. This affects queries and filters."
+        "value": "One common mistake is running queries that scan entire tables instead of using indexes. Full table scans can block other queries and slow down the entire system. Always ensure your WHERE clauses align with indexed columns to speed up lookups."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE department_id = NULL;"
+        "value": "SELECT * FROM orders WHERE customer_id = 123;"
       },
       {
         "type": "paragraph",
-        "value": "The above query will return zero rows, even if some rows have NULL as their department_id. The correct way to check for NULL values is by using the IS NULL operator."
+        "value": "In this example, make sure the 'customer_id' column is indexed. You can create an index like this:"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE department_id IS NULL;"
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
       },
       {
         "type": "paragraph",
-        "value": "Similarly, to check for non-NULL values, you should use IS NOT NULL."
+        "value": "Another error is using transactions that hold locks longer than necessary. Long transactions increase lock contention in high-concurrency systems, causing other queries to wait or throw errors like deadlocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep transactions short by grouping only related operations together and committing as soon as possible. Avoid user interaction or long computations inside transactions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Also, avoid SELECT * queries that fetch more data than needed, which increases network load and processing time. Instead, specify only required columns."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE department_id IS NOT NULL;"
+        "value": "SELECT order_id, order_date, total_amount FROM orders WHERE customer_id = 123;"
       },
       {
         "type": "paragraph",
-        "value": "Another pitfall is using aggregate functions like COUNT(). COUNT(column_name) counts only non-NULL values, while COUNT(*) counts all rows regardless of NULLs."
-      },
-      {
-        "type": "code",
-        "value": "SELECT COUNT(department_id) AS non_null_count, COUNT(*) AS total_count FROM employees;"
+        "value": "Using proper isolation levels is another important optimization. For many high-concurrency systems, the READ COMMITTED isolation level balances data consistency and concurrency. Higher isolation levels like SERIALIZABLE can cause more locking and slowdown."
       },
       {
         "type": "paragraph",
-        "value": "When doing arithmetic or string operations, be mindful that if any input is NULL, the result is often NULL as well. For example:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT salary, bonus, salary + bonus AS total_compensation FROM employees;"
+        "value": "Lastly, monitor query performance and errors regularly using your database’s tools. Identify slow queries, locking wait times, and deadlocks, then optimize those queries or database design accordingly."
       },
       {
         "type": "paragraph",
-        "value": "If bonus is NULL for some employee, total_compensation will also be NULL. To avoid this, use the COALESCE() function to treat NULL as a default value."
-      },
-      {
-        "type": "code",
-        "value": "SELECT salary, COALESCE(bonus, 0) AS bonus, salary + COALESCE(bonus, 0) AS total_compensation FROM employees;"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, here are the best practices to handle NULLs in SQL:\n- Use IS NULL or IS NOT NULL for checking NULL values.\n- Remember aggregate functions may ignore NULLs.\n- Use COALESCE() or similar functions to provide default values where needed.\n- Be cautious when performing operations with NULL inputs.\nFollowing these tips will help you avoid common mistakes and write more reliable SQL queries."
+        "value": "In summary, to avoid common SQL errors in high concurrency systems: use indexes wisely, keep transactions short, select only needed columns, choose suitable isolation levels, and monitor performance continuously. These steps will help keep your database fast and reliable under heavy load."
       }
     ]
   }

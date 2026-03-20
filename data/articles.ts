@@ -10928,5 +10928,447 @@ export const articles = [
         "value": "In summary, here are the best practices to handle NULLs in SQL:\n- Use IS NULL or IS NOT NULL for checking NULL values.\n- Remember aggregate functions may ignore NULLs.\n- Use COALESCE() or similar functions to provide default values where needed.\n- Be cautious when performing operations with NULL inputs.\nFollowing these tips will help you avoid common mistakes and write more reliable SQL queries."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-patterns-in-javascript-promises-async-await-and-callbacks-explained",
+    "title": "Mastering Asynchronous Patterns in JavaScript: Promises, Async/Await, and Callbacks Explained",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to handle asynchronous operations in JavaScript using callbacks, promises, and async/await with clear, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, meaning it executes code line by line. However, many tasks like fetching data, reading files, or timers require waiting without freezing the whole program. That's where asynchronous programming comes in. This tutorial will help you understand three main asynchronous patterns in JavaScript: callbacks, promises, and async/await."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Callbacks - The Traditional Way"
+      },
+      {
+        "type": "paragraph",
+        "value": "A callback is a function passed as an argument to another function, which gets called after some operation completes. This was the earliest way to handle async operations."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    callback('Data loaded');\n  }, 1000);\n}\n\nfetchData(function(result) {\n  console.log(result); // Logs \"Data loaded\" after 1 second\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Callbacks work but can lead to \"callback hell\" when multiple async operations are chained, making code hard to read and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Promises - Cleaner Asynchronous Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Promise is an object representing an operation that hasn't completed yet but will in the future. Promises allow chaining with `.then()` and `.catch()` to handle success and errors."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      resolve('Data loaded');\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(result => {\n    console.log(result); // Logs \"Data loaded\"\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises improve readability and help with error handling compared to callbacks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Async/Await - The Modern Syntax"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/await is a syntax built on top of promises that makes asynchronous code look and behave like synchronous code, increasing readability."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise(resolve => {\n    setTimeout(() => {\n      resolve('Data loaded');\n    }, 1000);\n  });\n}\n\nasync function getData() {\n  try {\n    const result = await fetchData();\n    console.log(result); // Logs \"Data loaded\"\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using async/await, you can write asynchronous code that’s easier to read and maintain, especially when multiple async operations depend on each other."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Callbacks are the old-school way to handle async tasks but can get messy.\n- Promises provide a better approach with chaining and error handling.\n- Async/await offers the cleanest syntax, making async code easier to write and understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start using these patterns today to make your JavaScript programs more efficient and maintainable!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-data-normalization-techniques-in-javascript-for-cleaner-data-models",
+    "title": "Mastering Data Normalization Techniques in JavaScript for Cleaner Data Models",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn beginner-friendly data normalization techniques in JavaScript to create efficient, error-free, and maintainable data models.",
+    "videoUrl": "https://www.youtube.com/watch?v=di5yzFGmHYk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data normalization is a crucial technique to keep your data models clean, efficient, and easy to work with. In JavaScript, this means transforming messy, nested data into a flat structure that reduces redundancy and avoids common errors like duplicated entries or confusing nested relationships."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you receive data from an API with deeply nested objects and arrays, making it hard to update or reference specific items. Without normalization, you risk inconsistent updates and bugs. This guide will help you master simple normalization strategies using JavaScript, enhancing your app’s maintainability and performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's consider a basic example of nested data that contains posts and their authors:"
+      },
+      {
+        "type": "code",
+        "value": "const posts = [\n  {\n    id: 1,\n    title: \"Post One\",\n    author: { id: 1, name: \"Alice\" }\n  },\n  {\n    id: 2,\n    title: \"Post Two\",\n    author: { id: 2, name: \"Bob\" }\n  },\n  {\n    id: 3,\n    title: \"Post Three\",\n    author: { id: 1, name: \"Alice\" }\n  }\n];"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how the author data repeats for each post. This redundancy leads to potential errors if one instance of an author is updated but others are not. Normalizing this data structure means separating authors into their own dictionary so that updates happen in one place."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to normalize the posts and authors into separate objects, referencing authors by their IDs:"
+      },
+      {
+        "type": "code",
+        "value": "function normalizeData(posts) {\n  const authors = {};\n  const normalizedPosts = posts.map(post => {\n    const { author, ...postData } = post;\n    authors[author.id] = author; // store author separately\n    return { ...postData, authorId: author.id };\n  });\n\n  return { posts: normalizedPosts, authors };\n}\n\nconst normalized = normalizeData(posts);\nconsole.log(normalized);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n\n\n{\n  posts: [\n    { id: 1, title: \"Post One\", authorId: 1 },\n    { id: 2, title: \"Post Two\", authorId: 2 },\n    { id: 3, title: \"Post Three\", authorId: 1 }\n  ],\n  authors: {\n    \"1\": { id: 1, name: \"Alice\" },\n    \"2\": { id: 2, name: \"Bob\" }\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how authors are now stored in a separate object using their IDs as keys. Posts only store a reference to the author ID, making updates easier and safer."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors during normalization include duplicates in your entities or incorrect references. Always ensure your keys (like author IDs) are unique and consistently used across your data structures. Additionally, avoid mutating the original data to prevent bugs; use methods like `map` and object spread (`...`) to create copies instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "Data normalization pays off especially when working with large datasets, complex relationships, or when integrating with state management libraries like Redux, which rely on normalized state shapes for efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to master data normalization in JavaScript:\n\n1. Identify nested or repetitive data.\n2. Separate entities into their own objects indexed by unique IDs.\n3. Replace nested objects with ID references.\n4. Avoid mutating original data.\n5. Validate data integrity by checking for unique keys.\n\nBy following these steps, you reduce errors and improve your code's clarity and maintainability."
+      }
+    ]
+  },
+  {
+    "slug": "building-robust-domain-models-typescript-step-by-step",
+    "title": "Building Robust Domain Models in TypeScript: A Step-by-Step Tutorial",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build clean and robust domain models in TypeScript with practical steps, examples, and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=J1berVAFz5M",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Creating a robust domain model is an important step when developing maintainable and clear software applications. Domain models represent real-world concepts and business logic in a way that's easy to understand and extend. In this TypeScript tutorial, we'll learn how to build strong domain models from scratch using classes, interfaces, and basic design principles. Let's get started!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Domain Model?\nA domain model is an abstract representation of the main concepts and entities in your problem domain. For example, if you’re building an e-commerce app, domain models might represent Products, Orders, and Customers. These models encapsulate both data and behaviors related to these entities."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Define the Core Entity Interface\nFirst, define the shape of your core entity using a TypeScript interface. This helps describe the data properties consistently."
+      },
+      {
+        "type": "code",
+        "value": "interface ProductProps {\n  id: string;\n  name: string;\n  price: number;\n  availableStock: number;\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Create the Domain Model Class\nUse a class to build the domain model. It holds the data (properties) and behaviors (methods). Make properties private or readonly when needed for encapsulation and data integrity."
+      },
+      {
+        "type": "code",
+        "value": "class Product {\n  private availableStock: number;\n\n  constructor(\n    public readonly id: string,\n    public name: string,\n    public price: number,\n    availableStock: number\n  ) {\n    this.availableStock = availableStock;\n  }\n\n  // Business logic: check if the product is in stock\n  isInStock(): boolean {\n    return this.availableStock > 0;\n  }\n\n  // Business logic: reduce stock when product is sold\n  reduceStock(quantity: number): void {\n    if(quantity <= 0) {\n      throw new Error('Quantity must be positive');\n    }\n\n    if(this.availableStock < quantity) {\n      throw new Error('Insufficient stock');\n    }\n\n    this.availableStock -= quantity;\n  }\n\n  // Method to get current stock\n  getStock(): number {\n    return this.availableStock;\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Use the Domain Model\nNow let’s instantiate the Product class and interact with it using its methods."
+      },
+      {
+        "type": "code",
+        "value": "const product = new Product('p1', 'Laptop', 1500, 10);\n\nconsole.log(product.isInStock());  // true\nconsole.log(product.getStock());   // 10\n\nproduct.reduceStock(3);\nconsole.log(product.getStock());   // 7\n\n// product.reduceStock(20);  // Throws error: Insufficient stock\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Extend with Validation and Immutability\nRobust domain models often protect their internal state from invalid changes. You can add validation in the constructor and use `readonly` properties where suitable."
+      },
+      {
+        "type": "code",
+        "value": "class SafeProduct {\n  private availableStock: number;\n\n  constructor(\n    public readonly id: string,\n    public readonly name: string,\n    public readonly price: number,\n    availableStock: number\n  ) {\n    if(price <= 0) {\n      throw new Error('Price must be greater than zero');\n    }\n\n    if(availableStock < 0) {\n      throw new Error('Stock cannot be negative');\n    }\n\n    this.availableStock = availableStock;\n  }\n\n  isInStock(): boolean {\n    return this.availableStock > 0;\n  }\n\n  reduceStock(quantity: number): void {\n    if(quantity <= 0) {\n      throw new Error('Quantity must be positive');\n    }\n\n    if(this.availableStock < quantity) {\n      throw new Error('Insufficient stock');\n    }\n\n    this.availableStock -= quantity;\n  }\n\n  getStock(): number {\n    return this.availableStock;\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBy following these simple steps, you can build domain models in TypeScript that are clean, maintainable, and resilient. Start by defining clear interfaces, encapsulate data with classes, add business logic inside methods, and protect internal state with validation and readonly properties. This foundation will help your application code stay organized and flexible."
+      }
+    ]
+  },
+  {
+    "slug": "designing-typescript-systems-to-handle-asynchronous-error-propagation-gracefully",
+    "title": "Designing TypeScript Systems to Handle Asynchronous Error Propagation Gracefully",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to effectively handle and propagate asynchronous errors in TypeScript with beginner-friendly patterns and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=jCeXv16D_Ow",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling errors in asynchronous code can be tricky, especially for those new to TypeScript or JavaScript. When dealing with promises or async/await patterns, it's important to catch and propagate errors properly without breaking the flow of your application. This article will guide you through designing TypeScript systems that handle asynchronous error propagation gracefully and in a beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "The key to managing asynchronous errors is to use try/catch blocks within your async functions and to propagate errors to calling functions so they can be handled appropriately. TypeScript’s type system can also help you by making error handling more explicit and predictable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example of an asynchronous function using async/await with proper error handling:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData(url: string): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.text();\n    return data;\n  } catch (error) {\n    // Here you can log the error or transform it\n    console.error('fetchData error:', error);\n    throw error; // Re-throw to propagate error\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, errors from the fetch call or any other part of the function are caught inside the catch block. The error is logged and then re-thrown to propagate it to the caller. This way, the caller knows that the async operation failed and can handle the error accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how to call this function safely, also handling errors properly:"
+      },
+      {
+        "type": "code",
+        "value": "async function handleData() {\n  try {\n    const data = await fetchData('https://jsonplaceholder.typicode.com/posts/1');\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Error handling data:', error);\n    // Display friendly message or recover gracefully\n  }\n}\n\nhandleData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "To make your error handling system more robust and maintainable, consider defining custom error types. This helps you distinguish between different failure cases and respond appropriately."
+      },
+      {
+        "type": "code",
+        "value": "class NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NetworkError';\n  }\n}\n\nasync function fetchWithCustomError(url: string): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new NetworkError(`Failed with status ${response.status}`);\n    }\n    return await response.text();\n  } catch (error) {\n    if (error instanceof NetworkError) {\n      // Handle specific network error\n      console.error('NetworkError caught:', error.message);\n    }\n    throw error; // re-throw to propagate\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, for advanced scenarios or larger projects, you might want to introduce utility functions or libraries that wrap asynchronous calls and return an object indicating success or failure, instead of throwing errors directly. This pattern is often called Result or Either."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> = { data: T; error: null } | { data: null; error: Error };\n\nasync function fetchResult(url: string): Promise<Result<string>> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      return { data: null, error: new Error(`HTTP error: ${response.status}`) };\n    }\n    const data = await response.text();\n    return { data, error: null };\n  } catch (error) {\n    return { data: null, error: error instanceof Error ? error : new Error('Unknown error') };\n  }\n}\n\n(async () => {\n  const result = await fetchResult('https://jsonplaceholder.typicode.com/posts/1');\n\n  if (result.error) {\n    console.error('Fetch failed:', result.error.message);\n  } else {\n    console.log('Fetch succeeded:', result.data);\n  }\n})();"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach lets you handle success and error results uniformly without using try/catch at every call site, improving readability and control flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to design TypeScript systems that handle asynchronous error propagation gracefully, use try/catch blocks in async functions, consider defining custom error classes, and explore result wrapper patterns for more complex scenarios. These techniques allow your applications to be more robust, readable, and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-asyncio-boosting-io-performance",
+    "title": "Mastering Python's Asyncio: Boosting I/O Performance with Real-World Examples",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's asyncio library to improve I/O performance with beginner-friendly explanations and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's asyncio module is a powerful tool for writing concurrent code using the async/await syntax. It is especially useful when dealing with I/O-bound operations such as network requests, file reading/writing, or database queries. Instead of blocking the whole program while waiting for these operations to complete, asyncio allows other tasks to run concurrently, boosting your program’s efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore the basics of asyncio, how to write asynchronous functions, and demonstrate real-world use cases like making multiple web requests concurrently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding the key concepts:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. An `async` function is defined using the `async def` syntax and returns a coroutine.\n2. The `await` keyword is used inside an async function to pause execution until the awaited coroutine completes.\n3. The event loop drives execution, scheduling and running coroutines."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of an async function that simulates waiting for an I/O operation:"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def say_hello():\n    print(\"Hello...\")\n    await asyncio.sleep(1)  # Simulate I/O delay\n    print(\"...World!\")\n\nasync def main():\n    await say_hello()\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, `asyncio.sleep(1)` acts like a non-blocking delay for 1 second. While awaiting this, the event loop can run other tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's improve I/O performance by running multiple tasks concurrently. Imagine you want to fetch data from many URLs. Instead of fetching them one-by-one, we can fetch them asynchronously."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll use the popular `aiohttp` library for async HTTP requests. First, install it with:\n\nbash\npip install aiohttp\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a practical example of asynchronously fetching multiple URLs:"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport aiohttp\n\nurls = [\n    'https://jsonplaceholder.typicode.com/posts/1',\n    'https://jsonplaceholder.typicode.com/posts/2',\n    'https://jsonplaceholder.typicode.com/posts/3',\n]\n\nasync def fetch(session, url):\n    async with session.get(url) as response:\n        data = await response.json()\n        print(f\"Fetched {url}: {data['title']}\")\n        return data\n\nasync def main():\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        results = await asyncio.gather(*tasks)\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `asyncio.gather()` runs all fetch tasks concurrently, which significantly reduces total waiting time compared to sequential requests."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering asyncio involves:\n\n- Writing async functions with `async def`.\n- Using `await` to pause coroutines without blocking.\n- Scheduling multiple coroutines concurrently.\n- Leveraging libraries like `aiohttp` for async I/O operations.\n\nWith these skills, you can build responsive, high-performance Python applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try these concepts on your own projects and watch your program’s I/O handling improve remarkably!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-handling-data-integrity-errors-in-python-data-models",
+    "title": "Understanding and Handling Data Integrity Errors in Python Data Models",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to identify, handle, and prevent data integrity errors in Python data models with practical examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=0-6HSiixzc4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with data models in Python, especially with databases or data validation libraries, maintaining data integrity is crucial. Data integrity errors occur when the data does not meet expected formats, uniqueness constraints, or relationships, which can lead to bugs or data loss."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore what data integrity errors are, common causes, and how to handle them effectively using Python. We'll focus on simple examples using custom classes and the popular `pydantic` library, which helps validate data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Data Integrity Errors?\n\nData integrity errors happen when data violates the rules your application or database expects. For example, trying to insert a duplicate user ID when IDs must be unique, or a string being too long for a field."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Simple Python Class With Validation"
+      },
+      {
+        "type": "code",
+        "value": "class User:\n    def __init__(self, user_id, name):\n        if not isinstance(user_id, int):\n            raise ValueError(\"user_id must be an integer\")\n        if not name:\n            raise ValueError(\"name cannot be empty\")\n        self.user_id = user_id\n        self.name = name\n\n# Usage:\ntry:\n    user = User(\"abc\", \"Alice\")  # This will raise an error\nexcept ValueError as e:\n    print(f\"Data integrity error: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the constructor checks if `user_id` is an integer and if the `name` is not empty. If these conditions fail, it raises a `ValueError`, which we catch and handle gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Pydantic to Manage Data Integrity"
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic is a powerful library that automatically performs data validation using Python type hints, raising clear errors when data integrity rules fail."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, ValidationError, constr\n\nclass UserModel(BaseModel):\n    user_id: int\n    name: constr(min_length=1)  # Name must not be empty\n\ntry:\n    user = UserModel(user_id=\"abc\", name=\"\")  # Invalid data\nexcept ValidationError as e:\n    print(\"Data integrity errors:\", e.errors())"
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic automatically checks that `user_id` is an integer and that the name is at least one character. When invalid data is passed, it throws a `ValidationError` with detailed info."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Unique Constraints (Simple Example)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common data integrity rule is uniqueness — for example, user IDs must be unique in a system. Here's a simple example that tracks existing IDs and raises an error if a duplicate is added."
+      },
+      {
+        "type": "code",
+        "value": "class UserRegistry:\n    def __init__(self):\n        self.users = {}\n\n    def add_user(self, user_id, name):\n        if user_id in self.users:\n            raise ValueError(f\"User ID {user_id} already exists.\")\n        self.users[user_id] = name\n\nregistry = UserRegistry()\ntry:\n    registry.add_user(1, \"Alice\")\n    registry.add_user(1, \"Bob\")  # Duplicate ID\nexcept ValueError as e:\n    print(f\"Data integrity error: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nHandling data integrity errors early prevents broken logic and corrupted data. You can use simple validation within your classes or leverage libraries like Pydantic for automatic checking. Also, be mindful of application-wide rules like uniqueness, and enforce those with checks and clear exception handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding why data might be invalid and coding defensive checks, you make your Python data models more robust and reliable — giving you confidence in your data's correctness."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-for-high-concurrency-system-designs",
+    "title": "Optimizing SQL Queries for High-Concurrency System Designs: Avoid Common Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn practical tips to optimize SQL queries for high-concurrency systems and avoid common errors that slow down performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When designing systems that handle many simultaneous users, writing efficient SQL queries is crucial. Poorly optimized queries can cause slow responses, locking issues, and database errors under high concurrency. This article explains common SQL errors beginners make in high-concurrency environments and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake is running queries that scan entire tables instead of using indexes. Full table scans can block other queries and slow down the entire system. Always ensure your WHERE clauses align with indexed columns to speed up lookups."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE customer_id = 123;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, make sure the 'customer_id' column is indexed. You can create an index like this:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another error is using transactions that hold locks longer than necessary. Long transactions increase lock contention in high-concurrency systems, causing other queries to wait or throw errors like deadlocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep transactions short by grouping only related operations together and committing as soon as possible. Avoid user interaction or long computations inside transactions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Also, avoid SELECT * queries that fetch more data than needed, which increases network load and processing time. Instead, specify only required columns."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date, total_amount FROM orders WHERE customer_id = 123;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using proper isolation levels is another important optimization. For many high-concurrency systems, the READ COMMITTED isolation level balances data consistency and concurrency. Higher isolation levels like SERIALIZABLE can cause more locking and slowdown."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, monitor query performance and errors regularly using your database’s tools. Identify slow queries, locking wait times, and deadlocks, then optimize those queries or database design accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to avoid common SQL errors in high concurrency systems: use indexes wisely, keep transactions short, select only needed columns, choose suitable isolation levels, and monitor performance continuously. These steps will help keep your database fast and reliable under heavy load."
+      }
+    ]
   }
 ];
