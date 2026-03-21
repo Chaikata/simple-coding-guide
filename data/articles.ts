@@ -13402,5 +13402,560 @@ export const articles = [
         "value": "By applying these beginner-friendly tips to optimize your SQL queries—using transactions, setting correct isolation levels, creating indexes, and handling errors—you can prevent data inconsistencies and build more reliable transactional systems."
       }
     ]
+  },
+  {
+    "slug": "build-scalable-data-models-javascript-real-time-apps",
+    "title": "How to Build Scalable Data Models in JavaScript for Real-Time Applications",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create scalable and efficient data models in JavaScript that support real-time applications, ensuring smooth user experience and improved performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time applications like chat apps, live dashboards, and multiplayer games require data models that are both efficient and scalable. In this tutorial, we will walk through the basics of building scalable data models in JavaScript to handle frequent updates and large data volumes seamlessly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Understand Your Data Structure Clearly\nBefore you write any code, think carefully about the data your app needs to manage. For example, a chat app might have users, messages, and chat rooms. Structuring these clearly helps avoid expensive operations later."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Use Immutable Data Patterns\nImmutable data means you don’t change existing objects but create new copies when updating. This approach makes managing state easier in real-time apps and works well with libraries like React or Redux."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple immutable state update example:"
+      },
+      {
+        "type": "code",
+        "value": "const chatState = {\n  users: ['Alice', 'Bob'],\n  messages: [{ user: 'Alice', text: 'Hi!' }]\n};\n\n// Adding a new message immutably\nconst newMessage = { user: 'Bob', text: 'Hello!' };\nconst newState = {\n  ...chatState,\n  messages: [...chatState.messages, newMessage]\n};\n\nconsole.log(newState);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Normalize Your Data\nIn real-time apps, data often references other data (e.g., messages reference users). Normalize by storing entities separately and using IDs to reference them. This reduces duplication and makes updates more efficient."
+      },
+      {
+        "type": "code",
+        "value": "const normalizedState = {\n  users: {\n    1: { id: 1, name: 'Alice' },\n    2: { id: 2, name: 'Bob' }\n  },\n  messages: {\n    101: { id: 101, userId: 1, text: 'Hi!' },\n    102: { id: 102, userId: 2, text: 'Hello!' }\n  },\n  messageOrder: [101, 102]\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use Efficient Lookup Structures\nObjects or Maps provide O(1) access times for reads and writes, unlike arrays, which require O(n) searches. For example, use a Map to store users keyed by their ID."
+      },
+      {
+        "type": "code",
+        "value": "const usersMap = new Map();\nusersMap.set(1, { id: 1, name: 'Alice' });\nusersMap.set(2, { id: 2, name: 'Bob' });\n\nconsole.log(usersMap.get(1)); // { id: 1, name: 'Alice' }"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Batch Updates to Minimize Re-renders\nIn real-time apps, multiple data changes often come in rapid succession. Batch these updates to reduce repeated recalculations or UI renders. Libraries like Redux support batching, but you can also implement it manually."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. Example: Simple Real-Time Message Model\nBelow is a small example illustrating a scalable data model for real-time messaging. It supports adding users, storing messages as normalized data, and retrieving messages with user names efficiently."
+      },
+      {
+        "type": "code",
+        "value": "class RealTimeDataModel {\n  constructor() {\n    this.users = new Map();\n    this.messages = new Map();\n    this.messageOrder = [];\n  }\n\n  addUser(id, name) {\n    this.users.set(id, { id, name });\n  }\n\n  addMessage(id, userId, text) {\n    this.messages.set(id, { id, userId, text });\n    this.messageOrder.push(id);\n  }\n\n  getMessagesWithUsernames() {\n    return this.messageOrder.map(msgId => {\n      const msg = this.messages.get(msgId);\n      const user = this.users.get(msg.userId);\n      return { text: msg.text, userName: user ? user.name : 'Unknown' };\n    });\n  }\n}\n\n// Usage:\nconst model = new RealTimeDataModel();\nmodel.addUser(1, 'Alice');\nmodel.addUser(2, 'Bob');\n\nmodel.addMessage(100, 1, 'Hi!');\nmodel.addMessage(101, 2, 'Hello!');\n\nconsole.log(model.getMessagesWithUsernames());"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Thoughts\nBuilding scalable data models for real-time applications requires careful structuring, choosing the right data patterns, and efficient lookups. Start simple and expand as your app grows. Following these foundational ideas will help your application stay fast and manageable."
+      }
+    ]
+  },
+  {
+    "slug": "unpacking-javascript-hidden-prototype-chain-errors",
+    "title": "Unpacking JavaScript's Hidden Prototype Chain Errors in Complex Inheritance",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to identify and fix common prototype chain errors that arise in complex JavaScript inheritance setups.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript uses a prototype-based inheritance model, which can sometimes cause unexpected errors, especially when dealing with complex inheritance. Beginners often face issues like missing methods or incorrect property lookup due to problems in the prototype chain. This article will help you understand these hidden prototype chain errors and how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, every object has an internal link to another object called its prototype. When you access a property or method on an object, JavaScript looks for it on the object itself. If it doesn't find it, it follows the prototype chain until it either finds it or reaches the end (null). If something is missing or incorrectly set up in this chain, errors occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a basic inheritance example that works as expected:"
+      },
+      {
+        "type": "code",
+        "value": "function Animal(name) {\n  this.name = name;\n}\n\nAnimal.prototype.speak = function() {\n  console.log(this.name + ' makes a noise.');\n};\n\nfunction Dog(name) {\n  Animal.call(this, name); // Call parent constructor\n}\n\nDog.prototype = Object.create(Animal.prototype); // Inherit from Animal\nDog.prototype.constructor = Dog; // Fix constructor pointer\n\nDog.prototype.speak = function() {\n  console.log(this.name + ' barks.');\n};\n\nconst myDog = new Dog('Rex');\nmyDog.speak(); // Output: Rex barks."
+      },
+      {
+        "type": "paragraph",
+        "value": "This example works correctly. However, problems happen when the prototype chain is misconfigured. For instance, if you forget to reset the constructor property after setting up inheritance, you might get unexpected results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a common mistake:"
+      },
+      {
+        "type": "code",
+        "value": "function Cat(name) {\n  Animal.call(this, name);\n}\n\nCat.prototype = Object.create(Animal.prototype);\n// Missing: Cat.prototype.constructor = Cat;\n\nconst myCat = new Cat('Whiskers');\nconsole.log(myCat.constructor === Cat); // false\nconsole.log(myCat.constructor === Animal); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that the constructor property points to Animal instead of Cat because we didn’t reset it. This can lead to issues when checking an object’s type or creating instances dynamically."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another hidden error occurs if you accidentally overwrite the prototype without using Object.create. For example:"
+      },
+      {
+        "type": "code",
+        "value": "function Bird(name) {\n  Animal.call(this, name);\n}\n\n// Incorrect inheritance setup - this breaks the prototype chain\nBird.prototype = Animal.prototype;\n\nconst myBird = new Bird('Tweety');\nmyBird.speak(); // Works, but prototype chain shared with Animal\n\nBird.prototype.fly = function() {\n  console.log(this.name + ' flies.');\n};\n\nconst anotherAnimal = new Animal('Generic');\nanotherAnimal.fly(); // Error! fly is not a function"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, assigning Bird.prototype directly to Animal.prototype means they share the same prototype object. Adding a method to Bird.prototype also changes Animal.prototype, which causes bugs and confusion."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Avoid Prototype Chain Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always use `Object.create` when setting up inheritance to create a new prototype object that inherits from the parent."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Remember to reset the `constructor` property after assigning the prototype."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Avoid directly assigning prototype objects from other constructors unless you intentionally want to share prototypes."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these guidelines, you can prevent many common pitfalls with the prototype chain in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding the prototype chain and carefully setting up inheritance is key to avoiding hidden errors. Whenever you see unexpected behavior or errors like methods not found, checking the prototype chain setup is a good first step."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types-for-cleaner-and-more-reusable-code",
+    "title": "Mastering TypeScript Utility Types for Cleaner and More Reusable Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript's powerful utility types to write cleaner, more reusable code with simple and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Zawa9WUltUE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript offers a set of built-in utility types that can transform existing types into new ones. These utility types help you write cleaner, more reusable code while reducing duplication and potential errors. In this tutorial, we’ll explore some of the most popular utility types like Partial, Pick, Omit, Readonly, and Record through simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding these utility types one by one."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Partial<Type> - Makes all properties of a given type optional. This is useful when you want to represent a subset of an object's properties."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Partial<User> means all properties are optional\nfunction updateUser(id: number, userUpdates: Partial<User>) {\n  // update logic here\n}\n\nupdateUser(1, { name: \"Alice\" }); // Valid, only name is updated"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Pick<Type, Keys> - Constructs a type by picking a set of properties Keys from Type. It’s great when you only need certain properties of a larger type."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  age: number;\n}\n\n// We pick just 'id' and 'name' from User\ntype UserPreview = Pick<User, 'id' | 'name'>;\n\nconst userPreview: UserPreview = {\n  id: 1,\n  name: 'Bob'\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Omit<Type, Keys> - Creates a type by omitting specific keys from Type. Use this when you want all properties except a few."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  password: string;\n}\n\n// Omit 'password' property\ntype UserWithoutPassword = Omit<User, 'password'>;\n\nconst user: UserWithoutPassword = {\n  id: 1,\n  name: 'Carol',\n  email: 'carol@example.com'\n};\n\n// user.password // Error: Property 'password' does not exist"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Readonly<Type> - Makes all properties of Type read-only, meaning they cannot be changed after initialization."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n}\n\nconst readonlyUser: Readonly<User> = {\n  id: 1,\n  name: 'Dave'\n};\n\n// readonlyUser.id = 2; // Error: Cannot assign to 'id' because it is a read-only property"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Record<Keys, Type> - Constructs an object type whose property keys are Keys and property values are Type. This is useful to map a set of keys to a specific type."
+      },
+      {
+        "type": "code",
+        "value": "type Roles = 'admin' | 'user' | 'guest';\n\n// Record maps roles to booleans indicating access\nconst roleAccess: Record<Roles, boolean> = {\n  admin: true,\n  user: false,\n  guest: false\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "By combining these utilities, you can write flexible and maintainable type-safe code. For example, using Partial with Omit can allow you to update user details without touching certain fields like IDs or passwords."
+      },
+      {
+        "type": "code",
+        "value": "type UserUpdate = Partial<Omit<User, 'id' | 'password'>>;\n\nfunction editUser(id: number, updates: UserUpdate) {\n  // safe update logic\n}\n\neditUser(1, { email: 'newemail@example.com' });"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, TypeScript's utility types reduce boilerplate and help you create more expressive and concise type definitions. As you build larger applications, mastering these utilities will significantly improve your development experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try incorporating these utility types in your next TypeScript project and see how they make your code cleaner and easier to maintain!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-data-modeling-avoiding-common-type-mismatches",
+    "title": "Mastering TypeScript Data Modeling: Avoiding Common Type Mismatches",
+    "language": "typescript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to mastering TypeScript data modeling by avoiding common type mismatches to build safer, more reliable applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=TEFBGTExMr4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool for building scalable applications because it adds static types to JavaScript. However, beginners often face type mismatches that can cause frustrating errors. In this article, we’ll explore how to model your data correctly in TypeScript and avoid frequent type errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "When working with data in TypeScript, the main goal is to create clear and accurate types or interfaces for your objects and variables. This helps the compiler catch mistakes early — before your code runs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Imagine you want to represent a user in your app with a name and an age."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = {\n  name: \"Alice\",\n  age: 30\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, we define a User interface with two properties: `name` as a string and `age` as a number. This tells TypeScript what the User object should look like."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is accidentally assigning the wrong type to a property."
+      },
+      {
+        "type": "code",
+        "value": "const badUser: User = {\n  name: \"Bob\",\n  age: \"thirty\" // Error: Type 'string' is not assignable to type 'number'\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript immediately detects this mismatch, preventing a bug you might have found later at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another key pattern is to use union types when a property can accept multiple types."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: number;\n  name: string;\n  discount?: number | null; // discount can be number, null, or undefined\n}\n\nconst product: Product = {\n  id: 101,\n  name: \"Shoes\",\n  discount: null\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `discount` property is optional (may be missing) and can be either a number or null. Modeling this correctly avoids errors when working with optional or nullable fields."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create more complex types with nested objects."
+      },
+      {
+        "type": "code",
+        "value": "interface Address {\n  street: string;\n  city: string;\n  zipCode: string;\n}\n\ninterface Customer {\n  id: number;\n  name: string;\n  address: Address;\n}\n\nconst customer: Customer = {\n  id: 1,\n  name: \"Jane\",\n  address: {\n    street: \"123 Main St\",\n    city: \"Townsville\",\n    zipCode: \"12345\"\n  }\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you model nested data clearly, TypeScript helps track down errors like missing or wrong-type properties deep inside objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always prefer strict typing over `any`. The `any` type disables type checking and can lead to hard-to-find bugs."
+      },
+      {
+        "type": "code",
+        "value": "let data: any = \"Hello\";\ndata = 5; // No error, but no help either"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, specify the expected types explicitly or use generics to maintain flexibility without losing safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "By defining interfaces, using union types, handling optional properties, and avoiding `any`, you can master TypeScript data modeling and write safer code with confidence."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-real-time-collaborative-text-editor-with-python-and-websockets",
+    "title": "Building a Real-Time Collaborative Text Editor with Python and WebSockets",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a real-time collaborative text editor using Python, WebSockets, and simple web technologies for instant updates between users.",
+    "videoUrl": "https://www.youtube.com/watch?v=afwZ4l_ZRMQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time collaboration is a powerful feature in modern web applications, allowing multiple users to edit content simultaneously. In this tutorial, we will build a simple real-time collaborative text editor using Python on the backend with WebSockets and vanilla JavaScript on the frontend. This project is beginner-friendly and demonstrates the core concepts of WebSocket communication and syncing text between clients."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, we need a basic Python server that can handle WebSocket connections. We'll use the popular `websockets` library, which is easy to work with for WebSocket servers. You can install it with `pip install websockets`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Below is the Python code for a simple WebSocket server that broadcasts any received message to all connected clients. This allows all users to see the latest text updates instantly."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport websockets\n\nconnected = set()\n\nasync def handler(websocket):\n    # Register client\n    connected.add(websocket)\n    try:\n        async for message in websocket:\n            # Broadcast messages to all connected clients\n            for conn in connected:\n                if conn != websocket:\n                    await conn.send(message)\n    except websockets.exceptions.ConnectionClosed:\n        pass\n    finally:\n        # Unregister client\n        connected.remove(websocket)\n\nstart_server = websockets.serve(handler, \"localhost\", 6789)\n\nasyncio.get_event_loop().run_until_complete(start_server)\nasyncio.get_event_loop().run_forever()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's build a simple HTML page with a textarea where users can type. We'll connect this page to the WebSocket server and send updates when the text changes, while also listening for updates from others to keep the textarea in sync."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is the HTML and JavaScript code needed for our front end:"
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Collaborative Text Editor</title>\n  <style>\n    textarea {\n      width: 100%;\n      height: 300px;\n      font-size: 16px;\n    }\n  </style>\n</head>\n<body>\n  <h1>Collaborative Text Editor</h1>\n  <textarea id=\"editor\" placeholder=\"Start typing...\"></textarea>\n\n  <script>\n    const ws = new WebSocket(\"ws://localhost:6789/\");\n    const editor = document.getElementById(\"editor\");\n\n    // Flag to avoid echoing updates\n    let localChange = false;\n\n    ws.onmessage = function(event) {\n      localChange = true;\n      editor.value = event.data;\n      localChange = false;\n    };\n\n    editor.addEventListener(\"input\", () => {\n      if (!localChange && ws.readyState === WebSocket.OPEN) {\n        ws.send(editor.value);\n      }\n    });\n  </script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "To run this example, start your Python WebSocket server by running the Python script. Then, open the HTML file in multiple browser windows or tabs. Typing in one editor will instantly update the others, demonstrating real-time collaboration."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple collaborative editor forms the basis for more complex applications. In a real-world app, you'd add user identification, document saving, conflict resolution, and security features. However, this tutorial covers the fundamental real-time syncing concept using Python and WebSockets, making it a great starting point for beginners."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-tracebacks-decode-complex-error-logs-like-a-pro",
+    "title": "Mastering Python Tracebacks: Decode Complex Error Logs Like a Pro",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to read and understand Python tracebacks to quickly identify and fix errors in your code with this beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=6anzVWN24Dw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python code, encountering errors is a natural part of the learning process. Python helps you by outputting error messages known as tracebacks. These tracebacks can initially seem intimidating, but mastering how to read them will save you hours of debugging and frustration."
+      },
+      {
+        "type": "paragraph",
+        "value": "A traceback is a report showing the sequence of function calls that led to an error. It helps pinpoint exactly where the problem occurred and what type of error it was. Understanding the components of a traceback is your first step toward decoding these complex error logs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example of a Python traceback:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, Python will raise an error because dividing by zero is not allowed. Here's what the traceback looks like:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 4, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down the traceback step-by-step:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Traceback (most recent call last):** This line indicates that the following lines are the error report."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **File \"example.py\", line 4, in <module>:** Shows where in your script the error occurred, specifically line 4 within the top-level module."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **result = divide(10, 0):** This is the line of code in your script that caused the issue."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **File \"example.py\", line 2, in divide:** Shows the function call stack. The error came from line 2 inside the divide function."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **return a / b:** The exact line inside the function that caused the exception."
+      },
+      {
+        "type": "paragraph",
+        "value": "6. **ZeroDivisionError: division by zero:** Finally, the type of error and a short description."
+      },
+      {
+        "type": "paragraph",
+        "value": "With this understanding, you can now track the source of the error in your code and fix it. In this case, you might want to check if the divisor is zero before performing division."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how you can handle this error gracefully using a try-except block:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return \"Error: Cannot divide by zero.\"\n\nresult = divide(10, 0)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, instead of the program crashing, it prints a friendly error message."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for decoding tracebacks like a pro:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Read from the bottom up:** The actual error message (exception type and description) is at the bottom."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Follow the call stack:** The traceback shows the path your program took before hitting the error, starting from the most recent call."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Check file names and line numbers:** These tell you exactly where to look in your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Search error types online:** Python’s error names usually link to clear explanations and solutions."
+      },
+      {
+        "type": "paragraph",
+        "value": "By regularly reading and interpreting tracebacks, you'll gain confidence to troubleshoot and fix your Python programs efficiently. Remember, errors and tracebacks are powerful learning tools on your coding journey!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-sql-data-models-for-ecommerce-platforms",
+    "title": "Designing Scalable SQL Data Models for E-Commerce Platforms: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and efficient SQL data models for e-commerce platforms with clear examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=_1IKwnbscQU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Building an e-commerce platform requires a robust and scalable database design to handle products, customers, orders, and inventory efficiently. In this tutorial, we'll learn how to design a simple yet scalable SQL data model suitable for beginners. This model can be expanded as your platform grows."
+      },
+      {
+        "type": "paragraph",
+        "value": "The core entities in an e-commerce platform typically include Products, Customers, Orders, and Order Items. Let’s start by creating tables for each of these entities and define their relationships."
+      },
+      {
+        "type": "code",
+        "value": "-- Create the Products table\nCREATE TABLE Products (\n    ProductID INT PRIMARY KEY AUTO_INCREMENT,\n    Name VARCHAR(100) NOT NULL,\n    Description TEXT,\n    Price DECIMAL(10, 2) NOT NULL,\n    StockQuantity INT NOT NULL DEFAULT 0,\n    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- Create the Customers table\nCREATE TABLE Customers (\n    CustomerID INT PRIMARY KEY AUTO_INCREMENT,\n    FirstName VARCHAR(50) NOT NULL,\n    LastName VARCHAR(50) NOT NULL,\n    Email VARCHAR(100) UNIQUE NOT NULL,\n    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we need to model the orders placed by customers. Each order can contain multiple products, so we introduce two tables: Orders and OrderItems. Orders holds general order data like the customer and date, while OrderItems holds the specific products and quantities for each order."
+      },
+      {
+        "type": "code",
+        "value": "-- Create the Orders table\nCREATE TABLE Orders (\n    OrderID INT PRIMARY KEY AUTO_INCREMENT,\n    CustomerID INT NOT NULL,\n    OrderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    Status VARCHAR(50) DEFAULT 'Pending',\n    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\n);\n\n-- Create the OrderItems table\nCREATE TABLE OrderItems (\n    OrderItemID INT PRIMARY KEY AUTO_INCREMENT,\n    OrderID INT NOT NULL,\n    ProductID INT NOT NULL,\n    Quantity INT NOT NULL CHECK (Quantity > 0),\n    PriceAtPurchase DECIMAL(10, 2) NOT NULL,\n    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),\n    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "By separating Orders and OrderItems, this design supports multiple products per order without data duplication. The PriceAtPurchase field captures the product price at the time of sale, which is important for historical accuracy."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s review some best practices to ensure scalability and maintainability:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use appropriate data types and constraints to maintain data integrity.\n2. Use foreign keys to enforce relationships between tables.\n3. Avoid storing computed or redundant data where possible.\n4. Design tables to handle growth, for example by indexing commonly filtered columns (like Email or OrderDate).\n5. Keep your schema flexible to allow future features (e.g., adding Product Categories or Payment details)."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, a scalable e-commerce database design focuses on clear, normalized tables with relationships that model real-world entities and their interactions. This simple model is a foundation you can extend as your needs evolve."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-large-ecommerce-databases",
+    "title": "Optimizing SQL Queries for Large-Scale E-commerce Databases: Beginner Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix common SQL query errors, improving performance for large e-commerce databases with practical beginner-friendly tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with large-scale e-commerce databases can be challenging, especially when your SQL queries start to slow down or throw errors. As a beginner, understanding how to optimize your SQL queries not only improves performance but also prevents common mistakes that can cause errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common issue arises from poorly written JOINs. For example, missing or incorrect JOIN conditions often cause unexpected results or runtime errors. Always double-check your JOIN criteria."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect JOIN that leads to a large Cartesian product and slow queries\nSELECT o.order_id, c.customer_name\nFROM orders o, customers c;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above query misses a JOIN condition between orders and customers, leading to every order being joined with every customer. To fix this, use explicit JOIN syntax with proper conditions:"
+      },
+      {
+        "type": "code",
+        "value": "-- Correct JOIN with ON condition\nSELECT o.order_id, c.customer_name\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common error is inefficient use of SELECT * in large tables, which retrieves unnecessary columns and increases load time. Always specify only the columns you need."
+      },
+      {
+        "type": "code",
+        "value": "-- Avoid SELECT * on large tables\nSELECT order_id, order_date, total_amount FROM orders WHERE order_status = 'completed';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Indexes are essential for optimizing queries on very large tables. Without proper indexing on columns used in WHERE, JOIN, or ORDER BY clauses, queries will scan the entire table, resulting in slow performance or timeouts."
+      },
+      {
+        "type": "code",
+        "value": "-- Creating an index on the customer_id column in orders table\nCREATE INDEX idx_orders_customer_id ON orders(customer_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Beware of functions or calculations in WHERE clauses, as they can prevent the database from using indexes, causing full-table scans."
+      },
+      {
+        "type": "code",
+        "value": "-- Avoid this (no index used):\nSELECT * FROM orders WHERE YEAR(order_date) = 2023;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, rewrite queries to allow the use of indexes:"
+      },
+      {
+        "type": "code",
+        "value": "-- Optimized query using range filtering\nSELECT * FROM orders WHERE order_date >= '2023-01-01' AND order_date < '2024-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to avoid errors and improve your SQL query performance in large e-commerce databases: always write clear JOIN conditions, avoid SELECT *, use appropriate indexes, and refrain from using functions on indexed columns in WHERE clauses."
+      }
+    ]
   }
 ];
