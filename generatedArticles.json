@@ -1,617 +1,489 @@
 [
   {
-    "slug": "handling-floating-point-precision-edge-cases-in-javascript-calculations",
-    "title": "Handling Floating Point Precision Edge Cases in JavaScript Calculations",
+    "slug": "building-scalable-data-models-in-javascript-with-immutable-js",
+    "title": "Building Scalable Data Models in JavaScript with Immutable.js",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to handle floating point precision issues in JavaScript with simple techniques to get accurate calculations every time.",
-    "videoUrl": "https://www.youtube.com/watch?v=0IOsF_N1DIs",
+    "description": "Learn how to create scalable and efficient data models in JavaScript using Immutable.js to keep your applications predictable and performant.",
+    "videoUrl": "https://www.youtube.com/watch?v=OUsRSM71H2E",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with numbers in JavaScript, one common challenge is dealing with floating point precision errors. This happens because JavaScript uses the IEEE 754 standard for representing numbers, which can lead to small rounding errors during calculations. In this tutorial, we'll explore why these issues occur and how to handle them effectively with beginner-friendly techniques."
+        "value": "When building modern web applications, managing data efficiently and predictably is crucial. Mutable data can lead to bugs and unpredictable behavior, especially in large-scale apps. Immutable.js is a JavaScript library that helps you build scalable data models by enforcing immutability, meaning once created, data structures cannot be changed. This tutorial will introduce the basics of Immutable.js and demonstrate how to use it to create and manipulate immutable data models."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a classic example. Try adding 0.1 and 0.2 in JavaScript:"
+        "value": "First, let's install Immutable.js. You can add it to your project using npm or yarn:"
       },
       {
         "type": "code",
-        "value": "console.log(0.1 + 0.2); // Output: 0.30000000000000004"
+        "value": "npm install immutable\n// or\n// yarn add immutable"
       },
       {
         "type": "paragraph",
-        "value": "As you can see, the result isn't exactly 0.3 but 0.30000000000000004. This tiny difference happens because the binary system can't precisely represent some decimals. Here's how you can handle this problem:"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Method 1: Using `toFixed()` to Format the Number"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can use the `toFixed()` method to round the number to a fixed number of decimal places. For example:"
+        "value": "Immutable.js provides several persistent data structures like Map, List, and Set. They behave like their JavaScript counterparts but are immutable and optimized for performance. Let's start by creating an immutable Map and List:"
       },
       {
         "type": "code",
-        "value": "const result = 0.1 + 0.2;\nconsole.log(result.toFixed(2)); // Output: \"0.30\""
+        "value": "import { Map, List } from 'immutable';\n\n// Create an immutable Map\nconst user = Map({ id: 1, name: 'Alice', age: 25 });\n\n// Create an immutable List\nconst tasks = List(['Learn JS', 'Write code', 'Read docs']);"
       },
       {
         "type": "paragraph",
-        "value": "Keep in mind, `toFixed()` returns a string, so you may need to convert it back to a number if you want to perform further calculations, like this:"
+        "value": "Because these data structures are immutable, when you update them, you get a new copy with the changes instead of modifying the original. This makes it easier to track state changes and debug your application:"
       },
       {
         "type": "code",
-        "value": "const fixedResult = Number(result.toFixed(2));\nconsole.log(fixedResult); // Output: 0.3"
+        "value": "// Update user age (returns a new Map)\nconst updatedUser = user.set('age', 26);\n\nconsole.log(user.get('age')); // 25\nconsole.log(updatedUser.get('age')); // 26"
       },
       {
         "type": "paragraph",
-        "value": "### Method 2: Multiplying and Dividing to Avoid Floating Point Issues"
-      },
-      {
-        "type": "paragraph",
-        "value": "Another way is to remove the decimal part during calculations by multiplying numbers to convert them to integers, perform operations, and then divide back. Here's an example:"
+        "value": "You can also chain operations to perform multiple updates in one go. Here’s how to add a new task to the list and update the user's name:"
       },
       {
         "type": "code",
-        "value": "const sum = (0.1 * 10 + 0.2 * 10) / 10;\nconsole.log(sum); // Output: 0.3"
+        "value": "const updatedTasks = tasks.push('Practice Immutable.js');\nconst updatedUser2 = updatedUser.set('name', 'Alice Smith');\n\nconsole.log(updatedTasks.toJS()); // ['Learn JS', 'Write code', 'Read docs', 'Practice Immutable.js']\nconsole.log(updatedUser2.toJS()); // { id: 1, name: 'Alice Smith', age: 26 }"
       },
       {
         "type": "paragraph",
-        "value": "This works because 0.1 * 10 = 1, and 0.2 * 10 = 2, both integers, so you avoid floating point errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Method 3: Using Libraries for Precise Decimal Arithmetic"
-      },
-      {
-        "type": "paragraph",
-        "value": "For more complex calculations, you might want to use libraries like `decimal.js` or `big.js` that handle decimal arithmetic more accurately. Installing and using these libraries might be overkill for simple cases but are excellent for financial or scientific calculations."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a quick example using `decimal.js` (you'd need to install it first):"
+        "value": "To integrate Immutable.js into a scalable application, consider structuring your state as nested immutable data models. For example, a user model might have nested address and preferences objects:"
       },
       {
         "type": "code",
-        "value": "const Decimal = require('decimal.js');\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\nconsole.log(sum.toString()); // Output: 0.3"
+        "value": "const userProfile = Map({\n  id: 1,\n  name: 'Alice',\n  address: Map({ city: 'New York', zip: '10001' }),\n  preferences: Map({ theme: 'dark', notifications: true })\n});"
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
+        "value": "When updating nested data, Immutable.js provides the `updateIn` or `setIn` methods. Here’s how to change the city inside the nested address map:"
+      },
+      {
+        "type": "code",
+        "value": "const updatedProfile = userProfile.setIn(['address', 'city'], 'San Francisco');\n\nconsole.log(userProfile.getIn(['address', 'city'])); // New York\nconsole.log(updatedProfile.getIn(['address', 'city'])); // San Francisco"
       },
       {
         "type": "paragraph",
-        "value": "Floating point precision issues are an inherent part of JavaScript number calculations, but by using methods like `toFixed()`, integer math, or dedicated libraries, you can write code that handles these edge cases gracefully. Start with simple rounding techniques and move to libraries when your use case requires high precision."
+        "value": "Using Immutable.js improves application scalability by reducing unexpected side-effects, enabling easy state comparison, and improving performance with structural sharing under the hood. It is especially helpful for frontend state management libraries like Redux."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to build scalable data models with Immutable.js:\n\n- Install Immutable.js and import required data structures.\n- Use immutable Maps and Lists to store and manage your data.\n- Always update your data immutably using methods like `set`, `push`, `updateIn`, and `setIn`.\n- Convert to plain JavaScript objects or arrays using `.toJS()` for debugging or UI display.\n\nGive Immutable.js a try in your next project to write more predictable and maintainable JavaScript code!"
       }
     ]
   },
   {
-    "slug": "mastering-data-integrity-in-javascript-best-practices-for-modeling-complex-data-structures",
-    "title": "Mastering Data Integrity in JavaScript: Best Practices for Modeling Complex Data Structures",
+    "slug": "harnessing-javascript-proxy-to-debug-object-mutations-like-a-pro",
+    "title": "Harnessing JavaScript Proxy to Debug Object Mutations Like a Pro",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to maintain data integrity when working with complex data structures in JavaScript through practical, beginner-friendly techniques and best practices.",
-    "videoUrl": "https://www.youtube.com/watch?v=lWX5mk2adrg",
+    "description": "Learn how to use JavaScript Proxy to monitor and debug object mutations effectively, helping you catch bugs and track unexpected changes.",
+    "videoUrl": "https://www.youtube.com/watch?v=Zg4XIpnLWQg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Data integrity is essential when managing complex data structures in JavaScript. It ensures that data remains accurate, consistent, and reliable throughout your application. Beginners often encounter errors when modifying objects or arrays directly, which can lead to bugs and unpredictable behavior. This article will guide you through essential best practices to master data integrity in your JavaScript code."
+        "value": "Debugging unexpected changes in JavaScript objects can be tricky, especially when large or complex objects are involved. Luckily, the JavaScript Proxy object allows you to intercept and monitor operations performed on an object, such as property reads, writes, and more. In this article, we'll cover how to use Proxy to detect and log mutations on objects, making debugging easier and more systematic."
       },
       {
         "type": "paragraph",
-        "value": "One common mistake is directly mutating objects or arrays. For example, modifying nested properties without care can overwrite important values or break references unexpectedly."
+        "value": "A Proxy wraps an existing object and lets you define handler functions for fundamental operations. For debugging object mutations, the most useful trap is `set`, which gets called whenever a property is changed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example to track all property updates on an object:"
       },
       {
         "type": "code",
-        "value": "const user = {\n  name: 'Alice',\n  address: {\n    city: 'New York',\n    zip: 10001\n  }\n};\n\n// Direct mutation\nuser.address.city = 'San Francisco';\nconsole.log(user.address.city); // 'San Francisco'"
+        "value": "const user = {\n  name: 'Alice',\n  age: 25\n};\n\nconst handler = {\n  set(target, property, value) {\n    console.log(`Property '${property}' changed from '${target[property]}' to '${value}'`);\n    target[property] = value; // actually update the property\n    return true; // indicate success\n  }\n};\n\nconst proxyUser = new Proxy(user, handler);\n\nproxyUser.age = 26; // Logs: Property 'age' changed from '25' to '26'\nproxyUser.name = 'Bob'; // Logs: Property 'name' changed from 'Alice' to 'Bob'"
       },
       {
         "type": "paragraph",
-        "value": "While this looks straightforward, direct mutation makes debugging harder as the original data is changed. Instead, use immutable patterns to create new versions of your data without altering the original objects."
+        "value": "In the example above, every time a property is assigned a new value, the `set` method logs the change. This approach gives you insight into who mutated the object and how."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also extend this idea to catch mutations in nested objects by recursively wrapping them with Proxies. This way, you gain deep mutation tracking, which is especially useful for debugging complex data structures."
       },
       {
         "type": "code",
-        "value": "const updatedUser = {\n  ...user,\n  address: {\n    ...user.address,\n    city: 'San Francisco'\n  }\n};\n\nconsole.log(user.address.city); // 'New York'\nconsole.log(updatedUser.address.city); // 'San Francisco'"
+        "value": "function createDeepProxy(target) {\n  const handler = {\n    set(target, property, value) {\n      console.log(`Property '${property}' changed from '${target[property]}' to '${value}'`);\n      target[property] = value;\n      // Wrap new objects with proxy to track nested changes\n      if (value && typeof value === 'object') {\n        target[property] = createDeepProxy(value);\n      }\n      return true;\n    }\n  };\n  // Wrap any existing nested objects\n  for (const key in target) {\n    if (target[key] && typeof target[key] === 'object') {\n      target[key] = createDeepProxy(target[key]);\n    }\n  }\n  return new Proxy(target, handler);\n}\n\nconst data = {\n  user: {\n    name: 'Alice',\n    details: {\n      age: 25\n    }\n  }\n};\n\nconst proxyData = createDeepProxy(data);\nproxyData.user.details.age = 26; // Logs: Property 'age' changed from '25' to '26'\nproxyData.user.name = 'Bob'; // Logs: Property 'name' changed from 'Alice' to 'Bob'"
       },
       {
         "type": "paragraph",
-        "value": "Using the spread operator, we create a new user object with a new address object, preserving the integrity of the original data. This practice helps avoid unexpected side effects."
+        "value": "Using Proxies like this allows you to visually track mutations as they happen, which helps in quickly diagnosing bugs related to unintended object changes. It's a powerful tool in any JavaScript developer's debugging arsenal."
       },
       {
         "type": "paragraph",
-        "value": "Another helpful tip is to validate data shape using utility libraries like Joi, Yup, or manually checking types. This ensures data conforms to expected formats before processing."
-      },
-      {
-        "type": "code",
-        "value": "// Simple manual validation example\nfunction validateUser(user) {\n  if (typeof user.name !== 'string') throw new Error('Name must be a string');\n  if (!user.address || typeof user.address.city !== 'string') throw new Error('Invalid address');\n}\n\ntry {\n  validateUser(user);\n  console.log('User data is valid');\n} catch (error) {\n  console.error(error.message);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "This validation prevents errors and enforces data consistency across your app. For larger projects, consider schema validation libraries to automate and simplify the process."
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, organize your data manipulation code by separating pure functions from side effects. Pure functions take inputs and return new data without changing the original, which enforces immutability and makes testing easier."
-      },
-      {
-        "type": "code",
-        "value": "function updateUserCity(user, newCity) {\n  return {\n    ...user,\n    address: {\n      ...user.address,\n      city: newCity\n    }\n  };\n}\n\nconst newUser = updateUserCity(user, 'Chicago');\nconsole.log(user.address.city); // 'New York'\nconsole.log(newUser.address.city); // 'Chicago'"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, mastering data integrity involves avoiding direct mutations, validating data shapes, using immutable updates, and writing pure functions. These best practices help you prevent common errors and write more maintainable JavaScript applications."
+        "value": "Remember, since Proxies wrap objects, accessing or passing around proxied objects might require some consideration depending on your use case. But for debugging, they provide an elegant and straightforward way to track mutations with minimal code."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-utility-types",
-    "title": "Mastering TypeScript Utility Types for Cleaner, More Maintainable Code",
+    "slug": "building-a-real-time-chat-application-with-typescript-and-websocket",
+    "title": "Building a Real-Time Chat Application with TypeScript and WebSocket",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript utility types to write cleaner and more maintainable code in this beginner-friendly tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=YUpNlWJP85g",
+    "description": "Learn how to build a simple real-time chat application using TypeScript and WebSocket. This beginner-friendly tutorial guides you step-by-step through setting up a server and client for interactive messaging.",
+    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. One of its lesser-known but incredibly useful features is its set of utility types. These utilities help you transform and manipulate existing types to make your code more expressive and maintainable. In this tutorial, we'll explore some of the most commonly used TypeScript utility types and see practical examples of how they can simplify your development."
+        "value": "Real-time communication is an essential feature of modern web applications, powering chat apps, live notifications, and collaborative tools. In this tutorial, we will build a basic real-time chat application using TypeScript and WebSocket, which allows for two-way communication between the client and the server."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with some foundational utility types that you will frequently encounter: `Partial`, `Required`, `Readonly`, and `Pick`. These utilities allow you to modify the shape or properties of an existing type without rewriting everything from scratch."
+        "value": "We will start by creating a WebSocket server that can manage multiple clients. Then, we will create a browser-based client to send and receive chat messages. TypeScript will help us write safer and more maintainable code."
       },
       {
         "type": "paragraph",
-        "value": "### Partial<Type>\nThe `Partial` utility makes all properties in a type optional. This is extremely handy when you want to create an object that only updates some properties of an existing type."
+        "value": "### Step 1: Setting Up the WebSocket Server\n\nFirst, let's create a simple WebSocket server using Node.js and the `ws` library. If you don't have the `ws` package installed, you can add it by running `npm install ws`."
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Using Partial to create an update object\nfunction updateUser(id: number, newUserData: Partial<User>) {\n  // Imagine this updates user data in a database\n  console.log(`Updating user ${id}`, newUserData);\n}\n\nupdateUser(1, { email: \"newemail@example.com\" }); // Only email needs to be provided"
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst port = 8080;\nconst wss = new WebSocketServer({ port });\n\nwss.on('connection', (ws: WebSocket) => {\n  console.log('New client connected');\n\n  ws.on('message', (data: WebSocket.Data) => {\n    // Broadcast the incoming message to all connected clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(data.toString());\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log(`WebSocket server is running on ws://localhost:${port}`);"
       },
       {
         "type": "paragraph",
-        "value": "### Required<Type>\nOpposite of `Partial`, the `Required` utility type makes all properties in a type required. If you have some optional properties but want to enforce they are provided in certain contexts, `Required` is your friend."
+        "value": "This server listens on port 8080 for WebSocket connections. When a new client connects, it logs the connection. Every incoming message from a client is broadcast to all other connected clients, enabling the chat functionality."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Creating the Client Side\n\nNow, let's create a simple client using an HTML page with embedded TypeScript. For ease, we will write the logic in TypeScript and compile it to JavaScript."
       },
       {
         "type": "code",
-        "value": "interface Config {\n  apiKey?: string;\n  endpoint?: string;\n}\n\n// Ensure all config properties are present\nconst fullConfig: Required<Config> = {\n  apiKey: \"abc123\",\n  endpoint: \"https://api.example.com\"\n};"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>TypeScript WebSocket Chat Client</title>\n  <style>\n    #messages { height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; }\n    #messageInput { width: 80%; }\n  </style>\n</head>\n<body>\n  <div id=\"messages\"></div>\n  <input id=\"messageInput\" type=\"text\" placeholder=\"Type a message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script src=\"client.js\"></script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "### Readonly<Type>\n`Readonly` makes all properties of a type immutable. This is useful when you want to prevent accidental property changes after the object has been created."
+        "value": "Next, here is the TypeScript code for the client (`client.ts`). This script connects to the WebSocket server and handles sending and receiving messages:"
       },
       {
         "type": "code",
-        "value": "interface Point {\n  x: number;\n  y: number;\n}\n\nconst point: Readonly<Point> = { x: 10, y: 20 };\n\n// point.x = 15; // Error: Cannot assign to 'x' because it is a read-only property."
+        "value": "const ws = new WebSocket('ws://localhost:8080');\n\nconst messagesDiv = document.getElementById('messages') as HTMLDivElement;\nconst input = document.getElementById('messageInput') as HTMLInputElement;\nconst sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;\n\nfunction appendMessage(message: string, isOwnMessage = false) {\n  const msgElm = document.createElement('div');\n  msgElm.textContent = message;\n  msgElm.style.padding = '5px';\n  msgElm.style.marginBottom = '5px';\n  msgElm.style.backgroundColor = isOwnMessage ? '#DCF8C6' : '#FFFFFF';\n  msgElm.style.textAlign = isOwnMessage ? 'right' : 'left';\n  messagesDiv.appendChild(msgElm);\n  messagesDiv.scrollTop = messagesDiv.scrollHeight;\n}\n\nws.onopen = () => {\n  appendMessage('Connected to the chat server.');\n};\n\nws.onmessage = event => {\n  appendMessage(event.data);\n};\n\nsendBtn.addEventListener('click', () => {\n  if (input.value.trim() !== '') {\n    ws.send(input.value.trim());\n    appendMessage(input.value.trim(), true);\n    input.value = '';\n  }\n});\n\ninput.addEventListener('keypress', event => {\n  if (event.key === 'Enter') {\n    sendBtn.click();\n  }\n});"
       },
       {
         "type": "paragraph",
-        "value": "### Pick<Type, Keys>\n`Pick` constructs a new type by selecting a subset of properties from an existing type. This is useful when you want to work with only certain fields."
-      },
-      {
-        "type": "code",
-        "value": "interface Person {\n  name: string;\n  age: number;\n  location: string;\n}\n\n// Create a type with only name and age\ntype PersonPreview = Pick<Person, \"name\" | \"age\">;\n\nconst preview: PersonPreview = { name: \"Alice\", age: 30 };"
+        "value": "Compile the TypeScript file to JavaScript using `tsc client.ts` and include the generated `client.js` in your HTML file. Then open the HTML file in multiple browser windows to test real-time messaging."
       },
       {
         "type": "paragraph",
-        "value": "These utility types help keep your code DRY (Don't Repeat Yourself) and make your type transformations simple and clear. There are many other utilities like `Omit` (opposite of `Pick`), `Record`, `Exclude`, and `ReturnType` that you can explore as you become more comfortable."
+        "value": "### Summary\n\nIn this tutorial, we built a simple real-time chat application leveraging TypeScript and WebSocket. The server established a WebSocket connection and broadcasted incoming messages to all clients. The client connected to this server, sending and displaying chat messages dynamically. This foundation can be expanded with features like user names, message timestamps, and persistent storage."
       },
       {
         "type": "paragraph",
-        "value": "By mastering TypeScript's utility types, you can write cleaner, more expressive type definitions that reduce bugs and improve maintainability. Start by incorporating these utilities into your projects and see the difference they make!"
+        "value": "Real-time WebSocket communication allows you to create interactive and engaging apps. With TypeScript's type safety, coding becomes more manageable and less error-prone. Keep experimenting and building more complex real-time apps!"
       }
     ]
   },
   {
-    "slug": "mastering-typescripts-strict-null-checks-for-safer-code",
-    "title": "Mastering TypeScript's Strict Null Checks for Safer Code",
+    "slug": "mastering-advanced-typescript-error-inference-for-cleaner-code",
+    "title": "Mastering Advanced TypeScript Error Inference for Cleaner Code",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how TypeScript's strict null checks help prevent common errors by catching null and undefined values early in your code.",
-    "videoUrl": "https://www.youtube.com/watch?v=tKGiAxLXDxk",
+    "description": "Learn how to use TypeScript's advanced error inference to write cleaner, safer, and more maintainable code with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=30LWjhZzg50",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful tool that adds static typing to JavaScript, making your code more predictable and easier to debug. One feature that helps catch common bugs early is called strict null checks. This feature ensures that variables declared without a null or undefined type can't accidentally hold those values. Let's explore what strict null checks do and how to use them effectively."
+        "value": "TypeScript helps catch errors early by inferring types automatically. However, sometimes your code can be improved even more by mastering TypeScript's error inference capabilities. This article walks you through some advanced concepts around error inference, making your code cleaner and easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "By default, in JavaScript and non-strict TypeScript, variables can be null or undefined without much warning. For example:"
+        "value": "A core strength of TypeScript is its ability to infer types from your code. But what about inferring errors? Advanced error inference lets TypeScript catch complex bugs without you explicitly defining every detail. Let's start with a simple example."
       },
       {
         "type": "code",
-        "value": "let name: string = \"Alice\";\nname = null; // No error here if strictNullChecks is off"
+        "value": "function getUserName(user: { name?: string }) {\n  // TypeScript infers name might be undefined\n  if (!user.name) {\n    throw new Error(\"User name is missing\");\n  }\n  return user.name;\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "This can lead to runtime errors if you try to use a variable that unexpectedly holds a null or undefined value. Enabling strict null checks in TypeScript prevents this by making `null` and `undefined` distinct types that variables must explicitly allow."
+        "value": "Here, TypeScript understands that `user.name` might be undefined because it is an optional property. The check `if (!user.name)` helps TypeScript narrow down the type safely. This prevents runtime errors by forcing a check before usage."
       },
       {
         "type": "paragraph",
-        "value": "To enable strict null checks, add this line to your `tsconfig.json` file:"
+        "value": "Now, consider a function where you want to infer errors in a more dynamic scenario with conditional types and advanced inference techniques."
       },
       {
         "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
+        "value": "type Result<T> = { success: true; value: T } | { success: false; error: string };\n\nfunction parseJson<T>(json: string): Result<T> {\n  try {\n    const parsed = JSON.parse(json) as T;\n    return { success: true, value: parsed };\n  } catch (e) {\n    return { success: false, error: (e as Error).message };\n  }\n}\n\nconst result = parseJson<{ name: string }>(`{\"name\":\"Alice\"}`);\n\nif (!result.success) {\n  // TypeScript infers this is the error case\n  console.error(\"Parsing failed:\", result.error);\n} else {\n  // TypeScript infers the value is correctly typed\n  console.log(\"Parsed name:\", result.value.name);\n}"
       },
       {
         "type": "paragraph",
-        "value": "With this option turned on, the previous example will cause a compile error because `name` is declared as a string and cannot be assigned `null`:"
+        "value": "In this example, we define a `Result` type that can represent either success or failure. TypeScript uses this union to infer errors and success cases, enabling more precise type checking. This approach allows you to handle errors cleanly without losing type-safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create utility types to infer errors from functions automatically. Here's a basic pattern to extract error types from promise-returning functions."
       },
       {
         "type": "code",
-        "value": "let name: string = \"Alice\";\nname = null; // Error: Type 'null' is not assignable to type 'string'."
+        "value": "type InferError<T> = T extends (...args: any[]) => Promise<infer R>\n  ? R extends { success: false; error: infer E }\n    ? E\n    : never\n  : never;\n\nasync function fetchUser(): Promise<Result<{ id: number; name: string }>> {\n  // Example fetching user\n  return { success: true, value: { id: 1, name: \"Alice\" } };\n}\n\n// TypeScript infers the error type as string\ntype FetchUserError = InferError<typeof fetchUser>;\n"
       },
       {
         "type": "paragraph",
-        "value": "If you want a variable to accept null or undefined values, you must explicitly indicate this using union types. For example:"
-      },
-      {
-        "type": "code",
-        "value": "let name: string | null = \"Alice\";\nname = null; // This is allowed now"
+        "value": "Using `InferError`, TypeScript automatically extracts the error type from the fetch function's return value, making error handling easier and more consistent across your codebase."
       },
       {
         "type": "paragraph",
-        "value": "This way, TypeScript forces you to handle these cases explicitly and catch potential null or undefined errors at compile time rather than at runtime."
-      },
-      {
-        "type": "paragraph",
-        "value": "When accessing properties or calling methods on variables that can be null or undefined, you need to perform checks to ensure safety. Here is an example using an optional chaining operator (`?.`) to safely access a property:"
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  name: string;\n  age?: number | null;\n}\n\nconst user: User = { name: \"Bob\", age: null };\n\n// Safe check for age\nconst userAge = user.age ?? 0; // Uses nullish coalescing to default to 0\n\nconsole.log(userAge);"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, enabling strict null checks in TypeScript makes your code more robust by requiring you to explicitly deal with null and undefined values, preventing many common runtime errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "To master strict null checks:\n- Enable `strictNullChecks` in your tsconfig.\n- Use union types (e.g., `string | null`) for nullable variables.\n- Use runtime checks or optional chaining before accessing potentially null or undefined values.\n- Leverage TypeScript’s compiler to catch mistakes early."
-      },
-      {
-        "type": "paragraph",
-        "value": "With these practices, your TypeScript code will be safer, cleaner, and easier to maintain."
+        "value": "In summary, mastering advanced error inference in TypeScript helps you write cleaner, more maintainable, and strongly-typed error handling logic. Use union types for success/error patterns, apply conditional types to infer error types, and always leverage TypeScript's narrowing abilities for safer code."
       }
     ]
   },
   {
-    "slug": "mastering-python-context-managers-practical-guide-resource-management",
-    "title": "Mastering Python Context Managers: A Practical Guide to Resource Management",
+    "slug": "building-scalable-data-models-in-python-for-time-series-forecasting",
+    "title": "Building Scalable Data Models in Python for Time Series Forecasting",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python context managers to manage resources efficiently and cleanly. This beginner-friendly guide covers the basics, practical examples, and creating your own context managers.",
-    "videoUrl": "https://www.youtube.com/watch?v=ypyko1Y7zas",
+    "description": "Learn how to build scalable and efficient data models in Python for time series forecasting using beginner-friendly techniques and libraries.",
+    "videoUrl": "https://www.youtube.com/watch?v=CUR6rKrIEGc",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with resources like files, network connections, or database sessions in Python, it's important to properly manage their opening and closing to avoid errors or resource leaks. Python's context managers provide a powerful and clean way to handle such resource management."
+        "value": "Time series forecasting is a crucial part of many fields such as finance, weather prediction, and inventory management. When working with large datasets, building scalable data models is essential to handle increased data efficiently while maintaining accuracy. In this tutorial, we'll cover how to prepare and build scalable data models for time series forecasting using Python, focusing on practical steps suitable for beginners."
       },
       {
         "type": "paragraph",
-        "value": "This tutorial will introduce you to the basics of Python context managers, demonstrate their usage with practical examples like file handling, and show you how to create your own context managers using both classes and the handy @contextmanager decorator."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is a Context Manager?"
-      },
-      {
-        "type": "paragraph",
-        "value": "A context manager is an object that defines setup and teardown actions around a block of code. It is most commonly used with the `with` statement. This helps ensure resources are properly acquired and released, even if errors occur in the block."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, opening a file for reading requires you to close it when done. Forgetting to close a file can lead to resource exhaustion. Context managers take care of such details automatically."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using Context Managers with files"
-      },
-      {
-        "type": "paragraph",
-        "value": "The most common example is the built-in file handler. Instead of this:"
+        "value": "First, ensure that you have the necessary libraries installed. For our example, we will use pandas for data manipulation, NumPy for handling arrays, and scikit-learn for scaling and splitting the dataset."
       },
       {
         "type": "code",
-        "value": "file = open('example.txt', 'r')\ncontent = file.read()\nfile.close()"
+        "value": "pip install pandas numpy scikit-learn"
       },
       {
         "type": "paragraph",
-        "value": "You use the `with` statement to simplify it:"
+        "value": "Let's start with loading a simple time series dataset. For this tutorial, we'll create a synthetic dataset to simulate daily sales data."
       },
       {
         "type": "code",
-        "value": "with open('example.txt', 'r') as file:\n    content = file.read()\n# file is automatically closed here"
+        "value": "import pandas as pd\nimport numpy as np\n\n# Create 1000 days of data\nnp.random.seed(42)\ndates = pd.date_range(start='2020-01-01', periods=1000, freq='D')\nsales = np.random.poisson(lam=200, size=1000) + np.linspace(0, 50, 1000)\n\n# Build dataframe\ndf = pd.DataFrame({'date': dates, 'sales': sales})\ndf.head()"
       },
       {
         "type": "paragraph",
-        "value": "Once the block under with is done, the file is automatically closed without you having to call `close()` explicitly."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How Context Managers Work Internally"
-      },
-      {
-        "type": "paragraph",
-        "value": "Context managers must implement two methods: `__enter__` and `__exit__`:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- `__enter__` is called at the start of the with block and returns the resource.\n- `__exit__` is called at the end of the block to clean up, even if an exception occurs."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Creating Your Own Context Manager with a Class"
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's create a simple context manager that prints messages when entering and exiting the context:"
+        "value": "To build a scalable model, we need to prepare the data properly. Time series data needs to be converted into a supervised learning format by creating features like lag variables (previous days' sales) and possibly rolling statistics."
       },
       {
         "type": "code",
-        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the context')\n        return 'Resource'\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n        if exc_type:\n            print(f'An exception occurred: {exc_value}')\n        return False  # Don't suppress exceptions\n\nwith MyContextManager() as resource:\n    print(f'Inside with block with {resource}')"
+        "value": "def create_lag_features(df, lag_days=[1, 2, 3]):\n    for lag in lag_days:\n        df[f'lag_{lag}'] = df['sales'].shift(lag)\n    return df\n\n# Create lag features\n df = create_lag_features(df)\n\n# Drop rows with NaN values created by lag features\ndf.dropna(inplace=True)\ndf.head()"
       },
       {
         "type": "paragraph",
-        "value": "Output:\nEntering the context\nInside with block with Resource\nExiting the context"
-      },
-      {
-        "type": "paragraph",
-        "value": "If an exception is raised inside the with block, `__exit__` gets called with exception details, allowing you to handle them if needed."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Creating a Context Manager Using @contextmanager"
-      },
-      {
-        "type": "paragraph",
-        "value": "Python's `contextlib` module offers a decorator, `@contextmanager`, which allows writing context managers with a generator function, which can be simpler than creating classes."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s the previous example using `@contextmanager`:"
+        "value": "Scalable models also benefit from feature scaling. Here we'll use Min-Max scaling which rescales features to a range of 0 to 1, making it easier for many machine learning models to converge."
       },
       {
         "type": "code",
-        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_context_manager():\n    print('Entering the context')\n    try:\n        yield 'Resource'\n    except Exception as e:\n        print(f'Exception caught: {e}')\n        raise\n    finally:\n        print('Exiting the context')\n\nwith my_context_manager() as resource:\n    print(f'Inside with block with {resource}')"
+        "value": "from sklearn.preprocessing import MinMaxScaler\n\nscaler = MinMaxScaler()\nfeatures = ['sales', 'lag_1', 'lag_2', 'lag_3']\ndf[features] = scaler.fit_transform(df[features])\ndf.head()"
       },
       {
         "type": "paragraph",
-        "value": "### Why Use Context Managers?"
+        "value": "Next, we'll split the data into training and testing sets. It is important for time series to avoid random shuffling to preserve temporal order."
+      },
+      {
+        "type": "code",
+        "value": "# Use 80% for training, 20% for testing\ntrain_size = int(len(df) * 0.8)\ntrain, test = df.iloc[:train_size], df.iloc[train_size:]\n\nX_train = train[['lag_1', 'lag_2', 'lag_3']]\ny_train = train['sales']\nX_test = test[['lag_1', 'lag_2', 'lag_3']]\ny_test = test['sales']"
       },
       {
         "type": "paragraph",
-        "value": "Context managers greatly improve code readability and safety by encapsulating setup and cleanup logic.\n\nThey make your code less error-prone by handling exceptions and ensuring resources like files, locks, or database connections are always properly released."
+        "value": "Now let's build a simple scalable regression model using Random Forest, which can handle nonlinear patterns. This model scales well to larger datasets with good performance."
+      },
+      {
+        "type": "code",
+        "value": "from sklearn.ensemble import RandomForestRegressor\nfrom sklearn.metrics import mean_squared_error\n\nmodel = RandomForestRegressor(n_estimators=100, random_state=42)\nmodel.fit(X_train, y_train)\n\n# Predict and evaluate\npreds = model.predict(X_test)\nmse = mean_squared_error(y_test, preds)\nprint(f'Mean Squared Error: {mse:.4f}')"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Context managers use `__enter__` and `__exit__` methods or the `@contextmanager` decorator.\n- They are designed to manage resource acquisition and release.\n- Use them with the `with` statement for clean and safe resource handling.\n- You can create custom context managers for your own resource management needs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start mastering context managers today to write cleaner, safer, and more Pythonic code!"
+        "value": "As your data grows, consider these scalability tips:\n\n- Use efficient data types and vectorized operations with pandas and NumPy.\n- Incrementally update models or use online learning frameworks.\n- Save and load models using joblib or pickle to avoid retraining.\n- Use cloud resources or distributed computing frameworks such as Dask for very large datasets.\n\nThis beginner-friendly approach provides a foundation for scalable time series forecasting with Python."
       }
     ]
   },
   {
-    "slug": "optimizing-python-code-performance-by-profiling-memory-leaks-and-inefficiencies",
-    "title": "Optimizing Python Code Performance by Profiling Memory Leaks and Inefficiencies",
+    "slug": "understanding-subtle-differences-typeerror-valueerror-python",
+    "title": "Understanding the Subtle Differences Between TypeError and ValueError in Python",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to identify and fix memory leaks and inefficiencies in Python code using profiling tools for better performance.",
-    "videoUrl": "https://www.youtube.com/watch?v=L5pdA1HVhCo",
+    "description": "Learn the key differences between TypeError and ValueError in Python with simple examples to help beginners write better error-handling code.",
+    "videoUrl": "https://www.youtube.com/watch?v=g2JEeiCJMP8",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing Python programs, it's common to encounter performance issues caused by memory leaks or inefficient code. These problems can make your code slower and consume more memory than necessary. Profiling is a way to analyze your program's behavior and find where inefficiencies or leaks occur. This article will guide beginners through the basics of profiling Python code to optimize performance."
+        "value": "When learning Python, you will frequently encounter errors. Two common built-in errors are TypeError and ValueError. Although they might seem similar, they occur under different circumstances. Understanding these differences can help you debug your code more effectively."
       },
       {
         "type": "paragraph",
-        "value": "A memory leak happens when your program keeps holding onto memory it no longer needs. This can cause your program to use more RAM over time and potentially crash. Inefficient code can slow down your program due to redundant operations or poor algorithm choices."
+        "value": "A TypeError occurs when an operation or function is applied to an object of inappropriate type. This means you are trying to use a value in a way that Python does not support based on the value's type."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by learning how to profile memory usage using the built-in module `tracemalloc` and an external tool `memory_profiler`. We will also look at how to find inefficient parts of your code using the `cProfile` and `timeit` modules."
+        "value": "On the other hand, a ValueError happens when a function receives an argument of the correct type but an inappropriate value. In this case, the data type is right, but the value itself doesn’t make sense for the operation."
       },
       {
         "type": "paragraph",
-        "value": "### Using tracemalloc to find memory leaks"
-      },
-      {
-        "type": "paragraph",
-        "value": "`tracemalloc` is a built-in Python module that tracks memory allocations and helps identify where memory is being used."
+        "value": "Let's see some examples to clarify these ideas:"
       },
       {
         "type": "code",
-        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Sample code that may leak memory\nx = []\nfor i in range(10000):\n    x.append(str(i) * 100)\n\nsnapshot = tracemalloc.take_snapshot()\ntop_stats = snapshot.statistics('lineno')\n\nprint(\"Top 5 lines allocating memory:\")\nfor stat in top_stats[:5]:\n    print(stat)"
+        "value": "x = 'hello'\n\n# TypeError example: you cannot add a string and an integer\ntry:\n    result = x + 5\nexcept TypeError as e:\n    print(f'TypeError: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "This code tracks memory allocations and prints out the top lines where memory is allocated. By analyzing this output, you can identify if any specific part of your code is using more memory than expected."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using memory_profiler to measure memory usage over time"
-      },
-      {
-        "type": "paragraph",
-        "value": "`memory_profiler` is an external tool that lets you track memory usage line by line. You need to install it first using:\n\n\npip install memory_profiler\n\n\nThen you can use the `@profile` decorator to mark the functions to analyze."
+        "value": "In the code above, trying to add a string ('hello') and an integer (5) raises a TypeError because Python doesn't know how to combine these two types directly."
       },
       {
         "type": "code",
-        "value": "@profile\ndef my_function():\n    a = [i for i in range(100000)]\n    b = [x * 2 for x in a]\n    return b\n\nif __name__ == '__main__':\n    my_function()"
+        "value": "# ValueError example: converting a non-numeric string to int\ntry:\n    number = int('abc')\nexcept ValueError as e:\n    print(f'ValueError: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "Run your script using:\n\npython -m memory_profiler your_script.py\n\nThis will show the memory usage for each line inside `my_function`, helping you pinpoint lines with unexpected memory consumption."
+        "value": "Here, the string 'abc' is of the correct type (string), but it cannot be converted to an integer since it doesn't represent a number. This is why a ValueError is raised."
       },
       {
         "type": "paragraph",
-        "value": "### Profiling code execution time with cProfile"
+        "value": "To summarize:"
       },
       {
         "type": "paragraph",
-        "value": "Besides memory, inefficient code can slow down your program. Python's built-in `cProfile` can help identify slow functions."
-      },
-      {
-        "type": "code",
-        "value": "import cProfile\nimport time\n\ndef slow_function():\n    time.sleep(2)\n\n\ndef fast_function():\n    time.sleep(0.1)\n\n\ncProfile.run('slow_function()')\ncProfile.run('fast_function()')"
+        "value": "- Use TypeError when the type of the data is wrong for an operation.\n- Use ValueError when the type is right but the value is invalid."
       },
       {
         "type": "paragraph",
-        "value": "This profiler reveals how much time each function takes to execute, so you can focus on optimizing the slowest parts."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Quick timing with timeit"
-      },
-      {
-        "type": "paragraph",
-        "value": "For small code snippets, the `timeit` module is handy for measuring execution time."
-      },
-      {
-        "type": "code",
-        "value": "import timeit\n\ncode = '''\nresult = [x**2 for x in range(1000)]\n'''\n\nprint(timeit.timeit(code, number=100))"
-      },
-      {
-        "type": "paragraph",
-        "value": "This runs the code 100 times and reports the total time taken, which helps you compare different ways of writing your code to see which is faster."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "To optimize your Python code's performance, start by profiling both memory and execution time. Use `tracemalloc` and `memory_profiler` to detect memory leaks and high memory usage. Use `cProfile` and `timeit` to find and fix slow code. By tackling these issues one step at a time, you will write faster, more efficient Python programs that handle resources well."
+        "value": "Understanding these distinctions will help you write clearer code and handle exceptions appropriately."
       }
     ]
   },
   {
-    "slug": "handling-null-values-complex-sql-joins",
-    "title": "Handling Null Values in Complex SQL Joins: Best Practices and Techniques",
+    "slug": "mastering-window-functions-in-sql-advanced-techniques-for-complex-analytics",
+    "title": "Mastering Window Functions in SQL: Advanced Techniques for Complex Analytics",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to manage and handle null values effectively in complex SQL joins with beginner-friendly explanations and practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "description": "Learn how to harness the power of SQL window functions to perform advanced data analysis with practical examples perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL, joins are essential for combining data from multiple tables. However, handling null values—especially in complex joins—can be tricky for beginners. Nulls often appear when records don't have matching rows in the joined tables, which can affect query results and cause confusion. This tutorial introduces best practices and simple techniques to manage null values gracefully in your SQL joins."
+        "value": "Window functions offer a powerful way to perform calculations across sets of rows that are related to the current row without collapsing the result set. This tutorial will introduce you to advanced window function techniques, helping you perform complex analytics with ease."
       },
       {
         "type": "paragraph",
-        "value": "First, let's quickly recap what happens during SQL joins:\n- INNER JOIN returns only matching rows between two tables.\n- LEFT JOIN returns all rows from the left table and matching rows from the right table, with NULLs for missing matches.\n- RIGHT JOIN is similar but returns all rows from the right table.\n- FULL JOIN returns all rows when there is a match in either left or right table."
+        "value": "Let's start with the basics. Unlike aggregate functions, window functions do not combine rows into a single output row. Instead, they allow you to calculate running totals, ranks, moving averages, and other analytical results alongside each row."
       },
       {
         "type": "paragraph",
-        "value": "When you use LEFT JOIN or FULL JOIN, you often get NULL values where no corresponding record exists in the joined table. These NULLs can impact functions, conditions, and calculations, so it’s important to handle them properly using built-in SQL functions such as COALESCE or ISNULL."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Handling Nulls in a LEFT JOIN\nSuppose we have two tables:\n- `employees` (employee_id, name)\n- `sales` (sale_id, employee_id, amount)\n\nWe want to list all employees and their total sales amount. Some employees might not have made any sales, so sales.amount could be NULL."
+        "value": "Here’s a simple example: calculating a running total of sales per salesperson."
       },
       {
         "type": "code",
-        "value": "SELECT\n  e.employee_id,\n  e.name,\n  COALESCE(SUM(s.amount), 0) AS total_sales\nFROM employees e\nLEFT JOIN sales s ON e.employee_id = s.employee_id\nGROUP BY e.employee_id, e.name;"
+        "value": "SELECT salesperson_id,\n       sales_date,\n       amount,\n       SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sales_date) AS running_total\nFROM sales_data;"
       },
       {
         "type": "paragraph",
-        "value": "In this query, COALESCE is used to replace NULL values returned by SUM when an employee has no sales. Without COALESCE, total_sales for those employees would be NULL, which might cause confusion or errors in your application."
+        "value": "In this query, the SUM() function is used as a window function. The PARTITION BY clause groups the rows by each salesperson, and ORDER BY within the window defines the order to calculate the running total."
       },
       {
         "type": "paragraph",
-        "value": "### Best Practices for Handling Nulls in Joins\n- Use COALESCE or ISNULL to replace NULL with default values where necessary.\n- Be mindful of which type of join you use; INNER JOIN excludes unmatched rows, so NULLs don't appear in your result.\n- Use CASE statements if you need custom logic based on NULL values.\n- Always test joins with data where some matches are missing, to see how NULLs affect your output."
+        "value": "Now, let's explore some advanced concepts:"
       },
       {
         "type": "paragraph",
-        "value": "### Example: Using CASE to Label Missing Data\nYou can add a new column to indicate when there's no matching record in the joined table using a CASE statement."
+        "value": "1. **ROW_NUMBER(), RANK(), DENSE_RANK()** – Useful for assigning row numbers or rankings within partitions."
       },
       {
         "type": "code",
-        "value": "SELECT\n  e.employee_id,\n  e.name,\n  CASE\n    WHEN s.employee_id IS NULL THEN 'No Sales'\n    ELSE 'Has Sales'\n  END AS sales_status\nFROM employees e\nLEFT JOIN sales s ON e.employee_id = s.employee_id\nGROUP BY e.employee_id, e.name, s.employee_id;"
+        "value": "SELECT employee_id,\n       department,\n       salary,\n       ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS row_num,\n       RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank,\n       DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rank\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "This query helps you spot employees without sales directly in your results, making the data easier to understand."
+        "value": "2. **LAG() and LEAD()** – Retrieve data from preceding or following rows, useful for comparisons and trend analysis."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id,\n       order_date,\n       sales_amount,\n       LAG(sales_amount, 1) OVER (ORDER BY order_date) AS previous_sales,\n       LEAD(sales_amount, 1) OVER (ORDER BY order_date) AS next_sales\nFROM orders;"
       },
       {
         "type": "paragraph",
-        "value": "By mastering these simple methods for handling NULL values in complex joins, you will write clearer, more reliable SQL queries that behave as you expect, even in edge cases."
+        "value": "3. **WINDOW FRAME CLAUSES** – Control the set of rows used for calculations. For example, moving averages can be calculated using ROWS BETWEEN."
+      },
+      {
+        "type": "code",
+        "value": "SELECT sales_date,\n       amount,\n       AVG(amount) OVER (ORDER BY sales_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query calculates a 3-day moving average (current day + 2 previous days)."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Combining multiple window functions in a single query** for more comprehensive analytics."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id,\n       department,\n       salary,\n       RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank,\n       AVG(salary) OVER (PARTITION BY department) AS avg_dept_salary\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows how you can easily get each employee's rank and average salary in their department."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these window function techniques, you'll be able to perform deep data analysis directly in your SQL queries without complex subqueries or temporary tables. Experiment with these examples using your own data to unlock powerful insights!"
       }
     ]
   },
   {
-    "slug": "optimizing-sql-query-performance-by-analyzing-execution-plans",
-    "title": "Optimizing SQL Query Performance by Analyzing Execution Plans",
+    "slug": "optimizing-sql-data-models-to-minimize-null-related-anomalies",
+    "title": "Optimizing SQL Data Models to Minimize Null-Related Anomalies",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to improve SQL query performance by understanding and analyzing execution plans. This beginner-friendly guide covers common errors and practical tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how to optimize your SQL data models to avoid common null-related anomalies, improve data integrity, and write cleaner queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=DXpsNQqSFQw",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, slow query performance can be frustrating. Fortunately, SQL databases provide a tool called an execution plan that helps you understand how your queries are processed. Analyzing execution plans is essential to optimize your SQL queries for better speed and efficiency."
+        "value": "Null values in SQL databases can cause unexpected behavior and errors if not handled properly. Nulls represent missing or unknown data, but they can also lead to anomalies in your data models and confusing query results. In this article, we will explore beginner-friendly techniques to optimize your SQL data models to minimize issues related to null values."
       },
       {
         "type": "paragraph",
-        "value": "An execution plan is a step-by-step description of how the SQL server executes a query. It shows the order of operations, indexes used, join types, and more. By examining these plans, you can identify common issues such as missing indexes, large table scans, or inefficient joins."
+        "value": "One of the main problems with nulls is that they behave differently from regular values in SQL. For example, comparisons involving nulls don’t evaluate to true or false, but to unknown. This can make your WHERE clauses and joins tricky if you are not careful."
       },
       {
         "type": "paragraph",
-        "value": "To view an execution plan in SQL Server Management Studio (SSMS), you can use the command:"
-      },
-      {
-        "type": "code",
-        "value": "SET SHOWPLAN_ALL ON;\nGO\n-- Your SQL query here\nSELECT * FROM Employees WHERE DepartmentID = 3;\nGO\nSET SHOWPLAN_ALL OFF;\nGO"
+        "value": "Here are some practical tips to improve your data models and avoid null-related anomalies:"
       },
       {
         "type": "paragraph",
-        "value": "Alternatively, you can click on the \"Include Actual Execution Plan\" button before running your query. This gives you a graphical representation that’s easier to interpret for beginners."
+        "value": "1. **Use NOT NULL Constraints Wisely**: If a column should always have a value, define it as NOT NULL. This prevents nulls from being inserted and ensures data completeness."
       },
       {
         "type": "paragraph",
-        "value": "When analyzing the execution plan, watch out for these common errors or inefficiencies:"
+        "value": "sql\nCREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    FirstName VARCHAR(50) NOT NULL,\n    LastName VARCHAR(50) NOT NULL,\n    Email VARCHAR(100) NOT NULL\n);\n"
       },
       {
         "type": "paragraph",
-        "value": "1. **Table Scan**: This means the entire table is read to find matching rows, which is slow for large tables. Consider adding an index on the filtering column."
+        "value": "2. **Choose Default Values When Appropriate**: Instead of allowing nulls, use default values that make sense for the business context. This can reduce null appearance in your data."
       },
       {
         "type": "paragraph",
-        "value": "2. **Missing Index Warning**: Sometimes the plan indicates a missing index that could improve performance."
+        "value": "sql\nALTER TABLE Orders\nADD COLUMN Status VARCHAR(20) NOT NULL DEFAULT 'Pending';\n"
       },
       {
         "type": "paragraph",
-        "value": "3. **Nested Loops Joins on Large Tables**: Nested loop joins are good for small datasets, but for large tables, hash or merge joins might perform better."
+        "value": "3. **Design Your Schema to Avoid Optional Columns Being Null**: Sometimes a table tries to store different types of related data in the same row, causing many nullable columns. Instead, consider splitting the data into multiple related tables."
       },
       {
         "type": "paragraph",
-        "value": "For example, if you see an execution plan indicating a table scan on the Employees table for the query below:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM Employees WHERE DepartmentID = 3;"
+        "value": "sql\n-- Instead of this:\nCREATE TABLE Vehicles (\n    VehicleID INT PRIMARY KEY,\n    Make VARCHAR(50),\n    Model VARCHAR(50),\n    EngineSize VARCHAR(20), -- for cars only\n    NumberOfSeats INT         -- for buses only\n);\n\n-- Use this approach:\nCREATE TABLE Vehicles (\n    VehicleID INT PRIMARY KEY,\n    Make VARCHAR(50),\n    Model VARCHAR(50)\n);\n\nCREATE TABLE CarDetails (\n    VehicleID INT PRIMARY KEY,\n    EngineSize VARCHAR(20),\n    FOREIGN KEY (VehicleID) REFERENCES Vehicles(VehicleID)\n);\n\nCREATE TABLE BusDetails (\n    VehicleID INT PRIMARY KEY,\n    NumberOfSeats INT,\n    FOREIGN KEY (VehicleID) REFERENCES Vehicles(VehicleID)\n);\n"
       },
       {
         "type": "paragraph",
-        "value": "You can improve performance by creating an index on the DepartmentID column:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_departmentid ON Employees(DepartmentID);"
+        "value": "4. **Use IS NULL and COALESCE Properly in Queries**: When querying, explicitly check for IS NULL or use the COALESCE function to handle null values safely."
       },
       {
         "type": "paragraph",
-        "value": "After creating the index, run the query again and check the execution plan. You should now see an index seek instead of a table scan, which is faster."
+        "value": "sql\nSELECT \n    EmployeeID, \n    COALESCE(PhoneNumber, 'No Phone') AS PhoneContact\nFROM Employees\nWHERE PhoneNumber IS NOT NULL;\n"
       },
       {
         "type": "paragraph",
-        "value": "In summary, learning to read and analyze SQL execution plans can help you quickly identify bottlenecks and optimize your queries effectively. Practice by running your queries with execution plans enabled, identify errors like table scans and missing indexes, and apply fixes such as adding indexes or rewriting joins."
+        "value": "5. **Understand Three-Valued Logic in SQL**: Keep in mind that comparisons with NULL return UNKNOWN, not true or false, so be explicit with null checks to avoid unwanted filtering."
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these tips, you can build more robust SQL data models with fewer null-related anomalies, making your data easier to query and maintain."
       }
     ]
   }

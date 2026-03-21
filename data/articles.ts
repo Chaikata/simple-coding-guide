@@ -11986,5 +11986,493 @@ export const articles = [
         "value": "In summary, learning to read and analyze SQL execution plans can help you quickly identify bottlenecks and optimize your queries effectively. Practice by running your queries with execution plans enabled, identify errors like table scans and missing indexes, and apply fixes such as adding indexes or rewriting joins."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-javascript-with-immutable-js",
+    "title": "Building Scalable Data Models in JavaScript with Immutable.js",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create scalable and efficient data models in JavaScript using Immutable.js to keep your applications predictable and performant.",
+    "videoUrl": "https://www.youtube.com/watch?v=OUsRSM71H2E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building modern web applications, managing data efficiently and predictably is crucial. Mutable data can lead to bugs and unpredictable behavior, especially in large-scale apps. Immutable.js is a JavaScript library that helps you build scalable data models by enforcing immutability, meaning once created, data structures cannot be changed. This tutorial will introduce the basics of Immutable.js and demonstrate how to use it to create and manipulate immutable data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's install Immutable.js. You can add it to your project using npm or yarn:"
+      },
+      {
+        "type": "code",
+        "value": "npm install immutable\n// or\n// yarn add immutable"
+      },
+      {
+        "type": "paragraph",
+        "value": "Immutable.js provides several persistent data structures like Map, List, and Set. They behave like their JavaScript counterparts but are immutable and optimized for performance. Let's start by creating an immutable Map and List:"
+      },
+      {
+        "type": "code",
+        "value": "import { Map, List } from 'immutable';\n\n// Create an immutable Map\nconst user = Map({ id: 1, name: 'Alice', age: 25 });\n\n// Create an immutable List\nconst tasks = List(['Learn JS', 'Write code', 'Read docs']);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Because these data structures are immutable, when you update them, you get a new copy with the changes instead of modifying the original. This makes it easier to track state changes and debug your application:"
+      },
+      {
+        "type": "code",
+        "value": "// Update user age (returns a new Map)\nconst updatedUser = user.set('age', 26);\n\nconsole.log(user.get('age')); // 25\nconsole.log(updatedUser.get('age')); // 26"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also chain operations to perform multiple updates in one go. Here’s how to add a new task to the list and update the user's name:"
+      },
+      {
+        "type": "code",
+        "value": "const updatedTasks = tasks.push('Practice Immutable.js');\nconst updatedUser2 = updatedUser.set('name', 'Alice Smith');\n\nconsole.log(updatedTasks.toJS()); // ['Learn JS', 'Write code', 'Read docs', 'Practice Immutable.js']\nconsole.log(updatedUser2.toJS()); // { id: 1, name: 'Alice Smith', age: 26 }"
+      },
+      {
+        "type": "paragraph",
+        "value": "To integrate Immutable.js into a scalable application, consider structuring your state as nested immutable data models. For example, a user model might have nested address and preferences objects:"
+      },
+      {
+        "type": "code",
+        "value": "const userProfile = Map({\n  id: 1,\n  name: 'Alice',\n  address: Map({ city: 'New York', zip: '10001' }),\n  preferences: Map({ theme: 'dark', notifications: true })\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "When updating nested data, Immutable.js provides the `updateIn` or `setIn` methods. Here’s how to change the city inside the nested address map:"
+      },
+      {
+        "type": "code",
+        "value": "const updatedProfile = userProfile.setIn(['address', 'city'], 'San Francisco');\n\nconsole.log(userProfile.getIn(['address', 'city'])); // New York\nconsole.log(updatedProfile.getIn(['address', 'city'])); // San Francisco"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using Immutable.js improves application scalability by reducing unexpected side-effects, enabling easy state comparison, and improving performance with structural sharing under the hood. It is especially helpful for frontend state management libraries like Redux."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to build scalable data models with Immutable.js:\n\n- Install Immutable.js and import required data structures.\n- Use immutable Maps and Lists to store and manage your data.\n- Always update your data immutably using methods like `set`, `push`, `updateIn`, and `setIn`.\n- Convert to plain JavaScript objects or arrays using `.toJS()` for debugging or UI display.\n\nGive Immutable.js a try in your next project to write more predictable and maintainable JavaScript code!"
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-javascript-proxy-to-debug-object-mutations-like-a-pro",
+    "title": "Harnessing JavaScript Proxy to Debug Object Mutations Like a Pro",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use JavaScript Proxy to monitor and debug object mutations effectively, helping you catch bugs and track unexpected changes.",
+    "videoUrl": "https://www.youtube.com/watch?v=Zg4XIpnLWQg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging unexpected changes in JavaScript objects can be tricky, especially when large or complex objects are involved. Luckily, the JavaScript Proxy object allows you to intercept and monitor operations performed on an object, such as property reads, writes, and more. In this article, we'll cover how to use Proxy to detect and log mutations on objects, making debugging easier and more systematic."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy wraps an existing object and lets you define handler functions for fundamental operations. For debugging object mutations, the most useful trap is `set`, which gets called whenever a property is changed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example to track all property updates on an object:"
+      },
+      {
+        "type": "code",
+        "value": "const user = {\n  name: 'Alice',\n  age: 25\n};\n\nconst handler = {\n  set(target, property, value) {\n    console.log(`Property '${property}' changed from '${target[property]}' to '${value}'`);\n    target[property] = value; // actually update the property\n    return true; // indicate success\n  }\n};\n\nconst proxyUser = new Proxy(user, handler);\n\nproxyUser.age = 26; // Logs: Property 'age' changed from '25' to '26'\nproxyUser.name = 'Bob'; // Logs: Property 'name' changed from 'Alice' to 'Bob'"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, every time a property is assigned a new value, the `set` method logs the change. This approach gives you insight into who mutated the object and how."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also extend this idea to catch mutations in nested objects by recursively wrapping them with Proxies. This way, you gain deep mutation tracking, which is especially useful for debugging complex data structures."
+      },
+      {
+        "type": "code",
+        "value": "function createDeepProxy(target) {\n  const handler = {\n    set(target, property, value) {\n      console.log(`Property '${property}' changed from '${target[property]}' to '${value}'`);\n      target[property] = value;\n      // Wrap new objects with proxy to track nested changes\n      if (value && typeof value === 'object') {\n        target[property] = createDeepProxy(value);\n      }\n      return true;\n    }\n  };\n  // Wrap any existing nested objects\n  for (const key in target) {\n    if (target[key] && typeof target[key] === 'object') {\n      target[key] = createDeepProxy(target[key]);\n    }\n  }\n  return new Proxy(target, handler);\n}\n\nconst data = {\n  user: {\n    name: 'Alice',\n    details: {\n      age: 25\n    }\n  }\n};\n\nconst proxyData = createDeepProxy(data);\nproxyData.user.details.age = 26; // Logs: Property 'age' changed from '25' to '26'\nproxyData.user.name = 'Bob'; // Logs: Property 'name' changed from 'Alice' to 'Bob'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using Proxies like this allows you to visually track mutations as they happen, which helps in quickly diagnosing bugs related to unintended object changes. It's a powerful tool in any JavaScript developer's debugging arsenal."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, since Proxies wrap objects, accessing or passing around proxied objects might require some consideration depending on your use case. But for debugging, they provide an elegant and straightforward way to track mutations with minimal code."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-real-time-chat-application-with-typescript-and-websocket",
+    "title": "Building a Real-Time Chat Application with TypeScript and WebSocket",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build a simple real-time chat application using TypeScript and WebSocket. This beginner-friendly tutorial guides you step-by-step through setting up a server and client for interactive messaging.",
+    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time communication is an essential feature of modern web applications, powering chat apps, live notifications, and collaborative tools. In this tutorial, we will build a basic real-time chat application using TypeScript and WebSocket, which allows for two-way communication between the client and the server."
+      },
+      {
+        "type": "paragraph",
+        "value": "We will start by creating a WebSocket server that can manage multiple clients. Then, we will create a browser-based client to send and receive chat messages. TypeScript will help us write safer and more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Setting Up the WebSocket Server\n\nFirst, let's create a simple WebSocket server using Node.js and the `ws` library. If you don't have the `ws` package installed, you can add it by running `npm install ws`."
+      },
+      {
+        "type": "code",
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst port = 8080;\nconst wss = new WebSocketServer({ port });\n\nwss.on('connection', (ws: WebSocket) => {\n  console.log('New client connected');\n\n  ws.on('message', (data: WebSocket.Data) => {\n    // Broadcast the incoming message to all connected clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(data.toString());\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log(`WebSocket server is running on ws://localhost:${port}`);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This server listens on port 8080 for WebSocket connections. When a new client connects, it logs the connection. Every incoming message from a client is broadcast to all other connected clients, enabling the chat functionality."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Creating the Client Side\n\nNow, let's create a simple client using an HTML page with embedded TypeScript. For ease, we will write the logic in TypeScript and compile it to JavaScript."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>TypeScript WebSocket Chat Client</title>\n  <style>\n    #messages { height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; }\n    #messageInput { width: 80%; }\n  </style>\n</head>\n<body>\n  <div id=\"messages\"></div>\n  <input id=\"messageInput\" type=\"text\" placeholder=\"Type a message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script src=\"client.js\"></script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, here is the TypeScript code for the client (`client.ts`). This script connects to the WebSocket server and handles sending and receiving messages:"
+      },
+      {
+        "type": "code",
+        "value": "const ws = new WebSocket('ws://localhost:8080');\n\nconst messagesDiv = document.getElementById('messages') as HTMLDivElement;\nconst input = document.getElementById('messageInput') as HTMLInputElement;\nconst sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;\n\nfunction appendMessage(message: string, isOwnMessage = false) {\n  const msgElm = document.createElement('div');\n  msgElm.textContent = message;\n  msgElm.style.padding = '5px';\n  msgElm.style.marginBottom = '5px';\n  msgElm.style.backgroundColor = isOwnMessage ? '#DCF8C6' : '#FFFFFF';\n  msgElm.style.textAlign = isOwnMessage ? 'right' : 'left';\n  messagesDiv.appendChild(msgElm);\n  messagesDiv.scrollTop = messagesDiv.scrollHeight;\n}\n\nws.onopen = () => {\n  appendMessage('Connected to the chat server.');\n};\n\nws.onmessage = event => {\n  appendMessage(event.data);\n};\n\nsendBtn.addEventListener('click', () => {\n  if (input.value.trim() !== '') {\n    ws.send(input.value.trim());\n    appendMessage(input.value.trim(), true);\n    input.value = '';\n  }\n});\n\ninput.addEventListener('keypress', event => {\n  if (event.key === 'Enter') {\n    sendBtn.click();\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Compile the TypeScript file to JavaScript using `tsc client.ts` and include the generated `client.js` in your HTML file. Then open the HTML file in multiple browser windows to test real-time messaging."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nIn this tutorial, we built a simple real-time chat application leveraging TypeScript and WebSocket. The server established a WebSocket connection and broadcasted incoming messages to all clients. The client connected to this server, sending and displaying chat messages dynamically. This foundation can be expanded with features like user names, message timestamps, and persistent storage."
+      },
+      {
+        "type": "paragraph",
+        "value": "Real-time WebSocket communication allows you to create interactive and engaging apps. With TypeScript's type safety, coding becomes more manageable and less error-prone. Keep experimenting and building more complex real-time apps!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-advanced-typescript-error-inference-for-cleaner-code",
+    "title": "Mastering Advanced TypeScript Error Inference for Cleaner Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's advanced error inference to write cleaner, safer, and more maintainable code with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=30LWjhZzg50",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript helps catch errors early by inferring types automatically. However, sometimes your code can be improved even more by mastering TypeScript's error inference capabilities. This article walks you through some advanced concepts around error inference, making your code cleaner and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "A core strength of TypeScript is its ability to infer types from your code. But what about inferring errors? Advanced error inference lets TypeScript catch complex bugs without you explicitly defining every detail. Let's start with a simple example."
+      },
+      {
+        "type": "code",
+        "value": "function getUserName(user: { name?: string }) {\n  // TypeScript infers name might be undefined\n  if (!user.name) {\n    throw new Error(\"User name is missing\");\n  }\n  return user.name;\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, TypeScript understands that `user.name` might be undefined because it is an optional property. The check `if (!user.name)` helps TypeScript narrow down the type safely. This prevents runtime errors by forcing a check before usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, consider a function where you want to infer errors in a more dynamic scenario with conditional types and advanced inference techniques."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> = { success: true; value: T } | { success: false; error: string };\n\nfunction parseJson<T>(json: string): Result<T> {\n  try {\n    const parsed = JSON.parse(json) as T;\n    return { success: true, value: parsed };\n  } catch (e) {\n    return { success: false, error: (e as Error).message };\n  }\n}\n\nconst result = parseJson<{ name: string }>(`{\"name\":\"Alice\"}`);\n\nif (!result.success) {\n  // TypeScript infers this is the error case\n  console.error(\"Parsing failed:\", result.error);\n} else {\n  // TypeScript infers the value is correctly typed\n  console.log(\"Parsed name:\", result.value.name);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we define a `Result` type that can represent either success or failure. TypeScript uses this union to infer errors and success cases, enabling more precise type checking. This approach allows you to handle errors cleanly without losing type-safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create utility types to infer errors from functions automatically. Here's a basic pattern to extract error types from promise-returning functions."
+      },
+      {
+        "type": "code",
+        "value": "type InferError<T> = T extends (...args: any[]) => Promise<infer R>\n  ? R extends { success: false; error: infer E }\n    ? E\n    : never\n  : never;\n\nasync function fetchUser(): Promise<Result<{ id: number; name: string }>> {\n  // Example fetching user\n  return { success: true, value: { id: 1, name: \"Alice\" } };\n}\n\n// TypeScript infers the error type as string\ntype FetchUserError = InferError<typeof fetchUser>;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `InferError`, TypeScript automatically extracts the error type from the fetch function's return value, making error handling easier and more consistent across your codebase."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering advanced error inference in TypeScript helps you write cleaner, more maintainable, and strongly-typed error handling logic. Use union types for success/error patterns, apply conditional types to infer error types, and always leverage TypeScript's narrowing abilities for safer code."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-python-for-time-series-forecasting",
+    "title": "Building Scalable Data Models in Python for Time Series Forecasting",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and efficient data models in Python for time series forecasting using beginner-friendly techniques and libraries.",
+    "videoUrl": "https://www.youtube.com/watch?v=CUR6rKrIEGc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Time series forecasting is a crucial part of many fields such as finance, weather prediction, and inventory management. When working with large datasets, building scalable data models is essential to handle increased data efficiently while maintaining accuracy. In this tutorial, we'll cover how to prepare and build scalable data models for time series forecasting using Python, focusing on practical steps suitable for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, ensure that you have the necessary libraries installed. For our example, we will use pandas for data manipulation, NumPy for handling arrays, and scikit-learn for scaling and splitting the dataset."
+      },
+      {
+        "type": "code",
+        "value": "pip install pandas numpy scikit-learn"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with loading a simple time series dataset. For this tutorial, we'll create a synthetic dataset to simulate daily sales data."
+      },
+      {
+        "type": "code",
+        "value": "import pandas as pd\nimport numpy as np\n\n# Create 1000 days of data\nnp.random.seed(42)\ndates = pd.date_range(start='2020-01-01', periods=1000, freq='D')\nsales = np.random.poisson(lam=200, size=1000) + np.linspace(0, 50, 1000)\n\n# Build dataframe\ndf = pd.DataFrame({'date': dates, 'sales': sales})\ndf.head()"
+      },
+      {
+        "type": "paragraph",
+        "value": "To build a scalable model, we need to prepare the data properly. Time series data needs to be converted into a supervised learning format by creating features like lag variables (previous days' sales) and possibly rolling statistics."
+      },
+      {
+        "type": "code",
+        "value": "def create_lag_features(df, lag_days=[1, 2, 3]):\n    for lag in lag_days:\n        df[f'lag_{lag}'] = df['sales'].shift(lag)\n    return df\n\n# Create lag features\n df = create_lag_features(df)\n\n# Drop rows with NaN values created by lag features\ndf.dropna(inplace=True)\ndf.head()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Scalable models also benefit from feature scaling. Here we'll use Min-Max scaling which rescales features to a range of 0 to 1, making it easier for many machine learning models to converge."
+      },
+      {
+        "type": "code",
+        "value": "from sklearn.preprocessing import MinMaxScaler\n\nscaler = MinMaxScaler()\nfeatures = ['sales', 'lag_1', 'lag_2', 'lag_3']\ndf[features] = scaler.fit_transform(df[features])\ndf.head()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we'll split the data into training and testing sets. It is important for time series to avoid random shuffling to preserve temporal order."
+      },
+      {
+        "type": "code",
+        "value": "# Use 80% for training, 20% for testing\ntrain_size = int(len(df) * 0.8)\ntrain, test = df.iloc[:train_size], df.iloc[train_size:]\n\nX_train = train[['lag_1', 'lag_2', 'lag_3']]\ny_train = train['sales']\nX_test = test[['lag_1', 'lag_2', 'lag_3']]\ny_test = test['sales']"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's build a simple scalable regression model using Random Forest, which can handle nonlinear patterns. This model scales well to larger datasets with good performance."
+      },
+      {
+        "type": "code",
+        "value": "from sklearn.ensemble import RandomForestRegressor\nfrom sklearn.metrics import mean_squared_error\n\nmodel = RandomForestRegressor(n_estimators=100, random_state=42)\nmodel.fit(X_train, y_train)\n\n# Predict and evaluate\npreds = model.predict(X_test)\nmse = mean_squared_error(y_test, preds)\nprint(f'Mean Squared Error: {mse:.4f}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "As your data grows, consider these scalability tips:\n\n- Use efficient data types and vectorized operations with pandas and NumPy.\n- Incrementally update models or use online learning frameworks.\n- Save and load models using joblib or pickle to avoid retraining.\n- Use cloud resources or distributed computing frameworks such as Dask for very large datasets.\n\nThis beginner-friendly approach provides a foundation for scalable time series forecasting with Python."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-subtle-differences-typeerror-valueerror-python",
+    "title": "Understanding the Subtle Differences Between TypeError and ValueError in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the key differences between TypeError and ValueError in Python with simple examples to help beginners write better error-handling code.",
+    "videoUrl": "https://www.youtube.com/watch?v=g2JEeiCJMP8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When learning Python, you will frequently encounter errors. Two common built-in errors are TypeError and ValueError. Although they might seem similar, they occur under different circumstances. Understanding these differences can help you debug your code more effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "A TypeError occurs when an operation or function is applied to an object of inappropriate type. This means you are trying to use a value in a way that Python does not support based on the value's type."
+      },
+      {
+        "type": "paragraph",
+        "value": "On the other hand, a ValueError happens when a function receives an argument of the correct type but an inappropriate value. In this case, the data type is right, but the value itself doesn’t make sense for the operation."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see some examples to clarify these ideas:"
+      },
+      {
+        "type": "code",
+        "value": "x = 'hello'\n\n# TypeError example: you cannot add a string and an integer\ntry:\n    result = x + 5\nexcept TypeError as e:\n    print(f'TypeError: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, trying to add a string ('hello') and an integer (5) raises a TypeError because Python doesn't know how to combine these two types directly."
+      },
+      {
+        "type": "code",
+        "value": "# ValueError example: converting a non-numeric string to int\ntry:\n    number = int('abc')\nexcept ValueError as e:\n    print(f'ValueError: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the string 'abc' is of the correct type (string), but it cannot be converted to an integer since it doesn't represent a number. This is why a ValueError is raised."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use TypeError when the type of the data is wrong for an operation.\n- Use ValueError when the type is right but the value is invalid."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding these distinctions will help you write clearer code and handle exceptions appropriately."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-in-sql-advanced-techniques-for-complex-analytics",
+    "title": "Mastering Window Functions in SQL: Advanced Techniques for Complex Analytics",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to harness the power of SQL window functions to perform advanced data analysis with practical examples perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions offer a powerful way to perform calculations across sets of rows that are related to the current row without collapsing the result set. This tutorial will introduce you to advanced window function techniques, helping you perform complex analytics with ease."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with the basics. Unlike aggregate functions, window functions do not combine rows into a single output row. Instead, they allow you to calculate running totals, ranks, moving averages, and other analytical results alongside each row."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example: calculating a running total of sales per salesperson."
+      },
+      {
+        "type": "code",
+        "value": "SELECT salesperson_id,\n       sales_date,\n       amount,\n       SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sales_date) AS running_total\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, the SUM() function is used as a window function. The PARTITION BY clause groups the rows by each salesperson, and ORDER BY within the window defines the order to calculate the running total."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's explore some advanced concepts:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **ROW_NUMBER(), RANK(), DENSE_RANK()** – Useful for assigning row numbers or rankings within partitions."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id,\n       department,\n       salary,\n       ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS row_num,\n       RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank,\n       DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_rank\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **LAG() and LEAD()** – Retrieve data from preceding or following rows, useful for comparisons and trend analysis."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id,\n       order_date,\n       sales_amount,\n       LAG(sales_amount, 1) OVER (ORDER BY order_date) AS previous_sales,\n       LEAD(sales_amount, 1) OVER (ORDER BY order_date) AS next_sales\nFROM orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **WINDOW FRAME CLAUSES** – Control the set of rows used for calculations. For example, moving averages can be calculated using ROWS BETWEEN."
+      },
+      {
+        "type": "code",
+        "value": "SELECT sales_date,\n       amount,\n       AVG(amount) OVER (ORDER BY sales_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query calculates a 3-day moving average (current day + 2 previous days)."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Combining multiple window functions in a single query** for more comprehensive analytics."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id,\n       department,\n       salary,\n       RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank,\n       AVG(salary) OVER (PARTITION BY department) AS avg_dept_salary\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows how you can easily get each employee's rank and average salary in their department."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these window function techniques, you'll be able to perform deep data analysis directly in your SQL queries without complex subqueries or temporary tables. Experiment with these examples using your own data to unlock powerful insights!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-data-models-to-minimize-null-related-anomalies",
+    "title": "Optimizing SQL Data Models to Minimize Null-Related Anomalies",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize your SQL data models to avoid common null-related anomalies, improve data integrity, and write cleaner queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=DXpsNQqSFQw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Null values in SQL databases can cause unexpected behavior and errors if not handled properly. Nulls represent missing or unknown data, but they can also lead to anomalies in your data models and confusing query results. In this article, we will explore beginner-friendly techniques to optimize your SQL data models to minimize issues related to null values."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the main problems with nulls is that they behave differently from regular values in SQL. For example, comparisons involving nulls don’t evaluate to true or false, but to unknown. This can make your WHERE clauses and joins tricky if you are not careful."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some practical tips to improve your data models and avoid null-related anomalies:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use NOT NULL Constraints Wisely**: If a column should always have a value, define it as NOT NULL. This prevents nulls from being inserted and ensures data completeness."
+      },
+      {
+        "type": "paragraph",
+        "value": "sql\nCREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    FirstName VARCHAR(50) NOT NULL,\n    LastName VARCHAR(50) NOT NULL,\n    Email VARCHAR(100) NOT NULL\n);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Choose Default Values When Appropriate**: Instead of allowing nulls, use default values that make sense for the business context. This can reduce null appearance in your data."
+      },
+      {
+        "type": "paragraph",
+        "value": "sql\nALTER TABLE Orders\nADD COLUMN Status VARCHAR(20) NOT NULL DEFAULT 'Pending';\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Design Your Schema to Avoid Optional Columns Being Null**: Sometimes a table tries to store different types of related data in the same row, causing many nullable columns. Instead, consider splitting the data into multiple related tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "sql\n-- Instead of this:\nCREATE TABLE Vehicles (\n    VehicleID INT PRIMARY KEY,\n    Make VARCHAR(50),\n    Model VARCHAR(50),\n    EngineSize VARCHAR(20), -- for cars only\n    NumberOfSeats INT         -- for buses only\n);\n\n-- Use this approach:\nCREATE TABLE Vehicles (\n    VehicleID INT PRIMARY KEY,\n    Make VARCHAR(50),\n    Model VARCHAR(50)\n);\n\nCREATE TABLE CarDetails (\n    VehicleID INT PRIMARY KEY,\n    EngineSize VARCHAR(20),\n    FOREIGN KEY (VehicleID) REFERENCES Vehicles(VehicleID)\n);\n\nCREATE TABLE BusDetails (\n    VehicleID INT PRIMARY KEY,\n    NumberOfSeats INT,\n    FOREIGN KEY (VehicleID) REFERENCES Vehicles(VehicleID)\n);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use IS NULL and COALESCE Properly in Queries**: When querying, explicitly check for IS NULL or use the COALESCE function to handle null values safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "sql\nSELECT \n    EmployeeID, \n    COALESCE(PhoneNumber, 'No Phone') AS PhoneContact\nFROM Employees\nWHERE PhoneNumber IS NOT NULL;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Understand Three-Valued Logic in SQL**: Keep in mind that comparisons with NULL return UNKNOWN, not true or false, so be explicit with null checks to avoid unwanted filtering."
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these tips, you can build more robust SQL data models with fewer null-related anomalies, making your data easier to query and maintain."
+      }
+    ]
   }
 ];
