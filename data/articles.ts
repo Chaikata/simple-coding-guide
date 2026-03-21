@@ -12976,5 +12976,431 @@ export const articles = [
         "value": "Optimizing SQL queries through index usage involves:\n- Identifying slow queries with EXPLAIN\n- Creating appropriate indexes on frequent search columns\n- Avoiding expressions on indexed columns that disable index use\n- Reviewing query plans regularly\n\nWith these beginner-friendly steps, you can dramatically improve your database’s responsiveness!"
       }
     ]
+  },
+  {
+    "slug": "building-a-progressive-web-app-with-javascript-step-by-step-tutorial",
+    "title": "Building a Progressive Web App with JavaScript: Step-by-Step Tutorial",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build a simple Progressive Web App (PWA) using JavaScript with this beginner-friendly step-by-step tutorial. Enhance your web app with offline support and installability.",
+    "videoUrl": "https://www.youtube.com/watch?v=sFsRylCQblw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Progressive Web Apps (PWAs) combine the best of web and mobile apps, offering fast, reliable, and engaging experiences. In this tutorial, you will learn how to create a basic PWA using JavaScript, including adding a service worker and a manifest to enable offline support and installability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 1: Create a simple web app structure with an HTML, CSS, and JavaScript file."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>My First PWA</title>\n  <link rel=\"stylesheet\" href=\"styles.css\" />\n  <link rel=\"manifest\" href=\"manifest.json\" />\n</head>\n<body>\n  <h1>Welcome to My PWA!</h1>\n  <p>This app works offline and can be installed on your device.</p>\n  <script src=\"app.js\"></script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 2: Add some basic styles in styles.css to make the app look nice."
+      },
+      {
+        "type": "code",
+        "value": "body {\n  font-family: Arial, sans-serif;\n  text-align: center;\n  margin: 50px;\n  background-color: #f0f0f0;\n  color: #333;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 3: Create a manifest.json file. This tells the browser about your app and how it should behave when installed."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"name\": \"My First PWA\",\n  \"short_name\": \"MyPWA\",\n  \"start_url\": \".\",\n  \"display\": \"standalone\",\n  \"background_color\": \"#ffffff\",\n  \"theme_color\": \"#317EFB\",\n  \"icons\": [\n    {\n      \"src\": \"icon-192.png\",\n      \"sizes\": \"192x192\",\n      \"type\": \"image/png\"\n    },\n    {\n      \"src\": \"icon-512.png\",\n      \"sizes\": \"512x512\",\n      \"type\": \"image/png\"\n    }\n  ]\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 4: Add a service worker in service-worker.js. This script will cache your files to make your app work offline."
+      },
+      {
+        "type": "code",
+        "value": "const CACHE_NAME = 'my-pwa-cache-v1';\nconst urlsToCache = [\n  '/',\n  '/index.html',\n  '/styles.css',\n  '/app.js',\n  '/icon-192.png',\n  '/icon-512.png'\n];\n\nself.addEventListener('install', (event) => {\n  event.waitUntil(\n    caches.open(CACHE_NAME)\n      .then((cache) => {\n        return cache.addAll(urlsToCache);\n      })\n  );\n});\n\nself.addEventListener('fetch', (event) => {\n  event.respondWith(\n    caches.match(event.request)\n      .then((response) => {\n        return response || fetch(event.request);\n      })\n  );\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 5: Register the service worker in app.js to make the browser aware of it."
+      },
+      {
+        "type": "code",
+        "value": "if ('serviceWorker' in navigator) {\n  window.addEventListener('load', () => {\n    navigator.serviceWorker.register('/service-worker.js')\n      .then((registration) => {\n        console.log('ServiceWorker registration successful with scope: ', registration.scope);\n      })\n      .catch((error) => {\n        console.log('ServiceWorker registration failed: ', error);\n      });\n  });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 6: Add icon images named icon-192.png and icon-512.png in your project folder. These icons will be used when installing the app."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 7: Run your app on a local server (for example, using VS Code Live Server or the command line `npx serve`). Visit your app in a browser that supports PWAs, like Chrome."
+      },
+      {
+        "type": "paragraph",
+        "value": "When everything is set up, you should be able to install the app and it will work offline thanks to the service worker caching your files."
+      },
+      {
+        "type": "paragraph",
+        "value": "You’ve just built a simple Progressive Web App using JavaScript! From here, you can explore adding push notifications, background sync, and more advanced features to make your PWA even better."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-for-high-performance-code",
+    "title": "Mastering TypeScript Generics for High-Performance Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to write flexible, reusable, and high-performance code. This tutorial will guide beginners through the basics and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are a powerful feature that allows you to write flexible and reusable functions, classes, and interfaces. They enable your code to work with any data type while still providing strong type safety. Understanding how to use generics can help you write high-performance code by avoiding unnecessary type conversions and promoting better code reuse."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example that shows how generics work. Imagine you want a function that can return the first item of an array, but the array could contain any type of elements. Without generics, you might lose type information, but with generics, you can keep your code type-safe and flexible."
+      },
+      {
+        "type": "code",
+        "value": "function firstItem<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst num = firstItem([1, 2, 3]); // num is number\nconst str = firstItem(['a', 'b', 'c']); // str is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, <T> is a type parameter that represents the type of elements in the array. When you call the function, TypeScript infers the correct type for T, making `num` a number and `str` a string. This helps catch errors early and improves performance by avoiding unnecessary runtime checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can also be used with interfaces and classes to create reusable components. For example, you can create a generic stack class that works with any type of data:"
+      },
+      {
+        "type": "code",
+        "value": "class Stack<T> {\n  private items: T[] = [];\n\n  push(item: T): void {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n}\n\nconst numberStack = new Stack<number>();\nnumberStack.push(10);\nconsole.log(numberStack.pop()); // 10\n\nconst stringStack = new Stack<string>();\nstringStack.push('hello');\nconsole.log(stringStack.pop()); // 'hello'"
+      },
+      {
+        "type": "paragraph",
+        "value": "This Stack class uses generics so it can store elements of any type while enforcing type safety. Using generics like this avoids duplicating code for different types and increases maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to restrict the kinds of types that can be used with your generics. You can do this using constraints with the `extends` keyword. For example, if you want a function that accepts only objects with a `length` property, you can write:"
+      },
+      {
+        "type": "code",
+        "value": "function logLength<T extends { length: number }>(item: T): T {\n  console.log(item.length);\n  return item;\n}\n\nlogLength('hello'); // 5\nlogLength([1, 2, 3]); // 3\n// logLength(10); // Error: number doesn't have 'length'"
+      },
+      {
+        "type": "paragraph",
+        "value": "This restricts the generic type `T` to only those that have a `length` property. This is helpful for high-performance code because it prevents incorrect types from being used and enables more precise optimizations."
+      },
+      {
+        "type": "paragraph",
+        "value": "To wrap up, mastering TypeScript generics lets you write code that is not only flexible and reusable but also type-safe and performant. Use generic functions, classes, and constraints to tailor your code for any data type without sacrificing reliability or speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing by refactoring your existing code to use generics where appropriate. You will soon see how this powerful feature can simplify your TypeScript projects and improve their performance."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-typescript-utility-types-for-robust-data-model-validation",
+    "title": "Leveraging TypeScript Utility Types for Robust Data Model Validation",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript utility types to create safer and more maintainable data models with built-in validation for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=q0E5weS1Bsw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with data in TypeScript, ensuring your data models are correct and robust is crucial. TypeScript utility types help simplify this task by providing pre-built types that can transform and validate your data models without extra code. In this article, we'll explore some of these handy utility types and how they can improve your data validation process."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's imagine you have a basic user model but want to enforce some rules, like some fields must always exist, others can be optional, and some might be read-only."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string;\n  createdAt: Date;\n  role?: string;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, \"email\" and \"role\" are optional. What if you want to create a version of this model where all fields are required? This is where the `Required<T>` utility type shines."
+      },
+      {
+        "type": "code",
+        "value": "type RequiredUser = Required<User>;\n\nconst user1: RequiredUser = {\n  id: 1,\n  name: \"Alice\",\n  email: \"alice@example.com\",\n  createdAt: new Date(),\n  role: \"admin\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, every property in `RequiredUser` must be present, which helps validate that an object has all the necessary fields."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to make sure that certain properties cannot be changed after creation. For example, the `id` and `createdAt` fields should be read-only. Use the `Readonly<T>` type to achieve this."
+      },
+      {
+        "type": "code",
+        "value": "type ReadonlyUser = Readonly<User>;\n\nconst user2: ReadonlyUser = {\n  id: 2,\n  name: \"Bob\",\n  createdAt: new Date()\n};\n\n// user2.id = 3; // Error: Cannot assign to 'id' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to create a user update model where only some properties are optional, you can use the `Partial<T>` utility type. This allows you to handle forms where users only modify specific fields."
+      },
+      {
+        "type": "code",
+        "value": "type UserUpdate = Partial<User>;\n\nfunction updateUser(user: User, updates: UserUpdate): User {\n  return { ...user, ...updates };\n}\n\nconst updatedUser = updateUser(user1, { email: \"newemail@example.com\" });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, it is helpful to select or exclude certain fields when validating data. The `Pick<T, K>` and `Omit<T, K>` utility types help you pick or omit specific keys from your model."
+      },
+      {
+        "type": "code",
+        "value": "type UserNameAndEmail = Pick<User, \"name\" | \"email\">;\n\nconst contactInfo: UserNameAndEmail = {\n  name: \"Alice\",\n  email: \"alice@example.com\"\n};\n\n// Omit createdAt and id\n\ntype UserWithoutMetadata = Omit<User, \"id\" | \"createdAt\">;\n\nconst partialUser: UserWithoutMetadata = {\n  name: \"Charlie\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "By combining these utility types, you can build flexible and robust validation patterns with minimal code. This reduces bugs and improves type safety across your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, TypeScript utility types like `Required`, `Readonly`, `Partial`, `Pick`, and `Omit` are powerful allies for validating and managing data models, especially if you want to keep your types strict and your code clean."
+      }
+    ]
+  },
+  {
+    "slug": "building-weather-forecast-dashboard-python-api",
+    "title": "Building a Weather Forecast Dashboard with Python and API Integration",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a beginner-friendly weather forecast dashboard using Python and an API to fetch live weather data.",
+    "videoUrl": "https://www.youtube.com/watch?v=aQZzMJgPMqQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we will build a simple weather forecast dashboard using Python. We'll integrate a weather API to fetch real-time weather data for any city and display it in a clear format. This beginner-friendly guide will cover getting API data, parsing JSON, and displaying the information."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you need to sign up for a free API key from OpenWeatherMap (https://openweathermap.org/api). The API will provide the weather details for the city you request."
+      },
+      {
+        "type": "paragraph",
+        "value": "Make sure you have Python installed on your system. You'll also need the 'requests' library to make HTTP requests. If you don't have it installed, run this command in your terminal or command prompt:"
+      },
+      {
+        "type": "code",
+        "value": "pip install requests"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's write the Python code to fetch and display the weather data. We'll create a function to call the API and print the temperature, weather description, humidity, and wind speed."
+      },
+      {
+        "type": "code",
+        "value": "import requests\n\nAPI_KEY = 'your_api_key_here'  # Replace with your OpenWeatherMap API key\nBASE_URL = 'http://api.openweathermap.org/data/2.5/weather'\n\n\ndef get_weather(city):\n    params = {\n        'q': city,\n        'appid': API_KEY,\n        'units': 'metric'  # Use 'imperial' for Fahrenheit\n    }\n    response = requests.get(BASE_URL, params=params)\n    if response.status_code == 200:\n        data = response.json()\n        weather = data['weather'][0]['description']\n        temp = data['main']['temp']\n        humidity = data['main']['humidity']\n        wind_speed = data['wind']['speed']\n\n        print(f\"Weather in {city.title()}:\")\n        print(f\"Description: {weather}\")\n        print(f\"Temperature: {temp}°C\")\n        print(f\"Humidity: {humidity}%\")\n        print(f\"Wind Speed: {wind_speed} m/s\")\n    else:\n        print(f\"Error fetching weather data for {city}. Please check the city name.\")\n\n\nif __name__ == '__main__':\n    city = input(\"Enter city name: \")\n    get_weather(city)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down what this code does:\n- It asks the user to enter a city name.\n- It sends a request to the OpenWeatherMap API with the city and your API key.\n- If the request is successful, it parses the JSON response to extract weather details.\n- It prints the weather description, temperature in Celsius, humidity percentage, and wind speed.\n- If the city is not found or there is an error, it prints an appropriate error message."
+      },
+      {
+        "type": "paragraph",
+        "value": "To run the script, save it as weather_dashboard.py and execute it from the command line with:\n\npython weather_dashboard.py\n\nThen enter the city when prompted. You'll see the current weather conditions displayed."
+      },
+      {
+        "type": "paragraph",
+        "value": "This basic dashboard can be expanded with GUI libraries like Tkinter or even converted into a web app using frameworks like Flask or Django. But this script is a great starting point to understand how API integration and data parsing works in Python."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-exception-chaining-for-cleaner-error-handling",
+    "title": "Mastering Python's Exception Chaining for Cleaner Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's exception chaining feature to write cleaner, easier-to-debug code by preserving error context during exception handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, handling errors gracefully is important to create robust applications. Python provides a powerful feature called exception chaining that helps preserve the original error context while raising new exceptions. This makes debugging easier and your code cleaner."
+      },
+      {
+        "type": "paragraph",
+        "value": "Exception chaining occurs when you catch an exception and raise another one in response. Python automatically links these exceptions together, so you don't lose information about the original error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example without exception chaining:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    raise ValueError(\"Invalid input provided\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, the `ZeroDivisionError` is caught, but the new `ValueError` hides the original problem. When you debug the error, you only see the `ValueError`, not the underlying cause."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's use exception chaining to maintain that context by using the `from` keyword:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError as e:\n    raise ValueError(\"Invalid input provided\") from e"
+      },
+      {
+        "type": "paragraph",
+        "value": "By adding `from e`, Python links the `ValueError` to the original `ZeroDivisionError`. The traceback now shows both exceptions, making it much clearer what went wrong and where."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also suppress the original exception if you want to completely hide it by using `from None`. This can be useful if the original error is not relevant and you want to present a cleaner error message:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    raise ValueError(\"Invalid input provided\") from None"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, exception chaining lets you:\n- Maintain error context for easier debugging\n- Wrap low-level exceptions with higher-level ones\n- Control the visibility of original exceptions"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using exception chaining in your Python projects will make your error handling more effective and your code easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-advanced-sql-tricks-for-data-analysis",
+    "title": "Mastering Window Functions: Advanced SQL Tricks for Data Analysis",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis with clear examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions in SQL are powerful tools that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions that collapse multiple rows into one, window functions preserve the rows while providing valuable analytics like running totals, rankings, moving averages, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore some common window functions and see how to use the OVER() clause to analyze data without losing detail."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example using sales data:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(50),\n  region VARCHAR(50),\n  sale_amount DECIMAL(10,2),\n  sale_date DATE\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', 'North', 500, '2024-01-01'),\n(2, 'Bob', 'North', 300, '2024-01-02'),\n(3, 'Alice', 'North', 700, '2024-01-03'),\n(4, 'Charlie', 'South', 200, '2024-01-01'),\n(5, 'Bob', 'North', 100, '2024-01-04');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Calculate Running Total per Salesperson\nTo see how sales accumulate over time for each salesperson, use the `SUM()` window function with the `PARTITION BY` and ordering inside the `OVER()` clause."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  id,\n  salesperson,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY salesperson, sale_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query sums the `sale_amount` for each salesperson, ordered by `sale_date`, producing a running total that resets for each person."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Ranking Salespeople by Total Sales Within Each Region\nUse the `RANK()` function to assign ranks to salespeople based on their total sales in each region."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson,\n  region,\n  SUM(sale_amount) AS total_sales,\n  RANK() OVER (PARTITION BY region ORDER BY SUM(sale_amount) DESC) AS sales_rank\nFROM sales\nGROUP BY salesperson, region\nORDER BY region, sales_rank;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `RANK()` orders salespeople in each region by their total sales. Note that this requires aggregation (`SUM()`) before ranking."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Calculate Moving Average of Sales\nYou can compute the moving average to smooth out the sales trend over defined periods using a window frame."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  id,\n  salesperson,\n  sale_date,\n  sale_amount,\n  AVG(sale_amount) OVER (\n    PARTITION BY salesperson\n    ORDER BY sale_date\n    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW\n  ) AS moving_avg_3_days\nFROM sales\nORDER BY salesperson, sale_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example calculates a 3-day moving average of sales per salesperson. The `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW` defines the window frame size."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Takeaways\n- Window functions preserve rows and add aggregate-style calculations.\n- `PARTITION BY` defines the group for the window function, similar to grouping.\n- `ORDER BY` inside `OVER()` defines the order of rows in the window.\n- You can define custom frames with `ROWS BETWEEN` or `RANGE BETWEEN`.\n\nMastering these functions unlocks advanced SQL analytics capabilities essential for data analysts."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with these window functions on your own datasets to better understand their power!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-to-prevent-data-inconsistencies",
+    "title": "Optimizing SQL Queries to Prevent Data Inconsistencies in Transactional Systems",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips to optimize SQL queries and avoid data inconsistencies in transactional systems using best practices and error handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data inconsistencies in transactional systems can cause serious problems like incorrect reports or failed operations. Optimizing SQL queries to prevent these issues is crucial. This article covers simple, effective ways to write SQL that keeps your data accurate and consistent."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, understand what causes inconsistencies. In transactional systems, multiple operations depend on each other to complete successfully. If any operation fails or runs at the wrong time, data can become mismatched. Using transactions and proper isolation levels helps avoid such problems."
+      },
+      {
+        "type": "paragraph",
+        "value": "Use transactions to group related SQL commands. This means either all commands succeed together or none do, preventing partial data updates. Here's an example of a transaction in SQL:"
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\n\nUPDATE Accounts SET Balance = Balance - 100 WHERE AccountID = 1;\nUPDATE Accounts SET Balance = Balance + 100 WHERE AccountID = 2;\n\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, transferring money between two accounts happens inside a transaction. If either update fails, the entire operation rolls back, preventing incorrect balances."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, optimize query locking to prevent conflicts when multiple users access the database. Use appropriate isolation levels like READ COMMITTED or SERIALIZABLE depending on your needs. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;\nBEGIN TRANSACTION;\n-- your queries here\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The SERIALIZABLE isolation level ensures that no other transactions interfere with your current transaction, preventing dirty reads or phantom data issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid long-running queries inside transactions since they can hold locks too long, blocking other operations. Instead, try to make queries efficient by using indexes and limiting the data returned. For example, add indexes to columns used in WHERE or JOIN clauses:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON Orders(CustomerID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always check for errors and handle exceptions in your application logic. This ensures if something goes wrong, you can rollback the transaction and log the issue for further analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these beginner-friendly tips to optimize your SQL queries—using transactions, setting correct isolation levels, creating indexes, and handling errors—you can prevent data inconsistencies and build more reliable transactional systems."
+      }
+    ]
   }
 ];

@@ -1,589 +1,481 @@
 [
   {
-    "slug": "comparing-async-await-vs-promises-real-world-javascript-use-cases",
-    "title": "Comparing Async/Await vs Promises: Real-World JavaScript Use Cases",
+    "slug": "building-a-progressive-web-app-with-javascript-step-by-step-tutorial",
+    "title": "Building a Progressive Web App with JavaScript: Step-by-Step Tutorial",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn the basics of async/await and promises in JavaScript with practical examples, helping beginners understand when and how to use each for cleaner asynchronous code.",
-    "videoUrl": "https://www.youtube.com/watch?v=plfoRabbyDY",
+    "description": "Learn how to build a simple Progressive Web App (PWA) using JavaScript with this beginner-friendly step-by-step tutorial. Enhance your web app with offline support and installability.",
+    "videoUrl": "https://www.youtube.com/watch?v=sFsRylCQblw",
     "content": [
       {
         "type": "paragraph",
-        "value": "As a beginner in JavaScript, understanding how to handle asynchronous code can greatly improve the readability and efficiency of your programs. Two common ways to manage asynchronous operations are Promises and async/await. Both help you work with tasks like fetching data from an API or reading files without blocking your code. In this article, we'll explore these concepts with simple, real-world examples."
+        "value": "Progressive Web Apps (PWAs) combine the best of web and mobile apps, offering fast, reliable, and engaging experiences. In this tutorial, you will learn how to create a basic PWA using JavaScript, including adding a service worker and a manifest to enable offline support and installability."
       },
       {
         "type": "paragraph",
-        "value": "### What are Promises?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Promises in JavaScript represent the eventual completion (or failure) of an asynchronous operation and its resulting value. They allow you to attach callbacks using `.then()` and `.catch()` methods to handle success and errors."
+        "value": "Step 1: Create a simple web app structure with an HTML, CSS, and JavaScript file."
       },
       {
         "type": "code",
-        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const data = { id: 1, message: 'Hello, World!' };\n      resolve(data);\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(response => {\n    console.log('Data received:', response);\n  })\n  .catch(error => {\n    console.error('Error:', error);\n  });"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>My First PWA</title>\n  <link rel=\"stylesheet\" href=\"styles.css\" />\n  <link rel=\"manifest\" href=\"manifest.json\" />\n</head>\n<body>\n  <h1>Welcome to My PWA!</h1>\n  <p>This app works offline and can be installed on your device.</p>\n  <script src=\"app.js\"></script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `fetchData` simulates an asynchronous operation using `setTimeout`. The promise resolves after 1 second with some sample data, which we handle in the `.then()` callback."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is Async/Await?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Async/await is a syntax built on top of Promises that allows you to write asynchronous code that looks and behaves more like synchronous code. It is generally easier to read and manage, especially when you have multiple asynchronous operations."
+        "value": "Step 2: Add some basic styles in styles.css to make the app look nice."
       },
       {
         "type": "code",
-        "value": "async function getData() {\n  try {\n    const response = await fetchData();\n    console.log('Data received:', response);\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\ngetData();"
+        "value": "body {\n  font-family: Arial, sans-serif;\n  text-align: center;\n  margin: 50px;\n  background-color: #f0f0f0;\n  color: #333;\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, the `getData` function uses the `await` keyword to wait for the `fetchData` promise to resolve before moving on. This makes the code more straightforward and avoids the chaining of `.then()`."
-      },
-      {
-        "type": "paragraph",
-        "value": "### When to Use Promises or Async/Await?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Both approaches work well, but async/await is often preferred for cleaner and more readable code, especially when dealing with multiple asynchronous calls."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's an example comparing both when fetching multiple pieces of data:"
+        "value": "Step 3: Create a manifest.json file. This tells the browser about your app and how it should behave when installed."
       },
       {
         "type": "code",
-        "value": "// Using Promises with .then()\nfunction fetchUser() {\n  return Promise.resolve({ id: 1, name: 'Alice' });\n}\n\nfunction fetchOrders(userId) {\n  return Promise.resolve(['order1', 'order2']);\n}\n\nfetchUser()\n  .then(user => {\n    console.log('User:', user);\n    return fetchOrders(user.id);\n  })\n  .then(orders => {\n    console.log('Orders:', orders);\n  })\n  .catch(err => console.error(err));"
+        "value": "{\n  \"name\": \"My First PWA\",\n  \"short_name\": \"MyPWA\",\n  \"start_url\": \".\",\n  \"display\": \"standalone\",\n  \"background_color\": \"#ffffff\",\n  \"theme_color\": \"#317EFB\",\n  \"icons\": [\n    {\n      \"src\": \"icon-192.png\",\n      \"sizes\": \"192x192\",\n      \"type\": \"image/png\"\n    },\n    {\n      \"src\": \"icon-512.png\",\n      \"sizes\": \"512x512\",\n      \"type\": \"image/png\"\n    }\n  ]\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 4: Add a service worker in service-worker.js. This script will cache your files to make your app work offline."
       },
       {
         "type": "code",
-        "value": "// Using async/await\nasync function getUserAndOrders() {\n  try {\n    const user = await fetchUser();\n    console.log('User:', user);\n    const orders = await fetchOrders(user.id);\n    console.log('Orders:', orders);\n  } catch (err) {\n    console.error(err);\n  }\n}\n\ngetUserAndOrders();"
+        "value": "const CACHE_NAME = 'my-pwa-cache-v1';\nconst urlsToCache = [\n  '/',\n  '/index.html',\n  '/styles.css',\n  '/app.js',\n  '/icon-192.png',\n  '/icon-512.png'\n];\n\nself.addEventListener('install', (event) => {\n  event.waitUntil(\n    caches.open(CACHE_NAME)\n      .then((cache) => {\n        return cache.addAll(urlsToCache);\n      })\n  );\n});\n\nself.addEventListener('fetch', (event) => {\n  event.respondWith(\n    caches.match(event.request)\n      .then((response) => {\n        return response || fetch(event.request);\n      })\n  );\n});"
       },
       {
         "type": "paragraph",
-        "value": "In this case, the async/await version looks cleaner and avoids callback nesting, making it easier to understand the flow."
+        "value": "Step 5: Register the service worker in app.js to make the browser aware of it."
+      },
+      {
+        "type": "code",
+        "value": "if ('serviceWorker' in navigator) {\n  window.addEventListener('load', () => {\n    navigator.serviceWorker.register('/service-worker.js')\n      .then((registration) => {\n        console.log('ServiceWorker registration successful with scope: ', registration.scope);\n      })\n      .catch((error) => {\n        console.log('ServiceWorker registration failed: ', error);\n      });\n  });\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "Step 6: Add icon images named icon-192.png and icon-512.png in your project folder. These icons will be used when installing the app."
       },
       {
         "type": "paragraph",
-        "value": "Promises are the foundation for managing asynchronous tasks in JavaScript, and async/await is a more modern, readable way to work with promises. For beginners, learning async/await alongside promises is essential since most modern JavaScript codebases prefer async/await for clarity and simplicity."
+        "value": "Step 7: Run your app on a local server (for example, using VS Code Live Server or the command line `npx serve`). Visit your app in a browser that supports PWAs, like Chrome."
       },
       {
         "type": "paragraph",
-        "value": "Start by creating simple async functions, then gradually use async/await to handle more complex asynchronous workflows!"
+        "value": "When everything is set up, you should be able to install the app and it will work offline thanks to the service worker caching your files."
+      },
+      {
+        "type": "paragraph",
+        "value": "You’ve just built a simple Progressive Web App using JavaScript! From here, you can explore adding push notifications, background sync, and more advanced features to make your PWA even better."
       }
     ]
   },
   {
-    "slug": "mastering-asynchronous-error-handling-in-javascript-real-world-applications",
-    "title": "Mastering Asynchronous Error Handling in JavaScript Real-World Applications",
+    "slug": "mastering-javascript-async-stack-traces-for-easier-debugging",
+    "title": "Mastering JavaScript's Async Stack Traces for Easier Debugging",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to handle errors effectively in asynchronous JavaScript code using modern techniques like async/await and promises for real-world applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=dADl2LrIhBw",
+    "description": "Learn how to understand and use JavaScript's async stack traces to debug asynchronous code more effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
     "content": [
       {
         "type": "paragraph",
-        "value": "Asynchronous code is a key part of modern JavaScript development, allowing programs to perform tasks like fetching data from a server without freezing the user interface. However, handling errors in asynchronous code can be tricky for beginners. This article will guide you through practical and beginner-friendly ways to handle errors in asynchronous JavaScript applications."
+        "value": "Debugging asynchronous JavaScript code can be tricky. When an error occurs in async code, the stack trace often doesn't show all the steps that led to the problem. This guide will help you understand how async stack traces work and give you tips to make debugging easier."
       },
       {
         "type": "paragraph",
-        "value": "### Why is error handling important in asynchronous code?\n\nWhen using asynchronous functions such as fetching data from an API or reading files, errors can happen in the background. Without proper handling, these errors might go unnoticed, causing bugs and poor user experience. By mastering error handling, you ensure your application is reliable and easier to debug."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using Promises with .catch() for error handling\n\nPromises were introduced to make asynchronous code more manageable. When a promise rejects (an error occurs), you can catch it using the `.catch()` method."
+        "value": "Let's start with a simple example. Consider an async function that throws an error:"
       },
       {
         "type": "code",
-        "value": "fetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('Error fetching data:', error);\n  });"
+        "value": "async function fetchData() {\n  throw new Error('Oops! Something went wrong.');\n}\n\nfetchData();"
       },
       {
         "type": "paragraph",
-        "value": "In this example, if the fetch request fails or the response is not valid JSON, the error is caught in the `.catch()` block and logged, preventing the application from crashing."
+        "value": "If you run this code and look at the error stack trace, you might notice it doesn't include the full path of calls that led to the error. This is because errors inside async functions often lose the trace of the previous calls."
       },
       {
         "type": "paragraph",
-        "value": "### Handling errors with async/await and try/catch\n\nAsync/await provides a cleaner and more readable syntax to work with asynchronous code. Errors can be caught using traditional `try/catch` blocks."
+        "value": "To make debugging easier, modern JavaScript engines try to preserve async stack traces. For example, if you chain promises or use async/await properly, you'll get more helpful error stacks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an improved example showing async stack trace preservation:"
       },
       {
         "type": "code",
-        "value": "async function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}\n\ngetData();"
+        "value": "async function first() {\n  await second();\n}\n\nasync function second() {\n  await third();\n}\n\nasync function third() {\n  throw new Error('Error in third!');\n}\n\nfirst().catch(error => {\n  console.error(error.stack);\n});"
       },
       {
         "type": "paragraph",
-        "value": "The `try` block attempts to fetch and process data. If any step throws an error (including manual checks like the `response.ok`), the control moves to the `catch` block where the error is handled."
+        "value": "In this case, the error stack will include the call chain from `first` to `second` to `third`, which helps you identify where the error started."
       },
       {
         "type": "paragraph",
-        "value": "### Common mistakes to avoid\n\n1. **Not handling errors at all**: Always use `.catch()` with promises or `try/catch` with async/await.\n2. **Ignoring `response.ok`**: Even if fetch resolves, the server might return a status like 404 or 500, these should be treated as errors.\n3. **Mixing callbacks with promises**: Stick to one pattern to avoid complexity.\n\n### Real-world tip\nIn applications, you might want to provide user-friendly messages or retry logic when errors occur. Also consider logging errors for monitoring purposes."
+        "value": "Here are some practical tips to get the most out of async stack traces:"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nHandling errors in asynchronous JavaScript is critical for building robust applications. Use `.catch()` with promises and `try/catch` with async/await effectively. Always check for response validity and plan how your app responds to errors."
+        "value": "1. Use `async/await` instead of raw promises when possible. This syntax makes the code easier to read and helps preserve stack traces.\n2. Always attach `.catch()` handlers or use `try/catch` blocks around your async functions to handle and log errors properly.\n3. Use modern browsers or Node.js versions that support long stack traces for async errors.\n4. When debugging, check the complete error stack in the console. It can show all the async call steps.\n5. Consider using source maps if you're working with transpiled code to see the original source locations in stack traces."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering async stack traces, you can significantly reduce the time it takes to find and fix bugs in your asynchronous JavaScript code."
       }
     ]
   },
   {
-    "slug": "building-a-real-time-chat-application-with-typescript-and-websockets",
-    "title": "Building a Real-Time Chat Application with TypeScript and WebSockets",
+    "slug": "mastering-typescript-generics-for-high-performance-code",
+    "title": "Mastering TypeScript Generics for High-Performance Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to create a real-time chat app using TypeScript and WebSockets. This beginner-friendly tutorial guides you through building a simple, interactive chat server and client.",
-    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
+    "description": "Learn how to use TypeScript generics to write flexible, reusable, and high-performance code. This tutorial will guide beginners through the basics and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time communication is a key feature in many modern web applications. WebSockets provide a full-duplex communication channel over a single TCP connection, making it perfect for real-time apps like chat. In this tutorial, we'll build a simple real-time chat application using TypeScript and the WebSocket protocol."
+        "value": "TypeScript generics are a powerful feature that allows you to write flexible and reusable functions, classes, and interfaces. They enable your code to work with any data type while still providing strong type safety. Understanding how to use generics can help you write high-performance code by avoiding unnecessary type conversions and promoting better code reuse."
       },
       {
         "type": "paragraph",
-        "value": "We'll create a basic WebSocket server that clients can connect to, and a simple front-end client that sends and receives messages instantly. Let's get started!"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 1: Setting up the WebSocket Server"
-      },
-      {
-        "type": "paragraph",
-        "value": "First, we need to set up a WebSocket server using the popular `ws` library for Node.js. Make sure you have Node.js and npm installed. Create a new project folder and initialize it with `npm init -y`. Then install the `ws` package and TypeScript as a development dependency."
+        "value": "Let's start with a simple example that shows how generics work. Imagine you want a function that can return the first item of an array, but the array could contain any type of elements. Without generics, you might lose type information, but with generics, you can keep your code type-safe and flexible."
       },
       {
         "type": "code",
-        "value": "npm install ws\nnpm install typescript @types/ws ts-node --save-dev"
+        "value": "function firstItem<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst num = firstItem([1, 2, 3]); // num is number\nconst str = firstItem(['a', 'b', 'c']); // str is string"
       },
       {
         "type": "paragraph",
-        "value": "Create a `server.ts` file to write our WebSocket server code."
+        "value": "In this example, <T> is a type parameter that represents the type of elements in the array. When you call the function, TypeScript infers the correct type for T, making `num` a number and `str` a string. This helps catch errors early and improves performance by avoiding unnecessary runtime checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can also be used with interfaces and classes to create reusable components. For example, you can create a generic stack class that works with any type of data:"
       },
       {
         "type": "code",
-        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\n// Create a WebSocket server listening on port 8080\nconst wss = new WebSocketServer({ port: 8080 });\n\n// Listen for connection events\nwss.on('connection', (ws) => {\n  console.log('New client connected');\n\n  // Listen for messages from clients\n  ws.on('message', (message) => {\n    console.log('Received:', message.toString());\n\n    // Broadcast received message back to all connected clients\n    wss.clients.forEach((client) => {\n      if (client.readyState === WebSocket.OPEN) {\n        client.send(message.toString());\n      }\n    });\n  });\n\n  // Handle client disconnection\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+        "value": "class Stack<T> {\n  private items: T[] = [];\n\n  push(item: T): void {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n}\n\nconst numberStack = new Stack<number>();\nnumberStack.push(10);\nconsole.log(numberStack.pop()); // 10\n\nconst stringStack = new Stack<string>();\nstringStack.push('hello');\nconsole.log(stringStack.pop()); // 'hello'"
       },
       {
         "type": "paragraph",
-        "value": "This server listens for incoming WebSocket connections on port 8080. When a client sends a message, the server broadcasts it to all connected clients, enabling real-time chat functionality."
+        "value": "This Stack class uses generics so it can store elements of any type while enforcing type safety. Using generics like this avoids duplicating code for different types and increases maintainability."
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Creating a Simple WebSocket Client"
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, let's create a simple HTML file with embedded TypeScript that connects to our WebSocket server. This client will send chat messages and display messages from all users."
-      },
-      {
-        "type": "paragraph",
-        "value": "Create an `index.html` file and add the following code:"
+        "value": "Sometimes you want to restrict the kinds of types that can be used with your generics. You can do this using constraints with the `extends` keyword. For example, if you want a function that accepts only objects with a `length` property, you can write:"
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n  <style>\n    #messages {\n      border: 1px solid #ccc;\n      height: 300px;\n      overflow-y: scroll;\n      padding: 10px;\n      margin-bottom: 10px;\n      font-family: Arial, sans-serif;\n    }\n  </style>\n</head>\n<body>\n  <div id=\"messages\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type a message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script src=\"https://cdn.jsdelivr.net/npm/typescript/lib/typescript.js\"></script>\n  <script src=\"https://cdn.jsdelivr.net/npm/tslib/tslib.js\"></script>\n  <script type=\"module\">\n    // TypeScript code inside a module\n    const ws = new WebSocket('ws://localhost:8080');\n    const messagesDiv = document.getElementById('messages')!;\n    const input = document.getElementById('messageInput') as HTMLInputElement;\n    const sendBtn = document.getElementById('sendBtn')!;\n\n    ws.onopen = () => {\n      appendMessage('Connected to chat server');\n    };\n\n    ws.onmessage = (event) => {\n      appendMessage(event.data);\n    };\n\n    ws.onclose = () => {\n      appendMessage('Disconnected from server');\n    };\n\n    sendBtn.addEventListener('click', () => {\n      sendMessage();\n    });\n\n    input.addEventListener('keypress', (event) => {\n      if (event.key === 'Enter') {\n        sendMessage();\n      }\n    });\n\n    function sendMessage() {\n      const message = input.value.trim();\n      if (message) {\n        ws.send(message);\n        input.value = '';\n      }\n    }\n\n    function appendMessage(message: string) {\n      const msgElem = document.createElement('div');\n      msgElem.textContent = message;\n      messagesDiv.appendChild(msgElem);\n      messagesDiv.scrollTop = messagesDiv.scrollHeight;\n    }\n  </script>\n</body>\n</html>"
+        "value": "function logLength<T extends { length: number }>(item: T): T {\n  console.log(item.length);\n  return item;\n}\n\nlogLength('hello'); // 5\nlogLength([1, 2, 3]); // 3\n// logLength(10); // Error: number doesn't have 'length'"
       },
       {
         "type": "paragraph",
-        "value": "This client connects to our WebSocket server and provides a simple interface to send and receive chat messages. Messages from all users are appended to the messages list."
+        "value": "This restricts the generic type `T` to only those that have a `length` property. This is helpful for high-performance code because it prevents incorrect types from being used and enables more precise optimizations."
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Running the Application"
+        "value": "To wrap up, mastering TypeScript generics lets you write code that is not only flexible and reusable but also type-safe and performant. Use generic functions, classes, and constraints to tailor your code for any data type without sacrificing reliability or speed."
       },
       {
         "type": "paragraph",
-        "value": "To run the server, use the following command:"
-      },
-      {
-        "type": "code",
-        "value": "npx ts-node server.ts"
-      },
-      {
-        "type": "paragraph",
-        "value": "Open the `index.html` file in multiple browser windows or tabs. When you send a message from one client, it should appear in all connected clients instantly."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "You have successfully built a simple real-time chat application using TypeScript and WebSockets! This example can be expanded with features like user authentication, message history, and UI improvements. Understanding the basics of WebSocket communication gives you a powerful tool for many interactive web apps."
+        "value": "Keep practicing by refactoring your existing code to use generics where appropriate. You will soon see how this powerful feature can simplify your TypeScript projects and improve their performance."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-strict-null-checks-for-robust-data-models",
-    "title": "Mastering TypeScript's Strict Null Checks for Robust Data Models",
+    "slug": "leveraging-typescript-utility-types-for-robust-data-model-validation",
+    "title": "Leveraging TypeScript Utility Types for Robust Data Model Validation",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript's strict null checks to avoid common errors and create reliable data models that handle null and undefined values safely.",
-    "videoUrl": "https://www.youtube.com/watch?v=REw7pEqM9FY",
+    "description": "Learn how to use TypeScript utility types to create safer and more maintainable data models with built-in validation for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=q0E5weS1Bsw",
     "content": [
       {
         "type": "paragraph",
-        "value": "One of the most common challenges when programming is dealing with null or undefined values, which can lead to unexpected runtime errors. TypeScript offers a powerful feature called \"strict null checks\" that helps catch these issues at compile-time, making your code much safer and more predictable."
+        "value": "When working with data in TypeScript, ensuring your data models are correct and robust is crucial. TypeScript utility types help simplify this task by providing pre-built types that can transform and validate your data models without extra code. In this article, we'll explore some of these handy utility types and how they can improve your data validation process."
       },
       {
         "type": "paragraph",
-        "value": "By enabling strict null checks, TypeScript requires you to explicitly handle null and undefined types in your variables and data models. This means your code must deal with the possibility that a value could be missing, instead of assuming everything has a valid value."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by seeing what happens when strict null checks are not enabled:"
+        "value": "Let's imagine you have a basic user model but want to enforce some rules, like some fields must always exist, others can be optional, and some might be read-only."
       },
       {
         "type": "code",
-        "value": "let userName: string = null;\nconsole.log(userName.toUpperCase()); // Runtime error if null\n"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string;\n  createdAt: Date;\n  role?: string;\n}"
       },
       {
         "type": "paragraph",
-        "value": "Above, assigning null to a variable declared as string is allowed without strict null checks. When calling a method on null, the program crashes at runtime."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, enable strict null checks by adding the following to your tsconfig.json:"
+        "value": "Here, \"email\" and \"role\" are optional. What if you want to create a version of this model where all fields are required? This is where the `Required<T>` utility type shines."
       },
       {
         "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
+        "value": "type RequiredUser = Required<User>;\n\nconst user1: RequiredUser = {\n  id: 1,\n  name: \"Alice\",\n  email: \"alice@example.com\",\n  createdAt: new Date(),\n  role: \"admin\"\n};"
       },
       {
         "type": "paragraph",
-        "value": "With this enabled, the TypeScript compiler will throw an error for the previous code, because null is not assignable to string:"
+        "value": "Now, every property in `RequiredUser` must be present, which helps validate that an object has all the necessary fields."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to make sure that certain properties cannot be changed after creation. For example, the `id` and `createdAt` fields should be read-only. Use the `Readonly<T>` type to achieve this."
       },
       {
         "type": "code",
-        "value": "let userName: string = null; // Error: Type 'null' is not assignable to type 'string'."
+        "value": "type ReadonlyUser = Readonly<User>;\n\nconst user2: ReadonlyUser = {\n  id: 2,\n  name: \"Bob\",\n  createdAt: new Date()\n};\n\n// user2.id = 3; // Error: Cannot assign to 'id' because it is a read-only property."
       },
       {
         "type": "paragraph",
-        "value": "To fix this, you can explicitly allow null by using a union type. For example:"
+        "value": "If you want to create a user update model where only some properties are optional, you can use the `Partial<T>` utility type. This allows you to handle forms where users only modify specific fields."
       },
       {
         "type": "code",
-        "value": "let userName: string | null = null;\n\nif (userName !== null) {\n  console.log(userName.toUpperCase());\n} else {\n  console.log('No user name provided');\n}"
+        "value": "type UserUpdate = Partial<User>;\n\nfunction updateUser(user: User, updates: UserUpdate): User {\n  return { ...user, ...updates };\n}\n\nconst updatedUser = updateUser(user1, { email: \"newemail@example.com\" });"
       },
       {
         "type": "paragraph",
-        "value": "This approach requires you to check for null before accessing methods or properties that assume a valid string. This eliminates the chance of runtime errors caused by null values."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let's apply strict null checks to a simple data model representing a user profile:"
+        "value": "Sometimes, it is helpful to select or exclude certain fields when validating data. The `Pick<T, K>` and `Omit<T, K>` utility types help you pick or omit specific keys from your model."
       },
       {
         "type": "code",
-        "value": "interface UserProfile {\n  id: number;\n  name: string;\n  email?: string | null;  // email can be missing or null\n}\n\nfunction printUserInfo(user: UserProfile) {\n  console.log(`ID: ${user.id}`);\n  console.log(`Name: ${user.name}`);\n\n  if (user.email) {\n    console.log(`Email: ${user.email}`);\n  } else {\n    console.log('Email not available');\n  }\n}"
+        "value": "type UserNameAndEmail = Pick<User, \"name\" | \"email\">;\n\nconst contactInfo: UserNameAndEmail = {\n  name: \"Alice\",\n  email: \"alice@example.com\"\n};\n\n// Omit createdAt and id\n\ntype UserWithoutMetadata = Omit<User, \"id\" | \"createdAt\">;\n\nconst partialUser: UserWithoutMetadata = {\n  name: \"Charlie\"\n};"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the email property is optional and can be null. When using it, we explicitly check if email has a truthy value before using it. This pattern keeps your data handling safe and clear."
+        "value": "By combining these utility types, you can build flexible and robust validation patterns with minimal code. This reduces bugs and improves type safety across your application."
       },
       {
         "type": "paragraph",
-        "value": "Strict null checks might require more initial effort writing checks or defining types carefully, but they significantly improve your code’s reliability, especially in larger projects where many variables can be null or undefined."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Enable strictNullChecks in your TypeScript configuration.\n- Use union types like `string | null` or `number | undefined` to explicitly allow null or undefined.\n- Always check for null or undefined before using variables that might have those values.\n- Apply this approach in your data models to make your code safer and easier to maintain."
-      },
-      {
-        "type": "paragraph",
-        "value": "Mastering strict null checks is a big step toward writing bulletproof TypeScript applications!"
+        "value": "In conclusion, TypeScript utility types like `Required`, `Readonly`, `Partial`, `Pick`, and `Omit` are powerful allies for validating and managing data models, especially if you want to keep your types strict and your code clean."
       }
     ]
   },
   {
-    "slug": "mastering-pythons-itertools-hidden-gems-for-efficient-data-processing",
-    "title": "Mastering Python's itertools: Hidden Gems for Efficient Data Processing",
+    "slug": "building-weather-forecast-dashboard-python-api",
+    "title": "Building a Weather Forecast Dashboard with Python and API Integration",
     "language": "python",
     "type": "tutorials",
-    "description": "Discover how to leverage Python's itertools module to write efficient, clean, and powerful data processing code. Perfect for beginners seeking practical examples and tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=mB0EBW-vDSQ",
+    "description": "Learn how to create a beginner-friendly weather forecast dashboard using Python and an API to fetch live weather data.",
+    "videoUrl": "https://www.youtube.com/watch?v=aQZzMJgPMqQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python's itertools is a treasure trove of tools for creating efficient iterators. If you often deal with data processing or large datasets, itertools can help you write code that's not only faster but also more readable and memory-friendly. This tutorial will introduce you to some of the most useful and beginner-friendly itertools functions, with practical examples."
+        "value": "In this tutorial, we will build a simple weather forecast dashboard using Python. We'll integrate a weather API to fetch real-time weather data for any city and display it in a clear format. This beginner-friendly guide will cover getting API data, parsing JSON, and displaying the information."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by importing itertools and understanding what it can do. The module provides a set of building blocks for working with iterators, including tools for filtering, grouping, and combining data."
+        "value": "First, you need to sign up for a free API key from OpenWeatherMap (https://openweathermap.org/api). The API will provide the weather details for the city you request."
+      },
+      {
+        "type": "paragraph",
+        "value": "Make sure you have Python installed on your system. You'll also need the 'requests' library to make HTTP requests. If you don't have it installed, run this command in your terminal or command prompt:"
       },
       {
         "type": "code",
-        "value": "import itertools"
+        "value": "pip install requests"
       },
       {
         "type": "paragraph",
-        "value": "### 1. `count()` – Create an Infinite Counter\n\nIf you want to generate consecutive numbers indefinitely (or until you stop), `count()` is your friend. It’s like an automatic number generator starting from a specified number."
+        "value": "Now, let's write the Python code to fetch and display the weather data. We'll create a function to call the API and print the temperature, weather description, humidity, and wind speed."
       },
       {
         "type": "code",
-        "value": "for num in itertools.count(10):\n    if num > 15:\n        break\n    print(num)\n\n# Output:\n# 10\n# 11\n# 12\n# 13\n# 14\n# 15"
+        "value": "import requests\n\nAPI_KEY = 'your_api_key_here'  # Replace with your OpenWeatherMap API key\nBASE_URL = 'http://api.openweathermap.org/data/2.5/weather'\n\n\ndef get_weather(city):\n    params = {\n        'q': city,\n        'appid': API_KEY,\n        'units': 'metric'  # Use 'imperial' for Fahrenheit\n    }\n    response = requests.get(BASE_URL, params=params)\n    if response.status_code == 200:\n        data = response.json()\n        weather = data['weather'][0]['description']\n        temp = data['main']['temp']\n        humidity = data['main']['humidity']\n        wind_speed = data['wind']['speed']\n\n        print(f\"Weather in {city.title()}:\")\n        print(f\"Description: {weather}\")\n        print(f\"Temperature: {temp}°C\")\n        print(f\"Humidity: {humidity}%\")\n        print(f\"Wind Speed: {wind_speed} m/s\")\n    else:\n        print(f\"Error fetching weather data for {city}. Please check the city name.\")\n\n\nif __name__ == '__main__':\n    city = input(\"Enter city name: \")\n    get_weather(city)"
       },
       {
         "type": "paragraph",
-        "value": "### 2. `cycle()` – Repeat a Sequence Forever\n\n`cycle()` repeats the elements of a sequence endlessly. It’s great when you want to loop patterns over and over without manual repetition."
-      },
-      {
-        "type": "code",
-        "value": "colors = ['red', 'green', 'blue']\ncolor_cycle = itertools.cycle(colors)\n\nfor _ in range(6):\n    print(next(color_cycle))\n\n# Output:\n# red\n# green\n# blue\n# red\n# green\n# blue"
+        "value": "Let's break down what this code does:\n- It asks the user to enter a city name.\n- It sends a request to the OpenWeatherMap API with the city and your API key.\n- If the request is successful, it parses the JSON response to extract weather details.\n- It prints the weather description, temperature in Celsius, humidity percentage, and wind speed.\n- If the city is not found or there is an error, it prints an appropriate error message."
       },
       {
         "type": "paragraph",
-        "value": "### 3. `chain()` – Combine Multiple Iterables\n\nSometimes you have multiple lists or sequences and want to process them as one continuous sequence. `chain()` concatenates iterables efficiently."
-      },
-      {
-        "type": "code",
-        "value": "list1 = [1, 2, 3]\nlist2 = ['a', 'b', 'c']\ncombined = itertools.chain(list1, list2)\n\nfor item in combined:\n    print(item)\n\n# Output:\n# 1\n# 2\n# 3\n# a\n# b\n# c"
+        "value": "To run the script, save it as weather_dashboard.py and execute it from the command line with:\n\npython weather_dashboard.py\n\nThen enter the city when prompted. You'll see the current weather conditions displayed."
       },
       {
         "type": "paragraph",
-        "value": "### 4. `groupby()` – Group Consecutive Items\n\n`groupby()` groups consecutive elements that have the same key. This is very handy for categorizing or aggregating data."
-      },
-      {
-        "type": "code",
-        "value": "data = [\"apple\", \"apple\", \"banana\", \"banana\", \"banana\", \"cherry\"]\nfor key, group in itertools.groupby(data):\n    print(key, list(group))\n\n# Output:\n# apple ['apple', 'apple']\n# banana ['banana', 'banana', 'banana']\n# cherry ['cherry']"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 5. `islice()` – Slice Iterators Like Lists\n\n`islice()` lets you slice any iterable, including infinite ones, without converting them to a list (which would not be possible for infinite iterators)."
-      },
-      {
-        "type": "code",
-        "value": "count = itertools.count(0)\nslice_5 = itertools.islice(count, 5)\nprint(list(slice_5))\n\n# Output:\n# [0, 1, 2, 3, 4]"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why Use itertools?\n\n- **Memory Efficiency:** itertools functions produce iterators instead of lists, so they don't store the entire sequence in memory.\n- **Clean Code:** They help you write concise and readable loops and data transformations.\n- **Speed:** Built-in functions in itertools are often faster than equivalent manual implementations."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\n\nBy mastering these hidden gems from itertools, you can handle data processing tasks more efficiently. Start by practicing these functions, and you'll soon find more use cases where itertools can simplify your Python code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Feel free to explore the official documentation for more advanced tools within itertools at https://docs.python.org/3/library/itertools.html"
+        "value": "This basic dashboard can be expanded with GUI libraries like Tkinter or even converted into a web app using frameworks like Flask or Django. But this script is a great starting point to understand how API integration and data parsing works in Python."
       }
     ]
   },
   {
-    "slug": "debugging-memory-leaks-python-web-applications",
-    "title": "Debugging Memory Leaks in Python Web Applications: A Practical Guide",
+    "slug": "mastering-pythons-exception-chaining-for-cleaner-error-handling",
+    "title": "Mastering Python's Exception Chaining for Cleaner Error Handling",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to identify and fix memory leaks in Python web applications with beginner-friendly steps and code examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=fMKilBkCJX0",
+    "description": "Learn how to use Python's exception chaining feature to write cleaner, easier-to-debug code by preserving error context during exception handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks in web applications can degrade performance and eventually crash your server. In Python web applications, even though Python has automatic memory management, leaks can still occur when objects are unintentionally retained. This guide covers practical ways to detect and debug memory leaks for beginners."
+        "value": "When writing Python programs, handling errors gracefully is important to create robust applications. Python provides a powerful feature called exception chaining that helps preserve the original error context while raising new exceptions. This makes debugging easier and your code cleaner."
       },
       {
         "type": "paragraph",
-        "value": "First, you want to confirm if there's a memory leak. Monitor your Python application's memory usage over time using system tools or libraries like psutil. If memory consistently grows without dropping, you likely have a leak."
+        "value": "Exception chaining occurs when you catch an exception and raise another one in response. Python automatically links these exceptions together, so you don't lose information about the original error."
       },
       {
         "type": "paragraph",
-        "value": "Next, you can use Python's built-in gc (garbage collector) module to identify what objects are not being freed. Here's a simple example to get a list of objects tracked by the garbage collector:"
+        "value": "Let's look at a simple example without exception chaining:"
       },
       {
         "type": "code",
-        "value": "import gc\n\n# Enable automatic garbage collection\ngc.enable()\n\n# Collect garbage and get uncollected objects\nunreachable = gc.collect()\nprint(f\"Unreachable objects: {unreachable}\")\n\n# List of all objects tracked by GC\nall_objects = gc.get_objects()\nprint(f'Total objects tracked by GC: {len(all_objects)}')"
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    raise ValueError(\"Invalid input provided\")"
       },
       {
         "type": "paragraph",
-        "value": "To find specific objects that might be leaking, such as instances of a custom class, you can filter the tracked objects:"
+        "value": "In this case, the `ZeroDivisionError` is caught, but the new `ValueError` hides the original problem. When you debug the error, you only see the `ValueError`, not the underlying cause."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's use exception chaining to maintain that context by using the `from` keyword:"
       },
       {
         "type": "code",
-        "value": "class MyLeakyClass:\n    pass\n\nleaky_instances = [obj for obj in gc.get_objects() if isinstance(obj, MyLeakyClass)]\nprint(f'Number of MyLeakyClass instances: {len(leaky_instances)}')"
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError as e:\n    raise ValueError(\"Invalid input provided\") from e"
       },
       {
         "type": "paragraph",
-        "value": "If you notice that the number of instances keeps growing after requests, those objects might be retained unintentionally. Common causes include reference cycles or global variables holding onto objects."
+        "value": "By adding `from e`, Python links the `ValueError` to the original `ZeroDivisionError`. The traceback now shows both exceptions, making it much clearer what went wrong and where."
       },
       {
         "type": "paragraph",
-        "value": "For deeper inspection, you can use the third-party library objgraph, which visualizes object references and helps pinpoint leaks. Install it with pip:"
+        "value": "You can also suppress the original exception if you want to completely hide it by using `from None`. This can be useful if the original error is not relevant and you want to present a cleaner error message:"
       },
       {
         "type": "code",
-        "value": "pip install objgraph"
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    raise ValueError(\"Invalid input provided\") from None"
       },
       {
         "type": "paragraph",
-        "value": "You can then generate graphs showing memory growth:"
-      },
-      {
-        "type": "code",
-        "value": "import objgraph\n\nobjgraph.show_growth(limit=10)\n\n# For example, show what is referencing a specific object\nleaky = leaky_instances[0] if leaky_instances else None\nif leaky:\n    objgraph.show_backrefs([leaky], filename='leak_backrefs.png')"
+        "value": "In summary, exception chaining lets you:\n- Maintain error context for easier debugging\n- Wrap low-level exceptions with higher-level ones\n- Control the visibility of original exceptions"
       },
       {
         "type": "paragraph",
-        "value": "Finally, to fix leaks, check whether long-lived data structures (like caches or lists) are holding objects longer than needed. Break reference cycles by defining __del__ methods carefully or using weak references from the weakref module."
-      },
-      {
-        "type": "code",
-        "value": "import weakref\n\nclass Cache:\n    def __init__(self):\n        self._data = weakref.WeakValueDictionary()\n\n    def add(self, key, obj):\n        self._data[key] = obj\n\ncache = Cache()\n\n# Objects not referenced elsewhere will be garbage collected automatically"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, debugging memory leaks involves monitoring memory usage, using gc to find uncollected objects, leveraging tools like objgraph for visualization, and fixing reference retention in your code. These steps will help keep your Python web application healthy and performant."
+        "value": "Using exception chaining in your Python projects will make your error handling more effective and your code easier to maintain."
       }
     ]
   },
   {
-    "slug": "building-a-scalable-ecommerce-inventory-system-with-sql",
-    "title": "Building a Scalable E-commerce Inventory System with SQL: A Beginner's Guide",
+    "slug": "mastering-window-functions-advanced-sql-tricks-for-data-analysis",
+    "title": "Mastering Window Functions: Advanced SQL Tricks for Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to create a scalable and efficient e-commerce inventory system using SQL. This beginner-friendly tutorial covers database design, table creation, and essential SQL queries to manage inventory effectively.",
-    "videoUrl": "https://www.youtube.com/watch?v=8bkGKwb29L4",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis with clear examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Managing an inventory system is crucial for any e-commerce platform. A well-structured database ensures that products are tracked accurately, stock levels are maintained, and customers have a smooth shopping experience. In this tutorial, we will learn how to build a scalable inventory system using SQL from scratch. We'll start with designing tables to store products, stock information, and categories, then move on to writing queries to manage and retrieve inventory data."
+        "value": "Window functions in SQL are powerful tools that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions that collapse multiple rows into one, window functions preserve the rows while providing valuable analytics like running totals, rankings, moving averages, and more."
       },
       {
         "type": "paragraph",
-        "value": "First, let’s define the tables needed in our inventory system. The key entities are products, categories (to organize products), and inventory (to track stock levels). Here’s how you can create those tables:"
+        "value": "In this tutorial, we'll explore some common window functions and see how to use the OVER() clause to analyze data without losing detail."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example using sales data:"
       },
       {
         "type": "code",
-        "value": "-- Create categories table to organize product types\nCREATE TABLE categories (\n    category_id INT PRIMARY KEY AUTO_INCREMENT,\n    category_name VARCHAR(100) NOT NULL\n);\n\n-- Create products table with reference to categories\nCREATE TABLE products (\n    product_id INT PRIMARY KEY AUTO_INCREMENT,\n    product_name VARCHAR(255) NOT NULL,\n    category_id INT,\n    price DECIMAL(10, 2) NOT NULL,\n    FOREIGN KEY (category_id) REFERENCES categories(category_id)\n);\n\n-- Create inventory table to track stock for each product\nCREATE TABLE inventory (\n    product_id INT PRIMARY KEY,\n    stock_quantity INT NOT NULL DEFAULT 0,\n    FOREIGN KEY (product_id) REFERENCES products(product_id)\n);"
+        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(50),\n  region VARCHAR(50),\n  sale_amount DECIMAL(10,2),\n  sale_date DATE\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', 'North', 500, '2024-01-01'),\n(2, 'Bob', 'North', 300, '2024-01-02'),\n(3, 'Alice', 'North', 700, '2024-01-03'),\n(4, 'Charlie', 'South', 200, '2024-01-01'),\n(5, 'Bob', 'North', 100, '2024-01-04');"
       },
       {
         "type": "paragraph",
-        "value": "With these tables, you can add product categories, define products under those categories, and track the available stock for each product. Let’s add some sample data to each table."
+        "value": "### Calculate Running Total per Salesperson\nTo see how sales accumulate over time for each salesperson, use the `SUM()` window function with the `PARTITION BY` and ordering inside the `OVER()` clause."
       },
       {
         "type": "code",
-        "value": "-- Insert categories\nINSERT INTO categories (category_name) VALUES ('Electronics'), ('Clothing'), ('Books');\n\n-- Insert products\nINSERT INTO products (product_name, category_id, price) VALUES\n('Wireless Mouse', 1, 25.99),\n('T-shirt', 2, 9.99),\n('Novel Book', 3, 14.50);\n\n-- Insert initial stock levels\nINSERT INTO inventory (product_id, stock_quantity) VALUES\n(1, 100),\n(2, 50),\n(3, 200);"
+        "value": "SELECT \n  id,\n  salesperson,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY salesperson, sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "Next, to ensure the inventory system works efficiently at scale, it’s important to use indexes and clear queries. For example, to quickly check available stock for a particular product, you can use JOINs between the products and inventory tables."
+        "value": "This query sums the `sale_amount` for each salesperson, ordered by `sale_date`, producing a running total that resets for each person."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Ranking Salespeople by Total Sales Within Each Region\nUse the `RANK()` function to assign ranks to salespeople based on their total sales in each region."
       },
       {
         "type": "code",
-        "value": "-- Query to check stock levels along with product details\nSELECT p.product_id, p.product_name, c.category_name, p.price, i.stock_quantity\nFROM products p\nJOIN categories c ON p.category_id = c.category_id\nJOIN inventory i ON p.product_id = i.product_id\nWHERE p.product_name = 'Wireless Mouse';"
+        "value": "SELECT \n  salesperson,\n  region,\n  SUM(sale_amount) AS total_sales,\n  RANK() OVER (PARTITION BY region ORDER BY SUM(sale_amount) DESC) AS sales_rank\nFROM sales\nGROUP BY salesperson, region\nORDER BY region, sales_rank;"
       },
       {
         "type": "paragraph",
-        "value": "To update stock after a sale or restock, you simply update the stock_quantity in the inventory table. For instance, if 5 wireless mice were sold, use this SQL:"
+        "value": "Here, `RANK()` orders salespeople in each region by their total sales. Note that this requires aggregation (`SUM()`) before ranking."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Calculate Moving Average of Sales\nYou can compute the moving average to smooth out the sales trend over defined periods using a window frame."
       },
       {
         "type": "code",
-        "value": "-- Reduce stock after a sale\nUPDATE inventory\nSET stock_quantity = stock_quantity - 5\nWHERE product_id = 1 AND stock_quantity >= 5;"
+        "value": "SELECT \n  id,\n  salesperson,\n  sale_date,\n  sale_amount,\n  AVG(sale_amount) OVER (\n    PARTITION BY salesperson\n    ORDER BY sale_date\n    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW\n  ) AS moving_avg_3_days\nFROM sales\nORDER BY salesperson, sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "It is good practice to include the condition that checks if the stock quantity is sufficient before reducing it to prevent negative stock values, ensuring data integrity."
+        "value": "This example calculates a 3-day moving average of sales per salesperson. The `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW` defines the window frame size."
       },
       {
         "type": "paragraph",
-        "value": "In summary, to build a scalable e-commerce inventory system using SQL:\n- Design normalized tables for categories, products, and inventory.\n- Use foreign key constraints to maintain relationships.\n- Write efficient SELECT queries with JOINs for data retrieval.\n- Update stock carefully with validation.\n\nBy following these basic steps, you can comfortably manage your inventory and scale the system as your product catalog grows."
+        "value": "### Key Takeaways\n- Window functions preserve rows and add aggregate-style calculations.\n- `PARTITION BY` defines the group for the window function, similar to grouping.\n- `ORDER BY` inside `OVER()` defines the order of rows in the window.\n- You can define custom frames with `ROWS BETWEEN` or `RANGE BETWEEN`.\n\nMastering these functions unlocks advanced SQL analytics capabilities essential for data analysts."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with these window functions on your own datasets to better understand their power!"
       }
     ]
   },
   {
-    "slug": "optimizing-sql-query-performance-through-index-usage-analysis",
-    "title": "Optimizing SQL Query Performance Through Index Usage Analysis",
+    "slug": "optimizing-sql-queries-to-prevent-data-inconsistencies",
+    "title": "Optimizing SQL Queries to Prevent Data Inconsistencies in Transactional Systems",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to optimize your SQL queries by analyzing and effectively using indexes to improve performance, with beginner-friendly tips and examples.",
+    "description": "Learn beginner-friendly tips to optimize SQL queries and avoid data inconsistencies in transactional systems using best practices and error handling.",
     "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, slow query performance is a common challenge, especially as your data grows. One of the most effective ways to optimize query performance is by understanding and using indexes properly. Indexes act like a table of contents in a book, helping the database find relevant data quickly without scanning the entire table."
+        "value": "Data inconsistencies in transactional systems can cause serious problems like incorrect reports or failed operations. Optimizing SQL queries to prevent these issues is crucial. This article covers simple, effective ways to write SQL that keeps your data accurate and consistent."
       },
       {
         "type": "paragraph",
-        "value": "However, not all indexes improve performance, and sometimes missing or wrong indexes cause slow queries or errors. In this article, we'll explore how to analyze index usage in your SQL queries and make adjustment decisions to speed up your database."
+        "value": "First, understand what causes inconsistencies. In transactional systems, multiple operations depend on each other to complete successfully. If any operation fails or runs at the wrong time, data can become mismatched. Using transactions and proper isolation levels helps avoid such problems."
       },
       {
         "type": "paragraph",
-        "value": "### What is an Index in SQL?"
-      },
-      {
-        "type": "paragraph",
-        "value": "An index is a database object that improves the speed of data retrieval. It stores a sorted list of key values and pointers to the corresponding data rows. Creating indexes on columns that are frequently searched, filtered, or joined can significantly boost performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Mistakes That Cause Index-Related Performance Issues"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Missing indexes on columns used in WHERE, JOIN, or ORDER BY clauses.\n2. Having too many indexes which slow down data modification operations.\n3. Using functions or operations on indexed columns that prevent index usage.\n4. Not analyzing the query execution plan to understand if indexes are used."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How to Analyze if Your Query Uses Indexes"
-      },
-      {
-        "type": "paragraph",
-        "value": "Most SQL databases provide tools to analyze query execution plans. For example, in MySQL you can use the EXPLAIN statement before your query to see how it is executed."
+        "value": "Use transactions to group related SQL commands. This means either all commands succeed together or none do, preventing partial data updates. Here's an example of a transaction in SQL:"
       },
       {
         "type": "code",
-        "value": "EXPLAIN SELECT * FROM employees WHERE last_name = 'Smith';"
+        "value": "BEGIN TRANSACTION;\n\nUPDATE Accounts SET Balance = Balance - 100 WHERE AccountID = 1;\nUPDATE Accounts SET Balance = Balance + 100 WHERE AccountID = 2;\n\nCOMMIT;"
       },
       {
         "type": "paragraph",
-        "value": "The output will show if an index scan or a full table scan is used. An index scan is preferred for better performance."
+        "value": "In this example, transferring money between two accounts happens inside a transaction. If either update fails, the entire operation rolls back, preventing incorrect balances."
       },
       {
         "type": "paragraph",
-        "value": "### Adding an Index to Improve Performance"
-      },
-      {
-        "type": "paragraph",
-        "value": "If the EXPLAIN results show a full table scan and the column is frequently used in queries, consider adding an index."
+        "value": "Next, optimize query locking to prevent conflicts when multiple users access the database. Use appropriate isolation levels like READ COMMITTED or SERIALIZABLE depending on your needs. For example:"
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_last_name ON employees(last_name);"
+        "value": "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;\nBEGIN TRANSACTION;\n-- your queries here\nCOMMIT;"
       },
       {
         "type": "paragraph",
-        "value": "After creating the index, rerun EXPLAIN to verify that the query now uses the index."
+        "value": "The SERIALIZABLE isolation level ensures that no other transactions interfere with your current transaction, preventing dirty reads or phantom data issues."
       },
       {
         "type": "paragraph",
-        "value": "### Avoid Common Index Usage Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "Be cautious about applying functions on indexed columns in the WHERE clause because it can disable index usage. For example, this query won't use an index on `last_name`:"
+        "value": "Avoid long-running queries inside transactions since they can hold locks too long, blocking other operations. Instead, try to make queries efficient by using indexes and limiting the data returned. For example, add indexes to columns used in WHERE or JOIN clauses:"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE LOWER(last_name) = 'smith';"
+        "value": "CREATE INDEX idx_customer_id ON Orders(CustomerID);"
       },
       {
         "type": "paragraph",
-        "value": "Instead, consider storing lowercase values in a computed column or using case-insensitive collations."
+        "value": "Finally, always check for errors and handle exceptions in your application logic. This ensures if something goes wrong, you can rollback the transaction and log the issue for further analysis."
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Optimizing SQL queries through index usage involves:\n- Identifying slow queries with EXPLAIN\n- Creating appropriate indexes on frequent search columns\n- Avoiding expressions on indexed columns that disable index use\n- Reviewing query plans regularly\n\nWith these beginner-friendly steps, you can dramatically improve your database’s responsiveness!"
+        "value": "By applying these beginner-friendly tips to optimize your SQL queries—using transactions, setting correct isolation levels, creating indexes, and handling errors—you can prevent data inconsistencies and build more reliable transactional systems."
       }
     ]
   }
