@@ -14460,5 +14460,421 @@ export const articles = [
         "value": "By following these beginner-friendly tips—avoiding deadlocks by ordering queries consistently, adding indexes, using proper isolation levels, and monitoring query performance—you can significantly improve the speed and reliability of your SQL database in high-concurrency systems."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-event-driven-architectures-with-javascript",
+    "title": "Building Scalable Event-Driven Architectures with JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable, event-driven applications using JavaScript with practical examples and easy-to-understand concepts.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture (EDA) is a design pattern that promotes the production, detection, and reaction to events or changes in state within a system. It is especially useful for building scalable and maintainable applications because parts of your system can operate independently and respond asynchronously."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore how to build a simple event-driven system using JavaScript. We'll focus on creating a basic event emitter, handling events, and thinking about scalability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is an Event Emitter?"
+      },
+      {
+        "type": "paragraph",
+        "value": "An event emitter is an object that can emit named events and register listeners (handlers) to respond when those events occur. Node.js provides a built-in `EventEmitter` class, but for learning purposes, we will build a simple version from scratch."
+      },
+      {
+        "type": "code",
+        "value": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n\n  on(eventName, listener) {\n    if (!this.events[eventName]) {\n      this.events[eventName] = [];\n    }\n    this.events[eventName].push(listener);\n  }\n\n  emit(eventName, data) {\n    const listeners = this.events[eventName];\n    if (listeners) {\n      listeners.forEach(listener => listener(data));\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how to use our simple event emitter:"
+      },
+      {
+        "type": "code",
+        "value": "const emitter = new EventEmitter();\n\n// Register a listener for the 'message' event\nemitter.on('message', (data) => {\n  console.log('Message received:', data);\n});\n\n// Emit the 'message' event with some data\nemitter.emit('message', 'Hello, Event-Driven World!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "When `emitter.emit` is called, all listeners attached to the event will run. This pattern allows different parts of your application to react to events independently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scaling Event-Driven Systems"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this example works great for small apps, real-world scalable systems often involve distributed services. To build scalable event-driven architectures, consider the following:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Asynchronous Processing:** Use async functions and non-blocking I/O to handle many events concurrently.\n- **Message Queues:** Use tools like Kafka, RabbitMQ, or AWS SNS/SQS to decouple event producers and consumers.\n- **Event Stores:** Persist events for auditing, debugging, or replaying.\n- **Load Balancing:** Distribute event handling across multiple servers or instances."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Node.js’s Built-in EventEmitter"
+      },
+      {
+        "type": "paragraph",
+        "value": "In Node.js, you can use the built-in `events` module that provides a robust `EventEmitter` class used by many core modules."
+      },
+      {
+        "type": "code",
+        "value": "const EventEmitter = require('events');\n\nclass MyEmitter extends EventEmitter {}\n\nconst myEmitter = new MyEmitter();\n\nmyEmitter.on('event', (data) => {\n  console.log('An event occurred:', data);\n});\n\nmyEmitter.emit('event', { id: 1, message: 'Hello world' });"
+      },
+      {
+        "type": "paragraph",
+        "value": "This built-in class supports many useful features such as once-only listeners, listener removal, and error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Building scalable event-driven architectures in JavaScript starts with understanding the event emitter pattern. Using JavaScript’s asynchronous capabilities, coupled with external message brokers when needed, you can build maintainable and scalable applications. Experiment with these ideas by starting small and gradually incorporating advanced tools as your app grows."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-javascript-proxies-for-dynamic-data-modeling-and-error-handling",
+    "title": "Leveraging JavaScript Proxies for Dynamic Data Modeling and Error Handling",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use JavaScript Proxies to create dynamic data models and improve error handling in your applications with simple, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=0U4Ko9DVxpY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript Proxies provide a powerful way to intercept and customize operations performed on objects. This feature can be especially useful for dynamic data modeling and robust error handling in your applications. In this tutorial, we will explore how beginners can leverage Proxies to create objects that react intelligently when properties are accessed, modified, or deleted."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy wraps around an object and lets you define custom behavior for fundamental operations like getting or setting a property. This means you can validate data, provide default values, or throw informative errors automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a simple Proxy that models a user object. We want to ensure that accessing any undefined property throws a clear error, improving debugging and avoiding silent bugs."
+      },
+      {
+        "type": "code",
+        "value": "const user = {\n  name: \"Alice\",\n  age: 30\n};\n\nconst userProxy = new Proxy(user, {\n  get(target, prop) {\n    if (prop in target) {\n      return target[prop];\n    } else {\n      throw new ReferenceError(`Property \\\"${prop}\\\" does not exist.`);\n    }\n  }\n});\n\nconsole.log(userProxy.name); // Alice\nconsole.log(userProxy.age);  // 30\n// console.log(userProxy.email); // Throws ReferenceError"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the get trap checks if the requested property exists in the target object. If not, it throws a ReferenceError with a helpful message. This way, you won't silently get undefined values and your app can handle missing data in a controlled manner."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's enhance the Proxy to allow setting new properties but warn users if they try to set invalid data types. This helps maintain consistent data models dynamically."
+      },
+      {
+        "type": "code",
+        "value": "const userWithValidation = new Proxy(user, {\n  get(target, prop) {\n    if (prop in target) {\n      return target[prop];\n    } else {\n      throw new ReferenceError(`Property \\\"${prop}\\\" does not exist.`);\n    }\n  },\n  set(target, prop, value) {\n    if (prop === 'age' && typeof value !== 'number') {\n      throw new TypeError('Age must be a number.');\n    }\n    target[prop] = value;\n    return true;\n  }\n});\n\nuserWithValidation.age = 35;  // Works\n// userWithValidation.age = 'thirty'; // Throws TypeError\nuserWithValidation.email = 'alice@example.com'; // Allowed"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the set trap validates the type of the age property before allowing the update. If the validation fails, it throws a TypeError. Other properties can be added freely, showing how Proxies enable flexible but safe data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, you can also trap delete operations for your data model, logging deletions or preventing the removal of critical properties."
+      },
+      {
+        "type": "code",
+        "value": "const protectedUser = new Proxy(user, {\n  deleteProperty(target, prop) {\n    if (prop === 'name') {\n      throw new Error('Cannot delete the name property.');\n    }\n    delete target[prop];\n    console.log(`Deleted property: ${prop}`);\n    return true;\n  }\n});\n\n// delete protectedUser.name; // Throws Error\ndelete protectedUser.age; // Logs 'Deleted property: age'"
+      },
+      {
+        "type": "paragraph",
+        "value": "By customizing the deleteProperty trap, you control how properties can be removed and also track such operations. This extra layer offers better data integrity and easier debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, JavaScript Proxies are excellent for building dynamic data models with built-in error handling. They make your objects smarter and your code safer without complex traditional checks. Start experimenting with Proxy traps like get, set, and deleteProperty to enhance your code's robustness and flexibility."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-metaclasses-a-deep-dive-into-dynamic-class-creation",
+    "title": "Mastering Python Metaclasses: A Deep Dive into Dynamic Class Creation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the fundamentals of Python metaclasses and how to use them to dynamically create and customize classes for more advanced Python programming.",
+    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're comfortable with Python classes and want to deepen your understanding of Python's object-oriented capabilities, metaclasses are essential. Metaclasses allow you to control the creation and behavior of classes themselves, enabling dynamic class generation and customization."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore what metaclasses are, why you might need them, and how to create and use them in your code with clear examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Metaclass?"
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, everything is an object, including classes. Normally, when you create a class, Python uses a metaclass called `type` behind the scenes. A metaclass is essentially the \"class of a class,\" which defines how classes behave. By default, `type` constructs classes, but you can create custom metaclasses to modify class creation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Metaclasses?"
+      },
+      {
+        "type": "paragraph",
+        "value": "You might want to use metaclasses to automate some class modifications, enforce coding standards, register classes, or add new methods or attributes dynamically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Metaclass"
+      },
+      {
+        "type": "paragraph",
+        "value": "To create a metaclass, inherit from `type` and override the `__new__` or `__init__` method. This allows you to customize the class creation process."
+      },
+      {
+        "type": "code",
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        # Add a new attribute to the class\n        dct['id'] = 123\n        return super().__new__(cls, name, bases, dct)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `MyMeta` is a metaclass that prints the name of the class being created and adds a class-level attribute `id`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using the Metaclass"
+      },
+      {
+        "type": "code",
+        "value": "class MyClass(metaclass=MyMeta):\n    pass\n\n# When we define MyClass, MyMeta.__new__ runs\nprint(MyClass.id)  # Output: 123"
+      },
+      {
+        "type": "paragraph",
+        "value": "When `MyClass` is defined, the `MyMeta.__new__` method is called, printing the creation message and adding `id` to the class."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Metaclasses for Validating Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use metaclasses to enforce rules. For example, ensuring a class has a certain method:"
+      },
+      {
+        "type": "code",
+        "value": "class InterfaceMeta(type):\n    def __init__(cls, name, bases, dct):\n        if 'required_method' not in dct:\n            raise TypeError(f\"Class {name} must implement 'required_method'.\")\n        super().__init__(name, bases, dct)\n\nclass GoodClass(metaclass=InterfaceMeta):\n    def required_method(self):\n        print(\"Implemented\")\n\n# This will raise an error:\n# class BadClass(metaclass=InterfaceMeta):\n#     pass"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, any class using `InterfaceMeta` must define `required_method`, or else a `TypeError` is raised during class creation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses let you control the class creation process in Python. They are a powerful tool for adding logic, enforcing rules, or modifying classes dynamically. Although not commonly needed for everyday programming, understanding metaclasses can open up new possibilities in your Python projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting by creating your own metaclasses to see how Python classes are built and enhanced behind the scenes!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-handling-best-practices-for-robust-code",
+    "title": "Mastering Python Exception Handling: Best Practices for Robust Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python exception handling to write more reliable and error-free code. This beginner-friendly guide covers try-except blocks, common exceptions, and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=IqasMPiUKW0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing code, unexpected errors can happen. Python provides a powerful way to manage these errors using exception handling. This helps your program continue running smoothly even if something goes wrong. In this article, we’ll cover the basics of exception handling in Python and best practices to write clean, robust code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common way to handle exceptions is using the try-except block. You put the code that might cause an error inside the try block. Then, you specify how to handle the error in the except block."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    x = int(input(\"Enter a number: \"))\n    result = 10 / x\n    print(f\"Result is {result}\")\nexcept ZeroDivisionError:\n    print(\"You can't divide by zero!\")\nexcept ValueError:\n    print(\"Invalid input! Please enter a number.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if the user enters zero, the ZeroDivisionError exception is caught and an informative message is displayed. If the input is not a valid number, the ValueError exception is caught. This prevents the program from crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also catch multiple exceptions in a single except block by grouping them in parentheses:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # risky code\n    pass\nexcept (ZeroDivisionError, ValueError) as e:\n    print(f\"Error occurred: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want code to run no matter what happened in the try block, such as closing a file or releasing resources. Use the finally block for that:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    file = open('data.txt', 'r')\n    data = file.read()\nexcept FileNotFoundError:\n    print(\"File not found!\")\nfinally:\n    file.close()\n    print(\"File closed\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the file is closed whether an exception occurs or not, avoiding resource leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Best practices for robust exception handling in Python:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Catch specific exceptions:** Avoid using a bare except clause (like `except:`) because it catches all exceptions, including unexpected ones, which can make debugging harder.\n\n2. **Keep try blocks small:** Only put code inside try blocks that might raise exceptions you want to handle. This improves clarity.\n\n3. **Use else block:** Use the else block to run code that should execute only if no exception was raised:\n"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    num = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"Not a valid number\")\nelse:\n    print(f\"You entered {num}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Log exceptions:** For more complex applications, log exceptions instead of just printing messages to help with troubleshooting.\n\n5. **Avoid catching exceptions you can't handle:** If you catch an exception but can’t properly handle it, it's often better to let it propagate or log it."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these basics and best practices, you'll write Python programs that gracefully handle errors and maintain reliability. Practice using try-except blocks in your next Python projects to become more confident with exception handling!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-data-models-for-multi-tenant-sql-databases",
+    "title": "Designing Scalable Data Models for Multi-Tenant SQL Databases: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and efficient data models for multi-tenant SQL databases with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant databases are essential for SaaS applications that serve multiple clients or organizations (tenants) from a single database instance. Designing a scalable data model for multi-tenant SQL databases requires careful planning to keep data isolated, secure, and efficient. In this tutorial, we cover the basics of multi-tenant design and show you how to build a scalable data model."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are three common approaches to multi-tenant data design: separate databases per tenant, separate schemas per tenant, and shared schema with tenant identifiers. For beginner-friendly scalability and maintainability, the shared schema approach is often preferred because it simplifies management and reduces resource use."
+      },
+      {
+        "type": "paragraph",
+        "value": "The core idea is to add a tenant identifier column to every table that holds tenant-specific data. This way, you logically separate data while using the same tables for all tenants."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simplified example for a multi-tenant customer management system."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Tenants (\n  TenantID INT PRIMARY KEY,\n  TenantName VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Customers (\n  CustomerID INT PRIMARY KEY,\n  TenantID INT NOT NULL,\n  CustomerName VARCHAR(100),\n  Email VARCHAR(100),\n  FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `Tenants` table lists all client organizations. The `Customers` table contains a `TenantID` foreign key to identify which tenant each customer belongs to. This enforces data separation at the application and database query level."
+      },
+      {
+        "type": "paragraph",
+        "value": "When querying data, always include the tenant filter to avoid data leaks between tenants. For example, to get customers for a specific tenant:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT CustomerID, CustomerName, Email\nFROM Customers\nWHERE TenantID = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To improve performance and scalability, consider the following tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Index TenantID:** Index the tenant identifier columns to speed up filtered queries."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customers_tenant ON Customers(TenantID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use schema separation for larger clients:** If some tenants have massive datasets, consider separate schemas or databases to isolate them physically."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Row-level security:** Some SQL platforms support row-level security (RLS) which enforces tenant isolation at the database engine level automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Be mindful of tenant context in your application:** Always ensure queries include the tenant ID from the logged-in user's session."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, designing scalable multi-tenant SQL databases means logically separating data using tenant identifiers, indexing for query performance, and optionally using advanced techniques like row-level security or schema separation for high-scale clients. Using these best practices helps you build secure, maintainable, and scalable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try extending this example by adding orders or products tables with tenant IDs and see how you can build a full multi-tenant app!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-timezone-conversion-pitfalls-in-sql-queries",
+    "title": "Handling Timezone Conversion Pitfalls in SQL Queries: Beginner's Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to avoid common timezone conversion errors in SQL queries with practical tips and examples suited for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=OwvEj406Cgw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with timezones in SQL queries can be tricky, especially if your database stores timestamps in different timezones or you need to convert between local time and UTC. Timezone conversion errors can lead to incorrect data interpretation, which affects your reports and applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common pitfall is assuming that timestamp data is always stored with timezone info or that the database automatically converts between timezones. Most database systems store timestamps either without timezone (e.g., `timestamp` in PostgreSQL) or with timezone awareness (e.g., `timestamptz` in PostgreSQL). Understanding the difference is key."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a quick overview of types you might encounter:\n- `timestamp without time zone`: This stores the time as-is, without any timezone context.\n- `timestamp with time zone`: This stores the time normalized to UTC but displays it as per the client’s timezone setting."
+      },
+      {
+        "type": "paragraph",
+        "value": "To safely convert timezones in SQL, you should:\n1. Know what timezone your timestamp is stored in.\n2. Convert timestamps explicitly using functions like `AT TIME ZONE` in PostgreSQL or `CONVERT_TZ` in MySQL.\n3. Avoid relying on implicit timezone conversions that could behave differently depending on database or client settings."
+      },
+      {
+        "type": "code",
+        "value": "-- PostgreSQL Example:\n-- Convert a timestamp without timezone (assumed UTC) to another timezone\nSELECT my_timestamp_column AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS ny_time\nFROM my_table;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `my_timestamp_column` is stored without any timezone information and assumed to be in UTC. The first `AT TIME ZONE 'UTC'` converts it to a timestamp with time zone (UTC-aware). The second conversion `AT TIME ZONE 'America/New_York'` converts it to New York local time."
+      },
+      {
+        "type": "code",
+        "value": "-- MySQL Example:\n-- Convert a datetime from UTC to another timezone\nSELECT CONVERT_TZ(my_datetime_column, '+00:00', 'America/Los_Angeles') AS la_time\nFROM my_table;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In MySQL, `CONVERT_TZ` converts a datetime from one timezone to another. Ensure your timezone tables are loaded for accurate timezone support."
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid directly comparing timestamps from different time zones without standardization. Always normalize timestamps to a common timezone, like UTC, before comparing or filtering."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, timezone handling in SQL requires careful awareness of storage formats and explicit conversions. Using the right functions and knowing your data’s timezones helps avoid subtle bugs and ensures your queries return accurate time-related data."
+      }
+    ]
   }
 ];
