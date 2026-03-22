@@ -13957,5 +13957,508 @@ export const articles = [
         "value": "In summary, to avoid errors and improve your SQL query performance in large e-commerce databases: always write clear JOIN conditions, avoid SELECT *, use appropriate indexes, and refrain from using functions on indexed columns in WHERE clauses."
       }
     ]
+  },
+  {
+    "slug": "designing-scalable-microservices-nodejs-event-driven-architecture",
+    "title": "Designing Scalable Microservices with Node.js and Event-Driven Architecture",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable microservices using Node.js and implement an event-driven architecture to improve performance and flexibility.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices are an architectural style where an application is broken down into smaller, independent services that communicate with each other. Designing scalable microservices ensures your application can manage increasing loads efficiently. In this tutorial, you'll learn how to design scalable microservices using Node.js combined with an event-driven architecture to create decoupled, flexible, and responsive services."
+      },
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture means services communicate by emitting and listening to events rather than synchronous calls. This decouples services, improves scalability, and handles asynchronous workflows well. For this tutorial, we'll create two simple microservices: an Order Service and an Inventory Service, communicating via events."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a simple event bus using Node.js's built-in EventEmitter. This will simulate an event broker."
+      },
+      {
+        "type": "code",
+        "value": "const EventEmitter = require('events');\n\nclass EventBus extends EventEmitter {}\nconst eventBus = new EventBus();\n\nmodule.exports = eventBus;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The eventBus will be used for publishing and subscribing events in our microservices. In real-world applications, you might use RabbitMQ, Kafka, or another message broker for scalability and persistence."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's build the Order Service. This service will create orders and emit an \"orderCreated\" event."
+      },
+      {
+        "type": "code",
+        "value": "const eventBus = require('./eventBus');\n\nclass OrderService {\n  createOrder(order) {\n    console.log('Creating order:', order);\n    // Business logic to create order here (e.g., saving to DB)\n\n    // Emit event after order creation\n    eventBus.emit('orderCreated', order);\n  }\n}\n\nmodule.exports = new OrderService();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's build the Inventory Service that listens for the \"orderCreated\" event and adjusts the inventory."
+      },
+      {
+        "type": "code",
+        "value": "const eventBus = require('./eventBus');\n\nclass InventoryService {\n  constructor() {\n    eventBus.on('orderCreated', this.handleOrderCreated.bind(this));\n  }\n\n  handleOrderCreated(order) {\n    console.log('Inventory Service received order:', order);\n    // Adjust inventory based on order details\n    // For example, reduce product quantities\n  }\n}\n\nmodule.exports = new InventoryService();"
+      },
+      {
+        "type": "paragraph",
+        "value": "To see this in action, create a main file that initializes both services and creates a sample order."
+      },
+      {
+        "type": "code",
+        "value": "const orderService = require('./OrderService');\nconst inventoryService = require('./InventoryService');\n\n// Simulate creating an order\norderService.createOrder({ id: 1, product: 'Laptop', quantity: 2 });"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run the main file, you should see the Order Service creating the order and the Inventory Service reacting to the event by receiving the order and handling inventory updates. This simple example demonstrates how event-driven communication helps keep microservices loosely coupled and easy to scale."
+      },
+      {
+        "type": "paragraph",
+        "value": "To build truly scalable microservices, consider using external message brokers, managing service failures, and implementing message queues to handle load smoothly. But this basic Node.js example gives a solid foundation for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary: You learned how to design scalable microservices in Node.js with an event-driven approach, created an event bus, built two example services, and connected them via events for asynchronous communication."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-javascript-memory-leaks-advanced-debugging-techniques",
+    "title": "Mastering JavaScript Memory Leaks: Advanced Debugging Techniques",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn practical, beginner-friendly techniques to identify and fix memory leaks in JavaScript applications with advanced debugging strategies.",
+    "videoUrl": "https://www.youtube.com/watch?v=WqNqeMjd28I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in JavaScript can slow down your application and lead to crashes. As a beginner, understanding how to find and fix these leaks is essential for building efficient web applications. This article will guide you through advanced yet beginner-friendly debugging techniques to spot and resolve memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "A memory leak happens when your program keeps references to objects it no longer uses, preventing the garbage collector from reclaiming that memory. Over time, these leaks accumulate and consume more memory, slowing your app down or causing it to crash."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Causes of Memory Leaks in JavaScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Global variables unintentionally created.\n2. Closures retaining large objects.\n3. Forgotten timers or callbacks.\n4. Detached DOM nodes still referenced in JavaScript.\n5. Event listeners not properly removed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Chrome DevTools to Detect Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Chrome DevTools is a powerful tool to help debug memory leaks. Here's how to use it:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Open your app in Chrome.\n2. Press F12 (or right-click → Inspect) to open DevTools.\n3. Go to the \"Memory\" tab.\n4. Use the \"Take heap snapshot\" button to capture memory usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "Take multiple heap snapshots while performing actions in your app. By comparing snapshots, you can see which objects keep growing, indicating a potential leak."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Fixing Event Listener Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Event listeners are a common cause of leaks if not removed properly. Consider this example:"
+      },
+      {
+        "type": "code",
+        "value": "function attachClickListener() {\n  const button = document.getElementById('myButton');\n  button.addEventListener('click', () => {\n    console.log('Button clicked!');\n  });\n}\n\n// Imagine this is called multiple times without removing previous listeners\nattachClickListener();\nattachClickListener();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Each call adds a new listener without removing the old one. Over time, this causes memory to build up."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, store the listener in a variable and remove it before attaching a new one:"
+      },
+      {
+        "type": "code",
+        "value": "let clickHandler = () => {\n  console.log('Button clicked!');\n};\n\nfunction attachClickListener() {\n  const button = document.getElementById('myButton');\n  button.removeEventListener('click', clickHandler); // Remove old listener\n  button.addEventListener('click', clickHandler); // Add new listener\n}\n\nattachClickListener();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use `Performance` and `Profiles` Tools"
+      },
+      {
+        "type": "paragraph",
+        "value": "Besides heap snapshots, DevTools offers the \"Performance\" and \"Profiles\" tabs to analyze memory and CPU usage over time. Recording a performance profile during app usage can reveal memory spikes or lingering objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Preventing Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always remove event listeners when no longer needed.\n- Clear intervals or timeouts if the callback will no longer be used.\n- Avoid unnecessary global variables.\n- Be cautious with closures holding large objects.\n- Use tools like WeakMap for cache mechanisms to allow garbage collection."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering memory leak debugging in JavaScript involves recognizing common leak patterns, using Chrome DevTools to capture snapshots, and carefully managing references like event listeners and timers. With practice, you’ll build cleaner, faster, and more reliable apps."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types-for-cleaner-code",
+    "title": "Mastering TypeScript Utility Types for Cleaner Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript utility types like Partial, Pick, and Omit to write cleaner and more maintainable code, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=eJ6R1knfsoc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript offers a set of powerful utility types that can help you manipulate and transform types easily. These utility types enable you to write cleaner, more maintainable code by reducing repetition and improving type safety. In this tutorial, we'll explore some of the most commonly used utility types such as Partial, Pick, Omit, and how you can use them in your projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Suppose you have an interface describing a User:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  age?: number;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `age` property is optional here. Now, let’s see how some utility types can help us:"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Partial<Type>\n\n`Partial` makes all properties of a type optional. This is useful when you want to update only some fields of an object."
+      },
+      {
+        "type": "code",
+        "value": "function updateUser(id: number, userUpdates: Partial<User>) {\n  // Imagine this updates a user in a database\n  console.log(`Updating user ${id}`, userUpdates);\n}\n\n// Usage:\nupdateUser(1, { name: \"Alice\" });\nupdateUser(2, { email: \"alice@example.com\", age: 30 });"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Pick<Type, Keys>\n\n`Pick` creates a new type by selecting only specific properties from an existing type. This is handy when you want to work with or expose only parts of an interface."
+      },
+      {
+        "type": "code",
+        "value": "type UserPreview = Pick<User, \"id\" | \"name\">;\n\nconst previewUser: UserPreview = {\n  id: 10,\n  name: \"Bob\"\n};\n\nconsole.log(previewUser);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Omit<Type, Keys>\n\n`Omit` creates a type by excluding certain properties from an existing type. This helps if you want all properties except a few."
+      },
+      {
+        "type": "code",
+        "value": "type UserWithoutEmail = Omit<User, \"email\">;\n\nconst userNoEmail: UserWithoutEmail = {\n  id: 5,\n  name: \"Carol\",\n  age: 25\n};\n\nconsole.log(userNoEmail);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Record<Keys, Type>\n\n`Record` is a utility type for creating an object type with specified keys and value types. It's useful when you want to map keys to certain values."
+      },
+      {
+        "type": "code",
+        "value": "type Roles = \"admin\" | \"editor\" | \"viewer\";\n\nconst rolePermissions: Record<Roles, string[]> = {\n  admin: [\"create\", \"read\", \"update\", \"delete\"],\n  editor: [\"read\", \"update\"],\n  viewer: [\"read\"]\n};\n\nconsole.log(rolePermissions);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why use Utility Types?\n\n- **Reduce boilerplate:** Avoid redefining similar types.\n- **Improve readability:** Utility types express your intent clearly.\n- **Increase maintainability:** Changes in base types flow automatically.\n\nExploring and mastering these built-in utility types can drastically improve the quality of your TypeScript code. As you become comfortable, you can even create your own custom utility types!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now you have a solid foundation on how to use TypeScript utility types to write cleaner and more maintainable code. Try applying these to your own projects and see the difference!"
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-typescript-strict-null-checks-performance-optimization",
+    "title": "Leveraging TypeScript’s Strict Null Checks for Better Performance Optimization",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how using TypeScript’s strict null checks can improve your code's reliability and performance by catching null and undefined errors early.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with TypeScript, one of the most beneficial compiler options you can enable is `strictNullChecks`. This option helps you catch errors related to `null` and `undefined` values at compile time, reducing runtime errors that can cause unexpected behavior and performance issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "By enabling `strictNullChecks`, TypeScript treats `null` and `undefined` as distinct types that need to be explicitly handled. This means you can no longer accidentally use potentially null or undefined values without proper checks, making your code safer and more predictable."
+      },
+      {
+        "type": "paragraph",
+        "value": "How does this improve performance? When your code explicitly handles null or undefined cases, it avoids unnecessary runtime checks or exceptions. Cleaner logic can also help JavaScript engines optimize the code better, leading to faster execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of code without `strictNullChecks`:"
+      },
+      {
+        "type": "code",
+        "value": "function getLength(str: string | null): number {\n  return str.length; // No error!\n}\n\nconsole.log(getLength(null)); // Throws runtime error\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above code compiles but throws an error at runtime if `str` is null. Enabling `strictNullChecks` will prevent this mistake by showing a compile-time error."
+      },
+      {
+        "type": "paragraph",
+        "value": "With `strictNullChecks` enabled, you must handle the null case explicitly, like this:"
+      },
+      {
+        "type": "code",
+        "value": "function getLength(str: string | null): number {\n  if (str === null) {\n    return 0;\n  }\n  return str.length;\n}\n\nconsole.log(getLength(null)); // 0\nconsole.log(getLength('hello')); // 5\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach safely handles the null case and ensures your program won’t unexpectedly crash. It also helps the JavaScript engine optimize code paths, as null values are explicitly checked."
+      },
+      {
+        "type": "paragraph",
+        "value": "To enable `strictNullChecks` in your `tsconfig.json`, add or update the following configuration:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, utilizing TypeScript’s `strictNullChecks` is a simple yet effective way to catch null-related errors early, resulting in more predictable code and potential performance optimizations. It's highly recommended for all projects, especially as you scale your codebase."
+      }
+    ]
+  },
+  {
+    "slug": "building-real-time-weather-dashboard-python-openweathermap",
+    "title": "Building a Real-Time Weather Dashboard with Python and OpenWeatherMap API",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a simple real-time weather dashboard in Python using the OpenWeatherMap API to fetch and display weather data.",
+    "videoUrl": "https://www.youtube.com/watch?v=aQZzMJgPMqQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Building a weather dashboard is a great way to practice working with APIs and Python. In this tutorial, you'll learn how to connect to the OpenWeatherMap API to get real-time weather data and display it in a user-friendly Python script."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you'll need to sign up for a free API key at OpenWeatherMap.org. This key will allow you to access their weather data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's install the required Python package, requests, which we will use to make HTTP requests to the OpenWeatherMap API."
+      },
+      {
+        "type": "code",
+        "value": "pip install requests"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's write a Python script that fetches weather information for a city and displays it. Save this as weather_dashboard.py:"
+      },
+      {
+        "type": "code",
+        "value": "import requests\n\nAPI_KEY = 'your_api_key_here'  # Replace with your OpenWeatherMap API key\nBASE_URL = 'http://api.openweathermap.org/data/2.5/weather'\n\n\ndef get_weather(city):\n    params = {\n        'q': city,\n        'appid': API_KEY,\n        'units': 'metric'  # Use 'imperial' for Fahrenheit\n    }\n    response = requests.get(BASE_URL, params=params)\n    if response.status_code == 200:\n        return response.json()\n    else:\n        return None\n\n\ndef display_weather(data):\n    if data:\n        city = data['name']\n        weather_desc = data['weather'][0]['description'].capitalize()\n        temp = data['main']['temp']\n        humidity = data['main']['humidity']\n        wind_speed = data['wind']['speed']\n\n        print(f\"Weather in {city}:\")\n        print(f\"Description: {weather_desc}\")\n        print(f\"Temperature: {temp}°C\")\n        print(f\"Humidity: {humidity}%\")\n        print(f\"Wind Speed: {wind_speed} m/s\")\n    else:\n        print(\"Sorry, weather data could not be retrieved.\")\n\n\ndef main():\n    city = input(\"Enter city name: \")\n    weather_data = get_weather(city)\n    display_weather(weather_data)\n\n\nif __name__ == '__main__':\n    main()"
+      },
+      {
+        "type": "paragraph",
+        "value": "To run your script, simply execute it in the terminal or command prompt:"
+      },
+      {
+        "type": "code",
+        "value": "python weather_dashboard.py"
+      },
+      {
+        "type": "paragraph",
+        "value": "Enter the city name when prompted, and the script will display the current weather conditions. This simple dashboard can be expanded with features like a graphical interface or additional data points."
+      },
+      {
+        "type": "paragraph",
+        "value": "By using Python and the OpenWeatherMap API, you can quickly build functional and real-time weather applications suitable for your projects or learning exercises."
+      }
+    ]
+  },
+  {
+    "slug": "handling-api-rate-limiting-errors-gracefully-python",
+    "title": "Handling API Rate Limiting Errors Gracefully in Python Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to detect and handle API rate limiting errors gracefully in your Python applications to improve reliability and user experience.",
+    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building Python applications that interact with external APIs, you might encounter rate limiting errors. APIs impose limits on how many requests can be made in a certain timeframe to protect their service from overload. Handling these rate limiting errors gracefully helps your app avoid crashes and provides a better user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "API rate limits generally respond with HTTP status code 429 (Too Many Requests). To handle this, your Python code should check for this status and wait before retrying the request. Using a simple retry mechanism with a delay is an effective way to do this."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a beginner-friendly example using the popular requests library. This example demonstrates how to detect a 429 error and retry after waiting for the time suggested by the API in the 'Retry-After' header."
+      },
+      {
+        "type": "code",
+        "value": "import time\nimport requests\n\nurl = 'https://api.example.com/data'\nheaders = {'Authorization': 'Bearer YOUR_API_KEY'}\n\nmax_retries = 5\nretry_count = 0\n\nwhile retry_count < max_retries:\n    response = requests.get(url, headers=headers)\n    if response.status_code == 429:\n        # API rate limit reached\n        retry_after = response.headers.get('Retry-After')\n        wait_time = int(retry_after) if retry_after else 5  # Default to 5 seconds if no header\n        print(f\"Rate limit hit, retrying after {wait_time} seconds...\")\n        time.sleep(wait_time)\n        retry_count += 1\n    else:\n        # Successful response or other error\n        break\n\nif response.status_code == 200:\n    data = response.json()\n    print(\"Data retrieved successfully!\")\n    # Process data...\nelse:\n    print(f\"Failed to retrieve data. Status code: {response.status_code}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the program sends a request to the API and checks if the status code is 429. If so, it looks for the 'Retry-After' header, which tells the client how many seconds to wait before retrying. If that header is missing, it defaults to a 5-second wait. The program tries up to 5 times before giving up."
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach ensures your app respects the API's limits and avoids bombarding the server with requests, which could lead to longer bans or account suspension."
+      },
+      {
+        "type": "paragraph",
+        "value": "To improve this further, consider using exponential backoff — gradually increasing the wait time after each retry — or use third-party libraries like \"tenacity\" to handle retries more robustly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling rate limiting errors gracefully shows good API citizenship and helps keep your applications running smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-for-complex-time-series-analysis",
+    "title": "Mastering SQL Window Functions for Complex Time Series Analysis",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to perform powerful and complex time series analysis with easy-to-understand examples suited for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Time series data is everywhere — from stock prices to website traffic, understanding data over time is critical. SQL window functions provide a powerful way to analyze this data efficiently, even when it appears complex. If you’re new to window functions, this article will guide you through the basics and demonstrate practical examples to analyze time series data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions operate on a set of rows related to the current row, allowing calculations like running totals, moving averages, and ranking without collapsing your result set. These functions complement GROUP BY by preserving row-level detail while providing aggregated information."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's begin by understanding how to use some common window functions with a sample time series table called `sales_data` with the following columns: `sale_date`, `product_id`, and `revenue`."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales_data (\n    sale_date DATE,\n    product_id INT,\n    revenue DECIMAL(10, 2)\n);\n\nINSERT INTO sales_data VALUES\n('2024-01-01', 1, 100.00),\n('2024-01-02', 1, 150.00),\n('2024-01-03', 1, 200.00),\n('2024-01-01', 2, 80.00),\n('2024-01-02', 2, 200.00),\n('2024-01-03', 2, 120.00);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Calculate Running Total by Product\nA common task is to compute a running total of revenue for each product over time."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sale_date,\n  product_id,\n  revenue,\n  SUM(revenue) OVER (PARTITION BY product_id ORDER BY sale_date) AS running_total\nFROM\n  sales_data;\n\n-- This gives a cumulative sum of revenue for each product ordered by date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Calculate Moving Average\nTo smooth out short-term fluctuations, you might want a 3-day moving average of revenue per product."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sale_date,\n  product_id,\n  revenue,\n  AVG(revenue) OVER (\n    PARTITION BY product_id \n    ORDER BY sale_date \n    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW\n  ) AS moving_avg_3day\nFROM\n  sales_data;\n\n-- This calculates the average revenue of the current day and two previous days for each product."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Ranking Days by Revenue\nFind which days had the highest revenue per product with the RANK() window function."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sale_date,\n  product_id,\n  revenue,\n  RANK() OVER (PARTITION BY product_id ORDER BY revenue DESC) AS revenue_rank\nFROM\n  sales_data;\n\n-- Days with highest revenue get rank 1, next highest rank 2, etc."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Difference Between Days\nFind the day-to-day change in revenue using the LAG() function."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sale_date,\n  product_id,\n  revenue,\n  revenue - LAG(revenue) OVER (PARTITION BY product_id ORDER BY sale_date) AS daily_change\nFROM\n  sales_data;\n\n-- This shows how much revenue increased or decreased compared to the previous day."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nMastering window functions lets you analyze time series data in flexible ways without losing detail. Start experimenting with `SUM()`, `AVG()`, `RANK()`, `LAG()`, and `LEAD()` to uncover insights in your data. These functions are widely supported across SQL databases and essential for growing your analytical skills."
+      },
+      {
+        "type": "paragraph",
+        "value": "Practice these queries on your own data and you'll soon find complex time series analysis simpler and faster with SQL window functions."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-in-high-concurrency-systems",
+    "title": "Optimizing SQL Query Performance in High-Concurrency Systems",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips to optimize SQL queries and handle errors effectively in high-concurrency environments for better database performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In high-concurrency systems, many users or processes access the database simultaneously. This can lead to slow queries and errors like deadlocks, timeouts, or locking conflicts. Optimizing SQL queries and understanding common errors is essential to ensure your application remains fast and reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common problem in high-concurrency systems is deadlocks. Deadlocks happen when two or more queries wait for each other to release locks, causing a cycle that prevents progress. To avoid deadlocks, keep your transactions short, access tables in a consistent order, and use appropriate isolation levels."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example of a problematic transaction that might cause deadlocks:"
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\nUPDATE accounts SET balance = balance - 100 WHERE account_id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE account_id = 2;\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If another transaction updates the same accounts in reverse order, a deadlock can occur. Make sure all transactions update resources in the same order to reduce this risk."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common issue is long-running queries that lock tables or rows for too long, causing other queries to wait or fail. You can optimize queries by adding indexes on frequently searched columns. Indexes help the database find data faster and reduce lock durations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of creating an index on the column `user_id` in a table called `orders`:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_user_id ON orders(user_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This index helps queries filtering by `user_id` run faster, reducing the time they hold locks."
+      },
+      {
+        "type": "paragraph",
+        "value": "In addition to indexes, using appropriate transaction isolation levels helps balance consistency and performance. For example, using \"READ COMMITTED\" can reduce locking compared to \"SERIALIZABLE\"."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is how you set the transaction isolation level in SQL:"
+      },
+      {
+        "type": "code",
+        "value": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, use monitoring tools and query execution plans to identify slow or locking queries. Understanding where the bottlenecks occur helps you focus your optimization efforts."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these beginner-friendly tips—avoiding deadlocks by ordering queries consistently, adding indexes, using proper isolation levels, and monitoring query performance—you can significantly improve the speed and reliability of your SQL database in high-concurrency systems."
+      }
+    ]
   }
 ];
