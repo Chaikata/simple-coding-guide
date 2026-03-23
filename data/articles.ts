@@ -16820,5 +16820,349 @@ export const articles = [
         "value": "By understanding and planning for these inconsistencies, your SQL code will be more robust and easier to maintain."
       }
     ]
+  },
+  {
+    "slug": "mastering-async-iterators-streamline-data-handling-in-javascript",
+    "title": "Mastering Async Iterators: Streamline Data Handling in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use async iterators in JavaScript to handle asynchronous data streaming efficiently with simple examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=gPemJq3KrL8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript has powerful tools to handle asynchronous operations, and one of the most flexible among these is the async iterator. Async iterators let you process data streams asynchronously in a clean and readable way. In this tutorial, we'll explore what async iterators are, why they matter, and how to use them effectively for handling asynchronous data."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Async Iterators?\n\nAsync iterators are similar to regular iterators but allow asynchronous data fetching. Instead of immediately returning the next value, they return a promise that resolves to the next value. This makes them perfect for scenarios like reading data from a network stream, where data arrives over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Syntax\n\nAsync iterators use `Symbol.asyncIterator` and the `for await...of` loop to iterate over asynchronous data sources with ease."
+      },
+      {
+        "type": "code",
+        "value": "const asyncIterable = {\n  async *[Symbol.asyncIterator]() {\n    const data = [10, 20, 30];\n    for (const item of data) {\n      // Simulate asynchronous delay\n      await new Promise(resolve => setTimeout(resolve, 1000));\n      yield item;\n    }\n  }\n};\n\n(async () => {\n  for await (const value of asyncIterable) {\n    console.log(value);\n  }\n})();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the async iterable produces values 10, 20, and 30, waiting one second before yielding each value. The `for await...of` loop pauses until each value is available, making asynchronous processing straightforward."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Async Iterators?\n- Handle data streams naturally\n- Simplify asynchronous loops\n- Improve code readability\n\nAsync iterators are especially helpful when working with APIs that provide streamed data or when processing large datasets asynchronously."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example: Fetching Data in Chunks\n\nImagine an API that returns data in pages asynchronously. You can create an async iterator to fetch and yield each page:"
+      },
+      {
+        "type": "code",
+        "value": "async function* fetchPages(url) {\n  let page = 1;\n  let hasMore = true;\n\n  while (hasMore) {\n    const response = await fetch(`${url}?page=${page}`);\n    const data = await response.json();\n    yield data.items; // yield an array of items\n    hasMore = data.hasMore;\n    page++;\n  }\n}\n\n(async () => {\n  for await (const items of fetchPages('https://api.example.com/data')) {\n    items.forEach(item => console.log(item));\n  }\n})();"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern lets you process data page by page without loading everything at once, reducing memory usage and improving responsiveness."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nAsync iterators are a powerful way to handle asynchronous data streams in JavaScript. By understanding how to implement and consume async iterables using `for await...of`, you can write cleaner and more efficient code for a broad range of asynchronous tasks."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-javascript-systems-handling-unexpected-runtime-exceptions-gracefully",
+    "title": "Designing Resilient JavaScript Systems: Handling Unexpected Runtime Exceptions Gracefully",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to design JavaScript programs that handle unexpected runtime exceptions gracefully, improving the stability and user experience of your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=5OWqcsCuwXk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, runtime exceptions can happen for many reasons such as accessing undefined variables, network failures, or invalid user inputs. Handling these errors effectively is crucial to making your applications more resilient and user-friendly. In this article, we'll explore basic strategies to handle unexpected runtime exceptions gracefully in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Runtime Exceptions\nRuntime exceptions are errors that occur while your code is executing. Unlike syntax errors that prevent your code from running, runtime exceptions may cause parts of your app to fail unexpectedly. Examples include ReferenceError, TypeError, and RangeError."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using try...catch to Handle Errors\nThe simplest way to manage runtime exceptions is with a try...catch block. The code inside the try block runs normally. If an error occurs, control moves to the catch block where you can handle or log the error without crashing the entire program."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  // Code that may throw an exception\n  const user = JSON.parse(userInput);\n  console.log(user.name);\n} catch (error) {\n  // Handle the error gracefully\n  console.error('Failed to parse user input:', error.message);\n  alert('Oops! Something went wrong. Please check your input and try again.');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Always Provide Meaningful Feedback\nWhen catching errors, it's important to give feedback to users or developers. Logging the error and displaying friendly messages helps diagnose issues and maintains a good user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Avoid Silent Failures\nNever leave catch blocks empty or ignore the error. Silent failures make debugging difficult and create unstable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Error Boundaries for Frontend Frameworks\nIn frameworks like React, you can create error boundaries that catch errors in the component tree and display fallback UI. This prevents the whole app from crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Global Error Handling\nYou can also listen for uncaught errors globally to handle unexpected exceptions gracefully. For example:"
+      },
+      {
+        "type": "code",
+        "value": "window.addEventListener('error', function(event) {\n  console.error('Global error caught:', event.message);\n  // Optionally show a friendly message or report the error\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nHandling runtime exceptions gracefully makes your JavaScript applications more reliable and easier to maintain. Start by using try...catch blocks to handle known risky code, provide helpful feedback, and avoid silent errors. For larger apps, consider global error handling or framework-specific error boundaries to manage unexpected failures without disrupting the user experience."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-error-handling-compared-to-javascript",
+    "title": "Understanding TypeScript's Error Handling Compared to JavaScript: A Deep Dive",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript improves error handling compared to JavaScript, making your code safer and easier to debug with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of writing robust applications. While JavaScript offers basic error handling with try...catch statements, TypeScript adds an extra layer of safety with its static typing system. This article explores how error handling in TypeScript differs from JavaScript and why TypeScript helps catch errors earlier."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, you handle errors using the familiar try...catch block, which catches runtime errors. However, JavaScript doesn't check types during compilation, so many errors only appear when you execute the program."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  const result = JSON.parse('invalid json');\n} catch (error) {\n  console.error('Parsing failed:', error.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the catch block catches a runtime error caused by parsing invalid JSON. This is straightforward, but it does not help prevent errors related to incorrect variable types before running the code."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript adds static type checking, which allows developers to catch certain errors at compile time. For example, if you try to call a function with the wrong type of argument, TypeScript will show an error before the code runs."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log('Hello', name.toUpperCase());\n}\n\ngreet(42); // TypeScript error: Argument of type 'number' is not assignable to parameter of type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "This compile-time error prevents a possible runtime problem where a number is passed instead of a string. This reduces the need to write defensive code everywhere and helps ensure your program runs more smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "When it comes to catching exceptions, TypeScript’s try...catch syntax is the same as JavaScript. But TypeScript also allows you to specify the types of objects you expect inside your catch blocks for better error handling."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  throw new Error('Something went wrong!');\n} catch (error: unknown) {\n  if (error instanceof Error) {\n    console.error('Error message:', error.message);\n  } else {\n    console.error('Unknown error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the `unknown` type and type narrowing (like `instanceof`) improves safety by avoiding assumptions about the error's shape, which can prevent unexpected crashes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript enhances traditional JavaScript error handling by adding static types to catch errors before runtime, while still allowing familiar try...catch blocks for runtime errors. By using both together, you can write safer and more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started, try adding TypeScript to an existing JavaScript project and gradually add type annotations to your functions and error handling for a smoother development experience."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-for-cleaner-and-faster-code",
+    "title": "Mastering Python Context Managers for Cleaner and Faster Code",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python context managers to write cleaner, safer, and more efficient code with real-world examples and easy-to-follow explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python context managers are a powerful tool that helps you manage resources like files, network connections, or locks, making your code cleaner and safer. By using context managers, you can ensure that resources are properly acquired and released, even if errors occur. This tutorial will guide you through the basics of context managers and how to create your own."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common way to use a context manager is with the `with` statement. This statement automatically handles setup and cleanup actions, so you don’t have to worry about forgetting to close files or release locks."
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')\n# No need to call file.close(), it's done automatically"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, `open()` returns a context manager that opens a file and makes sure it closes automatically after the block inside `with` runs, even if an error happens."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How Does a Context Manager Work?\nA context manager is any object that defines two special methods: `__enter__()` and `__exit__()`. When you use `with`, Python calls `__enter__()` at the start of the block and `__exit__()` at the end."
+      },
+      {
+        "type": "code",
+        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the context')\n        return self\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n        if exc_type:\n            print(f'An exception occurred: {exc_value}')\n        return False  # Propagate exceptions\n\nwith MyContextManager() as manager:\n    print('Inside the with block')"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, you will see messages when entering and exiting the context. If an error occurs inside the `with` block, `__exit__` receives the exception details and can handle them accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example: Managing a Simple Resource\nImagine you have a resource (like a connection or a temporary file) that needs to be opened and closed safely. Let’s create a context manager to manage this resource automatically."
+      },
+      {
+        "type": "code",
+        "value": "class Resource:\n    def __init__(self):\n        self.connected = False\n    \n    def connect(self):\n        print('Resource connected')\n        self.connected = True\n    \n    def disconnect(self):\n        print('Resource disconnected')\n        self.connected = False\n\nclass ResourceManager:\n    def __enter__(self):\n        self.resource = Resource()\n        self.resource.connect()\n        return self.resource\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        self.resource.disconnect()\n        if exc_type:\n            print(f'Error handled: {exc_value}')\n        return False\n\nwith ResourceManager() as resource:\n    print(f'Resource status: {resource.connected}')\n    # You can add more operations here\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows how the connection to the resource is guaranteed to close after your code block finishes, keeping your application safe from resource leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using `contextlib` to Simplify Context Managers\nPython’s `contextlib` module lets you write context managers more easily using the `@contextmanager` decorator. This approach uses a generator to handle setup and teardown."
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef open_file(filename, mode):\n    f = open(filename, mode)\n    try:\n        yield f\n    finally:\n        f.close()\n\nwith open_file('example.txt', 'w') as f:\n    f.write('Hello from contextlib!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "The code above works similarly to the built-in `open` context manager but shows you how `contextlib` allows for clean, readable context management with minimal code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nUsing context managers in Python helps you manage resources safely and cleanly. Whether you use the `with` statement with built-ins like `open`, create your own classes with `__enter__` and `__exit__`, or use `contextlib`, mastering context managers leads to faster development and fewer bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start using context managers today to make your Python code cleaner, safer, and more efficient!"
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-python-context-managers-to-gracefully-handle-resource-errors",
+    "title": "Harnessing Python Context Managers to Gracefully Handle Resource Errors",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how Python context managers can help you manage resources like files safely and handle errors gracefully without leaving your program in a broken state.",
+    "videoUrl": "https://www.youtube.com/watch?v=CJlB1F3oXpo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with resources such as files, network connections, or database connections in Python, it's important to manage these resources carefully. Errors might occur, and if the resources aren't properly released, your program could run into issues like memory leaks or locked files. Python's context managers offer a clean and beginner-friendly way to ensure resources are handled correctly, even if errors happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "A context manager allows you to allocate and release resources precisely when you want to. Using the `with` statement, you can open a file, do some operations, and be confident that the file will close after the block of code runs, no matter if it succeeded or an error occurred."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of reading a file using a context manager:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    with open('example.txt', 'r') as file:\n        contents = file.read()\n        print(contents)\nexcept FileNotFoundError:\n    print('The file was not found.')\nexcept IOError:\n    print('An error occurred while reading the file.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `open` returns a context manager that handles opening and closing the file. Even if an error happens during reading, the file will be safely closed. The `try-except` block catches specific errors such as the file not existing (`FileNotFoundError`) or other I/O errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create your own context managers to manage different resources or custom behaviors by using the `contextlib` module or by defining a class with `__enter__` and `__exit__` methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of a simple custom context manager using a class, which gracefully handles an error inside the managed block:"
+      },
+      {
+        "type": "code",
+        "value": "class CustomResource:\n    def __enter__(self):\n        print('Resource acquired')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        if exc_type:\n            print(f'An error occurred: {exc_value}')\n        print('Resource released')\n        # Returning False will propagate the exception if any\n        return False\n\ntry:\n    with CustomResource() as resource:\n        print('Using resource')\n        # Simulate an error\n        raise ValueError('Oops! Something went wrong.')\nexcept ValueError as e:\n    print(f'Caught an exception: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "When running this code, you'll see that the resource is always released even if an error occurs. The `__exit__` method parameters help detect exceptions, allowing cleanup or logging before the error continues to propagate or is handled."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using Python's context managers allows you to write cleaner, safer code when managing resources. They help you avoid common pitfalls like forgetting to close files or release resources after errors, making your programs more robust and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try incorporating context managers into your projects when dealing with resources to handle errors gracefully and ensure proper cleanup every time."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-cool-tricks-to-analyze-data-efficiently",
+    "title": "Mastering SQL Window Functions: Cool Tricks to Analyze Data Efficiently",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips on mastering SQL window functions to quickly analyze data and avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=HhvdQhERlH4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools for performing calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not reduce the number of rows returned, making them especially useful for detailed data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "However, beginners often encounter errors when trying to use window functions incorrectly. This article covers common errors and how to avoid them while learning practical examples of window functions to analyze data efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake is forgetting the OVER() clause, which is mandatory for window functions. Without it, SQL will throw a syntax error."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect: Missing OVER() clause\nSELECT employee_id, RANK() AS rank FROM employees;\n\n-- Correct usage\nSELECT employee_id, RANK() OVER (ORDER BY salary DESC) AS rank FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another frequent error is mixing aggregate functions with window functions without proper grouping or using the wrong clauses. Remember, window functions operate on a 'window' of rows while returning individual rows."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect: Combining aggregate aggregate without GROUP BY\nSELECT department_id, AVG(salary), RANK() OVER (ORDER BY salary DESC) FROM employees;\n\n-- Correct: Use GROUP BY or separate queries\nSELECT department_id, AVG(salary) FROM employees GROUP BY department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's look at some cool tricks using window functions. The ROW_NUMBER() function assigns a unique row number to each row based on ordering criteria, helpful for pagination or ranking."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, salary, ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The RANK() and DENSE_RANK() functions are similar but handle ties differently. RANK() will skip ranks after ties, while DENSE_RANK() provides consecutive ranks."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, salary, RANK() OVER (ORDER BY salary DESC) AS rank,\n       DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_rank\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The PARTITION BY clause can divide data into subsets and apply window functions within those subsets. For example, ranking employees within each department:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT department_id, employee_id, salary,\n       ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank_in_dept\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering SQL window functions involves understanding how to properly use the OVER() clause, recognizing the difference between aggregate and window functions, and applying partitioning when needed. Avoid common syntax errors by double-checking clauses, and practice these beginner-friendly tricks to analyze data more efficiently."
+      }
+    ]
   }
 ];

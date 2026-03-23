@@ -1,537 +1,461 @@
 [
   {
-    "slug": "mastering-javascript-memoization-to-boost-function-performance",
-    "title": "Mastering JavaScript Memoization to Boost Function Performance",
+    "slug": "mastering-async-iterators-streamline-data-handling-in-javascript",
+    "title": "Mastering Async Iterators: Streamline Data Handling in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how JavaScript memoization can improve your function’s performance by caching expensive function results and reusing them efficiently.",
-    "videoUrl": "https://www.youtube.com/watch?v=jPE3lRMbZn4",
+    "description": "Learn how to use async iterators in JavaScript to handle asynchronous data streaming efficiently with simple examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=gPemJq3KrL8",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memoization is a powerful optimization technique that can dramatically boost the performance of your JavaScript functions, especially when dealing with expensive or repetitive computations. In simple terms, memoization involves storing the results of function calls and returning the cached result when the same inputs occur again. This reduces the need to perform the same calculation multiple times."
+        "value": "JavaScript has powerful tools to handle asynchronous operations, and one of the most flexible among these is the async iterator. Async iterators let you process data streams asynchronously in a clean and readable way. In this tutorial, we'll explore what async iterators are, why they matter, and how to use them effectively for handling asynchronous data."
       },
       {
         "type": "paragraph",
-        "value": "Let’s start with a basic example: a function to calculate the nth Fibonacci number. The naive recursive solution is easy to implement but inefficient because it recalculates the same values repeatedly."
+        "value": "### What are Async Iterators?\n\nAsync iterators are similar to regular iterators but allow asynchronous data fetching. Instead of immediately returning the next value, they return a promise that resolves to the next value. This makes them perfect for scenarios like reading data from a network stream, where data arrives over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Syntax\n\nAsync iterators use `Symbol.asyncIterator` and the `for await...of` loop to iterate over asynchronous data sources with ease."
       },
       {
         "type": "code",
-        "value": "function fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nconsole.log(fibonacci(10)); // 55"
+        "value": "const asyncIterable = {\n  async *[Symbol.asyncIterator]() {\n    const data = [10, 20, 30];\n    for (const item of data) {\n      // Simulate asynchronous delay\n      await new Promise(resolve => setTimeout(resolve, 1000));\n      yield item;\n    }\n  }\n};\n\n(async () => {\n  for await (const value of asyncIterable) {\n    console.log(value);\n  }\n})();"
       },
       {
         "type": "paragraph",
-        "value": "Although this works correctly, its performance degrades exponentially as n increases. Memoization can help by storing the results of previous calls."
+        "value": "In this example, the async iterable produces values 10, 20, and 30, waiting one second before yielding each value. The `for await...of` loop pauses until each value is available, making asynchronous processing straightforward."
       },
       {
         "type": "paragraph",
-        "value": "Here's how you can implement a simple memoization wrapper function in JavaScript:"
+        "value": "### Why Use Async Iterators?\n- Handle data streams naturally\n- Simplify asynchronous loops\n- Improve code readability\n\nAsync iterators are especially helpful when working with APIs that provide streamed data or when processing large datasets asynchronously."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example: Fetching Data in Chunks\n\nImagine an API that returns data in pages asynchronously. You can create an async iterator to fetch and yield each page:"
       },
       {
         "type": "code",
-        "value": "function memoize(fn) {\n  const cache = {};\n  return function (...args) {\n    const key = JSON.stringify(args);\n    if (cache[key]) {\n      return cache[key];\n    } else {\n      const result = fn.apply(this, args);\n      cache[key] = result;\n      return result;\n    }\n  };\n}"
+        "value": "async function* fetchPages(url) {\n  let page = 1;\n  let hasMore = true;\n\n  while (hasMore) {\n    const response = await fetch(`${url}?page=${page}`);\n    const data = await response.json();\n    yield data.items; // yield an array of items\n    hasMore = data.hasMore;\n    page++;\n  }\n}\n\n(async () => {\n  for await (const items of fetchPages('https://api.example.com/data')) {\n    items.forEach(item => console.log(item));\n  }\n})();"
       },
       {
         "type": "paragraph",
-        "value": "This memoize function takes another function fn as input and returns a new function that caches its results. When you call the memoized function, it checks if the result for the given arguments exists in the cache; if so, it returns the cached result to save computation time."
+        "value": "This pattern lets you process data page by page without loading everything at once, reducing memory usage and improving responsiveness."
       },
       {
         "type": "paragraph",
-        "value": "Now, let's use the memoize function to optimize our Fibonacci example:"
-      },
-      {
-        "type": "code",
-        "value": "const memoizedFibonacci = memoize(function fib(n) {\n  if (n <= 1) return n;\n  return fib(n - 1) + fib(n - 2);\n});\n\nconsole.log(memoizedFibonacci(40)); // 102334155"
-      },
-      {
-        "type": "paragraph",
-        "value": "By memoizing, the computation for Fibonacci(40) becomes practical and much faster compared to the naive approach."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can apply memoization to any pure function where outputs depend only on inputs and there are no side effects. This technique helps reduce unnecessary recalculations and improves the overall efficiency of your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "In conclusion, mastering memoization in JavaScript empowers you to write faster, more efficient functions by caching results. This simple optimization can make a huge difference in performance-sensitive applications."
+        "value": "### Summary\n\nAsync iterators are a powerful way to handle asynchronous data streams in JavaScript. By understanding how to implement and consume async iterables using `for await...of`, you can write cleaner and more efficient code for a broad range of asynchronous tasks."
       }
     ]
   },
   {
-    "slug": "handling-data-model-inconsistencies-in-javascript-best-practices",
-    "title": "Handling Data Model Inconsistencies in JavaScript: Best Practices and Patterns",
+    "slug": "designing-resilient-javascript-systems-handling-unexpected-runtime-exceptions-gracefully",
+    "title": "Designing Resilient JavaScript Systems: Handling Unexpected Runtime Exceptions Gracefully",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to effectively handle data model inconsistencies in JavaScript using beginner-friendly best practices and patterns to write more robust code.",
-    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "description": "Learn how to design JavaScript programs that handle unexpected runtime exceptions gracefully, improving the stability and user experience of your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=5OWqcsCuwXk",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with data in JavaScript, especially from APIs or external sources, you may encounter inconsistencies in data models. These inconsistencies can cause bugs or runtime errors if not handled properly. Common issues include missing fields, unexpected data types, or nested objects with unpredictable properties. This article covers beginner-friendly ways to handle such inconsistencies to make your JavaScript applications more reliable."
+        "value": "In JavaScript, runtime exceptions can happen for many reasons such as accessing undefined variables, network failures, or invalid user inputs. Handling these errors effectively is crucial to making your applications more resilient and user-friendly. In this article, we'll explore basic strategies to handle unexpected runtime exceptions gracefully in JavaScript."
       },
       {
         "type": "paragraph",
-        "value": "### Why Do Data Model Inconsistencies Happen?\nData inconsistencies occur because data often comes from multiple sources with their own formats or incomplete information. For example, an API might sometimes send a `null` value instead of an object or omit optional fields. Being prepared to handle these cases prevents errors like \"Cannot read property of undefined\" and ensures your app continues working smoothly."
+        "value": "### Understanding Runtime Exceptions\nRuntime exceptions are errors that occur while your code is executing. Unlike syntax errors that prevent your code from running, runtime exceptions may cause parts of your app to fail unexpectedly. Examples include ReferenceError, TypeError, and RangeError."
       },
       {
         "type": "paragraph",
-        "value": "### Best Practices to Handle Data Inconsistencies"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use Default Values:** Always provide default values for properties that may be missing. This can be done using the `||` operator or default parameters."
+        "value": "### Using try...catch to Handle Errors\nThe simplest way to manage runtime exceptions is with a try...catch block. The code inside the try block runs normally. If an error occurs, control moves to the catch block where you can handle or log the error without crashing the entire program."
       },
       {
         "type": "code",
-        "value": "const user = {\n  name: 'Alice',\n  age: null\n};\n\n// Default age to 18 if null or undefined\nconst age = user.age || 18;\nconsole.log(age); // 18"
+        "value": "try {\n  // Code that may throw an exception\n  const user = JSON.parse(userInput);\n  console.log(user.name);\n} catch (error) {\n  // Handle the error gracefully\n  console.error('Failed to parse user input:', error.message);\n  alert('Oops! Something went wrong. Please check your input and try again.');\n}"
       },
       {
         "type": "paragraph",
-        "value": "2. **Optional Chaining:** Use optional chaining (`?.`) to safely access nested properties that may not exist."
+        "value": "### Always Provide Meaningful Feedback\nWhen catching errors, it's important to give feedback to users or developers. Logging the error and displaying friendly messages helps diagnose issues and maintains a good user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Avoid Silent Failures\nNever leave catch blocks empty or ignore the error. Silent failures make debugging difficult and create unstable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Error Boundaries for Frontend Frameworks\nIn frameworks like React, you can create error boundaries that catch errors in the component tree and display fallback UI. This prevents the whole app from crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Global Error Handling\nYou can also listen for uncaught errors globally to handle unexpected exceptions gracefully. For example:"
       },
       {
         "type": "code",
-        "value": "const response = {\n  data: {\n    user: {\n      profile: {\n        name: 'Bob'\n      }\n    }\n  }\n};\n\n// Safely access profile name or get undefined if any nested property is missing\nconst userName = response.data?.user?.profile?.name;\nconsole.log(userName); // 'Bob'"
+        "value": "window.addEventListener('error', function(event) {\n  console.error('Global error caught:', event.message);\n  // Optionally show a friendly message or report the error\n});"
       },
       {
         "type": "paragraph",
-        "value": "3. **Validate and Normalize Data:** Write small utility functions to check and transform incoming data into a consistent format."
-      },
-      {
-        "type": "code",
-        "value": "function normalizeUser(data) {\n  return {\n    name: data.name || 'Unknown',\n    age: typeof data.age === 'number' ? data.age : 0,\n    email: data.email || ''\n  };\n}\n\nconst rawUser = { name: 'Carol', email: null };\nconst user = normalizeUser(rawUser);\nconsole.log(user);\n// Output: { name: 'Carol', age: 0, email: '' }"
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Use Try-Catch for Defensive Coding:** When dealing with unpredictable data parsing (e.g., JSON parsing), use try-catch blocks to gracefully handle errors."
-      },
-      {
-        "type": "code",
-        "value": "function safeParse(jsonString) {\n  try {\n    return JSON.parse(jsonString);\n  } catch (error) {\n    console.error('Invalid JSON:', error);\n    return null;\n  }\n}\n\nconst data = safeParse('{ invalid json }'); // logs error and returns null"
-      },
-      {
-        "type": "paragraph",
-        "value": "5. **Use Type Checking Libraries (Optional for Beginners):** As you gain experience, consider libraries like PropTypes or TypeScript for stronger guarantees about your data models."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nHandling data model inconsistencies is a key skill in JavaScript development. By using default values, optional chaining, normalization functions, and defensive error handling, you can write code that gracefully manages unexpected or incomplete data. Start with these practical patterns to make your applications more robust and easier to maintain."
+        "value": "### Conclusion\nHandling runtime exceptions gracefully makes your JavaScript applications more reliable and easier to maintain. Start by using try...catch blocks to handle known risky code, provide helpful feedback, and avoid silent errors. For larger apps, consider global error handling or framework-specific error boundaries to manage unexpected failures without disrupting the user experience."
       }
     ]
   },
   {
-    "slug": "getting-started-with-typescript-building-your-first-interactive-web-app",
-    "title": "Getting Started with TypeScript: Building Your First Interactive Web App",
+    "slug": "building-a-real-time-chat-application-with-typescript-and-websockets",
+    "title": "Building a Real-Time Chat Application with TypeScript and WebSockets",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to create your first interactive web app using TypeScript with this beginner-friendly step-by-step tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=jBmrduvKl5w",
+    "description": "Learn how to create a simple real-time chat app using TypeScript and WebSockets, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful programming language that builds on JavaScript by adding static types, making your code easier to understand and less prone to errors. In this tutorial, you'll learn the basics of TypeScript and create a simple interactive web app — a counter that increases and decreases with button clicks."
+        "value": "In this tutorial, you'll learn how to build a real-time chat application using TypeScript and WebSockets. WebSockets enable two-way communication between a client and a server, making them ideal for chat applications. We'll create a simple server and a client that can send and receive messages instantly."
       },
       {
         "type": "paragraph",
-        "value": "First, let's set up a basic HTML page where we will add our TypeScript-powered app."
+        "value": "Let's start by setting up a WebSocket server using the popular 'ws' library."
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript Counter App</title>\n</head>\n<body>\n  <h1>Simple Counter</h1>\n  <button id=\"decrease\">-</button>\n  <span id=\"count\">0</span>\n  <button id=\"increase\">+</button>\n  <script src=\"app.js\"></script>\n</body>\n</html>"
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst wss = new WebSocketServer({ port: 8080 });\n\nwss.on('connection', (ws: WebSocket) => {\n  console.log('New client connected');\n\n  ws.on('message', (message: string) => {\n    console.log(`Received: ${message}`);\n    // Broadcast the message to all clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "Now, let's write our TypeScript code. Create a file named `app.ts`. This file will contain the logic for our counter. The main idea is to keep track of a count variable and update the displayed number when buttons are clicked."
+        "value": "This server listens on port 8080 and broadcasts messages received from any client to all other connected clients. Now, let's create a simple client that connects to this server."
       },
       {
         "type": "code",
-        "value": "let count: number = 0;\n\nconst countEl = document.getElementById('count') as HTMLSpanElement;\nconst increaseBtn = document.getElementById('increase') as HTMLButtonElement;\nconst decreaseBtn = document.getElementById('decrease') as HTMLButtonElement;\n\nfunction updateDisplay() {\n  countEl.textContent = count.toString();\n}\n\nincreaseBtn.addEventListener('click', () => {\n  count++;\n  updateDisplay();\n});\n\ndecreaseBtn.addEventListener('click', () => {\n  count--;\n  updateDisplay();\n});\n\nupdateDisplay();"
+        "value": "const ws = new WebSocket('ws://localhost:8080');\n\nws.onopen = () => {\n  console.log('Connected to the server');\n  ws.send('Hello from client!');\n};\n\nws.onmessage = (event) => {\n  console.log('Message from server:', event.data);\n};\n\nws.onclose = () => {\n  console.log('Disconnected from the server');\n};\n\n// To send a message from the client:\n// ws.send('Your message');"
       },
       {
         "type": "paragraph",
-        "value": "Next, compile the TypeScript code into JavaScript so the browser can run it. If you haven't installed TypeScript yet, you can do so via npm with `npm install -g typescript`. Then, run this command in your project directory:"
+        "value": "You can integrate this client code into a simple web page or Node.js environment. For a browser, use the native WebSocket API as shown above. Now, let's see how to put it all together with a minimal HTML page for chatting."
       },
       {
         "type": "code",
-        "value": "tsc app.ts"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Chat App with WebSocket</title>\n</head>\n<body>\n  <h1>Real-Time Chat</h1>\n  <div id=\"chat\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type your message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script type=\"module\">\n    const ws = new WebSocket('ws://localhost:8080');\n    const chatDiv = document.getElementById('chat');\n    const input = document.getElementById('messageInput');\n    const sendBtn = document.getElementById('sendBtn');\n\n    ws.onopen = () => {\n      chatDiv.innerHTML += '<p><em>Connected to server</em></p>';\n    };\n\n    ws.onmessage = (event) => {\n      chatDiv.innerHTML += `<p>${event.data}</p>`;\n      chatDiv.scrollTop = chatDiv.scrollHeight;\n    };\n\n    ws.onclose = () => {\n      chatDiv.innerHTML += '<p><em>Disconnected from server</em></p>';\n    };\n\n    sendBtn.onclick = () => {\n      if (input.value) {\n        ws.send(input.value);\n        input.value = '';\n      }\n    };\n\n    input.addEventListener('keyup', (event) => {\n      if (event.key === 'Enter') {\n        sendBtn.click();\n      }\n    });\n  </script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "This will generate an `app.js` file which is referenced in your HTML file. Open the HTML file in your browser, and you should see your interactive counter with working buttons."
+        "value": "Open this HTML file in multiple browser tabs to test the chat in real-time. Each message sent from one tab will appear in all other connected tabs almost instantly."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, you've learned how to:\n- Set up a basic HTML page\n- Write TypeScript code that interacts with HTML elements\n- Use TypeScript's type annotations for better safety\n- Compile TypeScript to JavaScript for browser use\n\nTypeScript helps catch errors early and makes your code easier to maintain. From here, you can explore more advanced features like interfaces, classes, and modules to build bigger applications."
+        "value": "In summary, by combining TypeScript on the server with WebSockets, you can create efficient real-time applications like chat apps. This tutorial covers the basics to get you started, and you can enhance it further by adding features like user authentication, message history, or richer UI."
       }
     ]
   },
   {
-    "slug": "handling-rare-typescript-type-narrowing-edge-cases-for-safer-code",
-    "title": "Handling Rare TypeScript Type Narrowing Edge Cases for Safer Code",
+    "slug": "understanding-typescripts-error-handling-compared-to-javascript",
+    "title": "Understanding TypeScript's Error Handling Compared to JavaScript: A Deep Dive",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to handle rare TypeScript type narrowing edge cases to write safer and more reliable code, even when TypeScript's inference might seem tricky.",
-    "videoUrl": "",
+    "description": "Learn how TypeScript improves error handling compared to JavaScript, making your code safer and easier to debug with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript’s type narrowing allows developers to write safer code by refining types based on runtime checks. For example, checking if a variable is a string narrows its type from a union (like string | number) to just string. Most of the time, this works as expected, but sometimes TypeScript struggles with rare edge cases leading to unexpected compiler errors or less safe code."
+        "value": "Error handling is a crucial part of writing robust applications. While JavaScript offers basic error handling with try...catch statements, TypeScript adds an extra layer of safety with its static typing system. This article explores how error handling in TypeScript differs from JavaScript and why TypeScript helps catch errors earlier."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explore some of these edge cases and practical solutions to handle them, helping beginners understand how to keep their TypeScript code safe and error-free."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 1: Narrowing with multiple union types"
-      },
-      {
-        "type": "paragraph",
-        "value": "Suppose you have a value that could be one of several string literals or numbers, and you want to narrow down to one specific type."
+        "value": "In JavaScript, you handle errors using the familiar try...catch block, which catches runtime errors. However, JavaScript doesn't check types during compilation, so many errors only appear when you execute the program."
       },
       {
         "type": "code",
-        "value": "type MyType = 'apple' | 'banana' | 1 | 2;\n\nfunction checkValue(val: MyType) {\n  if (typeof val === 'string') {\n    // Here, TypeScript narrows val to 'apple' | 'banana'\n    console.log(val.toUpperCase());\n  } else {\n    // Here, val is narrowed to 1 | 2\n    console.log(val + 1);\n  }\n}"
+        "value": "try {\n  const result = JSON.parse('invalid json');\n} catch (error) {\n  console.error('Parsing failed:', error.message);\n}"
       },
       {
         "type": "paragraph",
-        "value": "This works fine, but what if you want to type guard only for 'apple'? TypeScript can't narrow string literals with a simple typeof check since both 'apple' and 'banana' share the same string type."
+        "value": "In the example above, the catch block catches a runtime error caused by parsing invalid JSON. This is straightforward, but it does not help prevent errors related to incorrect variable types before running the code."
       },
       {
         "type": "paragraph",
-        "value": "### Solution: Use a user-defined type guard function"
+        "value": "TypeScript adds static type checking, which allows developers to catch certain errors at compile time. For example, if you try to call a function with the wrong type of argument, TypeScript will show an error before the code runs."
       },
       {
         "type": "code",
-        "value": "function isApple(val: MyType): val is 'apple' {\n  return val === 'apple';\n}\n\nfunction checkValue2(val: MyType) {\n  if (isApple(val)) {\n    // Now TypeScript specifically knows val is 'apple'\n    console.log(val.toUpperCase());\n  } else {\n    // val is narrowed to 'banana' | 1 | 2\n    console.log(val);\n  }\n}"
+        "value": "function greet(name: string) {\n  console.log('Hello', name.toUpperCase());\n}\n\ngreet(42); // TypeScript error: Argument of type 'number' is not assignable to parameter of type 'string'."
       },
       {
         "type": "paragraph",
-        "value": "### Example 2: Narrowing nullable types with complex conditions"
+        "value": "This compile-time error prevents a possible runtime problem where a number is passed instead of a string. This reduces the need to write defensive code everywhere and helps ensure your program runs more smoothly."
       },
       {
         "type": "paragraph",
-        "value": "Consider a value that could be a string, null, or undefined. Sometimes TypeScript’s narrowing does not successfully exclude null or undefined when the conditions get complex."
+        "value": "When it comes to catching exceptions, TypeScript’s try...catch syntax is the same as JavaScript. But TypeScript also allows you to specify the types of objects you expect inside your catch blocks for better error handling."
       },
       {
         "type": "code",
-        "value": "function process(value: string | null | undefined) {\n  if (value && value.length > 0) {\n    // TypeScript usually narrows value to string here\n    console.log(value.toUpperCase());\n  } else {\n    console.log('No valid string');\n  }\n}"
+        "value": "try {\n  throw new Error('Something went wrong!');\n} catch (error: unknown) {\n  if (error instanceof Error) {\n    console.error('Error message:', error.message);\n  } else {\n    console.error('Unknown error:', error);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "If you add more complex boolean logic or optional chaining, TypeScript might fail to narrow perfectly."
+        "value": "Using the `unknown` type and type narrowing (like `instanceof`) improves safety by avoiding assumptions about the error's shape, which can prevent unexpected crashes."
       },
       {
         "type": "paragraph",
-        "value": "### Solution: Use explicit null checks or helper functions"
-      },
-      {
-        "type": "code",
-        "value": "function isNonEmptyString(value: string | null | undefined): value is string {\n  return typeof value === 'string' && value.length > 0;\n}\n\nfunction process2(value: string | null | undefined) {\n  if (isNonEmptyString(value)) {\n    // Safely narrowed and more readable\n    console.log(value.toUpperCase());\n  } else {\n    console.log('No valid string');\n  }\n}"
+        "value": "In summary, TypeScript enhances traditional JavaScript error handling by adding static types to catch errors before runtime, while still allowing familiar try...catch blocks for runtime errors. By using both together, you can write safer and more maintainable code."
       },
       {
         "type": "paragraph",
-        "value": "### Example 3: Handling type narrowing inside closures"
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes, narrowing works in the outside scope but is lost inside a nested function or closure due to how TypeScript performs control flow analysis."
-      },
-      {
-        "type": "code",
-        "value": "function outer(val: string | number) {\n  if (typeof val === 'string') {\n    function inner() {\n      // TypeScript may not know val is still string here\n      console.log(val.toUpperCase()); // Error: Object is possibly 'number'\n    }\n    inner();\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Solution: Use a constant variable to preserve narrowing"
-      },
-      {
-        "type": "code",
-        "value": "function outerFixed(val: string | number) {\n  if (typeof val === 'string') {\n    const strVal = val; // Preserve narrowed type\n    function inner() {\n      console.log(strVal.toUpperCase()); // No error now\n    }\n    inner();\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### In summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript’s type narrowing is powerful but can sometimes miss corner cases, especially with unions, nullable types, or control flow in nested functions. When you encounter these issues, consider using user-defined type guards, explicit checks, or storing narrowed values in constants to help TypeScript understand your intentions. These techniques help you write safer, cleaner, and more maintainable TypeScript code."
+        "value": "To get started, try adding TypeScript to an existing JavaScript project and gradually add type annotations to your functions and error handling for a smoother development experience."
       }
     ]
   },
   {
-    "slug": "building-scalable-data-models-in-python-with-sqlalchemy-orm",
-    "title": "Building Scalable Data Models in Python with SQLAlchemy ORM: A Step-by-Step Tutorial",
+    "slug": "mastering-python-context-managers-for-cleaner-and-faster-code",
+    "title": "Mastering Python Context Managers for Cleaner and Faster Code",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to create scalable and reusable data models in Python using SQLAlchemy ORM with this beginner-friendly, practical tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=hAN60-79L0Y",
+    "description": "Learn how to use Python context managers to write cleaner, safer, and more efficient code with real-world examples and easy-to-follow explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're starting with Python and want to manage databases efficiently, SQLAlchemy ORM (Object Relational Mapper) is a powerful tool. It allows you to define your database schema in Python code and interact with the database using Python objects instead of raw SQL queries. This tutorial will guide you step-by-step in building scalable data models that are easy to maintain and extend as your application grows."
+        "value": "Python context managers are a powerful tool that helps you manage resources like files, network connections, or locks, making your code cleaner and safer. By using context managers, you can ensure that resources are properly acquired and released, even if errors occur. This tutorial will guide you through the basics of context managers and how to create your own."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Install SQLAlchemy\nFirst, ensure you have SQLAlchemy installed in your environment. You can install it via pip:"
+        "value": "The most common way to use a context manager is with the `with` statement. This statement automatically handles setup and cleanup actions, so you don’t have to worry about forgetting to close files or release locks."
       },
       {
         "type": "code",
-        "value": "pip install SQLAlchemy"
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')\n# No need to call file.close(), it's done automatically"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Setting Up the Database and Base Class\nBegin by importing necessary modules and creating an engine and a base class. The base class is used to define your data model classes."
+        "value": "In the example above, `open()` returns a context manager that opens a file and makes sure it closes automatically after the block inside `with` runs, even if an error happens."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How Does a Context Manager Work?\nA context manager is any object that defines two special methods: `__enter__()` and `__exit__()`. When you use `with`, Python calls `__enter__()` at the start of the block and `__exit__()` at the end."
       },
       {
         "type": "code",
-        "value": "from sqlalchemy import create_engine, Column, Integer, String, ForeignKey\nfrom sqlalchemy.orm import declarative_base, relationship, sessionmaker\n\n# Create an SQLite database in memory\nengine = create_engine('sqlite:///:memory:', echo=True)\n\n# Base class for declarative class definitions\nBase = declarative_base()"
+        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the context')\n        return self\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n        if exc_type:\n            print(f'An exception occurred: {exc_value}')\n        return False  # Propagate exceptions\n\nwith MyContextManager() as manager:\n    print('Inside the with block')"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Define Your Data Models\nLet's define two related models: `User` and `Address`. A user can have multiple addresses — this is a common one-to-many relationship."
+        "value": "When you run this code, you will see messages when entering and exiting the context. If an error occurs inside the `with` block, `__exit__` receives the exception details and can handle them accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example: Managing a Simple Resource\nImagine you have a resource (like a connection or a temporary file) that needs to be opened and closed safely. Let’s create a context manager to manage this resource automatically."
       },
       {
         "type": "code",
-        "value": "class User(Base):\n    __tablename__ = 'users'\n    \n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    email = Column(String, unique=True, nullable=False)\n    \n    # One-to-many relationship with Address\n    addresses = relationship('Address', back_populates='user')\n\n    def __repr__(self):\n        return f\"<User(name={self.name}, email={self.email})>\"\n\nclass Address(Base):\n    __tablename__ = 'addresses'\n    \n    id = Column(Integer, primary_key=True)\n    email_address = Column(String, nullable=False)\n    user_id = Column(Integer, ForeignKey('users.id'))\n    \n    # Relationship with User\n    user = relationship('User', back_populates='addresses')\n\n    def __repr__(self):\n        return f\"<Address(email_address={self.email_address})>\""
+        "value": "class Resource:\n    def __init__(self):\n        self.connected = False\n    \n    def connect(self):\n        print('Resource connected')\n        self.connected = True\n    \n    def disconnect(self):\n        print('Resource disconnected')\n        self.connected = False\n\nclass ResourceManager:\n    def __enter__(self):\n        self.resource = Resource()\n        self.resource.connect()\n        return self.resource\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        self.resource.disconnect()\n        if exc_type:\n            print(f'Error handled: {exc_value}')\n        return False\n\nwith ResourceManager() as resource:\n    print(f'Resource status: {resource.connected}')\n    # You can add more operations here\n"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Create the Tables in the Database\nNow that models are defined, create the tables in the database using `Base.metadata.create_all()`:"
+        "value": "This example shows how the connection to the resource is guaranteed to close after your code block finishes, keeping your application safe from resource leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using `contextlib` to Simplify Context Managers\nPython’s `contextlib` module lets you write context managers more easily using the `@contextmanager` decorator. This approach uses a generator to handle setup and teardown."
       },
       {
         "type": "code",
-        "value": "Base.metadata.create_all(engine)  # Creates users and addresses tables"
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef open_file(filename, mode):\n    f = open(filename, mode)\n    try:\n        yield f\n    finally:\n        f.close()\n\nwith open_file('example.txt', 'w') as f:\n    f.write('Hello from contextlib!')"
       },
       {
         "type": "paragraph",
-        "value": "### Step 5: Create a Session to Interact with the Database\nSessions allow you to add, update, or query the database."
-      },
-      {
-        "type": "code",
-        "value": "Session = sessionmaker(bind=engine)\nsession = Session()"
+        "value": "The code above works similarly to the built-in `open` context manager but shows you how `contextlib` allows for clean, readable context management with minimal code."
       },
       {
         "type": "paragraph",
-        "value": "### Step 6: Add Data to Your Models\nLet's add some users and their addresses to the database."
-      },
-      {
-        "type": "code",
-        "value": "user1 = User(name='Alice', email='alice@example.com')\nuser1.addresses = [\n    Address(email_address='alice123@example.com'),\n    Address(email_address='alice.work@example.com')\n]\n\nuser2 = User(name='Bob', email='bob@example.com')\nuser2.addresses = [\n    Address(email_address='bob@example.com')\n]\n\nsession.add(user1)\nsession.add(user2)\nsession.commit()"
+        "value": "### Summary\nUsing context managers in Python helps you manage resources safely and cleanly. Whether you use the `with` statement with built-ins like `open`, create your own classes with `__enter__` and `__exit__`, or use `contextlib`, mastering context managers leads to faster development and fewer bugs."
       },
       {
         "type": "paragraph",
-        "value": "### Step 7: Query the Database\nYou can query users and their related addresses easily using ORM:"
-      },
-      {
-        "type": "code",
-        "value": "for user in session.query(User).all():\n    print(user)\n    for address in user.addresses:\n        print(' ', address)"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 8: Designing for Scalability\nWhen building larger applications, keep these tips in mind:\n\n- **Modular Models:** Split models into different Python modules/files based on their domain.\n- **Relationships:** Use proper relationships to reflect how your data connects.\n- **Indexes and Constraints:** Add indexes and constraints such as `unique=True` or `nullable=False` to enforce data integrity.\n- **Migration Tools:** Use libraries like Alembic to handle database schema migrations safely as your models evolve.\n- **Session Management:** Use scoped sessions in web apps to handle concurrent requests efficiently."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nBy following these steps, you've built a simple but scalable data model using SQLAlchemy ORM in Python. This approach will help you maintain clear, readable code and make your database interactions easier to manage as your application grows. Start experimenting by adding more models, relationships, and constraints!"
+        "value": "Start using context managers today to make your Python code cleaner, safer, and more efficient!"
       }
     ]
   },
   {
-    "slug": "understanding-python-typeerror-vs-valueerror",
-    "title": "Understanding Python's TypeError vs ValueError: When and Why They Occur",
+    "slug": "harnessing-python-context-managers-to-gracefully-handle-resource-errors",
+    "title": "Harnessing Python Context Managers to Gracefully Handle Resource Errors",
     "language": "python",
     "type": "errors",
-    "description": "Learn the difference between Python's TypeError and ValueError, understand when these errors happen, and how to handle them effectively as a beginner.",
-    "videoUrl": "https://www.youtube.com/watch?v=K2_aC4FOECU",
+    "description": "Learn how Python context managers can help you manage resources like files safely and handle errors gracefully without leaving your program in a broken state.",
+    "videoUrl": "https://www.youtube.com/watch?v=CJlB1F3oXpo",
     "content": [
       {
         "type": "paragraph",
-        "value": "In Python, errors are a normal part of coding and understanding them helps you write better programs. Two common errors you'll encounter as a beginner are TypeError and ValueError. Knowing the difference between these errors and when they happen can save you time debugging your code."
+        "value": "When working with resources such as files, network connections, or database connections in Python, it's important to manage these resources carefully. Errors might occur, and if the resources aren't properly released, your program could run into issues like memory leaks or locked files. Python's context managers offer a clean and beginner-friendly way to ensure resources are handled correctly, even if errors happen."
       },
       {
         "type": "paragraph",
-        "value": "A TypeError occurs when an operation or function is applied to an object of the wrong type. For example, if you try to add a number and a string directly, Python will raise a TypeError because these types cannot be combined in that way."
+        "value": "A context manager allows you to allocate and release resources precisely when you want to. Using the `with` statement, you can open a file, do some operations, and be confident that the file will close after the block of code runs, no matter if it succeeded or an error occurred."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of reading a file using a context manager:"
       },
       {
         "type": "code",
-        "value": "number = 5\ntext = \"hello\"\n\n# This will raise a TypeError\nresult = number + text"
+        "value": "try:\n    with open('example.txt', 'r') as file:\n        contents = file.read()\n        print(contents)\nexcept FileNotFoundError:\n    print('The file was not found.')\nexcept IOError:\n    print('An error occurred while reading the file.')"
       },
       {
         "type": "paragraph",
-        "value": "On the other hand, a ValueError happens when a function receives the right type of argument but with an inappropriate value. For example, if you try to convert a string that doesn’t represent a number into an integer, Python raises a ValueError."
+        "value": "In this example, `open` returns a context manager that handles opening and closing the file. Even if an error happens during reading, the file will be safely closed. The `try-except` block catches specific errors such as the file not existing (`FileNotFoundError`) or other I/O errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create your own context managers to manage different resources or custom behaviors by using the `contextlib` module or by defining a class with `__enter__` and `__exit__` methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of a simple custom context manager using a class, which gracefully handles an error inside the managed block:"
       },
       {
         "type": "code",
-        "value": "text = \"hello\"\n\n# This will raise a ValueError\nnumber = int(text)"
+        "value": "class CustomResource:\n    def __enter__(self):\n        print('Resource acquired')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        if exc_type:\n            print(f'An error occurred: {exc_value}')\n        print('Resource released')\n        # Returning False will propagate the exception if any\n        return False\n\ntry:\n    with CustomResource() as resource:\n        print('Using resource')\n        # Simulate an error\n        raise ValueError('Oops! Something went wrong.')\nexcept ValueError as e:\n    print(f'Caught an exception: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "To summarize:\n- TypeError is about the wrong data type being used.\n- ValueError is about an invalid value for the correct data type.\n\nUnderstanding this helps you debug quickly. For instance, if you see a TypeError, check if you are mixing incompatible types. If it's a ValueError, check if the value you provided is valid for that operation."
+        "value": "When running this code, you'll see that the resource is always released even if an error occurs. The `__exit__` method parameters help detect exceptions, allowing cleanup or logging before the error continues to propagate or is handled."
       },
       {
         "type": "paragraph",
-        "value": "Here’s an example combining both concepts with error handling to make your program more robust."
-      },
-      {
-        "type": "code",
-        "value": "def safe_int_conversion(value):\n    try:\n        return int(value)\n    except TypeError:\n        print(\"TypeError: Provided value is not a type that can be converted to int.\")\n    except ValueError:\n        print(\"ValueError: Provided string does not contain a valid integer.\")\n\n# Testing with different inputs\nprint(safe_int_conversion(123))        # Works fine\nprint(safe_int_conversion(\"456\"))    # Works fine\nprint(safe_int_conversion([1, 2, 3])) # Raises TypeError and handled\nprint(safe_int_conversion(\"abc\"))    # Raises ValueError and handled"
+        "value": "In summary, using Python's context managers allows you to write cleaner, safer code when managing resources. They help you avoid common pitfalls like forgetting to close files or release resources after errors, making your programs more robust and easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "By understanding TypeError and ValueError, you can write code that anticipates and gracefully handles common mistakes, improving the user experience and reducing bugs."
+        "value": "Try incorporating context managers into your projects when dealing with resources to handle errors gracefully and ensure proper cleanup every time."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-queries-advanced-indexing-techniques",
-    "title": "Optimizing SQL Queries with Advanced Indexing Techniques: A Beginner's Guide",
+    "slug": "mastering-window-functions-advanced-sql-tricks-for-data-analysis",
+    "title": "Mastering Window Functions: Advanced SQL Tricks for Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to boost your SQL query performance by using advanced indexing techniques. This beginner-friendly guide explains practical ways to use indexes effectively for faster data retrieval.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how to use SQL window functions effectively to perform advanced data analysis with simple examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Indexes are like a map for your database. Without them, your SQL queries have to scan every row in a table to find what they need, which can be very slow. In this tutorial, we'll explore some advanced indexing techniques that go beyond the basic single-column index, helping you optimize your SQL queries and speed up data retrieval."
+        "value": "Window functions are powerful tools in SQL that allow you to perform calculations across sets of rows related to the current row. Unlike aggregate functions, window functions do not group your results; instead, they add a new dimension of analysis by keeping all rows intact. This tutorial will guide beginners through the basics and show practical examples to help you master these advanced SQL tricks."
       },
       {
         "type": "paragraph",
-        "value": "The simplest type of index is a single-column index, which helps when you often filter or sort data based on that column. However, in many real-world queries, conditions involve multiple columns. That's where composite (multi-column) indexes come in."
+        "value": "The most commonly used window functions include ROW_NUMBER(), RANK(), DENSE_RANK(), and aggregate functions used over a window like SUM() and AVG(). These functions require an OVER() clause which defines the window or set of rows the function operates on."
       },
       {
         "type": "paragraph",
-        "value": "A composite index is created on two or more columns. It works best when your query filters on the leftmost column of the index and optionally on the next columns. For example, suppose you have a table `orders` with columns `customer_id`, `order_date`, and `status`. You often run queries filtering by `customer_id` and `order_date`."
+        "value": "Let's start with the ROW_NUMBER() function, which assigns a unique sequential integer to rows within a partition of a result set, ordered by specified columns."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_customer_date ON orders(customer_id, order_date);"
+        "value": "SELECT\n  employee_id,\n  department_id,\n  salary,\n  ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank_within_department\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "This index speeds up queries like:\n\nsql\nSELECT * FROM orders WHERE customer_id = 123 AND order_date > '2023-01-01';\n\n\nBut if you filter only by `order_date` without `customer_id`, this index won't be used effectively because `customer_id` is the first column."
+        "value": "In this query, for each department (partition), employees are ranked by salary in descending order. The ROW_NUMBER() gives a unique rank to each employee by salary within that department."
       },
       {
         "type": "paragraph",
-        "value": "Another useful technique is using partial indexes. Partial indexes store index entries only for rows that meet a specified condition. This is helpful when you want to index just a subset of data to save space and improve performance."
+        "value": "Next, consider the RANK() function, which also ranks rows within partitions but assigns the same rank to rows with ties, leaving gaps in ranking afterwards."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_active_orders ON orders(status) WHERE status = 'active';"
+        "value": "SELECT\n  employee_id,\n  department_id,\n  salary,\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank_with_ties\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "This index helps queries that retrieve only active orders:\n\nsql\nSELECT * FROM orders WHERE status = 'active';\n\n\nWithout indexing inactive orders, this can make your database smaller and queries faster."
+        "value": "If two employees share the highest salary in a department, both will have rank 1, and the next rank will be 3 (skipping 2)."
       },
       {
         "type": "paragraph",
-        "value": "In some databases, you can create indexes on expressions or functions. For example, if you frequently search case-insensitively on a username column, a functional index on `LOWER(username)` can help."
+        "value": "You can also use aggregate functions as window functions to get cumulative sums or moving averages, for example:"
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_lower_username ON users(LOWER(username));"
+        "value": "SELECT\n  employee_id,\n  hire_date,\n  salary,\n  SUM(salary) OVER (ORDER BY hire_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_salary\nFROM employees\nORDER BY hire_date;"
       },
       {
         "type": "paragraph",
-        "value": "You can then run your query like this:\n\nsql\nSELECT * FROM users WHERE LOWER(username) = 'alice';\n\n\nThe database uses the index to quickly find matching rows."
+        "value": "This query calculates the cumulative salary up to the current employee, ordered by their hire date. It's useful to analyze trends or running totals."
       },
       {
         "type": "paragraph",
-        "value": "Finally, remember that indexes can speed up SELECT queries but slow down INSERT, UPDATE, and DELETE operations because the database needs to update the indexes too. Always monitor your queries and use indexing wisely."
+        "value": "To illustrate how window functions can simplify complex queries, let's find the top 3 highest-paid employees in each department:"
+      },
+      {
+        "type": "code",
+        "value": "WITH ranked_employees AS (\n  SELECT\n    employee_id,\n    department_id,\n    salary,\n    ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS dept_rank\n  FROM employees\n)\nSELECT *\nFROM ranked_employees\nWHERE dept_rank <= 3;"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, advanced indexing techniques like composite indexes, partial indexes, and functional indexes can greatly enhance SQL query performance when used appropriately. Experiment with these tools to find the best balance for your database workload."
+        "value": "Using the ROW_NUMBER() window function inside a Common Table Expression (CTE), we assign ranks per department and then filter by top 3, making the query neat and easy to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering window functions opens up advanced capabilities for data analysis in SQL. They let you perform rankings, running totals, moving averages, and comparisons while keeping the full dataset visible. Experiment with different window frames and partitions to extract rich insights from your data."
       }
     ]
   },
   {
-    "slug": "handling-inconsistent-null-behavior-across-sql-databases",
-    "title": "Handling Inconsistent Null Behavior Across SQL Databases",
+    "slug": "mastering-sql-window-functions-cool-tricks-to-analyze-data-efficiently",
+    "title": "Mastering SQL Window Functions: Cool Tricks to Analyze Data Efficiently",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to handle inconsistent NULL behavior in SQL databases and avoid common errors, with beginner-friendly tips and examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=HHmWcKIBuMc",
+    "description": "Learn beginner-friendly tips on mastering SQL window functions to quickly analyze data and avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=HhvdQhERlH4",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, handling NULL values can sometimes lead to unexpected results or errors, especially because different database systems treat NULLs in slightly different ways. Understanding these differences is critical for writing reliable and portable SQL queries."
+        "value": "SQL window functions are powerful tools for performing calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not reduce the number of rows returned, making them especially useful for detailed data analysis."
       },
       {
         "type": "paragraph",
-        "value": "NULL represents missing or unknown data in SQL, and it is important to remember that NULL is not equal to anything, even another NULL. For example, comparing NULL to NULL using the = operator returns false or unknown in most databases."
+        "value": "However, beginners often encounter errors when trying to use window functions incorrectly. This article covers common errors and how to avoid them while learning practical examples of window functions to analyze data efficiently."
       },
       {
         "type": "paragraph",
-        "value": "Here is an example that might seem confusing at first:"
+        "value": "One common mistake is forgetting the OVER() clause, which is mandatory for window functions. Without it, SQL will throw a syntax error."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM users WHERE last_login = NULL;"
+        "value": "-- Incorrect: Missing OVER() clause\nSELECT employee_id, RANK() AS rank FROM employees;\n\n-- Correct usage\nSELECT employee_id, RANK() OVER (ORDER BY salary DESC) AS rank FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "This query will not return any rows because NULL cannot be compared using =. Instead, you should use the IS NULL operator:"
+        "value": "Another frequent error is mixing aggregate functions with window functions without proper grouping or using the wrong clauses. Remember, window functions operate on a 'window' of rows while returning individual rows."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM users WHERE last_login IS NULL;"
+        "value": "-- Incorrect: Combining aggregate aggregate without GROUP BY\nSELECT department_id, AVG(salary), RANK() OVER (ORDER BY salary DESC) FROM employees;\n\n-- Correct: Use GROUP BY or separate queries\nSELECT department_id, AVG(salary) FROM employees GROUP BY department_id;"
       },
       {
         "type": "paragraph",
-        "value": "One common inconsistency is with aggregate functions like COUNT(), SUM(), or AVG(). Different databases may or may not include NULL values in their calculations. For example, COUNT(column) only counts non-NULLs, but COUNT(*) counts all rows."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example counting non-NULL values in a column:"
+        "value": "Now, let's look at some cool tricks using window functions. The ROW_NUMBER() function assigns a unique row number to each row based on ordering criteria, helpful for pagination or ranking."
       },
       {
         "type": "code",
-        "value": "SELECT COUNT(email) FROM customers;"
+        "value": "SELECT employee_id, salary, ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "If you want to count rows that have NULL in a column, you must explicitly check for NULL:"
+        "value": "The RANK() and DENSE_RANK() functions are similar but handle ties differently. RANK() will skip ranks after ties, while DENSE_RANK() provides consecutive ranks."
       },
       {
         "type": "code",
-        "value": "SELECT COUNT(*) FROM customers WHERE email IS NULL;"
+        "value": "SELECT employee_id, salary, RANK() OVER (ORDER BY salary DESC) AS rank,\n       DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_rank\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Another difference appears in how NULLs are treated in ORDER BY clauses. Some databases treat NULLs as the lowest values, others as the highest, which affects sorting results."
-      },
-      {
-        "type": "paragraph",
-        "value": "To control this, some SQL dialects support NULLS FIRST or NULLS LAST syntax after ORDER BY. For example:"
+        "value": "The PARTITION BY clause can divide data into subsets and apply window functions within those subsets. For example, ranking employees within each department:"
       },
       {
         "type": "code",
-        "value": "SELECT id, name FROM products ORDER BY price DESC NULLS LAST;"
+        "value": "SELECT department_id, employee_id, salary,\n       ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank_in_dept\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "If your database does not support this, you can often work around it using CASE statements:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT id, name FROM products\nORDER BY CASE WHEN price IS NULL THEN 1 ELSE 0 END, price DESC;"
-      },
-      {
-        "type": "paragraph",
-        "value": "When writing SQL queries for multiple databases, always test how NULLs behave or explicitly handle NULL conditions with IS NULL, IS NOT NULL, and CASE expressions to avoid surprises."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize, key tips for handling NULLs across SQL databases:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Use IS NULL or IS NOT NULL rather than = NULL.\n2. Count non-NULL values with COUNT(column) and NULL values with WHERE column IS NULL.\n3. Be aware of NULL sorting differences and use NULLS FIRST/LAST or CASE statements.\n4. Test your queries on all target databases."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding and planning for these inconsistencies, your SQL code will be more robust and easier to maintain."
+        "value": "In summary, mastering SQL window functions involves understanding how to properly use the OVER() clause, recognizing the difference between aggregate and window functions, and applying partitioning when needed. Avoid common syntax errors by double-checking clauses, and practice these beginner-friendly tricks to analyze data more efficiently."
       }
     ]
   }
