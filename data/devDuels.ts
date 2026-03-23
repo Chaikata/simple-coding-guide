@@ -320,5 +320,172 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "beginner-challenge-create-a-function-to-capitalize-the-first-letter-of-each-word",
+    "title": "Beginner Challenge: Create a Function to Capitalize the First Letter of Each Word",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Practice string manipulation by writing a JavaScript function that capitalizes the first letter of every word in a given sentence.",
+    "prompt": "Write a function named 'capitalizeWords' that takes a single string as input and returns a new string with the first letter of each word capitalized. Words are separated by spaces. For example, 'hello world' should become 'Hello World'.",
+    "guidance": [
+      "Split the input string into an array of words using the space character as the separator.",
+      "Capitalize the first character of each word and concatenate it with the rest of the word.",
+      "Join the capitalized words back together with spaces to form the final string."
+    ],
+    "hints": [
+      "You can use the 'split' method on strings to create an array of words.",
+      "Use 'charAt(0)' to get the first letter of each word, and 'toUpperCase()' to capitalize it.",
+      "Remember to add the rest of the word after the capitalized first letter."
+    ],
+    "starterCode": "function capitalizeWords(str) {\n  // Your code here\n}",
+    "expectedOutput": "capitalizeWords('hello world') // 'Hello World'",
+    "concepts": [
+      "string manipulation",
+      "functions",
+      "arrays"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "sum-all-odd-numbers-in-a-list",
+    "title": "Sum All Odd Numbers in a List",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Write a function that calculates the sum of all odd numbers in a given list of integers.",
+    "prompt": "Create a function called sum_odd_numbers that takes a list of integers as input and returns the sum of all the odd numbers in the list. If there are no odd numbers, the function should return 0.",
+    "guidance": [
+      "Iterate through each number in the list to check if it is odd.",
+      "Use the modulus operator (%) to determine whether a number is odd.",
+      "Keep a running total of all odd numbers encountered.",
+      "Return the total after processing the entire list."
+    ],
+    "hints": [
+      "Recall that an odd number has a remainder of 1 when divided by 2 (number % 2 == 1).",
+      "Start by initializing a variable (like total) to 0 to accumulate the sum.",
+      "You can use a for loop to go through all elements in the list."
+    ],
+    "starterCode": "def sum_odd_numbers(numbers):\n    # Initialize the sum\n    total = 0\n    # Your code here\n    return total",
+    "expectedOutput": "sum_odd_numbers([1, 2, 3, 4, 5]) -> 9\nsum_odd_numbers([2, 4, 6, 8]) -> 0\nsum_odd_numbers([7, 11, 13]) -> 31",
+    "concepts": [
+      "loops",
+      "conditional statements",
+      "functions",
+      "modulus operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "find-customers-who-made-purchases-above-100-using-sql",
+    "title": "Find Customers Who Made Purchases Above $100 Using SQL",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Practice writing a SQL query to identify customers who have made purchases greater than $100 from a sales table.",
+    "prompt": "Given a table named 'Sales' with columns 'CustomerID', 'PurchaseDate', and 'Amount', write a SQL query to find all unique customers who have made any purchase with an amount greater than 100. Return the CustomerID values without duplicates.",
+    "guidance": [
+      "Use the WHERE clause to filter purchases with Amount greater than 100.",
+      "Use SELECT DISTINCT to get unique CustomerID values without duplicates.",
+      "Make sure the output contains only the CustomerID column."
+    ],
+    "hints": [
+      "Remember that DISTINCT helps to remove duplicate rows in the result.",
+      "You can write a simple WHERE condition like 'Amount > 100'."
+    ],
+    "starterCode": "SELECT DISTINCT CustomerID\nFROM Sales\nWHERE ",
+    "expectedOutput": "CustomerID\n----------\n123\n456\n789",
+    "concepts": [
+      "SELECT DISTINCT",
+      "WHERE clause",
+      "Filtering data"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "find-the-largest-number-in-an-array",
+    "title": "Find the Largest Number in an Array",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Write a function to identify the largest number within an array of integers.",
+    "prompt": "Create a function named findLargestNumber that accepts an array of integers and returns the largest number in the array. If the array is empty, return null.",
+    "guidance": [
+      "Consider looping through the array to compare each number.",
+      "Use a variable to keep track of the current largest number found."
+    ],
+    "hints": [
+      "Initialize the largest number variable to the first element of the array.",
+      "Remember to check if the array is empty before processing."
+    ],
+    "starterCode": "function findLargestNumber(numbers) {\n  // Your code here\n}",
+    "expectedOutput": "findLargestNumber([3, 5, 7, 2, 8]) // 8\nfindLargestNumber([]) // null",
+    "concepts": [
+      "arrays",
+      "loops",
+      "conditionals",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "sql-beginner-challenge-calculate-total-sales-per-customer",
+    "title": "SQL Beginner Challenge: Calculate Total Sales per Customer",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "aggregation",
+    "description": "Practice basic SQL aggregation by calculating the total sales amount for each customer in a sales database.",
+    "prompt": "Given a Sales table with columns CustomerID, ProductID, Quantity, and Price, write an SQL query to find the total sales amount per customer. The total sales amount is calculated by multiplying Quantity by Price for each row, summed up for each customer.",
+    "guidance": [
+      "Use the SUM() aggregate function to calculate the total sales for each customer.",
+      "Group the results by CustomerID to get totals per customer."
+    ],
+    "hints": [
+      "Remember to multiply Quantity by Price before summing.",
+      "Use GROUP BY clause for aggregation per customer."
+    ],
+    "starterCode": "SELECT CustomerID, \n       -- Calculate total sales amount here\nFROM Sales\nGROUP BY CustomerID;",
+    "expectedOutput": "CustomerID | TotalSales\n-----------------------\n1          | 150.00\n2          | 230.50\n3          | 75.25",
+    "concepts": [
+      "SQL Aggregation",
+      "GROUP BY clause",
+      "Basic SQL functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "find-employees-with-salaries-above-department-average",
+    "title": "Find Employees with Salaries Above Department Average",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Write an SQL query to find employees whose salaries are higher than the average salary of their respective departments.",
+    "prompt": "Given two tables, Employees(employee_id, employee_name, department_id, salary) and Departments(department_id, department_name), write an SQL query to return the employee_id, employee_name, and salary of employees whose salary is greater than the average salary in their department.",
+    "guidance": [
+      "Calculate the average salary per department using GROUP BY.",
+      "Use a subquery or JOIN to compare each employee's salary with their department's average.",
+      "Select only those employees whose salary is greater than the department average."
+    ],
+    "hints": [
+      "Use the GROUP BY clause to find average salary for each department.",
+      "A JOIN between Employees and the subquery with averages can help filter.",
+      "Remember to compare salary values with the calculated average per department."
+    ],
+    "starterCode": "SELECT employee_id, employee_name, salary FROM Employees WHERE salary > (SELECT AVG(salary) FROM Employees WHERE department_id = Employees.department_id);",
+    "expectedOutput": "A table listing employee_id, employee_name, and salary of employees earning more than their department's average salary.",
+    "concepts": [
+      "aggregate functions",
+      "subqueries",
+      "JOINs",
+      "GROUP BY"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
