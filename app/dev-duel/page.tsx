@@ -1,6 +1,7 @@
 import DevDuelHero from "@/components/dev-duel/DevDuelHero";
 import DevDuelLanguageCard from "@/components/dev-duel/DevDuelLanguageCard";
 import DevDuelChallengeCard from "@/components/dev-duel/DevDuelChallengeCard";
+import StreakCard from "@/components/dev-duel/StreakCard";
 import { devDuels, supportedDevDuelLanguages } from "@/data/devDuels";
 import Link from "next/link";
 
@@ -69,6 +70,8 @@ export default function DevDuelPage() {
           </div>
         </section>
 
+        <StreakCard />
+
         <section id="languages" className="mt-12">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white">
@@ -93,7 +96,7 @@ export default function DevDuelPage() {
 
         <section className="mt-14">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-white">Featured duels</h2>
+            <h2 className="text-2xl font-bold text-white">Featured Duels</h2>
             <p className="mt-2 text-zinc-400">
               Start with strong practice problems across languages.
             </p>
