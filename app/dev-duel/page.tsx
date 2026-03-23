@@ -1,6 +1,7 @@
 import DevDuelHero from "@/components/dev-duel/DevDuelHero";
 import DevDuelLanguageCard from "@/components/dev-duel/DevDuelLanguageCard";
 import DevDuelChallengeCard from "@/components/dev-duel/DevDuelChallengeCard";
+import StreakCard from "@/components/dev-duel/StreakCard";
 import { devDuels, supportedDevDuelLanguages } from "@/data/devDuels";
 import Link from "next/link";
 
@@ -68,6 +69,8 @@ export default function DevDuelPage() {
             </div>
           </div>
         </section>
+
+        <StreakCard />
 
         <section id="languages" className="mt-12">
           <div className="mb-6">
