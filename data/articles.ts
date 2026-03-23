@@ -15925,5 +15925,411 @@ export const articles = [
         "value": "By indexing your JSON data, extracting only needed fields, minimizing array expansions, and validating JSON integrity, you'll avoid common errors and optimize your SQL queries handling large JSON in real-world apps."
       }
     ]
+  },
+  {
+    "slug": "handling-floating-point-precision-issues-in-javascript",
+    "title": "Handling Floating Point Precision Issues in JavaScript: Best Practices and Tricks",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to handle floating point precision issues in JavaScript with simple and effective best practices and tricks for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=Ysgmp40YMvc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Floating point precision issues are common when working with numbers in JavaScript. These arise because JavaScript uses binary floating point to represent decimal numbers, which can cause unexpected rounding errors. For example, the result of 0.1 + 0.2 is not exactly 0.3 but 0.30000000000000004."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we will explain why these issues happen and share some best practices and tricks to help avoid or handle floating point precision problems in your JavaScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Does Floating Point Precision Happen?"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript uses the IEEE 754 standard for floating point arithmetic, which cannot precisely represent all decimal numbers, especially those that are fractional. This limitation causes minor errors in calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(0.1 + 0.2); // Output: 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices and Tricks"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use `toFixed()` or `toPrecision()` to Format Numbers**\nThese methods round the number to a fixed number of decimal places or significant digits, which can help display results as expected."
+      },
+      {
+        "type": "code",
+        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2)); // Output: \"0.30\"\nconsole.log(Number(sum.toFixed(2))); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Multiply and Divide to Work With Integers**\nInstead of doing math directly with decimals, multiply the numbers by a power of 10 to convert to integers, do the math, then divide the result back."
+      },
+      {
+        "type": "code",
+        "value": "const sum = (0.1 * 10 + 0.2 * 10) / 10;\nconsole.log(sum); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use a Small Epsilon for Comparison**\nWhen comparing floating point numbers, test if the difference is within a tiny range (`Number.EPSILON`) rather than testing for equality."
+      },
+      {
+        "type": "code",
+        "value": "function areAlmostEqual(a, b) {\n  return Math.abs(a - b) < Number.EPSILON;\n}\n\nconsole.log(areAlmostEqual(0.1 + 0.2, 0.3)); // Output: true"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Consider Using BigInt or Libraries for Precise Decimal Arithmetic**\nIf you're working with money or require high precision, use libraries like `decimal.js` or `big.js` that handle decimal math accurately."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Floating point precision issues in JavaScript are unavoidable but manageable. Use rounding methods when displaying numbers, convert to integers for calculations, compare using small tolerances, and consider specialized libraries if your app needs strict precision."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, you can avoid many common bugs related to floating point math in your JavaScript programs."
+      }
+    ]
+  },
+  {
+    "slug": "handling-precision-edge-cases-javascript-floating-point-arithmetic",
+    "title": "Handling Precision Edge Cases in JavaScript Floating Point Arithmetic",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle common precision issues in JavaScript floating point arithmetic with simple techniques and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=2fYFTOtmhDw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript uses floating point numbers to represent all numeric values, which can lead to precision problems in calculations. For example, adding 0.1 and 0.2 won’t exactly equal 0.3 due to how numbers are stored internally. These small errors, called floating point precision issues, can cause bugs if not handled properly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a common example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(0.1 + 0.2); // Output: 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "Because floating point numbers can’t always represent decimal fractions accurately, the result here isn't exactly 0.3. This often surprises beginners but is expected behavior in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to handle this precision problem?"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use `.toFixed()` Method:** This method formats a number to a specific number of decimal places and returns a string. It's useful for displaying results but can be converted back to a number."
+      },
+      {
+        "type": "code",
+        "value": "const sum = 0.1 + 0.2;\nconst fixedSum = Number(sum.toFixed(2));\nconsole.log(fixedSum); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Multiply, then divide:** Convert numbers to integers by multiplying by a power of 10, perform the arithmetic, then divide back."
+      },
+      {
+        "type": "code",
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst result = (a * 10 + b * 10) / 10;\nconsole.log(result); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use a library:** For complex or critical calculations, use libraries like `decimal.js` or `big.js`, which handle decimal math precisely."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a quick example using `decimal.js` (after installing it with `npm install decimal.js`):"
+      },
+      {
+        "type": "code",
+        "value": "const Decimal = require('decimal.js');\nconst sumDecimal = new Decimal(0.1).plus(new Decimal(0.2));\nconsole.log(sumDecimal.toString()); // Output: '0.3'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Precision issues in JavaScript arithmetic stem from the way numbers are stored, but with simple tricks like `.toFixed()`, manual scaling, or specialized libraries, you can handle these edge cases effectively. Always choose the method that best fits your project's complexity and precision requirements."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-advanced-typescript-generics-for-scalable-code-architecture",
+    "title": "Mastering Advanced TypeScript Generics for Scalable Code Architecture",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use advanced TypeScript generics to build scalable, reusable, and type-safe code architectures with beginner-friendly examples and explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are powerful tools that allow you to write flexible and reusable code while keeping type safety intact. In this tutorial, we'll go beyond basic generics and explore advanced concepts such as constrained generics, generic utility types, and generic classes to help you build scalable code architectures."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a quick recap: generics let you define a function, class, or interface that works with any data type, which you specify when using it. This reduces redundancy and increases flexibility."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst num = identity<number>(42);\nconst str = identity<string>('hello');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Constraining Generics\nSometimes, you want your generic type to follow certain rules or extend a particular type. This is done using `extends`. For example, let's create a function that only accepts objects with a `length` property."
+      },
+      {
+        "type": "code",
+        "value": "interface HasLength {\n  length: number;\n}\n\nfunction logLength<T extends HasLength>(item: T): T {\n  console.log('Length:', item.length);\n  return item;\n}\n\nlogLength('Hello!');   // Length: 6\nlogLength([1, 2, 3]); // Length: 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Interfaces and Classes\nYou can also create generic interfaces and classes. This is very useful for building scalable architectures such as data handling, APIs, or UI components."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiResponse<T> {\n  data: T;\n  status: number;\n}\n\nclass Repository<T> {\n  private items: T[] = [];\n\n  add(item: T) {\n    this.items.push(item);\n  }\n\n  getAll(): T[] {\n    return this.items;\n  }\n}\n\nconst numberRepo = new Repository<number>();\nnumberRepo.add(1);\nnumberRepo.add(2);\nconsole.log(numberRepo.getAll()); // [1, 2]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Utility Generics\nTypeScript provides some built-in generic utility types such as `Partial`, `Readonly`, and `Pick` which are helpful in real-world applications to create scalable and maintainable code."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nfunction updateUser(user: User, fieldsToUpdate: Partial<User>): User {\n  return { ...user, ...fieldsToUpdate };\n}\n\nconst user1: User = { id: 1, name: 'Alice', email: 'alice@example.com' };\nconst updatedUser = updateUser(user1, { email: 'alice@newdomain.com' });\nconsole.log(updatedUser);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Constraints with keyof\nYou can also enforce that a generic type is a key of a specific interface using the `keyof` constraint. This helps make functions more precise and safe."
+      },
+      {
+        "type": "code",
+        "value": "function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n\nconst person = { name: 'Bob', age: 25 };\nconsole.log(getProperty(person, 'name')); // Bob\n// console.log(getProperty(person, 'unknown')); // Error: Argument of type '\"unknown\"' is not assignable"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nAdvanced generics empower you to write scalable and type-safe code architectures in TypeScript. By leveraging constraints, generic classes and interfaces, utility types, and keyof, you can build reusable components and functions that adapt to various data structures. Practice these patterns and integrate them into your projects to maximize maintainability and scalability."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-advanced-type-guards-for-robust-system-design",
+    "title": "Mastering TypeScript's Advanced Type Guards for Robust System Design",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's advanced type guards to catch errors early and build more reliable, maintainable systems.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript enhances JavaScript by adding static types, helping developers find bugs early. One powerful feature is type guards, which let you narrow down types during code execution, reducing runtime errors. This article will guide beginners through advanced type guards to build robust systems with fewer bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "A type guard is a way to tell TypeScript more about the type of a variable within a conditional block. This lets TypeScript check your code more accurately and avoid errors. Basic type guards use simple checks like `typeof` or `instanceof`. Advanced type guards use user-defined functions for complex data structures."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you're working with a system handling different shapes. You want to perform shape-specific calculations but avoid errors when the shape is unknown or malformed. Here's how you can create an advanced type guard."
+      },
+      {
+        "type": "code",
+        "value": "interface Circle {\n  kind: 'circle';\n  radius: number;\n}\n\ninterface Rectangle {\n  kind: 'rectangle';\n  width: number;\n  height: number;\n}\n\ntype Shape = Circle | Rectangle;\n\n// User-defined type guard function\nfunction isCircle(shape: Shape): shape is Circle {\n  return shape.kind === 'circle' && typeof shape.radius === 'number';\n}\n\nfunction calculateArea(shape: Shape): number {\n  if (isCircle(shape)) {\n    // TypeScript knows 'shape' is Circle here\n    return Math.PI * shape.radius * shape.radius;\n  } else {\n    // Here, TypeScript infers 'shape' is Rectangle\n    return shape.width * shape.height;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `isCircle` function performs a runtime check to see if `shape` matches the `Circle` interface. The key part is the return type `shape is Circle`, which tells TypeScript this is a type guard. Inside the `calculateArea` function, TypeScript narrows the type correctly, preventing invalid property access."
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced type guards help avoid common errors, like accessing properties that don’t exist on some shapes. By using them, your system becomes more reliable and maintainable, catching mistakes before they happen at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, you can create even more complex guards for nested objects, arrays, or custom validation logic, improving your system's robustness further."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering advanced type guards enables you to write clearer and safer TypeScript code. It reduces bugs by confirming your assumptions about data types during development, which is key to designing dependable systems."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-typeerror-vs-valueerror-handling-conversion-conflicts",
+    "title": "Understanding Python's TypeError vs ValueError: How to Handle Conversion Conflicts",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the difference between Python's TypeError and ValueError, why these errors occur during data conversion, and how to handle them effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start programming in Python, you often work with different data types and try to convert values from one type to another. During these conversions, errors may occur, especially if the value or type isn't what Python expects. Two common errors you will encounter are TypeError and ValueError. Understanding the difference between these errors is important to write better and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeError occurs when you try to perform an operation on a data type that is not supported or incompatible. This means Python expects one type, but you gave it another. For example, trying to convert a list directly to an integer will raise a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "my_list = [1, 2, 3]\nnum = int(my_list)  # This will cause TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "ValueError happens when the type of the input is correct but the value itself is invalid for the intended operation. For instance, converting a string that does not represent a number into an integer results in a ValueError."
+      },
+      {
+        "type": "code",
+        "value": "my_str = \"abc\"\nnum = int(my_str)  # This will cause ValueError"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how to handle these errors using try-except blocks. This allows your program to continue running even if a conversion fails, and you can provide helpful error messages or fallback logic."
+      },
+      {
+        "type": "code",
+        "value": "def convert_to_int(value):\n    try:\n        return int(value)\n    except TypeError:\n        print(f\"TypeError: Cannot convert {type(value)} to int.\")\n    except ValueError:\n        print(f\"ValueError: The value '{value}' is not a valid integer.\")\n\n# Test the function\nconvert_to_int([1, 2, 3])  # TypeError\nconvert_to_int(\"hello\")    # ValueError\nconvert_to_int(\"123\")      # 123"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this approach, you can distinguish between issues caused by incorrect types versus incorrect values and handle each appropriately. This improves debugging and user feedback in your programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, remember:\n- TypeError: Wrong data type for an operation.\n- ValueError: Right data type but invalid value for the operation.\nHandling both correctly leads to more robust Python code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-indexing-strategies-for-optimal-sql-query-performance",
+    "title": "Mastering Indexing Strategies for Optimal SQL Query Performance",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn beginner-friendly indexing strategies to speed up your SQL queries and optimize database performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=BIlFTFrEFOI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Indexing is a powerful way to improve the speed of your SQL queries by allowing the database to find data faster. Think of an index like the index of a book—it helps you quickly locate the page you need instead of searching every page one by one. In this tutorial, we will explore basic indexing concepts and show you how to create and use indexes effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand what an index is. An index is a database structure that stores key values from one or more columns and pointers to corresponding rows in the table. When you query the database, it can use these indexes to avoid scanning the full table."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to create a simple index on a single column:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_lastname ON Employees(LastName);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the index named `idx_lastname` is created on the `LastName` column of the `Employees` table. When you run queries filtering or sorting by `LastName`, the database will use this index to retrieve the results much faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create a composite (multi-column) index if your queries often filter by multiple columns together. For example:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_lastname_firstname ON Employees(LastName, FirstName);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This index will help queries that filter or sort by both `LastName` and `FirstName`."
+      },
+      {
+        "type": "paragraph",
+        "value": "However, be mindful that indexes speed up reads but can slow down writes like INSERT, UPDATE or DELETE because the indexes need to be updated too. So, avoid creating indexes on columns that change very frequently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Also, remember that indexes are most beneficial on columns that are used frequently in WHERE clauses, JOIN conditions, or ORDER BY clauses."
+      },
+      {
+        "type": "paragraph",
+        "value": "To drop an index if it's no longer needed, you can use:"
+      },
+      {
+        "type": "code",
+        "value": "DROP INDEX idx_lastname ON Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, start by identifying columns used in fast lookups and create indexes on them. Use composite indexes for multiple frequently-used columns in queries. Always balance between query speed and write performance, and avoid over-indexing."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these basic indexing strategies, you'll make your SQL queries run faster and your database more efficient."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-for-complex-data-aggregations",
+    "title": "Optimizing SQL Queries for Complex Data Aggregations Without Slowdowns",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips and techniques to optimize SQL queries involving complex aggregations, preventing common performance slowdowns.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL queries that involve complex data aggregations—like multiple JOINs and GROUP BY clauses—it's easy to encounter performance issues. Beginners often face slowdowns because queries are not optimized for the database engine's execution plan."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some practical methods to help optimize such SQL queries and reduce slowdowns."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use Indexes Effectively: Ensure columns used in JOIN conditions, WHERE clauses, and GROUP BY statements are indexed. Indexes dramatically speed up data retrieval and aggregation."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Avoid SELECT *: Select only the columns you need. Retrieving unnecessary columns can slow down query processing, especially in aggregations."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use Subqueries or CTEs to Break Down Complex Logic: Common Table Expressions (CTEs) or subqueries can simplify the aggregation process and help the optimizer execute queries more efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Filter Early: Apply WHERE conditions before aggregations to reduce the number of rows processed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of an optimized SQL query including these principles:"
+      },
+      {
+        "type": "code",
+        "value": "WITH FilteredSales AS (\n  SELECT\n    product_id,\n    quantity,\n    sale_date\n  FROM sales\n  WHERE sale_date >= '2024-01-01'\n)\n\nSELECT\n  p.product_name,\n  SUM(fs.quantity) AS total_quantity_sold\nFROM FilteredSales fs\nJOIN products p ON fs.product_id = p.product_id\nGROUP BY p.product_name\nORDER BY total_quantity_sold DESC;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the CTE FilteredSales pre-filters sales data by date before joining with the products table. By reducing the data early and only selecting needed columns, this approach minimizes the workload on the database engine."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, optimize your aggregations by indexing, filtering early, selecting specific columns, and breaking complex queries into manageable parts. These steps help ensure your SQL queries run smoothly even with large and complex datasets."
+      }
+    ]
   }
 ];
