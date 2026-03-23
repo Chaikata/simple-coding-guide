@@ -16,6 +16,13 @@ const client = new OpenAI({
 
 const LANGUAGES = ["javascript", "python", "sql", "cpp"];
 const DIFFICULTIES = ["beginner", "intermediate", "advanced"];
+const CHALLENGE_TYPES = [
+  "build_function",
+  "fix_bug",
+  "predict_output",
+  "refactor",
+  "mini_project",
+];
 
 const LIMITS = {
   maxPerRun: 6,
@@ -117,6 +124,44 @@ function pickDifficulty(index) {
   return DIFFICULTIES[index % DIFFICULTIES.length];
 }
 
+function pickChallengeType() {
+  return CHALLENGE_TYPES[Math.floor(Math.random() * CHALLENGE_TYPES.length)];
+}
+
+function getCategoryForType(challengeType, language) {
+  if (language === "sql") {
+    switch (challengeType) {
+      case "build_function":
+        return "queries";
+      case "fix_bug":
+        return "debugging";
+      case "predict_output":
+        return "query-analysis";
+      case "refactor":
+        return "optimization";
+      case "mini_project":
+        return "data-modeling";
+      default:
+        return "general";
+    }
+  }
+
+  switch (challengeType) {
+    case "build_function":
+      return "functions";
+    case "fix_bug":
+      return "debugging";
+    case "predict_output":
+      return "logic";
+    case "refactor":
+      return "code-quality";
+    case "mini_project":
+      return "mini-projects";
+    default:
+      return "general";
+  }
+}
+
 async function retry(label, fn) {
   let lastError;
 
@@ -132,21 +177,36 @@ async function retry(label, fn) {
   throw lastError;
 }
 
-async function generateChallenge(language, targetDifficulty) {
+async function generateChallenge(language, targetDifficulty, challengeType) {
+  const suggestedCategory = getCategoryForType(challengeType, language);
+
   const prompt = `
 Create ONE coding challenge for Dev Duel.
 
 Language: ${language}
 Target difficulty: ${targetDifficulty}
+Challenge type: ${challengeType}
+Suggested category: ${suggestedCategory}
+
+Type rules:
+- build_function: the user writes a function or query from scratch
+- fix_bug: include broken code or a broken query that the user must fix
+- predict_output: show code/query logic and ask what the output/result will be
+- refactor: improve messy code/query while keeping behavior correct
+- mini_project: a slightly larger real-world task
+
+Difficulty rules:
+- beginner: simple syntax, variables, loops, conditionals, basic functions, simple SELECT/FILTER queries
+- intermediate: multi-step logic, arrays/lists, objects/maps, joins, subqueries, debugging, deeper reasoning
+- advanced: larger scope, optimization, architecture, complex transformations, mini-project style work
 
 Requirements:
 - The difficulty MUST be exactly "${targetDifficulty}"
+- The challenge type MUST clearly match "${challengeType}"
 - Must be a real coding challenge, not theory
-- Beginner: simple syntax, variables, loops, conditionals, basic functions
-- Intermediate: multi-step logic, arrays/lists, objects/maps, joins, subqueries, debugging, slightly deeper reasoning
-- Advanced: larger problem scope, optimization, architecture, multi-step transformations, mini-project style work
 - Include a clear SEO-friendly title
 - Include a short description
+- Include category
 - Include a practical challenge prompt
 - Include 2-4 guidance points
 - Include 2-3 hints
@@ -162,7 +222,7 @@ Return ONLY JSON:
   "title": "string",
   "description": "string",
   "difficulty": "${targetDifficulty}",
-  "category": "functions",
+  "category": "${suggestedCategory}",
   "estimatedTime": "10 minutes",
   "prompt": "string",
   "guidance": ["string", "string"],
@@ -183,7 +243,9 @@ Return ONLY JSON:
   const difficulty = String(data.difficulty || "").trim().toLowerCase();
   if (difficulty !== targetDifficulty) {
     throw new Error(
-      `Model returned wrong difficulty. Expected ${targetDifficulty}, got ${difficulty || "missing"}`
+      `Model returned wrong difficulty. Expected ${targetDifficulty}, got ${
+        difficulty || "missing"
+      }`
     );
   }
 
@@ -192,7 +254,7 @@ Return ONLY JSON:
     title: String(data.title || "").trim(),
     language,
     difficulty,
-    category: String(data.category || "general").trim(),
+    category: String(data.category || suggestedCategory).trim().toLowerCase(),
     description: String(data.description || "").trim(),
     prompt: String(data.prompt || "").trim(),
     guidance: Array.isArray(data.guidance)
@@ -239,15 +301,19 @@ async function run() {
     const language =
       LANGUAGES[Math.floor(Math.random() * LANGUAGES.length)];
     const targetDifficulty = pickDifficulty(attemptIndex);
+    const challengeType = pickChallengeType();
     attemptIndex++;
 
     let duel;
     try {
-      duel = await retry(`duel ${language}/${targetDifficulty}`, () =>
-        generateChallenge(language, targetDifficulty)
+      duel = await retry(
+        `duel ${language}/${targetDifficulty}/${challengeType}`,
+        () => generateChallenge(language, targetDifficulty, challengeType)
       );
     } catch (error) {
-      console.log(`Failed ${language}/${targetDifficulty}: ${error.message}`);
+      console.log(
+        `Failed ${language}/${targetDifficulty}/${challengeType}: ${error.message}`
+      );
       continue;
     }
 
@@ -298,7 +364,9 @@ async function run() {
     runTitles.add(normalizedTitle);
     allDuels.push(duel);
 
-    console.log(`Added: ${duel.title} [${duel.difficulty}]`);
+    console.log(
+      `Added: ${duel.title} [${duel.difficulty}] [${challengeType}]`
+    );
   }
 
   fs.writeFileSync(
