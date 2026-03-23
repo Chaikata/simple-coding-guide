@@ -1,0 +1,150 @@
+export type DevDuelDifficulty = "beginner" | "intermediate" | "advanced";
+
+export type DevDuelChallenge = {
+  slug: string;
+  title: string;
+  language: "javascript" | "python" | "sql" | "cpp";
+  difficulty: DevDuelDifficulty;
+  category: string;
+  description: string;
+  prompt: string;
+  guidance: string[];
+  hints: string[];
+  starterCode?: string;
+  expectedOutput?: string;
+  concepts: string[];
+  estimatedTime: string;
+  relatedTutorialSlugs?: string[];
+  isFeatured?: boolean;
+};
+
+export const supportedDevDuelLanguages = [
+  {
+    slug: "javascript",
+    name: "JavaScript",
+    description: "Practice fundamentals, arrays, functions, async logic, and debugging.",
+  },
+  {
+    slug: "python",
+    name: "Python",
+    description: "Sharpen syntax, loops, functions, lists, dictionaries, and more.",
+  },
+  {
+    slug: "sql",
+    name: "SQL",
+    description: "Train with filtering, joins, grouping, subqueries, and window functions.",
+  },
+  {
+    slug: "cpp",
+    name: "C++",
+    description: "Work on variables, loops, functions, OOP, and problem-solving.",
+  },
+] as const;
+
+export const devDuels: DevDuelChallenge[] = [
+  {
+    slug: "sum-two-values",
+    title: "Sum Two Values",
+    language: "javascript",
+    difficulty: "beginner",
+    category: "functions",
+    description: "Write a function that returns the sum of two numbers.",
+    prompt:
+      "Create a function called addNumbers that takes two parameters and returns their sum.",
+    guidance: [
+      "Create a function with two parameters.",
+      "Use the return keyword.",
+      "Test the function with simple numeric values.",
+    ],
+    hints: [
+      "The function should accept two inputs.",
+      "You want to return a + b.",
+    ],
+    starterCode: `function addNumbers(a, b) {
+  // your code here
+}`,
+    expectedOutput: "addNumbers(2, 3) should return 5.",
+    concepts: ["functions", "parameters", "return values"],
+    estimatedTime: "5 minutes",
+    isFeatured: true,
+  },
+  {
+    slug: "count-even-numbers",
+    title: "Count Even Numbers",
+    language: "python",
+    difficulty: "beginner",
+    category: "loops",
+    description: "Count how many even numbers appear in a list.",
+    prompt:
+      "Write a function called count_even_numbers that receives a list of integers and returns how many of them are even.",
+    guidance: [
+      "Loop through each number in the list.",
+      "Check whether the number is divisible by 2.",
+      "Increase a counter when the number is even.",
+    ],
+    hints: [
+      "Use the modulo operator.",
+      "You can start a counter at 0.",
+    ],
+    starterCode: `def count_even_numbers(numbers):
+    # your code here
+    pass`,
+    expectedOutput: "count_even_numbers([1, 2, 3, 4, 6]) should return 3.",
+    concepts: ["loops", "conditionals", "lists"],
+    estimatedTime: "7 minutes",
+    isFeatured: true,
+  },
+  {
+    slug: "find-second-highest-salary",
+    title: "Find the Second Highest Salary",
+    language: "sql",
+    difficulty: "intermediate",
+    category: "subqueries",
+    description: "Return the second highest salary from an employees table.",
+    prompt:
+      "Write a SQL query that returns the second highest salary from an employees table.",
+    guidance: [
+      "Think about ordering salaries from highest to lowest.",
+      "You may need DISTINCT if duplicate salaries exist.",
+      "A subquery can help isolate the answer.",
+    ],
+    hints: [
+      "Try combining DISTINCT with ORDER BY.",
+      "LIMIT and OFFSET may help depending on SQL dialect.",
+    ],
+    expectedOutput:
+      "The query should return the second highest unique salary value.",
+    concepts: ["subqueries", "sorting", "distinct"],
+    estimatedTime: "10 minutes",
+    isFeatured: true,
+  },
+  {
+    slug: "reverse-string-without-built-ins",
+    title: "Reverse a String Without Built-Ins",
+    language: "cpp",
+    difficulty: "intermediate",
+    category: "strings",
+    description: "Reverse a string manually without using built-in reverse helpers.",
+    prompt:
+      "Write a C++ function that takes a string and returns it reversed without using a built-in reverse function.",
+    guidance: [
+      "Use a loop from the end of the string to the beginning.",
+      "Build a new result string.",
+      "Return the final reversed string.",
+    ],
+    hints: [
+      "Start at index length - 1.",
+      "Append characters one by one to a new string.",
+    ],
+    starterCode: `#include <string>
+using namespace std;
+
+string reverseString(string text) {
+    // your code here
+}`,
+    expectedOutput: `reverseString("code") should return "edoc".`,
+    concepts: ["strings", "loops", "indexing"],
+    estimatedTime: "12 minutes",
+    isFeatured: true,
+  },
+];

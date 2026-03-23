@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/dev-duel", label: "Dev Duel" },
   { href: "/javascript", label: "JavaScript" },
   { href: "/typescript", label: "TypeScript" },
   { href: "/python", label: "Python" },
@@ -16,7 +17,7 @@ export default function Navbar() {
           Dev Nest Guide
         </Link>
 
-        <nav className="flex flex-wrap gap-5 text-sm text-gray-300">
+        <nav className="flex flex-wrap items-center gap-5 text-sm text-gray-300">
           {navLinks.map((link) => (
             <Link
               key={link.href}
