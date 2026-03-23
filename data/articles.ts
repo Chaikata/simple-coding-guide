@@ -17164,5 +17164,561 @@ export const articles = [
         "value": "In summary, mastering SQL window functions involves understanding how to properly use the OVER() clause, recognizing the difference between aggregate and window functions, and applying partitioning when needed. Avoid common syntax errors by double-checking clauses, and practice these beginner-friendly tricks to analyze data more efficiently."
       }
     ]
+  },
+  {
+    "slug": "javascript-es6-features-every-beginner-should-master",
+    "title": "JavaScript ES6 Features Every Beginner Should Master",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the essential JavaScript ES6 features that beginners must know to write modern, clean, and efficient code.",
+    "videoUrl": "https://www.youtube.com/watch?v=NCwa_xi0Uuc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript ES6 (ECMAScript 2015) introduced many powerful features that make coding easier and more enjoyable. If you're new to JavaScript, mastering these features will help you write cleaner, more efficient code and prepare you for modern development. In this tutorial, we'll cover some must-know ES6 features with simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Let and Const**: Before ES6, `var` was used to declare variables, which has some confusing behavior. ES6 introduced `let` and `const` for better variable scoping."
+      },
+      {
+        "type": "code",
+        "value": "let age = 25;\nconst name = 'Alice';\n\nage = 26; // Allowed with let\n// name = 'Bob'; // Error: const variables cannot be reassigned"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use `let` when you expect the variable to change, and `const` when it should stay constant. This helps prevent bugs and makes your code easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Arrow Functions**: Arrow functions provide a shorter syntax for writing functions and don’t have their own `this` context, which solves common problems with function contexts."
+      },
+      {
+        "type": "code",
+        "value": "// Traditional function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst addArrow = (a, b) => a + b;\n\nconsole.log(addArrow(5, 3)); // Outputs 8"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use arrow functions especially for callbacks or short functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Template Literals**: Instead of using awkward string concatenation, template literals let you embed expressions inside backticks (``) using `${}`."
+      },
+      {
+        "type": "code",
+        "value": "const user = 'Bob';\nconst greeting = `Hello, ${user}! Welcome to ES6.`;\nconsole.log(greeting); // Outputs: Hello, Bob! Welcome to ES6."
+      },
+      {
+        "type": "paragraph",
+        "value": "This makes your strings clearer and easier to read."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Destructuring**: Destructuring allows you to unpack values from arrays or objects into variables in a clean and concise way."
+      },
+      {
+        "type": "code",
+        "value": "const person = { name: 'Anna', age: 30 };\nconst { name, age } = person;\n\nconsole.log(name); // Anna\nconsole.log(age);  // 30\n\nconst numbers = [1, 2, 3];\nconst [first, second] = numbers;\nconsole.log(first, second); // 1 2"
+      },
+      {
+        "type": "paragraph",
+        "value": "This helps simplify your code when working with objects or arrays."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Default Parameters**: You can assign default values to function parameters so the function works even if some arguments are missing."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name = 'Guest') {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet()); // Hello, Guest!\nconsole.log(greet('Sam')); // Hello, Sam!"
+      },
+      {
+        "type": "paragraph",
+        "value": "This prevents `undefined` values and makes your functions more robust."
+      },
+      {
+        "type": "paragraph",
+        "value": "6. **Spread Operator**: The spread operator (`...`) lets you expand arrays or objects. It’s great for copying or combining arrays and objects."
+      },
+      {
+        "type": "code",
+        "value": "const fruits = ['apple', 'banana'];\nconst moreFruits = [...fruits, 'orange'];\nconsole.log(moreFruits); // ['apple', 'banana', 'orange']\n\nconst obj1 = { a: 1 };\nconst obj2 = { b: 2 };\nconst merged = { ...obj1, ...obj2 };\nconsole.log(merged); // { a: 1, b: 2 }"
+      },
+      {
+        "type": "paragraph",
+        "value": "7. **Classes**: ES6 introduced class syntax, making it easier to create objects and deal with inheritance."
+      },
+      {
+        "type": "code",
+        "value": "class Person {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n\n  greet() {\n    console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);\n  }\n}\n\nconst person1 = new Person('John', 28);\nperson1.greet(); // Hi, I'm John and I'm 28 years old."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using classes can make object-oriented programming in JavaScript cleaner and easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nMastering these ES6 features is an excellent first step toward becoming a proficient JavaScript developer. Practice using `let` and `const`, arrows, template literals, destructuring, default parameters, spread operator, and classes in your projects to write modern and clean code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-javascript-memory-leaks-deep-dive-into-allocation-patterns-and-optimization",
+    "title": "Mastering JavaScript Memory Leaks: Deep Dive into Allocation Patterns and Optimization",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to identify, understand, and fix JavaScript memory leaks by exploring common allocation patterns and best optimization practices for cleaner, faster code.",
+    "videoUrl": "https://www.youtube.com/watch?v=WqNqeMjd28I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in JavaScript can cause your web app to slow down or even crash over time. As a beginner, understanding how memory is allocated and what causes leaks is crucial to writing efficient code. This article will guide you through common allocation patterns that lead to leaks and simple ways to optimize your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript automatically manages memory with garbage collection, meaning you don’t usually handle memory directly. However, some coding patterns can prevent the garbage collector from freeing unused memory, causing leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common source of memory leaks is holding references to objects or variables that are no longer needed. For example, attaching event listeners without removing them can keep references alive."
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const button = document.getElementById('myButton');\n  button.addEventListener('click', () => {\n    console.log('Clicked!');\n  });\n}\n\n// If you call setup several times without removing listeners, listeners pile up, leaking memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, remove event listeners when they are no longer needed using `removeEventListener`."
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const button = document.getElementById('myButton');\n  function onClick() {\n    console.log('Clicked!');\n  }\n  button.addEventListener('click', onClick);\n\n  // Later, when no longer needed\n  // button.removeEventListener('click', onClick);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures can also cause memory leaks if they unintentionally capture large objects or variables that are no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "function createHeavyClosure() {\n  const bigArray = new Array(1000000).fill('data');\n  return function() {\n    console.log(bigArray[0]);\n  };\n}\n\nconst closure = createHeavyClosure();\n// bigArray stays in memory as long as closure exists"
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize, avoid keeping references to large objects longer than necessary. If you only need parts of the data, copy or extract them instead of closing over the entire object."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another optimization tip is to nullify or overwrite variables that hold large data once you're done using them to help garbage collector reclaim that memory."
+      },
+      {
+        "type": "code",
+        "value": "let hugeData = new Array(1000000).fill('info');\n// Use hugeData for some operations\n// When finished:\nhugeData = null; // Help GC release memory"
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, using browser developer tools' Memory tab can help you track down memory leaks. Take heap snapshots before and after actions to see what objects remain in memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, avoid memory leaks in JavaScript by:\n- Removing event listeners when no longer needed\n- Being careful with closures capturing large data\n- Nullifying references to big objects\n- Monitoring memory usage with tools\n\nWith these practices, your JavaScript applications will run more smoothly and efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-microservices-with-typescript-and-nestjs",
+    "title": "Building Scalable Microservices with TypeScript and NestJS: A Step-by-Step Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable microservices using TypeScript and NestJS with practical, beginner-friendly steps.",
+    "videoUrl": "https://www.youtube.com/watch?v=0M8AYU_hPas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices architecture allows developers to build scalable and maintainable applications by breaking down a complex system into smaller, independent services. In this guide, you will learn how to create scalable microservices using TypeScript and NestJS, a progressive Node.js framework that makes building efficient and reliable server-side applications easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, make sure you have Node.js and npm installed on your machine. Then, install the NestJS CLI globally using the following command:"
+      },
+      {
+        "type": "code",
+        "value": "npm install -g @nestjs/cli"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, create a new NestJS project for your microservice:"
+      },
+      {
+        "type": "code",
+        "value": "nest new user-service"
+      },
+      {
+        "type": "paragraph",
+        "value": "Navigate into your project directory:"
+      },
+      {
+        "type": "code",
+        "value": "cd user-service"
+      },
+      {
+        "type": "paragraph",
+        "value": "NestJS supports various transport layers for microservices communication. For this beginner tutorial, we will use TCP transport, which is simple and effective for internal communication between microservices."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's set up the main microservice server. Open `src/main.ts` and update it as follows:"
+      },
+      {
+        "type": "code",
+        "value": "import { NestFactory } from '@nestjs/core';\nimport { MicroserviceOptions, Transport } from '@nestjs/microservices';\nimport { AppModule } from './app.module';\n\nasync function bootstrap() {\n  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {\n    transport: Transport.TCP,\n    options: {\n      host: '127.0.0.1',\n      port: 3001,\n    },\n  });\n  await app.listen();\n  console.log('User microservice is listening on port 3001');\n}\nbootstrap();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, create a simple service that listens to messages and responds. Modify `src/app.service.ts` to handle a request pattern called 'get_user':"
+      },
+      {
+        "type": "code",
+        "value": "import { Injectable } from '@nestjs/common';\nimport { MessagePattern } from '@nestjs/microservices';\n\n@Injectable()\nexport class AppService {\n  // Simulate user data\n  private users = [\n    { id: 1, name: 'Alice' },\n    { id: 2, name: 'Bob' },\n  ];\n\n  @MessagePattern({ cmd: 'get_user' })\n  getUser(data: { id: number }) {\n    const user = this.users.find(user => user.id === data.id);\n    return user || { error: 'User not found' };\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "We also need to register the service in the module file. Confirm your `src/app.module.ts` contains the following:"
+      },
+      {
+        "type": "code",
+        "value": "import { Module } from '@nestjs/common';\nimport { AppService } from './app.service';\n\n@Module({\n  providers: [AppService],\n})\nexport class AppModule {}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, we will create a separate client service that communicates with this user microservice. Create a new directory outside of your current project, for example `client-service`, and initialize another NestJS app:"
+      },
+      {
+        "type": "code",
+        "value": "nest new client-service\ncd client-service"
+      },
+      {
+        "type": "paragraph",
+        "value": "Install the microservices package if not included:"
+      },
+      {
+        "type": "code",
+        "value": "npm install --save @nestjs/microservices"
+      },
+      {
+        "type": "paragraph",
+        "value": "In your client service, set up a client proxy to communicate with the user microservice. Modify `src/app.service.ts` like this:"
+      },
+      {
+        "type": "code",
+        "value": "import { Injectable, OnModuleInit } from '@nestjs/common';\nimport { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';\n\n@Injectable()\nexport class AppService implements OnModuleInit {\n  private client: ClientProxy;\n\n  onModuleInit() {\n    this.client = ClientProxyFactory.create({\n      transport: Transport.TCP,\n      options: { host: '127.0.0.1', port: 3001 },\n    });\n  }\n\n  async getUser(id: number) {\n    return this.client.send({ cmd: 'get_user' }, { id }).toPromise();\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In a controller, you can now invoke this service method to fetch user data:"
+      },
+      {
+        "type": "code",
+        "value": "import { Controller, Get, Param } from '@nestjs/common';\nimport { AppService } from './app.service';\n\n@Controller('users')\nexport class AppController {\n  constructor(private readonly appService: AppService) {}\n\n  @Get(':id')\n  async getUser(@Param('id') id: string) {\n    const userId = parseInt(id, 10);\n    return await this.appService.getUser(userId);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, start your user microservice by running `npm run start` inside `user-service` directory, and start the client service by running `npm run start` inside the `client-service` directory. Your client will now forward user-related HTTP requests to the user microservice using TCP."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple example shows how NestJS and TypeScript allow you to build microservices that communicate efficiently. You can expand this architecture by adding more microservices, using message brokers like RabbitMQ or Kafka, and applying advanced patterns such as service discovery and distributed tracing for better scalability."
+      },
+      {
+        "type": "paragraph",
+        "value": "With this foundation, you’re ready to explore building real-world scalable microservices using NestJS."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-typescripts-strict-type-checking-to-optimize-runtime-performance",
+    "title": "Leveraging TypeScript’s Strict Type Checking to Optimize Runtime Performance",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how using TypeScript's strict type checking can help catch errors early and improve your code's runtime performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=iiGPWMyMGXI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool that adds static typing to JavaScript, enabling developers to catch errors during development instead of at runtime. One of the key features that makes TypeScript so effective is its strict type checking. This article will explain how enabling and leveraging strict type checking can help you write more efficient and error-free code, ultimately optimizing your runtime performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Strict type checking is a set of TypeScript compiler options that enforce rigorous type rules. By turning on strict mode, TypeScript can detect more potential bugs—such as null or undefined values, incorrect types, and unreachable code—before your code runs. This early error detection reduces the need for extra runtime checks, which can slow down your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "To enable strict type checking, update your `tsconfig.json` file with the following setting:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"strict\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "With strict mode enabled, TypeScript checks several aspects, including `noImplicitAny`, `strictNullChecks`, and `strictFunctionTypes`. This means you must explicitly handle cases like null or undefined values, which helps avoid common runtime errors such as \"cannot read property of undefined.\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider this example without strict null checking:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log(`Hello, ${name.toUpperCase()}`);\n}\n\ngreet(null); // Runtime error: Cannot read property 'toUpperCase' of null"
+      },
+      {
+        "type": "paragraph",
+        "value": "When `strictNullChecks` is enabled, TypeScript will force you to handle the possibility of `null`:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string | null) {\n  if (name) {\n    console.log(`Hello, ${name.toUpperCase()}`);\n  } else {\n    console.log(\"Hello, guest!\");\n  }\n}\n\ngreet(null); // Outputs: Hello, guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "By doing this, your code becomes more robust and eliminates the need for runtime error handling logic or try-catch blocks, improving runtime performance. Additionally, your code is easier to debug and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using TypeScript's strict mode helps catch bugs early during development, promotes safer code practices, and reduces unnecessary runtime checks. All these lead to optimized runtime performance and more reliable applications."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-asyncio-vs-threading-for-concurrent-programming",
+    "title": "Comparing Python's asyncio vs threading for Concurrent Programming",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the differences between Python's asyncio and threading modules for concurrent programming with simple examples to help beginners understand which to use and when.",
+    "videoUrl": "https://www.youtube.com/watch?v=QlkXji08lno",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Concurrent programming allows you to run multiple tasks seemingly at the same time, improving the efficiency of your programs. In Python, two popular ways to achieve concurrency are using the asyncio library and the threading module. This tutorial will help you understand the basic differences between asyncio and threading, and show simple examples of each."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is threading?\nThreading allows your program to run multiple threads at the same time, where each thread can execute different parts of code concurrently. This takes advantage of multiple CPU cores and can be useful for I/O-bound or some CPU-bound tasks. However, threads share memory, so you need to be careful about data access and synchronization."
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport time\n\ndef print_numbers():\n    for i in range(1, 6):\n        print(f\"Thread: {i}\")\n        time.sleep(1)\n\n# Create a thread that runs the print_numbers function\nthread = threading.Thread(target=print_numbers)\n\n# Start the thread\nthread.start()\n\n# Continue with the main thread\nfor i in range(1, 6):\n    print(f\"Main: {i}\")\n    time.sleep(1)\n\n# Wait for the thread to finish\nthread.join()"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this threading example, the main program and the new thread both print numbers concurrently. You can see outputs from both threads interleaved, which shows how they run in parallel."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is asyncio?\nAsyncio is a library to write concurrent code using the async/await syntax. Instead of multiple threads, asyncio uses a single-threaded event loop to manage tasks cooperatively. It's well suited for I/O-bound tasks like network or file operations because it can handle many tasks without creating new threads."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def print_numbers():\n    for i in range(1, 6):\n        print(f\"Asyncio: {i}\")\n        await asyncio.sleep(1)\n\nasync def main():\n    # Schedule two coroutines to run concurrently\n    await asyncio.gather(\n        print_numbers(),\n        print_numbers()\n    )\n\n# Run the main coroutine\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "This asyncio example runs two copies of the print_numbers coroutine concurrently. The output interleaves the print statements, demonstrating how the event loop switches between tasks without threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key differences to remember:\n- **Threads** run in parallel and can fully utilize multiple CPU cores but require careful handling of shared memory.\n- **Asyncio** runs in a single thread using an event loop and is simpler for managing many I/O-bound tasks without the complexity of thread synchronization.\n\nFor beginners, asyncio is often easier to use for network or file I/O concurrency, whereas threading might be better for CPU-bound tasks or when external libraries already use threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Use **threading** if you need true parallelism or have CPU-bound tasks.\n- Use **asyncio** if you're mostly working with I/O-bound tasks and want lightweight concurrency.\n- Both techniques can improve your program's responsiveness and throughput when used appropriately."
+      },
+      {
+        "type": "paragraph",
+        "value": "With this introduction and examples, you can start experimenting with both asyncio and threading to find which fits your Python projects best!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-exception-hierarchy-beginner-guide",
+    "title": "Understanding Python's Exception Hierarchy: A Beginner's Guide",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the basics of Python’s exception hierarchy to better understand error handling and improve your debugging skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, errors can happen. These errors are called exceptions. Understanding Python's exception hierarchy helps you handle errors effectively, making your code more reliable. This guide introduces you to the basics of Python’s exception hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "At the top of Python's exception hierarchy is the built-in BaseException class. Every other exception inherits from this. Most user-defined and standard exceptions inherit from the Exception class, which itself inherits from BaseException. This distinction is important to understand when you write try-except blocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simplified view of the top of the hierarchy:"
+      },
+      {
+        "type": "code",
+        "value": "BaseException\n  ├── SystemExit\n  ├── KeyboardInterrupt\n  ├── GeneratorExit\n  └── Exception\n        ├── ArithmeticError\n        ├── LookupError\n        ├── ValueError\n        └── ... (many others)"
+      },
+      {
+        "type": "paragraph",
+        "value": "BaseException is reserved mostly for system-exit exceptions like SystemExit and KeyboardInterrupt. Normal error handling usually works with Exception and its subclasses. For example, ValueError is a subclass of Exception and is raised when a function receives an argument of the right type but inappropriate value."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example showing how you can catch different exceptions using their hierarchy:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input(\"Enter a number: \"))\n    result = 10 / number\nexcept ValueError:\n    print(\"Oops! That was not a valid number.\")\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nexcept Exception:\n    print(\"An unexpected error occurred.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if the user enters something that cannot be converted to an integer, ValueError is caught. If the user enters 0, the program raises a ZeroDivisionError, which is also handled. The last except block catches any other error that inherits from Exception."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, learning the exception hierarchy helps you write better error handling code by choosing the right exceptions to catch. Use specific exceptions when possible for clearer, more maintainable programs."
+      }
+    ]
+  },
+  {
+    "slug": "handling-null-values-in-complex-sql-queries-practical-edge-case-tutorials",
+    "title": "Handling Null Values in Complex SQL Queries: Practical Edge Case Tutorials",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to effectively handle NULL values in complex SQL queries with beginner-friendly tutorials covering COALESCE, ISNULL, NULLIF, and JOIN edge cases.",
+    "videoUrl": "https://www.youtube.com/watch?v=xY3Bh0eXFFs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with NULL values is a common challenge when writing complex SQL queries. NULLs represent missing or unknown data, and if you don't handle them correctly, your queries can return unexpected results or errors. In this tutorial, we'll explore practical edge cases involving NULL values and show you how to manage them using simple SQL techniques."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding NULL and its Behavior\nNULL is not the same as zero or an empty string. It means 'no value.' When comparing NULL values, you must use IS NULL or IS NOT NULL instead of = or != because NULL represents an unknown."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using COALESCE to Replace NULLs\nCOALESCE returns the first non-NULL value in a list. It's useful when you want a default value instead of NULL."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  COALESCE(phone, 'No Phone') AS phone_number\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query replaces NULL phone numbers with 'No Phone', making the output easier to read and interpret."
+      },
+      {
+        "type": "paragraph",
+        "value": "### ISNULL Function (SQL Server Specific)\nSQL Server offers ISNULL which works like COALESCE but only with two arguments."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  ISNULL(phone, 'No Phone') AS phone_number\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use ISNULL when you only want to check one alternative value quickly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### NULLIF to Avoid Division by Zero Errors\nWhen dividing columns, division by zero will cause an error. Use NULLIF to return NULL if the denominator is zero."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sales / NULLIF(target, 0) AS sales_ratio\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If target is zero, NULLIF returns NULL which avoids division by zero errors and resulting query failure."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling NULL in JOIN Queries\nWhen joining tables, NULLs can cause rows to be excluded unintentionally. Using LEFT JOIN instead of INNER JOIN shows all rows from the first table, even if there is no match."
+      },
+      {
+        "type": "code",
+        "value": "SELECT e.employee_id, d.department_name\nFROM employees e\nLEFT JOIN departments d ON e.department_id = d.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns all employees, even those without a department (NULL department_id). Without LEFT JOIN, employees with NULL department_id would be skipped."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Checking for NULLs in WHERE Clauses\nRemember, WHERE column = NULL will not work. Always use IS NULL or IS NOT NULL."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id FROM employees WHERE phone IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This properly filters employees who do not have a phone number recorded."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nHandling NULL values correctly is crucial for accurate SQL query results. Use COALESCE or ISNULL for replacement, NULLIF to guard against division errors, LEFT JOIN for preserving unmatched rows, and always check NULLs with IS NULL or IS NOT NULL conditions. These simple techniques will ensure your queries behave reliably even in edge cases."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-performance-impacts-of-sql-join-types-on-large-datasets",
+    "title": "Comparing Performance Impacts of SQL JOIN Types on Large Datasets",
+    "language": "sql",
+    "type": "errors",
+    "description": "Understand how different SQL JOIN types affect performance on large datasets and learn beginner-friendly tips to avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large datasets in SQL, choosing the right JOIN type can significantly impact query performance. Beginners often face challenges understanding how INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL OUTER JOIN differ not only in results but also in efficiency. This article explains these JOIN types and common errors that slow down queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "INNER JOIN returns only matching records based on the join condition. It is usually the fastest JOIN type because the database only processes rows that meet the criteria."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM Orders o\nINNER JOIN Customers c ON o.CustomerID = c.CustomerID;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "LEFT JOIN returns all records from the left table and matched records from the right table. It can be slower than INNER JOIN especially if the right table is large, because the database retrieves unmatched rows as NULLs."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM Orders o\nLEFT JOIN Customers c ON o.CustomerID = c.CustomerID;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "RIGHT JOIN is similar to LEFT JOIN but returns all records from the right table. Its performance and usage are similar to LEFT JOIN but can be less intuitive and thus prone to logical errors."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM Orders o\nRIGHT JOIN Customers c ON o.CustomerID = c.CustomerID;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "FULL OUTER JOIN returns all matching and non-matching rows from both tables. This is the slowest JOIN type among the common ones since it must scan both tables fully and handle NULLs for non-matches."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM Orders o\nFULL OUTER JOIN Customers c ON o.CustomerID = c.CustomerID;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors that cause slow performance include missing indexes on join columns, joining on non-unique or nullable columns without proper conditions, and retrieving unnecessary columns or rows. Always ensure indexes exist on columns used in JOIN conditions to speed up lookups."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, prefer INNER JOIN when you only need matching data. Use LEFT or RIGHT JOIN only when necessary to include unmatched rows, and FULL OUTER JOIN if you need all data from both tables. Avoid unnecessary joins and always check your query execution plan to identify and fix bottlenecks."
+      }
+    ]
   }
 ];
