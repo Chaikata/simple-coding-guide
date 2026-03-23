@@ -4,11 +4,17 @@ import Footer from "@/components/Footer";
 import Script from "next/script";
 
 export const metadata = {
-  icons: {
-    icon: "/favicon_refined.ico",
+  title: {
+    default: "Dev Nest Guide – Learn Coding with Tutorials, Exercises & Debug Help",
+    template: "%s | Dev Nest Guide",
   },
-  title: "Dev Nest Guide",
-  description: "Beginner-friendly coding tutorials and error explanations.",
+  description:
+    "Learn coding with beginner-friendly tutorials, coding exercises, and real-world debugging help across JavaScript, Python, SQL and more.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 
