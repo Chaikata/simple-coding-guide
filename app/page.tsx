@@ -71,11 +71,7 @@ export default function HomePage() {
             </div>
 
             <div className="rounded-full border border-gray-800 px-4 py-2">
-              4 languages supported
-            </div>
-
-            <div className="rounded-full border border-gray-800 px-4 py-2">
-              More coming
+              4 languages supported (more coming soon)
             </div>
 
             <Link
