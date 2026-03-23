@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { articles } from "@/data/articles";
+import { devDuels } from "@/data/devDuels";
 import SearchBar from "@/components/SearchBar";
 
 const languages = [
@@ -37,9 +38,14 @@ function getTotalArticleCount() {
   return articles.length;
 }
 
+function getTotalDevDuelCount() {
+  return devDuels.length;
+}
+
 export default function HomePage() {
   const latestArticles = getLatestArticles(8);
   const totalArticles = getTotalArticleCount();
+  const totalDevDuels = getTotalDevDuelCount();
 
   return (
     <main className="min-h-screen bg-black px-6 py-10 text-white md:px-10">
@@ -63,12 +69,21 @@ export default function HomePage() {
             <div className="rounded-full border border-gray-800 px-4 py-2">
               {totalArticles} articles
             </div>
+
             <div className="rounded-full border border-gray-800 px-4 py-2">
               4 languages supported
             </div>
+
             <div className="rounded-full border border-gray-800 px-4 py-2">
               More coming
             </div>
+
+            <Link
+              href="/dev-duel"
+              className="rounded-full border border-gray-800 px-4 py-2 transition hover:border-gray-500 hover:text-white"
+            >
+              {totalDevDuels} Dev Duel challenges →
+            </Link>
           </div>
         </div>
 
