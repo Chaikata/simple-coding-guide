@@ -17720,5 +17720,505 @@ export const articles = [
         "value": "In summary, prefer INNER JOIN when you only need matching data. Use LEFT or RIGHT JOIN only when necessary to include unmatched rows, and FULL OUTER JOIN if you need all data from both tables. Avoid unnecessary joins and always check your query execution plan to identify and fix bottlenecks."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-iteration-in-javascript-practical-patterns-and-use-cases",
+    "title": "Mastering Asynchronous Iteration in JavaScript: Practical Patterns and Use Cases",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use asynchronous iteration in JavaScript with practical examples and patterns suitable for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous iteration is a powerful feature in JavaScript that helps you handle data streams, network requests, and other asynchronous tasks in a clean, manageable way. Unlike traditional loops that expect synchronous data, asynchronous loops can wait for promises to resolve before moving to the next item. This tutorial covers the basics of asynchronous iteration and practical examples you can use in real projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "The primary tool for asynchronous iteration in JavaScript is the `for await...of` loop. It works like the regular `for...of` loop but waits for each promise in the iterable to resolve before continuing. This is especially useful when you process streams of data asynchronously or consume APIs that return promises."
+      },
+      {
+        "type": "code",
+        "value": "async function* asyncGenerator() {\n  const data = [1000, 2000, 1500];\n  for (const delay of data) {\n    // Simulate an async operation with a delay\n    await new Promise(resolve => setTimeout(resolve, delay));\n    yield `Waited for ${delay} ms`;\n  }\n}\n\n(async () => {\n  for await (const message of asyncGenerator()) {\n    console.log(message);\n  }\n})();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `asyncGenerator` is an asynchronous generator function that simulates waiting for different delays. The `for await...of` loop consumes these delayed messages one by one, logging them after the awaited delay completes. This pattern is great when you need to process asynchronous data sequentially without blocking."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use asynchronous iteration with real-world data such as fetching multiple URLs. Instead of firing all fetch requests at once, you can wait for each response in order, which can be valuable if the sequence matters."
+      },
+      {
+        "type": "code",
+        "value": "async function* fetchUrls(urls) {\n  for (const url of urls) {\n    const response = await fetch(url);\n    const text = await response.text();\n    yield text;\n  }\n}\n\n(async () => {\n  const urls = [\n    'https://jsonplaceholder.typicode.com/posts/1',\n    'https://jsonplaceholder.typicode.com/posts/2'\n  ];\n  for await (const content of fetchUrls(urls)) {\n    console.log('Fetched content length:', content.length);\n  }\n})();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how the generator function `fetchUrls` waits for each fetch request to complete and yield the text content. The `for await...of` loop then handles these promises in sequence, making the code easy to read and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another practical use case is processing data from a readable stream — like a file or a network socket asynchronously. Streams can be iterated with `for await...of` to handle chunks of data as they arrive."
+      },
+      {
+        "type": "code",
+        "value": "async function processStream(stream) {\n  const reader = stream.getReader();\n  while (true) {\n    const { done, value } = await reader.read();\n    if (done) break;\n    console.log('Received chunk:', new TextDecoder().decode(value));\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to use the built-in async iterable support of streams, you can simplify the code further:"
+      },
+      {
+        "type": "code",
+        "value": "async function processStreamAsync(stream) {\n  for await (const chunk of stream) {\n    console.log('Received chunk:', new TextDecoder().decode(chunk));\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Use `async function*` to create asynchronous generators.\n- Use `for await...of` loops to consume async iterables.\n- These patterns help you work with multiple asynchronous operations in sequence without complex promise chains.\n- Practical examples include delayed events, fetching URLs, or processing streams incrementally.\n\nMastering asynchronous iteration will make your JavaScript code more readable and efficient when dealing with asynchronous workflows."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-error-handling-in-asynchronous-javascript-beyond-try-catch",
+    "title": "Mastering Error Handling in Asynchronous JavaScript: Beyond Try-Catch",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors in asynchronous JavaScript through promises, async/await, and advanced techniques beyond simple try-catch blocks.",
+    "videoUrl": "https://www.youtube.com/watch?v=wlTKcthuNnY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling errors in asynchronous JavaScript can be tricky, especially when working with promises and async/await. While try-catch blocks are a common way to catch errors, relying on them alone isn't enough for mastering asynchronous error handling. In this article, we'll explore practical techniques to handle errors effectively so your code stays robust and easy to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example using Promises. When a promise is rejected, the error can be caught using the .catch() method:"
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = Math.random() > 0.5;\n      if (success) {\n        resolve('Data fetched successfully');\n      } else {\n        reject(new Error('Fetch failed'));\n      }\n    }, 1000);\n  });\n};\n\nfetchData()\n  .then(data => {\n    console.log(data);\n  })\n  .catch(error => {\n    console.error('Error:', error.message);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern works well but can get messy with multiple asynchronous operations. That's where async/await syntax shines. It allows writing asynchronous code that looks synchronous, making error handling more intuitive with try-catch blocks."
+      },
+      {
+        "type": "code",
+        "value": "async function getData() {\n  try {\n    const data = await fetchData();\n    console.log(data);\n  } catch (error) {\n    console.error('Caught error:', error.message);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "However, there are cases where try-catch might not be sufficient or feels repetitive, especially when handling multiple promises concurrently. Promise.all() rejects immediately when one promise fails. If you want to handle each promise's error individually without stopping all, you can use Promise.allSettled()."
+      },
+      {
+        "type": "code",
+        "value": "const promise1 = Promise.resolve('Success 1');\nconst promise2 = Promise.reject(new Error('Failed 2'));\nconst promise3 = new Promise(resolve => setTimeout(() => resolve('Success 3'), 500));\n\nPromise.allSettled([promise1, promise2, promise3])\n  .then(results => {\n    results.forEach((result, index) => {\n      if (result.status === 'fulfilled') {\n        console.log(`Promise ${index + 1} succeeded with:`, result.value);\n      } else {\n        console.log(`Promise ${index + 1} failed with:`, result.reason.message);\n      }\n    });\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, for cleaner async error handling, you can create reusable helper functions. A popular pattern is the \"to\" function, which wraps any promise and returns a tuple with error and data. This helps avoid try-catch and keeps your code elegant."
+      },
+      {
+        "type": "code",
+        "value": "const to = promise => promise.then(data => [null, data]).catch(err => [err, null]);\n\nasync function fetchWithTo() {\n  const [error, data] = await to(fetchData());\n  if (error) {\n    console.error('Error captured with to():', error.message);\n  } else {\n    console.log('Data received:', data);\n  }\n}\n\nfetchWithTo();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, beyond try-catch, you should know how to:\n- Use .catch() on promises,\n- Leverage async/await with try-catch,\n- Handle multiple promises using Promise.allSettled(),\n- Consider helper functions like \"to\" for cleaner error management.\n\nMastering these will make your asynchronous JavaScript code more reliable and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-typescript-for-enterprise-applications",
+    "title": "Building Scalable Data Models in TypeScript for Enterprise Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn the basics of designing scalable and maintainable data models in TypeScript, perfect for enterprise-level applications and large projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building enterprise applications, having well-structured and scalable data models is crucial. TypeScript, with its strong typing system, helps you design models that are easy to maintain and extend as your application grows. This tutorial explains how to create scalable data models using interfaces, classes, and generics, helping beginners step into enterprise-level coding."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start by defining simple interfaces for your data objects. Interfaces establish a clear contract for the shape of your data and help you avoid errors early in development."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  isActive: boolean;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In an enterprise app, you often deal with related data that can be nested. Use interfaces to model those relationships."
+      },
+      {
+        "type": "code",
+        "value": "interface Address {\n  street: string;\n  city: string;\n  postalCode: string;\n}\n\ninterface Customer {\n  id: number;\n  name: string;\n  email: string;\n  address: Address;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To keep your models scalable, use classes when you need to add behavior or methods related to your data models. For example, adding methods to validate data or format output."
+      },
+      {
+        "type": "code",
+        "value": "class Product {\n  constructor(\n    public id: number,\n    public name: string,\n    public price: number\n  ) {}\n\n  applyDiscount(discountPercent: number): number {\n    return this.price * (1 - discountPercent / 100);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics become very useful for building reusable models or services working with different types of data."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiResponse<T> {\n  success: boolean;\n  data: T;\n  error?: string;\n}\n\nconst getUserResponse: ApiResponse<User> = {\n  success: true,\n  data: { id: 1, name: \"Alice\", email: \"alice@example.com\", isActive: true },\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "To organize models in a growing project, separate concerns by grouping related interfaces and classes into folders or modules. This makes your code easier to navigate and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, for scalable data models in TypeScript:\n- Use interfaces to define clear data contracts\n- Use classes to add behaviors\n- Use generics for reusable models\n- Organize your code with modules and folders\n\nBy following these simple steps, your enterprise applications become more maintainable, reliable, and easier to extend as requirements grow."
+      }
+    ]
+  },
+  {
+    "slug": "effective-typescript-error-handling-patterns-for-scalable-web-applications",
+    "title": "Effective TypeScript Error Handling Patterns for Scalable Web Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn beginner-friendly TypeScript error handling techniques to build scalable and maintainable web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of building robust web applications. With TypeScript, you can catch many errors during development, but you still need good runtime error handling to manage unexpected issues gracefully. In this article, we'll explore effective and beginner-friendly patterns for handling errors in TypeScript, helping you write code that is easier to maintain and scale."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why is Error Handling Important in TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even with TypeScript's static typing, some errors can only be caught at runtime, such as network failures or invalid API responses. Handling these errors properly prevents your application from crashing and improves user experience by showing meaningful messages or fallback UI."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Using `try...catch` Blocks"
+      },
+      {
+        "type": "paragraph",
+        "value": "`try...catch` is the simplest and most common way to handle errors in synchronous and asynchronous functions. You wrap code that might fail in a `try` block, then handle the error in the `catch` block."
+      },
+      {
+        "type": "code",
+        "value": "function parseJSON(jsonString: string): object | null {\n  try {\n    return JSON.parse(jsonString);\n  } catch (error) {\n    console.error('Invalid JSON string:', error);\n    return null;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, invalid JSON strings are caught without breaking the application."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Creating Custom Error Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "For larger apps, define custom error classes to provide more context about errors. This helps with better error identification and handling."
+      },
+      {
+        "type": "code",
+        "value": "class AppError extends Error {\n  public readonly isOperational: boolean;\n\n  constructor(message: string, isOperational = true) {\n    super(message);\n    this.isOperational = isOperational;\n    Object.setPrototypeOf(this, new.target.prototype); // Restore prototype chain\n    this.name = this.constructor.name;\n  }\n}\n\n// Usage\nfunction fetchData(url: string): Promise<string> {\n  return fetch(url).then(response => {\n    if (!response.ok) {\n      throw new AppError('Failed to fetch data');\n    }\n    return response.text();\n  });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Custom errors give you flexibility to distinguish between types of errors for better handling strategies."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Handling Async Errors with `async/await`"
+      },
+      {
+        "type": "paragraph",
+        "value": "In asynchronous code, use `try...catch` with `async/await` to handle errors clearly and avoid nested callbacks."
+      },
+      {
+        "type": "code",
+        "value": "async function getUserData(userId: string) {\n  try {\n    const response = await fetch(`/api/users/${userId}`);\n    if (!response.ok) {\n      throw new Error('User not found');\n    }\n    return await response.json();\n  } catch (error) {\n    console.error('Error fetching user data:', error);\n    return null;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern keeps async error handling easy to read and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Using Result Types Instead of Throwing"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another pattern to avoid exceptions is using a \"result\" type that returns success or error objects. This approach improves explicit handling of success and failure states."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> = {\n  success: true;\n  data: T;\n} | {\n  success: false;\n  error: string;\n};\n\nfunction divide(a: number, b: number): Result<number> {\n  if (b === 0) {\n    return { success: false, error: 'Division by zero' };\n  }\n  return { success: true, data: a / b };\n}\n\nconst result = divide(10, 0);\nif (!result.success) {\n  console.error('Error:', result.error);\n} else {\n  console.log('Result:', result.data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method helps avoid unexpected runtime errors and forces you to check for error conditions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Logging and Monitoring"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, robust error handling includes logging errors and monitoring them in production. Tools like Sentry or LogRocket help catch errors users experience and give insights for fixes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Effective error handling in TypeScript combines static typing with good runtime patterns. Use `try...catch` for synchronous and async code, create custom error classes for clarity, consider result types to handle success and failure explicitly, and always log errors for real-time monitoring. Applying these beginner-friendly patterns will make your web applications scalable and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-for-cleaner-resource-handling",
+    "title": "Mastering Python Context Managers for Cleaner Resource Handling",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how Python context managers help you manage resources like files and connections cleanly and efficiently, with simple examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with resources such as files, network connections, or locks, it’s important to release them properly after use. Python’s context managers provide a clean and readable way to manage resources, ensuring they are automatically cleaned up. In this tutorial, we’ll explore what context managers are, how to use them with the with statement, and how to create your own."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common way to use a context manager is with the built-in with statement. For example, when working with files, instead of manually opening and closing them:"
+      },
+      {
+        "type": "code",
+        "value": "file = open('example.txt', 'w')\nfile.write('Hello, world!')\nfile.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can simplify and safeguard your code by using a context manager:"
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This automatically handles opening and closing the file, even if an error occurs during writing. The with statement calls the context manager’s __enter__ method at the start and __exit__ method at the end, ensuring cleanup."
+      },
+      {
+        "type": "paragraph",
+        "value": "But what if you want to create your own context manager? Python offers two main ways to do this: using a class with __enter__ and __exit__ methods or using the contextlib module’s @contextmanager decorator."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example using a class that prints messages when entering and exiting a context:"
+      },
+      {
+        "type": "code",
+        "value": "class MyContext:\n    def __enter__(self):\n        print('Entering the context')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n        # Handle exceptions if necessary\n        return False  # Propagate exceptions if any\n\nwith MyContext() as context:\n    print('Inside the context')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Alternatively, you can use the @contextmanager decorator from contextlib to write a generator-based context manager. This often results in cleaner and simpler code:"
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_context():\n    print('Entering the context')\n    yield\n    print('Exiting the context')\n\nwith my_context():\n    print('Inside the context')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Context managers are especially useful for managing resources safely without cluttering your code with explicit cleanup steps. Once you master them, your Python programs will be cleaner, more reliable, and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try using context managers in your projects whenever you deal with resources like files, locks, or network connections. Creating custom context managers can also help simplify complex resource management tasks."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-identify-and-resolve-memory-leaks-in-python-applications",
+    "title": "How to Identify and Resolve Memory Leaks in Python Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn simple and effective techniques to identify and fix memory leaks in Python applications, ensuring your programs run smoothly and efficiently.",
+    "videoUrl": "https://www.youtube.com/watch?v=3PdmLQIZpwE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks happen when a program keeps using more and more memory over time because it does not properly release the memory it no longer needs. In Python, memory management is mostly handled automatically by the garbage collector. However, memory leaks can still occur, especially in long-running applications, causing performance issues or crashes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we will cover beginner-friendly ways to identify and fix memory leaks in Python applications using simple tools and examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Recognize symptoms of a memory leak\nIf your Python application’s memory usage keeps growing while running, even without heavy load, it could be leaking memory. You might notice your computer’s RAM usage increasing, the program slowing down, or eventually crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Use the `tracemalloc` module to track memory allocation\nPython’s built-in `tracemalloc` module helps monitor memory usage. You can use it to find where in your code the most memory is being allocated."
+      },
+      {
+        "type": "code",
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code that might leak memory\n\nsnapshot1 = tracemalloc.take_snapshot()\n\n# Run some code\n\nsnapshot2 = tracemalloc.take_snapshot()\n\ntop_stats = snapshot2.compare_to(snapshot1, 'lineno')\n\nprint(\"Top 10 lines allocating memory:\")\nfor stat in top_stats[:10]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This script will show you which lines in your code are responsible for the biggest increase in memory usage between two points."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Identify common causes of memory leaks\n- **Unintentional global references:** Objects stored in global variables or caches that are never cleared.\n- **Circular references:** Objects referencing each other can sometimes delay garbage collection.\n- **Large data structures growing indefinitely:** Lists, dictionaries, or sets that continually add items.\n\nTo resolve these, make sure to remove or clear unused objects, break circular references if needed, and monitor growing data structures."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Fix an example memory leak\nConsider the following example where a list keeps growing inside a function called repeatedly:"
+      },
+      {
+        "type": "code",
+        "value": "leak_list = []\n\ndef add_data():\n    leak_list.append('data')  # Leak: list grows with every call\n\nfor _ in range(100000):\n    add_data()\n\nprint(f'Length of leak_list: {len(leak_list)}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix it, you can clear the list once it's no longer needed or avoid storing unnecessary references:"
+      },
+      {
+        "type": "code",
+        "value": "leak_list = []\n\ndef add_data(fixed=False):\n    global leak_list\n    if fixed:\n        leak_list.clear()  # Clear list to prevent memory growth\n    leak_list.append('data')\n\nfor i in range(100000):\n    add_data(fixed=(i % 10000 == 0))  # Clear periodically\n\nprint(f'Length of leak_list after fix: {len(leak_list)}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Use external tools if needed\nFor more complex memory leak detection, tools like `objgraph`, `memory_profiler`, or `heapy` can help visualize memory usage and object references."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final tips:\n- Regularly profile your application if it runs for a long time.\n- Avoid unnecessary global variables and static caches.\n- Test components individually to isolate memory issues.\n\nBy following these simple steps and using Python’s built-in tools, you can identify and fix memory leaks, keeping your applications efficient and stable."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-in-sql-practical-use-cases-and-tricks",
+    "title": "Mastering Recursive CTEs in SQL: Practical Use Cases and Tricks",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) in SQL with practical examples and beginner-friendly tips to solve hierarchical and iterative problems effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are powerful SQL features that help you deal with hierarchical or recursive data efficiently. If you're a beginner, mastering recursive CTEs will allow you to handle tasks like organizational charts, tree structures, and factorial calculations directly within your SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE is a CTE that references itself. It consists of two parts: the anchor member, which sets the starting point, and the recursive member, which refers back to the CTE to build upon it until a stopping condition is met."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with the syntax of a recursive CTE:"
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE cte_name AS (\n  -- Anchor member\n  SELECT ...\n  UNION ALL\n  -- Recursive member\n  SELECT ... FROM cte_name WHERE ...\n)\nSELECT * FROM cte_name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example 1: Employee Hierarchy\nImagine you have an `employees` table where each employee has an `id` and a `manager_id` referring to their direct manager. You want to find the full reporting chain for a specific employee."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE employees (\n  id INT PRIMARY KEY,\n  name VARCHAR(50),\n  manager_id INT\n);\n\nINSERT INTO employees VALUES\n(1, 'Alice', NULL),\n(2, 'Bob', 1),\n(3, 'Carol', 2),\n(4, 'David', 2);\n\n-- Get the reporting chain for employee 3 (Carol)\nWITH RECURSIVE EmployeeChain AS (\n  SELECT id, name, manager_id\n  FROM employees\n  WHERE id = 3  -- anchor for Carol\n  UNION ALL\n  SELECT e.id, e.name, e.manager_id\n  FROM employees e\n  INNER JOIN EmployeeChain ec ON e.id = ec.manager_id\n)\nSELECT * FROM EmployeeChain;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query starts with Carol and recursively selects her managers until there are no more managers. This shows Carol's full chain up to the top boss Alice."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example 2: Calculating Factorial Using Recursive CTE\nRecursive CTEs can also perform iterative calculations. Let's calculate factorial of 5."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE FactorialCTE AS (\n  SELECT 1 AS n, 1 AS fact\n  UNION ALL\n  SELECT n + 1, fact * (n + 1)\n  FROM FactorialCTE WHERE n < 5\n)\nSELECT fact FROM FactorialCTE WHERE n = 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query calculates factorial by starting at 1 and multiplying the sequence incrementally until reaching 5."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips and Tricks for Recursive CTEs:\n- Always include a stopping condition to prevent infinite recursion (usually in the WHERE clause of the recursive member).\n- Use `UNION ALL` for better performance unless you need to eliminate duplicates.\n- Recursive CTEs can be expensive; test with real data and optimize as needed.\n- You can use recursive CTEs for tree traversals, graph searches, and even complex data transformations."
+      },
+      {
+        "type": "paragraph",
+        "value": "By practicing these examples and experimenting, you'll soon feel comfortable writing recursive queries in SQL to solve complex hierarchical and recursive problems efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-in-sql-advanced-use-cases-and-performance-tips",
+    "title": "Mastering Window Functions in SQL: Advanced Use Cases and Performance Tips",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn practical tips and advanced use cases for SQL window functions, while avoiding common errors to boost query performance and accuracy.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions in SQL are incredibly powerful for performing calculations across rows related to the current query row. They enable sophisticated analyses, such as running totals, ranking, and moving averages, without collapsing your results like GROUP BY does. However, beginners often encounter errors when using window functions incorrectly, or face performance issues when queries get complex. In this article, we'll explore advanced use cases along with common pitfalls and performance optimization tips."
+      },
+      {
+        "type": "paragraph",
+        "value": "One frequent error is misunderstanding the difference between aggregate functions and window functions. Aggregate functions like COUNT(), SUM(), or AVG() reduce multiple rows into one result row when used with GROUP BY. Window functions apply these calculations across a set of rows but still return one row per original row. Let's look at an example using ROW_NUMBER() to enumerate rows within each department in an employee table."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_name, department_id,\n       ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY hire_date) AS row_num\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query assigns a unique row number for each employee within their department ordered by hire date, without grouping or losing any employee details. A common error when using window functions is forgetting to include the OVER() clause, which is mandatory to define the window context. For example, writing ROW_NUMBER() without OVER() will result in a syntax error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another advanced use case involves combining window functions with filters. Suppose you want the top 3 employees with the highest sales per region. You can use RANK() or DENSE_RANK() to assign rankings and then filter accordingly."
+      },
+      {
+        "type": "code",
+        "value": "WITH ranked_sales AS (\n  SELECT employee_name, region, sales,\n         RANK() OVER (PARTITION BY region ORDER BY sales DESC) AS sales_rank\n  FROM sales_data\n)\nSELECT * FROM ranked_sales\nWHERE sales_rank <= 3;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to filter by sales_rank in a WHERE clause without a CTE or subquery like above, you'll get an error because WHERE filters rows before window functions are applied. Instead, use a CTE or subquery to filter on window function results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Performance can degrade if window functions are applied to large datasets without proper indexing or partitioning. To optimize performance, consider these tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use PARTITION BY to limit window function calculations to smaller subsets.\n- Ensure columns in PARTITION BY and ORDER BY clauses are indexed.\n- Avoid complex expressions inside window functions where possible.\n- If performance is critical, pre-aggregate results or use materialized views."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Adding indexes to improve window function performance\nCREATE INDEX idx_sales_region ON sales_data(region);\nCREATE INDEX idx_sales_region_date ON sales_data(region, sales_date);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always test window function queries with EXPLAIN plans to understand execution costs. By mastering these usage patterns, tips, and common error fixes, you can unlock the full potential of SQL window functions effectively and efficiently."
+      }
+    ]
   }
 ];
