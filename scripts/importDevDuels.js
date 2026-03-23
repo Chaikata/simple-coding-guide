@@ -30,18 +30,27 @@ function normalizeStringArray(value) {
 
 function normalizeDifficulty(value) {
   const difficulty = String(value || "").trim().toLowerCase();
-  if (difficulty === "beginner" || difficulty === "intermediate" || difficulty === "advanced") {
+  if (
+    difficulty === "beginner" ||
+    difficulty === "intermediate" ||
+    difficulty === "advanced"
+  ) {
     return difficulty;
   }
-  return "beginner";
+  return "";
 }
 
 function normalizeLanguage(value) {
   const language = String(value || "").trim().toLowerCase();
-  if (language === "javascript" || language === "python" || language === "sql" || language === "cpp") {
+  if (
+    language === "javascript" ||
+    language === "python" ||
+    language === "sql" ||
+    language === "cpp"
+  ) {
     return language;
   }
-  return "javascript";
+  return "";
 }
 
 function normalizeDevDuel(duel) {
@@ -64,7 +73,9 @@ function normalizeDevDuel(duel) {
     ...(Array.isArray(duel.relatedTutorialSlugs)
       ? { relatedTutorialSlugs: normalizeStringArray(duel.relatedTutorialSlugs) }
       : {}),
-    ...(typeof duel.isFeatured === "boolean" ? { isFeatured: duel.isFeatured } : {}),
+    ...(typeof duel.isFeatured === "boolean"
+      ? { isFeatured: duel.isFeatured }
+      : {}),
   };
 }
 
@@ -213,6 +224,16 @@ function readGeneratedDevDuels() {
   return parsed.map(normalizeDevDuel).filter((duel) => {
     if (!duel.slug || !duel.title) {
       console.log("Skipping invalid generated duel with missing slug/title");
+      return false;
+    }
+
+    if (!duel.language) {
+      console.log(`Skipping duel with invalid language: ${duel.title}`);
+      return false;
+    }
+
+    if (!duel.difficulty) {
+      console.log(`Skipping duel with invalid difficulty: ${duel.title}`);
       return false;
     }
 

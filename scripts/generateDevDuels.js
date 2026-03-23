@@ -15,6 +15,7 @@ const client = new OpenAI({
 });
 
 const LANGUAGES = ["javascript", "python", "sql", "cpp"];
+const DIFFICULTIES = ["beginner", "intermediate", "advanced"];
 
 const LIMITS = {
   maxPerRun: 6,
@@ -112,6 +113,10 @@ function isTooSimilar(newTitle, existingTitles) {
   });
 }
 
+function pickDifficulty(index) {
+  return DIFFICULTIES[index % DIFFICULTIES.length];
+}
+
 async function retry(label, fn) {
   let lastError;
 
@@ -127,15 +132,19 @@ async function retry(label, fn) {
   throw lastError;
 }
 
-async function generateChallenge(language) {
+async function generateChallenge(language, targetDifficulty) {
   const prompt = `
 Create ONE coding challenge for Dev Duel.
 
 Language: ${language}
+Target difficulty: ${targetDifficulty}
 
 Requirements:
+- The difficulty MUST be exactly "${targetDifficulty}"
 - Must be a real coding challenge, not theory
-- Difficulty must be exactly one of: beginner, intermediate, advanced
+- Beginner: simple syntax, variables, loops, conditionals, basic functions
+- Intermediate: multi-step logic, arrays/lists, objects/maps, joins, subqueries, debugging, slightly deeper reasoning
+- Advanced: larger problem scope, optimization, architecture, multi-step transformations, mini-project style work
 - Include a clear SEO-friendly title
 - Include a short description
 - Include a practical challenge prompt
@@ -145,7 +154,6 @@ Requirements:
 - Include expected output when useful
 - Include 2-5 concepts
 - Include an estimated time like "10 minutes"
-- Keep it beginner-friendly overall, even if intermediate or advanced
 - Do not return markdown
 - Return only valid JSON
 
@@ -153,7 +161,7 @@ Return ONLY JSON:
 {
   "title": "string",
   "description": "string",
-  "difficulty": "beginner",
+  "difficulty": "${targetDifficulty}",
   "category": "functions",
   "estimatedTime": "10 minutes",
   "prompt": "string",
@@ -172,11 +180,18 @@ Return ONLY JSON:
 
   const data = extractJson(extractResponseText(res));
 
+  const difficulty = String(data.difficulty || "").trim().toLowerCase();
+  if (difficulty !== targetDifficulty) {
+    throw new Error(
+      `Model returned wrong difficulty. Expected ${targetDifficulty}, got ${difficulty || "missing"}`
+    );
+  }
+
   return {
     slug: slugify(data.title),
     title: String(data.title || "").trim(),
     language,
-    difficulty: String(data.difficulty || "").trim().toLowerCase(),
+    difficulty,
     category: String(data.category || "general").trim(),
     description: String(data.description || "").trim(),
     prompt: String(data.prompt || "").trim(),
@@ -218,15 +233,21 @@ async function run() {
     getExistingSlugsAndTitles();
   const runTitles = new Set();
 
+  let attemptIndex = 0;
+
   while (allDuels.length < LIMITS.maxPerRun) {
     const language =
       LANGUAGES[Math.floor(Math.random() * LANGUAGES.length)];
+    const targetDifficulty = pickDifficulty(attemptIndex);
+    attemptIndex++;
 
     let duel;
     try {
-      duel = await retry(`duel ${language}`, () => generateChallenge(language));
+      duel = await retry(`duel ${language}/${targetDifficulty}`, () =>
+        generateChallenge(language, targetDifficulty)
+      );
     } catch (error) {
-      console.log(`Failed ${language}: ${error.message}`);
+      console.log(`Failed ${language}/${targetDifficulty}: ${error.message}`);
       continue;
     }
 
@@ -277,7 +298,7 @@ async function run() {
     runTitles.add(normalizedTitle);
     allDuels.push(duel);
 
-    console.log(`Added: ${duel.title}`);
+    console.log(`Added: ${duel.title} [${duel.difficulty}]`);
   }
 
   fs.writeFileSync(
