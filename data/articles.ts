@@ -19227,5 +19227,474 @@ export const articles = [
         "value": "By understanding these common pitfalls and debugging strategies, you'll gain confidence in writing and troubleshooting recursive CTE queries to efficiently explore hierarchical data in SQL."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-javascript-optimize-performance-with-async-await-patterns",
+    "title": "Mastering Asynchronous JavaScript: Optimize Performance with Async/Await Patterns",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use async/await in JavaScript to write cleaner and more performant asynchronous code. This beginner-friendly tutorial explains core concepts and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=0IifRcykPdA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, but many tasks like fetching data from a server take time, so they run asynchronously to keep your app responsive. The async/await syntax is a modern way to handle asynchronous operations, making your code easier to read and maintain. In this tutorial, we'll explore how async/await works and how to use it to optimize your JavaScript performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/await is built on top of promises. It allows you to write asynchronous code that looks like synchronous code. The `async` keyword before a function means the function will return a promise. The `await` keyword pauses the execution of an async function until the awaited promise resolves, making the code wait for the result."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Example"
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise(resolve => {\n    setTimeout(() => {\n      resolve('Data loaded');\n    }, 2000);\n  });\n}\n\nasync function load() {\n  console.log('Start loading...');\n  const data = await fetchData();\n  console.log(data);\n  console.log('Loading complete.');\n}\n\nload();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `fetchData` simulates a network request by returning a promise that resolves after 2 seconds. The `load` function uses `await` to wait for the promise to resolve before continuing. This makes your asynchronous code easier to understand and follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Optimizing Performance with Parallel Async Calls"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you have multiple asynchronous operations that can run at the same time. Awaiting each one one after another can slow down your app unnecessarily. Instead, start all promises at once and then await their results together using `Promise.all`."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUser() {\n  return new Promise(resolve => setTimeout(() => resolve('User data'), 1000));\n}\n\nasync function fetchPosts() {\n  return new Promise(resolve => setTimeout(() => resolve('Posts data'), 1500));\n}\n\nasync function loadAllData() {\n  console.log('Fetching data...');\n  const userPromise = fetchUser();\n  const postsPromise = fetchPosts();\n\n  // Wait for both promises to resolve in parallel\n  const [user, posts] = await Promise.all([userPromise, postsPromise]);\n\n  console.log(user);\n  console.log(posts);\n  console.log('All data fetched.');\n}\n\nloadAllData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `fetchUser` and `fetchPosts` start simultaneously. Using `Promise.all`, we wait for both to complete. This reduces total waiting time compared to awaiting each one sequentially."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Error Handling with Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use try/catch blocks to handle errors in async functions. This provides cleaner error handling compared to `.catch()` on promises."
+      },
+      {
+        "type": "code",
+        "value": "async function riskyFetch() {\n  throw new Error('Failed to fetch data');\n}\n\nasync function run() {\n  try {\n    await riskyFetch();\n  } catch (error) {\n    console.error('Error caught:', error.message);\n  }\n}\n\nrun();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/await makes asynchronous JavaScript code more readable and maintainable. Remember these key points:\n- Use `async` before functions that return promises.\n- Use `await` to pause execution until a promise resolves.\n- Run parallel async operations with `Promise.all` to optimize performance.\n- Handle errors with try/catch inside async functions.\n\nBy mastering async/await patterns, you can write simpler and faster JavaScript applications."
+      }
+    ]
+  },
+  {
+    "slug": "handling-unexpected-type-coercion-in-javascript-edge-cases",
+    "title": "Handling Unexpected Type Coercion in JavaScript Edge Cases",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to recognize and handle unexpected type coercion in JavaScript with practical examples tailored for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=N02hDpjE_wQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that automatically converts values from one type to another — a feature called type coercion. While convenient, it can sometimes lead to unexpected behavior, especially for beginners. In this article, we'll explore common edge cases where type coercion can cause errors or confusion, and show you how to handle them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One well-known example is when the plus (+) operator is used with both numbers and strings. JavaScript will concatenate if either operand is a string, instead of performing a numeric addition."
+      },
+      {
+        "type": "code",
+        "value": "console.log(1 + '2'); // Output: '12'\nconsole.log('5' + 10); // Output: '510'\nconsole.log(1 + 2);  // Output: 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid this, always ensure values are of the expected type before operations. For example, use the Number() function to explicitly convert strings to numbers:"
+      },
+      {
+        "type": "code",
+        "value": "let result = Number('2') + 1;\nconsole.log(result); // Output: 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another tricky case involves comparisons between different types. For example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(0 == false); // true\nconsole.log('' == false); // true\nconsole.log(null == undefined); // true\nconsole.log(0 === false); // false\nconsole.log('' === false); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "The double equals (==) operator performs type coercion before comparing, while the triple equals (===) operator compares both value and type without coercion. To avoid unexpected results, use === in most cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion can also cause unexpected results with objects and arrays. For example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log([] + []);          // Output: '' (empty string)\nconsole.log([] + {});          // Output: '[object Object]'\nconsole.log({} + []);          // Output: 0 in some engines because {} is treated as a block\nconsole.log([1,2] == '1,2');  // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "These results occur because JavaScript tries to convert objects to strings when using the + operator or comparing with strings. To handle this safely, convert arrays or objects explicitly:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(JSON.stringify([]) + JSON.stringify([])); // '[][]'\nconsole.log([1,2].toString() === '1,2');             // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the key to handling unexpected type coercion is to always be explicit about types when doing operations, prefer === over == for comparisons, and use conversion functions (Number(), String(), Boolean()) when needed. This will reduce bugs and make your code easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you're ever unsure about what type JavaScript is treating a value as, you can use the typeof operator to check:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(typeof 123);      // 'number'\nconsole.log(typeof 'hello');  // 'string'\nconsole.log(typeof true);     // 'boolean'\nconsole.log(typeof undefined); // 'undefined'\nconsole.log(typeof null);      // 'object' (this is a known quirk)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding these edge cases will give you greater confidence in writing robust JavaScript code. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-recursive-type-aliases-in-typescript-advanced-edge-cases-explained",
+    "title": "Handling Recursive Type Aliases in TypeScript: Advanced Edge Cases Explained",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to work with recursive type aliases in TypeScript, including solutions to common advanced edge cases for safer and cleaner type definitions.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive type aliases are a powerful feature in TypeScript that allow you to define types referencing themselves. This capability is particularly useful for describing nested data structures like trees, linked lists, or JSON-like objects. In this tutorial, we'll break down how to handle recursive type aliases, understand their constraints, and explore advanced edge cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of a recursive type alias to represent a tree structure. Each node can have children which are themselves nodes:"
+      },
+      {
+        "type": "code",
+        "value": "type TreeNode = {\n  value: string;\n  children?: TreeNode[];\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "This works well and TypeScript understands that `TreeNode` can nest indefinitely. However, when you attempt more complex recursive structures, such as union types or conditional types that refer to themselves, TypeScript has some limitations to prevent infinite expansion."
+      },
+      {
+        "type": "paragraph",
+        "value": "For instance, consider a type alias that tries to describe JSON values recursively:"
+      },
+      {
+        "type": "code",
+        "value": "type JSONValue =\n  | string\n  | number\n  | boolean\n  | null\n  | JSONValue[] // Recursive array of JSON values\n  | { [key: string]: JSONValue }; // Recursive object with JSON values"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern is common and works smoothly, but if you remix recursion with union types inside conditional types, TypeScript may throw errors like ‘Type alias ‘X’ circularly references itself’."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common advanced edge case is when recursive type aliases involve conditional types. TypeScript does not allow direct recursion in type aliases used in conditional types without some workarounds."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example that causes an error because of circular reference:"
+      },
+      {
+        "type": "code",
+        "value": "type Recursive<T> = T extends object ? Recursive<T> : T;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle recursion in these cases, you can try to break the recursion by introducing an interface or using helper types to defer recursion, or use the `interface` keyword instead of `type` where possible since interfaces can be self-referential."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, switching to an interface for recursive types:"
+      },
+      {
+        "type": "code",
+        "value": "interface RecursiveInterface {\n  value: string;\n  next?: RecursiveInterface;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This can be extended safely without causing issues with circular references, which are more rigid in `type` aliases with conditional types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another technique is to use helper type parameters to accumulate state during recursion and prevent infinite expansion. For example:"
+      },
+      {
+        "type": "code",
+        "value": "type DeepPartial<T> = T extends object\n  ? { [K in keyof T]?: DeepPartial<T[K]> }\n  : T;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this `DeepPartial` utility type, recursion happens through mapped types safely by conditionally traversing the object properties. TypeScript can handle this well because it unwraps one level of the type on each recursion step."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary Tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use recursive type aliases to represent nested data, but avoid direct recursion inside conditional types."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Prefer interfaces for self-referential structures when type alias recursion is problematic."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use helper types and conditional checks to limit recursion depth or indirectly structure recursion."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Employ mapped types carefully for recursive transformations like `DeepPartial`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling recursive type aliases cleverly in TypeScript can enable very flexible and safe type definitions for complex data models. Armed with these techniques, you can confidently model advanced recursive structures without hitting common pitfalls."
+      }
+    ]
+  },
+  {
+    "slug": "handling-unexpected-nan-infinity-values-typescript",
+    "title": "Handling Unexpected NaN and Infinity Values in TypeScript Calculations",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to identify and handle unexpected NaN and Infinity values in TypeScript to keep your calculations safe and error-free.",
+    "videoUrl": "https://www.youtube.com/watch?v=qCpQpre4RO8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with numbers in TypeScript, you might sometimes encounter unexpected results such as NaN (Not a Number) or Infinity values. These special values usually indicate something went wrong during calculations, like dividing by zero or operating on invalid inputs. Understanding how to detect and handle these situations will help you write more reliable and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "NaN means the result of a calculation is not a valid number. For example, 0 divided by 0 yields NaN. Infinity arises when a number is too large or when you divide a positive number by zero."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript provides some built-in methods to check for these values: Number.isNaN() and Number.isFinite(). Number.isNaN() returns true if the value is actually NaN, and Number.isFinite() returns true if the value is a finite number (not NaN, Infinity, or -Infinity)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example demonstrating how to handle unexpected NaN and Infinity values in your calculations:"
+      },
+      {
+        "type": "code",
+        "value": "function safeDivide(a: number, b: number): number | null {\n  if (b === 0) {\n    console.warn('Division by zero detected. Returning null instead of Infinity.');\n    return null; // or handle it in a way that makes sense for your app\n  }\n\n  const result = a / b;\n\n  if (Number.isNaN(result)) {\n    console.error('Result is NaN. Please check input values.');\n    return null;\n  }\n\n  if (!Number.isFinite(result)) {\n    console.error('Result is Infinity. Calculation overflow or division by zero.');\n    return null;\n  }\n\n  return result;\n}\n\n// Example usage:\nconsole.log(safeDivide(10, 2)); // 5\nconsole.log(safeDivide(10, 0)); // null with warning\nconsole.log(safeDivide(0, 0));  // null with error"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the function safeDivide checks for division by zero before performing the division. It also verifies whether the result is NaN or Infinity using Number.isNaN() and Number.isFinite(). Returning null allows you to handle errors gracefully instead of letting unexpected values propagate."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more complex calculations, you can wrap your logic in try-catch blocks or add additional input validation to avoid invalid operations. Always validating inputs before your calculations is a good practice to keep your TypeScript code robust."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, watch out for NaN and Infinity values during calculations and use TypeScript's built-in number checks to handle these cases effectively. This approach helps you avoid bugs and makes your applications more stable and predictable."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-hierarchies-for-cleaner-code-architecture",
+    "title": "Mastering Python Exception Hierarchies for Cleaner Code Architecture",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to organize and handle errors effectively in Python by mastering exception hierarchies, improving your code's readability and maintainability.",
+    "videoUrl": "https://www.youtube.com/watch?v=pTB30aXS77U",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, handling errors is essential to create robust and user-friendly applications. Exceptions in Python help manage unexpected situations, but properly organizing them can be confusing for beginners. Understanding Python's exception hierarchy allows you to write cleaner, more maintainable code by grouping related errors logically."
+      },
+      {
+        "type": "paragraph",
+        "value": "At the top of Python's exception hierarchy is the base class `BaseException`. Almost every error inherits from this class. However, when writing your code, you will mainly deal with exceptions derived from `Exception`, a subclass of `BaseException`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple visualization of part of the Python exception hierarchy:"
+      },
+      {
+        "type": "code",
+        "value": "BaseException\n ├─ SystemExit\n ├─ KeyboardInterrupt\n └─ Exception\n      ├─ ArithmeticError\n      │    ├─ ZeroDivisionError\n      │    └─ OverflowError\n      ├─ LookupError\n      │    ├─ IndexError\n      │    └─ KeyError\n      └─ ValueError"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you catch exceptions, you want to be as specific as possible to avoid hiding bugs and to handle different errors appropriately. For example, catching a `ZeroDivisionError` separately from a generic `ArithmeticError` gives more control."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example handling multiple exceptions:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(x, y):\n    try:\n        result = x / y\n    except ZeroDivisionError:\n        print(\"Error: Cannot divide by zero.\")\n    else:\n        print(f\"Result is {result}\")\n\n# Usage\n divide(10, 2)  # Output: Result is 5.0\n divide(10, 0)  # Output: Error: Cannot divide by zero."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create custom exceptions for your applications by defining a new class inheriting from `Exception`. This helps distinguish errors specific to your program from built-in exceptions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to define and use a custom exception:"
+      },
+      {
+        "type": "code",
+        "value": "class NegativeNumberError(Exception):\n    pass\n\ndef square_root(x):\n    if x < 0:\n        raise NegativeNumberError(\"Cannot calculate square root of a negative number.\")\n    return x ** 0.5\n\ntry:\n    print(square_root(-4))\nexcept NegativeNumberError as e:\n    print(f\"Custom error caught: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you might want to create an exception hierarchy for your custom errors. For example, grouping errors related to file processing:"
+      },
+      {
+        "type": "code",
+        "value": "class FileProcessingError(Exception):\n    pass\n\nclass FileFormatError(FileProcessingError):\n    pass\n\nclass FileReadError(FileProcessingError):\n    pass\n\ntry:\n    raise FileFormatError(\"Unsupported file format.\")\nexcept FileProcessingError as e:\n    print(f\"Handling file error: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "By catching `FileProcessingError`, you handle both `FileFormatError` and `FileReadError` in one except block while still allowing for specific handling if needed. This hierarchical structure keeps your code organized and clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering Python's exception hierarchy helps you:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Catch specific exceptions to avoid masking bugs.\n- Create and organize custom exceptions for your app's needs.\n- Write more readable and maintainable error handling code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start applying these concepts to your Python projects to handle errors with confidence and make your code cleaner!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-multi-tenant-databases-sql",
+    "title": "Designing Scalable Multi-Tenant Databases with SQL: A Beginner’s Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of designing scalable multi-tenant databases using SQL with practical examples tailored for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant databases allow multiple customers (tenants) to share the same database while keeping their data isolated and secure. This approach is common in SaaS platforms and helps reduce infrastructure costs. In this tutorial, we will explore how to design scalable multi-tenant databases using SQL, focusing on practical and beginner-friendly concepts."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are three main ways to structure a multi-tenant database: single database with shared schema, single database with separate schemas, and separate databases per tenant. Each has its pros and cons related to scalability, maintenance, and security."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by looking at the simplest and most common design: a single database with a shared schema, where each table includes a TenantID column to identify which tenant owns each row."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Customers (\n    CustomerID INT PRIMARY KEY,\n    TenantID INT NOT NULL,\n    CustomerName VARCHAR(100),\n    Email VARCHAR(100)\n);\n\nCREATE INDEX idx_tenant_customer ON Customers(TenantID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this design, the TenantID column helps separate each tenant's data logically. You must include the tenant filter in all queries to avoid accidentally mixing data. For example, to get customers for Tenant 1:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT CustomerID, CustomerName, Email\nFROM Customers\nWHERE TenantID = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To improve security and reduce errors, consider using row-level security policies (available in some database systems) or views that automatically filter by TenantID."
+      },
+      {
+        "type": "paragraph",
+        "value": "If your tenants have very different data needs or require strict separation, you might use schemas or separate databases per tenant. Here's an example of separate schemas:"
+      },
+      {
+        "type": "code",
+        "value": "-- Creating schemas for two tenants\nCREATE SCHEMA tenant1;\nCREATE SCHEMA tenant2;\n\n-- Creating customer tables inside each schema\nCREATE TABLE tenant1.Customers (\n    CustomerID INT PRIMARY KEY,\n    CustomerName VARCHAR(100),\n    Email VARCHAR(100)\n);\n\nCREATE TABLE tenant2.Customers (\n    CustomerID INT PRIMARY KEY,\n    CustomerName VARCHAR(100),\n    Email VARCHAR(100)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach simplifies tenant data separation at the cost of increased overhead for schema management and queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, consider performance and scalability. Create indexes on TenantID and other frequently queried columns, and optimize queries to filter by tenant. Regularly monitor your database size and performance to adjust your design or hardware as the number of tenants grows."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, designing a scalable multi-tenant database in SQL requires balancing data isolation, performance, and ease of maintenance. Start simple with a shared schema and tenant identifier, then evolve your design based on your application and tenant requirements."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding and building scalable applications!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-advanced-techniques-for-hierarchical-data-queries-in-sql",
+    "title": "Mastering Recursive CTEs: Advanced Techniques for Hierarchical Data Queries in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to write and troubleshoot recursive CTEs in SQL to efficiently query hierarchical data and avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are a powerful SQL feature used to query hierarchical or tree-structured data. Whether you are dealing with organizational charts, file systems, or category trees, recursive CTEs let you easily fetch parent-child relationships. However, beginners often encounter errors in syntax or logic that prevent these queries from working correctly. This article will guide you through advanced techniques and common errors in recursive CTEs to help you master them."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE has two main parts: an anchor member and a recursive member. The anchor member selects the root or starting rows, while the recursive member joins the CTE back to the base table, gradually building the hierarchy."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE Hierarchy AS (\n  -- Anchor member: select root nodes\n  SELECT id, name, parent_id, 1 AS level\n  FROM categories\n  WHERE parent_id IS NULL\n\n  UNION ALL\n\n  -- Recursive member: join with categories to find children\n  SELECT c.id, c.name, c.parent_id, h.level + 1\n  FROM categories c\n  INNER JOIN Hierarchy h ON c.parent_id = h.id\n)\nSELECT * FROM Hierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors when writing recursive CTEs include:\n1. Forgetting the UNION ALL between anchor and recursive parts.\n2. Using UNION instead of UNION ALL, which can cause unexpected duplicate suppression.\n3. Missing or incorrect join condition in the recursive member.\n4. Infinite recursion due to cyclic references in data.\n5. Not limiting recursion depth, which can lead to performance issues or query failure."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid infinite loops caused by cycles in your data, introduce a maximum recursion depth using a WHERE clause or utilize system-specific options like OPTION (MAXRECURSION n) in SQL Server. You can also track visited nodes with an additional column."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE Hierarchy AS (\n  SELECT id, name, parent_id, 1 AS level, CAST(id AS VARCHAR(255)) AS path\n  FROM categories\n  WHERE parent_id IS NULL\n\n  UNION ALL\n\n  SELECT c.id, c.name, c.parent_id, h.level + 1, CONCAT(h.path, '>', c.id)\n  FROM categories c\n  INNER JOIN Hierarchy h ON c.parent_id = h.id\n  WHERE c.id NOT IN (SELECT CAST(value AS INT) FROM STRING_SPLIT(h.path, '>'))\n)\nSELECT * FROM Hierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above example, the 'path' column keeps track of visited nodes by concatenating IDs, preventing cycles. Adjust the string functions according to your SQL dialect."
+      },
+      {
+        "type": "paragraph",
+        "value": "Debugging recursive CTEs is easier if you:\n- Start with the anchor part and verify it returns expected rows.\n- Test the recursive member separately.\n- Limit recursion depth initially to catch logical errors.\n- Use explicit column aliases and data types to avoid mismatches."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these techniques, you can confidently write efficient and error-free recursive CTE queries for hierarchical data in SQL."
+      }
+    ]
   }
 ];

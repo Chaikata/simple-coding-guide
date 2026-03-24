@@ -1,113 +1,63 @@
 [
   {
-    "slug": "building-scalable-data-models-in-javascript-using-immutable-js",
-    "title": "Building Scalable Data Models in JavaScript Using Immutable.js",
+    "slug": "mastering-asynchronous-javascript-optimize-performance-with-async-await-patterns",
+    "title": "Mastering Asynchronous JavaScript: Optimize Performance with Async/Await Patterns",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build scalable and maintainable data models in JavaScript by using Immutable.js, a powerful library for handling immutable data structures.",
-    "videoUrl": "https://www.youtube.com/watch?v=OUsRSM71H2E",
+    "description": "Learn how to use async/await in JavaScript to write cleaner and more performant asynchronous code. This beginner-friendly tutorial explains core concepts and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=0IifRcykPdA",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building applications, managing data can become complex especially as the app grows. Mutable data can lead to hard-to-track bugs and unpredictable behavior. Immutable.js provides persistent immutable data structures that help keep your data predictable and your application scalable. In this tutorial, we will learn how to use Immutable.js to build scalable data models in JavaScript."
+        "value": "JavaScript is single-threaded, but many tasks like fetching data from a server take time, so they run asynchronously to keep your app responsive. The async/await syntax is a modern way to handle asynchronous operations, making your code easier to read and maintain. In this tutorial, we'll explore how async/await works and how to use it to optimize your JavaScript performance."
       },
       {
         "type": "paragraph",
-        "value": "Immutable data means once you create a data structure, it cannot be changed. Instead, when you want to update the data, a new copy is created with the changes applied. This makes your application easier to reason about and prevents unintended side effects."
+        "value": "### What is Async/Await?"
       },
       {
         "type": "paragraph",
-        "value": "First, let's install Immutable.js using npm:"
+        "value": "Async/await is built on top of promises. It allows you to write asynchronous code that looks like synchronous code. The `async` keyword before a function means the function will return a promise. The `await` keyword pauses the execution of an async function until the awaited promise resolves, making the code wait for the result."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Example"
       },
       {
         "type": "code",
-        "value": "npm install immutable"
+        "value": "function fetchData() {\n  return new Promise(resolve => {\n    setTimeout(() => {\n      resolve('Data loaded');\n    }, 2000);\n  });\n}\n\nasync function load() {\n  console.log('Start loading...');\n  const data = await fetchData();\n  console.log(data);\n  console.log('Loading complete.');\n}\n\nload();"
       },
       {
         "type": "paragraph",
-        "value": "Now let's create a simple data model using Immutable.js. We'll build a Todo list model where each Todo item has an id, text, and completed status."
+        "value": "In this example, `fetchData` simulates a network request by returning a promise that resolves after 2 seconds. The `load` function uses `await` to wait for the promise to resolve before continuing. This makes your asynchronous code easier to understand and follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Optimizing Performance with Parallel Async Calls"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you have multiple asynchronous operations that can run at the same time. Awaiting each one one after another can slow down your app unnecessarily. Instead, start all promises at once and then await their results together using `Promise.all`."
       },
       {
         "type": "code",
-        "value": "const { Map, List } = require('immutable');\n\n// Initial empty todos list\ndefaultTodos = List();\n\n// Function to add a todo\nfunction addTodo(todos, id, text) {\n  return todos.push(Map({ id, text, completed: false }));\n}\n\n// Function to toggle a todo's completed status\nfunction toggleTodo(todos, id) {\n  const index = todos.findIndex(todo => todo.get('id') === id);\n  if (index === -1) return todos;\n  return todos.update(index, todo => todo.set('completed', !todo.get('completed')));\n}\n\n// Usage example\nlet todos = defaultTodos;\ntodos = addTodo(todos, 1, 'Learn Immutable.js');\ntodos = addTodo(todos, 2, 'Build scalable data models');\n\nconsole.log(todos.toJS());\n\ntodos = toggleTodo(todos, 1);\n\nconsole.log(todos.toJS());"
+        "value": "async function fetchUser() {\n  return new Promise(resolve => setTimeout(() => resolve('User data'), 1000));\n}\n\nasync function fetchPosts() {\n  return new Promise(resolve => setTimeout(() => resolve('Posts data'), 1500));\n}\n\nasync function loadAllData() {\n  console.log('Fetching data...');\n  const userPromise = fetchUser();\n  const postsPromise = fetchPosts();\n\n  // Wait for both promises to resolve in parallel\n  const [user, posts] = await Promise.all([userPromise, postsPromise]);\n\n  console.log(user);\n  console.log(posts);\n  console.log('All data fetched.');\n}\n\nloadAllData();"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, we used Immutable.js's List and Map to create our Todo list and individual Todo items. Functions `addTodo` and `toggleTodo` return new lists with the applied changes, leaving the original list unchanged."
+        "value": "Here, `fetchUser` and `fetchPosts` start simultaneously. Using `Promise.all`, we wait for both to complete. This reduces total waiting time compared to awaiting each one sequentially."
       },
       {
         "type": "paragraph",
-        "value": "This approach helps us avoid bugs related to unexpected mutations. It also makes it easier to implement features like undo/redo since the previous states are always intact."
+        "value": "### Error Handling with Async/Await"
       },
       {
         "type": "paragraph",
-        "value": "You can extend this pattern to build more complex data models involving nested structures. Immutable.js provides many helpful methods such as `setIn`, `updateIn`, and `merge` for working with deeply nested data."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, using Immutable.js helps you keep your JavaScript data models scalable by enforcing immutability, improving predictability, and making debugging easier."
-      },
-      {
-        "type": "paragraph",
-        "value": "To learn more about Immutable.js, visit its official site: https://immutable-js.github.io/immutable-js/"
-      }
-    ]
-  },
-  {
-    "slug": "understanding-javascript-event-loop-managing-async-errors",
-    "title": "Understanding JavaScript's Event Loop: A Beginner's Guide to Managing Asynchronous Errors",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn how JavaScript's event loop works and how to effectively handle asynchronous errors with practical examples designed for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=vn3tm0quoqE",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "JavaScript is a single-threaded language, which means it can only execute one task at a time. However, it handles tasks like network requests, timers, and file reading asynchronously to keep your app responsive. Understanding how JavaScript's event loop works is key to managing these asynchronous tasks and properly handling any errors they might produce."
-      },
-      {
-        "type": "paragraph",
-        "value": "The event loop is a mechanism that waits for tasks in the call stack to finish and then picks up tasks from the callback queue. When an asynchronous task finishes, its callback gets added to the callback queue, and the event loop moves it to the call stack when it's free. This way, JavaScript can handle asynchronous operations without freezing the main thread."
-      },
-      {
-        "type": "paragraph",
-        "value": "One common challenge with asynchronous code is handling errors. Unlike synchronous code, where you can use try...catch blocks directly, asynchronous code often requires special methods to catch errors properly. Let's look at some practical examples."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 1: Handling Errors in setTimeout"
+        "value": "Use try/catch blocks to handle errors in async functions. This provides cleaner error handling compared to `.catch()` on promises."
       },
       {
         "type": "code",
-        "value": "setTimeout(() => {\n  try {\n    // Simulate an error\n    throw new Error('Timeout error!');\n  } catch (error) {\n    console.error('Caught error inside setTimeout:', error.message);\n  }\n}, 1000);"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the above example, the error is thrown inside a `setTimeout` callback. If you didn't have the try...catch block inside the callback, the error would be uncaught because the callback runs asynchronously, separate from the main call stack."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 2: Handling Promise Rejections"
-      },
-      {
-        "type": "code",
-        "value": "const asyncTask = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(new Error('Promise rejected!'));\n  }, 500);\n});\n\n// Handling rejection with .catch()\nasyncTask.catch(error => {\n  console.error('Caught promise rejection:', error.message);\n});"
-      },
-      {
-        "type": "paragraph",
-        "value": "Promises are a common way to work with async code. Always handle rejected promises using `.catch()` or inside an `async/await` try...catch to avoid unhandled promise errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 3: Using async/await with try...catch"
-      },
-      {
-        "type": "code",
-        "value": "async function fetchData() {\n  try {\n    // Simulating a failing async operation\n    await Promise.reject(new Error('Failed to fetch data'));\n  } catch (error) {\n    console.error('Async/Await caught error:', error.message);\n  }\n}\n\nfetchData();"
-      },
-      {
-        "type": "paragraph",
-        "value": "The `async/await` syntax lets you write asynchronous code that looks synchronous. Wrapping `await` calls inside a try...catch ensures you catch any errors from rejected promises."
+        "value": "async function riskyFetch() {\n  throw new Error('Failed to fetch data');\n}\n\nasync function run() {\n  try {\n    await riskyFetch();\n  } catch (error) {\n    console.error('Error caught:', error.message);\n  }\n}\n\nrun();"
       },
       {
         "type": "paragraph",
@@ -115,495 +65,481 @@
       },
       {
         "type": "paragraph",
-        "value": "Understanding the event loop helps you realize why asynchronous errors need special handling. Use try...catch inside asynchronous callbacks like `setTimeout`, always handle promise rejections with `.catch()` or `try...catch` in `async/await`. Mastering this will make your JavaScript code more robust and easier to debug."
+        "value": "Async/await makes asynchronous JavaScript code more readable and maintainable. Remember these key points:\n- Use `async` before functions that return promises.\n- Use `await` to pause execution until a promise resolves.\n- Run parallel async operations with `Promise.all` to optimize performance.\n- Handle errors with try/catch inside async functions.\n\nBy mastering async/await patterns, you can write simpler and faster JavaScript applications."
       }
     ]
   },
   {
-    "slug": "building-scalable-data-models-in-typescript-for-enterprise-applications",
-    "title": "Building Scalable Data Models in TypeScript for Enterprise Applications",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to build scalable and maintainable data models in TypeScript for enterprise applications with practical examples and best practices.",
-    "videoUrl": "https://www.youtube.com/watch?v=YXbJGXdb5Bc",
+    "slug": "handling-unexpected-type-coercion-in-javascript-edge-cases",
+    "title": "Handling Unexpected Type Coercion in JavaScript Edge Cases",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to recognize and handle unexpected type coercion in JavaScript with practical examples tailored for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=N02hDpjE_wQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "In enterprise applications, managing data efficiently is crucial to creating scalable and maintainable software. TypeScript, with its static typing and modern features, helps developers define clear data models that reduce errors and improve code readability. This tutorial will guide you through building scalable data models using TypeScript, starting with basic concepts and moving to more advanced patterns."
+        "value": "JavaScript is a flexible language that automatically converts values from one type to another — a feature called type coercion. While convenient, it can sometimes lead to unexpected behavior, especially for beginners. In this article, we'll explore common edge cases where type coercion can cause errors or confusion, and show you how to handle them."
       },
       {
         "type": "paragraph",
-        "value": "We will start by defining simple interfaces and types for data models, and then learn how to handle more complex scenarios like inheritance, composition, and utility types. By the end, you’ll have a solid foundation to build robust enterprise data models."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Defining Basic Data Models with Interfaces"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript interfaces let you specify the shape of an object. This makes your data structures explicit and easy to understand."
+        "value": "One well-known example is when the plus (+) operator is used with both numbers and strings. JavaScript will concatenate if either operand is a string, instead of performing a numeric addition."
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: string;\n  name: string;\n  email: string;\n  isActive: boolean;\n}\n\nconst newUser: User = {\n  id: \"123\",\n  name: \"Alice\",\n  email: \"alice@example.com\",\n  isActive: true,\n};"
+        "value": "console.log(1 + '2'); // Output: '12'\nconsole.log('5' + 10); // Output: '510'\nconsole.log(1 + 2);  // Output: 3"
       },
       {
         "type": "paragraph",
-        "value": "With this interface, any variable typed as `User` must have the properties `id`, `name`, `email`, and `isActive` with the specified types. This prevents bugs caused by missing or wrongly typed properties."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. Using Type Aliases for Flexibility"
-      },
-      {
-        "type": "paragraph",
-        "value": "Type aliases in TypeScript are another way to name a type. They're useful for creating unions or more complex types."
+        "value": "To avoid this, always ensure values are of the expected type before operations. For example, use the Number() function to explicitly convert strings to numbers:"
       },
       {
         "type": "code",
-        "value": "type Role = \"admin\" | \"editor\" | \"viewer\";\n\ntype UserWithRole = User & { role: Role };\n\nconst user: UserWithRole = {\n  id: \"456\",\n  name: \"Bob\",\n  email: \"bob@example.com\",\n  isActive: false,\n  role: \"admin\",\n};"
+        "value": "let result = Number('2') + 1;\nconsole.log(result); // Output: 3"
       },
       {
         "type": "paragraph",
-        "value": "Here, `Role` defines possible user roles, and `UserWithRole` extends the base `User` type with a `role` property. This pattern helps when expanding models without duplicating all properties."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Modeling Inheritance with Interfaces"
-      },
-      {
-        "type": "paragraph",
-        "value": "Enterprise apps often require models that share common properties but also have specific fields. Interfaces support inheritance using the `extends` keyword."
+        "value": "Another tricky case involves comparisons between different types. For example:"
       },
       {
         "type": "code",
-        "value": "interface Product {\n  id: string;\n  name: string;\n  price: number;\n}\n\ninterface DigitalProduct extends Product {\n  fileSizeMB: number;\n  downloadUrl: string;\n}\n\ninterface PhysicalProduct extends Product {\n  weightKg: number;\n  shippingCost: number;\n}\n\nconst ebook: DigitalProduct = {\n  id: \"001\",\n  name: \"Learn TypeScript\",\n  price: 29.99,\n  fileSizeMB: 5,\n  downloadUrl: \"https://example.com/download/ebook\",\n};"
+        "value": "console.log(0 == false); // true\nconsole.log('' == false); // true\nconsole.log(null == undefined); // true\nconsole.log(0 === false); // false\nconsole.log('' === false); // false"
       },
       {
         "type": "paragraph",
-        "value": "This structure lets you share common properties while keeping specialized details separate, maintaining type safety."
+        "value": "The double equals (==) operator performs type coercion before comparing, while the triple equals (===) operator compares both value and type without coercion. To avoid unexpected results, use === in most cases."
       },
       {
         "type": "paragraph",
-        "value": "### 4. Composing Models Using Utility Types"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript provides several built-in utility types like `Partial`, `Pick`, `Omit` which help in composing data models and managing variations."
+        "value": "Type coercion can also cause unexpected results with objects and arrays. For example:"
       },
       {
         "type": "code",
-        "value": "// Partial allows making all properties optional\nconst updateUser: Partial<User> = {\n  email: \"newemail@example.com\",\n};\n\n// Pick selects specific keys\ntype UserContactInfo = Pick<User, \"email\" | \"name\">;\n\nconst contact: UserContactInfo = {\n  email: \"contact@example.com\",\n  name: \"Contact Name\",\n};"
+        "value": "console.log([] + []);          // Output: '' (empty string)\nconsole.log([] + {});          // Output: '[object Object]'\nconsole.log({} + []);          // Output: 0 in some engines because {} is treated as a block\nconsole.log([1,2] == '1,2');  // true"
       },
       {
         "type": "paragraph",
-        "value": "Using these utilities promotes code reuse and easier maintenance, especially when handling updates or partial data input."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 5. Enforcing Immutability with Readonly Types"
-      },
-      {
-        "type": "paragraph",
-        "value": "In large applications, preventing unwanted data mutations is crucial. You can use `readonly` modifiers to make properties immutable."
+        "value": "These results occur because JavaScript tries to convert objects to strings when using the + operator or comparing with strings. To handle this safely, convert arrays or objects explicitly:"
       },
       {
         "type": "code",
-        "value": "interface ImmutableUser {\n  readonly id: string;\n  readonly name: string;\n  readonly email: string;\n}\n\nconst immutableUser: ImmutableUser = {\n  id: \"789\",\n  name: \"Charlie\",\n  email: \"charlie@example.com\",\n};\n\n// immutableUser.id = \"newId\"; // Error: Cannot assign to 'id' because it is a read-only property."
+        "value": "console.log(JSON.stringify([]) + JSON.stringify([])); // '[][]'\nconsole.log([1,2].toString() === '1,2');             // true"
       },
       {
         "type": "paragraph",
-        "value": "Using `readonly` both in interfaces or as the `Readonly<T>` utility type helps maintain data integrity."
+        "value": "In summary, the key to handling unexpected type coercion is to always be explicit about types when doing operations, prefer === over == for comparisons, and use conversion functions (Number(), String(), Boolean()) when needed. This will reduce bugs and make your code easier to understand."
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
+        "value": "If you're ever unsure about what type JavaScript is treating a value as, you can use the typeof operator to check:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(typeof 123);      // 'number'\nconsole.log(typeof 'hello');  // 'string'\nconsole.log(typeof true);     // 'boolean'\nconsole.log(typeof undefined); // 'undefined'\nconsole.log(typeof null);      // 'object' (this is a known quirk)"
       },
       {
         "type": "paragraph",
-        "value": "Building scalable data models in TypeScript involves defining clear interfaces, leveraging type aliases, inheritance, utility types, and immutability features. These practices make your codebase easier to understand, safer, and easier to maintain as your enterprise application grows. Start simple, build on patterns that fit your domain, and always keep type safety and readability in mind."
+        "value": "Understanding these edge cases will give you greater confidence in writing robust JavaScript code. Happy coding!"
       }
     ]
   },
   {
-    "slug": "designing-resilient-typescript-systems-handling-unexpected-runtime-exceptions-gracefully",
-    "title": "Designing Resilient TypeScript Systems: Handling Unexpected Runtime Exceptions Gracefully",
+    "slug": "handling-recursive-type-aliases-in-typescript-advanced-edge-cases-explained",
+    "title": "Handling Recursive Type Aliases in TypeScript: Advanced Edge Cases Explained",
     "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to build resilient TypeScript applications by effectively handling unexpected runtime exceptions to improve stability and user experience.",
+    "type": "tutorials",
+    "description": "Learn how to work with recursive type aliases in TypeScript, including solutions to common advanced edge cases for safer and cleaner type definitions.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building TypeScript applications, it's common to think that static types solve all problems. However, even with TypeScript's strong typing, unexpected runtime exceptions can still occur—for example, when working with external APIs, user inputs, or asynchronous code. Designing your system to gracefully handle these exceptions ensures your application remains stable and provides a better user experience."
+        "value": "Recursive type aliases are a powerful feature in TypeScript that allow you to define types referencing themselves. This capability is particularly useful for describing nested data structures like trees, linked lists, or JSON-like objects. In this tutorial, we'll break down how to handle recursive type aliases, understand their constraints, and explore advanced edge cases."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explore some beginner-friendly strategies to handle unexpected runtime exceptions in TypeScript, including try-catch blocks, error types, and global error handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Use try-catch Blocks to Handle Exceptions Locally"
-      },
-      {
-        "type": "paragraph",
-        "value": "The simplest and most direct way to handle runtime errors is with try-catch blocks. This approach lets you catch errors where they happen and decide how to respond."
+        "value": "Let's start with a simple example of a recursive type alias to represent a tree structure. Each node can have children which are themselves nodes:"
       },
       {
         "type": "code",
-        "value": "function parseJson(jsonString: string) {\n  try {\n    const result = JSON.parse(jsonString);\n    console.log(\"Parsed result:\", result);\n  } catch (error) {\n    console.error(\"Could not parse JSON:\", error);\n  }\n}\n\nparseJson('{\"valid\": true}');\nparseJson('invalid json');"
+        "value": "type TreeNode = {\n  value: string;\n  children?: TreeNode[];\n};"
       },
       {
         "type": "paragraph",
-        "value": "2. Use Custom Error Types for More Meaningful Error Handling"
+        "value": "This works well and TypeScript understands that `TreeNode` can nest indefinitely. However, when you attempt more complex recursive structures, such as union types or conditional types that refer to themselves, TypeScript has some limitations to prevent infinite expansion."
       },
       {
         "type": "paragraph",
-        "value": "You can define custom error classes extending the built-in Error type. This helps you identify and react differently to various error scenarios."
+        "value": "For instance, consider a type alias that tries to describe JSON values recursively:"
       },
       {
         "type": "code",
-        "value": "class NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = \"NetworkError\";\n  }\n}\n\nfunction fetchData(success: boolean) {\n  if (!success) {\n    throw new NetworkError(\"Failed to fetch data\");\n  }\n  return { data: \"Some data\" };\n}\n\ntry {\n  const data = fetchData(false);\n  console.log(data);\n} catch (error) {\n  if (error instanceof NetworkError) {\n    console.error(\"Network issue:\", error.message);\n  } else {\n    console.error(\"Unknown error:\", error);\n  }\n}"
+        "value": "type JSONValue =\n  | string\n  | number\n  | boolean\n  | null\n  | JSONValue[] // Recursive array of JSON values\n  | { [key: string]: JSONValue }; // Recursive object with JSON values"
       },
       {
         "type": "paragraph",
-        "value": "3. Handle Errors in Asynchronous Code Using try-catch with async/await"
+        "value": "This pattern is common and works smoothly, but if you remix recursion with union types inside conditional types, TypeScript may throw errors like ‘Type alias ‘X’ circularly references itself’."
       },
       {
         "type": "paragraph",
-        "value": "When working with asynchronous code, wrap your await calls in try-catch blocks."
+        "value": "One common advanced edge case is when recursive type aliases involve conditional types. TypeScript does not allow direct recursion in type aliases used in conditional types without some workarounds."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example that causes an error because of circular reference:"
       },
       {
         "type": "code",
-        "value": "async function getUserData(userId: string) {\n  try {\n    const response = await fetch(`https://api.example.com/user/${userId}`);\n    if (!response.ok) {\n      throw new Error(`Server returned ${response.status}`);\n    }\n    const data = await response.json();\n    console.log(\"User data:\", data);\n  } catch (error) {\n    console.error(\"Error fetching user data:\", error);\n  }\n}\n\ngetUserData(\"123\");"
+        "value": "type Recursive<T> = T extends object ? Recursive<T> : T;"
       },
       {
         "type": "paragraph",
-        "value": "4. Use Global Error Handlers for Catching Unhandled Exceptions"
+        "value": "To handle recursion in these cases, you can try to break the recursion by introducing an interface or using helper types to defer recursion, or use the `interface` keyword instead of `type` where possible since interfaces can be self-referential."
       },
       {
         "type": "paragraph",
-        "value": "In some environments like Node.js or browsers, you can register global error handlers to catch uncaught exceptions and unhandled promise rejections."
+        "value": "For example, switching to an interface for recursive types:"
       },
       {
         "type": "code",
-        "value": "// Node.js example\nprocess.on('uncaughtException', (error) => {\n  console.error('Uncaught Exception:', error);\n  // Ideally do some cleanup and restart or shutdown gracefully\n});\n\nprocess.on('unhandledRejection', (reason) => {\n  console.error('Unhandled Rejection:', reason);\n});"
+        "value": "interface RecursiveInterface {\n  value: string;\n  next?: RecursiveInterface;\n}"
       },
       {
         "type": "paragraph",
-        "value": "5. Provide User-Friendly Error Messages and Recovery Options"
+        "value": "This can be extended safely without causing issues with circular references, which are more rigid in `type` aliases with conditional types."
       },
       {
         "type": "paragraph",
-        "value": "Whenever possible, show helpful error messages to users instead of generic failures. Consider logging errors for developers and allowing your app to recover or retry."
+        "value": "Another technique is to use helper type parameters to accumulate state during recursion and prevent infinite expansion. For example:"
+      },
+      {
+        "type": "code",
+        "value": "type DeepPartial<T> = T extends object\n  ? { [K in keyof T]?: DeepPartial<T[K]> }\n  : T;"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, even though TypeScript helps reduce many runtime bugs through static typing, gracefully handling runtime exceptions is essential to build resilient applications. Use try-catch blocks, custom error types, async-await error handling, and global error listeners to create robust systems that can recover from unexpected situations."
+        "value": "In this `DeepPartial` utility type, recursion happens through mapped types safely by conditionally traversing the object properties. TypeScript can handle this well because it unwraps one level of the type on each recursion step."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary Tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use recursive type aliases to represent nested data, but avoid direct recursion inside conditional types."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Prefer interfaces for self-referential structures when type alias recursion is problematic."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use helper types and conditional checks to limit recursion depth or indirectly structure recursion."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Employ mapped types carefully for recursive transformations like `DeepPartial`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling recursive type aliases cleverly in TypeScript can enable very flexible and safe type definitions for complex data models. Armed with these techniques, you can confidently model advanced recursive structures without hitting common pitfalls."
       }
     ]
   },
   {
-    "slug": "comparing-python-asyncio-vs-threading-for-concurrent-web-scraping",
-    "title": "Comparing Python's Asyncio vs Threading for Concurrent Web Scraping",
+    "slug": "handling-unexpected-nan-infinity-values-typescript",
+    "title": "Handling Unexpected NaN and Infinity Values in TypeScript Calculations",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to identify and handle unexpected NaN and Infinity values in TypeScript to keep your calculations safe and error-free.",
+    "videoUrl": "https://www.youtube.com/watch?v=qCpQpre4RO8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with numbers in TypeScript, you might sometimes encounter unexpected results such as NaN (Not a Number) or Infinity values. These special values usually indicate something went wrong during calculations, like dividing by zero or operating on invalid inputs. Understanding how to detect and handle these situations will help you write more reliable and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "NaN means the result of a calculation is not a valid number. For example, 0 divided by 0 yields NaN. Infinity arises when a number is too large or when you divide a positive number by zero."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript provides some built-in methods to check for these values: Number.isNaN() and Number.isFinite(). Number.isNaN() returns true if the value is actually NaN, and Number.isFinite() returns true if the value is a finite number (not NaN, Infinity, or -Infinity)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example demonstrating how to handle unexpected NaN and Infinity values in your calculations:"
+      },
+      {
+        "type": "code",
+        "value": "function safeDivide(a: number, b: number): number | null {\n  if (b === 0) {\n    console.warn('Division by zero detected. Returning null instead of Infinity.');\n    return null; // or handle it in a way that makes sense for your app\n  }\n\n  const result = a / b;\n\n  if (Number.isNaN(result)) {\n    console.error('Result is NaN. Please check input values.');\n    return null;\n  }\n\n  if (!Number.isFinite(result)) {\n    console.error('Result is Infinity. Calculation overflow or division by zero.');\n    return null;\n  }\n\n  return result;\n}\n\n// Example usage:\nconsole.log(safeDivide(10, 2)); // 5\nconsole.log(safeDivide(10, 0)); // null with warning\nconsole.log(safeDivide(0, 0));  // null with error"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the function safeDivide checks for division by zero before performing the division. It also verifies whether the result is NaN or Infinity using Number.isNaN() and Number.isFinite(). Returning null allows you to handle errors gracefully instead of letting unexpected values propagate."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more complex calculations, you can wrap your logic in try-catch blocks or add additional input validation to avoid invalid operations. Always validating inputs before your calculations is a good practice to keep your TypeScript code robust."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, watch out for NaN and Infinity values during calculations and use TypeScript's built-in number checks to handle these cases effectively. This approach helps you avoid bugs and makes your applications more stable and predictable."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-for-cleaner-resource-handling",
+    "title": "Mastering Python Context Managers for Cleaner Resource Handling",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the basics of using Python's asyncio and threading modules to perform concurrent web scraping. Compare their use cases, performance, and how to implement each for efficient scraping.",
-    "videoUrl": "https://www.youtube.com/watch?v=Ii7x4mpIhIs",
+    "description": "Learn how to use Python context managers to write cleaner, safer code by managing resources like files and network connections efficiently.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
     "content": [
       {
         "type": "paragraph",
-        "value": "Web scraping often involves making multiple requests to websites to collect data. Doing this serially can be slow, especially if you need to scrape hundreds of pages. By using concurrency, you can speed up your scraping tasks. Python offers two popular concurrency approaches: asyncio and threading. Both have their advantages, and this tutorial will help you understand when and how to use each for web scraping."
+        "value": "Python context managers are a powerful feature that help you manage resources such as files, network connections, or locks cleanly and efficiently. They handle setup and cleanup actions, ensuring your resources are properly closed or released even if errors occur. The most common way to use a context manager is with the 'with' statement."
       },
       {
         "type": "paragraph",
-        "value": "Threading is a way to run multiple threads (smaller units of process) simultaneously in a program. It is useful when tasks involve waiting for input/output, like network responses. Asyncio, on the other hand, is Python's asynchronous programming library, which uses an event loop to handle tasks that can be paused and resumed, such as network operations. Asyncio is often more efficient for I/O-bound tasks because it uses fewer system resources than threading."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by seeing how you can use threading to scrape multiple websites concurrently. We will use the popular requests library along with threading."
+        "value": "Let's look at a simple example of reading a file using a context manager:"
       },
       {
         "type": "code",
-        "value": "import threading\nimport requests\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nresults = []\n\n# Define a function that downloads data from a url\n\ndef fetch(url):\n    print(f'Starting {url}')\n    response = requests.get(url)\n    results.append((url, response.status_code))\n    print(f'Finished {url}')\n\nthreads = []\n\nfor url in urls:\n    t = threading.Thread(target=fetch, args=(url,))\n    t.start()\n    threads.append(t)\n\n# Wait for all threads to complete\nfor t in threads:\n    t.join()\n\nprint('All downloads completed.')\nprint(results)"
+        "value": "with open('example.txt', 'r') as file:\n    content = file.read()\nprint(content)"
       },
       {
         "type": "paragraph",
-        "value": "In this example, each URL is downloaded in its own thread, allowing multiple downloads to happen at the same time. Using threading helps when requests are waiting for network response, but note that threads come with some overhead and are limited by Python's Global Interpreter Lock (GIL) when doing CPU-bound work."
+        "value": "In this code, 'open' is a function that returns a file object which acts as a context manager. The 'with' statement ensures that the file is automatically closed after the block is executed, even if an error occurs inside the block. Without 'with', you'd have to manually close the file, which is prone to mistakes."
       },
       {
         "type": "paragraph",
-        "value": "Next, let's see how to achieve similar concurrent scraping with asyncio. For asyncio, we use an asynchronous HTTP library like aiohttp to make non-blocking requests."
+        "value": "You can also create your own context managers using two main approaches: by defining a class or by using the 'contextlib' module with a generator function."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can create a context manager by defining a class that manages a resource:"
       },
       {
         "type": "code",
-        "value": "import asyncio\nimport aiohttp\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nresults = []\n\nasync def fetch(session, url):\n    print(f'Starting {url}')\n    async with session.get(url) as response:\n        status = response.status\n        results.append((url, status))\n        print(f'Finished {url}')\n\nasync def main():\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        await asyncio.gather(*tasks)\n\nasyncio.run(main())\nprint('All downloads completed.')\nprint(results)"
+        "value": "class ManagedFile:\n    def __init__(self, filename):\n        self.filename = filename\n\n    def __enter__(self):\n        self.file = open(self.filename, 'r')\n        return self.file\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        self.file.close()"
       },
       {
         "type": "paragraph",
-        "value": "This asyncio example uses a single thread but an event loop to manage multiple HTTP requests concurrently. Because tasks yield control while waiting for responses, the program can handle many connections efficiently without the overhead of multiple threads."
+        "value": "You use this custom context manager like this:"
+      },
+      {
+        "type": "code",
+        "value": "with ManagedFile('example.txt') as f:\n    content = f.read()\nprint(content)"
       },
       {
         "type": "paragraph",
-        "value": "To summarize the differences:\n- Threading is easier to understand for beginners and works well if your scraping program also runs CPU-bound tasks.\n- Asyncio requires asynchronous libraries and a different programming style (async/await) but is more efficient for many simultaneous I/O tasks.\n\nFor web scraping, where the program mostly waits on network responses, asyncio is usually the better choice in terms of resource use and speed."
+        "value": "The '__enter__' method is called when the 'with' block starts, and its return value is assigned to the variable after 'as'. The '__exit__' method runs when the block ends, closing the file, no matter what happens inside the block."
       },
       {
         "type": "paragraph",
-        "value": "Remember to always respect websites' terms of service and avoid sending too many requests in a short time, which can overload servers or get your IP blocked."
+        "value": "Alternatively, Python's 'contextlib' module makes it easier to create context managers using the 'contextmanager' decorator from the 'contextlib' module. Here's the same example using this approach:"
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef managed_file(filename):\n    f = open(filename, 'r')\n    try:\n        yield f\n    finally:\n        f.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use the managed_file context manager like this:"
+      },
+      {
+        "type": "code",
+        "value": "with managed_file('example.txt') as f:\n    content = f.read()\nprint(content)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using context managers is a best practice whenever you work with resources that need explicit cleanup. It leads to cleaner code, reduces bugs related to resource leaks, and enhances readability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, start by using built-in context managers like file objects, and when needed, define your own using either a class with '__enter__' and '__exit__' methods or a generator function decorated with '@contextmanager'. Mastering context managers will help you write more robust and maintainable Python code."
       }
     ]
   },
   {
-    "slug": "understanding-pythons-typeerror-a-beginners-guide-to-common-causes-and-solutions",
-    "title": "Understanding Python's TypeError: A Beginner's Guide to Common Causes and Solutions",
+    "slug": "mastering-python-exception-hierarchies-for-cleaner-code-architecture",
+    "title": "Mastering Python Exception Hierarchies for Cleaner Code Architecture",
     "language": "python",
     "type": "errors",
-    "description": "Learn what Python's TypeError means, common reasons it occurs, and practical solutions to fix it with beginner-friendly examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=uswm-Xtekfs",
+    "description": "Learn how to organize and handle errors effectively in Python by mastering exception hierarchies, improving your code's readability and maintainability.",
+    "videoUrl": "https://www.youtube.com/watch?v=pTB30aXS77U",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to Python, encountering errors can be frustrating. One common error you'll come across is the TypeError. This error happens when you try to perform an operation on a data type that doesn't support it. In this guide, we'll explain what TypeError means, look at common causes, and show you easy ways to fix it."
+        "value": "When writing Python programs, handling errors is essential to create robust and user-friendly applications. Exceptions in Python help manage unexpected situations, but properly organizing them can be confusing for beginners. Understanding Python's exception hierarchy allows you to write cleaner, more maintainable code by grouping related errors logically."
       },
       {
         "type": "paragraph",
-        "value": "The TypeError is Python’s way of telling you, \"You’re trying to use a value in a way that isn’t allowed by its type.\" For example, you can't add a number to a string without converting one type to another first."
+        "value": "At the top of Python's exception hierarchy is the base class `BaseException`. Almost every error inherits from this class. However, when writing your code, you will mainly deal with exceptions derived from `Exception`, a subclass of `BaseException`."
       },
       {
         "type": "paragraph",
-        "value": "Let's see a simple example:"
+        "value": "Here's a simple visualization of part of the Python exception hierarchy:"
       },
       {
         "type": "code",
-        "value": "age = 25\nmessage = \"I am \" + age + \" years old\"\nprint(message)"
+        "value": "BaseException\n ├─ SystemExit\n ├─ KeyboardInterrupt\n └─ Exception\n      ├─ ArithmeticError\n      │    ├─ ZeroDivisionError\n      │    └─ OverflowError\n      ├─ LookupError\n      │    ├─ IndexError\n      │    └─ KeyError\n      └─ ValueError"
       },
       {
         "type": "paragraph",
-        "value": "Trying to run this will raise a TypeError because Python cannot concatenate a string (\"I am \") with an integer (age). To fix this, you need to convert the number to a string first:"
+        "value": "When you catch exceptions, you want to be as specific as possible to avoid hiding bugs and to handle different errors appropriately. For example, catching a `ZeroDivisionError` separately from a generic `ArithmeticError` gives more control."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example handling multiple exceptions:"
       },
       {
         "type": "code",
-        "value": "age = 25\nmessage = \"I am \" + str(age) + \" years old\"\nprint(message)"
+        "value": "def divide(x, y):\n    try:\n        result = x / y\n    except ZeroDivisionError:\n        print(\"Error: Cannot divide by zero.\")\n    else:\n        print(f\"Result is {result}\")\n\n# Usage\n divide(10, 2)  # Output: Result is 5.0\n divide(10, 0)  # Output: Error: Cannot divide by zero."
       },
       {
         "type": "paragraph",
-        "value": "Now the code works because `str(age)` changes the integer 25 into the string \"25\", allowing the pieces to be joined correctly."
+        "value": "You can also create custom exceptions for your applications by defining a new class inheriting from `Exception`. This helps distinguish errors specific to your program from built-in exceptions."
       },
       {
         "type": "paragraph",
-        "value": "Here are a few common causes of TypeError and how to fix them:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Adding or combining incompatible types**\n\nYou can’t add a string and a number directly. Always convert types explicitly."
+        "value": "Here's how to define and use a custom exception:"
       },
       {
         "type": "code",
-        "value": "# Incorrect\nresult = \"Score: \" + 100\n\n# Correct\nresult = \"Score: \" + str(100)"
+        "value": "class NegativeNumberError(Exception):\n    pass\n\ndef square_root(x):\n    if x < 0:\n        raise NegativeNumberError(\"Cannot calculate square root of a negative number.\")\n    return x ** 0.5\n\ntry:\n    print(square_root(-4))\nexcept NegativeNumberError as e:\n    print(f\"Custom error caught: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "2. **Calling a function with the wrong type of argument**\n\nIf a function expects a list but you pass an integer, you'll get a TypeError."
+        "value": "Sometimes you might want to create an exception hierarchy for your custom errors. For example, grouping errors related to file processing:"
       },
       {
         "type": "code",
-        "value": "def greet_all(names):\n    for name in names:\n        print(\"Hello, \" + name)\n\n# Incorrect call\n#greet_all(123)\n\n# Correct call\nnames = [\"Alice\", \"Bob\"]\ngreet_all(names)"
+        "value": "class FileProcessingError(Exception):\n    pass\n\nclass FileFormatError(FileProcessingError):\n    pass\n\nclass FileReadError(FileProcessingError):\n    pass\n\ntry:\n    raise FileFormatError(\"Unsupported file format.\")\nexcept FileProcessingError as e:\n    print(f\"Handling file error: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "3. **Using unsupported operations on data types**\n\nYou can't multiply a string by a float. Multiplication between a string and an integer is allowed (it repeats the string), but float causes a TypeError."
-      },
-      {
-        "type": "code",
-        "value": "# Incorrect\n# result = \"hello\" * 2.5\n\n# Correct\nresult = \"hello\" * 2\nprint(result)  # Output: hellohello"
+        "value": "By catching `FileProcessingError`, you handle both `FileFormatError` and `FileReadError` in one except block while still allowing for specific handling if needed. This hierarchical structure keeps your code organized and clear."
       },
       {
         "type": "paragraph",
-        "value": "In summary, a TypeError happens when you mix up data types in your code. You can avoid most TypeErrors by:\n- Knowing the type of your variables (use `type()` to check)\n- Converting types when needed using functions like `str()`, `int()`, or `float()`\n- Following the expected input types for functions\n\nWith a little practice, you'll get comfortable spotting and fixing these errors quickly!"
+        "value": "To summarize, mastering Python's exception hierarchy helps you:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Catch specific exceptions to avoid masking bugs.\n- Create and organize custom exceptions for your app's needs.\n- Write more readable and maintainable error handling code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start applying these concepts to your Python projects to handle errors with confidence and make your code cleaner!"
       }
     ]
   },
   {
-    "slug": "how-to-use-window-functions-in-sql-for-data-analysis",
-    "title": "How to Use Window Functions in SQL for Data Analysis: A Beginner’s Guide",
+    "slug": "designing-scalable-multi-tenant-databases-sql",
+    "title": "Designing Scalable Multi-Tenant Databases with SQL: A Beginner’s Guide",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to leverage SQL window functions for powerful and easy data analysis with this beginner-friendly tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn the basics of designing scalable multi-tenant databases using SQL with practical examples tailored for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions in SQL are a powerful tool that let you perform calculations across a set of rows related to the current query row, without collapsing the results like aggregation functions do. They are extremely useful for data analysis tasks such as calculating running totals, ranking rows, or finding moving averages."
+        "value": "Multi-tenant databases allow multiple customers (tenants) to share the same database while keeping their data isolated and secure. This approach is common in SaaS platforms and helps reduce infrastructure costs. In this tutorial, we will explore how to design scalable multi-tenant databases using SQL, focusing on practical and beginner-friendly concepts."
       },
       {
         "type": "paragraph",
-        "value": "In this guide, we will explore some common window functions and how to use them with simple examples so you can start using them in your own SQL queries right away."
+        "value": "There are three main ways to structure a multi-tenant database: single database with shared schema, single database with separate schemas, and separate databases per tenant. Each has its pros and cons related to scalability, maintenance, and security."
       },
       {
         "type": "paragraph",
-        "value": "### What Are Window Functions?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Window functions operate on a set of rows called the 'window' and return a value for each row from the input. The window is defined using the `OVER()` clause, which can include partitions and ordering."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common window functions include `ROW_NUMBER()`, `RANK()`, `SUM()`, `AVG()`, `LAG()`, and `LEAD()`."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Basic Example Dataset"
-      },
-      {
-        "type": "paragraph",
-        "value": "Assume we have a table named `sales` with the following columns: `id`, `salesperson`, `sale_date`, and `amount`."
+        "value": "Let's start by looking at the simplest and most common design: a single database with a shared schema, where each table includes a TenantID column to identify which tenant owns each row."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM sales;\n\n-- Example rows:\n-- id | salesperson | sale_date  | amount\n-- 1  | Alice       | 2024-01-01 | 500\n-- 2  | Bob         | 2024-01-02 | 300\n-- 3  | Alice       | 2024-01-03 | 200\n-- 4  | Bob         | 2024-01-04 | 700\n-- 5  | Alice       | 2024-01-05 | 400"
+        "value": "CREATE TABLE Customers (\n    CustomerID INT PRIMARY KEY,\n    TenantID INT NOT NULL,\n    CustomerName VARCHAR(100),\n    Email VARCHAR(100)\n);\n\nCREATE INDEX idx_tenant_customer ON Customers(TenantID);"
       },
       {
         "type": "paragraph",
-        "value": "### Using ROW_NUMBER() to Rank Sales by Salesperson"
-      },
-      {
-        "type": "paragraph",
-        "value": "The `ROW_NUMBER()` function assigns a unique sequential number to rows within a partition (group) of a result set, ordered by a column."
+        "value": "In this design, the TenantID column helps separate each tenant's data logically. You must include the tenant filter in all queries to avoid accidentally mixing data. For example, to get customers for Tenant 1:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS sale_rank\nFROM sales;"
+        "value": "SELECT CustomerID, CustomerName, Email\nFROM Customers\nWHERE TenantID = 1;"
       },
       {
         "type": "paragraph",
-        "value": "In this query, each salesperson's sales are numbered in order of the sale date."
+        "value": "To improve security and reduce errors, consider using row-level security policies (available in some database systems) or views that automatically filter by TenantID."
       },
       {
         "type": "paragraph",
-        "value": "### Calculating Running Total with SUM()"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can calculate a running total of sales amounts for each salesperson using `SUM()` with a window."
+        "value": "If your tenants have very different data needs or require strict separation, you might use schemas or separate databases per tenant. Here's an example of separate schemas:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales;"
+        "value": "-- Creating schemas for two tenants\nCREATE SCHEMA tenant1;\nCREATE SCHEMA tenant2;\n\n-- Creating customer tables inside each schema\nCREATE TABLE tenant1.Customers (\n    CustomerID INT PRIMARY KEY,\n    CustomerName VARCHAR(100),\n    Email VARCHAR(100)\n);\n\nCREATE TABLE tenant2.Customers (\n    CustomerID INT PRIMARY KEY,\n    CustomerName VARCHAR(100),\n    Email VARCHAR(100)\n);"
       },
       {
         "type": "paragraph",
-        "value": "This sums the sales amounts in order, resetting the sum for each salesperson."
+        "value": "This approach simplifies tenant data separation at the cost of increased overhead for schema management and queries."
       },
       {
         "type": "paragraph",
-        "value": "### Finding Previous Sale Amounts with LAG()"
+        "value": "Finally, consider performance and scalability. Create indexes on TenantID and other frequently queried columns, and optimize queries to filter by tenant. Regularly monitor your database size and performance to adjust your design or hardware as the number of tenants grows."
       },
       {
         "type": "paragraph",
-        "value": "The `LAG()` function accesses data from a previous row in the same result set, which is useful for comparing current values with previous ones."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_sale_amount\nFROM sales;"
+        "value": "In summary, designing a scalable multi-tenant database in SQL requires balancing data isolation, performance, and ease of maintenance. Start simple with a shared schema and tenant identifier, then evolve your design based on your application and tenant requirements."
       },
       {
         "type": "paragraph",
-        "value": "Here, for each sale, you can see the amount from the previous sale made by the same salesperson."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Window functions greatly enhance your ability to analyze data directly in SQL by providing flexible ways to rank, aggregate, and compare rows without grouping them. Start experimenting with them in your queries to gain deeper insights and write more efficient code."
+        "value": "Happy coding and building scalable applications!"
       }
     ]
   },
   {
-    "slug": "mastering-recursive-ctes-debugging-complex-hierarchical-queries-in-sql",
-    "title": "Mastering Recursive CTEs: Debugging Complex Hierarchical Queries in SQL",
+    "slug": "mastering-recursive-ctes-advanced-techniques-for-hierarchical-data-queries-in-sql",
+    "title": "Mastering Recursive CTEs: Advanced Techniques for Hierarchical Data Queries in SQL",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to effectively debug recursive Common Table Expressions (CTEs) in SQL, unlocking the power to query hierarchical data without frustration.",
+    "description": "Learn how to write and troubleshoot recursive CTEs in SQL to efficiently query hierarchical data and avoid common errors.",
     "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Recursive CTEs (Common Table Expressions) are a powerful feature in SQL that help you query hierarchical or tree-structured data, such as organizational charts, folder structures, or bill of materials. However, writing and debugging these queries can be challenging, especially for beginners. This article walks you through common errors encountered with recursive CTEs and provides practical tips to fix them."
+        "value": "Recursive Common Table Expressions (CTEs) are a powerful SQL feature used to query hierarchical or tree-structured data. Whether you are dealing with organizational charts, file systems, or category trees, recursive CTEs let you easily fetch parent-child relationships. However, beginners often encounter errors in syntax or logic that prevent these queries from working correctly. This article will guide you through advanced techniques and common errors in recursive CTEs to help you master them."
       },
       {
         "type": "paragraph",
-        "value": "A recursive CTE starts with an anchor query that defines the base set of rows. This is then followed by a recursive part that references the CTE itself and keeps building on the results until no new rows are returned. Let's start with a simple example and then explore common errors."
+        "value": "A recursive CTE has two main parts: an anchor member and a recursive member. The anchor member selects the root or starting rows, while the recursive member joins the CTE back to the base table, gradually building the hierarchy."
       },
       {
         "type": "code",
-        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    -- Anchor member: select the root employee (e.g., CEO)\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    -- Recursive member: join employees to their managers\n    SELECT e.EmployeeID, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;"
+        "value": "WITH RECURSIVE Hierarchy AS (\n  -- Anchor member: select root nodes\n  SELECT id, name, parent_id, 1 AS level\n  FROM categories\n  WHERE parent_id IS NULL\n\n  UNION ALL\n\n  -- Recursive member: join with categories to find children\n  SELECT c.id, c.name, c.parent_id, h.level + 1\n  FROM categories c\n  INNER JOIN Hierarchy h ON c.parent_id = h.id\n)\nSELECT * FROM Hierarchy;\n"
       },
       {
         "type": "paragraph",
-        "value": "### Common Errors and How to Fix Them"
+        "value": "Common errors when writing recursive CTEs include:\n1. Forgetting the UNION ALL between anchor and recursive parts.\n2. Using UNION instead of UNION ALL, which can cause unexpected duplicate suppression.\n3. Missing or incorrect join condition in the recursive member.\n4. Infinite recursion due to cyclic references in data.\n5. Not limiting recursion depth, which can lead to performance issues or query failure."
       },
       {
         "type": "paragraph",
-        "value": "**1. Missing Anchor Member or Recursive Member**\nYour recursive CTE must have at least two parts combined by UNION ALL: the anchor and the recursive member. Omitting either causes errors or infinite loops."
+        "value": "To avoid infinite loops caused by cycles in your data, introduce a maximum recursion depth using a WHERE clause or utilize system-specific options like OPTION (MAXRECURSION n) in SQL Server. You can also track visited nodes with an additional column."
       },
       {
         "type": "code",
-        "value": "-- Incorrect: Missing anchor member\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID = 1  -- This alone is not anchor\n)\nSELECT * FROM EmployeeHierarchy;"
+        "value": "WITH RECURSIVE Hierarchy AS (\n  SELECT id, name, parent_id, 1 AS level, CAST(id AS VARCHAR(255)) AS path\n  FROM categories\n  WHERE parent_id IS NULL\n\n  UNION ALL\n\n  SELECT c.id, c.name, c.parent_id, h.level + 1, CONCAT(h.path, '>', c.id)\n  FROM categories c\n  INNER JOIN Hierarchy h ON c.parent_id = h.id\n  WHERE c.id NOT IN (SELECT CAST(value AS INT) FROM STRING_SPLIT(h.path, '>'))\n)\nSELECT * FROM Hierarchy;\n"
       },
       {
         "type": "paragraph",
-        "value": "Make sure you always have a base anchor query that doesn't reference the CTE itself."
+        "value": "In the above example, the 'path' column keeps track of visited nodes by concatenating IDs, preventing cycles. Adjust the string functions according to your SQL dialect."
       },
       {
         "type": "paragraph",
-        "value": "**2. Infinite Recursion or Excessive Iterations**\nIf your recursive query keeps generating new rows indefinitely, your database might throw an error or use a maximum recursion limit (e.g., SQL Server has a default max recursion of 100). To avoid infinite loops, confirm your join condition properly reduces the search space."
-      },
-      {
-        "type": "code",
-        "value": "-- Example causing infinite loop due to bad join condition\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    SELECT e.EmployeeID, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.EmployeeID = eh.EmployeeID  -- Incorrect join\n)\nSELECT * FROM EmployeeHierarchy;"
+        "value": "Debugging recursive CTEs is easier if you:\n- Start with the anchor part and verify it returns expected rows.\n- Test the recursive member separately.\n- Limit recursion depth initially to catch logical errors.\n- Use explicit column aliases and data types to avoid mismatches."
       },
       {
         "type": "paragraph",
-        "value": "Here, joining on e.EmployeeID = eh.EmployeeID causes recursion on the same employee repeatedly. Instead, join e.ManagerID = eh.EmployeeID."
-      },
-      {
-        "type": "paragraph",
-        "value": "**3. Incorrect Column Number or Data Types**\nThe anchor and recursive member must return the same number of columns and compatible data types."
-      },
-      {
-        "type": "code",
-        "value": "-- Error example - mismatch of columns\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    SELECT EmployeeID, ManagerID, Level + 1  -- Extra column without anchor counterpart\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Fix it by including the same columns with matching data types in both parts."
-      },
-      {
-        "type": "paragraph",
-        "value": "**4. Using Non-Terminating Conditions**\nSet an appropriate termination condition in your recursive part to stop the recursion once all relevant rows are found."
-      },
-      {
-        "type": "code",
-        "value": "-- Limiting recursion depth example\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    SELECT e.EmployeeID, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n    WHERE eh.Level < 10  -- Stop after 10 levels\n)\nSELECT * FROM EmployeeHierarchy;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This prevents runaway recursion if you know your hierarchy won’t exceed a certain depth."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Debugging Tips"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Run the anchor part alone first to ensure it returns expected root rows.\n- Then run the recursive member with sample inputs by manually substituting.\n- Add a recursion level or path column to track recursion depth or visited nodes.\n- Use `LIMIT` or `TOP` clauses to test partial recursion to avoid timeouts.\n- Check for cycles or self-referencing rows that may cause infinite recursion."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding these common pitfalls and debugging strategies, you'll gain confidence in writing and troubleshooting recursive CTE queries to efficiently explore hierarchical data in SQL."
+        "value": "With these techniques, you can confidently write efficient and error-free recursive CTE queries for hierarchical data in SQL."
       }
     ]
   }
