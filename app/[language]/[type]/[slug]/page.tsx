@@ -68,6 +68,9 @@ export async function generateMetadata({
   return {
     title: `${article.title} | Dev Nest Guide`,
     description: article.description,
+    alternates: {
+      canonical: `/${language}/${type}/${slug}`,
+    },
   };
 }
 
