@@ -661,5 +661,179 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-broken-select-query-to-retrieve-employee-names",
+    "title": "Fix the Broken SELECT Query to Retrieve Employee Names",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple SQL query intended to retrieve all employee names is not working correctly. Your task is to identify and fix the syntax errors so the query runs successfully and returns the correct results.",
+    "prompt": "You have a table called Employees with columns id, name, and department. The following SQL query is intended to select all employee names, but it contains errors and does not run properly. Fix the query so it executes correctly and returns the correct list of employee names.",
+    "guidance": [
+      "Check for common SQL syntax issues such as missing or misplaced keywords or punctuation.",
+      "Ensure the SELECT statement includes the correct column name.",
+      "Verify the table name is spelled correctly and referenced properly."
+    ],
+    "hints": [
+      "SELECT queries usually start with the keyword SELECT followed by the column(s) you want to retrieve.",
+      "Check if commas and FROM keyword are used correctly.",
+      "Make sure column and table names are spelled exactly as they appear in the database."
+    ],
+    "starterCode": "SELEC name FROM Employee;",
+    "expectedOutput": "A list of all employee names from the Employees table, for example:\nJohn Doe\nJane Smith\nAlice Johnson",
+    "concepts": [
+      "Basic SQL syntax",
+      "SELECT statement",
+      "Column and table naming"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-json-data-filter-and-sorter",
+    "title": "Build a JSON Data Filter and Sorter",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a JavaScript function that accepts an array of JSON objects representing products, filters them based on multiple criteria, and then sorts the filtered results by a specified property.",
+    "prompt": "You are given an array of product objects, each with properties like name, category, price, and rating. Write a function `filterAndSortProducts(products, filters, sortBy, sortOrder)` that filters this array according to the given filter criteria (category and minimum rating), and then sorts the filtered results by price or rating in ascending or descending order.\n\n- `products`: Array of product objects.\n- `filters`: Object with optional keys `category` (string) and `minRating` (number).\n- `sortBy`: string, either \"price\" or \"rating\".\n- `sortOrder`: string, either \"asc\" or \"desc\".\n\nReturn the filtered and sorted array.\n\nExample:\n\nconst products = [\n  {name: \"Product A\", category: \"electronics\", price: 99.99, rating: 4.5},\n  {name: \"Product B\", category: \"clothing\", price: 29.99, rating: 4.2},\n  {name: \"Product C\", category: \"electronics\", price: 199.99, rating: 4.8},\n];\n\nfilterAndSortProducts(products, {category: \"electronics\", minRating: 4.5}, \"price\", \"asc\");\n\nShould return Product A and Product C, sorted by price ascending.",
+    "guidance": [
+      "Use Array.filter() with conditions based on the filters object to narrow down the products.",
+      "Use Array.sort() to sort the filtered products according to the specified property and order.",
+      "Handle cases where filters or sort parameters may be missing or undefined."
+    ],
+    "hints": [
+      "Remember to check if filter criteria exist before applying them.",
+      "For sorting in descending order, reverse the comparison results.",
+      "Use optional chaining or default parameters to avoid errors when accessing filters."
+    ],
+    "starterCode": "function filterAndSortProducts(products, filters, sortBy, sortOrder) {\n  // Your code here\n}\n\nconst products = [\n  {name: \"Product A\", category: \"electronics\", price: 99.99, rating: 4.5},\n  {name: \"Product B\", category: \"clothing\", price: 29.99, rating: 4.2},\n  {name: \"Product C\", category: \"electronics\", price: 199.99, rating: 4.8},\n];",
+    "expectedOutput": "[\n  {name: \"Product A\", category: \"electronics\", price: 99.99, rating: 4.5},\n  {name: \"Product C\", category: \"electronics\", price: 199.99, rating: 4.8}\n]",
+    "concepts": [
+      "Array filtering",
+      "Array sorting",
+      "Objects and properties",
+      "Conditional logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-sql-function-to-calculate-running-median-over-a-dynamic-window",
+    "title": "Build a SQL Function to Calculate Running Median Over a Dynamic Window",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "queries",
+    "description": "In this challenge, you will create a SQL function that calculates the running median value of a numeric column over a dynamic sliding window based on timestamps. This requires advanced use of window functions, array manipulation, and median calculation within SQL.",
+    "prompt": "Create a SQL function named `running_median` that accepts a table name, a numeric column name, a timestamp column name, and an integer window size (in terms of the number of rows). The function should return the original table appended with an additional column `median_val` that contains the median of the numeric column over the previous `window_size` rows ordered by the timestamp column (including the current row). Implement this using standard SQL with window functions, arrays, or any relevant constructs available in your SQL dialect. Your solution must handle dynamic input parameters for column and table names where possible (or describe assumptions if not possible).",
+    "guidance": [
+      "Use window functions like ROWS BETWEEN to define sliding windows based on row counts.",
+      "Since SQL does not have a built-in median aggregate in all dialects, consider using arrays and percentile_cont or manual calculation using array slicing.",
+      "Think about performance optimizations for large datasets and how to minimize repeated calculations."
+    ],
+    "hints": [
+      "percentile_cont(0.5) WITHIN GROUP (ORDER BY column) can be used in some SQL dialects to approximate median within a window.",
+      "If dynamic table and column names cannot be parameterized in your SQL environment, create the function targeting fixed columns or symbolize with identifiers.",
+      "You can aggregate values into arrays over the window, then select the middle element(s) to find the median."
+    ],
+    "starterCode": "CREATE FUNCTION running_median(window_size INTEGER)\nRETURNS TABLE(id INT, event_time TIMESTAMP, value NUMERIC, median_val NUMERIC) AS $$\nBEGIN\n  -- Implement your logic here assuming a fixed table named 'events' with columns 'id', 'event_time', and 'value'\n  RETURN QUERY\n  SELECT\n    id,\n    event_time,\n    value,\n    -- placeholder for median calculation\n    NULL::NUMERIC AS median_val\n  FROM events\n  ORDER BY event_time;\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "A result set from the 'events' table including a new column 'median_val' where each row's value is the median of the 'value' column over the last 'window_size' rows ordered by 'event_time'.",
+    "concepts": [
+      "Window Functions",
+      "Median Calculation",
+      "Aggregate Functions",
+      "Array Manipulation in SQL"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-simple-loop-and-conditional-in-c",
+    "title": "Predict the Output of a Simple Loop and Conditional in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "logic",
+    "description": "Analyze the given C++ code involving a loop and conditional statements, and predict the exact output it produces when run.",
+    "prompt": "Consider the following C++ code snippet. What will be the output when this code runs?\n\nint main() {\n    for (int i = 1; i <= 5; i++) {\n        if (i % 2 == 0) {\n            std::cout << i << \" is even\\n\";\n        } else {\n            std::cout << i << \" is odd\\n\";\n        }\n    }\n    return 0;\n}\n\nWrite down the exact text output the program prints.",
+    "guidance": [
+      "Carefully check the loop's start and end conditions to know which numbers it processes.",
+      "Remember how the modulo operator (%) determines if a number is even or odd.",
+      "Each iteration prints one line; count how many lines will be output."
+    ],
+    "hints": [
+      "The loop variable 'i' starts at 1 and increases by 1 until it reaches 5.",
+      "If 'i % 2 == 0' evaluates to true, the number is even; otherwise, it's odd."
+    ],
+    "starterCode": "int main() {\n    for (int i = 1; i <= 5; i++) {\n        if (i % 2 == 0) {\n            std::cout << i << \" is even\\n\";\n        } else {\n            std::cout << i << \" is odd\\n\";\n        }\n    }\n    return 0;\n}",
+    "expectedOutput": "1 is odd\n2 is even\n3 is odd\n4 is even\n5 is odd",
+    "concepts": [
+      "loops",
+      "conditionals",
+      "modulo operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "design-and-query-a-library-management-data-model",
+    "title": "Design and Query a Library Management Data Model",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "data-modeling",
+    "description": "Create a SQL data model for a library management system and write queries to retrieve meaningful information about books, authors, borrowers, and loans.",
+    "prompt": "You are tasked with designing a simple relational database schema for a library management system. Your database must include tables for Books, Authors, Borrowers, and Loans. Each book can have multiple authors, and each borrower can have multiple loans. After creating the schema and inserting sample data, write a SQL query to find the names of all borrowers who currently have at least one book on loan that was authored by 'Jane Austen'. Include the book title, borrower name, and loan date in your results.",
+    "guidance": [
+      "Design tables with appropriate primary keys and foreign keys to represent the relationships.",
+      "Consider a junction table for the many-to-many relationship between Books and Authors.",
+      "Write a query using JOINs to connect Borrowers, Loans, Books, and Authors.",
+      "Filter loans to include only those not yet returned (assume a NULL return date)."
+    ],
+    "hints": [
+      "The many-to-many relationship between Books and Authors requires a separate linking table.",
+      "Use INNER JOINs to combine the data across multiple tables.",
+      "Filter on author name in the WHERE clause and check for NULL return_date to find current loans."
+    ],
+    "starterCode": "CREATE TABLE Authors (\n  author_id INT PRIMARY KEY,\n  name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Books (\n  book_id INT PRIMARY KEY,\n  title VARCHAR(200) NOT NULL\n);\n\nCREATE TABLE BookAuthors (\n  book_id INT,\n  author_id INT,\n  PRIMARY KEY (book_id, author_id),\n  FOREIGN KEY (book_id) REFERENCES Books(book_id),\n  FOREIGN KEY (author_id) REFERENCES Authors(author_id)\n);\n\nCREATE TABLE Borrowers (\n  borrower_id INT PRIMARY KEY,\n  name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Loans (\n  loan_id INT PRIMARY KEY,\n  book_id INT,\n  borrower_id INT,\n  loan_date DATE,\n  return_date DATE,\n  FOREIGN KEY (book_id) REFERENCES Books(book_id),\n  FOREIGN KEY (borrower_id) REFERENCES Borrowers(borrower_id)\n);",
+    "expectedOutput": "A result set containing columns: title, name, loan_date for all borrowers who have an active loan (return_date IS NULL) of a book authored by 'Jane Austen'. For example:\n\n| title                 | name            | loan_date  |\n|-----------------------|-----------------|------------|\n| Pride and Prejudice   | Emily Clark     | 2024-03-01 |\n| Sense and Sensibility | John Doe        | 2024-04-15 |",
+    "concepts": [
+      "SQL JOINs",
+      "many-to-many relationships",
+      "foreign keys",
+      "query filtering"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-memory-leak-and-logic-bug-in-a-recursive-deep-clone-function",
+    "title": "Fix the Memory Leak and Logic Bug in a Recursive Deep Clone Function",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "This challenge provides a broken implementation of a deep clone function in JavaScript. The function is supposed to recursively clone any object or array, preserving nested structures without reference sharing. However, the current implementation has both a logic bug causing incorrect cloning of nested structures and a memory leak due to undetected circular references. Your task is to fix these issues and optimize the function for deep cloning complex objects.",
+    "prompt": "You're given a deepClone function intended to recursively clone objects and arrays. However, it fails for complex nested objects, especially those containing circular references. It reuses references incorrectly, can cause infinite recursion, and leaks memory. Fix the deepClone function to correctly and safely deep clone any input (object or array), handle circular references gracefully, and ensure no memory leaks occur.",
+    "guidance": [
+      "Detect and keep track of already cloned objects to resolve circular references.",
+      "Ensure arrays and objects are cloned properly without referencing the original.",
+      "Avoid global variables or growing state that causes memory leaks.",
+      "Use a helper parameter (like a WeakMap) to store references during recursion."
+    ],
+    "hints": [
+      "Use a WeakMap to map original objects to their clones during recursion to avoid infinite loops.",
+      "Return primitive types immediately without cloning, since they are immutable.",
+      "Avoid recreating large objects repeatedly without garbage collection support."
+    ],
+    "starterCode": "function deepClone(obj) {\n  if (obj === null || typeof obj !== 'object') {\n    return obj;\n  }\n\n  if (Array.isArray(obj)) {\n    let cloneArr = [];\n    for (let i = 0; i < obj.length; i++) {\n      cloneArr[i] = deepClone(obj[i]);\n    }\n    return cloneArr;\n  } else {\n    let cloneObj = {};\n    for (let key in obj) {\n      cloneObj[key] = deepClone(obj[key]);\n    }\n    return cloneObj;\n  }\n}",
+    "expectedOutput": "const circularObj = {};\ncircularObj.self = circularObj;\nconst cloned = deepClone(circularObj);\nconsole.log(cloned !== circularObj); // true\nconsole.log(cloned.self === cloned); // true\n\nconst original = { a: 1, b: { c: 2 } };\nconst copy = deepClone(original);\nconsole.log(copy !== original); // true\nconsole.log(copy.b !== original.b); // true\nconsole.log(copy.b.c === 2); // true",
+    "concepts": [
+      "recursion",
+      "deep cloning",
+      "memory management",
+      "circular references",
+      "WeakMap"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
