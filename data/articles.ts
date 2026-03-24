@@ -19696,5 +19696,597 @@ export const articles = [
         "value": "With these techniques, you can confidently write efficient and error-free recursive CTE queries for hierarchical data in SQL."
       }
     ]
+  },
+  {
+    "slug": "step-by-step-guide-to-building-your-first-javascript-to-do-list-app",
+    "title": "Step-by-Step Guide to Building Your First JavaScript To-Do List App",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple, beginner-friendly to-do list app using plain JavaScript, HTML, and CSS in this step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=G0jO8kUrg-I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Building a to-do list is a classic beginner project that helps you practice JavaScript, HTML, and CSS together. In this tutorial, we'll create a simple to-do list app that lets you add and remove tasks dynamically. Let's get started!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Set up the HTML Structure\nFirst, create an HTML file with a text input, a button to add tasks, and a list to display the tasks."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Simple To-Do List</title>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Enter a new task\" />\n  <button id=\"addBtn\">Add Task</button>\n  <ul id=\"taskList\"></ul>\n\n  <script src=\"script.js\"></script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Style Your To-Do List (Optional)\nYou can add some basic CSS for better appearance. Save this as a CSS file or include it in the HTML `<style>` tag."
+      },
+      {
+        "type": "code",
+        "value": "body {\n  font-family: Arial, sans-serif;\n  max-width: 400px;\n  margin: 30px auto;\n  padding: 0 20px;\n}\n\ninput {\n  width: 70%;\n  padding: 8px;\n  margin-right: 10px;\n}\n\nbutton {\n  padding: 8px 12px;\n  cursor: pointer;\n}\n\nul {\n  list-style-type: none;\n  padding-left: 0;\n}\n\nli {\n  background: #f4f4f4;\n  margin-bottom: 8px;\n  padding: 10px;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\nli button {\n  background: #ff4d4d;\n  border: none;\n  color: white;\n  padding: 5px 8px;\n  cursor: pointer;\n  border-radius: 4px;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Write JavaScript to Add and Remove Tasks\nCreate a file named `script.js` and write the following code to handle adding tasks and deleting them when clicked."
+      },
+      {
+        "type": "code",
+        "value": "const addBtn = document.getElementById('addBtn');\nconst taskInput = document.getElementById('taskInput');\nconst taskList = document.getElementById('taskList');\n\n// Function to add a new task\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if (taskText === '') {\n    alert('Please enter a task');\n    return;\n  }\n\n  // Create list item\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Create delete button\n  const delBtn = document.createElement('button');\n  delBtn.textContent = 'Delete';\n  delBtn.onclick = function() {\n    taskList.removeChild(li);\n  };\n\n  // Add delete button to list item\n  li.appendChild(delBtn);\n\n  // Add list item to the list\n  taskList.appendChild(li);\n\n  // Clear input\n  taskInput.value = '';\n  taskInput.focus();\n}\n\n// Add event listener to button\naddBtn.addEventListener('click', addTask);\n\n// Add task when pressing Enter key\ntaskInput.addEventListener('keypress', function(event) {\n  if (event.key === 'Enter') {\n    addTask();\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Test Your To-Do List App\nOpen your HTML file in a browser. Type a task into the input box and press the Add Task button or Enter key. Your task should appear below with a Delete button next to it. Click Delete to remove the task."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nYou've just built a basic JavaScript to-do list app! This project showed you how to manipulate the DOM, handle events, and update content dynamically. Feel free to enhance it with saving tasks in local storage, editing tasks, or marking tasks as complete."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-asynchronous-stack-traces-nodejs-debugging",
+    "title": "Mastering Asynchronous Stack Traces in Node.js for Effective Debugging",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to read and improve asynchronous stack traces in Node.js to debug your applications more effectively with clear examples and tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging in Node.js can be tricky, especially when dealing with asynchronous code. Traditional stack traces often lose context in asynchronous operations, making it harder to identify where errors originate. In this article, we'll explore how asynchronous stack traces work in Node.js and learn practical ways to master them for better debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is an Asynchronous Stack Trace?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A stack trace shows the sequence of function calls leading to an error. In synchronous code, the stack trace is straightforward because function calls are nested naturally. However, in asynchronous code (using callbacks, promises, or async/await), the stack trace can get fragmented because the call stack is not continuous—each asynchronous milestone effectively resets the stack."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example of a Problematic Stack Trace"
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Failed to fetch data'));\n    }, 100);\n  });\n}\n\nasync function process() {\n  await fetchData();\n}\n\nprocess().catch(err => {\n  console.error(err.stack);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, your stack trace might only show where the Promise was rejected inside `setTimeout`, but not the line in `process()` or where `process()` was called. This limits your ability to quickly find the origin of the error."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How Node.js Helps With Async Stack Traces"
+      },
+      {
+        "type": "paragraph",
+        "value": "Node.js has made improvements in how asynchronous stack traces are captured, especially with async/await. By default, recent Node.js versions provide better async stack traces that capture the sequence of awaited calls. To take advantage of this, make sure you are using a Node.js version 12 or above."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using `async_hooks` for Even Better Context (Advanced but Useful)"
+      },
+      {
+        "type": "paragraph",
+        "value": "For deeper debugging, Node.js provides the `async_hooks` module which lets you track asynchronous resources and maintain context across async calls. While it is more advanced, tools like `cls-hooked` (Continuaton Local Storage) are built on it to help retain context and improve stack traces."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Tips to Master Async Stack Traces"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use async/await instead of callbacks:** This creates more readable asynchronous code and better error stack traces.\n2. **Enable full trace warnings:** Run Node.js with `--trace-warnings` to get more insight.\n3. **Use source maps for transpiled code:** If you use TypeScript or Babel, enable source maps so errors map back to your original source.\n4. **Wrap errors with custom messages:** Add helpful context before throwing errors.\n5. **Use tools like `longjohn` or debugging IDEs:** They help capture async call stacks.\n\nHere's a simple example with async/await and added error context:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  // Simulate a fetch failure\n  throw new Error('Failed to fetch data');\n}\n\nasync function process() {\n  try {\n    await fetchData();\n  } catch (err) {\n    err.message = `process() failed: ${err.message}`;\n    throw err;\n  }\n}\n\nprocess().catch(err => {\n  console.error(err.stack);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering asynchronous stack traces in Node.js can dramatically improve your debugging speed and confidence. Use modern async/await syntax, keep your Node.js version updated, add meaningful error context, and consider advanced tools like `async_hooks` or source maps for complex projects. With these approaches, chasing down bugs in asynchronous code becomes much easier."
+      }
+    ]
+  },
+  {
+    "slug": "handling-complex-type-inference-with-recursive-types-in-typescript",
+    "title": "Handling Complex Type Inference with Recursive Types in TypeScript",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to work with recursive types in TypeScript to improve complex type inference in your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=QryUZJ0Tx90",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript's powerful type system allows developers to create complex and expressive types. One helpful feature is recursive types — types that reference themselves. They can be especially useful when modeling data structures like trees or nested objects. However, using recursive types can sometimes cause difficulties with type inference, especially for beginners. In this tutorial, you'll learn how to handle complex type inference with recursive types in TypeScript using clear, practical examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you want to create a type for a nested JSON object where values can be either strings or other nested objects of the same shape. A recursive type lets you define this structure easily."
+      },
+      {
+        "type": "code",
+        "value": "type NestedObject = {\n  [key: string]: string | NestedObject;\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `NestedObject` is a type that can have any number of properties with either a string value or another `NestedObject`. This recursive definition lets you create deeply nested objects with consistent typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's see how you can type a function that takes such a nested object and logs all the string values, no matter how deep they are nested:"
+      },
+      {
+        "type": "code",
+        "value": "function logNestedStrings(obj: NestedObject): void {\n  for (const key in obj) {\n    const value = obj[key];\n    if (typeof value === 'string') {\n      console.log(value);\n    } else {\n      logNestedStrings(value);\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function is straightforward: it checks the type of each value, and if it's a string, it logs it. If the value is another nested object, it calls itself recursively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes TypeScript's inference struggles when using recursive types in generic functions or complex conditions. One way to help TypeScript is by using type assertions or helper types to guide inference."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, suppose you want a generic function that flattens nested objects of type `NestedObject` into simple key-value pairs where keys are dot-separated paths. Here is how you can implement and type it:"
+      },
+      {
+        "type": "code",
+        "value": "type FlatObject = {\n  [key: string]: string;\n};\n\nfunction flattenNestedObject(\n  obj: NestedObject,\n  prefix: string = ''\n): FlatObject {\n  let result: FlatObject = {};\n\n  for (const key in obj) {\n    const value = obj[key];\n    const newKey = prefix ? `${prefix}.${key}` : key;\n\n    if (typeof value === 'string') {\n      result[newKey] = value;\n    } else {\n      const nested = flattenNestedObject(value, newKey);\n      result = { ...result, ...nested };\n    }\n  }\n\n  return result;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function handles nested objects recursively, building a flat object that maps dot-separated paths to string values."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can test it with this example:"
+      },
+      {
+        "type": "code",
+        "value": "const nested: NestedObject = {\n  user: {\n    name: 'Alice',\n    address: {\n      city: 'Wonderland',\n      zip: '12345'\n    }\n  },\n  status: 'active'\n};\n\nconst flat = flattenNestedObject(nested);\nconsole.log(flat);\n// Output:\n// {\n//   'user.name': 'Alice',\n//   'user.address.city': 'Wonderland',\n//   'user.address.zip': '12345',\n//   'status': 'active'\n// }"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use recursive type aliases to model nested or self-referential structures.\n- When inference struggles, annotate function inputs/outputs clearly.\n- Use recursive functions with careful type narrowing (`typeof value === 'string'`) to handle each case.\n- Helper types can simplify working with complex data.\n\nUnderstanding and handling recursive types allows you to express and manipulate deeply nested data safely and effectively in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing with your own nested data structures, and soon you'll be comfortable with TypeScript's advanced type inference!"
+      }
+    ]
+  },
+  {
+    "slug": "advanced-typescript-error-handling-patterns-for-scalable-enterprise-applications",
+    "title": "Advanced TypeScript Error Handling Patterns for Scalable Enterprise Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn advanced error handling patterns in TypeScript to build scalable and maintainable enterprise-grade applications with cleaner and safer error management.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial aspect of building robust and scalable applications, especially in enterprise environments. TypeScript provides powerful features that help us handle errors more effectively beyond the basic try-catch blocks and the built-in Error object. In this article, we'll explore advanced error handling patterns in TypeScript that improve code maintainability, readability, and reliability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Advanced Error Handling?"
+      },
+      {
+        "type": "paragraph",
+        "value": "In large applications, simply throwing and catching generic errors is not enough. You want to categorize, enrich, and handle errors in ways that provide meaningful information to developers and even end users. This helps with debugging, logging, retry mechanisms, and presenting user-friendly messages."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Using Custom Error Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of using the generic Error object, customize your own error classes to provide specific context about an error."
+      },
+      {
+        "type": "code",
+        "value": "class DatabaseError extends Error {\n  public code: number;\n\n  constructor(message: string, code: number) {\n    super(message);\n    this.code = code;\n    this.name = 'DatabaseError';\n    Object.setPrototypeOf(this, DatabaseError.prototype); // Fix prototype chain\n  }\n}\n\n// Usage:\ntry {\n  throw new DatabaseError('Connection Timeout', 504);\n} catch (err) {\n  if (err instanceof DatabaseError) {\n    console.error(`DB Error ${err.code}: ${err.message}`);\n  } else {\n    console.error('Unknown error:', err);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Using Result Types Instead of Exceptions"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another pattern popular in functional programming is using a Result type which explicitly models success or failure, avoiding exceptions for flow control."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };\n\nfunction fetchData(id: string): Result<string, string> {\n  if (id === 'valid') {\n    return { ok: true, value: 'data for valid id' };\n  }\n  return { ok: false, error: 'ID not found' };\n}\n\nconst result = fetchData('invalid');\nif (result.ok) {\n  console.log('Success:', result.value);\n} else {\n  console.error('Failure:', result.error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern makes error handling explicit and forces the caller to handle both success and failure."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Error Wrapping and Chaining"
+      },
+      {
+        "type": "paragraph",
+        "value": "To maintain context about where an error originates, you can wrap errors inside custom error classes. This helps when errors bubble up through layers."
+      },
+      {
+        "type": "code",
+        "value": "class AppError extends Error {\n  originalError?: Error;\n\n  constructor(message: string, originalError?: Error) {\n    super(message);\n    this.name = 'AppError';\n    this.originalError = originalError;\n    Object.setPrototypeOf(this, AppError.prototype);\n  }\n}\n\nfunction apiCall() {\n  try {\n    throw new Error('Low-level API failure');\n  } catch (err) {\n    throw new AppError('API call failed', err instanceof Error ? err : undefined);\n  }\n}\n\ntry {\n  apiCall();\n} catch (err) {\n  if (err instanceof AppError && err.originalError) {\n    console.error('Cause:', err.originalError.message);\n  }\n  console.error('Error:', err.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Creating Typed Error Responses for APIs"
+      },
+      {
+        "type": "paragraph",
+        "value": "When writing REST or GraphQL APIs, explicitly typing your error responses helps frontend developers handle errors correctly."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiError {\n  code: number;\n  message: string;\n  details?: any;\n}\n\ninterface ApiResponse<T> {\n  data?: T;\n  error?: ApiError;\n}\n\nasync function getUser(id: string): Promise<ApiResponse<{ name: string }>> {\n  if (id === '123') {\n    return { data: { name: 'Alice' } };\n  }\n  return { error: { code: 404, message: 'User not found' } };\n}\n\ngetUser('999').then(response => {\n  if (response.error) {\n    console.error(`API Error ${response.error.code}: ${response.error.message}`);\n  } else {\n    console.log('User data:', response.data);\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Using Utility Libraries for Better Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "Libraries like `fp-ts` provide functional types like Either and Option to handle errors and optional values safely and declaratively."
+      },
+      {
+        "type": "paragraph",
+        "value": "For beginners, focus on mastering the above TypeScript native patterns first before moving to advanced functional libraries."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced error handling in TypeScript means using custom errors, result types, error wrapping, typed API error responses, and eventually functional programming libraries. These patterns help create scalable, maintainable, and reliable enterprise applications by making errors more descriptive and easier to manage."
+      }
+    ]
+  },
+  {
+    "slug": "handling-unicode-edge-cases-python-string-manipulation",
+    "title": "Handling Unicode Edge Cases in Python String Manipulation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to properly handle Unicode edge cases in Python string manipulation for more reliable and bug-free code.",
+    "videoUrl": "https://www.youtube.com/watch?v=dmiLBlt2nXg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python 3 has excellent built-in support for Unicode, but working with strings that contain special or complex Unicode characters can sometimes cause unexpected issues. This tutorial introduces key concepts and simple techniques to handle common Unicode edge cases so your string manipulation remains robust and accurate."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to understand that Unicode characters can sometimes be represented by multiple code points. For example, the character \"é\" can be a single code point (U+00E9) or two code points: the letter \"e\" (U+0065) followed by an accent \"´\" (U+0301). This is called normalization."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle this, Python provides the `unicodedata` module to normalize strings into a consistent form. The two most common forms are NFC (composed form) and NFD (decomposed form). Normalizing strings before comparing or processing helps avoid bugs."
+      },
+      {
+        "type": "code",
+        "value": "import unicodedata\n\ns1 = 'café'\ns2 = 'cafe\\u0301'  # 'e' + combining acute accent\n\nprint(s1 == s2)  # False without normalization\n\ns1_nfd = unicodedata.normalize('NFD', s1)\ns2_nfd = unicodedata.normalize('NFD', s2)\n\nprint(s1_nfd == s2_nfd)  # True after normalization"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common challenge is counting characters. Since some characters like emoji or combined characters can be made of multiple code points, using `len()` on a string might give you a count of code points, not visible characters (grapheme clusters). For example:"
+      },
+      {
+        "type": "code",
+        "value": "s = '👩‍👩‍👧‍👦'  # family emoji made of multiple code points\nprint(len(s))  # 11 code points\n\n# But visually it's a single character"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle this, you can use third-party libraries such as `regex` which supports grapheme clusters with the `\\X` pattern, allowing you to iterate over user-perceived characters:"
+      },
+      {
+        "type": "code",
+        "value": "import regex\n\ngraphs = regex.findall(r'\\X', s)\nprint(graphs)  # ['👩‍👩‍👧‍👦']\nprint(len(graphs))  # 1"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, be cautious with string slicing. Direct slicing might split combined characters or emojis in the middle, causing invalid or unexpected results. Always consider working with grapheme clusters if you need accurate slicing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary tips for beginners:\n- Always normalize Unicode strings before comparing or searching.\n- Use libraries like `regex` to handle grapheme clusters properly.\n- Avoid relying purely on `len()` when counting user-perceived characters.\n- Consider potential multi-code-point characters when slicing strings."
+      },
+      {
+        "type": "paragraph",
+        "value": "By keeping these Unicode edge cases in mind, your Python string processing will be more reliable and inclusive of all languages and emoji use cases."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-handling-best-practices",
+    "title": "Mastering Python Exception Handling: Best Practices for Clean and Maintainable Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle errors gracefully in Python with clear, beginner-friendly best practices for writing clean and maintainable exception handling code.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Exception handling is an essential skill for every Python programmer. It helps your programs respond to errors gracefully, making your code more robust and user-friendly. This article covers the basics of Python exception handling and shares best practices to keep your code clean and maintainable."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, errors detected during execution are called exceptions. If an exception occurs and it's not handled properly, your program will crash. To prevent this, Python provides a try-except block that lets you catch and handle exceptions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example showing how to handle a common exception — division by zero."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"You cannot divide by zero!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, Python tries to divide 10 by 0, which raises a ZeroDivisionError. The except block catches this specific exception and prints a friendly message instead of crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Python Exception Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Catch specific exceptions**: Always catch specific exceptions instead of a general 'except' to avoid hiding unexpected errors."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"That's not a valid number!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Catching specific exceptions like `ValueError` helps you handle known problems without accidentally ignoring other bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use the else block for code that should run if no exception occurs**."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    num = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"Invalid input!\")\nelse:\n    print(f\"You entered {num}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "The else block runs only if the try block did not raise an exception. It's a good place for code that depends on successful execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use finally to execute cleanup code**. This block runs whether or not an exception occurred."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    file = open('example.txt', 'r')\n    data = file.read()\nexcept FileNotFoundError:\n    print(\"File not found!\")\nfinally:\n    file.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "The finally block is perfect for closing files or releasing resources, ensuring clean-up happens even if an error occurs."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Avoid using bare except** since it catches all exceptions, including system-exiting ones, which can make debugging hard."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Log exceptions with useful information** to help with debugging instead of simply printing messages."
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\ntry:\n    x = 1 / 0\nexcept ZeroDivisionError as e:\n    logging.error(f\"Error occurred: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using logging allows you to keep track of errors in a file or monitoring system for better maintenance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering exception handling makes your Python code more professional and reliable. Remember to catch specific exceptions, use else and finally blocks wisely, avoid bare excepts, and log errors properly. These best practices will help you write clean and maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-sql-schemas-for-high-traffic-ecommerce-platforms",
+    "title": "Designing Scalable SQL Schemas for High-Traffic E-Commerce Platforms",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and efficient SQL schemas tailored for high-traffic e-commerce platforms, ensuring fast data retrieval and smooth user experiences.",
+    "videoUrl": "https://www.youtube.com/watch?v=_1IKwnbscQU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building an e-commerce platform, designing a database schema that can handle a large number of users and transactions smoothly is crucial. A scalable SQL schema not only supports the platform as it grows but also improves performance and maintainability. This tutorial covers beginner-friendly best practices to design such a schema."
+      },
+      {
+        "type": "paragraph",
+        "value": "The core idea is to organize your SQL tables in a way that minimizes duplication, speeds up queries, and makes it easy to add features later. Common concepts include normalization, indexing, and choosing proper data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by identifying the main entities in an e-commerce platform: users, products, orders, and order items. We'll create separate tables for each and define relationships between them."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n  user_id INT PRIMARY KEY AUTO_INCREMENT,\n  username VARCHAR(50) NOT NULL UNIQUE,\n  email VARCHAR(100) NOT NULL UNIQUE,\n  password_hash VARCHAR(255) NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The users table stores information about customers. We make sure usernames and emails are unique to avoid duplicates, and we use an auto-incrementing primary key. The created_at timestamp helps track when users sign up."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE products (\n  product_id INT PRIMARY KEY AUTO_INCREMENT,\n  name VARCHAR(150) NOT NULL,\n  description TEXT,\n  price DECIMAL(10, 2) NOT NULL,\n  stock INT DEFAULT 0,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The products table holds details of items available for sale. The stock column helps to track inventory. Using DECIMAL for price ensures accurate financial data storage."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE orders (\n  order_id INT PRIMARY KEY AUTO_INCREMENT,\n  user_id INT NOT NULL,\n  status VARCHAR(20) DEFAULT 'pending',\n  total_amount DECIMAL(10, 2) NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (user_id) REFERENCES users(user_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Orders are linked to users via a foreign key (user_id). Status helps track the order lifecycle (pending, shipped, completed, cancelled). Storing total_amount reduces the need to calculate order cost repeatedly."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE order_items (\n  order_item_id INT PRIMARY KEY AUTO_INCREMENT,\n  order_id INT NOT NULL,\n  product_id INT NOT NULL,\n  quantity INT NOT NULL,\n  price_at_purchase DECIMAL(10, 2) NOT NULL,\n  FOREIGN KEY (order_id) REFERENCES orders(order_id),\n  FOREIGN KEY (product_id) REFERENCES products(product_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The order_items table breaks down each order into individual products with quantities. Capturing price_at_purchase preserves historical sale price, which may differ from current product price."
+      },
+      {
+        "type": "paragraph",
+        "value": "To help with scalability, consider these additional tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Index important columns** like user_id in orders and product_id in order_items to speed up joins and lookups."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Use appropriate data types** to save space and improve query performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Partition large tables** such as orders and order_items by date to distribute data and improve query speed for recent records."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Avoid storing redundant data** by normalizing your schema but do consider denormalization selectively for read-heavy scenarios."
+      },
+      {
+        "type": "paragraph",
+        "value": "Implementing this scalable schema will provide a solid foundation for your e-commerce platform to handle high traffic and growing volumes of data efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-sql-null-handling-across-different-database-systems",
+    "title": "Comparing SQL NULL Handling Across Different Database Systems",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how SQL NULL values are handled differently in various popular database systems and how to avoid common errors beginners face.",
+    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, understanding how NULL values are handled across different database systems is essential. NULL represents missing or undefined data but can cause unexpected behavior if not properly managed. This article explains SQL NULL handling differences among popular databases like MySQL, PostgreSQL, and SQL Server to help beginners avoid common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "NULL means 'unknown' or 'missing' data. Importantly, NULL is not the same as zero or an empty string. Many beginners mistakenly treat NULL as a value, which leads to errors in comparison and aggregation."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how SQL NULL comparisons work. In standard SQL, any comparison involving NULL returns UNKNOWN instead of TRUE or FALSE. This often leads to confusing results:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE salary = NULL;  -- This returns 0 rows since salary = NULL is UNKNOWN"
+      },
+      {
+        "type": "paragraph",
+        "value": "To properly check for NULL, you should use IS NULL or IS NOT NULL operators:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE salary IS NULL;  -- Correct way to find rows where salary is NULL"
+      },
+      {
+        "type": "paragraph",
+        "value": "Different databases handle NULL sorting differently. For example, in ORDER BY clauses, PostgreSQL treats NULLs as higher than any value by default, while MySQL treats NULLs as lowest. You can explicitly define NULLS FIRST or NULLS LAST in PostgreSQL:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees ORDER BY salary NULLS LAST;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In MySQL, NULLs are always sorted first in ascending order, and last in descending order, but you cannot explicitly specify 'NULLS LAST'. You can use tricks like putting NULLs last with a custom expression:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees ORDER BY (salary IS NULL), salary ASC;"
+      },
+      {
+        "type": "paragraph",
+        "value": "When aggregating data, NULLs are ignored by functions like COUNT, SUM, AVG, and so forth. However, the behavior is consistent across most systems, but understanding this is key to avoiding unexpected results."
+      },
+      {
+        "type": "paragraph",
+        "value": "In SQL Server, the behavior of concatenating NULL strings differs from MySQL and PostgreSQL. By default, concatenating with NULL results in NULL in SQL Server:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT 'Hello' + NULL AS result;  -- Returns NULL in SQL Server\n-- In MySQL and PostgreSQL, you use CONCAT which ignores NULLs:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT CONCAT('Hello', NULL) AS result;  -- Returns 'Hello' in MySQL/PostgreSQL"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, the key points for working with NULLs are:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always use IS NULL or IS NOT NULL to check for NULL values.\n- Be aware of different NULL sorting behaviors in ORDER BY.\n- Remember that NULLs are ignored by most aggregate functions.\n- Mind concatenation differences in SQL Server and other systems."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these differences and using correct syntax, beginners can avoid many common pitfalls when working with NULLs in SQL across different database systems."
+      }
+    ]
   }
 ];
