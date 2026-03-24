@@ -1007,5 +1007,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-nested-list-comprehensions-with-conditional-logic",
+    "title": "Predict the Output of Nested List Comprehensions with Conditional Logic",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze nested list comprehensions with conditional statements and predict the final output of the given Python code snippet.",
+    "prompt": "Consider the following Python code that uses nested list comprehensions combined with conditional and arithmetic logic. Predict the exact output printed by the code:\n\nfor i in range(3):\n    result = [j * i if j % 2 == 0 else j + i for j in range(5)]\n    print(result)\n\nWhat is the output of the above code?",
+    "guidance": [
+      "Carefully evaluate the nested list comprehension inside the loop for each value of i from 0 to 2.",
+      "For each element j in the inner range, decide which expression applies based on whether j is even or odd.",
+      "Calculate the final derived list for each iteration and consider how the results change with different values of i."
+    ],
+    "hints": [
+      "Recall that 'j % 2 == 0' checks if j is even.",
+      "For even j, the expression is 'j * i'; for odd j, it is 'j + i'.",
+      "Track the values of i and j step-by-step for clarity."
+    ],
+    "starterCode": "for i in range(3):\n    result = [j * i if j % 2 == 0 else j + i for j in range(5)]\n    print(result)",
+    "expectedOutput": "[0, 1, 0, 3, 0]\n[0, 2, 2, 4, 4]\n[0, 3, 4, 5, 8]",
+    "concepts": [
+      "list comprehensions",
+      "conditional expressions",
+      "loops",
+      "modulo operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-complex-sql-query-summarizing-sales-data",
+    "title": "Fix Bug in Complex SQL Query Summarizing Sales Data",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Debug and fix the provided SQL query that intends to summarize monthly sales data by product category but produces incorrect results due to logical errors and misused joins.",
+    "prompt": "You are given a SQL query designed to calculate the total sales and average sales per product category per month from sales and product tables. However, the query currently returns incorrect totals, duplicates rows, or omits some data. Identify and fix the bugs in the SQL query so that it correctly aggregates total and average sales grouped by category and month.\n\nThe schema consists of:\n- sales(sale_id INT, product_id INT, sale_date DATE, sale_amount DECIMAL)\n- products(product_id INT, category VARCHAR)\n\nYour fixed query must return columns: category, month (formatted as 'YYYY-MM'), total_sales, avg_sales_per_product\n\nCarefully review joins and grouping logic to ensure accuracy.",
+    "guidance": [
+      "Check if joins between sales and products tables are causing unintended row multiplication or missing rows.",
+      "Validate the GROUP BY clause includes all non-aggregated columns to ensure correct aggregation.",
+      "Pay attention to the grouping by month: use proper date function to extract month in 'YYYY-MM' format."
+    ],
+    "hints": [
+      "INNER JOIN might exclude categories with zero sales; consider if that's expected.",
+      "Aggregates must be calculated per category and month, so group accordingly and extract month from sale_date with DATE_FORMAT or TO_CHAR depending on your SQL dialect.",
+      "Avoid joining tables multiple times or creating cartesian products."
+    ],
+    "starterCode": "SELECT p.category,\n       DATE_FORMAT(s.sale_date, '%Y-%m') AS month,\n       SUM(s.sale_amount) AS total_sales,\n       AVG(s.sale_amount) AS avg_sales_per_product\nFROM sales s\nJOIN products p ON s.product_id = p.product_id\nGROUP BY p.category;",
+    "expectedOutput": "category | month  | total_sales | avg_sales_per_product\n---------|--------|-------------|-----------------------\nBooks    | 2024-04| 10500.00    | 350.00               \nElectronics | 2024-04 | 25000.00  | 1250.00              \nClothing | 2024-04| 7000.00     | 233.33",
+    "concepts": [
+      "SQL Joins",
+      "Aggregation and GROUP BY",
+      "Date Formatting in SQL"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-bug-in-sql-query-to-filter-active-users",
+    "title": "Fix the Bug in SQL Query to Filter Active Users",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided SQL query that is supposed to retrieve only active users from the users table.",
+    "prompt": "The following SQL query is intended to select all users where the status is 'active'. However, it is returning all users regardless of their status. Find and fix the bug so that only active users are retrieved.",
+    "guidance": [
+      "Check the WHERE clause syntax carefully.",
+      "Make sure the string comparison is done correctly.",
+      "Test the query after fixing to ensure only active users are listed."
+    ],
+    "hints": [
+      "Remember that string literals in SQL need to be enclosed in single quotes.",
+      "Look for any misplaced or missing quotation marks around 'active'.",
+      "Check if the condition is using '=' or '==' incorrectly."
+    ],
+    "starterCode": "SELECT * FROM users WHERE status = active;",
+    "expectedOutput": "Only rows where the status column equals 'active' should be returned.",
+    "concepts": [
+      "SQL WHERE clause",
+      "String comparison",
+      "Basic SELECT query"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-incorrect-join-and-aggregation-in-sales-report-query",
+    "title": "Fix Incorrect Join and Aggregation in Sales Report Query",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "A SQL query intended to generate a monthly sales report per product category uses incorrect join syntax and aggregation logic. Fix the query to produce accurate total sales per category per month.",
+    "prompt": "You are given a broken SQL query that aims to report the total sales amount for each product category grouped by month. However, the results show incorrect totals and duplicate rows. Identify and fix the join and aggregation issues to return the correct monthly sales totals per category.\n\nThe database schema includes the following tables:\n- sales(sale_id, product_id, sale_date, amount)\n- products(product_id, product_name, category_id)\n- categories(category_id, category_name)\n\nBroken Query:\n\nSELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  SUM(s.amount) AS total_sales\nFROM\n  sales s\nJOIN\n  products p,\n  categories c\n  ON s.product_id = p.product_id\n  AND p.category_id = c.category_id\nGROUP BY\n  c.category_name, sale_month\nORDER BY\n  sale_month, c.category_name;\n\nFix the query so it properly joins the tables and correctly aggregates total sales per category by month.",
+    "guidance": [
+      "Check the JOIN syntax to ensure all tables join correctly in a single JOIN clause tree.",
+      "Verify that aggregation (SUM) and GROUP BY expressions correspond correctly to the selected columns.",
+      "Test the query on sample data to confirm duplicate rows are eliminated and totals are accurate."
+    ],
+    "hints": [
+      "Replace the misplaced commas in the FROM and JOIN clauses with explicit JOIN statements.",
+      "Make sure each JOIN has the appropriate ON condition mapping keys between tables.",
+      "GROUP BY all non-aggregated select expressions exactly as they appear."
+    ],
+    "starterCode": "SELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  SUM(s.amount) AS total_sales\nFROM\n  sales s\nJOIN\n  products p,\n  categories c\n  ON s.product_id = p.product_id\n  AND p.category_id = c.category_id\nGROUP BY\n  c.category_name, sale_month\nORDER BY\n  sale_month, c.category_name;",
+    "expectedOutput": "category_name | sale_month | total_sales\n------------- | ---------- | -----------\nBooks         | 2024-01    | 15000.00\nBooks         | 2024-02    | 12000.00\nElectronics   | 2024-01    | 35000.00\nElectronics   | 2024-02    | 42000.00",
+    "concepts": [
+      "SQL JOIN",
+      "GROUP BY and Aggregations",
+      "Date Formatting"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-decorator-to-cache-function-results-with-expiry",
+    "title": "Build a Decorator to Cache Function Results with Expiry",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a Python decorator function that caches the results of an expensive function call, with support for automatic expiration of cached values after a given time-to-live (TTL).",
+    "prompt": "Write a Python decorator named 'cache_with_expiry' that takes one parameter ttl (in seconds). When applied to a function, it caches its return values keyed by arguments, so repeated calls with the same arguments return cached results without recomputing. The cached results should expire and be removed if the TTL has passed since caching. Your solution should handle positional and keyword arguments properly, and ensure that different argument sets cache independently.",
+    "guidance": [
+      "Use a dictionary to store cached results with a key generated from the function arguments.",
+      "Store both the cached result and the timestamp when it was cached to check expiry.",
+      "Ensure that the decorator supports functions with any combination of positional and keyword arguments.",
+      "Use 'functools.wraps' to preserve the original function's metadata."
+    ],
+    "hints": [
+      "Consider using 'time.time()' to get the current timestamp in seconds.",
+      "To create a hashable key from function arguments, consider using a tuple for positional args and a frozenset for keyword args.",
+      "Remember to invalidate (remove) cached entries when their TTL has expired before returning cached results."
+    ],
+    "starterCode": "import time\nimport functools\n\ndef cache_with_expiry(ttl):\n    def decorator(func):\n        cache = {}\n\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            # Your caching logic here\n            pass\n\n        return wrapper\n    return decorator",
+    "expectedOutput": "When decorating a function that returns a time-dependent value, repeated calls with the same arguments within ttl seconds return the cached value instantly, but calls after ttl seconds recompute the value.",
+    "concepts": [
+      "decorators",
+      "caching",
+      "function arguments",
+      "time-based expiration"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-simplify-a-function-to-calculate-total-price",
+    "title": "Refactor and Simplify a Function to Calculate Total Price",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a simple JavaScript function that calculates the total price of items including tax. The functionality should remain the same while making the code cleaner.",
+    "prompt": "You are given a function that calculates the total price for a purchase including tax. The current function works correctly but is written in a verbose and less readable way. Refactor the function to make it simpler and easier to understand, without changing its behavior.",
+    "guidance": [
+      "Keep the function's input parameters and output the same.",
+      "Remove unnecessary variables and simplify expressions where possible.",
+      "Use descriptive variable names to clarify meaning."
+    ],
+    "hints": [
+      "Look for opportunities to combine multiple statements into one expression.",
+      "Consider removing redundant intermediate variables.",
+      "Use arithmetic operations directly in the return statement if possible."
+    ],
+    "starterCode": "function calculateTotalPrice(price, taxRate) {\n  let taxAmount = price * taxRate;\n  let total = price + taxAmount;\n  return total;\n}",
+    "expectedOutput": "calculateTotalPrice(100, 0.15) === 115",
+    "concepts": [
+      "functions",
+      "variables",
+      "arithmetic operations",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];

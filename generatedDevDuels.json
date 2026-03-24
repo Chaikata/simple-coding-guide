@@ -1,174 +1,174 @@
 [
   {
-    "slug": "build-a-function-to-check-even-or-odd-numbers",
-    "title": "Build a Function to Check Even or Odd Numbers",
+    "slug": "predict-the-output-of-nested-list-comprehensions-with-conditional-logic",
+    "title": "Predict the Output of Nested List Comprehensions with Conditional Logic",
     "language": "python",
-    "difficulty": "beginner",
-    "category": "functions",
-    "description": "Create a simple Python function that takes an integer as input and returns whether the number is 'Even' or 'Odd'. This helps beginners practice conditionals and function definitions.",
-    "prompt": "Write a function named check_even_odd that accepts one integer parameter and returns the string 'Even' if the number is even, or 'Odd' if the number is odd.",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze nested list comprehensions with conditional statements and predict the final output of the given Python code snippet.",
+    "prompt": "Consider the following Python code that uses nested list comprehensions combined with conditional and arithmetic logic. Predict the exact output printed by the code:\n\nfor i in range(3):\n    result = [j * i if j % 2 == 0 else j + i for j in range(5)]\n    print(result)\n\nWhat is the output of the above code?",
     "guidance": [
-      "Define a function using def and specify one parameter.",
-      "Use the modulo operator (%) to check if the number is divisible by 2.",
-      "Return 'Even' if the number modulo 2 equals zero; otherwise, return 'Odd'."
+      "Carefully evaluate the nested list comprehension inside the loop for each value of i from 0 to 2.",
+      "For each element j in the inner range, decide which expression applies based on whether j is even or odd.",
+      "Calculate the final derived list for each iteration and consider how the results change with different values of i."
     ],
     "hints": [
-      "The modulo operator (%) gives the remainder when dividing two numbers.",
-      "If number % 2 == 0, the number is even; else it is odd."
+      "Recall that 'j % 2 == 0' checks if j is even.",
+      "For even j, the expression is 'j * i'; for odd j, it is 'j + i'.",
+      "Track the values of i and j step-by-step for clarity."
     ],
-    "starterCode": "def check_even_odd(num):\n    # Your code here\n    pass",
-    "expectedOutput": "check_even_odd(10)  # Output: 'Even'\ncheck_even_odd(7)   # Output: 'Odd'",
+    "starterCode": "for i in range(3):\n    result = [j * i if j % 2 == 0 else j + i for j in range(5)]\n    print(result)",
+    "expectedOutput": "[0, 1, 0, 3, 0]\n[0, 2, 2, 4, 4]\n[0, 3, 4, 5, 8]",
     "concepts": [
-      "functions",
-      "conditionals",
+      "list comprehensions",
+      "conditional expressions",
+      "loops",
       "modulo operator"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "predict-the-output-of-a-complex-array-and-object-transformation",
-    "title": "Predict the Output of a Complex Array and Object Transformation",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "logic",
-    "description": "Analyze the provided JavaScript code snippet that manipulates arrays and objects with multiple steps. Predict the exact output produced by the code.",
-    "prompt": "Given the following JavaScript code that processes an array of user objects, determine what the console.log output will be when the code is executed. Focus on understanding the transformations, map/filter usage, and combined operations on the data.",
-    "guidance": [
-      "Examine how the map() and filter() methods transform the array step-by-step.",
-      "Pay attention to how object properties are accessed and modified within callback functions.",
-      "Consider the order of operations and how chaining affects the intermediate results."
-    ],
-    "hints": [
-      "Remember that map() returns a new array based on the return value of its callback.",
-      "Filtering affects which elements continue in the chain, so consider which users are excluded.",
-      "Look carefully at nested properties and increments inside the map callbacks."
-    ],
-    "starterCode": "const users = [\n  { id: 1, name: 'Alice', scores: [10, 20, 30] },\n  { id: 2, name: 'Bob', scores: [5, 15] },\n  { id: 3, name: 'Charlie', scores: [] },\n  { id: 4, name: 'David', scores: [8, 8, 8] }\n];\n\nconst processedUsers = users\n  .map(user => ({\n    ...user,\n    totalScore: user.scores.reduce((a, b) => a + b, 0),\n    averageScore: user.scores.length ? user.scores.reduce((a, b) => a + b, 0) / user.scores.length : 0\n  }))\n  .filter(user => user.totalScore >= 20)\n  .map(user => ({\n    id: user.id * 2,\n    name: user.name.toUpperCase(),\n    totalScore: user.totalScore + 5,\n    averageScore: parseFloat(user.averageScore.toFixed(2))\n  }));\n\nconsole.log(processedUsers);",
-    "expectedOutput": "[\n  { id: 2, name: 'ALICE', totalScore: 65, averageScore: 20 },\n  { id: 8, name: 'DAVID', totalScore: 29, averageScore: 8 }\n]",
-    "concepts": [
-      "Array map()",
-      "Array filter()",
-      "Array reduce()",
-      "Object destructuring and spread syntax"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-the-infinite-recursion-bug-in-a-python-memoization-function",
-    "title": "Fix the Infinite Recursion Bug in a Python Memoization Function",
-    "language": "python",
+    "slug": "fix-bug-in-complex-sql-query-summarizing-sales-data",
+    "title": "Fix Bug in Complex SQL Query Summarizing Sales Data",
+    "language": "sql",
     "difficulty": "advanced",
     "category": "debugging",
-    "description": "Identify and fix a subtle bug causing infinite recursion in a Python function designed to compute Fibonacci numbers with memoization. The code uses a dictionary cache but incorrectly implements memoization logic, leading to recursion errors. Your task is to debug the function to correctly utilize memoization and efficiently compute Fibonacci values.",
-    "prompt": "The provided Python function is intended to compute the nth Fibonacci number using memoization to optimize repeated calculations. However, it produces a RuntimeError due to infinite recursion. Identify and fix the bug causing this infinite recursion so that the function returns the correct Fibonacci number efficiently. Preserve the memoization approach in your fix.",
+    "description": "Debug and fix the provided SQL query that intends to summarize monthly sales data by product category but produces incorrect results due to logical errors and misused joins.",
+    "prompt": "You are given a SQL query designed to calculate the total sales and average sales per product category per month from sales and product tables. However, the query currently returns incorrect totals, duplicates rows, or omits some data. Identify and fix the bugs in the SQL query so that it correctly aggregates total and average sales grouped by category and month.\n\nThe schema consists of:\n- sales(sale_id INT, product_id INT, sale_date DATE, sale_amount DECIMAL)\n- products(product_id INT, category VARCHAR)\n\nYour fixed query must return columns: category, month (formatted as 'YYYY-MM'), total_sales, avg_sales_per_product\n\nCarefully review joins and grouping logic to ensure accuracy.",
     "guidance": [
-      "Review how the function uses the cache dictionary to store computed Fibonacci values.",
-      "Check the base cases to ensure proper termination of recursion.",
-      "Ensure that the recursive results are stored in the cache before returning."
+      "Check if joins between sales and products tables are causing unintended row multiplication or missing rows.",
+      "Validate the GROUP BY clause includes all non-aggregated columns to ensure correct aggregation.",
+      "Pay attention to the grouping by month: use proper date function to extract month in 'YYYY-MM' format."
     ],
     "hints": [
-      "The cache assignment might be placed incorrectly or missing before the recursive return.",
-      "If you omit storing the computed result in the cache, recursive calls will never resolve.",
-      "Confirm that the function checks the cache before computing new Fibonacci values."
+      "INNER JOIN might exclude categories with zero sales; consider if that's expected.",
+      "Aggregates must be calculated per category and month, so group accordingly and extract month from sale_date with DATE_FORMAT or TO_CHAR depending on your SQL dialect.",
+      "Avoid joining tables multiple times or creating cartesian products."
     ],
-    "starterCode": "def fib(n, cache={}):\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    if n not in cache:\n        return fib(n - 1, cache) + fib(n - 2, cache)\n    return cache[n]",
-    "expectedOutput": "fib(10) should return 55",
+    "starterCode": "SELECT p.category,\n       DATE_FORMAT(s.sale_date, '%Y-%m') AS month,\n       SUM(s.sale_amount) AS total_sales,\n       AVG(s.sale_amount) AS avg_sales_per_product\nFROM sales s\nJOIN products p ON s.product_id = p.product_id\nGROUP BY p.category;",
+    "expectedOutput": "category | month  | total_sales | avg_sales_per_product\n---------|--------|-------------|-----------------------\nBooks    | 2024-04| 10500.00    | 350.00               \nElectronics | 2024-04 | 25000.00  | 1250.00              \nClothing | 2024-04| 7000.00     | 233.33",
     "concepts": [
-      "recursion",
-      "memoization",
-      "dictionary caching",
-      "debugging infinite recursion"
+      "SQL Joins",
+      "Aggregation and GROUP BY",
+      "Date Formatting in SQL"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-a-function-to-check-if-a-number-is-even",
-    "title": "Build a Function to Check if a Number is Even",
-    "language": "javascript",
+    "slug": "fix-the-bug-in-sql-query-to-filter-active-users",
+    "title": "Fix the Bug in SQL Query to Filter Active Users",
+    "language": "sql",
     "difficulty": "beginner",
-    "category": "functions",
-    "description": "Create a simple JavaScript function that takes a number as input and returns true if the number is even, and false if it is odd.",
-    "prompt": "Write a function named isEven that accepts one parameter, a number. The function should return true if the number is even, and false if the number is odd.",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided SQL query that is supposed to retrieve only active users from the users table.",
+    "prompt": "The following SQL query is intended to select all users where the status is 'active'. However, it is returning all users regardless of their status. Find and fix the bug so that only active users are retrieved.",
     "guidance": [
-      "Recall that a number is even if it is divisible by 2 with no remainder.",
-      "Use the modulus operator (%) to find the remainder when dividing the number by 2.",
-      "Return true if the remainder is 0; otherwise, return false."
+      "Check the WHERE clause syntax carefully.",
+      "Make sure the string comparison is done correctly.",
+      "Test the query after fixing to ensure only active users are listed."
     ],
     "hints": [
-      "Try using 'number % 2' — what does it return for even numbers?",
-      "Remember that the function should return a boolean value, true or false.",
-      "Test your function with both even and odd numbers to verify it works correctly."
+      "Remember that string literals in SQL need to be enclosed in single quotes.",
+      "Look for any misplaced or missing quotation marks around 'active'.",
+      "Check if the condition is using '=' or '==' incorrectly."
     ],
-    "starterCode": "function isEven(number) {\n  // Your code here\n}",
-    "expectedOutput": "isEven(4) // true\nisEven(7) // false",
+    "starterCode": "SELECT * FROM users WHERE status = active;",
+    "expectedOutput": "Only rows where the status column equals 'active' should be returned.",
     "concepts": [
-      "functions",
-      "conditionals",
-      "modulus operator"
+      "SQL WHERE clause",
+      "String comparison",
+      "Basic SELECT query"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "refactor-and-simplify-nested-loops-for-data-aggregation",
-    "title": "Refactor and Simplify Nested Loops for Data Aggregation",
-    "language": "python",
+    "slug": "fix-incorrect-join-and-aggregation-in-sales-report-query",
+    "title": "Fix Incorrect Join and Aggregation in Sales Report Query",
+    "language": "sql",
     "difficulty": "intermediate",
-    "category": "code-quality",
-    "description": "Improve the structure and readability of a Python function that aggregates sales data from multiple stores and products, while preserving its original behavior.",
-    "prompt": "You are given a function that processes sales data from several stores to calculate the total sales per product category. The current implementation uses multiple nested loops, redundant conditions, and some repeated code blocks, making it hard to maintain and understand. Refactor the function to simplify the logic, reduce nesting, and improve readability without changing the output.",
+    "category": "debugging",
+    "description": "A SQL query intended to generate a monthly sales report per product category uses incorrect join syntax and aggregation logic. Fix the query to produce accurate total sales per category per month.",
+    "prompt": "You are given a broken SQL query that aims to report the total sales amount for each product category grouped by month. However, the results show incorrect totals and duplicate rows. Identify and fix the join and aggregation issues to return the correct monthly sales totals per category.\n\nThe database schema includes the following tables:\n- sales(sale_id, product_id, sale_date, amount)\n- products(product_id, product_name, category_id)\n- categories(category_id, category_name)\n\nBroken Query:\n\nSELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  SUM(s.amount) AS total_sales\nFROM\n  sales s\nJOIN\n  products p,\n  categories c\n  ON s.product_id = p.product_id\n  AND p.category_id = c.category_id\nGROUP BY\n  c.category_name, sale_month\nORDER BY\n  sale_month, c.category_name;\n\nFix the query so it properly joins the tables and correctly aggregates total sales per category by month.",
     "guidance": [
-      "Focus on removing unnecessary loops or conditions and consolidate repeated code.",
-      "Use intermediate variables or helper functions if it makes the code clearer.",
-      "Ensure that the function behavior and final output remain exactly the same after refactoring."
+      "Check the JOIN syntax to ensure all tables join correctly in a single JOIN clause tree.",
+      "Verify that aggregation (SUM) and GROUP BY expressions correspond correctly to the selected columns.",
+      "Test the query on sample data to confirm duplicate rows are eliminated and totals are accurate."
     ],
     "hints": [
-      "Look for places where you can use dictionary methods like get() to avoid explicit conditionals.",
-      "Consider looping over data just once where possible, using data structures to hold intermediate results.",
-      "Use descriptive variable names and consider list/dictionary comprehensions where applicable."
+      "Replace the misplaced commas in the FROM and JOIN clauses with explicit JOIN statements.",
+      "Make sure each JOIN has the appropriate ON condition mapping keys between tables.",
+      "GROUP BY all non-aggregated select expressions exactly as they appear."
     ],
-    "starterCode": "def calculate_total_sales(data):\n    result = {}\n    for store in data:\n        for product in store['products']:\n            category = product['category']\n            if category in result:\n                if product['name'] in result[category]:\n                    result[category][product['name']] += product['sales']\n                else:\n                    result[category][product['name']] = product['sales']\n            else:\n                result[category] = {}\n                if product['name'] in result[category]:\n                    result[category][product['name']] += product['sales']\n                else:\n                    result[category][product['name']] = product['sales']\n    return result",
-    "expectedOutput": "{'Electronics': {'TV': 350, 'Radio': 80}, 'Books': {'Novel': 120, 'Comics': 75}}",
+    "starterCode": "SELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  SUM(s.amount) AS total_sales\nFROM\n  sales s\nJOIN\n  products p,\n  categories c\n  ON s.product_id = p.product_id\n  AND p.category_id = c.category_id\nGROUP BY\n  c.category_name, sale_month\nORDER BY\n  sale_month, c.category_name;",
+    "expectedOutput": "category_name | sale_month | total_sales\n------------- | ---------- | -----------\nBooks         | 2024-01    | 15000.00\nBooks         | 2024-02    | 12000.00\nElectronics   | 2024-01    | 35000.00\nElectronics   | 2024-02    | 42000.00",
     "concepts": [
-      "refactoring",
-      "nested loops",
-      "dictionaries",
+      "SQL JOIN",
+      "GROUP BY and Aggregations",
+      "Date Formatting"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-decorator-to-cache-function-results-with-expiry",
+    "title": "Build a Decorator to Cache Function Results with Expiry",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a Python decorator function that caches the results of an expensive function call, with support for automatic expiration of cached values after a given time-to-live (TTL).",
+    "prompt": "Write a Python decorator named 'cache_with_expiry' that takes one parameter ttl (in seconds). When applied to a function, it caches its return values keyed by arguments, so repeated calls with the same arguments return cached results without recomputing. The cached results should expire and be removed if the TTL has passed since caching. Your solution should handle positional and keyword arguments properly, and ensure that different argument sets cache independently.",
+    "guidance": [
+      "Use a dictionary to store cached results with a key generated from the function arguments.",
+      "Store both the cached result and the timestamp when it was cached to check expiry.",
+      "Ensure that the decorator supports functions with any combination of positional and keyword arguments.",
+      "Use 'functools.wraps' to preserve the original function's metadata."
+    ],
+    "hints": [
+      "Consider using 'time.time()' to get the current timestamp in seconds.",
+      "To create a hashable key from function arguments, consider using a tuple for positional args and a frozenset for keyword args.",
+      "Remember to invalidate (remove) cached entries when their TTL has expired before returning cached results."
+    ],
+    "starterCode": "import time\nimport functools\n\ndef cache_with_expiry(ttl):\n    def decorator(func):\n        cache = {}\n\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            # Your caching logic here\n            pass\n\n        return wrapper\n    return decorator",
+    "expectedOutput": "When decorating a function that returns a time-dependent value, repeated calls with the same arguments within ttl seconds return the cached value instantly, but calls after ttl seconds recompute the value.",
+    "concepts": [
+      "decorators",
+      "caching",
+      "function arguments",
+      "time-based expiration"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-simplify-a-function-to-calculate-total-price",
+    "title": "Refactor and Simplify a Function to Calculate Total Price",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a simple JavaScript function that calculates the total price of items including tax. The functionality should remain the same while making the code cleaner.",
+    "prompt": "You are given a function that calculates the total price for a purchase including tax. The current function works correctly but is written in a verbose and less readable way. Refactor the function to make it simpler and easier to understand, without changing its behavior.",
+    "guidance": [
+      "Keep the function's input parameters and output the same.",
+      "Remove unnecessary variables and simplify expressions where possible.",
+      "Use descriptive variable names to clarify meaning."
+    ],
+    "hints": [
+      "Look for opportunities to combine multiple statements into one expression.",
+      "Consider removing redundant intermediate variables.",
+      "Use arithmetic operations directly in the return statement if possible."
+    ],
+    "starterCode": "function calculateTotalPrice(price, taxRate) {\n  let taxAmount = price * taxRate;\n  let total = price + taxAmount;\n  return total;\n}",
+    "expectedOutput": "calculateTotalPrice(100, 0.15) === 115",
+    "concepts": [
+      "functions",
+      "variables",
+      "arithmetic operations",
       "code readability"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
-  },
-  {
-    "slug": "predict-output-of-complex-recursive-and-bitwise-operations-in-c",
-    "title": "Predict Output of Complex Recursive and Bitwise Operations in C++",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "logic",
-    "description": "Analyze a complex C++ program that uses recursion combined with bitwise operations and tricky short-circuit logic. Predict the exact output produced by the program without running it.",
-    "prompt": "Given the following C++ code, determine the exact output printed to stdout.\n\nExplain the reasoning behind the output considering recursion, bitwise operations, and short-circuit evaluation.\n\n#include <iostream>\n\nint func(int x) {\n    static int state = 1;\n    if (x <= 0) return 0;\n    int result = 0;\n    if ((x & 1) && (state++ < 4)) {\n        result += func(x - 2);\n        result += state;\n    } else {\n        result += func(x - 1);\n        result += state * 2;\n    }\n    return result;\n}\n\nint main() {\n    std::cout << func(5) << std::endl;\n    return 0;\n}",
-    "guidance": [
-      "Trace the recursive calls carefully, keeping track of the static state variable's value at each stage.",
-      "Pay special attention to short-circuit evaluation of the condition in the if statement.",
-      "Remember how bitwise AND (&) works to check the parity of x.",
-      "Consider the order of operations inside each recursive call."
-    ],
-    "hints": [
-      "The static 'state' variable persists and increments only under certain conditions — track that closely.",
-      "When x is odd, the first condition short-circuits if 'state < 4' is false.",
-      "Calculate smaller inputs first to build the solution upwards."
-    ],
-    "starterCode": "#include <iostream>\n\nint func(int x) {\n    static int state = 1;\n    if (x <= 0) return 0;\n    int result = 0;\n    if ((x & 1) && (state++ < 4)) {\n        result += func(x - 2);\n        result += state;\n    } else {\n        result += func(x - 1);\n        result += state * 2;\n    }\n    return result;\n}\n\nint main() {\n    std::cout << func(5) << std::endl;\n    return 0;\n}",
-    "expectedOutput": "14",
-    "concepts": [
-      "recursion",
-      "bitwise operations",
-      "static variables",
-      "short-circuit evaluation"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
   }
 ]
