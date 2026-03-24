@@ -18220,5 +18220,511 @@ export const articles = [
         "value": "Finally, always test window function queries with EXPLAIN plans to understand execution costs. By mastering these usage patterns, tips, and common error fixes, you can unlock the full potential of SQL window functions effectively and efficiently."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-memory-leaks-advanced-detection-and-prevention-techniques",
+    "title": "Mastering JavaScript Memory Leaks: Advanced Detection and Prevention Techniques",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to detect and prevent JavaScript memory leaks with practical tips and code examples to improve your web app performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript memory leaks occur when your program holds onto memory it no longer needs. This causes your app to slow down or crash over time. In this article, we’ll explore what memory leaks are, how to detect them with practical tools, and techniques to prevent them in your JavaScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Memory leaks usually happen when an application keeps references to objects that are no longer needed. The garbage collector can't free that memory because the reference still exists somewhere. Common causes include unintended global variables, event listeners that aren’t removed, and forgotten timers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Detecting Memory Leaks Using Chrome DevTools"
+      },
+      {
+        "type": "paragraph",
+        "value": "Chrome DevTools has powerful memory profiling tools that can help identify leaks. Here's a quick way to use it:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Open your app in Chrome."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Open DevTools (F12 or Ctrl+Shift+I)."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Go to the Memory tab."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Take a heap snapshot before and after interacting with your app."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Compare snapshots to see objects that are not being released."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Common Memory Leak Scenario with Event Listeners"
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider this scenario where we add an event listener but never remove it. This prevents associated objects from being garbage collected."
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const button = document.getElementById('clickMe');\n  button.addEventListener('click', function handleClick() {\n    console.log('Button clicked!');\n  });\n}\n\n// setup() is called repeatedly without cleaning up the previous listeners\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Each time setup() runs, a new listener is added. Without removing old listeners, this creates a memory leak."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Preventing Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent leaks caused by event listeners, always remove listeners when they’re no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const button = document.getElementById('clickMe');\n  function handleClick() {\n    console.log('Button clicked!');\n  }\n  button.addEventListener('click', handleClick);\n\n  // Cleanup function example\n  return () => {\n    button.removeEventListener('click', handleClick);\n  };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Call the returned cleanup function when you want to remove the listener, such as when a component unmounts or before setup() is called again."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Avoiding Unintended Global Variables"
+      },
+      {
+        "type": "paragraph",
+        "value": "Declaring variables without var, let, or const creates global variables that persist throughout the lifetime of the page. Always use these keywords to keep variables scoped properly."
+      },
+      {
+        "type": "code",
+        "value": "// Bad - creates a global variable unintentionally\nfunction leak() {\n  leakedVar = 'I am global!';\n}\n\n// Good - scoped variable\nfunction noLeak() {\n  const localVar = 'I am local!';\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Weak References for Cache and Event Listeners"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to store references without preventing garbage collection, JavaScript provides WeakMap and WeakSet. These collections hold weak references, meaning the objects can still be freed if no other references exist."
+      },
+      {
+        "type": "code",
+        "value": "const cache = new WeakMap();\n\nfunction cacheData(obj, data) {\n  cache.set(obj, data);\n}\n\n// If 'obj' is no longer referenced elsewhere, garbage collector can free it\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Memory leaks can seriously impact the performance of your JavaScript applications. Using tools like Chrome DevTools, carefully managing event listeners, avoiding unintended globals, and using weak references are effective ways to detect and prevent leaks. Regularly profile your app during development to keep memory usage in check."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-for-scalable-and-reusable-code",
+    "title": "Mastering TypeScript Generics for Scalable and Reusable Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how TypeScript generics enable you to write scalable, flexible, and reusable code by allowing functions and classes to work with any data type.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics might sound complex at first, but once you understand the basics, they become a powerful tool for writing reusable and scalable code. Generics allow you to create components, functions, or classes that work with a variety of data types, without sacrificing type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you want to create a function that returns the first element of an array. In JavaScript, you write it simply, but TypeScript needs to know what type of elements are inside the array to provide accurate type checking."
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement(arr: any[]): any {\n  return arr[0];\n}\n\nconst num = getFirstElement([1, 2, 3]); // Type is any\nconst str = getFirstElement([\"a\", \"b\", \"c\"]); // Type is any"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above function works, but TypeScript does not know what type it returns because we used `any`. Using generics, we can specify that the function works for any type, and the return type will match the array's element type."
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst num = getFirstElement([1, 2, 3]); // Type is number\nconst str = getFirstElement([\"a\", \"b\", \"c\"]); // Type is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `<T>` is a placeholder for the type that will be provided when you call the function. TypeScript infers the type based on the argument you pass in. This makes the function reusable for any type, while still keeping strict typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics are not limited to functions. You can also use them with interfaces and classes to build flexible data structures."
+      },
+      {
+        "type": "code",
+        "value": "interface Box<T> {\n  value: T;\n}\n\nconst numberBox: Box<number> = { value: 123 };\nconst stringBox: Box<string> = { value: \"hello\" };"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `Box` interface holds a single value of any type `T`. When creating instances, you specify the type you want it to hold, allowing TypeScript to enforce correct usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, classes can be made generic which is incredibly useful when implementing data structures like stacks, queues, or linked lists."
+      },
+      {
+        "type": "code",
+        "value": "class Stack<T> {\n  private items: T[] = [];\n\n  push(item: T) {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n}\n\nconst numberStack = new Stack<number>();\nnumberStack.push(10);\nconst poppedNumber = numberStack.pop(); // number | undefined\n\nconst stringStack = new Stack<string>();\nstringStack.push(\"hello\");\nconst poppedString = stringStack.pop(); // string | undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering generics, you enhance code reusability and maintain type safety. This helps reduce bugs and increases productivity, especially in large scale projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize: use generics when you want your functions, interfaces, or classes to work with multiple data types. Let TypeScript infer the generic types whenever possible to keep your code clean and readable."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-type-narrowing-for-enhanced-performance",
+    "title": "Understanding TypeScript's Type Narrowing for Enhanced Performance",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's type narrowing helps catch errors early and improves your code’s performance with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=KGSnHsdQuIo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool for catching errors early during development by adding types to JavaScript. One of its key features is type narrowing, which refines the type of a variable within a specific code block. This can help you write safer code and sometimes improve runtime performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing happens automatically when you use certain checks like `typeof`, `instanceof`, or custom type guards. When TypeScript knows more about the value’s type, it restricts what you can do with it, avoiding errors and allowing more optimized code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s look at a simple example. Suppose you have a variable that could be either a `string` or `number`. Without narrowing, TypeScript won’t allow string-specific or number-specific operations without errors."
+      },
+      {
+        "type": "code",
+        "value": "function formatValue(value: string | number) {\n  if (typeof value === 'string') {\n    // Here TypeScript knows `value` is a string\n    return value.trim().toUpperCase();\n  } else {\n    // Here TypeScript knows `value` is a number\n    return value.toFixed(2);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the `typeof` checks narrow the type inside each block. This avoids errors like calling `trim()` on a number, which would fail. It also enables the editor to provide better autocompletion and error detection."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common way to narrow types is using `instanceof`. This is especially useful with classes."
+      },
+      {
+        "type": "code",
+        "value": "class Dog {\n  bark() { return 'Woof!'; }\n}\nclass Cat {\n  meow() { return 'Meow!'; }\n}\n\nfunction speak(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    return animal.bark();\n  } else {\n    return animal.meow();\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using custom type guards is another technique for narrowing. A type guard is simply a function that returns a boolean and uses the `parameterName is Type` return type syntax."
+      },
+      {
+        "type": "code",
+        "value": "interface Fish { swim: () => void; }\ninterface Bird { fly: () => void; }\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();\n  } else {\n    pet.fly();\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By narrowing types, you make your code more predictable and easier to maintain. It also helps prevent runtime errors because TypeScript enforces correct use of properties and methods for narrowed types."
+      },
+      {
+        "type": "paragraph",
+        "value": "In terms of performance, while TypeScript itself does not affect runtime speed, the clearer code and reduction of bugs can lead to optimized JavaScript after compilation and fewer runtime checks during debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, leveraging TypeScript's type narrowing helps you write safer code by guiding you with more specific types in different code paths. It's a beginner-friendly concept that can greatly improve your TypeScript coding experience."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-asyncio-performance-optimization",
+    "title": "Mastering Python's Asyncio: Deep Dive into Performance Optimization Techniques",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to optimize Python's asyncio for better performance with practical tips and examples, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's asyncio module allows you to write asynchronous programs, making I/O-bound tasks more efficient. For beginners, understanding how to optimize asyncio can significantly improve the responsiveness and scalability of your applications. In this tutorial, we'll explore key performance optimization techniques for asyncio with practical examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to understand the basics: asyncio uses an event loop to handle asynchronous tasks. By using async and await keywords, you can write non-blocking code that allows multiple operations to run concurrently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of running two tasks concurrently using asyncio."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def say_after(delay, message):\n    await asyncio.sleep(delay)\n    print(message)\n\nasync def main():\n    task1 = asyncio.create_task(say_after(1, 'Hello'))\n    task2 = asyncio.create_task(say_after(2, 'World'))\n\n    print('Started tasks')\n    await task1\n    await task2\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, two tasks run asynchronously, meaning they don't block each other. However, as your application scales, you may want to optimize resource management and reduce overhead."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Performance Optimization Techniques"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use `asyncio.gather()` for concurrent execution:**\nInstead of awaiting tasks one by one, use `asyncio.gather()` to run multiple coroutines concurrently and wait for all of them to complete. This reduces context switching overhead."
+      },
+      {
+        "type": "code",
+        "value": "async def main():\n    await asyncio.gather(\n        say_after(1, 'Hello'),\n        say_after(2, 'World')\n    )\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Limit concurrency with semaphores:**\nIf you’re making many network requests or I/O operations, controlling concurrency with `asyncio.Semaphore` can prevent overwhelming resources and improve throughput."
+      },
+      {
+        "type": "code",
+        "value": "semaphore = asyncio.Semaphore(5)  # Limit to 5 concurrent tasks\n\nasync def limited_say_after(delay, message):\n    async with semaphore:\n        await asyncio.sleep(delay)\n        print(message)\n\nasync def main():\n    tasks = [limited_say_after(i % 3, f'Message {i}') for i in range(10)]\n    await asyncio.gather(*tasks)\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid blocking calls:**\nEnsure no blocking I/O or CPU-bound operations are executed inside async functions. If you need to run blocking code, use `run_in_executor` to offload it to a separate thread or process."
+      },
+      {
+        "type": "code",
+        "value": "import time\n\nasync def blocking_task():\n    loop = asyncio.get_running_loop()\n    result = await loop.run_in_executor(None, time.sleep, 2)\n    print('Blocking task done')\n\nasync def main():\n    await blocking_task()\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use appropriate event loops:**\nOn Windows, consider using `ProactorEventLoop` for better socket performance. On Unix-like systems, the default event loop usually works well."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Reuse tasks and connections:**\nWhen possible, reuse established connections (like HTTP sessions) to reduce setup overhead. Instead of creating a new session for each request, keep it open."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Tips"
+      },
+      {
+        "type": "paragraph",
+        "value": "Performance optimization is about writing efficient asynchronous code and managing resources wisely. Always profile your code to find bottlenecks and apply these techniques accordingly. Asyncio offers great power and flexibility when used properly."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these optimizations, you can make your Python async programs faster, more responsive, and scalable."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-for-memory-usage",
+    "title": "Optimizing Python Code for Memory Usage: Practical Techniques to Avoid Performance Pitfalls",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn beginner-friendly techniques to optimize your Python code for better memory usage and avoid common performance issues.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a versatile and easy-to-learn language, but beginners often run into memory-related performance issues when their programs grow. Optimizing for memory usage can help your code run faster, use fewer resources, and avoid crashing on large datasets or limited hardware."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore practical Python techniques to reduce memory consumption and prevent common pitfalls. These tips are beginner-friendly and do not require deep knowledge of advanced memory management."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid Creating Unnecessary Copies of Large Data Structures\n\nWhen you manipulate large lists or dictionaries, accidentally making copies duplicates memory usage. For example, avoid operations like slicing or concatenation if not needed."
+      },
+      {
+        "type": "code",
+        "value": "original_list = [x for x in range(1000000)]\n\n# POTENTIAL MEMORY ISSUE: This creates a new list copy\ncopy_list = original_list[:]\n\n# BETTER: Work directly on original_list or use generators\nfor item in original_list:\n    pass"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use Generators Instead of Lists When Possible\n\nGenerators produce items one at a time, saving memory compared to storing all items in a list."
+      },
+      {
+        "type": "code",
+        "value": "# List (uses more memory)\nnumbers = [x * 2 for x in range(1000000)]\n\n# Generator (memory friendly)\nnumbers_gen = (x * 2 for x in range(1000000))\n\nfor number in numbers_gen:\n    pass  # Process numbers one by one"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use Built-in Functions and Modules Which Are Often More Memory Efficient\n\nFunctions like sum(), min(), and modules like itertools save memory by optimizing loops internally."
+      },
+      {
+        "type": "code",
+        "value": "import itertools\n\n# Using itertools to create combinations without storing them all\nfor combo in itertools.combinations(range(1000), 2):\n    pass"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Clear Unused Objects to Free Memory Explicitly\n\nPython's garbage collector will free unused memory, but you can help by deleting large variables when done."
+      },
+      {
+        "type": "code",
+        "value": "large_data = [x for x in range(1000000)]\n\n# Use large_data\n\n# When done, delete it to free memory\n del large_data"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Be Careful with Mutable Default Arguments\n\nUsing mutable objects like lists or dictionaries as default function arguments can cause unexpected memory use and bugs."
+      },
+      {
+        "type": "code",
+        "value": "def add_item(item, items=None):\n    if items is None:\n        items = []  # create a new list each time\n    items.append(item)\n    return items\n\nprint(add_item(1))  # [1]\nprint(add_item(2))  # [2], not [1, 2]"
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Profile Your Code's Memory Usage\n\nUse tools like the memory_profiler package to find parts of your code using the most memory and optimize accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these tips, you will write more efficient Python code that avoids common memory pitfalls. Start small by using generators, avoiding unnecessary copies, and cleaning up large data objects as soon as possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Optimizing memory usage not only improves performance but also makes your programs more reliable and scalable."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-window-functions-for-faster-analytics-queries",
+    "title": "Optimizing SQL Window Functions for Faster Analytics Queries",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to optimize SQL window functions to speed up your analytical queries with beginner-friendly tips and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools for analytic queries, allowing you to perform calculations across a set of table rows related to the current row. Commonly used functions include ROW_NUMBER(), RANK(), and SUM() OVER(). However, if not optimized, queries using window functions can become slow, especially with large datasets. In this article, we'll cover beginner-friendly tips to optimize window functions and improve query performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand a basic use of a window function. Suppose you want to rank salespeople by their monthly sales within each region:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT region,\n       salesperson,\n       sales_amount,\n       RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query ranks salespeople within each region based on their sales amount. While this is straightforward, performance can degrade with large tables. Here are some simple ways to optimize such queries:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Filter Early:** Apply WHERE clauses before the window function to reduce the amount of data processed."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, if you only want sales from 2023, filter the dataset first:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT region,\n       salesperson,\n       sales_amount,\n       RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank\nFROM sales_data\nWHERE sales_year = 2023;"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use Indexes on Partition and Order Columns:** Creating indexes on the columns used in PARTITION BY and ORDER BY inside window functions can speed up data retrieval."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, create an index on (region, sales_amount):"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_region_sales_amount ON sales_data(region, sales_amount DESC);"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid Overlapping Window Functions:** If you have multiple window functions with the same PARTITION BY and ORDER BY, try to combine them into one call to avoid multiple passes over the data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT region,\n       salesperson,\n       sales_amount,\n       RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank,\n       SUM(sales_amount) OVER (PARTITION BY region ORDER BY sales_amount DESC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Limit Returned Data:** Use LIMIT or TOP clauses after ordering if you only need a subset of the ranking results."
+      },
+      {
+        "type": "code",
+        "value": "WITH ranked_sales AS (\n  SELECT region,\n         salesperson,\n         sales_amount,\n         RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank\n  FROM sales_data\n)\nSELECT * FROM ranked_sales\nWHERE sales_rank <= 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Materialize Intermediate Results:** For very complex queries, you can save intermediate results into temporary tables to avoid recalculating window functions repeatedly."
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, optimizing SQL window functions involves reducing the data volume early, indexing partition/order columns, minimizing redundant calculations, and limiting the final output. These simple practices help speed up your analytics queries and keep them efficient as your dataset grows."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-query-performance-troubleshooting-sql-joins",
+    "title": "Optimizing Query Performance by Troubleshooting Logical Errors in SQL Joins",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix common logical errors in SQL joins to improve query performance and get accurate results.",
+    "videoUrl": "https://www.youtube.com/watch?v=yJv7XFOcAwc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL joins are powerful tools used to combine data from multiple tables. However, logical errors in joins can lead to incorrect results or poor performance. This article will help beginners understand common join mistakes and how to troubleshoot them for better query optimization."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the common logical errors occurs when the join condition is incorrect or missing. This often results in a Cartesian product, where every row from one table is combined with every row from the other, causing huge result sets and slow performance."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees e, departments d;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, there is no join condition. This query produces a Cartesian product, which is almost never what you want. To fix this, you should specify the relationship between tables using a proper join condition."
+      },
+      {
+        "type": "code",
+        "value": "SELECT e.employee_id, e.name, d.department_name\nFROM employees e\nJOIN departments d ON e.department_id = d.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another frequent issue is using the wrong type of join. For example, using INNER JOIN when you actually want to include records that don't have matching rows in the other table can lead to missing data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT e.name, d.department_name\nFROM employees e\nLEFT JOIN departments d ON e.department_id = d.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The LEFT JOIN ensures that you get all employees, including those who are not assigned to any department. Choosing the correct join type keeps your results accurate and prevents unnecessary data processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Logical errors can also arise from joining on non-indexed columns, which can slow down your query. Make sure to create indexes on columns used in join conditions to speed up the matching process."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_department_id ON employees(department_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to optimize query performance and fix logical errors in SQL joins: always specify correct join conditions, choose the right join type, and index columns involved in joins. By following these practices, your queries will run faster and return precise data."
+      }
+    ]
   }
 ];
