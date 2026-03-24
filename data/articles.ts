@@ -18726,5 +18726,506 @@ export const articles = [
         "value": "In summary, to optimize query performance and fix logical errors in SQL joins: always specify correct join conditions, choose the right join type, and index columns involved in joins. By following these practices, your queries will run faster and return precise data."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-javascript-using-immutable-js",
+    "title": "Building Scalable Data Models in JavaScript Using Immutable.js",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and maintainable data models in JavaScript by using Immutable.js, a powerful library for handling immutable data structures.",
+    "videoUrl": "https://www.youtube.com/watch?v=OUsRSM71H2E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications, managing data can become complex especially as the app grows. Mutable data can lead to hard-to-track bugs and unpredictable behavior. Immutable.js provides persistent immutable data structures that help keep your data predictable and your application scalable. In this tutorial, we will learn how to use Immutable.js to build scalable data models in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Immutable data means once you create a data structure, it cannot be changed. Instead, when you want to update the data, a new copy is created with the changes applied. This makes your application easier to reason about and prevents unintended side effects."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's install Immutable.js using npm:"
+      },
+      {
+        "type": "code",
+        "value": "npm install immutable"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's create a simple data model using Immutable.js. We'll build a Todo list model where each Todo item has an id, text, and completed status."
+      },
+      {
+        "type": "code",
+        "value": "const { Map, List } = require('immutable');\n\n// Initial empty todos list\ndefaultTodos = List();\n\n// Function to add a todo\nfunction addTodo(todos, id, text) {\n  return todos.push(Map({ id, text, completed: false }));\n}\n\n// Function to toggle a todo's completed status\nfunction toggleTodo(todos, id) {\n  const index = todos.findIndex(todo => todo.get('id') === id);\n  if (index === -1) return todos;\n  return todos.update(index, todo => todo.set('completed', !todo.get('completed')));\n}\n\n// Usage example\nlet todos = defaultTodos;\ntodos = addTodo(todos, 1, 'Learn Immutable.js');\ntodos = addTodo(todos, 2, 'Build scalable data models');\n\nconsole.log(todos.toJS());\n\ntodos = toggleTodo(todos, 1);\n\nconsole.log(todos.toJS());"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we used Immutable.js's List and Map to create our Todo list and individual Todo items. Functions `addTodo` and `toggleTodo` return new lists with the applied changes, leaving the original list unchanged."
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach helps us avoid bugs related to unexpected mutations. It also makes it easier to implement features like undo/redo since the previous states are always intact."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can extend this pattern to build more complex data models involving nested structures. Immutable.js provides many helpful methods such as `setIn`, `updateIn`, and `merge` for working with deeply nested data."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using Immutable.js helps you keep your JavaScript data models scalable by enforcing immutability, improving predictability, and making debugging easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "To learn more about Immutable.js, visit its official site: https://immutable-js.github.io/immutable-js/"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-event-loop-managing-async-errors",
+    "title": "Understanding JavaScript's Event Loop: A Beginner's Guide to Managing Asynchronous Errors",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript's event loop works and how to effectively handle asynchronous errors with practical examples designed for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=vn3tm0quoqE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a single-threaded language, which means it can only execute one task at a time. However, it handles tasks like network requests, timers, and file reading asynchronously to keep your app responsive. Understanding how JavaScript's event loop works is key to managing these asynchronous tasks and properly handling any errors they might produce."
+      },
+      {
+        "type": "paragraph",
+        "value": "The event loop is a mechanism that waits for tasks in the call stack to finish and then picks up tasks from the callback queue. When an asynchronous task finishes, its callback gets added to the callback queue, and the event loop moves it to the call stack when it's free. This way, JavaScript can handle asynchronous operations without freezing the main thread."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common challenge with asynchronous code is handling errors. Unlike synchronous code, where you can use try...catch blocks directly, asynchronous code often requires special methods to catch errors properly. Let's look at some practical examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Handling Errors in setTimeout"
+      },
+      {
+        "type": "code",
+        "value": "setTimeout(() => {\n  try {\n    // Simulate an error\n    throw new Error('Timeout error!');\n  } catch (error) {\n    console.error('Caught error inside setTimeout:', error.message);\n  }\n}, 1000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above example, the error is thrown inside a `setTimeout` callback. If you didn't have the try...catch block inside the callback, the error would be uncaught because the callback runs asynchronously, separate from the main call stack."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Handling Promise Rejections"
+      },
+      {
+        "type": "code",
+        "value": "const asyncTask = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(new Error('Promise rejected!'));\n  }, 500);\n});\n\n// Handling rejection with .catch()\nasyncTask.catch(error => {\n  console.error('Caught promise rejection:', error.message);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises are a common way to work with async code. Always handle rejected promises using `.catch()` or inside an `async/await` try...catch to avoid unhandled promise errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Using async/await with try...catch"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    // Simulating a failing async operation\n    await Promise.reject(new Error('Failed to fetch data'));\n  } catch (error) {\n    console.error('Async/Await caught error:', error.message);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `async/await` syntax lets you write asynchronous code that looks synchronous. Wrapping `await` calls inside a try...catch ensures you catch any errors from rejected promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding the event loop helps you realize why asynchronous errors need special handling. Use try...catch inside asynchronous callbacks like `setTimeout`, always handle promise rejections with `.catch()` or `try...catch` in `async/await`. Mastering this will make your JavaScript code more robust and easier to debug."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-typescript-systems-handling-unexpected-runtime-exceptions-gracefully",
+    "title": "Designing Resilient TypeScript Systems: Handling Unexpected Runtime Exceptions Gracefully",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to build resilient TypeScript applications by effectively handling unexpected runtime exceptions to improve stability and user experience.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building TypeScript applications, it's common to think that static types solve all problems. However, even with TypeScript's strong typing, unexpected runtime exceptions can still occur—for example, when working with external APIs, user inputs, or asynchronous code. Designing your system to gracefully handle these exceptions ensures your application remains stable and provides a better user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore some beginner-friendly strategies to handle unexpected runtime exceptions in TypeScript, including try-catch blocks, error types, and global error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use try-catch Blocks to Handle Exceptions Locally"
+      },
+      {
+        "type": "paragraph",
+        "value": "The simplest and most direct way to handle runtime errors is with try-catch blocks. This approach lets you catch errors where they happen and decide how to respond."
+      },
+      {
+        "type": "code",
+        "value": "function parseJson(jsonString: string) {\n  try {\n    const result = JSON.parse(jsonString);\n    console.log(\"Parsed result:\", result);\n  } catch (error) {\n    console.error(\"Could not parse JSON:\", error);\n  }\n}\n\nparseJson('{\"valid\": true}');\nparseJson('invalid json');"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use Custom Error Types for More Meaningful Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can define custom error classes extending the built-in Error type. This helps you identify and react differently to various error scenarios."
+      },
+      {
+        "type": "code",
+        "value": "class NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = \"NetworkError\";\n  }\n}\n\nfunction fetchData(success: boolean) {\n  if (!success) {\n    throw new NetworkError(\"Failed to fetch data\");\n  }\n  return { data: \"Some data\" };\n}\n\ntry {\n  const data = fetchData(false);\n  console.log(data);\n} catch (error) {\n  if (error instanceof NetworkError) {\n    console.error(\"Network issue:\", error.message);\n  } else {\n    console.error(\"Unknown error:\", error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Handle Errors in Asynchronous Code Using try-catch with async/await"
+      },
+      {
+        "type": "paragraph",
+        "value": "When working with asynchronous code, wrap your await calls in try-catch blocks."
+      },
+      {
+        "type": "code",
+        "value": "async function getUserData(userId: string) {\n  try {\n    const response = await fetch(`https://api.example.com/user/${userId}`);\n    if (!response.ok) {\n      throw new Error(`Server returned ${response.status}`);\n    }\n    const data = await response.json();\n    console.log(\"User data:\", data);\n  } catch (error) {\n    console.error(\"Error fetching user data:\", error);\n  }\n}\n\ngetUserData(\"123\");"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Use Global Error Handlers for Catching Unhandled Exceptions"
+      },
+      {
+        "type": "paragraph",
+        "value": "In some environments like Node.js or browsers, you can register global error handlers to catch uncaught exceptions and unhandled promise rejections."
+      },
+      {
+        "type": "code",
+        "value": "// Node.js example\nprocess.on('uncaughtException', (error) => {\n  console.error('Uncaught Exception:', error);\n  // Ideally do some cleanup and restart or shutdown gracefully\n});\n\nprocess.on('unhandledRejection', (reason) => {\n  console.error('Unhandled Rejection:', reason);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Provide User-Friendly Error Messages and Recovery Options"
+      },
+      {
+        "type": "paragraph",
+        "value": "Whenever possible, show helpful error messages to users instead of generic failures. Consider logging errors for developers and allowing your app to recover or retry."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, even though TypeScript helps reduce many runtime bugs through static typing, gracefully handling runtime exceptions is essential to build resilient applications. Use try-catch blocks, custom error types, async-await error handling, and global error listeners to create robust systems that can recover from unexpected situations."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-asyncio-vs-threading-for-concurrent-web-scraping",
+    "title": "Comparing Python's Asyncio vs Threading for Concurrent Web Scraping",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of using Python's asyncio and threading modules to perform concurrent web scraping. Compare their use cases, performance, and how to implement each for efficient scraping.",
+    "videoUrl": "https://www.youtube.com/watch?v=Ii7x4mpIhIs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping often involves making multiple requests to websites to collect data. Doing this serially can be slow, especially if you need to scrape hundreds of pages. By using concurrency, you can speed up your scraping tasks. Python offers two popular concurrency approaches: asyncio and threading. Both have their advantages, and this tutorial will help you understand when and how to use each for web scraping."
+      },
+      {
+        "type": "paragraph",
+        "value": "Threading is a way to run multiple threads (smaller units of process) simultaneously in a program. It is useful when tasks involve waiting for input/output, like network responses. Asyncio, on the other hand, is Python's asynchronous programming library, which uses an event loop to handle tasks that can be paused and resumed, such as network operations. Asyncio is often more efficient for I/O-bound tasks because it uses fewer system resources than threading."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by seeing how you can use threading to scrape multiple websites concurrently. We will use the popular requests library along with threading."
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport requests\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nresults = []\n\n# Define a function that downloads data from a url\n\ndef fetch(url):\n    print(f'Starting {url}')\n    response = requests.get(url)\n    results.append((url, response.status_code))\n    print(f'Finished {url}')\n\nthreads = []\n\nfor url in urls:\n    t = threading.Thread(target=fetch, args=(url,))\n    t.start()\n    threads.append(t)\n\n# Wait for all threads to complete\nfor t in threads:\n    t.join()\n\nprint('All downloads completed.')\nprint(results)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, each URL is downloaded in its own thread, allowing multiple downloads to happen at the same time. Using threading helps when requests are waiting for network response, but note that threads come with some overhead and are limited by Python's Global Interpreter Lock (GIL) when doing CPU-bound work."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's see how to achieve similar concurrent scraping with asyncio. For asyncio, we use an asynchronous HTTP library like aiohttp to make non-blocking requests."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport aiohttp\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nresults = []\n\nasync def fetch(session, url):\n    print(f'Starting {url}')\n    async with session.get(url) as response:\n        status = response.status\n        results.append((url, status))\n        print(f'Finished {url}')\n\nasync def main():\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        await asyncio.gather(*tasks)\n\nasyncio.run(main())\nprint('All downloads completed.')\nprint(results)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This asyncio example uses a single thread but an event loop to manage multiple HTTP requests concurrently. Because tasks yield control while waiting for responses, the program can handle many connections efficiently without the overhead of multiple threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize the differences:\n- Threading is easier to understand for beginners and works well if your scraping program also runs CPU-bound tasks.\n- Asyncio requires asynchronous libraries and a different programming style (async/await) but is more efficient for many simultaneous I/O tasks.\n\nFor web scraping, where the program mostly waits on network responses, asyncio is usually the better choice in terms of resource use and speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to always respect websites' terms of service and avoid sending too many requests in a short time, which can overload servers or get your IP blocked."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-pythons-typeerror-a-beginners-guide-to-common-causes-and-solutions",
+    "title": "Understanding Python's TypeError: A Beginner's Guide to Common Causes and Solutions",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what Python's TypeError means, common reasons it occurs, and practical solutions to fix it with beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=uswm-Xtekfs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to Python, encountering errors can be frustrating. One common error you'll come across is the TypeError. This error happens when you try to perform an operation on a data type that doesn't support it. In this guide, we'll explain what TypeError means, look at common causes, and show you easy ways to fix it."
+      },
+      {
+        "type": "paragraph",
+        "value": "The TypeError is Python’s way of telling you, \"You’re trying to use a value in a way that isn’t allowed by its type.\" For example, you can't add a number to a string without converting one type to another first."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "age = 25\nmessage = \"I am \" + age + \" years old\"\nprint(message)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Trying to run this will raise a TypeError because Python cannot concatenate a string (\"I am \") with an integer (age). To fix this, you need to convert the number to a string first:"
+      },
+      {
+        "type": "code",
+        "value": "age = 25\nmessage = \"I am \" + str(age) + \" years old\"\nprint(message)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now the code works because `str(age)` changes the integer 25 into the string \"25\", allowing the pieces to be joined correctly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are a few common causes of TypeError and how to fix them:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Adding or combining incompatible types**\n\nYou can’t add a string and a number directly. Always convert types explicitly."
+      },
+      {
+        "type": "code",
+        "value": "# Incorrect\nresult = \"Score: \" + 100\n\n# Correct\nresult = \"Score: \" + str(100)"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Calling a function with the wrong type of argument**\n\nIf a function expects a list but you pass an integer, you'll get a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "def greet_all(names):\n    for name in names:\n        print(\"Hello, \" + name)\n\n# Incorrect call\n#greet_all(123)\n\n# Correct call\nnames = [\"Alice\", \"Bob\"]\ngreet_all(names)"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Using unsupported operations on data types**\n\nYou can't multiply a string by a float. Multiplication between a string and an integer is allowed (it repeats the string), but float causes a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "# Incorrect\n# result = \"hello\" * 2.5\n\n# Correct\nresult = \"hello\" * 2\nprint(result)  # Output: hellohello"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, a TypeError happens when you mix up data types in your code. You can avoid most TypeErrors by:\n- Knowing the type of your variables (use `type()` to check)\n- Converting types when needed using functions like `str()`, `int()`, or `float()`\n- Following the expected input types for functions\n\nWith a little practice, you'll get comfortable spotting and fixing these errors quickly!"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-window-functions-in-sql-for-data-analysis",
+    "title": "How to Use Window Functions in SQL for Data Analysis: A Beginner’s Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to leverage SQL window functions for powerful and easy data analysis with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions in SQL are a powerful tool that let you perform calculations across a set of rows related to the current query row, without collapsing the results like aggregation functions do. They are extremely useful for data analysis tasks such as calculating running totals, ranking rows, or finding moving averages."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this guide, we will explore some common window functions and how to use them with simple examples so you can start using them in your own SQL queries right away."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Window Functions?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions operate on a set of rows called the 'window' and return a value for each row from the input. The window is defined using the `OVER()` clause, which can include partitions and ordering."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common window functions include `ROW_NUMBER()`, `RANK()`, `SUM()`, `AVG()`, `LAG()`, and `LEAD()`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Example Dataset"
+      },
+      {
+        "type": "paragraph",
+        "value": "Assume we have a table named `sales` with the following columns: `id`, `salesperson`, `sale_date`, and `amount`."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM sales;\n\n-- Example rows:\n-- id | salesperson | sale_date  | amount\n-- 1  | Alice       | 2024-01-01 | 500\n-- 2  | Bob         | 2024-01-02 | 300\n-- 3  | Alice       | 2024-01-03 | 200\n-- 4  | Bob         | 2024-01-04 | 700\n-- 5  | Alice       | 2024-01-05 | 400"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using ROW_NUMBER() to Rank Sales by Salesperson"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `ROW_NUMBER()` function assigns a unique sequential number to rows within a partition (group) of a result set, ordered by a column."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS sale_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, each salesperson's sales are numbered in order of the sale date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Calculating Running Total with SUM()"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can calculate a running total of sales amounts for each salesperson using `SUM()` with a window."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This sums the sales amounts in order, resetting the sum for each salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Finding Previous Sale Amounts with LAG()"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `LAG()` function accesses data from a previous row in the same result set, which is useful for comparing current values with previous ones."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_sale_amount\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, for each sale, you can see the amount from the previous sale made by the same salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions greatly enhance your ability to analyze data directly in SQL by providing flexible ways to rank, aggregate, and compare rows without grouping them. Start experimenting with them in your queries to gain deeper insights and write more efficient code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-debugging-complex-hierarchical-queries-in-sql",
+    "title": "Mastering Recursive CTEs: Debugging Complex Hierarchical Queries in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to effectively debug recursive Common Table Expressions (CTEs) in SQL, unlocking the power to query hierarchical data without frustration.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive CTEs (Common Table Expressions) are a powerful feature in SQL that help you query hierarchical or tree-structured data, such as organizational charts, folder structures, or bill of materials. However, writing and debugging these queries can be challenging, especially for beginners. This article walks you through common errors encountered with recursive CTEs and provides practical tips to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE starts with an anchor query that defines the base set of rows. This is then followed by a recursive part that references the CTE itself and keeps building on the results until no new rows are returned. Let's start with a simple example and then explore common errors."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    -- Anchor member: select the root employee (e.g., CEO)\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    -- Recursive member: join employees to their managers\n    SELECT e.EmployeeID, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Errors and How to Fix Them"
+      },
+      {
+        "type": "paragraph",
+        "value": "**1. Missing Anchor Member or Recursive Member**\nYour recursive CTE must have at least two parts combined by UNION ALL: the anchor and the recursive member. Omitting either causes errors or infinite loops."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect: Missing anchor member\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID = 1  -- This alone is not anchor\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Make sure you always have a base anchor query that doesn't reference the CTE itself."
+      },
+      {
+        "type": "paragraph",
+        "value": "**2. Infinite Recursion or Excessive Iterations**\nIf your recursive query keeps generating new rows indefinitely, your database might throw an error or use a maximum recursion limit (e.g., SQL Server has a default max recursion of 100). To avoid infinite loops, confirm your join condition properly reduces the search space."
+      },
+      {
+        "type": "code",
+        "value": "-- Example causing infinite loop due to bad join condition\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    SELECT e.EmployeeID, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.EmployeeID = eh.EmployeeID  -- Incorrect join\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, joining on e.EmployeeID = eh.EmployeeID causes recursion on the same employee repeatedly. Instead, join e.ManagerID = eh.EmployeeID."
+      },
+      {
+        "type": "paragraph",
+        "value": "**3. Incorrect Column Number or Data Types**\nThe anchor and recursive member must return the same number of columns and compatible data types."
+      },
+      {
+        "type": "code",
+        "value": "-- Error example - mismatch of columns\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    SELECT EmployeeID, ManagerID, Level + 1  -- Extra column without anchor counterpart\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Fix it by including the same columns with matching data types in both parts."
+      },
+      {
+        "type": "paragraph",
+        "value": "**4. Using Non-Terminating Conditions**\nSet an appropriate termination condition in your recursive part to stop the recursion once all relevant rows are found."
+      },
+      {
+        "type": "code",
+        "value": "-- Limiting recursion depth example\nWITH RECURSIVE EmployeeHierarchy AS (\n    SELECT EmployeeID, ManagerID, 1 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    SELECT e.EmployeeID, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n    WHERE eh.Level < 10  -- Stop after 10 levels\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This prevents runaway recursion if you know your hierarchy won’t exceed a certain depth."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Debugging Tips"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Run the anchor part alone first to ensure it returns expected root rows.\n- Then run the recursive member with sample inputs by manually substituting.\n- Add a recursion level or path column to track recursion depth or visited nodes.\n- Use `LIMIT` or `TOP` clauses to test partial recursion to avoid timeouts.\n- Check for cycles or self-referencing rows that may cause infinite recursion."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these common pitfalls and debugging strategies, you'll gain confidence in writing and troubleshooting recursive CTE queries to efficiently explore hierarchical data in SQL."
+      }
+    ]
   }
 ];
