@@ -2,21 +2,25 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
+  metadataBase: new URL("https://devnestguide.com"),
   title: {
     default: "Dev Nest Guide – Learn Coding with Tutorials, Exercises & Debug Help",
     template: "%s | Dev Nest Guide",
   },
   description:
     "Learn coding with beginner-friendly tutorials, coding exercises, and real-world debugging help across JavaScript, Python, SQL and more.",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/favicon.ico",
   },
 };
-
 
 export default function RootLayout({
   children,
