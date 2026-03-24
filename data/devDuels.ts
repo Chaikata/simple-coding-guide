@@ -835,5 +835,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-check-even-or-odd-numbers",
+    "title": "Build a Function to Check Even or Odd Numbers",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Create a simple Python function that takes an integer as input and returns whether the number is 'Even' or 'Odd'. This helps beginners practice conditionals and function definitions.",
+    "prompt": "Write a function named check_even_odd that accepts one integer parameter and returns the string 'Even' if the number is even, or 'Odd' if the number is odd.",
+    "guidance": [
+      "Define a function using def and specify one parameter.",
+      "Use the modulo operator (%) to check if the number is divisible by 2.",
+      "Return 'Even' if the number modulo 2 equals zero; otherwise, return 'Odd'."
+    ],
+    "hints": [
+      "The modulo operator (%) gives the remainder when dividing two numbers.",
+      "If number % 2 == 0, the number is even; else it is odd."
+    ],
+    "starterCode": "def check_even_odd(num):\n    # Your code here\n    pass",
+    "expectedOutput": "check_even_odd(10)  # Output: 'Even'\ncheck_even_odd(7)   # Output: 'Odd'",
+    "concepts": [
+      "functions",
+      "conditionals",
+      "modulo operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-complex-array-and-object-transformation",
+    "title": "Predict the Output of a Complex Array and Object Transformation",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the provided JavaScript code snippet that manipulates arrays and objects with multiple steps. Predict the exact output produced by the code.",
+    "prompt": "Given the following JavaScript code that processes an array of user objects, determine what the console.log output will be when the code is executed. Focus on understanding the transformations, map/filter usage, and combined operations on the data.",
+    "guidance": [
+      "Examine how the map() and filter() methods transform the array step-by-step.",
+      "Pay attention to how object properties are accessed and modified within callback functions.",
+      "Consider the order of operations and how chaining affects the intermediate results."
+    ],
+    "hints": [
+      "Remember that map() returns a new array based on the return value of its callback.",
+      "Filtering affects which elements continue in the chain, so consider which users are excluded.",
+      "Look carefully at nested properties and increments inside the map callbacks."
+    ],
+    "starterCode": "const users = [\n  { id: 1, name: 'Alice', scores: [10, 20, 30] },\n  { id: 2, name: 'Bob', scores: [5, 15] },\n  { id: 3, name: 'Charlie', scores: [] },\n  { id: 4, name: 'David', scores: [8, 8, 8] }\n];\n\nconst processedUsers = users\n  .map(user => ({\n    ...user,\n    totalScore: user.scores.reduce((a, b) => a + b, 0),\n    averageScore: user.scores.length ? user.scores.reduce((a, b) => a + b, 0) / user.scores.length : 0\n  }))\n  .filter(user => user.totalScore >= 20)\n  .map(user => ({\n    id: user.id * 2,\n    name: user.name.toUpperCase(),\n    totalScore: user.totalScore + 5,\n    averageScore: parseFloat(user.averageScore.toFixed(2))\n  }));\n\nconsole.log(processedUsers);",
+    "expectedOutput": "[\n  { id: 2, name: 'ALICE', totalScore: 65, averageScore: 20 },\n  { id: 8, name: 'DAVID', totalScore: 29, averageScore: 8 }\n]",
+    "concepts": [
+      "Array map()",
+      "Array filter()",
+      "Array reduce()",
+      "Object destructuring and spread syntax"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-infinite-recursion-bug-in-a-python-memoization-function",
+    "title": "Fix the Infinite Recursion Bug in a Python Memoization Function",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix a subtle bug causing infinite recursion in a Python function designed to compute Fibonacci numbers with memoization. The code uses a dictionary cache but incorrectly implements memoization logic, leading to recursion errors. Your task is to debug the function to correctly utilize memoization and efficiently compute Fibonacci values.",
+    "prompt": "The provided Python function is intended to compute the nth Fibonacci number using memoization to optimize repeated calculations. However, it produces a RuntimeError due to infinite recursion. Identify and fix the bug causing this infinite recursion so that the function returns the correct Fibonacci number efficiently. Preserve the memoization approach in your fix.",
+    "guidance": [
+      "Review how the function uses the cache dictionary to store computed Fibonacci values.",
+      "Check the base cases to ensure proper termination of recursion.",
+      "Ensure that the recursive results are stored in the cache before returning."
+    ],
+    "hints": [
+      "The cache assignment might be placed incorrectly or missing before the recursive return.",
+      "If you omit storing the computed result in the cache, recursive calls will never resolve.",
+      "Confirm that the function checks the cache before computing new Fibonacci values."
+    ],
+    "starterCode": "def fib(n, cache={}):\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    if n not in cache:\n        return fib(n - 1, cache) + fib(n - 2, cache)\n    return cache[n]",
+    "expectedOutput": "fib(10) should return 55",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dictionary caching",
+      "debugging infinite recursion"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-check-if-a-number-is-even",
+    "title": "Build a Function to Check if a Number is Even",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Create a simple JavaScript function that takes a number as input and returns true if the number is even, and false if it is odd.",
+    "prompt": "Write a function named isEven that accepts one parameter, a number. The function should return true if the number is even, and false if the number is odd.",
+    "guidance": [
+      "Recall that a number is even if it is divisible by 2 with no remainder.",
+      "Use the modulus operator (%) to find the remainder when dividing the number by 2.",
+      "Return true if the remainder is 0; otherwise, return false."
+    ],
+    "hints": [
+      "Try using 'number % 2' — what does it return for even numbers?",
+      "Remember that the function should return a boolean value, true or false.",
+      "Test your function with both even and odd numbers to verify it works correctly."
+    ],
+    "starterCode": "function isEven(number) {\n  // Your code here\n}",
+    "expectedOutput": "isEven(4) // true\nisEven(7) // false",
+    "concepts": [
+      "functions",
+      "conditionals",
+      "modulus operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-and-simplify-nested-loops-for-data-aggregation",
+    "title": "Refactor and Simplify Nested Loops for Data Aggregation",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the structure and readability of a Python function that aggregates sales data from multiple stores and products, while preserving its original behavior.",
+    "prompt": "You are given a function that processes sales data from several stores to calculate the total sales per product category. The current implementation uses multiple nested loops, redundant conditions, and some repeated code blocks, making it hard to maintain and understand. Refactor the function to simplify the logic, reduce nesting, and improve readability without changing the output.",
+    "guidance": [
+      "Focus on removing unnecessary loops or conditions and consolidate repeated code.",
+      "Use intermediate variables or helper functions if it makes the code clearer.",
+      "Ensure that the function behavior and final output remain exactly the same after refactoring."
+    ],
+    "hints": [
+      "Look for places where you can use dictionary methods like get() to avoid explicit conditionals.",
+      "Consider looping over data just once where possible, using data structures to hold intermediate results.",
+      "Use descriptive variable names and consider list/dictionary comprehensions where applicable."
+    ],
+    "starterCode": "def calculate_total_sales(data):\n    result = {}\n    for store in data:\n        for product in store['products']:\n            category = product['category']\n            if category in result:\n                if product['name'] in result[category]:\n                    result[category][product['name']] += product['sales']\n                else:\n                    result[category][product['name']] = product['sales']\n            else:\n                result[category] = {}\n                if product['name'] in result[category]:\n                    result[category][product['name']] += product['sales']\n                else:\n                    result[category][product['name']] = product['sales']\n    return result",
+    "expectedOutput": "{'Electronics': {'TV': 350, 'Radio': 80}, 'Books': {'Novel': 120, 'Comics': 75}}",
+    "concepts": [
+      "refactoring",
+      "nested loops",
+      "dictionaries",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-output-of-complex-recursive-and-bitwise-operations-in-c",
+    "title": "Predict Output of Complex Recursive and Bitwise Operations in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a complex C++ program that uses recursion combined with bitwise operations and tricky short-circuit logic. Predict the exact output produced by the program without running it.",
+    "prompt": "Given the following C++ code, determine the exact output printed to stdout.\n\nExplain the reasoning behind the output considering recursion, bitwise operations, and short-circuit evaluation.\n\n#include <iostream>\n\nint func(int x) {\n    static int state = 1;\n    if (x <= 0) return 0;\n    int result = 0;\n    if ((x & 1) && (state++ < 4)) {\n        result += func(x - 2);\n        result += state;\n    } else {\n        result += func(x - 1);\n        result += state * 2;\n    }\n    return result;\n}\n\nint main() {\n    std::cout << func(5) << std::endl;\n    return 0;\n}",
+    "guidance": [
+      "Trace the recursive calls carefully, keeping track of the static state variable's value at each stage.",
+      "Pay special attention to short-circuit evaluation of the condition in the if statement.",
+      "Remember how bitwise AND (&) works to check the parity of x.",
+      "Consider the order of operations inside each recursive call."
+    ],
+    "hints": [
+      "The static 'state' variable persists and increments only under certain conditions — track that closely.",
+      "When x is odd, the first condition short-circuits if 'state < 4' is false.",
+      "Calculate smaller inputs first to build the solution upwards."
+    ],
+    "starterCode": "#include <iostream>\n\nint func(int x) {\n    static int state = 1;\n    if (x <= 0) return 0;\n    int result = 0;\n    if ((x & 1) && (state++ < 4)) {\n        result += func(x - 2);\n        result += state;\n    } else {\n        result += func(x - 1);\n        result += state * 2;\n    }\n    return result;\n}\n\nint main() {\n    std::cout << func(5) << std::endl;\n    return 0;\n}",
+    "expectedOutput": "14",
+    "concepts": [
+      "recursion",
+      "bitwise operations",
+      "static variables",
+      "short-circuit evaluation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
