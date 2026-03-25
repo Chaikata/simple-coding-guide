@@ -1,433 +1,379 @@
 [
   {
-    "slug": "step-by-step-guide-to-building-your-first-javascript-to-do-list-app",
-    "title": "Step-by-Step Guide to Building Your First JavaScript To-Do List App",
+    "slug": "comparing-async-await-vs-promises-best-practices-for-modern-javascript",
+    "title": "Comparing Async/Await vs Promises: Best Practices for Modern JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to create a simple, beginner-friendly to-do list app using plain JavaScript, HTML, and CSS in this step-by-step tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=G0jO8kUrg-I",
+    "description": "Learn the differences between async/await and promises in JavaScript, with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "Building a to-do list is a classic beginner project that helps you practice JavaScript, HTML, and CSS together. In this tutorial, we'll create a simple to-do list app that lets you add and remove tasks dynamically. Let's get started!"
+        "value": "Asynchronous programming is essential in JavaScript, especially when working with operations like API calls or reading files. Two common ways to handle async code are Promises and async/await. This tutorial explains the differences between them and shows best practices to write cleaner and more readable JavaScript."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Set up the HTML Structure\nFirst, create an HTML file with a text input, a button to add tasks, and a list to display the tasks."
+        "value": "### What are Promises?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Promise is an object representing the eventual completion or failure of an asynchronous operation. Promises use `.then()` and `.catch()` methods to handle success and errors."
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Simple To-Do List</title>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Enter a new task\" />\n  <button id=\"addBtn\">Add Task</button>\n  <ul id=\"taskList\"></ul>\n\n  <script src=\"script.js\"></script>\n</body>\n</html>"
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data loaded');\n      } else {\n        reject('Error loading data');\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(response => {\n    console.log(response); // Data loaded\n  })\n  .catch(error => {\n    console.error(error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Style Your To-Do List (Optional)\nYou can add some basic CSS for better appearance. Save this as a CSS file or include it in the HTML `<style>` tag."
+        "value": "As you can see, Promises allow chaining of multiple `.then()` calls to process the result step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is syntax built on top of Promises that allows asynchronous code to look more like synchronous code. It uses the `async` keyword before a function and the `await` keyword before a Promise to pause execution until the Promise resolves."
       },
       {
         "type": "code",
-        "value": "body {\n  font-family: Arial, sans-serif;\n  max-width: 400px;\n  margin: 30px auto;\n  padding: 0 20px;\n}\n\ninput {\n  width: 70%;\n  padding: 8px;\n  margin-right: 10px;\n}\n\nbutton {\n  padding: 8px 12px;\n  cursor: pointer;\n}\n\nul {\n  list-style-type: none;\n  padding-left: 0;\n}\n\nli {\n  background: #f4f4f4;\n  margin-bottom: 8px;\n  padding: 10px;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\nli button {\n  background: #ff4d4d;\n  border: none;\n  color: white;\n  padding: 5px 8px;\n  cursor: pointer;\n  border-radius: 4px;\n}"
+        "value": "async function loadData() {\n  try {\n    const response = await fetchData();\n    console.log(response); // Data loaded\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nloadData();"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Write JavaScript to Add and Remove Tasks\nCreate a file named `script.js` and write the following code to handle adding tasks and deleting them when clicked."
+        "value": "The async/await approach often makes code easier to read and debug because it avoids deeply nested `.then()` calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Using Promises and Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use async/await for readability:** When possible, use async/await to write clearer asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Handle errors properly:** Always use `try/catch` with async/await or `.catch()` with Promises to handle errors gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid mixing styles:** Try not to mix async/await and `.then()` in the same block to keep code consistent."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Return Promises in functions:** If a function is asynchronous, return the Promise or mark it as `async` to enable proper chaining or awaiting."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to use Promises directly"
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises are still useful when you want to handle multiple asynchronous calls concurrently using `Promise.all()` or `Promise.race()`."
       },
       {
         "type": "code",
-        "value": "const addBtn = document.getElementById('addBtn');\nconst taskInput = document.getElementById('taskInput');\nconst taskList = document.getElementById('taskList');\n\n// Function to add a new task\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if (taskText === '') {\n    alert('Please enter a task');\n    return;\n  }\n\n  // Create list item\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Create delete button\n  const delBtn = document.createElement('button');\n  delBtn.textContent = 'Delete';\n  delBtn.onclick = function() {\n    taskList.removeChild(li);\n  };\n\n  // Add delete button to list item\n  li.appendChild(delBtn);\n\n  // Add list item to the list\n  taskList.appendChild(li);\n\n  // Clear input\n  taskInput.value = '';\n  taskInput.focus();\n}\n\n// Add event listener to button\naddBtn.addEventListener('click', addTask);\n\n// Add task when pressing Enter key\ntaskInput.addEventListener('keypress', function(event) {\n  if (event.key === 'Enter') {\n    addTask();\n  }\n});"
+        "value": "const promise1 = Promise.resolve('First');\nconst promise2 = Promise.resolve('Second');\n\nPromise.all([promise1, promise2])\n  .then(results => {\n    console.log(results); // ['First', 'Second']\n  });"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Test Your To-Do List App\nOpen your HTML file in a browser. Type a task into the input box and press the Add Task button or Enter key. Your task should appear below with a Delete button next to it. Click Delete to remove the task."
+        "value": "You can also use async/await combined with `Promise.all()` for the same effect:"
+      },
+      {
+        "type": "code",
+        "value": "async function loadAll() {\n  const results = await Promise.all([promise1, promise2]);\n  console.log(results); // ['First', 'Second']\n}\n\nloadAll();"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nYou've just built a basic JavaScript to-do list app! This project showed you how to manipulate the DOM, handle events, and update content dynamically. Feel free to enhance it with saving tasks in local storage, editing tasks, or marking tasks as complete."
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both Promises and async/await are powerful tools for handling asynchronous JavaScript. Async/await offers cleaner and more readable code, especially for sequential async operations. Promises are useful for multiple parallel operations and chaining. Knowing when and how to use both will make your JavaScript programming more efficient and maintainable."
       }
     ]
   },
   {
-    "slug": "mastering-asynchronous-stack-traces-nodejs-debugging",
-    "title": "Mastering Asynchronous Stack Traces in Node.js for Effective Debugging",
+    "slug": "optimizing-javascript-event-loop-for-high-performance",
+    "title": "Optimizing JavaScript Event Loop for High-Performance System Design",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to read and improve asynchronous stack traces in Node.js to debug your applications more effectively with clear examples and tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
+    "description": "Learn how to optimize the JavaScript event loop to avoid common errors and build high-performance, responsive applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=b4TpO9pYpqk",
     "content": [
       {
         "type": "paragraph",
-        "value": "Debugging in Node.js can be tricky, especially when dealing with asynchronous code. Traditional stack traces often lose context in asynchronous operations, making it harder to identify where errors originate. In this article, we'll explore how asynchronous stack traces work in Node.js and learn practical ways to master them for better debugging."
+        "value": "JavaScript runs on a single thread and uses an event loop to handle asynchronous operations like timers, I/O, and user interactions. Understanding how the event loop works is vital for optimizing performance and avoiding common errors like blocking the UI or slowing down your application."
       },
       {
         "type": "paragraph",
-        "value": "### What is an Asynchronous Stack Trace?"
+        "value": "The event loop processes tasks in a queue. If a long-running task blocks this queue, everything else waits until it finishes — causing freezes or slow response times. Let's explore beginner-friendly ways to optimize it."
       },
       {
         "type": "paragraph",
-        "value": "A stack trace shows the sequence of function calls leading to an error. In synchronous code, the stack trace is straightforward because function calls are nested naturally. However, in asynchronous code (using callbacks, promises, or async/await), the stack trace can get fragmented because the call stack is not continuous—each asynchronous milestone effectively resets the stack."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example of a Problematic Stack Trace"
+        "value": "1. Avoid long synchronous code: Break heavy computations into smaller chunks so the event loop can process other events between them."
       },
       {
         "type": "code",
-        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Failed to fetch data'));\n    }, 100);\n  });\n}\n\nasync function process() {\n  await fetchData();\n}\n\nprocess().catch(err => {\n  console.error(err.stack);\n});"
+        "value": "function heavyTask() {\n  for (let i = 0; i < 1e9; i++) {\n    // CPU intensive work\n  }\n  console.log('Heavy task done');\n}\n\n// This blocks the event loop!\nheavyTask();"
       },
       {
         "type": "paragraph",
-        "value": "When you run this code, your stack trace might only show where the Promise was rejected inside `setTimeout`, but not the line in `process()` or where `process()` was called. This limits your ability to quickly find the origin of the error."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How Node.js Helps With Async Stack Traces"
-      },
-      {
-        "type": "paragraph",
-        "value": "Node.js has made improvements in how asynchronous stack traces are captured, especially with async/await. By default, recent Node.js versions provide better async stack traces that capture the sequence of awaited calls. To take advantage of this, make sure you are using a Node.js version 12 or above."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using `async_hooks` for Even Better Context (Advanced but Useful)"
-      },
-      {
-        "type": "paragraph",
-        "value": "For deeper debugging, Node.js provides the `async_hooks` module which lets you track asynchronous resources and maintain context across async calls. While it is more advanced, tools like `cls-hooked` (Continuaton Local Storage) are built on it to help retain context and improve stack traces."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Tips to Master Async Stack Traces"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use async/await instead of callbacks:** This creates more readable asynchronous code and better error stack traces.\n2. **Enable full trace warnings:** Run Node.js with `--trace-warnings` to get more insight.\n3. **Use source maps for transpiled code:** If you use TypeScript or Babel, enable source maps so errors map back to your original source.\n4. **Wrap errors with custom messages:** Add helpful context before throwing errors.\n5. **Use tools like `longjohn` or debugging IDEs:** They help capture async call stacks.\n\nHere's a simple example with async/await and added error context:"
+        "value": "Instead, use `setTimeout` to chunk the task, allowing other events to run:"
       },
       {
         "type": "code",
-        "value": "async function fetchData() {\n  // Simulate a fetch failure\n  throw new Error('Failed to fetch data');\n}\n\nasync function process() {\n  try {\n    await fetchData();\n  } catch (err) {\n    err.message = `process() failed: ${err.message}`;\n    throw err;\n  }\n}\n\nprocess().catch(err => {\n  console.error(err.stack);\n});"
+        "value": "function chunkedTask(start = 0, end = 1e9, chunkSize = 1e7) {\n  let i = start;\n\n  function processChunk() {\n    const limit = Math.min(i + chunkSize, end);\n    for (; i < limit; i++) {\n      // CPU intensive work chunk\n    }\n    console.log(`Processed chunk up to ${i}`);\n\n    if (i < end) {\n      setTimeout(processChunk, 0); // Yield to event loop\n    } else {\n      console.log('All chunks done');\n    }\n  }\n\n  processChunk();\n}\n\nchunkedTask();"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "2. Use asynchronous APIs like Promises and async/await to avoid blocking. These APIs allow your code to wait for results without freezing the main thread."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}\n\nfetchData();"
       },
       {
         "type": "paragraph",
-        "value": "Mastering asynchronous stack traces in Node.js can dramatically improve your debugging speed and confidence. Use modern async/await syntax, keep your Node.js version updated, add meaningful error context, and consider advanced tools like `async_hooks` or source maps for complex projects. With these approaches, chasing down bugs in asynchronous code becomes much easier."
+        "value": "3. Beware of infinite loops or recursive calls without exit conditions, which stall the event loop and freeze your app."
+      },
+      {
+        "type": "code",
+        "value": "function badLoop() {\n  while(true) {\n    // This will freeze the browser\n  }\n}\n\n// Avoid calling badLoop()"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Offload heavy tasks to Web Workers if your app requires parallel processing. This keeps the main event loop free for UI interactions."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing the JavaScript event loop involves breaking down heavy tasks, embracing asynchronous APIs, avoiding blocking code, and using workers when necessary. These practices lead to smooth, high-performance web applications."
       }
     ]
   },
   {
-    "slug": "handling-complex-type-inference-with-recursive-types-in-typescript",
-    "title": "Handling Complex Type Inference with Recursive Types in TypeScript",
+    "slug": "mastering-typescript-decorators-advanced-patterns-and-use-cases",
+    "title": "Mastering TypeScript Decorators: Advanced Patterns and Use Cases",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to work with recursive types in TypeScript to improve complex type inference in your applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=QryUZJ0Tx90",
+    "description": "Explore advanced TypeScript decorator patterns and practical use cases to enhance your coding skills with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=RJot7H_gd5k",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript's powerful type system allows developers to create complex and expressive types. One helpful feature is recursive types — types that reference themselves. They can be especially useful when modeling data structures like trees or nested objects. However, using recursive types can sometimes cause difficulties with type inference, especially for beginners. In this tutorial, you'll learn how to handle complex type inference with recursive types in TypeScript using clear, practical examples."
+        "value": "TypeScript decorators provide a powerful way to add metadata and modify classes, methods, properties, and parameters at design time. Initially popular in frameworks like Angular, decorators enable clean, reusable code patterns. This tutorial will help you master advanced decorator techniques and practical use cases even if you are new to decorators."
       },
       {
         "type": "paragraph",
-        "value": "Let's say you want to create a type for a nested JSON object where values can be either strings or other nested objects of the same shape. A recursive type lets you define this structure easily."
+        "value": "Before diving into advanced patterns, let's quickly recap what decorators are. A decorator is a special kind of declaration attached to a class or its members. It allows you to intercept and modify behavior by wrapping or annotating the original element."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript supports four decorator types: class decorators, method decorators, property decorators, and parameter decorators. Each receives specific arguments that let you hook into the class's structure."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating an advanced class decorator that adds a timestamp to class instances."
       },
       {
         "type": "code",
-        "value": "type NestedObject = {\n  [key: string]: string | NestedObject;\n};"
+        "value": "function Timestamp<T extends { new (...args: any[]): {} }>(constructor: T) {\n  return class extends constructor {\n    createdAt = new Date();\n  };\n}\n\n@Timestamp\nclass User {\n  constructor(public name: string) {}\n}\n\nconst user = new User('John');\nconsole.log(user.createdAt); // Prints creation timestamp"
       },
       {
         "type": "paragraph",
-        "value": "Here, `NestedObject` is a type that can have any number of properties with either a string value or another `NestedObject`. This recursive definition lets you create deeply nested objects with consistent typing."
+        "value": "The Timestamp decorator replaces the original class with a subclass that adds a createdAt property. This is a simple pattern to augment class instances without modifying the original class code."
       },
       {
         "type": "paragraph",
-        "value": "Now let's see how you can type a function that takes such a nested object and logs all the string values, no matter how deep they are nested:"
+        "value": "Next, let's explore method decorators that can help with logging method calls and their arguments."
       },
       {
         "type": "code",
-        "value": "function logNestedStrings(obj: NestedObject): void {\n  for (const key in obj) {\n    const value = obj[key];\n    if (typeof value === 'string') {\n      console.log(value);\n    } else {\n      logNestedStrings(value);\n    }\n  }\n}"
+        "value": "function LogMethod(\n  target: Object,\n  propertyKey: string | symbol,\n  descriptor: PropertyDescriptor\n) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    console.log(`Calling ${String(propertyKey)} with`, args);\n    const result = originalMethod.apply(this, args);\n    console.log(`Result of ${String(propertyKey)}`, result);\n    return result;\n  };\n  return descriptor;\n}\n\nclass Calculator {\n  @LogMethod\n  add(a: number, b: number) {\n    return a + b;\n  }\n}\n\nconst calc = new Calculator();\ncalc.add(5, 3);"
       },
       {
         "type": "paragraph",
-        "value": "This function is straightforward: it checks the type of each value, and if it's a string, it logs it. If the value is another nested object, it calls itself recursively."
+        "value": "This method decorator wraps the original method to log input arguments and result, helping with debugging and tracing function calls."
       },
       {
         "type": "paragraph",
-        "value": "Sometimes TypeScript's inference struggles when using recursive types in generic functions or complex conditions. One way to help TypeScript is by using type assertions or helper types to guide inference."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, suppose you want a generic function that flattens nested objects of type `NestedObject` into simple key-value pairs where keys are dot-separated paths. Here is how you can implement and type it:"
+        "value": "Another useful pattern is using property decorators to enforce validation rules. Check out this example that restricts a property to positive numbers only."
       },
       {
         "type": "code",
-        "value": "type FlatObject = {\n  [key: string]: string;\n};\n\nfunction flattenNestedObject(\n  obj: NestedObject,\n  prefix: string = ''\n): FlatObject {\n  let result: FlatObject = {};\n\n  for (const key in obj) {\n    const value = obj[key];\n    const newKey = prefix ? `${prefix}.${key}` : key;\n\n    if (typeof value === 'string') {\n      result[newKey] = value;\n    } else {\n      const nested = flattenNestedObject(value, newKey);\n      result = { ...result, ...nested };\n    }\n  }\n\n  return result;\n}"
+        "value": "function Positive(target: any, propertyKey: string) {\n  let value = target[propertyKey];\n\n  const getter = () => value;\n  const setter = (newVal: number) => {\n    if (newVal <= 0) {\n      throw new Error(`${propertyKey} must be positive.`);\n    }\n    value = newVal;\n  };\n\n  Object.defineProperty(target, propertyKey, {\n    get: getter,\n    set: setter,\n    enumerable: true,\n    configurable: true,\n  });\n}\n\nclass BankAccount {\n  @Positive\n  balance: number = 0;\n\n  constructor(initialBalance: number) {\n    this.balance = initialBalance;\n  }\n}\n\nconst account = new BankAccount(100);\naccount.balance = 50; // works\n// account.balance = -10; // Throws error: balance must be positive."
       },
       {
         "type": "paragraph",
-        "value": "This function handles nested objects recursively, building a flat object that maps dot-separated paths to string values."
+        "value": "Here, the Positive decorator overrides the property’s getter and setter, adding a check to ensure the balance can never be set to zero or negative."
       },
       {
         "type": "paragraph",
-        "value": "You can test it with this example:"
+        "value": "Finally, parameter decorators allow you to access metadata about parameters but can be combined with libraries like Reflect Metadata for advanced use. Here's a simple example to log parameter positions."
       },
       {
         "type": "code",
-        "value": "const nested: NestedObject = {\n  user: {\n    name: 'Alice',\n    address: {\n      city: 'Wonderland',\n      zip: '12345'\n    }\n  },\n  status: 'active'\n};\n\nconst flat = flattenNestedObject(nested);\nconsole.log(flat);\n// Output:\n// {\n//   'user.name': 'Alice',\n//   'user.address.city': 'Wonderland',\n//   'user.address.zip': '12345',\n//   'status': 'active'\n// }"
+        "value": "function LogParameter(target: Object, propertyKey: string | symbol, parameterIndex: number) {\n  const existingLoggedParams: number[] = Reflect.getOwnMetadata('log_params', target, propertyKey) || [];\n  existingLoggedParams.push(parameterIndex);\n  Reflect.defineMetadata('log_params', existingLoggedParams, target, propertyKey);\n}\n\nclass Person {\n  greet(@LogParameter message: string) {\n    console.log(message);\n  }\n}\n\n// Note: To fully utilize parameter decorators, use `reflect-metadata` package and enable emitDecoratorMetadata."
       },
       {
         "type": "paragraph",
-        "value": "In summary:"
+        "value": "In summary, TypeScript decorators can be used in many advanced ways, including augmenting classes, wrapping methods for cross-cutting concerns like logging, enforcing validation on properties, and managing metadata on parameters. These powerful patterns help write cleaner, more maintainable code."
       },
       {
         "type": "paragraph",
-        "value": "- Use recursive type aliases to model nested or self-referential structures.\n- When inference struggles, annotate function inputs/outputs clearly.\n- Use recursive functions with careful type narrowing (`typeof value === 'string'`) to handle each case.\n- Helper types can simplify working with complex data.\n\nUnderstanding and handling recursive types allows you to express and manipulate deeply nested data safely and effectively in TypeScript."
+        "value": "To further explore decorators, ensure you have the \"experimentalDecorators\" and \"emitDecoratorMetadata\" options enabled in your tsconfig.json:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES6\",\n    \"experimentalDecorators\": true,\n    \"emitDecoratorMetadata\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Keep practicing with your own nested data structures, and soon you'll be comfortable with TypeScript's advanced type inference!"
+        "value": "Happy decorating! With practice, you can leverage decorators to write expressive, efficient TypeScript code."
       }
     ]
   },
   {
-    "slug": "advanced-typescript-error-handling-patterns-for-scalable-enterprise-applications",
-    "title": "Advanced TypeScript Error Handling Patterns for Scalable Enterprise Applications",
+    "slug": "designing-resilient-systems-typescript-handling-async-failures",
+    "title": "Designing Resilient Systems in TypeScript: Handling Asynchronous Failures Gracefully",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn advanced error handling patterns in TypeScript to build scalable and maintainable enterprise-grade applications with cleaner and safer error management.",
-    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "description": "Learn how to handle asynchronous failures gracefully in TypeScript to build resilient web applications with practical patterns and example code.",
+    "videoUrl": "https://www.youtube.com/watch?v=qTXihivWGFk",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is a crucial aspect of building robust and scalable applications, especially in enterprise environments. TypeScript provides powerful features that help us handle errors more effectively beyond the basic try-catch blocks and the built-in Error object. In this article, we'll explore advanced error handling patterns in TypeScript that improve code maintainability, readability, and reliability."
+        "value": "Asynchronous operations are at the heart of modern web applications, from fetching data to processing user input. However, these operations can fail due to network issues, unexpected data, or server errors. In TypeScript, handling these failures gracefully is essential to building resilient systems that provide a smooth user experience even during unexpected errors."
       },
       {
         "type": "paragraph",
-        "value": "### Why Advanced Error Handling?"
+        "value": "This article will introduce beginner-friendly concepts and practical patterns for managing asynchronous errors effectively using TypeScript's features. We will cover try-catch blocks, Promise error handling, and the use of async/await with examples."
       },
       {
         "type": "paragraph",
-        "value": "In large applications, simply throwing and catching generic errors is not enough. You want to categorize, enrich, and handle errors in ways that provide meaningful information to developers and even end users. This helps with debugging, logging, retry mechanisms, and presenting user-friendly messages."
+        "value": "### Understanding Asynchronous Failures"
       },
       {
         "type": "paragraph",
-        "value": "### 1. Using Custom Error Classes"
+        "value": "When you call an asynchronous function in TypeScript, it often returns a Promise that may either resolve with data or reject with an error. If you don’t handle these rejections, your app might crash or behave unpredictably."
       },
       {
         "type": "paragraph",
-        "value": "Instead of using the generic Error object, customize your own error classes to provide specific context about an error."
+        "value": "### Using try-catch with async/await"
+      },
+      {
+        "type": "paragraph",
+        "value": "`async/await` makes your code look synchronous while still dealing with asynchronous operations. Wrapping your await calls in a try-catch block helps catch rejected promises easily."
       },
       {
         "type": "code",
-        "value": "class DatabaseError extends Error {\n  public code: number;\n\n  constructor(message: string, code: number) {\n    super(message);\n    this.code = code;\n    this.name = 'DatabaseError';\n    Object.setPrototypeOf(this, DatabaseError.prototype); // Fix prototype chain\n  }\n}\n\n// Usage:\ntry {\n  throw new DatabaseError('Connection Timeout', 504);\n} catch (err) {\n  if (err instanceof DatabaseError) {\n    console.error(`DB Error ${err.code}: ${err.message}`);\n  } else {\n    console.error('Unknown error:', err);\n  }\n}"
+        "value": "async function fetchData(url: string): Promise<void> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n    // Handle error gracefully, e.g., show a user-friendly message\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Using Result Types Instead of Exceptions"
+        "value": "In the example above, if the network request fails or the server returns an error status, the catch block will activate, allowing you to handle the failure without crashing the app."
       },
       {
         "type": "paragraph",
-        "value": "Another pattern popular in functional programming is using a Result type which explicitly models success or failure, avoiding exceptions for flow control."
+        "value": "### Handling Promise Rejections"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you work directly with Promises instead of async/await, you can use `.catch()` to handle errors."
       },
       {
         "type": "code",
-        "value": "type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };\n\nfunction fetchData(id: string): Result<string, string> {\n  if (id === 'valid') {\n    return { ok: true, value: 'data for valid id' };\n  }\n  return { ok: false, error: 'ID not found' };\n}\n\nconst result = fetchData('invalid');\nif (result.ok) {\n  console.log('Success:', result.value);\n} else {\n  console.error('Failure:', result.error);\n}"
+        "value": "function fetchUserData(userId: number): Promise<void> {\n  return fetch(`https://api.example.com/users/${userId}`)\n    .then(response => {\n      if (!response.ok) {\n        throw new Error(`Error fetching user data: ${response.status}`);\n      }\n      return response.json();\n    })\n    .then(data => {\n      console.log('User data:', data);\n    })\n    .catch(error => {\n      console.error('Error occurred:', error);\n      // Handle failure, e.g., retry or notify user\n    });\n}"
       },
       {
         "type": "paragraph",
-        "value": "This pattern makes error handling explicit and forces the caller to handle both success and failure."
+        "value": "### Best Practices for Resilient Asynchronous Code"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Error Wrapping and Chaining"
+        "value": "1. Always handle errors on Promises either with try-catch (async/await) or `.catch()` callbacks.\n2. Provide fallback logic or retries for transient failures like network issues.\n3. Avoid unhandled promise rejections by using consistent error handling.\n4. Consider using utility libraries like `p-retry` for retry logic or `fp-ts` for functional error handling.\n5. Log meaningful error messages to help with debugging."
       },
       {
         "type": "paragraph",
-        "value": "To maintain context about where an error originates, you can wrap errors inside custom error classes. This helps when errors bubble up through layers."
-      },
-      {
-        "type": "code",
-        "value": "class AppError extends Error {\n  originalError?: Error;\n\n  constructor(message: string, originalError?: Error) {\n    super(message);\n    this.name = 'AppError';\n    this.originalError = originalError;\n    Object.setPrototypeOf(this, AppError.prototype);\n  }\n}\n\nfunction apiCall() {\n  try {\n    throw new Error('Low-level API failure');\n  } catch (err) {\n    throw new AppError('API call failed', err instanceof Error ? err : undefined);\n  }\n}\n\ntry {\n  apiCall();\n} catch (err) {\n  if (err instanceof AppError && err.originalError) {\n    console.error('Cause:', err.originalError.message);\n  }\n  console.error('Error:', err.message);\n}"
+        "value": "Handling asynchronous failures properly in TypeScript leads to more reliable and maintainable software. By anticipating errors and managing them gracefully, you improve user trust and make debugging much easier."
       },
       {
         "type": "paragraph",
-        "value": "### 4. Creating Typed Error Responses for APIs"
-      },
-      {
-        "type": "paragraph",
-        "value": "When writing REST or GraphQL APIs, explicitly typing your error responses helps frontend developers handle errors correctly."
-      },
-      {
-        "type": "code",
-        "value": "interface ApiError {\n  code: number;\n  message: string;\n  details?: any;\n}\n\ninterface ApiResponse<T> {\n  data?: T;\n  error?: ApiError;\n}\n\nasync function getUser(id: string): Promise<ApiResponse<{ name: string }>> {\n  if (id === '123') {\n    return { data: { name: 'Alice' } };\n  }\n  return { error: { code: 404, message: 'User not found' } };\n}\n\ngetUser('999').then(response => {\n  if (response.error) {\n    console.error(`API Error ${response.error.code}: ${response.error.message}`);\n  } else {\n    console.log('User data:', response.data);\n  }\n});"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 5. Using Utility Libraries for Better Error Handling"
-      },
-      {
-        "type": "paragraph",
-        "value": "Libraries like `fp-ts` provide functional types like Either and Option to handle errors and optional values safely and declaratively."
-      },
-      {
-        "type": "paragraph",
-        "value": "For beginners, focus on mastering the above TypeScript native patterns first before moving to advanced functional libraries."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Advanced error handling in TypeScript means using custom errors, result types, error wrapping, typed API error responses, and eventually functional programming libraries. These patterns help create scalable, maintainable, and reliable enterprise applications by making errors more descriptive and easier to manage."
+        "value": "Start incorporating these patterns in your TypeScript projects today and watch your applications become more robust!"
       }
     ]
   },
   {
-    "slug": "handling-unicode-edge-cases-python-string-manipulation",
-    "title": "Handling Unicode Edge Cases in Python String Manipulation",
+    "slug": "mastering-python-decorators-creative-tricks-to-simplify-your-code",
+    "title": "Mastering Python Decorators: Creative Tricks to Simplify Your Code",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to properly handle Unicode edge cases in Python string manipulation for more reliable and bug-free code.",
-    "videoUrl": "https://www.youtube.com/watch?v=dmiLBlt2nXg",
+    "description": "Learn how to master Python decorators with beginner-friendly tricks to write simpler, cleaner, and more reusable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=5B41CPvYMjY",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python 3 has excellent built-in support for Unicode, but working with strings that contain special or complex Unicode characters can sometimes cause unexpected issues. This tutorial introduces key concepts and simple techniques to handle common Unicode edge cases so your string manipulation remains robust and accurate."
+        "value": "Python decorators are a powerful tool that allows you to modify the behavior of functions or methods. If you're new to decorators, they might seem confusing at first, but once you understand them, they can greatly simplify your code and help you follow the DRY (Don't Repeat Yourself) principle. In this tutorial, we'll explore what decorators are, how to create your own, and some creative tricks to use them effectively."
       },
       {
         "type": "paragraph",
-        "value": "First, it's important to understand that Unicode characters can sometimes be represented by multiple code points. For example, the character \"é\" can be a single code point (U+00E9) or two code points: the letter \"e\" (U+0065) followed by an accent \"´\" (U+0301). This is called normalization."
+        "value": "At a basic level, a decorator is a function that takes another function and extends its behavior without explicitly modifying it. This means you can add features like logging, timing, or access control in a clean and reusable way."
       },
       {
         "type": "paragraph",
-        "value": "To handle this, Python provides the `unicodedata` module to normalize strings into a consistent form. The two most common forms are NFC (composed form) and NFD (decomposed form). Normalizing strings before comparing or processing helps avoid bugs."
+        "value": "Let's start with a simple example of a decorator to print a message before and after a function runs."
       },
       {
         "type": "code",
-        "value": "import unicodedata\n\ns1 = 'café'\ns2 = 'cafe\\u0301'  # 'e' + combining acute accent\n\nprint(s1 == s2)  # False without normalization\n\ns1_nfd = unicodedata.normalize('NFD', s1)\ns2_nfd = unicodedata.normalize('NFD', s2)\n\nprint(s1_nfd == s2_nfd)  # True after normalization"
+        "value": "def my_decorator(func):\n    def wrapper():\n        print(\"Before the function runs\")\n        func()\n        print(\"After the function runs\")\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\"Hello!\")\n\nsay_hello()"
       },
       {
         "type": "paragraph",
-        "value": "Another common challenge is counting characters. Since some characters like emoji or combined characters can be made of multiple code points, using `len()` on a string might give you a count of code points, not visible characters (grapheme clusters). For example:"
+        "value": "In this code, `my_decorator` is a function that takes `func` as input and defines a nested `wrapper` function that runs code before and after calling `func`. The `@my_decorator` line is syntactic sugar for `say_hello = my_decorator(say_hello)`. When you call `say_hello()`, it actually runs `wrapper`."
+      },
+      {
+        "type": "paragraph",
+        "value": "The output will be:\n\nBefore the function runs\nHello!\nAfter the function runs\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Functions with Arguments\nMost functions take arguments, so your decorator should too. You can do this using `*args` and `**kwargs` to accept any number of positional and keyword arguments."
       },
       {
         "type": "code",
-        "value": "s = '👩‍👩‍👧‍👦'  # family emoji made of multiple code points\nprint(len(s))  # 11 code points\n\n# But visually it's a single character"
+        "value": "def decorator_with_args(func):\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__} with arguments {args} and {kwargs}\")\n        result = func(*args, **kwargs)\n        print(f\"{func.__name__} returned {result}\")\n        return result\n    return wrapper\n\n@decorator_with_args\ndef add(a, b):\n    return a + b\n\nadd(5, 3)"
       },
       {
         "type": "paragraph",
-        "value": "To handle this, you can use third-party libraries such as `regex` which supports grapheme clusters with the `\\X` pattern, allowing you to iterate over user-perceived characters:"
+        "value": "This decorator prints the function’s name, the arguments it received, and the result it returned. This is useful for debugging or logging purposes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Preserving Function Metadata\nWhen you decorate a function, Python replaces the original function with the wrapper, which can hide useful information like the function’s name and docstring. To fix this, use the `functools.wraps` decorator inside your wrapper."
       },
       {
         "type": "code",
-        "value": "import regex\n\ngraphs = regex.findall(r'\\X', s)\nprint(graphs)  # ['👩‍👩‍👧‍👦']\nprint(len(graphs))  # 1"
+        "value": "import functools\n\ndef preserve_metadata(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f\"Running {func.__name__}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@preserve_metadata\ndef greet(name):\n    \"\"\"Returns a greeting message\"\"\"\n    return f\"Hello, {name}!\"\n\nprint(greet.__name__)  # Output: greet\nprint(greet.__doc__)   # Output: Returns a greeting message"
       },
       {
         "type": "paragraph",
-        "value": "Finally, be cautious with string slicing. Direct slicing might split combined characters or emojis in the middle, causing invalid or unexpected results. Always consider working with grapheme clusters if you need accurate slicing."
-      },
-      {
-        "type": "paragraph",
-        "value": "Summary tips for beginners:\n- Always normalize Unicode strings before comparing or searching.\n- Use libraries like `regex` to handle grapheme clusters properly.\n- Avoid relying purely on `len()` when counting user-perceived characters.\n- Consider potential multi-code-point characters when slicing strings."
-      },
-      {
-        "type": "paragraph",
-        "value": "By keeping these Unicode edge cases in mind, your Python string processing will be more reliable and inclusive of all languages and emoji use cases."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-python-exception-handling-best-practices",
-    "title": "Mastering Python Exception Handling: Best Practices for Clean and Maintainable Code",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn how to handle errors gracefully in Python with clear, beginner-friendly best practices for writing clean and maintainable exception handling code.",
-    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Exception handling is an essential skill for every Python programmer. It helps your programs respond to errors gracefully, making your code more robust and user-friendly. This article covers the basics of Python exception handling and shares best practices to keep your code clean and maintainable."
-      },
-      {
-        "type": "paragraph",
-        "value": "In Python, errors detected during execution are called exceptions. If an exception occurs and it's not handled properly, your program will crash. To prevent this, Python provides a try-except block that lets you catch and handle exceptions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is a simple example showing how to handle a common exception — division by zero."
+        "value": "### Creative Trick 1: Timing Your Functions\nLet’s create a decorator to measure how long a function takes to run. This is handy for optimizing your code."
       },
       {
         "type": "code",
-        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"You cannot divide by zero!\")"
+        "value": "import time\nimport functools\n\ndef timer(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f\"{func.__name__} took {end - start:.4f} seconds to run\")\n        return result\n    return wrapper\n\n@timer\ndef countdown(n):\n    while n > 0:\n        n -= 1\n\ncountdown(1000000)"
       },
       {
         "type": "paragraph",
-        "value": "In this example, Python tries to divide 10 by 0, which raises a ZeroDivisionError. The except block catches this specific exception and prints a friendly message instead of crashing."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices for Python Exception Handling"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Catch specific exceptions**: Always catch specific exceptions instead of a general 'except' to avoid hiding unexpected errors."
+        "value": "### Creative Trick 2: Access Control Decorator\nYou can use decorators to control access to certain functions. For example, let's make a simple user authorization decorator."
       },
       {
         "type": "code",
-        "value": "try:\n    number = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"That's not a valid number!\")"
+        "value": "def requires_admin(func):\n    @functools.wraps(func)\n    def wrapper(user, *args, **kwargs):\n        if not user.get('is_admin', False):\n            print(\"Access denied! Admins only.\")\n            return None\n        return func(user, *args, **kwargs)\n    return wrapper\n\n@requires_admin\ndef delete_database(user):\n    print(\"Database deleted!\")\n\nuser = {'username': 'jane', 'is_admin': False}\nadmin = {'username': 'john', 'is_admin': True}\n\ndelete_database(user)   # Access denied! Admins only.\ndelete_database(admin)  # Database deleted!"
       },
       {
         "type": "paragraph",
-        "value": "Catching specific exceptions like `ValueError` helps you handle known problems without accidentally ignoring other bugs."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Use the else block for code that should run if no exception occurs**."
-      },
-      {
-        "type": "code",
-        "value": "try:\n    num = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"Invalid input!\")\nelse:\n    print(f\"You entered {num}\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "The else block runs only if the try block did not raise an exception. It's a good place for code that depends on successful execution."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Use finally to execute cleanup code**. This block runs whether or not an exception occurred."
-      },
-      {
-        "type": "code",
-        "value": "try:\n    file = open('example.txt', 'r')\n    data = file.read()\nexcept FileNotFoundError:\n    print(\"File not found!\")\nfinally:\n    file.close()"
-      },
-      {
-        "type": "paragraph",
-        "value": "The finally block is perfect for closing files or releasing resources, ensuring clean-up happens even if an error occurs."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Avoid using bare except** since it catches all exceptions, including system-exiting ones, which can make debugging hard."
-      },
-      {
-        "type": "paragraph",
-        "value": "5. **Log exceptions with useful information** to help with debugging instead of simply printing messages."
-      },
-      {
-        "type": "code",
-        "value": "import logging\n\ntry:\n    x = 1 / 0\nexcept ZeroDivisionError as e:\n    logging.error(f\"Error occurred: {e}\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using logging allows you to keep track of errors in a file or monitoring system for better maintenance."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Mastering exception handling makes your Python code more professional and reliable. Remember to catch specific exceptions, use else and finally blocks wisely, avoid bare excepts, and log errors properly. These best practices will help you write clean and maintainable code."
+        "value": "### Summary\nDecorators are a versatile feature in Python that can help you write more readable, maintainable, and reusable code. Start by understanding the basic decorator structure, using `*args` and `**kwargs` to handle arbitrary arguments, preserving function metadata with `functools.wraps`, and applying creative use cases like timing and access control. With practice, you'll find many opportunities to simplify your code with decorators!"
       },
       {
         "type": "paragraph",
@@ -436,158 +382,252 @@
     ]
   },
   {
-    "slug": "designing-scalable-sql-schemas-for-high-traffic-ecommerce-platforms",
-    "title": "Designing Scalable SQL Schemas for High-Traffic E-Commerce Platforms",
-    "language": "sql",
-    "type": "tutorials",
-    "description": "Learn how to design scalable and efficient SQL schemas tailored for high-traffic e-commerce platforms, ensuring fast data retrieval and smooth user experiences.",
-    "videoUrl": "https://www.youtube.com/watch?v=_1IKwnbscQU",
+    "slug": "optimizing-python-code-performance-by-efficiently-handling-memoryerrors",
+    "title": "Optimizing Python Code Performance by Efficiently Handling MemoryErrors",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to optimize Python code by efficiently handling MemoryError exceptions to avoid crashes and improve performance, with practical tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=qz4JZ7OfPNU",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building an e-commerce platform, designing a database schema that can handle a large number of users and transactions smoothly is crucial. A scalable SQL schema not only supports the platform as it grows but also improves performance and maintainability. This tutorial covers beginner-friendly best practices to design such a schema."
+        "value": "When working with large amounts of data in Python, you might encounter a MemoryError, which occurs when Python runs out of available memory. This error can cause your program to crash unexpectedly. As a beginner, learning how to handle and optimize your code to avoid MemoryErrors is crucial for creating robust and efficient Python applications."
       },
       {
         "type": "paragraph",
-        "value": "The core idea is to organize your SQL tables in a way that minimizes duplication, speeds up queries, and makes it easy to add features later. Common concepts include normalization, indexing, and choosing proper data types."
+        "value": "A MemoryError usually happens when your program tries to allocate more memory than your system can provide. This often occurs with large lists, big files, or huge data processing tasks. Instead of letting the program crash, you can catch MemoryErrors and adjust your code to use memory more efficiently."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by identifying the main entities in an e-commerce platform: users, products, orders, and order items. We'll create separate tables for each and define relationships between them."
+        "value": "Here are practical steps to handle and optimize your code for MemoryError:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use Try-Except to Catch MemoryError: Always wrap memory-heavy code in try-except blocks so you can handle the error gracefully."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE users (\n  user_id INT PRIMARY KEY AUTO_INCREMENT,\n  username VARCHAR(50) NOT NULL UNIQUE,\n  email VARCHAR(100) NOT NULL UNIQUE,\n  password_hash VARCHAR(255) NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);"
+        "value": "try:\n    big_list = [0] * (10**9)  # Trying to create a huge list\nexcept MemoryError:\n    print(\"MemoryError caught: Not enough memory to create the list.\")\n    # You can take alternative actions here"
       },
       {
         "type": "paragraph",
-        "value": "The users table stores information about customers. We make sure usernames and emails are unique to avoid duplicates, and we use an auto-incrementing primary key. The created_at timestamp helps track when users sign up."
+        "value": "2. Process Data in Smaller Chunks: Instead of loading or processing all data at once, divide it into smaller parts to reduce memory usage."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE products (\n  product_id INT PRIMARY KEY AUTO_INCREMENT,\n  name VARCHAR(150) NOT NULL,\n  description TEXT,\n  price DECIMAL(10, 2) NOT NULL,\n  stock INT DEFAULT 0,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);"
+        "value": "def process_in_chunks(data, chunk_size=1000):\n    for i in range(0, len(data), chunk_size):\n        chunk = data[i:i+chunk_size]\n        # Process each chunk\n        print(f\"Processing chunk from {i} to {i + len(chunk)}\")\n\n# Example with a large list\nlarge_data = list(range(10**7))\nprocess_in_chunks(large_data, chunk_size=1000000)"
       },
       {
         "type": "paragraph",
-        "value": "The products table holds details of items available for sale. The stock column helps to track inventory. Using DECIMAL for price ensures accurate financial data storage."
+        "value": "3. Use Generators Instead of Lists: Generators produce items one by one, saving memory compared to creating entire lists."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE orders (\n  order_id INT PRIMARY KEY AUTO_INCREMENT,\n  user_id INT NOT NULL,\n  status VARCHAR(20) DEFAULT 'pending',\n  total_amount DECIMAL(10, 2) NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (user_id) REFERENCES users(user_id)\n);"
+        "value": "def count_up_to(n):\n    i = 0\n    while i < n:\n        yield i\n        i += 1\n\nfor number in count_up_to(10**7):\n    if number % 1000000 == 0:\n        print(f\"Current number: {number}\")"
       },
       {
         "type": "paragraph",
-        "value": "Orders are linked to users via a foreign key (user_id). Status helps track the order lifecycle (pending, shipped, completed, cancelled). Storing total_amount reduces the need to calculate order cost repeatedly."
+        "value": "4. Utilize Memory-Efficient Libraries: Libraries like NumPy use optimized data structures that use less memory compared to standard Python lists."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE order_items (\n  order_item_id INT PRIMARY KEY AUTO_INCREMENT,\n  order_id INT NOT NULL,\n  product_id INT NOT NULL,\n  quantity INT NOT NULL,\n  price_at_purchase DECIMAL(10, 2) NOT NULL,\n  FOREIGN KEY (order_id) REFERENCES orders(order_id),\n  FOREIGN KEY (product_id) REFERENCES products(product_id)\n);"
+        "value": "import numpy as np\n\ntry:\n    big_array = np.zeros(10**8, dtype=np.float32)  # Uses less memory than a list of floats\nexcept MemoryError:\n    print(\"MemoryError caught when creating NumPy array.\")"
       },
       {
         "type": "paragraph",
-        "value": "The order_items table breaks down each order into individual products with quantities. Capturing price_at_purchase preserves historical sale price, which may differ from current product price."
+        "value": "5. Delete Unused Variables: Python does automatic garbage collection, but explicitly deleting large variables you no longer need can free memory sooner."
+      },
+      {
+        "type": "code",
+        "value": "big_data = [0] * (10**7)\n# Process big_data\n\ndel big_data  # Explicitly delete large list when done"
       },
       {
         "type": "paragraph",
-        "value": "To help with scalability, consider these additional tips:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Index important columns** like user_id in orders and product_id in order_items to speed up joins and lookups."
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Use appropriate data types** to save space and improve query performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Partition large tables** such as orders and order_items by date to distribute data and improve query speed for recent records."
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Avoid storing redundant data** by normalizing your schema but do consider denormalization selectively for read-heavy scenarios."
-      },
-      {
-        "type": "paragraph",
-        "value": "Implementing this scalable schema will provide a solid foundation for your e-commerce platform to handle high traffic and growing volumes of data efficiently."
+        "value": "By following these tips, you can write Python code that avoids memory errors and runs more efficiently, especially when dealing with large datasets. Handling MemoryError exceptions properly is an important skill that helps your programs run smoothly without unexpected crashes."
       }
     ]
   },
   {
-    "slug": "comparing-sql-null-handling-across-different-database-systems",
-    "title": "Comparing SQL NULL Handling Across Different Database Systems",
+    "slug": "comparing-window-functions-vs-aggregate-functions-in-sql-for-data-analysis",
+    "title": "Comparing Window Functions vs Aggregate Functions in SQL for Data Analysis",
     "language": "sql",
-    "type": "errors",
-    "description": "Learn how SQL NULL values are handled differently in various popular database systems and how to avoid common errors beginners face.",
-    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "type": "tutorials",
+    "description": "Learn the key differences between window functions and aggregate functions in SQL with easy examples to improve your data analysis skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL, understanding how NULL values are handled across different database systems is essential. NULL represents missing or undefined data but can cause unexpected behavior if not properly managed. This article explains SQL NULL handling differences among popular databases like MySQL, PostgreSQL, and SQL Server to help beginners avoid common errors."
+        "value": "When working with data in SQL, understanding how to summarize or analyze data is essential. Two powerful tools for this are Aggregate Functions and Window Functions. Although they might seem similar, they serve different purposes and can be used to gain different insights."
       },
       {
         "type": "paragraph",
-        "value": "NULL means 'unknown' or 'missing' data. Importantly, NULL is not the same as zero or an empty string. Many beginners mistakenly treat NULL as a value, which leads to errors in comparison and aggregation."
+        "value": "Aggregate Functions like SUM(), AVG(), COUNT(), MAX(), and MIN() combine multiple rows into a single summary value. These functions reduce the number of rows by grouping data. For example, if you want the total sales per product, aggregate functions are the way to go."
       },
       {
         "type": "paragraph",
-        "value": "Let's see how SQL NULL comparisons work. In standard SQL, any comparison involving NULL returns UNKNOWN instead of TRUE or FALSE. This often leads to confusing results:"
+        "value": "Window Functions, on the other hand, perform calculations across a set of rows related to the current row but do not reduce the number of rows returned. This makes window functions very useful when you want to keep the original data but add extra information, like ranking, running totals, or averages over a partition."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see both in action using a simple sales data example."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE salary = NULL;  -- This returns 0 rows since salary = NULL is UNKNOWN"
+        "value": "CREATE TABLE sales (\n  id INT,\n  product VARCHAR(50),\n  sales_amount DECIMAL(10,2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Product A', 100),\n(2, 'Product A', 150),\n(3, 'Product B', 200),\n(4, 'Product B', 300),\n(5, 'Product C', 250);"
       },
       {
         "type": "paragraph",
-        "value": "To properly check for NULL, you should use IS NULL or IS NOT NULL operators:"
+        "value": "### Example 1: Using Aggregate Functions to get total sales per product"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE salary IS NULL;  -- Correct way to find rows where salary is NULL"
+        "value": "SELECT product, SUM(sales_amount) AS total_sales\nFROM sales\nGROUP BY product;"
       },
       {
         "type": "paragraph",
-        "value": "Different databases handle NULL sorting differently. For example, in ORDER BY clauses, PostgreSQL treats NULLs as higher than any value by default, while MySQL treats NULLs as lowest. You can explicitly define NULLS FIRST or NULLS LAST in PostgreSQL:"
+        "value": "This query groups the data by each product and sums the sales amounts, resulting in one row per product."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Using Window Functions to get total sales per product for each row"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees ORDER BY salary NULLS LAST;"
+        "value": "SELECT id, product, sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY product) AS total_sales_per_product\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "In MySQL, NULLs are always sorted first in ascending order, and last in descending order, but you cannot explicitly specify 'NULLS LAST'. You can use tricks like putting NULLs last with a custom expression:"
+        "value": "Here, the window function computes the total sales per product, but each row of the original table is kept. This is useful when you want detailed data alongside aggregated information."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key differences summarized:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Aggregate functions collapse multiple rows into a single output row per group.\n- Window functions add aggregated information without reducing the number of rows.\n- Use aggregate functions for summary reports.\n- Use window functions when you need to keep row-level data but add analytics like rankings, running totals, or averages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering both aggregate and window functions will elevate your SQL data analysis, enabling you to extract meaningful insights efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-logical-operator-misuse",
+    "title": "Optimizing SQL Query Performance by Identifying Logical Operator Misuse",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how improper use of logical operators in SQL queries can hurt performance and how to avoid common mistakes for faster, more efficient database operations.",
+    "videoUrl": "https://www.youtube.com/watch?v=MYVgiKriVeI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing SQL queries, beginners often misuse logical operators such as AND, OR, and NOT. These mistakes can lead to inefficient query execution, longer response times, and increased load on your database server. Understanding how to use logical operators correctly is crucial for writing optimized queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Logical operators help combine multiple conditions in the WHERE clause. Using them properly helps the database engine filter rows faster by leveraging indexes and efficient evaluation order. However, misuse can cause the database engine to evaluate unnecessary conditions or perform full table scans."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common logical operator misuse includes mixing AND and OR without proper parentheses, using NOT in a way that prevents index use, and writing overly complex conditions. Let's explore these issues with examples and fixes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Mixing AND and OR Without Parentheses"
+      },
+      {
+        "type": "paragraph",
+        "value": "Incorrect use of AND and OR without parentheses can change the intended logic and force the database to process more rows than needed."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees ORDER BY (salary IS NULL), salary ASC;"
+        "value": "SELECT * FROM Employees\nWHERE Department = 'Sales' OR Department = 'Marketing' AND Status = 'Active';"
       },
       {
         "type": "paragraph",
-        "value": "When aggregating data, NULLs are ignored by functions like COUNT, SUM, AVG, and so forth. However, the behavior is consistent across most systems, but understanding this is key to avoiding unexpected results."
+        "value": "The above query will first evaluate `Department = 'Marketing' AND Status = 'Active'` and then OR the result with `Department = 'Sales'`. This means it incorrectly includes all Sales employees regardless of Status."
       },
       {
         "type": "paragraph",
-        "value": "In SQL Server, the behavior of concatenating NULL strings differs from MySQL and PostgreSQL. By default, concatenating with NULL results in NULL in SQL Server:"
+        "value": "Fix this by adding parentheses to clearly define the logic:"
       },
       {
         "type": "code",
-        "value": "SELECT 'Hello' + NULL AS result;  -- Returns NULL in SQL Server\n-- In MySQL and PostgreSQL, you use CONCAT which ignores NULLs:"
+        "value": "SELECT * FROM Employees\nWHERE (Department = 'Sales' OR Department = 'Marketing') AND Status = 'Active';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, the query fetches only Active employees in either Sales or Marketing departments, allowing the database to use indexes efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Using NOT That Prevents Index Utilization"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using NOT directly on a column or expression can negate the benefits of indexes, causing full table scans."
       },
       {
         "type": "code",
-        "value": "SELECT CONCAT('Hello', NULL) AS result;  -- Returns 'Hello' in MySQL/PostgreSQL"
+        "value": "SELECT * FROM Products\nWHERE NOT Category = 'Electronics';"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, the key points for working with NULLs are:"
+        "value": "This condition is functionally the same as `Category <> 'Electronics'`, but in some databases, this might still cause performance issues."
       },
       {
         "type": "paragraph",
-        "value": "- Always use IS NULL or IS NOT NULL to check for NULL values.\n- Be aware of different NULL sorting behaviors in ORDER BY.\n- Remember that NULLs are ignored by most aggregate functions.\n- Mind concatenation differences in SQL Server and other systems."
+        "value": "Rewrite it using inequality operator explicitly:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Products\nWHERE Category <> 'Electronics';"
       },
       {
         "type": "paragraph",
-        "value": "By understanding these differences and using correct syntax, beginners can avoid many common pitfalls when working with NULLs in SQL across different database systems."
+        "value": "Or alternatively, use positive conditions or separate queries if possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Overly Complex Conditions"
+      },
+      {
+        "type": "paragraph",
+        "value": "Chaining many OR conditions without indexes can degrade performance. Instead, use IN for better clarity and optimization."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders\nWHERE Status = 'Pending' OR Status = 'Processing' OR Status = 'Shipped';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Rewrite with IN:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders\nWHERE Status IN ('Pending', 'Processing', 'Shipped');"
+      },
+      {
+        "type": "paragraph",
+        "value": "This reduces complexity and helps the query planner use indexes more effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize SQL query performance by avoiding logical operator misuse:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use parentheses to control the order of evaluation between AND and OR.\n- Avoid NOT operators that lead to full scans; prefer positive or inequality conditions.\n- Use IN instead of multiple OR statements for better efficiency.\n- Test your queries with `EXPLAIN` or equivalent to check index use and cost."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these simple tips, beginners can write cleaner, faster SQL queries that make better use of database resources."
       }
     ]
   }

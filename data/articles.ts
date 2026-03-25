@@ -20288,5 +20288,637 @@ export const articles = [
         "value": "By understanding these differences and using correct syntax, beginners can avoid many common pitfalls when working with NULLs in SQL across different database systems."
       }
     ]
+  },
+  {
+    "slug": "comparing-async-await-vs-promises-best-practices-for-modern-javascript",
+    "title": "Comparing Async/Await vs Promises: Best Practices for Modern JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between async/await and promises in JavaScript, with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous programming is essential in JavaScript, especially when working with operations like API calls or reading files. Two common ways to handle async code are Promises and async/await. This tutorial explains the differences between them and shows best practices to write cleaner and more readable JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Promises?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Promise is an object representing the eventual completion or failure of an asynchronous operation. Promises use `.then()` and `.catch()` methods to handle success and errors."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data loaded');\n      } else {\n        reject('Error loading data');\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(response => {\n    console.log(response); // Data loaded\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, Promises allow chaining of multiple `.then()` calls to process the result step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is syntax built on top of Promises that allows asynchronous code to look more like synchronous code. It uses the `async` keyword before a function and the `await` keyword before a Promise to pause execution until the Promise resolves."
+      },
+      {
+        "type": "code",
+        "value": "async function loadData() {\n  try {\n    const response = await fetchData();\n    console.log(response); // Data loaded\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nloadData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "The async/await approach often makes code easier to read and debug because it avoids deeply nested `.then()` calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Using Promises and Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use async/await for readability:** When possible, use async/await to write clearer asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Handle errors properly:** Always use `try/catch` with async/await or `.catch()` with Promises to handle errors gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid mixing styles:** Try not to mix async/await and `.then()` in the same block to keep code consistent."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Return Promises in functions:** If a function is asynchronous, return the Promise or mark it as `async` to enable proper chaining or awaiting."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to use Promises directly"
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises are still useful when you want to handle multiple asynchronous calls concurrently using `Promise.all()` or `Promise.race()`."
+      },
+      {
+        "type": "code",
+        "value": "const promise1 = Promise.resolve('First');\nconst promise2 = Promise.resolve('Second');\n\nPromise.all([promise1, promise2])\n  .then(results => {\n    console.log(results); // ['First', 'Second']\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use async/await combined with `Promise.all()` for the same effect:"
+      },
+      {
+        "type": "code",
+        "value": "async function loadAll() {\n  const results = await Promise.all([promise1, promise2]);\n  console.log(results); // ['First', 'Second']\n}\n\nloadAll();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both Promises and async/await are powerful tools for handling asynchronous JavaScript. Async/await offers cleaner and more readable code, especially for sequential async operations. Promises are useful for multiple parallel operations and chaining. Knowing when and how to use both will make your JavaScript programming more efficient and maintainable."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-javascript-event-loop-for-high-performance",
+    "title": "Optimizing JavaScript Event Loop for High-Performance System Design",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to optimize the JavaScript event loop to avoid common errors and build high-performance, responsive applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=b4TpO9pYpqk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript runs on a single thread and uses an event loop to handle asynchronous operations like timers, I/O, and user interactions. Understanding how the event loop works is vital for optimizing performance and avoiding common errors like blocking the UI or slowing down your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "The event loop processes tasks in a queue. If a long-running task blocks this queue, everything else waits until it finishes — causing freezes or slow response times. Let's explore beginner-friendly ways to optimize it."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid long synchronous code: Break heavy computations into smaller chunks so the event loop can process other events between them."
+      },
+      {
+        "type": "code",
+        "value": "function heavyTask() {\n  for (let i = 0; i < 1e9; i++) {\n    // CPU intensive work\n  }\n  console.log('Heavy task done');\n}\n\n// This blocks the event loop!\nheavyTask();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, use `setTimeout` to chunk the task, allowing other events to run:"
+      },
+      {
+        "type": "code",
+        "value": "function chunkedTask(start = 0, end = 1e9, chunkSize = 1e7) {\n  let i = start;\n\n  function processChunk() {\n    const limit = Math.min(i + chunkSize, end);\n    for (; i < limit; i++) {\n      // CPU intensive work chunk\n    }\n    console.log(`Processed chunk up to ${i}`);\n\n    if (i < end) {\n      setTimeout(processChunk, 0); // Yield to event loop\n    } else {\n      console.log('All chunks done');\n    }\n  }\n\n  processChunk();\n}\n\nchunkedTask();"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use asynchronous APIs like Promises and async/await to avoid blocking. These APIs allow your code to wait for results without freezing the main thread."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Beware of infinite loops or recursive calls without exit conditions, which stall the event loop and freeze your app."
+      },
+      {
+        "type": "code",
+        "value": "function badLoop() {\n  while(true) {\n    // This will freeze the browser\n  }\n}\n\n// Avoid calling badLoop()"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Offload heavy tasks to Web Workers if your app requires parallel processing. This keeps the main event loop free for UI interactions."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing the JavaScript event loop involves breaking down heavy tasks, embracing asynchronous APIs, avoiding blocking code, and using workers when necessary. These practices lead to smooth, high-performance web applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-decorators-advanced-patterns-and-use-cases",
+    "title": "Mastering TypeScript Decorators: Advanced Patterns and Use Cases",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore advanced TypeScript decorator patterns and practical use cases to enhance your coding skills with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=RJot7H_gd5k",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators provide a powerful way to add metadata and modify classes, methods, properties, and parameters at design time. Initially popular in frameworks like Angular, decorators enable clean, reusable code patterns. This tutorial will help you master advanced decorator techniques and practical use cases even if you are new to decorators."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before diving into advanced patterns, let's quickly recap what decorators are. A decorator is a special kind of declaration attached to a class or its members. It allows you to intercept and modify behavior by wrapping or annotating the original element."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript supports four decorator types: class decorators, method decorators, property decorators, and parameter decorators. Each receives specific arguments that let you hook into the class's structure."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating an advanced class decorator that adds a timestamp to class instances."
+      },
+      {
+        "type": "code",
+        "value": "function Timestamp<T extends { new (...args: any[]): {} }>(constructor: T) {\n  return class extends constructor {\n    createdAt = new Date();\n  };\n}\n\n@Timestamp\nclass User {\n  constructor(public name: string) {}\n}\n\nconst user = new User('John');\nconsole.log(user.createdAt); // Prints creation timestamp"
+      },
+      {
+        "type": "paragraph",
+        "value": "The Timestamp decorator replaces the original class with a subclass that adds a createdAt property. This is a simple pattern to augment class instances without modifying the original class code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's explore method decorators that can help with logging method calls and their arguments."
+      },
+      {
+        "type": "code",
+        "value": "function LogMethod(\n  target: Object,\n  propertyKey: string | symbol,\n  descriptor: PropertyDescriptor\n) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    console.log(`Calling ${String(propertyKey)} with`, args);\n    const result = originalMethod.apply(this, args);\n    console.log(`Result of ${String(propertyKey)}`, result);\n    return result;\n  };\n  return descriptor;\n}\n\nclass Calculator {\n  @LogMethod\n  add(a: number, b: number) {\n    return a + b;\n  }\n}\n\nconst calc = new Calculator();\ncalc.add(5, 3);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method decorator wraps the original method to log input arguments and result, helping with debugging and tracing function calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful pattern is using property decorators to enforce validation rules. Check out this example that restricts a property to positive numbers only."
+      },
+      {
+        "type": "code",
+        "value": "function Positive(target: any, propertyKey: string) {\n  let value = target[propertyKey];\n\n  const getter = () => value;\n  const setter = (newVal: number) => {\n    if (newVal <= 0) {\n      throw new Error(`${propertyKey} must be positive.`);\n    }\n    value = newVal;\n  };\n\n  Object.defineProperty(target, propertyKey, {\n    get: getter,\n    set: setter,\n    enumerable: true,\n    configurable: true,\n  });\n}\n\nclass BankAccount {\n  @Positive\n  balance: number = 0;\n\n  constructor(initialBalance: number) {\n    this.balance = initialBalance;\n  }\n}\n\nconst account = new BankAccount(100);\naccount.balance = 50; // works\n// account.balance = -10; // Throws error: balance must be positive."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the Positive decorator overrides the property’s getter and setter, adding a check to ensure the balance can never be set to zero or negative."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, parameter decorators allow you to access metadata about parameters but can be combined with libraries like Reflect Metadata for advanced use. Here's a simple example to log parameter positions."
+      },
+      {
+        "type": "code",
+        "value": "function LogParameter(target: Object, propertyKey: string | symbol, parameterIndex: number) {\n  const existingLoggedParams: number[] = Reflect.getOwnMetadata('log_params', target, propertyKey) || [];\n  existingLoggedParams.push(parameterIndex);\n  Reflect.defineMetadata('log_params', existingLoggedParams, target, propertyKey);\n}\n\nclass Person {\n  greet(@LogParameter message: string) {\n    console.log(message);\n  }\n}\n\n// Note: To fully utilize parameter decorators, use `reflect-metadata` package and enable emitDecoratorMetadata."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript decorators can be used in many advanced ways, including augmenting classes, wrapping methods for cross-cutting concerns like logging, enforcing validation on properties, and managing metadata on parameters. These powerful patterns help write cleaner, more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "To further explore decorators, ensure you have the \"experimentalDecorators\" and \"emitDecoratorMetadata\" options enabled in your tsconfig.json:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES6\",\n    \"experimentalDecorators\": true,\n    \"emitDecoratorMetadata\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy decorating! With practice, you can leverage decorators to write expressive, efficient TypeScript code."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-systems-typescript-handling-async-failures",
+    "title": "Designing Resilient Systems in TypeScript: Handling Asynchronous Failures Gracefully",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to handle asynchronous failures gracefully in TypeScript to build resilient web applications with practical patterns and example code.",
+    "videoUrl": "https://www.youtube.com/watch?v=qTXihivWGFk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous operations are at the heart of modern web applications, from fetching data to processing user input. However, these operations can fail due to network issues, unexpected data, or server errors. In TypeScript, handling these failures gracefully is essential to building resilient systems that provide a smooth user experience even during unexpected errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "This article will introduce beginner-friendly concepts and practical patterns for managing asynchronous errors effectively using TypeScript's features. We will cover try-catch blocks, Promise error handling, and the use of async/await with examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Asynchronous Failures"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you call an asynchronous function in TypeScript, it often returns a Promise that may either resolve with data or reject with an error. If you don’t handle these rejections, your app might crash or behave unpredictably."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using try-catch with async/await"
+      },
+      {
+        "type": "paragraph",
+        "value": "`async/await` makes your code look synchronous while still dealing with asynchronous operations. Wrapping your await calls in a try-catch block helps catch rejected promises easily."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData(url: string): Promise<void> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n    // Handle error gracefully, e.g., show a user-friendly message\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, if the network request fails or the server returns an error status, the catch block will activate, allowing you to handle the failure without crashing the app."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Promise Rejections"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you work directly with Promises instead of async/await, you can use `.catch()` to handle errors."
+      },
+      {
+        "type": "code",
+        "value": "function fetchUserData(userId: number): Promise<void> {\n  return fetch(`https://api.example.com/users/${userId}`)\n    .then(response => {\n      if (!response.ok) {\n        throw new Error(`Error fetching user data: ${response.status}`);\n      }\n      return response.json();\n    })\n    .then(data => {\n      console.log('User data:', data);\n    })\n    .catch(error => {\n      console.error('Error occurred:', error);\n      // Handle failure, e.g., retry or notify user\n    });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Resilient Asynchronous Code"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always handle errors on Promises either with try-catch (async/await) or `.catch()` callbacks.\n2. Provide fallback logic or retries for transient failures like network issues.\n3. Avoid unhandled promise rejections by using consistent error handling.\n4. Consider using utility libraries like `p-retry` for retry logic or `fp-ts` for functional error handling.\n5. Log meaningful error messages to help with debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling asynchronous failures properly in TypeScript leads to more reliable and maintainable software. By anticipating errors and managing them gracefully, you improve user trust and make debugging much easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start incorporating these patterns in your TypeScript projects today and watch your applications become more robust!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-decorators-creative-tricks-to-simplify-your-code",
+    "title": "Mastering Python Decorators: Creative Tricks to Simplify Your Code",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to master Python decorators with beginner-friendly tricks to write simpler, cleaner, and more reusable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=5B41CPvYMjY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python decorators are a powerful tool that allows you to modify the behavior of functions or methods. If you're new to decorators, they might seem confusing at first, but once you understand them, they can greatly simplify your code and help you follow the DRY (Don't Repeat Yourself) principle. In this tutorial, we'll explore what decorators are, how to create your own, and some creative tricks to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "At a basic level, a decorator is a function that takes another function and extends its behavior without explicitly modifying it. This means you can add features like logging, timing, or access control in a clean and reusable way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of a decorator to print a message before and after a function runs."
+      },
+      {
+        "type": "code",
+        "value": "def my_decorator(func):\n    def wrapper():\n        print(\"Before the function runs\")\n        func()\n        print(\"After the function runs\")\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\"Hello!\")\n\nsay_hello()"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, `my_decorator` is a function that takes `func` as input and defines a nested `wrapper` function that runs code before and after calling `func`. The `@my_decorator` line is syntactic sugar for `say_hello = my_decorator(say_hello)`. When you call `say_hello()`, it actually runs `wrapper`."
+      },
+      {
+        "type": "paragraph",
+        "value": "The output will be:\n\nBefore the function runs\nHello!\nAfter the function runs\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Functions with Arguments\nMost functions take arguments, so your decorator should too. You can do this using `*args` and `**kwargs` to accept any number of positional and keyword arguments."
+      },
+      {
+        "type": "code",
+        "value": "def decorator_with_args(func):\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__} with arguments {args} and {kwargs}\")\n        result = func(*args, **kwargs)\n        print(f\"{func.__name__} returned {result}\")\n        return result\n    return wrapper\n\n@decorator_with_args\ndef add(a, b):\n    return a + b\n\nadd(5, 3)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This decorator prints the function’s name, the arguments it received, and the result it returned. This is useful for debugging or logging purposes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Preserving Function Metadata\nWhen you decorate a function, Python replaces the original function with the wrapper, which can hide useful information like the function’s name and docstring. To fix this, use the `functools.wraps` decorator inside your wrapper."
+      },
+      {
+        "type": "code",
+        "value": "import functools\n\ndef preserve_metadata(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f\"Running {func.__name__}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@preserve_metadata\ndef greet(name):\n    \"\"\"Returns a greeting message\"\"\"\n    return f\"Hello, {name}!\"\n\nprint(greet.__name__)  # Output: greet\nprint(greet.__doc__)   # Output: Returns a greeting message"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creative Trick 1: Timing Your Functions\nLet’s create a decorator to measure how long a function takes to run. This is handy for optimizing your code."
+      },
+      {
+        "type": "code",
+        "value": "import time\nimport functools\n\ndef timer(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f\"{func.__name__} took {end - start:.4f} seconds to run\")\n        return result\n    return wrapper\n\n@timer\ndef countdown(n):\n    while n > 0:\n        n -= 1\n\ncountdown(1000000)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creative Trick 2: Access Control Decorator\nYou can use decorators to control access to certain functions. For example, let's make a simple user authorization decorator."
+      },
+      {
+        "type": "code",
+        "value": "def requires_admin(func):\n    @functools.wraps(func)\n    def wrapper(user, *args, **kwargs):\n        if not user.get('is_admin', False):\n            print(\"Access denied! Admins only.\")\n            return None\n        return func(user, *args, **kwargs)\n    return wrapper\n\n@requires_admin\ndef delete_database(user):\n    print(\"Database deleted!\")\n\nuser = {'username': 'jane', 'is_admin': False}\nadmin = {'username': 'john', 'is_admin': True}\n\ndelete_database(user)   # Access denied! Admins only.\ndelete_database(admin)  # Database deleted!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nDecorators are a versatile feature in Python that can help you write more readable, maintainable, and reusable code. Start by understanding the basic decorator structure, using `*args` and `**kwargs` to handle arbitrary arguments, preserving function metadata with `functools.wraps`, and applying creative use cases like timing and access control. With practice, you'll find many opportunities to simplify your code with decorators!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-performance-by-efficiently-handling-memoryerrors",
+    "title": "Optimizing Python Code Performance by Efficiently Handling MemoryErrors",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to optimize Python code by efficiently handling MemoryError exceptions to avoid crashes and improve performance, with practical tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=qz4JZ7OfPNU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large amounts of data in Python, you might encounter a MemoryError, which occurs when Python runs out of available memory. This error can cause your program to crash unexpectedly. As a beginner, learning how to handle and optimize your code to avoid MemoryErrors is crucial for creating robust and efficient Python applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "A MemoryError usually happens when your program tries to allocate more memory than your system can provide. This often occurs with large lists, big files, or huge data processing tasks. Instead of letting the program crash, you can catch MemoryErrors and adjust your code to use memory more efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are practical steps to handle and optimize your code for MemoryError:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use Try-Except to Catch MemoryError: Always wrap memory-heavy code in try-except blocks so you can handle the error gracefully."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    big_list = [0] * (10**9)  # Trying to create a huge list\nexcept MemoryError:\n    print(\"MemoryError caught: Not enough memory to create the list.\")\n    # You can take alternative actions here"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Process Data in Smaller Chunks: Instead of loading or processing all data at once, divide it into smaller parts to reduce memory usage."
+      },
+      {
+        "type": "code",
+        "value": "def process_in_chunks(data, chunk_size=1000):\n    for i in range(0, len(data), chunk_size):\n        chunk = data[i:i+chunk_size]\n        # Process each chunk\n        print(f\"Processing chunk from {i} to {i + len(chunk)}\")\n\n# Example with a large list\nlarge_data = list(range(10**7))\nprocess_in_chunks(large_data, chunk_size=1000000)"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use Generators Instead of Lists: Generators produce items one by one, saving memory compared to creating entire lists."
+      },
+      {
+        "type": "code",
+        "value": "def count_up_to(n):\n    i = 0\n    while i < n:\n        yield i\n        i += 1\n\nfor number in count_up_to(10**7):\n    if number % 1000000 == 0:\n        print(f\"Current number: {number}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Utilize Memory-Efficient Libraries: Libraries like NumPy use optimized data structures that use less memory compared to standard Python lists."
+      },
+      {
+        "type": "code",
+        "value": "import numpy as np\n\ntry:\n    big_array = np.zeros(10**8, dtype=np.float32)  # Uses less memory than a list of floats\nexcept MemoryError:\n    print(\"MemoryError caught when creating NumPy array.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Delete Unused Variables: Python does automatic garbage collection, but explicitly deleting large variables you no longer need can free memory sooner."
+      },
+      {
+        "type": "code",
+        "value": "big_data = [0] * (10**7)\n# Process big_data\n\ndel big_data  # Explicitly delete large list when done"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, you can write Python code that avoids memory errors and runs more efficiently, especially when dealing with large datasets. Handling MemoryError exceptions properly is an important skill that helps your programs run smoothly without unexpected crashes."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-window-functions-vs-aggregate-functions-in-sql-for-data-analysis",
+    "title": "Comparing Window Functions vs Aggregate Functions in SQL for Data Analysis",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the key differences between window functions and aggregate functions in SQL with easy examples to improve your data analysis skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with data in SQL, understanding how to summarize or analyze data is essential. Two powerful tools for this are Aggregate Functions and Window Functions. Although they might seem similar, they serve different purposes and can be used to gain different insights."
+      },
+      {
+        "type": "paragraph",
+        "value": "Aggregate Functions like SUM(), AVG(), COUNT(), MAX(), and MIN() combine multiple rows into a single summary value. These functions reduce the number of rows by grouping data. For example, if you want the total sales per product, aggregate functions are the way to go."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window Functions, on the other hand, perform calculations across a set of rows related to the current row but do not reduce the number of rows returned. This makes window functions very useful when you want to keep the original data but add extra information, like ranking, running totals, or averages over a partition."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see both in action using a simple sales data example."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n  id INT,\n  product VARCHAR(50),\n  sales_amount DECIMAL(10,2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Product A', 100),\n(2, 'Product A', 150),\n(3, 'Product B', 200),\n(4, 'Product B', 300),\n(5, 'Product C', 250);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Using Aggregate Functions to get total sales per product"
+      },
+      {
+        "type": "code",
+        "value": "SELECT product, SUM(sales_amount) AS total_sales\nFROM sales\nGROUP BY product;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query groups the data by each product and sums the sales amounts, resulting in one row per product."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Using Window Functions to get total sales per product for each row"
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, product, sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY product) AS total_sales_per_product\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the window function computes the total sales per product, but each row of the original table is kept. This is useful when you want detailed data alongside aggregated information."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key differences summarized:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Aggregate functions collapse multiple rows into a single output row per group.\n- Window functions add aggregated information without reducing the number of rows.\n- Use aggregate functions for summary reports.\n- Use window functions when you need to keep row-level data but add analytics like rankings, running totals, or averages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering both aggregate and window functions will elevate your SQL data analysis, enabling you to extract meaningful insights efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-logical-operator-misuse",
+    "title": "Optimizing SQL Query Performance by Identifying Logical Operator Misuse",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how improper use of logical operators in SQL queries can hurt performance and how to avoid common mistakes for faster, more efficient database operations.",
+    "videoUrl": "https://www.youtube.com/watch?v=MYVgiKriVeI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing SQL queries, beginners often misuse logical operators such as AND, OR, and NOT. These mistakes can lead to inefficient query execution, longer response times, and increased load on your database server. Understanding how to use logical operators correctly is crucial for writing optimized queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Logical operators help combine multiple conditions in the WHERE clause. Using them properly helps the database engine filter rows faster by leveraging indexes and efficient evaluation order. However, misuse can cause the database engine to evaluate unnecessary conditions or perform full table scans."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common logical operator misuse includes mixing AND and OR without proper parentheses, using NOT in a way that prevents index use, and writing overly complex conditions. Let's explore these issues with examples and fixes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Mixing AND and OR Without Parentheses"
+      },
+      {
+        "type": "paragraph",
+        "value": "Incorrect use of AND and OR without parentheses can change the intended logic and force the database to process more rows than needed."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Employees\nWHERE Department = 'Sales' OR Department = 'Marketing' AND Status = 'Active';"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above query will first evaluate `Department = 'Marketing' AND Status = 'Active'` and then OR the result with `Department = 'Sales'`. This means it incorrectly includes all Sales employees regardless of Status."
+      },
+      {
+        "type": "paragraph",
+        "value": "Fix this by adding parentheses to clearly define the logic:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Employees\nWHERE (Department = 'Sales' OR Department = 'Marketing') AND Status = 'Active';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, the query fetches only Active employees in either Sales or Marketing departments, allowing the database to use indexes efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Using NOT That Prevents Index Utilization"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using NOT directly on a column or expression can negate the benefits of indexes, causing full table scans."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Products\nWHERE NOT Category = 'Electronics';"
+      },
+      {
+        "type": "paragraph",
+        "value": "This condition is functionally the same as `Category <> 'Electronics'`, but in some databases, this might still cause performance issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "Rewrite it using inequality operator explicitly:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Products\nWHERE Category <> 'Electronics';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Or alternatively, use positive conditions or separate queries if possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Overly Complex Conditions"
+      },
+      {
+        "type": "paragraph",
+        "value": "Chaining many OR conditions without indexes can degrade performance. Instead, use IN for better clarity and optimization."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders\nWHERE Status = 'Pending' OR Status = 'Processing' OR Status = 'Shipped';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Rewrite with IN:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders\nWHERE Status IN ('Pending', 'Processing', 'Shipped');"
+      },
+      {
+        "type": "paragraph",
+        "value": "This reduces complexity and helps the query planner use indexes more effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize SQL query performance by avoiding logical operator misuse:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use parentheses to control the order of evaluation between AND and OR.\n- Avoid NOT operators that lead to full scans; prefer positive or inequality conditions.\n- Use IN instead of multiple OR statements for better efficiency.\n- Test your queries with `EXPLAIN` or equivalent to check index use and cost."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these simple tips, beginners can write cleaner, faster SQL queries that make better use of database resources."
+      }
+    ]
   }
 ];
