@@ -21402,5 +21402,498 @@ export const articles = [
         "value": "By carefully managing data types in your SQL data models and handling mismatches with explicit conversions or schema corrections, you reduce errors and improve query performance. This foundational knowledge will help you build more reliable databases."
       }
     ]
+  },
+  {
+    "slug": "handling-floating-point-precision-errors-in-javascript-best-practices-and-workarounds",
+    "title": "Handling Floating Point Precision Errors in JavaScript: Best Practices and Workarounds",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle floating point precision errors in JavaScript with simple explanations, best practices, and practical code examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=38dmbYWrOV0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Floating point precision errors are common in JavaScript and other programming languages because numbers are stored in a format that can't always represent decimals exactly. This can lead to unexpected results when performing arithmetic operations. For example, you might expect 0.1 + 0.2 to equal 0.3, but instead, you get 0.30000000000000004."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explain why these errors happen, and show you some best practices and simple workarounds to handle precision errors in your JavaScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Why do floating point errors happen?"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript uses the IEEE 754 standard to store numbers as 64-bit floating point values. Some decimal numbers can’t be represented exactly in binary, causing tiny rounding errors. These errors accumulate or become visible when you perform arithmetic with decimals."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Common example"
+      },
+      {
+        "type": "code",
+        "value": "console.log(0.1 + 0.2);\n// Output: 0.30000000000000004\n\nconsole.log(0.1 + 0.2 === 0.3);\n// Output: false"
+      },
+      {
+        "type": "paragraph",
+        "value": "Although it looks like a small difference, this can cause bugs in your applications if not handled properly."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Best Practices and Workarounds"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Use `toFixed()` or `toPrecision()` when displaying numbers"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you only need to display a number, you can round it to a certain number of decimal places using the `toFixed()` method."
+      },
+      {
+        "type": "code",
+        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2)); // Output: \"0.30\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep in mind `toFixed()` returns a string, so convert it back to a number if you want to do further math:"
+      },
+      {
+        "type": "code",
+        "value": "const roundedSum = Number(sum.toFixed(2));\nconsole.log(roundedSum); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Work with integers when possible"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you’re dealing with money or other decimal values, multiply your values so you work with whole numbers instead of floats. For example, treat dollars as cents."
+      },
+      {
+        "type": "code",
+        "value": "const price1 = 199; // representing $1.99 in cents\nconst price2 = 299; // $2.99\n\nconst total = price1 + price2; // 498 cents\nconsole.log(total / 100); // Output: 4.98 dollars"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach avoids floating point math problems altogether."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Use a small epsilon value for comparisons"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of checking if floating values are exactly equal, check if the difference between them is smaller than a tiny number (epsilon)."
+      },
+      {
+        "type": "code",
+        "value": "const epsilon = 0.000001;\nconst sum = 0.1 + 0.2;\nconst expected = 0.3;\n\nif (Math.abs(sum - expected) < epsilon) {\n  console.log('Values are close enough!');\n} else {\n  console.log('Values are different!');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method is useful for comparing floating point numbers in conditions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use external libraries for complicated math"
+      },
+      {
+        "type": "paragraph",
+        "value": "There are libraries like [Decimal.js](https://github.com/MikeMcl/decimal.js/) or [Big.js](https://github.com/MikeMcl/big.js/) that provide arbitrary-precision decimal math to eliminate floating point errors in calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example with Decimal.js:"
+      },
+      {
+        "type": "code",
+        "value": "const Decimal = require('decimal.js');\n\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\n\nconsole.log(sum.toString()); // Output: '0.3'"
+      },
+      {
+        "type": "paragraph",
+        "value": "These libraries are great for financial or scientific calculations where precision is critical."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Floating point precision errors in JavaScript are caused by how numbers are stored internally, and can result in unexpected results when working with decimals. To handle these issues:\n- Use rounding methods like `toFixed()` for display.\n- Work with integers instead of floats when possible.\n- Use an epsilon value for safe comparisons.\n- Consider external libraries for precise calculations.\n\nBy using these techniques, you can avoid common pitfalls and write more reliable JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-typescript-generics-for-high-performance-applications",
+    "title": "Optimizing TypeScript Generics for High-Performance Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics effectively to write high-performance, reusable code with this beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are a powerful feature that enable you to create reusable and flexible components while maintaining strict type safety. However, beginners often worry that using generics might slow down their applications. In this tutorial, we’ll explore how to optimize TypeScript generics to build high-performance applications without sacrificing readability and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics in TypeScript allow you to write functions, classes, or interfaces that work with a variety of types rather than a single one. This means you don’t need to write duplicate code for different data types."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst output1 = identity<string>(\"Hello\");\nconst output2 = identity<number>(123);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "While generics help with flexibility, to optimize performance you should avoid unnecessary type constraints and complex generic operations at runtime. Since TypeScript generics are erased during compilation, they primarily impact developer experience and compile-time type safety rather than runtime speed. However, good practices still ensure your code remains efficient and scalable."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for optimizing TypeScript Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Keep generic constraints simple.** Complex constraints can slow down TypeScript's type checking and make your code harder to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use default types when possible.** This reduces the need to specify generic parameters explicitly and makes the API easier to work with."
+      },
+      {
+        "type": "code",
+        "value": "function getArray<T = number>(items: T[]): T[] {\n  return new Array<T>().concat(items);\n}\n\nconst numbers = getArray([1, 2, 3]);  // No need to specify <number>\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid excessive generic nesting.** Deeply nested generics can increase compile times and make debugging difficult."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use generic utility types smartly.** TypeScript provides utility types such as `Partial<T>`, `Readonly<T>`, and `Record<K, T>` which are optimized and well-tested."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  age?: number;\n}\n\nfunction updateUser(user: User, updates: Partial<User>): User {\n  return { ...user, ...updates };\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Leverage type inference to reduce verbosity.** TypeScript often can infer the generic parameter types, so you don’t have to specify them manually."
+      },
+      {
+        "type": "code",
+        "value": "function wrapInArray<T>(value: T) {\n  return [value];  // TypeScript infers T automatically\n}\n\nconst wrappedNumber = wrapInArray(42);  // inferred as number[]\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, you can write clean, reusable generic code in TypeScript without negatively impacting your application's performance. Remember that generics mostly affect compile-time safety and developer productivity rather than runtime. Always profile your code if you suspect performance issues, and keep your generics simple and readable."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these beginner-friendly strategies, you’ll be able to confidently use TypeScript generics to build fast and scalable applications. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-api-rate-limiting-gracefully-in-typescript-projects",
+    "title": "Handling API Rate Limiting Gracefully in TypeScript Projects",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to handle API rate limiting errors gracefully in TypeScript projects to improve reliability and user experience.",
+    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with APIs, hitting a rate limit is common. APIs often restrict how many requests you can make in a given time frame to protect their servers. If you exceed this limit, you'll get an error response, usually with status code 429. Handling this properly helps your application stay reliable and polite to the API."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this beginner-friendly guide, we'll cover how to catch rate limiting errors and retry your request after a delay using TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Rate Limiting?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Rate limiting is a control mechanism used by APIs to limit the number of requests a client can make in a certain period. For example, an API may allow 100 requests per minute. If you go beyond this, it returns a 429 Too Many Requests status code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling 429 Errors Gracefully"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you receive a 429 error, the API may send a `Retry-After` header indicating how long to wait before trying again. If this header is missing, you can implement a default wait time or use exponential backoff."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example of how to handle rate limiting using TypeScript with the Fetch API and exponential backoff:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithRateLimit(url: string, retries = 3, delay = 1000): Promise<any> {\n  try {\n    const response = await fetch(url);\n\n    if (response.status === 429) {\n      if (retries > 0) {\n        // Check for Retry-After header\n        const retryAfter = response.headers.get('Retry-After');\n        const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : delay;\n        console.warn(`Rate limited. Retrying after ${waitTime} ms...`);\n        await new Promise(res => setTimeout(res, waitTime));\n        // Retry with exponential backoff\n        return fetchWithRateLimit(url, retries - 1, delay * 2);\n      } else {\n        throw new Error('Rate limit exceeded. Max retries reached');\n      }\n    }\n\n    if (!response.ok) {\n      throw new Error(`HTTP error! Status: ${response.status}`);\n    }\n\n    return await response.json();\n  } catch (error) {\n    console.error('Fetch failed:', error);\n    throw error;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### How It Works"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. We attempt to fetch the resource.\n2. If the response status is 429, and retries remain, check the `Retry-After` header.\n3. Wait for the indicated time or a default delay.\n4. Retry the request, doubling the delay each time to reduce request frequency.\n5. If all retries fail, throw an error.\n6. Handle other HTTP errors and successful responses normally."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Beginners"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always respect the API's rate limits to avoid being blocked.\n- Use the `Retry-After` header if provided.\n- Keep retry attempts limited to avoid infinite loops.\n- Inform users of delays or failures gracefully in your UI."
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling API rate limiting gracefully not only improves your app's stability but also helps maintain a good relationship with the API provider. Using this pattern in your TypeScript projects will make your API requests smarter and more resilient."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-asyncio-vs-threading-when-to-use-each-for-concurrency",
+    "title": "Comparing Python's Asyncio vs Threading: When to Use Each for Concurrency",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the differences between Python's asyncio and threading for concurrency, and discover practical guidance on when to use each in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=QlkXji08lno",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Concurrency is a powerful concept in programming that allows your program to handle multiple tasks at the same time. In Python, two popular ways to achieve concurrency are threading and asyncio. This article explains what each approach is, how they work, and when to use each one, especially if you are new to concurrency."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Threading?\nThreading lets you create multiple threads (smaller units of a process) that run in parallel. Each thread can execute code independently, which can improve performance for tasks that involve waiting for external systems like file operations or network access."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of threading in Python:"
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport time\n\ndef worker():\n    print('Thread starting')\n    time.sleep(2)\n    print('Thread finished')\n\nthread = threading.Thread(target=worker)\nthread.start()\nprint('Main program continues')\nthread.join()\nprint('Thread joined, program ends')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, we create and start a thread that runs the `worker` function. The main program continues to run while the thread sleeps for two seconds, demonstrating basic concurrency."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Asyncio?\nAsyncio is a library to write concurrent code using the async/await syntax introduced in Python 3.5+. It's designed for handling many tasks that spend time waiting (like network requests) without creating multiple threads. Instead, asyncio runs a single-threaded event loop which schedules and switches between tasks efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example using asyncio:"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def worker():\n    print('Async task starting')\n    await asyncio.sleep(2)\n    print('Async task finished')\n\nasync def main():\n    task = asyncio.create_task(worker())\n    print('Main program continues')\n    await task\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code runs the `worker` coroutine asynchronously. The `await asyncio.sleep(2)` pauses the coroutine but doesn't block the whole program, allowing other async tasks to run meanwhile."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Threading\n- When you have CPU-bound tasks that can run in parallel (though Python’s Global Interpreter Lock (GIL) can limit true parallelism).\n- When you're working with blocking I/O operations (file access, network calls in libraries that don't support asyncio).\n- When existing libraries you use are not compatible with asyncio.\n\nThreading provides true concurrency with multiple threads but can introduce complexity like race conditions and requires careful handling of shared resources."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Asyncio\n- For high-level structured network code, web servers, or applications that need to handle thousands of open connections efficiently.\n- When the tasks involve a lot of waiting and can be designed using async/await syntax.\n- When you want to avoid the overhead of multiple threads and context switching.\n\nAsyncio is often more efficient for I/O-bound, high-concurrency workloads but requires all parts of the code (and libraries) to be async-compatible."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n| Feature             | Threading                           | Asyncio                      |\n|---------------------|-----------------------------------|------------------------------|\n| Model               | Multiple system threads             | Single-threaded event loop    |\n| Ideal for           | Blocking I/O, some CPU-bound tasks | I/O-bound, high-concurrency   |\n| Syntax complexity   | Traditional (functions, locking)   | Requires async/await syntax   |\n| Library compatibility | Wide (most libraries work)          | Limited to async-compatible libs |\n\nIn conclusion, use threading if your tasks involve blocking calls or you need compatibility with existing synchronous libraries. Use asyncio for modern, scalable, and efficient I/O-bound applications with many concurrent tasks."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-exception-handling-performance-try-except-vs-context-managers",
+    "title": "Comparing Exception Handling Performance in Python: Try-Except vs. Context Managers",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the basics of Python exception handling by comparing the performance of try-except blocks and context managers with clear examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=96mDQrlceEk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling errors properly is a key part of writing robust Python programs. Two common methods for managing exceptions are using try-except blocks directly or leveraging context managers implemented with the 'with' statement. In this article, we'll explore both techniques, compare their performance, and understand when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "A try-except block is the most straightforward way to catch and handle exceptions in Python. You write the code that could raise an error inside the 'try' block and handle errors in the 'except' block. Here's a simple example that handles a division by zero error:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    result = None\nprint(f\"Result is: {result}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "A context manager, on the other hand, is a Python object that defines setup and teardown actions using the __enter__ and __exit__ methods. The 'with' statement simplifies exception handling by calling __exit__ automatically if an error occurs. Custom context managers can manage resources or handle errors in a clean way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple context manager that catches ZeroDivisionError and returns None instead of raising the error:"
+      },
+      {
+        "type": "code",
+        "value": "class HandleZeroDivision:\n    def __enter__(self):\n        # Setup, nothing special here\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type is ZeroDivisionError:\n            print(\"Caught ZeroDivisionError in context manager\")\n            return True  # Suppress the exception\n        return False  # Propagate other exceptions\n\nwith HandleZeroDivision():\n    result = 10 / 0\nprint(f\"Result is: {result if 'result' in globals() else None}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's compare the performance of both methods in a scenario where an exception occurs multiple times. We'll use the timeit module for this purpose."
+      },
+      {
+        "type": "code",
+        "value": "import timeit\n\n# Using try-except\ncode_try_except = '''\ncount = 0\nfor _ in range(10000):\n    try:\n        result = 1 / 0\n    except ZeroDivisionError:\n        count += 1\n'''\n\n# Using context manager\ncode_context_manager = '''\nclass HandleZeroDivision:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type is ZeroDivisionError:\n            return True\n        return False\n\ncount = 0\nwith HandleZeroDivision():\n    for _ in range(10000):\n        result = 1 / 0\n        count += 1\n'''\n\ntime_try_except = timeit.timeit(code_try_except, number=10)\ntime_context_manager = timeit.timeit(code_context_manager, number=10)\n\nprint(f\"Try-except time: {time_try_except:.5f} seconds\")\nprint(f\"Context manager time: {time_context_manager:.5f} seconds\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In many cases, the try-except block performs faster because it avoids the overhead of entering and exiting context manager methods on every loop iteration. However, context managers provide cleaner and more reusable code, especially when managing resources like files or network connections."
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, use try-except blocks when you want simple and direct handling of exceptions. Use context managers when your error handling is tied to resource management or when you want to encapsulate complex setup and teardown logic cleanly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding performance differences is useful but prioritize code readability and maintainability. Both methods have their place in writing effective Python code."
+      }
+    ]
+  },
+  {
+    "slug": "scalable-multi-tenant-databases-sql-best-practices",
+    "title": "Designing Scalable Multi-Tenant Databases with SQL: Best Practices and Strategies",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the best practices and strategies for designing scalable multi-tenant databases using SQL, enabling you to efficiently manage multiple clients with a single database system.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant databases are essential when building applications that serve multiple clients (tenants) from a single database infrastructure. Designing these databases properly helps maintain security, scalability, and performance. This tutorial will guide beginners through key best practices and strategies using SQL to create scalable multi-tenant architectures."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Multi-Tenancy Models\nThere are three common multi-tenancy models you can implement with SQL databases:\n\n1. Shared Database, Shared Schema: All tenants share the same database and tables, differentiated by a Tenant ID column.\n2. Shared Database, Separate Schemas: One database with separate schemas per tenant.\n3. Separate Databases: Each tenant has its own database.\n\nFor beginners, the Shared Database and Shared Schema model is the easiest and most scalable to start with."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Best Practices for Multi-Tenant Database Design\n- **Include Tenant ID in every table:** This is critical for isolating tenant data.\n- **Use Indexing on Tenant ID:** Improves query performance when filtering by tenant.\n- **Apply Row-Level Security:** Limits data access to the correct tenant.\n- **Avoid Cross-Tenant Queries:** Ensure queries always filter by Tenant ID.\n- **Use Partitioning (Optional):** Partition tables by tenant to optimize large-scale data.\n- **Automate Tenant Data Management:** Simplifies onboarding and offboarding tenants."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Schema Design\nHere’s an example of a simple multi-tenant design using a shared schema approach. We will create a `users` table where each user's data is tagged with a `tenant_id`."
+      },
+      {
+        "type": "code",
+        "value": "\nCREATE TABLE users (\n    id SERIAL PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    username VARCHAR(50) NOT NULL,\n    email VARCHAR(100) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    CONSTRAINT unique_username_per_tenant UNIQUE (tenant_id, username)\n);\n\n-- Add an index on tenant_id for faster lookups\nCREATE INDEX idx_users_tenant_id ON users (tenant_id);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Querying Data Safely\nTo prevent accidental cross-tenant data access, always include the `tenant_id` filter when querying:\n"
+      },
+      {
+        "type": "code",
+        "value": "\n-- Select all users for tenant with id = 1\nSELECT id, username, email\nFROM users\nWHERE tenant_id = 1;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Implementing Row-Level Security (RLS) in PostgreSQL\nFor added security, PostgreSQL supports Row-Level Security policies to enforce tenant isolation at the database level.\n\nHere is how you can enable it for the `users` table:"
+      },
+      {
+        "type": "code",
+        "value": "\n-- Enable RLS on users table\nALTER TABLE users ENABLE ROW LEVEL SECURITY;\n\n-- Create a policy to allow tenants to access only their own rows\nCREATE POLICY tenant_isolation_policy ON users\n  USING (tenant_id = current_setting('app.current_tenant')::INT);\n\n-- Apply the policy\nALTER TABLE users FORCE ROW LEVEL SECURITY;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before querying, the application must set the current tenant ID for each session:\n"
+      },
+      {
+        "type": "code",
+        "value": "\n-- Set current tenant ID in session (example for tenant 1)\nSET app.current_tenant = '1';\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nDesigning scalable multi-tenant databases requires careful schema design and security considerations. Start with a shared schema and tenant_id in every table, optimize queries with proper indexing, and consider applying row-level security. These strategies help ensure your application remains performant and secure as you onboard more tenants."
+      }
+    ]
+  },
+  {
+    "slug": "unraveling-complex-sql-constraint-violations-root-causes-prevention",
+    "title": "Unraveling Complex SQL Constraint Violations: A Deep Dive into Root Causes and Prevention",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify, troubleshoot, and prevent common SQL constraint violations such as primary key, foreign key, and unique constraints with practical examples for beginners.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, constraints help maintain data integrity by enforcing rules on data columns. However, beginners often encounter constraint violation errors that can be confusing. Understanding the root causes behind these errors is essential for effective troubleshooting and prevention."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some common SQL constraint types and the typical reasons why violations occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. PRIMARY KEY Constraint Violation: This error happens when you try to insert a duplicate value into a column that must contain unique values."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Employees (\n  EmployeeID INT PRIMARY KEY,\n  Name VARCHAR(100)\n);\n\n-- Attempting to insert duplicate EmployeeID\nINSERT INTO Employees (EmployeeID, Name) VALUES (1, 'John Doe');\nINSERT INTO Employees (EmployeeID, Name) VALUES (1, 'Jane Smith'); -- Causes PRIMARY KEY violation"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent this, always check for existing records before inserting or use database features like `ON CONFLICT` to handle duplicates gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. FOREIGN KEY Constraint Violation: This occurs when you try to insert a record that references a non-existent entry in another table."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Departments (\n  DepartmentID INT PRIMARY KEY,\n  DepartmentName VARCHAR(100)\n);\n\nCREATE TABLE Employees (\n  EmployeeID INT PRIMARY KEY,\n  Name VARCHAR(100),\n  DeptID INT,\n  FOREIGN KEY (DeptID) REFERENCES Departments(DepartmentID)\n);\n\n-- Insert an employee with a non-existent department\nINSERT INTO Employees (EmployeeID, Name, DeptID) VALUES (1, 'Alice', 99); -- Causes FOREIGN KEY violation"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always ensure the foreign key value exists in the parent table before inserting or updating dependent records."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. UNIQUE Constraint Violation: This violation is triggered when duplicate values are inserted into columns that must be unique but are not primary keys."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Users (\n  UserID INT PRIMARY KEY,\n  Email VARCHAR(100) UNIQUE\n);\n\n-- Insert two users with the same email\nINSERT INTO Users (UserID, Email) VALUES (1, 'user@example.com');\nINSERT INTO Users (UserID, Email) VALUES (2, 'user@example.com'); -- Causes UNIQUE violation"
+      },
+      {
+        "type": "paragraph",
+        "value": "To reduce the risk of this error, validate input data and consider adding application-level checks before database operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary and Best Practices:"
+      },
+      {
+        "type": "paragraph",
+        "value": "• Always design your tables with constraints to ensure data integrity.\n• Before inserting or updating data, validate it against existing records.\n• Use transactions to manage multiple related operations safely.\n• When encountering constraint violations, review the error message carefully to understand which constraint failed.\n• Utilize database documentation and error logs for in-depth troubleshooting."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these common violations and their root causes, beginners can write more reliable SQL code and avoid frustrating errors."
+      }
+    ]
   }
 ];
