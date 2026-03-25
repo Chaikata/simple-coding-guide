@@ -1,174 +1,174 @@
 [
   {
-    "slug": "predict-the-output-of-nested-list-comprehensions-with-conditional-logic",
-    "title": "Predict the Output of Nested List Comprehensions with Conditional Logic",
-    "language": "python",
-    "difficulty": "intermediate",
-    "category": "logic",
-    "description": "Analyze nested list comprehensions with conditional statements and predict the final output of the given Python code snippet.",
-    "prompt": "Consider the following Python code that uses nested list comprehensions combined with conditional and arithmetic logic. Predict the exact output printed by the code:\n\nfor i in range(3):\n    result = [j * i if j % 2 == 0 else j + i for j in range(5)]\n    print(result)\n\nWhat is the output of the above code?",
-    "guidance": [
-      "Carefully evaluate the nested list comprehension inside the loop for each value of i from 0 to 2.",
-      "For each element j in the inner range, decide which expression applies based on whether j is even or odd.",
-      "Calculate the final derived list for each iteration and consider how the results change with different values of i."
-    ],
-    "hints": [
-      "Recall that 'j % 2 == 0' checks if j is even.",
-      "For even j, the expression is 'j * i'; for odd j, it is 'j + i'.",
-      "Track the values of i and j step-by-step for clarity."
-    ],
-    "starterCode": "for i in range(3):\n    result = [j * i if j % 2 == 0 else j + i for j in range(5)]\n    print(result)",
-    "expectedOutput": "[0, 1, 0, 3, 0]\n[0, 2, 2, 4, 4]\n[0, 3, 4, 5, 8]",
-    "concepts": [
-      "list comprehensions",
-      "conditional expressions",
-      "loops",
-      "modulo operator"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-bug-in-complex-sql-query-summarizing-sales-data",
-    "title": "Fix Bug in Complex SQL Query Summarizing Sales Data",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Debug and fix the provided SQL query that intends to summarize monthly sales data by product category but produces incorrect results due to logical errors and misused joins.",
-    "prompt": "You are given a SQL query designed to calculate the total sales and average sales per product category per month from sales and product tables. However, the query currently returns incorrect totals, duplicates rows, or omits some data. Identify and fix the bugs in the SQL query so that it correctly aggregates total and average sales grouped by category and month.\n\nThe schema consists of:\n- sales(sale_id INT, product_id INT, sale_date DATE, sale_amount DECIMAL)\n- products(product_id INT, category VARCHAR)\n\nYour fixed query must return columns: category, month (formatted as 'YYYY-MM'), total_sales, avg_sales_per_product\n\nCarefully review joins and grouping logic to ensure accuracy.",
-    "guidance": [
-      "Check if joins between sales and products tables are causing unintended row multiplication or missing rows.",
-      "Validate the GROUP BY clause includes all non-aggregated columns to ensure correct aggregation.",
-      "Pay attention to the grouping by month: use proper date function to extract month in 'YYYY-MM' format."
-    ],
-    "hints": [
-      "INNER JOIN might exclude categories with zero sales; consider if that's expected.",
-      "Aggregates must be calculated per category and month, so group accordingly and extract month from sale_date with DATE_FORMAT or TO_CHAR depending on your SQL dialect.",
-      "Avoid joining tables multiple times or creating cartesian products."
-    ],
-    "starterCode": "SELECT p.category,\n       DATE_FORMAT(s.sale_date, '%Y-%m') AS month,\n       SUM(s.sale_amount) AS total_sales,\n       AVG(s.sale_amount) AS avg_sales_per_product\nFROM sales s\nJOIN products p ON s.product_id = p.product_id\nGROUP BY p.category;",
-    "expectedOutput": "category | month  | total_sales | avg_sales_per_product\n---------|--------|-------------|-----------------------\nBooks    | 2024-04| 10500.00    | 350.00               \nElectronics | 2024-04 | 25000.00  | 1250.00              \nClothing | 2024-04| 7000.00     | 233.33",
-    "concepts": [
-      "SQL Joins",
-      "Aggregation and GROUP BY",
-      "Date Formatting in SQL"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-the-bug-in-sql-query-to-filter-active-users",
-    "title": "Fix the Bug in SQL Query to Filter Active Users",
+    "slug": "fix-the-incorrect-sql-query-filtering-by-date",
+    "title": "Fix the Incorrect SQL Query Filtering by Date",
     "language": "sql",
     "difficulty": "beginner",
     "category": "debugging",
-    "description": "Identify and fix the bug in the provided SQL query that is supposed to retrieve only active users from the users table.",
-    "prompt": "The following SQL query is intended to select all users where the status is 'active'. However, it is returning all users regardless of their status. Find and fix the bug so that only active users are retrieved.",
+    "description": "Identify and fix the bug in the provided SQL query that aims to filter orders placed after January 1, 2023. The original query incorrectly returns all rows due to a syntax mistake in the WHERE clause.",
+    "prompt": "You are given a SQL query intended to select all orders made after January 1st, 2023 from the 'Orders' table. However, the current query returns all orders regardless of the order date. Find the bug and fix the query so it correctly filters the results.",
     "guidance": [
-      "Check the WHERE clause syntax carefully.",
-      "Make sure the string comparison is done correctly.",
-      "Test the query after fixing to ensure only active users are listed."
+      "Check the syntax of the WHERE clause and ensure the date comparison operator is used correctly.",
+      "Verify how date literals are formatted in SQL and whether they are quoted properly."
     ],
     "hints": [
-      "Remember that string literals in SQL need to be enclosed in single quotes.",
-      "Look for any misplaced or missing quotation marks around 'active'.",
-      "Check if the condition is using '=' or '==' incorrectly."
+      "In SQL, date values should be enclosed in single quotes.",
+      "Make sure you are using a comparison operator (>, >=, etc.) correctly with the column name and date."
     ],
-    "starterCode": "SELECT * FROM users WHERE status = active;",
-    "expectedOutput": "Only rows where the status column equals 'active' should be returned.",
+    "starterCode": "SELECT * FROM Orders WHERE OrderDate > 2023-01-01;",
+    "expectedOutput": "Only orders with OrderDate after 2023-01-01 should be returned.",
     "concepts": [
-      "SQL WHERE clause",
-      "String comparison",
-      "Basic SELECT query"
+      "WHERE clause",
+      "Date comparison",
+      "SQL syntax"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-incorrect-join-and-aggregation-in-sales-report-query",
-    "title": "Fix Incorrect Join and Aggregation in Sales Report Query",
-    "language": "sql",
+    "slug": "build-a-todo-list-manager-with-filtering-and-prioritization",
+    "title": "Build a Todo List Manager with Filtering and Prioritization",
+    "language": "javascript",
     "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "A SQL query intended to generate a monthly sales report per product category uses incorrect join syntax and aggregation logic. Fix the query to produce accurate total sales per category per month.",
-    "prompt": "You are given a broken SQL query that aims to report the total sales amount for each product category grouped by month. However, the results show incorrect totals and duplicate rows. Identify and fix the join and aggregation issues to return the correct monthly sales totals per category.\n\nThe database schema includes the following tables:\n- sales(sale_id, product_id, sale_date, amount)\n- products(product_id, product_name, category_id)\n- categories(category_id, category_name)\n\nBroken Query:\n\nSELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  SUM(s.amount) AS total_sales\nFROM\n  sales s\nJOIN\n  products p,\n  categories c\n  ON s.product_id = p.product_id\n  AND p.category_id = c.category_id\nGROUP BY\n  c.category_name, sale_month\nORDER BY\n  sale_month, c.category_name;\n\nFix the query so it properly joins the tables and correctly aggregates total sales per category by month.",
+    "category": "mini-projects",
+    "description": "Create a JavaScript function that manages a list of todo items, allowing for adding, removing, updating status, and filtering tasks based on their priority and completion status.",
+    "prompt": "Write a function called `manageTodos` that maintains an internal list of todo items. Each todo item should have an id, description, priority (low, medium, high), and a completed status (true/false). The function should accept two arguments: a command string ('add', 'remove', 'toggle', 'filter') and a payload object that changes based on the command:\n\n- 'add': the payload includes description and priority; assign a unique id and set completed to false.\n- 'remove': the payload includes the id of the todo to remove.\n- 'toggle': the payload includes the id of the todo; toggle its completed status.\n- 'filter': the payload includes optional filters priority and/or completed, and returns a filtered array of todos matching these criteria.\n\nImplement proper internal state handling so repeated calls to `manageTodos` modify or query the same todo list.\n\nExample usage:\nmanageTodos('add', { description: 'Write code', priority: 'high' });\nmanageTodos('toggle', { id: 1 });\nmanageTodos('filter', { completed: false, priority: 'high' });",
     "guidance": [
-      "Check the JOIN syntax to ensure all tables join correctly in a single JOIN clause tree.",
-      "Verify that aggregation (SUM) and GROUP BY expressions correspond correctly to the selected columns.",
-      "Test the query on sample data to confirm duplicate rows are eliminated and totals are accurate."
+      "Use a closure or module pattern to encapsulate the todo list as a private variable.",
+      "Ensure unique ids are generated for each new todo item.",
+      "Implement the filter command to handle one or both filters gracefully.",
+      "Make sure to update the completed status correctly when toggling."
     ],
     "hints": [
-      "Replace the misplaced commas in the FROM and JOIN clauses with explicit JOIN statements.",
-      "Make sure each JOIN has the appropriate ON condition mapping keys between tables.",
-      "GROUP BY all non-aggregated select expressions exactly as they appear."
+      "Consider using an array to store todos and find items by id using findIndex.",
+      "Use default parameter values to make filters optional when filtering.",
+      "Use a simple incremental counter or Date.now() for unique id generation."
     ],
-    "starterCode": "SELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  SUM(s.amount) AS total_sales\nFROM\n  sales s\nJOIN\n  products p,\n  categories c\n  ON s.product_id = p.product_id\n  AND p.category_id = c.category_id\nGROUP BY\n  c.category_name, sale_month\nORDER BY\n  sale_month, c.category_name;",
-    "expectedOutput": "category_name | sale_month | total_sales\n------------- | ---------- | -----------\nBooks         | 2024-01    | 15000.00\nBooks         | 2024-02    | 12000.00\nElectronics   | 2024-01    | 35000.00\nElectronics   | 2024-02    | 42000.00",
+    "starterCode": "function manageTodos() {\n  const todos = [];\n  let idCounter = 1;\n\n  return function(command, payload) {\n    // Your implementation here\n  };\n}\n\nconst todoManager = manageTodos();\n\n// Example calls\n// todoManager('add', { description: 'Learn JavaScript', priority: 'medium' });\n",
+    "expectedOutput": "[{ id: 1, description: 'Write code', priority: 'high', completed: false }]",
     "concepts": [
-      "SQL JOIN",
-      "GROUP BY and Aggregations",
-      "Date Formatting"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "build-a-decorator-to-cache-function-results-with-expiry",
-    "title": "Build a Decorator to Cache Function Results with Expiry",
-    "language": "python",
-    "difficulty": "advanced",
-    "category": "functions",
-    "description": "Create a Python decorator function that caches the results of an expensive function call, with support for automatic expiration of cached values after a given time-to-live (TTL).",
-    "prompt": "Write a Python decorator named 'cache_with_expiry' that takes one parameter ttl (in seconds). When applied to a function, it caches its return values keyed by arguments, so repeated calls with the same arguments return cached results without recomputing. The cached results should expire and be removed if the TTL has passed since caching. Your solution should handle positional and keyword arguments properly, and ensure that different argument sets cache independently.",
-    "guidance": [
-      "Use a dictionary to store cached results with a key generated from the function arguments.",
-      "Store both the cached result and the timestamp when it was cached to check expiry.",
-      "Ensure that the decorator supports functions with any combination of positional and keyword arguments.",
-      "Use 'functools.wraps' to preserve the original function's metadata."
-    ],
-    "hints": [
-      "Consider using 'time.time()' to get the current timestamp in seconds.",
-      "To create a hashable key from function arguments, consider using a tuple for positional args and a frozenset for keyword args.",
-      "Remember to invalidate (remove) cached entries when their TTL has expired before returning cached results."
-    ],
-    "starterCode": "import time\nimport functools\n\ndef cache_with_expiry(ttl):\n    def decorator(func):\n        cache = {}\n\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            # Your caching logic here\n            pass\n\n        return wrapper\n    return decorator",
-    "expectedOutput": "When decorating a function that returns a time-dependent value, repeated calls with the same arguments within ttl seconds return the cached value instantly, but calls after ttl seconds recompute the value.",
-    "concepts": [
-      "decorators",
-      "caching",
-      "function arguments",
-      "time-based expiration"
+      "closures",
+      "arrays",
+      "objects",
+      "state management"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
   },
   {
-    "slug": "refactor-and-simplify-a-function-to-calculate-total-price",
-    "title": "Refactor and Simplify a Function to Calculate Total Price",
+    "slug": "fix-bug-in-async-data-aggregation-and-error-handling-function",
+    "title": "Fix Bug in Async Data Aggregation and Error Handling Function",
     "language": "javascript",
-    "difficulty": "beginner",
-    "category": "code-quality",
-    "description": "Improve the readability and maintainability of a simple JavaScript function that calculates the total price of items including tax. The functionality should remain the same while making the code cleaner.",
-    "prompt": "You are given a function that calculates the total price for a purchase including tax. The current function works correctly but is written in a verbose and less readable way. Refactor the function to make it simpler and easier to understand, without changing its behavior.",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Debug and fix a complex asynchronous JavaScript function designed to fetch and aggregate data from multiple APIs with error handling. The current implementation contains subtle bugs causing unhandled promise rejections and incorrect data aggregation.",
+    "prompt": "You are given a function fetchAndAggregateData that asynchronously fetches data from three different APIs and combines the results into a single array. The function is supposed to handle errors gracefully by continuing to fetch data from other APIs even if one fails, but currently, it does not work as expected. Your task is to identify and fix all bugs so that the function properly fetches, aggregates, and handles errors without stopping prematurely or producing incorrect results.",
     "guidance": [
-      "Keep the function's input parameters and output the same.",
-      "Remove unnecessary variables and simplify expressions where possible.",
-      "Use descriptive variable names to clarify meaning."
+      "Check how promises are awaited and handled inside try/catch blocks.",
+      "Ensure error handling does not block fetching from remaining APIs.",
+      "Verify that all fetched data is combined correctly in the result."
     ],
     "hints": [
-      "Look for opportunities to combine multiple statements into one expression.",
-      "Consider removing redundant intermediate variables.",
-      "Use arithmetic operations directly in the return statement if possible."
+      "Look for promise handling in parallel versus sequential execution.",
+      "Consider using Promise.allSettled to handle multiple async calls with independent error handling.",
+      "Watch out for cases where variable reassignment or overwriting causes data loss."
     ],
-    "starterCode": "function calculateTotalPrice(price, taxRate) {\n  let taxAmount = price * taxRate;\n  let total = price + taxAmount;\n  return total;\n}",
-    "expectedOutput": "calculateTotalPrice(100, 0.15) === 115",
+    "starterCode": "async function fetchAndAggregateData() {\n  const apiEndpoints = [\n    'https://api.example.com/data1',\n    'https://api.example.com/data2',\n    'https://api.example.com/data3'\n  ];\n  let aggregatedData = [];\n  for (const url of apiEndpoints) {\n    try {\n      const response = await fetch(url);\n      if (!response.ok) {\n        throw new Error('Network response was not ok');\n      }\n      const data = await response.json();\n      aggregatedData = data;\n    } catch (error) {\n      console.error('Failed to fetch from:', url, error);\n    }\n  }\n  return aggregatedData;\n}",
+    "expectedOutput": "An array containing combined data from all successful API fetches; errors logged but do not prevent aggregation of other successful results.",
     "concepts": [
-      "functions",
-      "variables",
-      "arithmetic operations",
-      "code readability"
+      "asynchronous programming",
+      "error handling",
+      "promises",
+      "API integration",
+      "data aggregation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-a-c-function-to-calculate-factorial",
+    "title": "Fix the Bug in a C++ Function to Calculate Factorial",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a simple C++ function intended to calculate the factorial of a given number. The function currently produces incorrect output for some inputs.",
+    "prompt": "The following C++ function is supposed to calculate the factorial of a non-negative integer n (where n! = n * (n-1) * ... * 1 and 0! = 1). However, when tested, it produces incorrect results for inputs greater than 1. Find and fix the bug in the function so that it correctly calculates the factorial.",
+    "guidance": [
+      "Carefully check the initialization of variables used for the factorial calculation.",
+      "Review the loop structure to ensure it iterates over the correct range.",
+      "Remember the factorial of 0 is 1 by definition."
+    ],
+    "hints": [
+      "Is the variable holding the factorial value initialized correctly before the loop starts?",
+      "Check whether the loop boundaries include all the numbers needed for the factorial calculation."
+    ],
+    "starterCode": "int factorial(int n) {\n    int result = 0;\n    for (int i = 1; i < n; ++i) {\n        result = result * i;\n    }\n    return result;\n}",
+    "expectedOutput": "factorial(0) -> 1\nfactorial(1) -> 1\nfactorial(5) -> 120",
+    "concepts": [
+      "variables initialization",
+      "for loop",
+      "basic arithmetic operations",
+      "function return"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-list-and-dictionary-comprehension-logic",
+    "title": "Predict the Output: List and Dictionary Comprehension Logic",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given Python code containing nested list and dictionary comprehensions along with conditional logic, and predict the exact output it produces.",
+    "prompt": "Given the Python code below, carefully read through the nested list and dictionary comprehensions and internal logic. Predict what the output will be when the code is executed.\n\nExplain your reasoning if asked, but for now, only provide the exact printed output:\n\npython\nresult = {i: [j**2 if j % 2 == 0 else j**3 for j in range(i)] for i in range(5)}\nprint(result)",
+    "guidance": [
+      "Break down the comprehension step-by-step: start with the outer dictionary comprehension and analyze what keys and values it produces.",
+      "Focus on the inner list comprehension and understand how it transforms the list of numbers for each key.",
+      "Pay attention to the conditional inside the list comprehension and how it changes the value depending on even or odd numbers."
+    ],
+    "hints": [
+      "Recall that i in the outer comprehension goes from 0 to 4 inclusive, creating dictionary keys.",
+      "Examine carefully what happens when i is 0—what would range(0) return?",
+      "For list elements, even j values are squared (j**2), odd j values are cubed (j**3)."
+    ],
+    "starterCode": "result = {i: [j**2 if j % 2 == 0 else j**3 for j in range(i)] for i in range(5)}\nprint(result)",
+    "expectedOutput": "{0: [], 1: [0], 2: [0, 1], 3: [0, 1, 4], 4: [0, 1, 4, 27]}",
+    "concepts": [
+      "dictionary comprehension",
+      "list comprehension",
+      "conditional expressions",
+      "loops"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-an-advanced-debounce-function-with-immediate-and-cancel-options",
+    "title": "Build an Advanced Debounce Function with Immediate and Cancel Options",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a robust debounce utility function in JavaScript that delays invoking a function until after a specified wait time elapses since the last call. Support both immediate execution on the leading edge and the ability to cancel a pending invocation.",
+    "prompt": "Write a function named debounce that accepts three parameters: a function func, a delay time in milliseconds wait, and an options object. The options object can have two boolean properties: 'immediate' and 'cancelable'. The debounce function should return a new debounced version of func with the following behavior:\n\n1. When called repeatedly, the original func should only be invoked once, either after wait milliseconds have elapsed since the last call (trailing edge), or immediately if immediate is true (leading edge).\n2. If immediate is true, the first call to the debounced function should invoke func immediately, then ignore subsequent calls until wait elapses.\n3. If cancelable is true, the debounced function should have a method called cancel that can be called to cancel any pending invocation.\n\nImplement this debounce function fully so that it can be used to limit the rate at which a function runs, with flexible configuration for immediate triggers and canceling.\n\nExample usage:\n\nconst debounced = debounce(() => console.log('Triggered!'), 1000, { immediate: true, cancelable: true });\ndebounced();\ndebounced.cancel(); // should cancel any scheduled call if exists",
+    "guidance": [
+      "Use a closure to store timing state between calls.",
+      "Use setTimeout and clearTimeout to manage the delay.",
+      "Implement the cancel method conditionally based on the options object."
+    ],
+    "hints": [
+      "Store a reference to the timeout ID so you can clear it.",
+      "To support immediate invocation, track if the function was already called within the wait period.",
+      "Attach the cancel method as a property of the returned function."
+    ],
+    "starterCode": "function debounce(func, wait, options = {}) {\n  // Your implementation here\n}",
+    "expectedOutput": "Upon calling debounced(), the func logs 'Triggered!' immediately if immediate is true; subsequent calls within wait ms do not invoke func. Calling debounced.cancel() stops any pending invocation representing no output afterward.",
+    "concepts": [
+      "closures",
+      "asynchronous timing",
+      "function properties",
+      "higher-order functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ]

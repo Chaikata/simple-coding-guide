@@ -1179,5 +1179,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-incorrect-sql-query-filtering-by-date",
+    "title": "Fix the Incorrect SQL Query Filtering by Date",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided SQL query that aims to filter orders placed after January 1, 2023. The original query incorrectly returns all rows due to a syntax mistake in the WHERE clause.",
+    "prompt": "You are given a SQL query intended to select all orders made after January 1st, 2023 from the 'Orders' table. However, the current query returns all orders regardless of the order date. Find the bug and fix the query so it correctly filters the results.",
+    "guidance": [
+      "Check the syntax of the WHERE clause and ensure the date comparison operator is used correctly.",
+      "Verify how date literals are formatted in SQL and whether they are quoted properly."
+    ],
+    "hints": [
+      "In SQL, date values should be enclosed in single quotes.",
+      "Make sure you are using a comparison operator (>, >=, etc.) correctly with the column name and date."
+    ],
+    "starterCode": "SELECT * FROM Orders WHERE OrderDate > 2023-01-01;",
+    "expectedOutput": "Only orders with OrderDate after 2023-01-01 should be returned.",
+    "concepts": [
+      "WHERE clause",
+      "Date comparison",
+      "SQL syntax"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-todo-list-manager-with-filtering-and-prioritization",
+    "title": "Build a Todo List Manager with Filtering and Prioritization",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a JavaScript function that manages a list of todo items, allowing for adding, removing, updating status, and filtering tasks based on their priority and completion status.",
+    "prompt": "Write a function called `manageTodos` that maintains an internal list of todo items. Each todo item should have an id, description, priority (low, medium, high), and a completed status (true/false). The function should accept two arguments: a command string ('add', 'remove', 'toggle', 'filter') and a payload object that changes based on the command:\n\n- 'add': the payload includes description and priority; assign a unique id and set completed to false.\n- 'remove': the payload includes the id of the todo to remove.\n- 'toggle': the payload includes the id of the todo; toggle its completed status.\n- 'filter': the payload includes optional filters priority and/or completed, and returns a filtered array of todos matching these criteria.\n\nImplement proper internal state handling so repeated calls to `manageTodos` modify or query the same todo list.\n\nExample usage:\nmanageTodos('add', { description: 'Write code', priority: 'high' });\nmanageTodos('toggle', { id: 1 });\nmanageTodos('filter', { completed: false, priority: 'high' });",
+    "guidance": [
+      "Use a closure or module pattern to encapsulate the todo list as a private variable.",
+      "Ensure unique ids are generated for each new todo item.",
+      "Implement the filter command to handle one or both filters gracefully.",
+      "Make sure to update the completed status correctly when toggling."
+    ],
+    "hints": [
+      "Consider using an array to store todos and find items by id using findIndex.",
+      "Use default parameter values to make filters optional when filtering.",
+      "Use a simple incremental counter or Date.now() for unique id generation."
+    ],
+    "starterCode": "function manageTodos() {\n  const todos = [];\n  let idCounter = 1;\n\n  return function(command, payload) {\n    // Your implementation here\n  };\n}\n\nconst todoManager = manageTodos();\n\n// Example calls\n// todoManager('add', { description: 'Learn JavaScript', priority: 'medium' });\n",
+    "expectedOutput": "[{ id: 1, description: 'Write code', priority: 'high', completed: false }]",
+    "concepts": [
+      "closures",
+      "arrays",
+      "objects",
+      "state management"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-bug-in-async-data-aggregation-and-error-handling-function",
+    "title": "Fix Bug in Async Data Aggregation and Error Handling Function",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Debug and fix a complex asynchronous JavaScript function designed to fetch and aggregate data from multiple APIs with error handling. The current implementation contains subtle bugs causing unhandled promise rejections and incorrect data aggregation.",
+    "prompt": "You are given a function fetchAndAggregateData that asynchronously fetches data from three different APIs and combines the results into a single array. The function is supposed to handle errors gracefully by continuing to fetch data from other APIs even if one fails, but currently, it does not work as expected. Your task is to identify and fix all bugs so that the function properly fetches, aggregates, and handles errors without stopping prematurely or producing incorrect results.",
+    "guidance": [
+      "Check how promises are awaited and handled inside try/catch blocks.",
+      "Ensure error handling does not block fetching from remaining APIs.",
+      "Verify that all fetched data is combined correctly in the result."
+    ],
+    "hints": [
+      "Look for promise handling in parallel versus sequential execution.",
+      "Consider using Promise.allSettled to handle multiple async calls with independent error handling.",
+      "Watch out for cases where variable reassignment or overwriting causes data loss."
+    ],
+    "starterCode": "async function fetchAndAggregateData() {\n  const apiEndpoints = [\n    'https://api.example.com/data1',\n    'https://api.example.com/data2',\n    'https://api.example.com/data3'\n  ];\n  let aggregatedData = [];\n  for (const url of apiEndpoints) {\n    try {\n      const response = await fetch(url);\n      if (!response.ok) {\n        throw new Error('Network response was not ok');\n      }\n      const data = await response.json();\n      aggregatedData = data;\n    } catch (error) {\n      console.error('Failed to fetch from:', url, error);\n    }\n  }\n  return aggregatedData;\n}",
+    "expectedOutput": "An array containing combined data from all successful API fetches; errors logged but do not prevent aggregation of other successful results.",
+    "concepts": [
+      "asynchronous programming",
+      "error handling",
+      "promises",
+      "API integration",
+      "data aggregation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-a-c-function-to-calculate-factorial",
+    "title": "Fix the Bug in a C++ Function to Calculate Factorial",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a simple C++ function intended to calculate the factorial of a given number. The function currently produces incorrect output for some inputs.",
+    "prompt": "The following C++ function is supposed to calculate the factorial of a non-negative integer n (where n! = n * (n-1) * ... * 1 and 0! = 1). However, when tested, it produces incorrect results for inputs greater than 1. Find and fix the bug in the function so that it correctly calculates the factorial.",
+    "guidance": [
+      "Carefully check the initialization of variables used for the factorial calculation.",
+      "Review the loop structure to ensure it iterates over the correct range.",
+      "Remember the factorial of 0 is 1 by definition."
+    ],
+    "hints": [
+      "Is the variable holding the factorial value initialized correctly before the loop starts?",
+      "Check whether the loop boundaries include all the numbers needed for the factorial calculation."
+    ],
+    "starterCode": "int factorial(int n) {\n    int result = 0;\n    for (int i = 1; i < n; ++i) {\n        result = result * i;\n    }\n    return result;\n}",
+    "expectedOutput": "factorial(0) -> 1\nfactorial(1) -> 1\nfactorial(5) -> 120",
+    "concepts": [
+      "variables initialization",
+      "for loop",
+      "basic arithmetic operations",
+      "function return"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-list-and-dictionary-comprehension-logic",
+    "title": "Predict the Output: List and Dictionary Comprehension Logic",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given Python code containing nested list and dictionary comprehensions along with conditional logic, and predict the exact output it produces.",
+    "prompt": "Given the Python code below, carefully read through the nested list and dictionary comprehensions and internal logic. Predict what the output will be when the code is executed.\n\nExplain your reasoning if asked, but for now, only provide the exact printed output:\n\npython\nresult = {i: [j**2 if j % 2 == 0 else j**3 for j in range(i)] for i in range(5)}\nprint(result)",
+    "guidance": [
+      "Break down the comprehension step-by-step: start with the outer dictionary comprehension and analyze what keys and values it produces.",
+      "Focus on the inner list comprehension and understand how it transforms the list of numbers for each key.",
+      "Pay attention to the conditional inside the list comprehension and how it changes the value depending on even or odd numbers."
+    ],
+    "hints": [
+      "Recall that i in the outer comprehension goes from 0 to 4 inclusive, creating dictionary keys.",
+      "Examine carefully what happens when i is 0—what would range(0) return?",
+      "For list elements, even j values are squared (j**2), odd j values are cubed (j**3)."
+    ],
+    "starterCode": "result = {i: [j**2 if j % 2 == 0 else j**3 for j in range(i)] for i in range(5)}\nprint(result)",
+    "expectedOutput": "{0: [], 1: [0], 2: [0, 1], 3: [0, 1, 4], 4: [0, 1, 4, 27]}",
+    "concepts": [
+      "dictionary comprehension",
+      "list comprehension",
+      "conditional expressions",
+      "loops"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-an-advanced-debounce-function-with-immediate-and-cancel-options",
+    "title": "Build an Advanced Debounce Function with Immediate and Cancel Options",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a robust debounce utility function in JavaScript that delays invoking a function until after a specified wait time elapses since the last call. Support both immediate execution on the leading edge and the ability to cancel a pending invocation.",
+    "prompt": "Write a function named debounce that accepts three parameters: a function func, a delay time in milliseconds wait, and an options object. The options object can have two boolean properties: 'immediate' and 'cancelable'. The debounce function should return a new debounced version of func with the following behavior:\n\n1. When called repeatedly, the original func should only be invoked once, either after wait milliseconds have elapsed since the last call (trailing edge), or immediately if immediate is true (leading edge).\n2. If immediate is true, the first call to the debounced function should invoke func immediately, then ignore subsequent calls until wait elapses.\n3. If cancelable is true, the debounced function should have a method called cancel that can be called to cancel any pending invocation.\n\nImplement this debounce function fully so that it can be used to limit the rate at which a function runs, with flexible configuration for immediate triggers and canceling.\n\nExample usage:\n\nconst debounced = debounce(() => console.log('Triggered!'), 1000, { immediate: true, cancelable: true });\ndebounced();\ndebounced.cancel(); // should cancel any scheduled call if exists",
+    "guidance": [
+      "Use a closure to store timing state between calls.",
+      "Use setTimeout and clearTimeout to manage the delay.",
+      "Implement the cancel method conditionally based on the options object."
+    ],
+    "hints": [
+      "Store a reference to the timeout ID so you can clear it.",
+      "To support immediate invocation, track if the function was already called within the wait period.",
+      "Attach the cancel method as a property of the returned function."
+    ],
+    "starterCode": "function debounce(func, wait, options = {}) {\n  // Your implementation here\n}",
+    "expectedOutput": "Upon calling debounced(), the func logs 'Triggered!' immediately if immediate is true; subsequent calls within wait ms do not invoke func. Calling debounced.cancel() stops any pending invocation representing no output afterward.",
+    "concepts": [
+      "closures",
+      "asynchronous timing",
+      "function properties",
+      "higher-order functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ];
