@@ -20920,5 +20920,487 @@ export const articles = [
         "value": "By following these simple tips, beginners can write cleaner, faster SQL queries that make better use of database resources."
       }
     ]
+  },
+  {
+    "slug": "comparing-async-await-vs-promises-which-is-best-for-modern-javascript",
+    "title": "Comparing Async/Await vs Promises: Which Is Best for Modern JavaScript?",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between Async/Await and Promises in JavaScript and discover which approach is best for writing clean, efficient, and modern asynchronous code.",
+    "videoUrl": "https://www.youtube.com/watch?v=cunfDJzh_ok",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous programming is essential in JavaScript, especially when dealing with tasks like fetching data from a server or reading files. Two popular ways to handle asynchronous operations are Promises and Async/Await. If you're new to these concepts, this article will help you understand the differences and when to use each one."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Promises?\n\nPromises represent the eventual completion or failure of an asynchronous operation and its resulting value. They allow you to write asynchronous code in a more manageable way compared to traditional callbacks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example using Promises:"
+      },
+      {
+        "type": "code",
+        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true; // Simulate success or failure\n      if (success) {\n        resolve({ name: 'John', age: 30 });\n      } else {\n        reject('Error fetching user data');\n      }\n    }, 1000);\n  });\n}\n\nfetchUserData()\n  .then(data => {\n    console.log('User data:', data);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Is Async/Await?\n\nAsync/Await is a syntax introduced in ES2017 that works on top of Promises to make asynchronous code appear and behave more like synchronous code. This makes your code easier to read and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s the same example rewritten with Async/Await:"
+      },
+      {
+        "type": "code",
+        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve({ name: 'John', age: 30 });\n      } else {\n        reject('Error fetching user data');\n      }\n    }, 1000);\n  });\n}\n\nasync function getUser() {\n  try {\n    const data = await fetchUserData();\n    console.log('User data:', data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetUser();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Readability:** Async/Await code looks cleaner and easier to understand, especially with complex sequences of asynchronous operations.\n\n2. **Error handling:** With Async/Await, you can use `try/catch` blocks, making error handling more straightforward than chaining `.catch()` in Promises.\n\n3. **Debugging:** Async/Await produces stack traces that are more similar to synchronous code, which can make debugging easier.\n\n4. **Browser support:** Promises are widely supported in all modern browsers, while Async/Await requires ES2017 support, which is available in most modern browsers but might need transpiling for older environments."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Promises or Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both approaches are based on the same fundamental concept, so you can often use either. If your code involves simple, linear asynchronous calls or you want a cleaner look, Async/Await is usually the best choice. However, for some complex scenarios (like running multiple asynchronous operations in parallel), Promises with `Promise.all()` can be more performant and flexible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of running multiple asynchronous operations in parallel with Promises:"
+      },
+      {
+        "type": "code",
+        "value": "const fetchUser = new Promise(resolve => setTimeout(() => resolve('User data'), 1000));\nconst fetchPosts = new Promise(resolve => setTimeout(() => resolve('Posts data'), 1500));\n\nPromise.all([fetchUser, fetchPosts])\n  .then(results => {\n    console.log('Results:', results); // ['User data', 'Posts data']\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can do the same with Async/Await like this:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchAllData() {\n  const [user, posts] = await Promise.all([fetchUser, fetchPosts]);\n  console.log('User:', user);\n  console.log('Posts:', posts);\n}\n\nfetchAllData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Thoughts\n\nAsync/Await is generally preferred for modern JavaScript development because it leads to cleaner and more understandable code. Promises still play an important role and are the foundation upon which Async/Await is built, so understanding both is valuable. Start with Promises to grasp asynchronous behavior, then use Async/Await to simplify your code."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-hoisting-how-it-affects-variable-and-function-errors",
+    "title": "Understanding JavaScript Hoisting: How It Affects Variable and Function Errors",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what JavaScript hoisting is and how it influences variable and function errors, with beginner-friendly examples and explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=N2sQ5tjAHP0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript hoisting is a behavior where variable and function declarations are moved to the top of their containing scope during the compilation phase. This can sometimes lead to unexpected errors or behaviors if you're not aware of how it works. In this article, we'll explore hoisting, how it affects variables and functions, and how to avoid common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to note that only declarations are hoisted, not the assignments. This means that JavaScript processes variable and function declarations before running the code, allowing you to use functions before they're defined in the code. However, variables declared with var are hoisted differently compared to let and const."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with an example of function hoisting:"
+      },
+      {
+        "type": "code",
+        "value": "sayHello(); // Output: Hello!\n\nfunction sayHello() {\n  console.log('Hello!');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, even though the function call comes before the function declaration, it works fine because the function declaration is hoisted to the top."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's see how variable hoisting works with var:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(myVar); // Output: undefined\nvar myVar = 10;\nconsole.log(myVar); // Output: 10"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above example, the declaration var myVar is hoisted to the top, but the assignment (= 10) stays in place. That's why the first console.log prints undefined instead of causing an error."
+      },
+      {
+        "type": "paragraph",
+        "value": "However, let and const variables behave differently and are not hoisted the same way. Trying to access them before declaration will cause a ReferenceError."
+      },
+      {
+        "type": "code",
+        "value": "console.log(myLet); // ReferenceError: Cannot access 'myLet' before initialization\nlet myLet = 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is because let and const variables are hoisted but not initialized, and they exist in a \"temporal dead zone\" until the declaration is encountered during execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid hoisting-related errors, it's best practice to always declare your variables and functions at the top of their scope or before you use them. Prefer using let or const over var to prevent unexpected undefined values."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding hoisting helps you predict and prevent variable and function-related errors in JavaScript. Remember: function declarations are fully hoisted, var declarations are hoisted but initialized as undefined, and let/const are hoisted but not initialized."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-decorators-practical-use-cases-and-advanced-patterns",
+    "title": "Mastering TypeScript Decorators: Practical Use Cases and Advanced Patterns",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript decorators with practical examples and advanced patterns to enhance your code with clean, reusable, and powerful annotations.",
+    "videoUrl": "https://www.youtube.com/watch?v=tv-_1er1mWI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators provide a way to add annotations and meta-programming syntax for class declarations and members. They help improve code readability and reusability by allowing you to modify classes, methods, properties, or parameters in a declarative way. In this tutorial, we will cover the basics of decorators, practical use cases, and some advanced patterns to master this powerful feature of TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Decorators? A Quick Overview\nDecorators are special functions that can be attached to classes, methods, properties, or method parameters. They receive metadata about the target they decorate and optionally modify or extend its behavior. To enable decorators in your TypeScript project, ensure you have \"experimentalDecorators\" set to true in your tsconfig.json:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"experimentalDecorators\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating Your First Simple Class Decorator\nLet's start with a simple example: a class decorator that logs when an instance of the class is created."
+      },
+      {
+        "type": "code",
+        "value": "function LogCreation(target: Function) {\n  const original = target;\n\n  function construct(constructor: any, args: any[]) {\n    console.log(`Creating instance of: ${constructor.name}`);\n    return new constructor(...args);\n  }\n\n  const f: any = function(...args: any[]) {\n    return construct(original, args);\n  };\n\n  f.prototype = original.prototype;\n  return f;\n}\n\n@LogCreation\nclass Person {\n  constructor(public name: string) {}\n}\n\nconst p = new Person('Alice');\n// Console output: Creating instance of: Person"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Method Decorators: Adding Execution Time Logging\nMethod decorators can enhance existing methods. Here's an example that logs how long a method takes to execute."
+      },
+      {
+        "type": "code",
+        "value": "function LogExecutionTime(\n  target: any,\n  propertyKey: string,\n  descriptor: PropertyDescriptor\n) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    console.time(propertyKey);\n    const result = originalMethod.apply(this, args);\n    console.timeEnd(propertyKey);\n    return result;\n  };\n  return descriptor;\n}\n\nclass MathOps {\n  @LogExecutionTime\n  factorial(n: number): number {\n    if (n <= 1) return 1;\n    return n * this.factorial(n - 1);\n  }\n}\n\nconst math = new MathOps();\nmath.factorial(5);\n// Console output will show timed logs for factorial method"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Property Decorators: Validating Values\nYou can use property decorators to enforce validation rules on class properties. Below is a simple decorator that ensures a string property is never empty."
+      },
+      {
+        "type": "code",
+        "value": "function NonEmpty(target: any, propertyKey: string) {\n  let value = target[propertyKey];\n\n  const getter = () => value;\n  const setter = (newVal: string) => {\n    if (!newVal || newVal.trim().length === 0) {\n      throw new Error(`${propertyKey} cannot be empty.`);\n    }\n    value = newVal;\n  };\n\n  Object.defineProperty(target, propertyKey, {\n    get: getter,\n    set: setter,\n    enumerable: true,\n    configurable: true\n  });\n}\n\nclass User {\n  @NonEmpty\n  name: string = '';\n\n  constructor(name: string) {\n    this.name = name;\n  }\n}\n\nconst user = new User('Bob');\n// user.name = '';  // Throws error: name cannot be empty."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Parameter Decorators: Logging Metadata\nParameter decorators allow you to observe or modify parameters of methods. Here’s an example that logs parameter indexes."
+      },
+      {
+        "type": "code",
+        "value": "function LogParameter(target: any, propertyKey: string, parameterIndex: number) {\n  console.log(\n    `Parameter at position ${parameterIndex} in method ${propertyKey} has been decorated.`\n  );\n}\n\nclass Greeter {\n  greet(@LogParameter message: string): void {\n    console.log(message);\n  }\n}\n\nconst greeter = new Greeter();\ngreeter.greet('Hello!');\n// Console output: Parameter at position 0 in method greet has been decorated."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Advanced Pattern: Creating a Reusable Authentication Decorator\nAs an advanced example, consider a method decorator that only allows method execution if a user is authenticated."
+      },
+      {
+        "type": "code",
+        "value": "function Authenticated(\n  target: any,\n  propertyKey: string,\n  descriptor: PropertyDescriptor\n) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    if (!this.isAuthenticated) {\n      throw new Error('User is not authenticated.');\n    }\n    return originalMethod.apply(this, args);\n  };\n  return descriptor;\n}\n\nclass Service {\n  isAuthenticated = false;\n\n  @Authenticated\n  fetchData() {\n    return 'Sensitive data';\n  }\n}\n\nconst service = new Service();\n// service.fetchData(); // Throws error: User is not authenticated.\nservice.isAuthenticated = true;\nconsole.log(service.fetchData()); // Outputs: Sensitive data"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nTypeScript decorators are a powerful tool that can cleanly add functionality to your code — from simple logging and validation to complex behaviors like authentication or caching. Mastering them involves understanding decorators on classes, methods, properties, and parameters, along with practical use cases and more advanced decorator factories and patterns. Experiment with these examples to make your TypeScript code more modular and expressive!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-strict-null-checks-beginners-guide",
+    "title": "Understanding TypeScript's Strict Null Checks: A Beginner's Guide",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's strict null checks help prevent errors by making you handle null and undefined values explicitly. This beginner-friendly guide explains the concept with examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=EvcOwjYR2tQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with TypeScript, you might encounter errors related to \"null\" or \"undefined\" values. These errors often happen because JavaScript allows variables to be null or undefined by default, which can lead to unexpected problems during runtime. To help prevent these issues, TypeScript includes a feature called \"strict null checks.\" In this guide, we will explain what strict null checks are, why they matter, and how to work with them."
+      },
+      {
+        "type": "paragraph",
+        "value": "By default, TypeScript allows a variable declared as a type like `string` to also be null or undefined. This can cause confusion and bugs, as you might try to use the variable without checking if it's actually holding a value. Enabling strict null checks changes this behavior. It forces you to explicitly handle the cases where a variable might be null or undefined."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see an example without strict null checks enabled:"
+      },
+      {
+        "type": "code",
+        "value": "let name: string = null;  // No error by default\n\nconsole.log(name.toUpperCase());  // Runtime error: Cannot read property 'toUpperCase' of null"
+      },
+      {
+        "type": "paragraph",
+        "value": "If strict null checks are enabled in your `tsconfig.json` (`\"strictNullChecks\": true`), the above code will produce a compile-time error, helping you catch potential problems early."
+      },
+      {
+        "type": "paragraph",
+        "value": "With strict null checks, if you want a variable to hold either a string or null, you must specify it explicitly using a union type:"
+      },
+      {
+        "type": "code",
+        "value": "let name: string | null = null;\n\nif (name !== null) {\n  // TypeScript now knows 'name' is not null here\n  console.log(name.toUpperCase());\n} else {\n  console.log('Name is null');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This ensures you check for null (or undefined) before using the variable, preventing unexpected runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, you might want to allow undefined values, which is common in optional function parameters:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name?: string) {\n  if (name !== undefined) {\n    console.log(`Hello, ${name.toUpperCase()}!`);\n  } else {\n    console.log('Hello, guest!');\n  }\n}\n\ngreet('Alice');  // Output: Hello, ALICE!\ngreet();        // Output: Hello, guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, enabling strict null checks helps you write safer code by forcing you to consider cases where values could be null or undefined. You can enable it by setting the following in your `tsconfig.json` file:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Strict null checks are part of the broader `strict` mode in TypeScript, which is recommended for most projects to catch potential errors early and improve code quality."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-itertools-for-efficient-data-handling",
+    "title": "Mastering Python's itertools for Efficient Data Handling",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's itertools module to handle data efficiently with beginner-friendly examples and practical explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=VQbgP06ZuOo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's itertools module is a powerful tool that helps you efficiently iterate over data without needing extra memory for creating intermediate lists. It's perfect for beginners who want to write cleaner and faster code when working with collections like lists, tuples, or generators."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some of the most useful itertools functions and see practical examples to help you get started."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. itertools.count()"
+      },
+      {
+        "type": "paragraph",
+        "value": "The count() function generates an infinite sequence of numbers starting from a specified number (default is 0). This can be useful when you need to create indexes or infinite loops safely with a break condition."
+      },
+      {
+        "type": "code",
+        "value": "import itertools\n\n# Start counting from 10\nenum = itertools.count(10)\n\nprint(next(enum))  # 10\nprint(next(enum))  # 11\nprint(next(enum))  # 12"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. itertools.cycle()"
+      },
+      {
+        "type": "paragraph",
+        "value": "The cycle() function endlessly repeats elements from a sequence. This is helpful for tasks where you want to loop over a list of items repeatedly."
+      },
+      {
+        "type": "code",
+        "value": "colors = ['red', 'green', 'blue']\ncycler = itertools.cycle(colors)\n\nfor _ in range(5):\n    print(next(cycler))"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. itertools.chain()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use chain() to combine multiple iterables into one continuous sequence. This avoids creating large intermediate lists and is memory-efficient."
+      },
+      {
+        "type": "code",
+        "value": "list1 = [1, 2, 3]\nlist2 = [4, 5, 6]\n\ncombined = itertools.chain(list1, list2)\n\nfor item in combined:\n    print(item)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. itertools.islice()"
+      },
+      {
+        "type": "paragraph",
+        "value": "The islice() function allows you to slice an iterable without converting it to a list. This is great for dealing with large or infinite sequences."
+      },
+      {
+        "type": "code",
+        "value": "counting = itertools.count(1)\nslice_obj = itertools.islice(counting, 5)\n\nfor num in slice_obj:\n    print(num)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. itertools.permutations()"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to generate permutations (all ordered arrangements) of a sequence, permutations() is the way to go."
+      },
+      {
+        "type": "code",
+        "value": "letters = ['a', 'b', 'c']\nperms = itertools.permutations(letters, 2)\n\nfor p in perms:\n    print(p)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "The itertools module contains many more tools such as combinations, groupby, and product, each useful for specific tasks. By mastering these basic functions, you can handle data more efficiently with less memory usage and cleaner code. Start practicing these techniques in your projects today!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-context-managers-to-prevent-resource-leaks-in-python",
+    "title": "Mastering Context Managers to Prevent Resource Leaks in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how Python context managers help you manage resources efficiently and avoid common errors like resource leaks.",
+    "videoUrl": "https://www.youtube.com/watch?v=ypaZDsJqv34",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with external resources such as files, network connections, or database connections, managing those resources properly is crucial. If resources aren't released correctly, your program might leak memory or run into other problems. This is where Python's context managers come in handy. They help ensure resources are automatically cleaned up, even if errors occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common example of a context manager is the with statement when working with files. Without it, you must manually open and close the file, and forgetting to close the file can cause resource leaks."
+      },
+      {
+        "type": "code",
+        "value": "file = open('example.txt', 'r')\ntry:\n    content = file.read()\nfinally:\n    file.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "If an error occurs during file reading, the finally block ensures the file still closes. But this is tedious and prone to mistakes. Instead, you can use a context manager with the with statement:"
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'r') as file:\n    content = file.read()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, Python guarantees that the file will be closed when you exit the with block — no matter what. This pattern is not just for files; you can create your own context managers for custom resource management."
+      },
+      {
+        "type": "paragraph",
+        "value": "To create a custom context manager, you can use the contextlib module which makes it simple. Here's an example of a context manager that prints messages when entering and exiting a block:"
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_manager():\n    print('Entering the block')\n    yield\n    print('Exiting the block')\n\nwith my_manager():\n    print('Inside the block')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\nEntering the block\nInside the block\nExiting the block"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, everything before yield runs when entering the block, and everything after yield runs when exiting. This pattern is very useful to handle setup and teardown logic safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary: Using context managers with the with statement helps prevent resource leaks by ensuring resources are released properly. You can use built-in context managers for files, or create your own for other resources. This practice leads to more robust and readable Python code."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-handling-data-type-mismatches-in-sql-data-modeling",
+    "title": "Understanding and Handling Data Type Mismatches in SQL Data Modeling",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix data type mismatches in SQL data modeling to ensure smooth data operations and avoid common SQL errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=nROJQpz4fGo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL data models, one common source of errors is data type mismatches. This happens when you try to compare, join, or insert data where the data types don't align properly. For beginners, understanding these mismatches and how to handle them is essential to prevent SQL errors and ensure efficient database operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Data types define what kind of data a column can store, such as integers, text, dates, or decimals. If a query tries to compare an integer column with a text column, SQL will often throw an error or return unexpected results. Let's explore how to recognize and fix these issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Causes of Data Type Mismatches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Comparing columns of different types in WHERE clauses or JOIN conditions.\n- Inserting data into a column with a different type than the input.\n- Using functions or operators that expect specific data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Scenario:"
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you have two tables: `customers` and `orders`. The `customers.customer_id` column is an integer, but `orders.customer_id` was mistakenly defined as VARCHAR (text). Trying to join these tables on `customer_id` will cause a data type mismatch."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query might cause an error or perform poorly because it compares an integer to a string."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Fix It:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Convert data types explicitly using CAST or CONVERT:** You can cast one side of the comparison to match the other. For example, convert the string to an integer if possible."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM customers c\nJOIN orders o ON c.customer_id = CAST(o.customer_id AS INT);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Update table schema:** If feasible, change the data type of the column to match across tables. For example:"
+      },
+      {
+        "type": "code",
+        "value": "ALTER TABLE orders\nMODIFY customer_id INT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Consistent data entry:** Ensure data inserted into columns matches their defined data types to prevent future mismatches."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Additional Tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use the database's schema inspection commands like `DESCRIBE table_name` or querying `information_schema` to check data types.\n- Avoid implicit type conversions in WHERE or JOIN clauses as they can slow down queries.\n- Always normalize data types during data import or ETL (Extract, Transform, Load) processes."
+      },
+      {
+        "type": "paragraph",
+        "value": "By carefully managing data types in your SQL data models and handling mismatches with explicit conversions or schema corrections, you reduce errors and improve query performance. This foundational knowledge will help you build more reliable databases."
+      }
+    ]
   }
 ];
