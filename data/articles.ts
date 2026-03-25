@@ -21895,5 +21895,487 @@ export const articles = [
         "value": "By understanding these common violations and their root causes, beginners can write more reliable SQL code and avoid frustrating errors."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-javascript-for-ecommerce-applications",
+    "title": "Building Scalable Data Models in JavaScript for E-Commerce Applications",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and organized data models in JavaScript for building maintainable e-commerce applications. This beginner-friendly guide covers key concepts and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=50NN3d-Ne1U",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building an e-commerce application in JavaScript, creating scalable data models is essential for managing complex information like products, users, orders, and inventory efficiently. A well-structured data model ensures your app remains manageable as it grows, allowing easy addition of new features and better performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll cover how to create simple and scalable JavaScript data models using objects and classes. We will use practical examples like Product, User, and Order to demonstrate how to keep your code clean and easy to extend."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by modeling a Product. A product in an e-commerce app usually has properties like id, name, price, description, and stock quantity."
+      },
+      {
+        "type": "code",
+        "value": "class Product {\n  constructor(id, name, price, description, stock) {\n    this.id = id;\n    this.name = name;\n    this.price = price;\n    this.description = description;\n    this.stock = stock;\n  }\n\n  // Method to check if product is in stock\n  isAvailable() {\n    return this.stock > 0;\n  }\n\n  // Method to reduce stock when a purchase is made\n  reduceStock(quantity) {\n    if (quantity > this.stock) {\n      throw new Error('Not enough stock available');\n    }\n    this.stock -= quantity;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we can create a User model that keeps track of customer details. For e-commerce, important user properties might include id, name, email, and an address book."
+      },
+      {
+        "type": "code",
+        "value": "class User {\n  constructor(id, name, email) {\n    this.id = id;\n    this.name = name;\n    this.email = email;\n    this.addresses = [];\n  }\n\n  // Add a new address to the user's address list\n  addAddress(address) {\n    this.addresses.push(address);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "For addresses, you can also create a separate model. This modular approach helps to keep your data organized and scalable."
+      },
+      {
+        "type": "code",
+        "value": "class Address {\n  constructor(street, city, state, zip, country) {\n    this.street = street;\n    this.city = city;\n    this.state = state;\n    this.zip = zip;\n    this.country = country;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Orders are a core part of any e-commerce app. An Order should include an id, the user who placed it, a list of products with quantities, and order status."
+      },
+      {
+        "type": "code",
+        "value": "class Order {\n  constructor(id, user) {\n    this.id = id;\n    this.user = user;\n    this.items = [];\n    this.status = 'pending';\n  }\n\n  addItem(product, quantity) {\n    if (!product.isAvailable()) {\n      throw new Error('Product is out of stock');\n    }\n\n    product.reduceStock(quantity);\n    this.items.push({ product, quantity });\n  }\n\n  setStatus(newStatus) {\n    this.status = newStatus;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using classes like these, you can keep your models modular and easy to maintain. You can add more methods to handle business logic without cluttering your app structure."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, these best practices help your data models scale as your e-commerce app grows:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use classes to encapsulate related data and behaviors.\n- Keep models focused on single responsibilities (e.g., Product handles stock management).\n- Separate concerns by creating different classes for complex data types like Address.\n- Include methods that enforce business rules (e.g., stock checks before ordering).\n- Organize related models in modules or folders for better maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these principles, your JavaScript e-commerce data models will be easier to scale, test, and update over time."
+      }
+    ]
+  },
+  {
+    "slug": "handling-memory-leaks-in-large-scale-javascript-applications-best-practices-and-tools",
+    "title": "Handling Memory Leaks in Large-Scale JavaScript Applications: Best Practices and Tools",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to identify, prevent, and fix memory leaks in large-scale JavaScript apps using practical tips and powerful tools.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks occur when your JavaScript application holds onto memory it no longer needs, causing performance issues and sometimes crashes. In large-scale applications, memory leaks can be subtle and harder to detect. Understanding how to identify and fix them is crucial for delivering a smooth user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common cause of memory leaks is retaining references to objects after they are no longer needed, preventing JavaScript's garbage collector from freeing up memory. Common sources include unused event listeners, global variables, closures, and forgotten timers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some best practices to handle memory leaks in your JavaScript projects:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Remove Event Listeners:** Always clean up event listeners when elements are removed or no longer used."
+      },
+      {
+        "type": "code",
+        "value": "// Adding and removing event listeners\nconst button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', handleClick);\n\n// Later, when cleaning up to prevent leaks\nbutton.removeEventListener('click', handleClick);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Avoid Global Variables:** Use local scopes or modules to avoid polluting the global namespace, which can cause unexpected references and leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Clear Timers and Intervals:** Always clear any timers (`setTimeout` and `setInterval`) when they are no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "const intervalId = setInterval(() => {\n  console.log('Running some task...');\n}, 1000);\n\n// When no longer needed\nclearInterval(intervalId);"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Watch Closures:** Be careful with closures that capture large objects or DOM elements unintentionally."
+      },
+      {
+        "type": "paragraph",
+        "value": "To detect memory leaks, you can use browser developer tools."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Chrome DevTools for Memory Leak Detection"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Open Chrome DevTools (`F12` or `Ctrl + Shift + I`)."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Go to the \"Memory\" tab."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use the \"Heap Snapshot\" to capture memory usage at different points in your app."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Look for objects that shouldn’t be there or are growing unexpectedly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another great tool is the open-source library `leakage`, which helps automatically test for leaks in your Node.js applications."
+      },
+      {
+        "type": "code",
+        "value": "const { iterate } = require('leakage');\n\nfunction createLeakyFunction() {\n  const bigArray = new Array(1000000).fill('*');\n  return () => bigArray.length;\n}\n\niterate(() => {\n  const fn = createLeakyFunction();\n  fn();\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, handling memory leaks involves writing clean, manageable code and using tools to monitor and analyze your app's memory. This prevents performance issues and keeps your users happy."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-microservices-with-typescript",
+    "title": "Building Scalable Microservices with TypeScript: A Step-by-Step Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable microservices using TypeScript with this beginner-friendly step-by-step tutorial. Start creating efficient and maintainable services today.",
+    "videoUrl": "https://www.youtube.com/watch?v=lL_j7ilk7rc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices have become a popular architectural style for building scalable and maintainable applications. Using TypeScript for microservices adds the power of static typing and modern JavaScript features, making it easier for developers to write and maintain code. In this guide, we'll walk you through building a simple, scalable microservice using TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Set up Your Project\nFirst, create a new folder for your microservice project and initialize it with npm. Then, install the necessary dependencies."
+      },
+      {
+        "type": "code",
+        "value": "mkdir my-microservice\ncd my-microservice\nnpm init -y\nnpm install express @types/express typescript ts-node-dev --save"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Configure TypeScript\nCreate a `tsconfig.json` file to configure TypeScript for your project. This file tells the TypeScript compiler how to compile your code."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES6\",\n    \"module\": \"commonjs\",\n    \"outDir\": \"dist\",\n    \"rootDir\": \"src\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Create Your First Microservice Endpoint\nNext, create a `src` directory. Inside it, create an `index.ts` file which will be the entry point of your microservice. We'll build a simple REST API using Express.js."
+      },
+      {
+        "type": "code",
+        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\nconst port = process.env.PORT || 3000;\n\napp.use(express.json());\n\n// Basic health check route\napp.get('/health', (req: Request, res: Response) => {\n  res.status(200).json({ status: 'up' });\n});\n\n// Example of simple item list\nconst items = [{ id: 1, name: 'Item One' }, { id: 2, name: 'Item Two' }];\n\n// Get all items\napp.get('/items', (req: Request, res: Response) => {\n  res.json(items);\n});\n\napp.listen(port, () => {\n  console.log(`Microservice is running on http://localhost:${port}`);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Running Your Microservice\nTo make it easier to run your code during development, add a script to your `package.json` to start the microservice using `ts-node-dev`, which restarts your app on file changes."
+      },
+      {
+        "type": "code",
+        "value": "\"scripts\": {\n  \"start\": \"ts-node-dev --respawn src/index.ts\"\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, run your microservice with:\n\nbash\nnpm start\n\n\nYour endpoints `/health` and `/items` should be accessible via http://localhost:3000."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Structuring for Scalability\nFor scalable microservices, organize your code into separate modules. For example, create folders like `routes`, `controllers`, and `models`. This separation makes it easier to maintain and grow your codebase."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of a simple controller (`src/controllers/itemController.ts`):"
+      },
+      {
+        "type": "code",
+        "value": "import { Request, Response } from 'express';\n\nconst items = [{ id: 1, name: 'Item One' }, { id: 2, name: 'Item Two' }];\n\nexport const getAllItems = (req: Request, res: Response) => {\n  res.json(items);\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Then use this controller in your route file (`src/routes/itemRoutes.ts`):"
+      },
+      {
+        "type": "code",
+        "value": "import { Router } from 'express';\nimport { getAllItems } from '../controllers/itemController';\n\nconst router = Router();\n\nrouter.get('/items', getAllItems);\n\nexport default router;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, update your `index.ts` to use the routes:"
+      },
+      {
+        "type": "code",
+        "value": "import express from 'express';\nimport itemRoutes from './routes/itemRoutes';\n\nconst app = express();\nconst port = process.env.PORT || 3000;\n\napp.use(express.json());\napp.use('/api', itemRoutes);\n\napp.listen(port, () => {\n  console.log(`Microservice running on http://localhost:${port}`);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Next Steps for Scalability\n- Use a database instead of in-memory arrays to store data.\n- Add logging and error handling.\n- Include environment variables management with packages like `dotenv`.\n- Containerize your microservice using Docker for easy deployment.\n- Set up CI/CD pipelines for automatic testing and deployment.\n\nBy following these steps, your microservice will be well-organized and scalable."
+      },
+      {
+        "type": "paragraph",
+        "value": "With TypeScript's strong typing and clear code structure, building scalable microservices becomes much more manageable and robust. Start small, organize your code well, and scale as your application's needs grow."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-error-handling-best-practices-for-beginners",
+    "title": "Understanding TypeScript's Error Handling: Best Practices for Beginners",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn the basics of error handling in TypeScript with practical examples and best practices designed for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=qUuSD1vUl6k",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is an essential part of writing reliable applications. In TypeScript, which adds static typing on top of JavaScript, handling errors properly helps you catch problems early and provide smooth user experiences. This article will introduce you to the core concepts of error handling in TypeScript and share best practices to get started."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common way to handle errors is by using try...catch blocks. They allow you to run code that might fail and catch any errors that occur, preventing your program from crashing."
+      },
+      {
+        "type": "code",
+        "value": "function divide(a: number, b: number): number {\n  if (b === 0) {\n    throw new Error('Cannot divide by zero');\n  }\n  return a / b;\n}\n\ntry {\n  const result = divide(10, 0);\n  console.log(result);\n} catch (error) {\n  if (error instanceof Error) {\n    console.error('Error caught:', error.message);\n  } else {\n    console.error('Unknown error');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we throw a new error if division by zero is attempted. The try block calls the divide function, and if an error occurs, the catch block handles it, checking that the caught error is indeed an Error object."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Error Handling in TypeScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use specific error types when possible:** Instead of using generic Errors, create custom error classes to provide more meaningful context."
+      },
+      {
+        "type": "code",
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction validateName(name: string) {\n  if (name.length < 3) {\n    throw new ValidationError('Name must be at least 3 characters long');\n  }\n  return true;\n}\n\ntry {\n  validateName('Jo');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation error:', error.message);\n  } else {\n    console.error('Unexpected error');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use TypeScript's type narrowing:** In catch blocks, use the `instanceof` operator to narrow error types and safely access properties like `message`."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid empty catch blocks:** Always handle errors in some way, even if it's just logging them for debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Return error information gracefully:** In some cases, especially in asynchronous code, consider returning error details instead of throwing exceptions to keep your app stable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example of returning errors without throwing:"
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> = {\n  data?: T;\n  error?: string;\n};\n\nfunction parseJSON(input: string): Result<object> {\n  try {\n    const data = JSON.parse(input);\n    return { data };\n  } catch {\n    return { error: 'Invalid JSON string' };\n  }\n}\n\nconst result = parseJSON('{ invalid json }');\nif (result.error) {\n  console.error('Error:', result.error);\n} else {\n  console.log('Parsed data:', result.data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Error handling in TypeScript enhances your code's safety and user experience. Use try...catch blocks, leverage TypeScript's type system by creating custom errors, and handle errors gracefully. Mastering these basics will make you more confident in building robust applications."
+      }
+    ]
+  },
+  {
+    "slug": "building-real-time-chat-application-python-websockets",
+    "title": "Building a Real-Time Chat Application with Python and WebSockets",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build a simple real-time chat application using Python and WebSockets. This beginner-friendly tutorial walks you through setting up a WebSocket server and creating a simple client to exchange messages instantly.",
+    "videoUrl": "https://www.youtube.com/watch?v=cw8-KFVXpTE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time communication is essential in many modern web applications, and WebSockets provide a perfect way to achieve this. In this tutorial, we'll create a simple real-time chat app using Python. We'll use the \"websockets\" library to handle WebSocket connections easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, ensure you have Python installed on your computer. Then, install the websockets library using pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install websockets"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's create a basic WebSocket server. The server will listen for clients connecting, receive messages from them, and broadcast those messages to all connected clients."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport websockets\n\n# A set to store all connected clients\nconnected_clients = set()\n\nasync def chat_server(websocket, path):\n    # Register client connection\n    connected_clients.add(websocket)\n    try:\n        async for message in websocket:\n            # When a message is received, send it to all clients\n            for client in connected_clients:\n                if client != websocket:  # Optionally exclude sender\n                    await client.send(message)\n    except websockets.exceptions.ConnectionClosed:\n        pass\n    finally:\n        # Unregister client on disconnect\n        connected_clients.remove(websocket)\n\n# Start the server\nstart_server = websockets.serve(chat_server, \"localhost\", 6789)\n\nprint(\"Chat server started on ws://localhost:6789\")\nasyncio.get_event_loop().run_until_complete(start_server)\nasyncio.get_event_loop().run_forever()"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code starts a WebSocket server on localhost at port 6789. When clients connect, they are added to a set, and whenever a message is received from any client, it is broadcast to the others."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let’s create a simple client script to connect to this server and send messages. This client will also listen for messages and print them."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport websockets\n\nasync def chat_client():\n    uri = \"ws://localhost:6789\"\n    async with websockets.connect(uri) as websocket:\n        # Run two tasks: one to send messages and another to receive\n        async def send_msg():\n            while True:\n                message = input(\"You: \")\n                await websocket.send(message)\n\n        async def recv_msg():\n            while True:\n                message = await websocket.recv()\n                print(f\"Friend: {message}\")\n\n        await asyncio.gather(send_msg(), recv_msg())\n\nasyncio.get_event_loop().run_until_complete(chat_client())"
+      },
+      {
+        "type": "paragraph",
+        "value": "Open multiple terminal windows to run this client script and connect to the server. You can now chat in real time between these terminal clients!"
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple example shows the power of WebSockets for real-time communication. You can expand this by adding features like handling usernames, storing message history, or integrating with a web UI."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, WebSocket servers can also be deployed on the web and accessed from browsers using JavaScript clients, making your chat application accessible anywhere."
+      },
+      {
+        "type": "paragraph",
+        "value": "Feel free to explore and improve this project as your Python and asynchronous programming skills grow!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-in-sql-boost-your-data-analysis-skills",
+    "title": "Mastering Window Functions in SQL: Boost Your Data Analysis Skills",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to analyze data efficiently and perform advanced calculations with ease.",
+    "videoUrl": "https://www.youtube.com/watch?v=zbcoBi6VbwM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions are powerful SQL features that let you perform calculations across rows related to the current row without collapsing the result set. Unlike aggregate functions that group rows into a single output, window functions preserve individual row details while providing cumulative, ranking, or moving averages insights."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore the basics of window functions with some practical examples using a sample sales table with columns: sales_id, employee_id, sale_date, and sale_amount."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. ROW_NUMBER(): Assigns a unique sequential number to rows within a partition, ordered by specified columns."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY sale_date) AS sale_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, sales are ranked by date for each employee, with the earliest sale having rank 1."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. RANK(): Similar to ROW_NUMBER but assigns the same rank to tied values and leaves gaps in ranking."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sale_amount,\n  RANK() OVER (PARTITION BY employee_id ORDER BY sale_amount DESC) AS sales_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, sales are ranked within each employee by sale amount, assigning the same rank to ties."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. SUM() OVER(): Calculate running totals or cumulative sums without grouping."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY employee_id ORDER BY sale_date\n                        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query calculates a running total of sales for each employee ordered by sale_date."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. AVG() OVER(): Compute moving averages."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  AVG(sale_amount) OVER (PARTITION BY employee_id ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This calculates a moving average of the current sale amount and two preceding sales for each employee."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions can be combined and customized using PARTITION BY (to group data logically) and ORDER BY (to order rows within the group). Understanding them allows you to write more efficient, readable queries for complex data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start incorporating window functions into your SQL toolkit to boost your ability to gain insights from data without complicated self-joins or subqueries."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-collation-conflicts-in-sql-how-to-compare-strings-across-different-encodings",
+    "title": "Understanding Collation Conflicts in SQL: How to Compare Strings Across Different Encodings",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what collation conflicts are in SQL, why they happen, and how to resolve them when comparing strings using different encodings.",
+    "videoUrl": "https://www.youtube.com/watch?v=W9Q1O68KVM8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, you may encounter errors related to collation conflicts. These conflicts occur when you try to compare or join string columns that use different collations or encodings. Understanding how collations work and knowing how to resolve these conflicts is essential for avoiding frustrating errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "A collation in SQL defines how string data is sorted and compared. It determines character encoding, case sensitivity, and accent sensitivity. For example, two columns may use different collations such as `SQL_Latin1_General_CP1_CI_AS` and `Latin1_General_BIN`. Trying to directly compare these can produce errors like:"
+      },
+      {
+        "type": "code",
+        "value": "Msg 468, Level 16, State 9, Line 1\nCannot resolve collation conflict for column 1 in SELECT statement."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore a simple example to reproduce this error. Suppose you have two tables each with a `name` column using different collations:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE TableA ( name VARCHAR(50) COLLATE Latin1_General_CI_AS );\nCREATE TABLE TableB ( name VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS );\n\nINSERT INTO TableA VALUES ('apple');\nINSERT INTO TableB VALUES ('apple');\n\n-- This join will cause a collation conflict error\nSELECT A.name, B.name\nFROM TableA A\nJOIN TableB B ON A.name = B.name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, you need to explicitly tell SQL Server to use the same collation for both columns during comparison. You can do this by using the `COLLATE` keyword to override the collation temporarily."
+      },
+      {
+        "type": "code",
+        "value": "SELECT A.name, B.name\nFROM TableA A\nJOIN TableB B ON A.name COLLATE SQL_Latin1_General_CP1_CI_AS = B.name;\n\n-- Or alternatively:\nSELECT A.name, B.name\nFROM TableA A\nJOIN TableB B ON A.name = B.name COLLATE Latin1_General_CI_AS;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can choose either collation to match, but both sides of the comparison must have the same collation to avoid conflicts."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, collation conflicts arise when SQL tries to compare or join string columns with different encodings or sorting rules. The solution is to use the `COLLATE` clause to align collations explicitly. This technique helps you work smoothly with databases containing mixed collations or data from different sources."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember: always check your database and column collations if you face these errors, and apply the `COLLATE` clause when needed to resolve conflicts and ensure consistent string comparisons."
+      }
+    ]
   }
 ];

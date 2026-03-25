@@ -1,569 +1,545 @@
 [
   {
-    "slug": "building-scalable-data-models-in-javascript-with-immutable-js",
-    "title": "Building Scalable Data Models in JavaScript with Immutable.js",
+    "slug": "building-scalable-data-models-in-javascript-for-ecommerce-applications",
+    "title": "Building Scalable Data Models in JavaScript for E-Commerce Applications",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build scalable and maintainable data models in JavaScript using Immutable.js to ensure immutability and improve app reliability.",
-    "videoUrl": "https://www.youtube.com/watch?v=OUsRSM71H2E",
+    "description": "Learn how to design scalable and organized data models in JavaScript for building maintainable e-commerce applications. This beginner-friendly guide covers key concepts and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=50NN3d-Ne1U",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building complex applications in JavaScript, managing state and data models can become challenging. Mutable objects that change over time often lead to bugs that are hard to track down. Immutable.js is a library that helps you create immutable data structures, which means once created, the data cannot be changed. This approach ensures predictable data state changes, making your applications easier to maintain and scale."
+        "value": "When building an e-commerce application in JavaScript, creating scalable data models is essential for managing complex information like products, users, orders, and inventory efficiently. A well-structured data model ensures your app remains manageable as it grows, allowing easy addition of new features and better performance."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we will cover the basics of Immutable.js and how to build scalable data models using its key data structures such as Map and List."
+        "value": "In this tutorial, we'll cover how to create simple and scalable JavaScript data models using objects and classes. We will use practical examples like Product, User, and Order to demonstrate how to keep your code clean and easy to extend."
       },
       {
         "type": "paragraph",
-        "value": "First, install Immutable.js in your project using npm or yarn:"
+        "value": "Let's start by modeling a Product. A product in an e-commerce app usually has properties like id, name, price, description, and stock quantity."
       },
       {
         "type": "code",
-        "value": "npm install immutable"
+        "value": "class Product {\n  constructor(id, name, price, description, stock) {\n    this.id = id;\n    this.name = name;\n    this.price = price;\n    this.description = description;\n    this.stock = stock;\n  }\n\n  // Method to check if product is in stock\n  isAvailable() {\n    return this.stock > 0;\n  }\n\n  // Method to reduce stock when a purchase is made\n  reduceStock(quantity) {\n    if (quantity > this.stock) {\n      throw new Error('Not enough stock available');\n    }\n    this.stock -= quantity;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Once installed, you can import Immutable's data structures like Map and List. Let’s start by creating an immutable user profile model."
+        "value": "Next, we can create a User model that keeps track of customer details. For e-commerce, important user properties might include id, name, email, and an address book."
       },
       {
         "type": "code",
-        "value": "const { Map, List } = require('immutable');\n\n// Creating a user profile as an Immutable Map\nconst userProfile = Map({\n  id: 1,\n  name: 'Alice',\n  friends: List(['Bob', 'Charlie'])\n});\n\nconsole.log(userProfile.toJS());"
+        "value": "class User {\n  constructor(id, name, email) {\n    this.id = id;\n    this.name = name;\n    this.email = email;\n    this.addresses = [];\n  }\n\n  // Add a new address to the user's address list\n  addAddress(address) {\n    this.addresses.push(address);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, userProfile is an immutable Map containing user data. Notice that the friends property is an immutable List. This nested immutability is critical for consistent data handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, imagine you want to update the user's name. With mutable objects, you would directly change the name property. With Immutable.js, you create a new version of the Map with updates:"
+        "value": "For addresses, you can also create a separate model. This modular approach helps to keep your data organized and scalable."
       },
       {
         "type": "code",
-        "value": "const updatedUserProfile = userProfile.set('name', 'Alice Cooper');\n\nconsole.log(updatedUserProfile.toJS());"
+        "value": "class Address {\n  constructor(street, city, state, zip, country) {\n    this.street = street;\n    this.city = city;\n    this.state = state;\n    this.zip = zip;\n    this.country = country;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Notice that the original userProfile remains unchanged. This immutability helps avoid unexpected side effects in your application."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also update nested data using the `updateIn` or `setIn` methods. For example, adding a new friend:"
+        "value": "Orders are a core part of any e-commerce app. An Order should include an id, the user who placed it, a list of products with quantities, and order status."
       },
       {
         "type": "code",
-        "value": "const newUserProfile = updatedUserProfile.update('friends', friends => friends.push('Dave'));\n\nconsole.log(newUserProfile.toJS());"
+        "value": "class Order {\n  constructor(id, user) {\n    this.id = id;\n    this.user = user;\n    this.items = [];\n    this.status = 'pending';\n  }\n\n  addItem(product, quantity) {\n    if (!product.isAvailable()) {\n      throw new Error('Product is out of stock');\n    }\n\n    product.reduceStock(quantity);\n    this.items.push({ product, quantity });\n  }\n\n  setStatus(newStatus) {\n    this.status = newStatus;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Using Immutable.js data structures enables easy and safe updates on deeply nested data without mutating the original objects."
+        "value": "Using classes like these, you can keep your models modular and easy to maintain. You can add more methods to handle business logic without cluttering your app structure."
       },
       {
         "type": "paragraph",
-        "value": "### Benefits of Using Immutable.js for Scalable Models\n- **Predictability:** Data structures never change after creation, reducing bugs.\n- **Performance:** Structural sharing optimizes memory usage when creating modified versions.\n- **Integration:** Works well with libraries like React and Redux where immutability matters.\n- **Clarity:** Clear API methods for updating and querying data."
+        "value": "To summarize, these best practices help your data models scale as your e-commerce app grows:"
       },
       {
         "type": "paragraph",
-        "value": "In summary, Immutable.js is a valuable tool for building scalable, maintainable data models in JavaScript. It promotes immutability, which leads to more predictable and reliable code, especially in large applications."
+        "value": "- Use classes to encapsulate related data and behaviors.\n- Keep models focused on single responsibilities (e.g., Product handles stock management).\n- Separate concerns by creating different classes for complex data types like Address.\n- Include methods that enforce business rules (e.g., stock checks before ordering).\n- Organize related models in modules or folders for better maintainability."
       },
       {
         "type": "paragraph",
-        "value": "To dive deeper, explore Immutable.js documentation and experiment with Maps, Lists, Sets, and Records for modeling your application's state."
+        "value": "With these principles, your JavaScript e-commerce data models will be easier to scale, test, and update over time."
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-errors-in-javascript-best-practices-and-workarounds",
-    "title": "Handling Floating Point Precision Errors in JavaScript: Best Practices and Workarounds",
+    "slug": "handling-memory-leaks-in-large-scale-javascript-applications-best-practices-and-tools",
+    "title": "Handling Memory Leaks in Large-Scale JavaScript Applications: Best Practices and Tools",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to handle floating point precision errors in JavaScript with simple explanations, best practices, and practical code examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=38dmbYWrOV0",
+    "description": "Learn how to identify, prevent, and fix memory leaks in large-scale JavaScript apps using practical tips and powerful tools.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
     "content": [
       {
         "type": "paragraph",
-        "value": "Floating point precision errors are common in JavaScript and other programming languages because numbers are stored in a format that can't always represent decimals exactly. This can lead to unexpected results when performing arithmetic operations. For example, you might expect 0.1 + 0.2 to equal 0.3, but instead, you get 0.30000000000000004."
+        "value": "Memory leaks occur when your JavaScript application holds onto memory it no longer needs, causing performance issues and sometimes crashes. In large-scale applications, memory leaks can be subtle and harder to detect. Understanding how to identify and fix them is crucial for delivering a smooth user experience."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explain why these errors happen, and show you some best practices and simple workarounds to handle precision errors in your JavaScript code."
+        "value": "A common cause of memory leaks is retaining references to objects after they are no longer needed, preventing JavaScript's garbage collector from freeing up memory. Common sources include unused event listeners, global variables, closures, and forgotten timers."
       },
       {
         "type": "paragraph",
-        "value": "## Why do floating point errors happen?"
+        "value": "Here are some best practices to handle memory leaks in your JavaScript projects:"
       },
       {
         "type": "paragraph",
-        "value": "JavaScript uses the IEEE 754 standard to store numbers as 64-bit floating point values. Some decimal numbers can’t be represented exactly in binary, causing tiny rounding errors. These errors accumulate or become visible when you perform arithmetic with decimals."
-      },
-      {
-        "type": "paragraph",
-        "value": "## Common example"
+        "value": "1. **Remove Event Listeners:** Always clean up event listeners when elements are removed or no longer used."
       },
       {
         "type": "code",
-        "value": "console.log(0.1 + 0.2);\n// Output: 0.30000000000000004\n\nconsole.log(0.1 + 0.2 === 0.3);\n// Output: false"
+        "value": "// Adding and removing event listeners\nconst button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', handleClick);\n\n// Later, when cleaning up to prevent leaks\nbutton.removeEventListener('click', handleClick);"
       },
       {
         "type": "paragraph",
-        "value": "Although it looks like a small difference, this can cause bugs in your applications if not handled properly."
+        "value": "2. **Avoid Global Variables:** Use local scopes or modules to avoid polluting the global namespace, which can cause unexpected references and leaks."
       },
       {
         "type": "paragraph",
-        "value": "## Best Practices and Workarounds"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Use `toFixed()` or `toPrecision()` when displaying numbers"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you only need to display a number, you can round it to a certain number of decimal places using the `toFixed()` method."
+        "value": "3. **Clear Timers and Intervals:** Always clear any timers (`setTimeout` and `setInterval`) when they are no longer needed."
       },
       {
         "type": "code",
-        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2)); // Output: \"0.30\""
+        "value": "const intervalId = setInterval(() => {\n  console.log('Running some task...');\n}, 1000);\n\n// When no longer needed\nclearInterval(intervalId);"
       },
       {
         "type": "paragraph",
-        "value": "Keep in mind `toFixed()` returns a string, so convert it back to a number if you want to do further math:"
+        "value": "4. **Watch Closures:** Be careful with closures that capture large objects or DOM elements unintentionally."
+      },
+      {
+        "type": "paragraph",
+        "value": "To detect memory leaks, you can use browser developer tools."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Chrome DevTools for Memory Leak Detection"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Open Chrome DevTools (`F12` or `Ctrl + Shift + I`)."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Go to the \"Memory\" tab."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use the \"Heap Snapshot\" to capture memory usage at different points in your app."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Look for objects that shouldn’t be there or are growing unexpectedly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another great tool is the open-source library `leakage`, which helps automatically test for leaks in your Node.js applications."
       },
       {
         "type": "code",
-        "value": "const roundedSum = Number(sum.toFixed(2));\nconsole.log(roundedSum); // Output: 0.3"
+        "value": "const { iterate } = require('leakage');\n\nfunction createLeakyFunction() {\n  const bigArray = new Array(1000000).fill('*');\n  return () => bigArray.length;\n}\n\niterate(() => {\n  const fn = createLeakyFunction();\n  fn();\n});"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Work with integers when possible"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you’re dealing with money or other decimal values, multiply your values so you work with whole numbers instead of floats. For example, treat dollars as cents."
-      },
-      {
-        "type": "code",
-        "value": "const price1 = 199; // representing $1.99 in cents\nconst price2 = 299; // $2.99\n\nconst total = price1 + price2; // 498 cents\nconsole.log(total / 100); // Output: 4.98 dollars"
-      },
-      {
-        "type": "paragraph",
-        "value": "This approach avoids floating point math problems altogether."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Use a small epsilon value for comparisons"
-      },
-      {
-        "type": "paragraph",
-        "value": "Instead of checking if floating values are exactly equal, check if the difference between them is smaller than a tiny number (epsilon)."
-      },
-      {
-        "type": "code",
-        "value": "const epsilon = 0.000001;\nconst sum = 0.1 + 0.2;\nconst expected = 0.3;\n\nif (Math.abs(sum - expected) < epsilon) {\n  console.log('Values are close enough!');\n} else {\n  console.log('Values are different!');\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "This method is useful for comparing floating point numbers in conditions."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. Use external libraries for complicated math"
-      },
-      {
-        "type": "paragraph",
-        "value": "There are libraries like [Decimal.js](https://github.com/MikeMcl/decimal.js/) or [Big.js](https://github.com/MikeMcl/big.js/) that provide arbitrary-precision decimal math to eliminate floating point errors in calculations."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example with Decimal.js:"
-      },
-      {
-        "type": "code",
-        "value": "const Decimal = require('decimal.js');\n\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\n\nconsole.log(sum.toString()); // Output: '0.3'"
-      },
-      {
-        "type": "paragraph",
-        "value": "These libraries are great for financial or scientific calculations where precision is critical."
-      },
-      {
-        "type": "paragraph",
-        "value": "## Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Floating point precision errors in JavaScript are caused by how numbers are stored internally, and can result in unexpected results when working with decimals. To handle these issues:\n- Use rounding methods like `toFixed()` for display.\n- Work with integers instead of floats when possible.\n- Use an epsilon value for safe comparisons.\n- Consider external libraries for precise calculations.\n\nBy using these techniques, you can avoid common pitfalls and write more reliable JavaScript code."
+        "value": "In summary, handling memory leaks involves writing clean, manageable code and using tools to monitor and analyze your app's memory. This prevents performance issues and keeps your users happy."
       }
     ]
   },
   {
-    "slug": "optimizing-typescript-generics-for-high-performance-applications",
-    "title": "Optimizing TypeScript Generics for High-Performance Applications",
+    "slug": "building-scalable-microservices-with-typescript",
+    "title": "Building Scalable Microservices with TypeScript: A Step-by-Step Guide",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript generics effectively to write high-performance, reusable code with this beginner-friendly guide.",
-    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "description": "Learn how to build scalable microservices using TypeScript with this beginner-friendly step-by-step tutorial. Start creating efficient and maintainable services today.",
+    "videoUrl": "https://www.youtube.com/watch?v=lL_j7ilk7rc",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript generics are a powerful feature that enable you to create reusable and flexible components while maintaining strict type safety. However, beginners often worry that using generics might slow down their applications. In this tutorial, we’ll explore how to optimize TypeScript generics to build high-performance applications without sacrificing readability and maintainability."
+        "value": "Microservices have become a popular architectural style for building scalable and maintainable applications. Using TypeScript for microservices adds the power of static typing and modern JavaScript features, making it easier for developers to write and maintain code. In this guide, we'll walk you through building a simple, scalable microservice using TypeScript."
       },
       {
         "type": "paragraph",
-        "value": "Generics in TypeScript allow you to write functions, classes, or interfaces that work with a variety of types rather than a single one. This means you don’t need to write duplicate code for different data types."
+        "value": "### Step 1: Set up Your Project\nFirst, create a new folder for your microservice project and initialize it with npm. Then, install the necessary dependencies."
       },
       {
         "type": "code",
-        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst output1 = identity<string>(\"Hello\");\nconst output2 = identity<number>(123);\n"
+        "value": "mkdir my-microservice\ncd my-microservice\nnpm init -y\nnpm install express @types/express typescript ts-node-dev --save"
       },
       {
         "type": "paragraph",
-        "value": "While generics help with flexibility, to optimize performance you should avoid unnecessary type constraints and complex generic operations at runtime. Since TypeScript generics are erased during compilation, they primarily impact developer experience and compile-time type safety rather than runtime speed. However, good practices still ensure your code remains efficient and scalable."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Tips for optimizing TypeScript Generics"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Keep generic constraints simple.** Complex constraints can slow down TypeScript's type checking and make your code harder to understand."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Use default types when possible.** This reduces the need to specify generic parameters explicitly and makes the API easier to work with."
+        "value": "### Step 2: Configure TypeScript\nCreate a `tsconfig.json` file to configure TypeScript for your project. This file tells the TypeScript compiler how to compile your code."
       },
       {
         "type": "code",
-        "value": "function getArray<T = number>(items: T[]): T[] {\n  return new Array<T>().concat(items);\n}\n\nconst numbers = getArray([1, 2, 3]);  // No need to specify <number>\n"
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES6\",\n    \"module\": \"commonjs\",\n    \"outDir\": \"dist\",\n    \"rootDir\": \"src\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "3. **Avoid excessive generic nesting.** Deeply nested generics can increase compile times and make debugging difficult."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Use generic utility types smartly.** TypeScript provides utility types such as `Partial<T>`, `Readonly<T>`, and `Record<K, T>` which are optimized and well-tested."
+        "value": "### Step 3: Create Your First Microservice Endpoint\nNext, create a `src` directory. Inside it, create an `index.ts` file which will be the entry point of your microservice. We'll build a simple REST API using Express.js."
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  age?: number;\n}\n\nfunction updateUser(user: User, updates: Partial<User>): User {\n  return { ...user, ...updates };\n}\n"
+        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\nconst port = process.env.PORT || 3000;\n\napp.use(express.json());\n\n// Basic health check route\napp.get('/health', (req: Request, res: Response) => {\n  res.status(200).json({ status: 'up' });\n});\n\n// Example of simple item list\nconst items = [{ id: 1, name: 'Item One' }, { id: 2, name: 'Item Two' }];\n\n// Get all items\napp.get('/items', (req: Request, res: Response) => {\n  res.json(items);\n});\n\napp.listen(port, () => {\n  console.log(`Microservice is running on http://localhost:${port}`);\n});"
       },
       {
         "type": "paragraph",
-        "value": "5. **Leverage type inference to reduce verbosity.** TypeScript often can infer the generic parameter types, so you don’t have to specify them manually."
+        "value": "### Step 4: Running Your Microservice\nTo make it easier to run your code during development, add a script to your `package.json` to start the microservice using `ts-node-dev`, which restarts your app on file changes."
       },
       {
         "type": "code",
-        "value": "function wrapInArray<T>(value: T) {\n  return [value];  // TypeScript infers T automatically\n}\n\nconst wrappedNumber = wrapInArray(42);  // inferred as number[]\n"
+        "value": "\"scripts\": {\n  \"start\": \"ts-node-dev --respawn src/index.ts\"\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "Now, run your microservice with:\n\nbash\nnpm start\n\n\nYour endpoints `/health` and `/items` should be accessible via http://localhost:3000."
       },
       {
         "type": "paragraph",
-        "value": "By following these tips, you can write clean, reusable generic code in TypeScript without negatively impacting your application's performance. Remember that generics mostly affect compile-time safety and developer productivity rather than runtime. Always profile your code if you suspect performance issues, and keep your generics simple and readable."
+        "value": "### Step 5: Structuring for Scalability\nFor scalable microservices, organize your code into separate modules. For example, create folders like `routes`, `controllers`, and `models`. This separation makes it easier to maintain and grow your codebase."
       },
       {
         "type": "paragraph",
-        "value": "With these beginner-friendly strategies, you’ll be able to confidently use TypeScript generics to build fast and scalable applications. Happy coding!"
+        "value": "Example of a simple controller (`src/controllers/itemController.ts`):"
+      },
+      {
+        "type": "code",
+        "value": "import { Request, Response } from 'express';\n\nconst items = [{ id: 1, name: 'Item One' }, { id: 2, name: 'Item Two' }];\n\nexport const getAllItems = (req: Request, res: Response) => {\n  res.json(items);\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Then use this controller in your route file (`src/routes/itemRoutes.ts`):"
+      },
+      {
+        "type": "code",
+        "value": "import { Router } from 'express';\nimport { getAllItems } from '../controllers/itemController';\n\nconst router = Router();\n\nrouter.get('/items', getAllItems);\n\nexport default router;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, update your `index.ts` to use the routes:"
+      },
+      {
+        "type": "code",
+        "value": "import express from 'express';\nimport itemRoutes from './routes/itemRoutes';\n\nconst app = express();\nconst port = process.env.PORT || 3000;\n\napp.use(express.json());\napp.use('/api', itemRoutes);\n\napp.listen(port, () => {\n  console.log(`Microservice running on http://localhost:${port}`);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Next Steps for Scalability\n- Use a database instead of in-memory arrays to store data.\n- Add logging and error handling.\n- Include environment variables management with packages like `dotenv`.\n- Containerize your microservice using Docker for easy deployment.\n- Set up CI/CD pipelines for automatic testing and deployment.\n\nBy following these steps, your microservice will be well-organized and scalable."
+      },
+      {
+        "type": "paragraph",
+        "value": "With TypeScript's strong typing and clear code structure, building scalable microservices becomes much more manageable and robust. Start small, organize your code well, and scale as your application's needs grow."
       }
     ]
   },
   {
-    "slug": "handling-api-rate-limiting-gracefully-in-typescript-projects",
-    "title": "Handling API Rate Limiting Gracefully in TypeScript Projects",
+    "slug": "understanding-typescripts-error-handling-best-practices-for-beginners",
+    "title": "Understanding TypeScript's Error Handling: Best Practices for Beginners",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to handle API rate limiting errors gracefully in TypeScript projects to improve reliability and user experience.",
-    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
+    "description": "Learn the basics of error handling in TypeScript with practical examples and best practices designed for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=qUuSD1vUl6k",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with APIs, hitting a rate limit is common. APIs often restrict how many requests you can make in a given time frame to protect their servers. If you exceed this limit, you'll get an error response, usually with status code 429. Handling this properly helps your application stay reliable and polite to the API."
+        "value": "Error handling is an essential part of writing reliable applications. In TypeScript, which adds static typing on top of JavaScript, handling errors properly helps you catch problems early and provide smooth user experiences. This article will introduce you to the core concepts of error handling in TypeScript and share best practices to get started."
       },
       {
         "type": "paragraph",
-        "value": "In this beginner-friendly guide, we'll cover how to catch rate limiting errors and retry your request after a delay using TypeScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is Rate Limiting?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Rate limiting is a control mechanism used by APIs to limit the number of requests a client can make in a certain period. For example, an API may allow 100 requests per minute. If you go beyond this, it returns a 429 Too Many Requests status code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Handling 429 Errors Gracefully"
-      },
-      {
-        "type": "paragraph",
-        "value": "When you receive a 429 error, the API may send a `Retry-After` header indicating how long to wait before trying again. If this header is missing, you can implement a default wait time or use exponential backoff."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is a simple example of how to handle rate limiting using TypeScript with the Fetch API and exponential backoff:"
+        "value": "The most common way to handle errors is by using try...catch blocks. They allow you to run code that might fail and catch any errors that occur, preventing your program from crashing."
       },
       {
         "type": "code",
-        "value": "async function fetchWithRateLimit(url: string, retries = 3, delay = 1000): Promise<any> {\n  try {\n    const response = await fetch(url);\n\n    if (response.status === 429) {\n      if (retries > 0) {\n        // Check for Retry-After header\n        const retryAfter = response.headers.get('Retry-After');\n        const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : delay;\n        console.warn(`Rate limited. Retrying after ${waitTime} ms...`);\n        await new Promise(res => setTimeout(res, waitTime));\n        // Retry with exponential backoff\n        return fetchWithRateLimit(url, retries - 1, delay * 2);\n      } else {\n        throw new Error('Rate limit exceeded. Max retries reached');\n      }\n    }\n\n    if (!response.ok) {\n      throw new Error(`HTTP error! Status: ${response.status}`);\n    }\n\n    return await response.json();\n  } catch (error) {\n    console.error('Fetch failed:', error);\n    throw error;\n  }\n}"
+        "value": "function divide(a: number, b: number): number {\n  if (b === 0) {\n    throw new Error('Cannot divide by zero');\n  }\n  return a / b;\n}\n\ntry {\n  const result = divide(10, 0);\n  console.log(result);\n} catch (error) {\n  if (error instanceof Error) {\n    console.error('Error caught:', error.message);\n  } else {\n    console.error('Unknown error');\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "### How It Works"
+        "value": "In this example, we throw a new error if division by zero is attempted. The try block calls the divide function, and if an error occurs, the catch block handles it, checking that the caught error is indeed an Error object."
       },
       {
         "type": "paragraph",
-        "value": "1. We attempt to fetch the resource.\n2. If the response status is 429, and retries remain, check the `Retry-After` header.\n3. Wait for the indicated time or a default delay.\n4. Retry the request, doubling the delay each time to reduce request frequency.\n5. If all retries fail, throw an error.\n6. Handle other HTTP errors and successful responses normally."
+        "value": "### Best Practices for Error Handling in TypeScript"
       },
       {
         "type": "paragraph",
-        "value": "### Tips for Beginners"
+        "value": "1. **Use specific error types when possible:** Instead of using generic Errors, create custom error classes to provide more meaningful context."
+      },
+      {
+        "type": "code",
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction validateName(name: string) {\n  if (name.length < 3) {\n    throw new ValidationError('Name must be at least 3 characters long');\n  }\n  return true;\n}\n\ntry {\n  validateName('Jo');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation error:', error.message);\n  } else {\n    console.error('Unexpected error');\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "- Always respect the API's rate limits to avoid being blocked.\n- Use the `Retry-After` header if provided.\n- Keep retry attempts limited to avoid infinite loops.\n- Inform users of delays or failures gracefully in your UI."
+        "value": "2. **Use TypeScript's type narrowing:** In catch blocks, use the `instanceof` operator to narrow error types and safely access properties like `message`."
       },
       {
         "type": "paragraph",
-        "value": "Handling API rate limiting gracefully not only improves your app's stability but also helps maintain a good relationship with the API provider. Using this pattern in your TypeScript projects will make your API requests smarter and more resilient."
+        "value": "3. **Avoid empty catch blocks:** Always handle errors in some way, even if it's just logging them for debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Return error information gracefully:** In some cases, especially in asynchronous code, consider returning error details instead of throwing exceptions to keep your app stable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example of returning errors without throwing:"
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> = {\n  data?: T;\n  error?: string;\n};\n\nfunction parseJSON(input: string): Result<object> {\n  try {\n    const data = JSON.parse(input);\n    return { data };\n  } catch {\n    return { error: 'Invalid JSON string' };\n  }\n}\n\nconst result = parseJSON('{ invalid json }');\nif (result.error) {\n  console.error('Error:', result.error);\n} else {\n  console.log('Parsed data:', result.data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Error handling in TypeScript enhances your code's safety and user experience. Use try...catch blocks, leverage TypeScript's type system by creating custom errors, and handle errors gracefully. Mastering these basics will make you more confident in building robust applications."
       }
     ]
   },
   {
-    "slug": "comparing-python-asyncio-vs-threading-when-to-use-each-for-concurrency",
-    "title": "Comparing Python's Asyncio vs Threading: When to Use Each for Concurrency",
+    "slug": "building-real-time-chat-application-python-websockets",
+    "title": "Building a Real-Time Chat Application with Python and WebSockets",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the differences between Python's asyncio and threading for concurrency, and discover practical guidance on when to use each in your projects.",
-    "videoUrl": "https://www.youtube.com/watch?v=QlkXji08lno",
+    "description": "Learn how to build a simple real-time chat application using Python and WebSockets. This beginner-friendly tutorial walks you through setting up a WebSocket server and creating a simple client to exchange messages instantly.",
+    "videoUrl": "https://www.youtube.com/watch?v=cw8-KFVXpTE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Concurrency is a powerful concept in programming that allows your program to handle multiple tasks at the same time. In Python, two popular ways to achieve concurrency are threading and asyncio. This article explains what each approach is, how they work, and when to use each one, especially if you are new to concurrency."
+        "value": "Real-time communication is essential in many modern web applications, and WebSockets provide a perfect way to achieve this. In this tutorial, we'll create a simple real-time chat app using Python. We'll use the \"websockets\" library to handle WebSocket connections easily."
       },
       {
         "type": "paragraph",
-        "value": "### What is Threading?\nThreading lets you create multiple threads (smaller units of a process) that run in parallel. Each thread can execute code independently, which can improve performance for tasks that involve waiting for external systems like file operations or network access."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple example of threading in Python:"
+        "value": "First, ensure you have Python installed on your computer. Then, install the websockets library using pip:"
       },
       {
         "type": "code",
-        "value": "import threading\nimport time\n\ndef worker():\n    print('Thread starting')\n    time.sleep(2)\n    print('Thread finished')\n\nthread = threading.Thread(target=worker)\nthread.start()\nprint('Main program continues')\nthread.join()\nprint('Thread joined, program ends')"
+        "value": "pip install websockets"
       },
       {
         "type": "paragraph",
-        "value": "In this code, we create and start a thread that runs the `worker` function. The main program continues to run while the thread sleeps for two seconds, demonstrating basic concurrency."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is Asyncio?\nAsyncio is a library to write concurrent code using the async/await syntax introduced in Python 3.5+. It's designed for handling many tasks that spend time waiting (like network requests) without creating multiple threads. Instead, asyncio runs a single-threaded event loop which schedules and switches between tasks efficiently."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example using asyncio:"
+        "value": "Next, let's create a basic WebSocket server. The server will listen for clients connecting, receive messages from them, and broadcast those messages to all connected clients."
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def worker():\n    print('Async task starting')\n    await asyncio.sleep(2)\n    print('Async task finished')\n\nasync def main():\n    task = asyncio.create_task(worker())\n    print('Main program continues')\n    await task\n\nasyncio.run(main())"
+        "value": "import asyncio\nimport websockets\n\n# A set to store all connected clients\nconnected_clients = set()\n\nasync def chat_server(websocket, path):\n    # Register client connection\n    connected_clients.add(websocket)\n    try:\n        async for message in websocket:\n            # When a message is received, send it to all clients\n            for client in connected_clients:\n                if client != websocket:  # Optionally exclude sender\n                    await client.send(message)\n    except websockets.exceptions.ConnectionClosed:\n        pass\n    finally:\n        # Unregister client on disconnect\n        connected_clients.remove(websocket)\n\n# Start the server\nstart_server = websockets.serve(chat_server, \"localhost\", 6789)\n\nprint(\"Chat server started on ws://localhost:6789\")\nasyncio.get_event_loop().run_until_complete(start_server)\nasyncio.get_event_loop().run_forever()"
       },
       {
         "type": "paragraph",
-        "value": "This code runs the `worker` coroutine asynchronously. The `await asyncio.sleep(2)` pauses the coroutine but doesn't block the whole program, allowing other async tasks to run meanwhile."
+        "value": "This code starts a WebSocket server on localhost at port 6789. When clients connect, they are added to a set, and whenever a message is received from any client, it is broadcast to the others."
       },
       {
         "type": "paragraph",
-        "value": "### When to Use Threading\n- When you have CPU-bound tasks that can run in parallel (though Python’s Global Interpreter Lock (GIL) can limit true parallelism).\n- When you're working with blocking I/O operations (file access, network calls in libraries that don't support asyncio).\n- When existing libraries you use are not compatible with asyncio.\n\nThreading provides true concurrency with multiple threads but can introduce complexity like race conditions and requires careful handling of shared resources."
+        "value": "Now, let’s create a simple client script to connect to this server and send messages. This client will also listen for messages and print them."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport websockets\n\nasync def chat_client():\n    uri = \"ws://localhost:6789\"\n    async with websockets.connect(uri) as websocket:\n        # Run two tasks: one to send messages and another to receive\n        async def send_msg():\n            while True:\n                message = input(\"You: \")\n                await websocket.send(message)\n\n        async def recv_msg():\n            while True:\n                message = await websocket.recv()\n                print(f\"Friend: {message}\")\n\n        await asyncio.gather(send_msg(), recv_msg())\n\nasyncio.get_event_loop().run_until_complete(chat_client())"
       },
       {
         "type": "paragraph",
-        "value": "### When to Use Asyncio\n- For high-level structured network code, web servers, or applications that need to handle thousands of open connections efficiently.\n- When the tasks involve a lot of waiting and can be designed using async/await syntax.\n- When you want to avoid the overhead of multiple threads and context switching.\n\nAsyncio is often more efficient for I/O-bound, high-concurrency workloads but requires all parts of the code (and libraries) to be async-compatible."
+        "value": "Open multiple terminal windows to run this client script and connect to the server. You can now chat in real time between these terminal clients!"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\n| Feature             | Threading                           | Asyncio                      |\n|---------------------|-----------------------------------|------------------------------|\n| Model               | Multiple system threads             | Single-threaded event loop    |\n| Ideal for           | Blocking I/O, some CPU-bound tasks | I/O-bound, high-concurrency   |\n| Syntax complexity   | Traditional (functions, locking)   | Requires async/await syntax   |\n| Library compatibility | Wide (most libraries work)          | Limited to async-compatible libs |\n\nIn conclusion, use threading if your tasks involve blocking calls or you need compatibility with existing synchronous libraries. Use asyncio for modern, scalable, and efficient I/O-bound applications with many concurrent tasks."
+        "value": "This simple example shows the power of WebSockets for real-time communication. You can expand this by adding features like handling usernames, storing message history, or integrating with a web UI."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, WebSocket servers can also be deployed on the web and accessed from browsers using JavaScript clients, making your chat application accessible anywhere."
+      },
+      {
+        "type": "paragraph",
+        "value": "Feel free to explore and improve this project as your Python and asynchronous programming skills grow!"
       }
     ]
   },
   {
-    "slug": "comparing-exception-handling-performance-try-except-vs-context-managers",
-    "title": "Comparing Exception Handling Performance in Python: Try-Except vs. Context Managers",
+    "slug": "mastering-python-exception-handling-best-practices",
+    "title": "Mastering Python Exception Handling: Best Practices for Robust Code",
     "language": "python",
     "type": "errors",
-    "description": "Learn the basics of Python exception handling by comparing the performance of try-except blocks and context managers with clear examples and beginner-friendly explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=96mDQrlceEk",
+    "description": "Learn beginner-friendly best practices to handle errors in Python using exception handling techniques that make your code more robust and maintainable.",
+    "videoUrl": "https://www.youtube.com/watch?v=IqasMPiUKW0",
     "content": [
       {
         "type": "paragraph",
-        "value": "Handling errors properly is a key part of writing robust Python programs. Two common methods for managing exceptions are using try-except blocks directly or leveraging context managers implemented with the 'with' statement. In this article, we'll explore both techniques, compare their performance, and understand when to use each."
+        "value": "Exception handling in Python is a powerful way to make your programs more robust by managing errors gracefully. Instead of letting your program crash unexpectedly, you can anticipate potential errors and respond accordingly. This article will introduce you to beginner-friendly concepts and best practices for mastering exception handling in Python."
       },
       {
         "type": "paragraph",
-        "value": "A try-except block is the most straightforward way to catch and handle exceptions in Python. You write the code that could raise an error inside the 'try' block and handle errors in the 'except' block. Here's a simple example that handles a division by zero error:"
+        "value": "The most common way to handle exceptions is by using the try-except block. This block lets you 'try' to run some code and 'catch' any errors that might occur. For example, when dividing two numbers, you might want to handle the case when the divisor is zero:"
       },
       {
         "type": "code",
-        "value": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    result = None\nprint(f\"Result is: {result}\")"
+        "value": "try:\n    dividend = 10\n    divisor = 0\n    result = dividend / divisor\n    print(f'Result: {result}')\nexcept ZeroDivisionError:\n    print('Error: Cannot divide by zero.')"
       },
       {
         "type": "paragraph",
-        "value": "A context manager, on the other hand, is a Python object that defines setup and teardown actions using the __enter__ and __exit__ methods. The 'with' statement simplifies exception handling by calling __exit__ automatically if an error occurs. Custom context managers can manage resources or handle errors in a clean way."
+        "value": "In this example, if the code inside the try block raises a ZeroDivisionError, the except block handles it by printing a friendly message instead of crashing the program."
       },
       {
         "type": "paragraph",
-        "value": "Let's create a simple context manager that catches ZeroDivisionError and returns None instead of raising the error:"
+        "value": "You can catch multiple specific exceptions by listing them in separate except blocks. This helps you handle different errors in different ways."
       },
       {
         "type": "code",
-        "value": "class HandleZeroDivision:\n    def __enter__(self):\n        # Setup, nothing special here\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type is ZeroDivisionError:\n            print(\"Caught ZeroDivisionError in context manager\")\n            return True  # Suppress the exception\n        return False  # Propagate other exceptions\n\nwith HandleZeroDivision():\n    result = 10 / 0\nprint(f\"Result is: {result if 'result' in globals() else None}\")"
+        "value": "try:\n    user_input = int(input('Enter a number: '))\n    result = 10 / user_input\nexcept ValueError:\n    print('Error: Please enter a valid integer.')\nexcept ZeroDivisionError:\n    print('Error: Cannot divide by zero.')"
       },
       {
         "type": "paragraph",
-        "value": "Now, let's compare the performance of both methods in a scenario where an exception occurs multiple times. We'll use the timeit module for this purpose."
+        "value": "Sometimes you want to catch all exceptions, but it's better to handle specific ones. If you need to catch any error as a fallback, you can use a generic except statement. However, avoid overusing it to prevent hiding bugs."
       },
       {
         "type": "code",
-        "value": "import timeit\n\n# Using try-except\ncode_try_except = '''\ncount = 0\nfor _ in range(10000):\n    try:\n        result = 1 / 0\n    except ZeroDivisionError:\n        count += 1\n'''\n\n# Using context manager\ncode_context_manager = '''\nclass HandleZeroDivision:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type is ZeroDivisionError:\n            return True\n        return False\n\ncount = 0\nwith HandleZeroDivision():\n    for _ in range(10000):\n        result = 1 / 0\n        count += 1\n'''\n\ntime_try_except = timeit.timeit(code_try_except, number=10)\ntime_context_manager = timeit.timeit(code_context_manager, number=10)\n\nprint(f\"Try-except time: {time_try_except:.5f} seconds\")\nprint(f\"Context manager time: {time_context_manager:.5f} seconds\")"
+        "value": "try:\n    # some code that may raise errors\n    pass\nexcept Exception as e:\n    print(f'An unexpected error occurred: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "In many cases, the try-except block performs faster because it avoids the overhead of entering and exiting context manager methods on every loop iteration. However, context managers provide cleaner and more reusable code, especially when managing resources like files or network connections."
+        "value": "Python also supports the optional else and finally blocks in try-except structure. The else block runs only if no exceptions were raised, which is useful for code that should run only on success."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    file = open('example.txt', 'r')\nexcept FileNotFoundError:\n    print('Error: File not found.')\nelse:\n    data = file.read()\n    print(data)\n    file.close()"
       },
       {
         "type": "paragraph",
-        "value": "In conclusion, use try-except blocks when you want simple and direct handling of exceptions. Use context managers when your error handling is tied to resource management or when you want to encapsulate complex setup and teardown logic cleanly."
+        "value": "The finally block runs no matter what happened before, even if an exception was raised. This makes it perfect for cleaning up resources like closing files or releasing locks."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    file = open('example.txt', 'r')\n    data = file.read()\nexcept FileNotFoundError:\n    print('Error: File not found.')\nfinally:\n    file.close()\n    print('File closed.')"
       },
       {
         "type": "paragraph",
-        "value": "Understanding performance differences is useful but prioritize code readability and maintainability. Both methods have their place in writing effective Python code."
+        "value": "To summarize the best practices for exception handling in Python:\n\n1. Always try to catch specific exceptions tailored to your code.\n2. Use else for code that runs only if there were no exceptions.\n3. Use finally to clean up resources.\n4. Avoid bare except blocks that catch all exceptions without distinction.\n5. Provide helpful error messages to make debugging easier.\n\nBy following these tips, your Python programs will be more reliable and easier to maintain."
       }
     ]
   },
   {
-    "slug": "scalable-multi-tenant-databases-sql-best-practices",
-    "title": "Designing Scalable Multi-Tenant Databases with SQL: Best Practices and Strategies",
+    "slug": "mastering-window-functions-in-sql-boost-your-data-analysis-skills",
+    "title": "Mastering Window Functions in SQL: Boost Your Data Analysis Skills",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn the best practices and strategies for designing scalable multi-tenant databases using SQL, enabling you to efficiently manage multiple clients with a single database system.",
-    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "description": "Learn how to use SQL window functions to analyze data efficiently and perform advanced calculations with ease.",
+    "videoUrl": "https://www.youtube.com/watch?v=zbcoBi6VbwM",
     "content": [
       {
         "type": "paragraph",
-        "value": "Multi-tenant databases are essential when building applications that serve multiple clients (tenants) from a single database infrastructure. Designing these databases properly helps maintain security, scalability, and performance. This tutorial will guide beginners through key best practices and strategies using SQL to create scalable multi-tenant architectures."
+        "value": "Window functions are powerful SQL features that let you perform calculations across rows related to the current row without collapsing the result set. Unlike aggregate functions that group rows into a single output, window functions preserve individual row details while providing cumulative, ranking, or moving averages insights."
       },
       {
         "type": "paragraph",
-        "value": "### Understanding Multi-Tenancy Models\nThere are three common multi-tenancy models you can implement with SQL databases:\n\n1. Shared Database, Shared Schema: All tenants share the same database and tables, differentiated by a Tenant ID column.\n2. Shared Database, Separate Schemas: One database with separate schemas per tenant.\n3. Separate Databases: Each tenant has its own database.\n\nFor beginners, the Shared Database and Shared Schema model is the easiest and most scalable to start with."
+        "value": "Let's explore the basics of window functions with some practical examples using a sample sales table with columns: sales_id, employee_id, sale_date, and sale_amount."
       },
       {
         "type": "paragraph",
-        "value": "### Key Best Practices for Multi-Tenant Database Design\n- **Include Tenant ID in every table:** This is critical for isolating tenant data.\n- **Use Indexing on Tenant ID:** Improves query performance when filtering by tenant.\n- **Apply Row-Level Security:** Limits data access to the correct tenant.\n- **Avoid Cross-Tenant Queries:** Ensure queries always filter by Tenant ID.\n- **Use Partitioning (Optional):** Partition tables by tenant to optimize large-scale data.\n- **Automate Tenant Data Management:** Simplifies onboarding and offboarding tenants."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example Schema Design\nHere’s an example of a simple multi-tenant design using a shared schema approach. We will create a `users` table where each user's data is tagged with a `tenant_id`."
+        "value": "1. ROW_NUMBER(): Assigns a unique sequential number to rows within a partition, ordered by specified columns."
       },
       {
         "type": "code",
-        "value": "\nCREATE TABLE users (\n    id SERIAL PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    username VARCHAR(50) NOT NULL,\n    email VARCHAR(100) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    CONSTRAINT unique_username_per_tenant UNIQUE (tenant_id, username)\n);\n\n-- Add an index on tenant_id for faster lookups\nCREATE INDEX idx_users_tenant_id ON users (tenant_id);\n"
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY sale_date) AS sale_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### Querying Data Safely\nTo prevent accidental cross-tenant data access, always include the `tenant_id` filter when querying:\n"
+        "value": "In this example, sales are ranked by date for each employee, with the earliest sale having rank 1."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. RANK(): Similar to ROW_NUMBER but assigns the same rank to tied values and leaves gaps in ranking."
       },
       {
         "type": "code",
-        "value": "\n-- Select all users for tenant with id = 1\nSELECT id, username, email\nFROM users\nWHERE tenant_id = 1;\n"
+        "value": "SELECT\n  employee_id,\n  sale_amount,\n  RANK() OVER (PARTITION BY employee_id ORDER BY sale_amount DESC) AS sales_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### Implementing Row-Level Security (RLS) in PostgreSQL\nFor added security, PostgreSQL supports Row-Level Security policies to enforce tenant isolation at the database level.\n\nHere is how you can enable it for the `users` table:"
+        "value": "Here, sales are ranked within each employee by sale amount, assigning the same rank to ties."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. SUM() OVER(): Calculate running totals or cumulative sums without grouping."
       },
       {
         "type": "code",
-        "value": "\n-- Enable RLS on users table\nALTER TABLE users ENABLE ROW LEVEL SECURITY;\n\n-- Create a policy to allow tenants to access only their own rows\nCREATE POLICY tenant_isolation_policy ON users\n  USING (tenant_id = current_setting('app.current_tenant')::INT);\n\n-- Apply the policy\nALTER TABLE users FORCE ROW LEVEL SECURITY;\n"
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY employee_id ORDER BY sale_date\n                        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "Before querying, the application must set the current tenant ID for each session:\n"
+        "value": "This query calculates a running total of sales for each employee ordered by sale_date."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. AVG() OVER(): Compute moving averages."
       },
       {
         "type": "code",
-        "value": "\n-- Set current tenant ID in session (example for tenant 1)\nSET app.current_tenant = '1';\n"
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  AVG(sale_amount) OVER (PARTITION BY employee_id ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nDesigning scalable multi-tenant databases requires careful schema design and security considerations. Start with a shared schema and tenant_id in every table, optimize queries with proper indexing, and consider applying row-level security. These strategies help ensure your application remains performant and secure as you onboard more tenants."
+        "value": "This calculates a moving average of the current sale amount and two preceding sales for each employee."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions can be combined and customized using PARTITION BY (to group data logically) and ORDER BY (to order rows within the group). Understanding them allows you to write more efficient, readable queries for complex data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start incorporating window functions into your SQL toolkit to boost your ability to gain insights from data without complicated self-joins or subqueries."
       }
     ]
   },
   {
-    "slug": "unraveling-complex-sql-constraint-violations-root-causes-prevention",
-    "title": "Unraveling Complex SQL Constraint Violations: A Deep Dive into Root Causes and Prevention",
+    "slug": "understanding-collation-conflicts-in-sql-how-to-compare-strings-across-different-encodings",
+    "title": "Understanding Collation Conflicts in SQL: How to Compare Strings Across Different Encodings",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to identify, troubleshoot, and prevent common SQL constraint violations such as primary key, foreign key, and unique constraints with practical examples for beginners.",
-    "videoUrl": "",
+    "description": "Learn what collation conflicts are in SQL, why they happen, and how to resolve them when comparing strings using different encodings.",
+    "videoUrl": "https://www.youtube.com/watch?v=W9Q1O68KVM8",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, constraints help maintain data integrity by enforcing rules on data columns. However, beginners often encounter constraint violation errors that can be confusing. Understanding the root causes behind these errors is essential for effective troubleshooting and prevention."
+        "value": "When working with SQL databases, you may encounter errors related to collation conflicts. These conflicts occur when you try to compare or join string columns that use different collations or encodings. Understanding how collations work and knowing how to resolve these conflicts is essential for avoiding frustrating errors."
       },
       {
         "type": "paragraph",
-        "value": "Let's explore some common SQL constraint types and the typical reasons why violations occur."
-      },
-      {
-        "type": "paragraph",
-        "value": "1. PRIMARY KEY Constraint Violation: This error happens when you try to insert a duplicate value into a column that must contain unique values."
+        "value": "A collation in SQL defines how string data is sorted and compared. It determines character encoding, case sensitivity, and accent sensitivity. For example, two columns may use different collations such as `SQL_Latin1_General_CP1_CI_AS` and `Latin1_General_BIN`. Trying to directly compare these can produce errors like:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Employees (\n  EmployeeID INT PRIMARY KEY,\n  Name VARCHAR(100)\n);\n\n-- Attempting to insert duplicate EmployeeID\nINSERT INTO Employees (EmployeeID, Name) VALUES (1, 'John Doe');\nINSERT INTO Employees (EmployeeID, Name) VALUES (1, 'Jane Smith'); -- Causes PRIMARY KEY violation"
+        "value": "Msg 468, Level 16, State 9, Line 1\nCannot resolve collation conflict for column 1 in SELECT statement."
       },
       {
         "type": "paragraph",
-        "value": "To prevent this, always check for existing records before inserting or use database features like `ON CONFLICT` to handle duplicates gracefully."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. FOREIGN KEY Constraint Violation: This occurs when you try to insert a record that references a non-existent entry in another table."
+        "value": "Let's explore a simple example to reproduce this error. Suppose you have two tables each with a `name` column using different collations:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Departments (\n  DepartmentID INT PRIMARY KEY,\n  DepartmentName VARCHAR(100)\n);\n\nCREATE TABLE Employees (\n  EmployeeID INT PRIMARY KEY,\n  Name VARCHAR(100),\n  DeptID INT,\n  FOREIGN KEY (DeptID) REFERENCES Departments(DepartmentID)\n);\n\n-- Insert an employee with a non-existent department\nINSERT INTO Employees (EmployeeID, Name, DeptID) VALUES (1, 'Alice', 99); -- Causes FOREIGN KEY violation"
+        "value": "CREATE TABLE TableA ( name VARCHAR(50) COLLATE Latin1_General_CI_AS );\nCREATE TABLE TableB ( name VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS );\n\nINSERT INTO TableA VALUES ('apple');\nINSERT INTO TableB VALUES ('apple');\n\n-- This join will cause a collation conflict error\nSELECT A.name, B.name\nFROM TableA A\nJOIN TableB B ON A.name = B.name;"
       },
       {
         "type": "paragraph",
-        "value": "Always ensure the foreign key value exists in the parent table before inserting or updating dependent records."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. UNIQUE Constraint Violation: This violation is triggered when duplicate values are inserted into columns that must be unique but are not primary keys."
+        "value": "To fix this, you need to explicitly tell SQL Server to use the same collation for both columns during comparison. You can do this by using the `COLLATE` keyword to override the collation temporarily."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Users (\n  UserID INT PRIMARY KEY,\n  Email VARCHAR(100) UNIQUE\n);\n\n-- Insert two users with the same email\nINSERT INTO Users (UserID, Email) VALUES (1, 'user@example.com');\nINSERT INTO Users (UserID, Email) VALUES (2, 'user@example.com'); -- Causes UNIQUE violation"
+        "value": "SELECT A.name, B.name\nFROM TableA A\nJOIN TableB B ON A.name COLLATE SQL_Latin1_General_CP1_CI_AS = B.name;\n\n-- Or alternatively:\nSELECT A.name, B.name\nFROM TableA A\nJOIN TableB B ON A.name = B.name COLLATE Latin1_General_CI_AS;"
       },
       {
         "type": "paragraph",
-        "value": "To reduce the risk of this error, validate input data and consider adding application-level checks before database operations."
+        "value": "You can choose either collation to match, but both sides of the comparison must have the same collation to avoid conflicts."
       },
       {
         "type": "paragraph",
-        "value": "Summary and Best Practices:"
+        "value": "In summary, collation conflicts arise when SQL tries to compare or join string columns with different encodings or sorting rules. The solution is to use the `COLLATE` clause to align collations explicitly. This technique helps you work smoothly with databases containing mixed collations or data from different sources."
       },
       {
         "type": "paragraph",
-        "value": "• Always design your tables with constraints to ensure data integrity.\n• Before inserting or updating data, validate it against existing records.\n• Use transactions to manage multiple related operations safely.\n• When encountering constraint violations, review the error message carefully to understand which constraint failed.\n• Utilize database documentation and error logs for in-depth troubleshooting."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding these common violations and their root causes, beginners can write more reliable SQL code and avoid frustrating errors."
+        "value": "Remember: always check your database and column collations if you face these errors, and apply the `COLLATE` clause when needed to resolve conflicts and ensure consistent string comparisons."
       }
     ]
   }
