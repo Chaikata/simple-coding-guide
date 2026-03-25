@@ -1351,5 +1351,178 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "refactor-sql-query-for-sales-aggregation-optimization",
+    "title": "Refactor SQL Query for Sales Aggregation Optimization",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Improve the given SQL query that calculates total and average sales per product category. The original query uses multiple subqueries and redundant joins, causing inefficiencies. Refactor it to be cleaner and more performant while preserving the exact results.",
+    "prompt": "You are given a query that computes total and average sales amount for each product category by joining orders, order_items, and products tables. The original query uses nested subqueries and redundant joins, making it hard to maintain and inefficient. Your task is to refactor the query to optimize it without changing its behavior or output.\n\nTables: \n- orders(order_id, order_date)\n- order_items(order_item_id, order_id, product_id, quantity, price)\n- products(product_id, category)\n\nOriginal query:\nSELECT category,\n       (SELECT SUM(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN orders o ON oi.order_id = o.order_id\n        JOIN products p2 ON oi.product_id = p2.product_id\n        WHERE p2.category = p.category) AS total_sales,\n       (SELECT AVG(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN products p3 ON oi.product_id = p3.product_id\n        WHERE p3.category = p.category) AS avg_sales\nFROM products p\nGROUP BY category;",
+    "guidance": [
+      "Focus on reducing the use of correlated subqueries by leveraging JOINs and GROUP BY clauses.",
+      "Use aggregation functions directly in a single query rather than nested subqueries.",
+      "Ensure that the refactored query produces the same output with category, total_sales, and avg_sales columns."
+    ],
+    "hints": [
+      "Try starting with joining order_items to products first, then group by category.",
+      "Calculate total and average sales directly in the SELECT clause using SUM and AVG.",
+      "Avoid joining the orders table if it doesn't add filtering or aggregation benefits."
+    ],
+    "starterCode": "SELECT category,\n       (SELECT SUM(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN orders o ON oi.order_id = o.order_id\n        JOIN products p2 ON oi.product_id = p2.product_id\n        WHERE p2.category = p.category) AS total_sales,\n       (SELECT AVG(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN products p3 ON oi.product_id = p3.product_id\n        WHERE p3.category = p.category) AS avg_sales\nFROM products p\nGROUP BY category;",
+    "expectedOutput": "category | total_sales | avg_sales\n----------------------------------\nBooks    | 15000       | 75.0\nClothing | 23000       | 115.0\nToys     | 12000       | 60.0",
+    "concepts": [
+      "SQL joins",
+      "aggregate functions",
+      "query optimization",
+      "subquery refactoring"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-recursive-memoized-logic-on-nested-tuples",
+    "title": "Predict the Output of Recursive Memoized Logic on Nested Tuples",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a Python function that performs recursive computations with memoization on a nested tuple input. Predict the final output when the function is called with a complex nested structure.",
+    "prompt": "Given the following Python function, predict the exact output when the function advanced_calc is called with the nested tuple input provided. Explain the reasoning behind the output based on the recursive calls and memoization logic.",
+    "guidance": [
+      "Follow the recursion closely and track memoization cache changes step-by-step.",
+      "Understand how the function treats integers vs tuples differently in recursion."
+    ],
+    "hints": [
+      "Memoization prevents recalculating results for same sub-tuples, so focus on unique sub-tuples.",
+      "Notice that the function sums either integer values or recursively computed sums after transformations on tuple elements."
+    ],
+    "starterCode": "def advanced_calc(t, memo={}):\n    if t in memo:\n        return memo[t]\n    if isinstance(t, int):\n        memo[t] = t*2\n        return memo[t]\n    total = 0\n    for i in t:\n        if isinstance(i, int):\n            total += i + 1\n        else:\n            total += advanced_calc(tuple(reversed(i)), memo)\n    memo[t] = total\n    return total\n\nnested_tuple = (1, (2, 3), (4, (5, 6)))\nprint(advanced_calc(nested_tuple))",
+    "expectedOutput": "27",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "nested data structures",
+      "tuple manipulation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-movie-recommendation-engine-based-on-user-ratings",
+    "title": "Build a Movie Recommendation Engine Based on User Ratings",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a Python mini-project that recommends movies to a user based on their past ratings and similarity to other users' ratings. Implement basic collaborative filtering logic without external libraries.",
+    "prompt": "You are given a dataset containing user ratings for various movies. Each entry consists of a user ID, a movie ID, and a rating from 1 to 5. Your task is to build a function that, given a target user ID, recommends the top 3 movies that the user hasn't rated yet, based on movie ratings similarity from other users. Use user-based collaborative filtering: find users similar to the target user by comparing their ratings and aggregate ratings for movies the target user hasn't seen to generate recommendations.",
+    "guidance": [
+      "Create a user-movie ratings matrix from the input list for easier comparison.",
+      "Calculate similarity between users using a metric like Pearson correlation or cosine similarity based on their common rated movies.",
+      "Aggregate ratings of similar users to recommend movies not rated by the target user.",
+      "Return the top 3 movies sorted by predicted rating."
+    ],
+    "hints": [
+      "Focus on users who have rated several of the same movies as the target user for better similarity estimates.",
+      "Normalize ratings if you choose to use Pearson correlation to account for user rating bias.",
+      "You can handle ties by sorting movies with the same recommendation score by movie ID."
+    ],
+    "starterCode": "def recommend_movies(ratings, target_user_id):\n    # ratings: List of tuples (user_id, movie_id, rating)\n    # TODO: Implement the recommendation engine\n    pass\n\n# Example input:\nrating_data = [\n    (1, 101, 5), (1, 102, 3), (1, 103, 4),\n    (2, 101, 4), (2, 102, 5), (2, 104, 2),\n    (3, 101, 2), (3, 103, 5), (3, 104, 4),\n    (4, 102, 5), (4, 103, 3), (4, 104, 5)\n]\n\nprint(recommend_movies(rating_data, 1))",
+    "expectedOutput": "[104, 105, 106]  # Example output assuming 104 is recommended top, others can vary",
+    "concepts": [
+      "collaborative filtering",
+      "matrix operations",
+      "similarity metrics",
+      "data structures"
+    ],
+    "estimatedTime": "30 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "implement-a-thread-safe-memoization-function-in-c",
+    "title": "Implement a Thread-Safe Memoization Function in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Build a reusable templated function that memoizes results of expensive computations in a thread-safe manner using modern C++ features.",
+    "prompt": "Implement a templated function named `memoize` that accepts a callable (function, lambda, or functor) and returns a new callable which caches the results of prior calls to improve performance on repeated inputs. The memoization cache should be thread-safe, allowing concurrent access from multiple threads without data races or undefined behavior. Your solution should support callables with one or more parameters of arbitrary types, and should use efficient synchronization mechanisms from the C++ Standard Library. Avoid global/static variables to ensure reusability in multiple contexts.",
+    "guidance": [
+      "Use templates to allow memoizing functions with different signatures and parameter types.",
+      "Use a suitable container such as `std::unordered_map` or `std::map` to store cached results keyed by the function arguments.",
+      "To allow multiple arguments and arbitrary types as keys, consider using `std::tuple` combined with a hash function.",
+      "Use synchronization primitives like `std::mutex` or `std::shared_mutex` to protect access to the cache for thread safety."
+    ],
+    "hints": [
+      "Provide a custom hash function or specialize `std::hash` for `std::tuple` if you use it as a key in an unordered map.",
+      "Consider using `std::lock_guard` or `std::shared_lock` for scoped locking.",
+      "Use perfect forwarding for the input parameters to preserve value categories."
+    ],
+    "starterCode": "template<typename Func>\nauto memoize(Func&& f) {\n    // Your implementation here\n}",
+    "expectedOutput": "The returned callable caches results to quickly return cached values on repeated calls, and is safe for concurrent use (verified by testing with multi-threaded calls).",
+    "concepts": [
+      "templates",
+      "thread safety",
+      "memoization",
+      "concurrency primitives"
+    ],
+    "estimatedTime": "20 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-bug-in-counting-even-numbers-in-an-array",
+    "title": "Fix the Bug in Counting Even Numbers in an Array",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the given C++ function that is supposed to count the number of even numbers in an integer array.",
+    "prompt": "The function countEvens takes an integer array and its size as input and should return the count of even numbers in the array. However, it currently returns incorrect results. Debug the function to make it work correctly.",
+    "guidance": [
+      "Check how the function iterates over the array.",
+      "Verify the condition used to identify even numbers.",
+      "Ensure the counter is updated properly within the loop."
+    ],
+    "hints": [
+      "Remember that an even number is divisible by 2 with zero remainder.",
+      "Make sure the loop uses the correct index and does not go out of bounds."
+    ],
+    "starterCode": "int countEvens(int arr[], int size) {\n    int count = 0;\n    for (int i = 1; i <= size; i++) {\n        if (arr[i] % 2 == 1) {\n            count++;\n        }\n    }\n    return count;\n}",
+    "expectedOutput": "For array {1, 2, 3, 4, 5, 6}, countEvens should return 3.",
+    "concepts": [
+      "loops",
+      "arrays",
+      "conditionals",
+      "modulus operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-nested-array-and-object-manipulation-in-javascript",
+    "title": "Predict the Output: Nested Array and Object Manipulation in JavaScript",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given JavaScript code that involves nested arrays and objects with multiple transformations. Predict what the final output will be after all operations are executed.",
+    "prompt": "Examine the following JavaScript function. It takes an array of user objects, performs nested array filtering, mapping and object property updates. Predict the exact output of the function when called with the provided sample data.",
+    "guidance": [
+      "Follow each step of the array transformations carefully, watching for side effects on objects.",
+      "Track filter and map operations distinctly and note how they change the array length or values.",
+      "Remember that objects are passed by reference, so modifying user objects inside map affects the final result."
+    ],
+    "hints": [
+      "Pay attention to the filter condition on user.scores and which users are included.",
+      "Notice how the map function updates the age property and how that affects the output.",
+      "Remember the difference between shallow copying and mutating objects when working with arrays."
+    ],
+    "starterCode": "function processUsers(users) {\n  return users\n    .filter(user => user.scores.some(score => score > 80))\n    .map(user => {\n      user.age += 1;\n      user.scores = user.scores.filter(score => score > 50);\n      return user;\n    });\n}\n\nconst users = [\n  { name: 'Alice', age: 30, scores: [45, 82, 77] },\n  { name: 'Bob', age: 25, scores: [55, 49, 68] },\n  { name: 'Charlie', age: 35, scores: [95, 92, 88] },\n  { name: 'Diana', age: 20, scores: [40, 42, 47] }\n];\n\nconsole.log(processUsers(users));",
+    "expectedOutput": "[\n  { name: 'Alice', age: 31, scores: [82, 77] },\n  { name: 'Bob', age: 26, scores: [55, 68] },\n  { name: 'Charlie', age: 36, scores: [95, 92, 88] }\n]",
+    "concepts": [
+      "array filter",
+      "array map",
+      "object mutation",
+      "nested array manipulation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];

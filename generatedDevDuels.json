@@ -1,174 +1,175 @@
 [
   {
-    "slug": "fix-the-incorrect-sql-query-filtering-by-date",
-    "title": "Fix the Incorrect SQL Query Filtering by Date",
+    "slug": "refactor-sql-query-for-sales-aggregation-optimization",
+    "title": "Refactor SQL Query for Sales Aggregation Optimization",
     "language": "sql",
-    "difficulty": "beginner",
-    "category": "debugging",
-    "description": "Identify and fix the bug in the provided SQL query that aims to filter orders placed after January 1, 2023. The original query incorrectly returns all rows due to a syntax mistake in the WHERE clause.",
-    "prompt": "You are given a SQL query intended to select all orders made after January 1st, 2023 from the 'Orders' table. However, the current query returns all orders regardless of the order date. Find the bug and fix the query so it correctly filters the results.",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Improve the given SQL query that calculates total and average sales per product category. The original query uses multiple subqueries and redundant joins, causing inefficiencies. Refactor it to be cleaner and more performant while preserving the exact results.",
+    "prompt": "You are given a query that computes total and average sales amount for each product category by joining orders, order_items, and products tables. The original query uses nested subqueries and redundant joins, making it hard to maintain and inefficient. Your task is to refactor the query to optimize it without changing its behavior or output.\n\nTables: \n- orders(order_id, order_date)\n- order_items(order_item_id, order_id, product_id, quantity, price)\n- products(product_id, category)\n\nOriginal query:\nSELECT category,\n       (SELECT SUM(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN orders o ON oi.order_id = o.order_id\n        JOIN products p2 ON oi.product_id = p2.product_id\n        WHERE p2.category = p.category) AS total_sales,\n       (SELECT AVG(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN products p3 ON oi.product_id = p3.product_id\n        WHERE p3.category = p.category) AS avg_sales\nFROM products p\nGROUP BY category;",
     "guidance": [
-      "Check the syntax of the WHERE clause and ensure the date comparison operator is used correctly.",
-      "Verify how date literals are formatted in SQL and whether they are quoted properly."
+      "Focus on reducing the use of correlated subqueries by leveraging JOINs and GROUP BY clauses.",
+      "Use aggregation functions directly in a single query rather than nested subqueries.",
+      "Ensure that the refactored query produces the same output with category, total_sales, and avg_sales columns."
     ],
     "hints": [
-      "In SQL, date values should be enclosed in single quotes.",
-      "Make sure you are using a comparison operator (>, >=, etc.) correctly with the column name and date."
+      "Try starting with joining order_items to products first, then group by category.",
+      "Calculate total and average sales directly in the SELECT clause using SUM and AVG.",
+      "Avoid joining the orders table if it doesn't add filtering or aggregation benefits."
     ],
-    "starterCode": "SELECT * FROM Orders WHERE OrderDate > 2023-01-01;",
-    "expectedOutput": "Only orders with OrderDate after 2023-01-01 should be returned.",
+    "starterCode": "SELECT category,\n       (SELECT SUM(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN orders o ON oi.order_id = o.order_id\n        JOIN products p2 ON oi.product_id = p2.product_id\n        WHERE p2.category = p.category) AS total_sales,\n       (SELECT AVG(oi.quantity * oi.price)\n        FROM order_items oi\n        JOIN products p3 ON oi.product_id = p3.product_id\n        WHERE p3.category = p.category) AS avg_sales\nFROM products p\nGROUP BY category;",
+    "expectedOutput": "category | total_sales | avg_sales\n----------------------------------\nBooks    | 15000       | 75.0\nClothing | 23000       | 115.0\nToys     | 12000       | 60.0",
     "concepts": [
-      "WHERE clause",
-      "Date comparison",
-      "SQL syntax"
+      "SQL joins",
+      "aggregate functions",
+      "query optimization",
+      "subquery refactoring"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-recursive-memoized-logic-on-nested-tuples",
+    "title": "Predict the Output of Recursive Memoized Logic on Nested Tuples",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a Python function that performs recursive computations with memoization on a nested tuple input. Predict the final output when the function is called with a complex nested structure.",
+    "prompt": "Given the following Python function, predict the exact output when the function advanced_calc is called with the nested tuple input provided. Explain the reasoning behind the output based on the recursive calls and memoization logic.",
+    "guidance": [
+      "Follow the recursion closely and track memoization cache changes step-by-step.",
+      "Understand how the function treats integers vs tuples differently in recursion."
+    ],
+    "hints": [
+      "Memoization prevents recalculating results for same sub-tuples, so focus on unique sub-tuples.",
+      "Notice that the function sums either integer values or recursively computed sums after transformations on tuple elements."
+    ],
+    "starterCode": "def advanced_calc(t, memo={}):\n    if t in memo:\n        return memo[t]\n    if isinstance(t, int):\n        memo[t] = t*2\n        return memo[t]\n    total = 0\n    for i in t:\n        if isinstance(i, int):\n            total += i + 1\n        else:\n            total += advanced_calc(tuple(reversed(i)), memo)\n    memo[t] = total\n    return total\n\nnested_tuple = (1, (2, 3), (4, (5, 6)))\nprint(advanced_calc(nested_tuple))",
+    "expectedOutput": "27",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "nested data structures",
+      "tuple manipulation"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-a-todo-list-manager-with-filtering-and-prioritization",
-    "title": "Build a Todo List Manager with Filtering and Prioritization",
-    "language": "javascript",
+    "slug": "build-a-movie-recommendation-engine-based-on-user-ratings",
+    "title": "Build a Movie Recommendation Engine Based on User Ratings",
+    "language": "python",
     "difficulty": "intermediate",
     "category": "mini-projects",
-    "description": "Create a JavaScript function that manages a list of todo items, allowing for adding, removing, updating status, and filtering tasks based on their priority and completion status.",
-    "prompt": "Write a function called `manageTodos` that maintains an internal list of todo items. Each todo item should have an id, description, priority (low, medium, high), and a completed status (true/false). The function should accept two arguments: a command string ('add', 'remove', 'toggle', 'filter') and a payload object that changes based on the command:\n\n- 'add': the payload includes description and priority; assign a unique id and set completed to false.\n- 'remove': the payload includes the id of the todo to remove.\n- 'toggle': the payload includes the id of the todo; toggle its completed status.\n- 'filter': the payload includes optional filters priority and/or completed, and returns a filtered array of todos matching these criteria.\n\nImplement proper internal state handling so repeated calls to `manageTodos` modify or query the same todo list.\n\nExample usage:\nmanageTodos('add', { description: 'Write code', priority: 'high' });\nmanageTodos('toggle', { id: 1 });\nmanageTodos('filter', { completed: false, priority: 'high' });",
+    "description": "Create a Python mini-project that recommends movies to a user based on their past ratings and similarity to other users' ratings. Implement basic collaborative filtering logic without external libraries.",
+    "prompt": "You are given a dataset containing user ratings for various movies. Each entry consists of a user ID, a movie ID, and a rating from 1 to 5. Your task is to build a function that, given a target user ID, recommends the top 3 movies that the user hasn't rated yet, based on movie ratings similarity from other users. Use user-based collaborative filtering: find users similar to the target user by comparing their ratings and aggregate ratings for movies the target user hasn't seen to generate recommendations.",
     "guidance": [
-      "Use a closure or module pattern to encapsulate the todo list as a private variable.",
-      "Ensure unique ids are generated for each new todo item.",
-      "Implement the filter command to handle one or both filters gracefully.",
-      "Make sure to update the completed status correctly when toggling."
+      "Create a user-movie ratings matrix from the input list for easier comparison.",
+      "Calculate similarity between users using a metric like Pearson correlation or cosine similarity based on their common rated movies.",
+      "Aggregate ratings of similar users to recommend movies not rated by the target user.",
+      "Return the top 3 movies sorted by predicted rating."
     ],
     "hints": [
-      "Consider using an array to store todos and find items by id using findIndex.",
-      "Use default parameter values to make filters optional when filtering.",
-      "Use a simple incremental counter or Date.now() for unique id generation."
+      "Focus on users who have rated several of the same movies as the target user for better similarity estimates.",
+      "Normalize ratings if you choose to use Pearson correlation to account for user rating bias.",
+      "You can handle ties by sorting movies with the same recommendation score by movie ID."
     ],
-    "starterCode": "function manageTodos() {\n  const todos = [];\n  let idCounter = 1;\n\n  return function(command, payload) {\n    // Your implementation here\n  };\n}\n\nconst todoManager = manageTodos();\n\n// Example calls\n// todoManager('add', { description: 'Learn JavaScript', priority: 'medium' });\n",
-    "expectedOutput": "[{ id: 1, description: 'Write code', priority: 'high', completed: false }]",
+    "starterCode": "def recommend_movies(ratings, target_user_id):\n    # ratings: List of tuples (user_id, movie_id, rating)\n    # TODO: Implement the recommendation engine\n    pass\n\n# Example input:\nrating_data = [\n    (1, 101, 5), (1, 102, 3), (1, 103, 4),\n    (2, 101, 4), (2, 102, 5), (2, 104, 2),\n    (3, 101, 2), (3, 103, 5), (3, 104, 4),\n    (4, 102, 5), (4, 103, 3), (4, 104, 5)\n]\n\nprint(recommend_movies(rating_data, 1))",
+    "expectedOutput": "[104, 105, 106]  # Example output assuming 104 is recommended top, others can vary",
     "concepts": [
-      "closures",
-      "arrays",
-      "objects",
-      "state management"
+      "collaborative filtering",
+      "matrix operations",
+      "similarity metrics",
+      "data structures"
     ],
-    "estimatedTime": "15 minutes",
+    "estimatedTime": "30 minutes",
     "isFeatured": true
   },
   {
-    "slug": "fix-bug-in-async-data-aggregation-and-error-handling-function",
-    "title": "Fix Bug in Async Data Aggregation and Error Handling Function",
-    "language": "javascript",
+    "slug": "implement-a-thread-safe-memoization-function-in-c",
+    "title": "Implement a Thread-Safe Memoization Function in C++",
+    "language": "cpp",
     "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Debug and fix a complex asynchronous JavaScript function designed to fetch and aggregate data from multiple APIs with error handling. The current implementation contains subtle bugs causing unhandled promise rejections and incorrect data aggregation.",
-    "prompt": "You are given a function fetchAndAggregateData that asynchronously fetches data from three different APIs and combines the results into a single array. The function is supposed to handle errors gracefully by continuing to fetch data from other APIs even if one fails, but currently, it does not work as expected. Your task is to identify and fix all bugs so that the function properly fetches, aggregates, and handles errors without stopping prematurely or producing incorrect results.",
+    "category": "functions",
+    "description": "Build a reusable templated function that memoizes results of expensive computations in a thread-safe manner using modern C++ features.",
+    "prompt": "Implement a templated function named `memoize` that accepts a callable (function, lambda, or functor) and returns a new callable which caches the results of prior calls to improve performance on repeated inputs. The memoization cache should be thread-safe, allowing concurrent access from multiple threads without data races or undefined behavior. Your solution should support callables with one or more parameters of arbitrary types, and should use efficient synchronization mechanisms from the C++ Standard Library. Avoid global/static variables to ensure reusability in multiple contexts.",
     "guidance": [
-      "Check how promises are awaited and handled inside try/catch blocks.",
-      "Ensure error handling does not block fetching from remaining APIs.",
-      "Verify that all fetched data is combined correctly in the result."
+      "Use templates to allow memoizing functions with different signatures and parameter types.",
+      "Use a suitable container such as `std::unordered_map` or `std::map` to store cached results keyed by the function arguments.",
+      "To allow multiple arguments and arbitrary types as keys, consider using `std::tuple` combined with a hash function.",
+      "Use synchronization primitives like `std::mutex` or `std::shared_mutex` to protect access to the cache for thread safety."
     ],
     "hints": [
-      "Look for promise handling in parallel versus sequential execution.",
-      "Consider using Promise.allSettled to handle multiple async calls with independent error handling.",
-      "Watch out for cases where variable reassignment or overwriting causes data loss."
+      "Provide a custom hash function or specialize `std::hash` for `std::tuple` if you use it as a key in an unordered map.",
+      "Consider using `std::lock_guard` or `std::shared_lock` for scoped locking.",
+      "Use perfect forwarding for the input parameters to preserve value categories."
     ],
-    "starterCode": "async function fetchAndAggregateData() {\n  const apiEndpoints = [\n    'https://api.example.com/data1',\n    'https://api.example.com/data2',\n    'https://api.example.com/data3'\n  ];\n  let aggregatedData = [];\n  for (const url of apiEndpoints) {\n    try {\n      const response = await fetch(url);\n      if (!response.ok) {\n        throw new Error('Network response was not ok');\n      }\n      const data = await response.json();\n      aggregatedData = data;\n    } catch (error) {\n      console.error('Failed to fetch from:', url, error);\n    }\n  }\n  return aggregatedData;\n}",
-    "expectedOutput": "An array containing combined data from all successful API fetches; errors logged but do not prevent aggregation of other successful results.",
+    "starterCode": "template<typename Func>\nauto memoize(Func&& f) {\n    // Your implementation here\n}",
+    "expectedOutput": "The returned callable caches results to quickly return cached values on repeated calls, and is safe for concurrent use (verified by testing with multi-threaded calls).",
     "concepts": [
-      "asynchronous programming",
-      "error handling",
-      "promises",
-      "API integration",
-      "data aggregation"
+      "templates",
+      "thread safety",
+      "memoization",
+      "concurrency primitives"
     ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
+    "estimatedTime": "20 minutes",
+    "isFeatured": false
   },
   {
-    "slug": "fix-the-bug-in-a-c-function-to-calculate-factorial",
-    "title": "Fix the Bug in a C++ Function to Calculate Factorial",
+    "slug": "fix-the-bug-in-counting-even-numbers-in-an-array",
+    "title": "Fix the Bug in Counting Even Numbers in an Array",
     "language": "cpp",
     "difficulty": "beginner",
     "category": "debugging",
-    "description": "Identify and fix the bug in a simple C++ function intended to calculate the factorial of a given number. The function currently produces incorrect output for some inputs.",
-    "prompt": "The following C++ function is supposed to calculate the factorial of a non-negative integer n (where n! = n * (n-1) * ... * 1 and 0! = 1). However, when tested, it produces incorrect results for inputs greater than 1. Find and fix the bug in the function so that it correctly calculates the factorial.",
+    "description": "Identify and fix the bug in the given C++ function that is supposed to count the number of even numbers in an integer array.",
+    "prompt": "The function countEvens takes an integer array and its size as input and should return the count of even numbers in the array. However, it currently returns incorrect results. Debug the function to make it work correctly.",
     "guidance": [
-      "Carefully check the initialization of variables used for the factorial calculation.",
-      "Review the loop structure to ensure it iterates over the correct range.",
-      "Remember the factorial of 0 is 1 by definition."
+      "Check how the function iterates over the array.",
+      "Verify the condition used to identify even numbers.",
+      "Ensure the counter is updated properly within the loop."
     ],
     "hints": [
-      "Is the variable holding the factorial value initialized correctly before the loop starts?",
-      "Check whether the loop boundaries include all the numbers needed for the factorial calculation."
+      "Remember that an even number is divisible by 2 with zero remainder.",
+      "Make sure the loop uses the correct index and does not go out of bounds."
     ],
-    "starterCode": "int factorial(int n) {\n    int result = 0;\n    for (int i = 1; i < n; ++i) {\n        result = result * i;\n    }\n    return result;\n}",
-    "expectedOutput": "factorial(0) -> 1\nfactorial(1) -> 1\nfactorial(5) -> 120",
+    "starterCode": "int countEvens(int arr[], int size) {\n    int count = 0;\n    for (int i = 1; i <= size; i++) {\n        if (arr[i] % 2 == 1) {\n            count++;\n        }\n    }\n    return count;\n}",
+    "expectedOutput": "For array {1, 2, 3, 4, 5, 6}, countEvens should return 3.",
     "concepts": [
-      "variables initialization",
-      "for loop",
-      "basic arithmetic operations",
-      "function return"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "predict-the-output-list-and-dictionary-comprehension-logic",
-    "title": "Predict the Output: List and Dictionary Comprehension Logic",
-    "language": "python",
-    "difficulty": "intermediate",
-    "category": "logic",
-    "description": "Analyze the given Python code containing nested list and dictionary comprehensions along with conditional logic, and predict the exact output it produces.",
-    "prompt": "Given the Python code below, carefully read through the nested list and dictionary comprehensions and internal logic. Predict what the output will be when the code is executed.\n\nExplain your reasoning if asked, but for now, only provide the exact printed output:\n\npython\nresult = {i: [j**2 if j % 2 == 0 else j**3 for j in range(i)] for i in range(5)}\nprint(result)",
-    "guidance": [
-      "Break down the comprehension step-by-step: start with the outer dictionary comprehension and analyze what keys and values it produces.",
-      "Focus on the inner list comprehension and understand how it transforms the list of numbers for each key.",
-      "Pay attention to the conditional inside the list comprehension and how it changes the value depending on even or odd numbers."
-    ],
-    "hints": [
-      "Recall that i in the outer comprehension goes from 0 to 4 inclusive, creating dictionary keys.",
-      "Examine carefully what happens when i is 0—what would range(0) return?",
-      "For list elements, even j values are squared (j**2), odd j values are cubed (j**3)."
-    ],
-    "starterCode": "result = {i: [j**2 if j % 2 == 0 else j**3 for j in range(i)] for i in range(5)}\nprint(result)",
-    "expectedOutput": "{0: [], 1: [0], 2: [0, 1], 3: [0, 1, 4], 4: [0, 1, 4, 27]}",
-    "concepts": [
-      "dictionary comprehension",
-      "list comprehension",
-      "conditional expressions",
-      "loops"
+      "loops",
+      "arrays",
+      "conditionals",
+      "modulus operator"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-an-advanced-debounce-function-with-immediate-and-cancel-options",
-    "title": "Build an Advanced Debounce Function with Immediate and Cancel Options",
+    "slug": "predict-the-output-nested-array-and-object-manipulation-in-javascript",
+    "title": "Predict the Output: Nested Array and Object Manipulation in JavaScript",
     "language": "javascript",
-    "difficulty": "advanced",
-    "category": "functions",
-    "description": "Create a robust debounce utility function in JavaScript that delays invoking a function until after a specified wait time elapses since the last call. Support both immediate execution on the leading edge and the ability to cancel a pending invocation.",
-    "prompt": "Write a function named debounce that accepts three parameters: a function func, a delay time in milliseconds wait, and an options object. The options object can have two boolean properties: 'immediate' and 'cancelable'. The debounce function should return a new debounced version of func with the following behavior:\n\n1. When called repeatedly, the original func should only be invoked once, either after wait milliseconds have elapsed since the last call (trailing edge), or immediately if immediate is true (leading edge).\n2. If immediate is true, the first call to the debounced function should invoke func immediately, then ignore subsequent calls until wait elapses.\n3. If cancelable is true, the debounced function should have a method called cancel that can be called to cancel any pending invocation.\n\nImplement this debounce function fully so that it can be used to limit the rate at which a function runs, with flexible configuration for immediate triggers and canceling.\n\nExample usage:\n\nconst debounced = debounce(() => console.log('Triggered!'), 1000, { immediate: true, cancelable: true });\ndebounced();\ndebounced.cancel(); // should cancel any scheduled call if exists",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given JavaScript code that involves nested arrays and objects with multiple transformations. Predict what the final output will be after all operations are executed.",
+    "prompt": "Examine the following JavaScript function. It takes an array of user objects, performs nested array filtering, mapping and object property updates. Predict the exact output of the function when called with the provided sample data.",
     "guidance": [
-      "Use a closure to store timing state between calls.",
-      "Use setTimeout and clearTimeout to manage the delay.",
-      "Implement the cancel method conditionally based on the options object."
+      "Follow each step of the array transformations carefully, watching for side effects on objects.",
+      "Track filter and map operations distinctly and note how they change the array length or values.",
+      "Remember that objects are passed by reference, so modifying user objects inside map affects the final result."
     ],
     "hints": [
-      "Store a reference to the timeout ID so you can clear it.",
-      "To support immediate invocation, track if the function was already called within the wait period.",
-      "Attach the cancel method as a property of the returned function."
+      "Pay attention to the filter condition on user.scores and which users are included.",
+      "Notice how the map function updates the age property and how that affects the output.",
+      "Remember the difference between shallow copying and mutating objects when working with arrays."
     ],
-    "starterCode": "function debounce(func, wait, options = {}) {\n  // Your implementation here\n}",
-    "expectedOutput": "Upon calling debounced(), the func logs 'Triggered!' immediately if immediate is true; subsequent calls within wait ms do not invoke func. Calling debounced.cancel() stops any pending invocation representing no output afterward.",
+    "starterCode": "function processUsers(users) {\n  return users\n    .filter(user => user.scores.some(score => score > 80))\n    .map(user => {\n      user.age += 1;\n      user.scores = user.scores.filter(score => score > 50);\n      return user;\n    });\n}\n\nconst users = [\n  { name: 'Alice', age: 30, scores: [45, 82, 77] },\n  { name: 'Bob', age: 25, scores: [55, 49, 68] },\n  { name: 'Charlie', age: 35, scores: [95, 92, 88] },\n  { name: 'Diana', age: 20, scores: [40, 42, 47] }\n];\n\nconsole.log(processUsers(users));",
+    "expectedOutput": "[\n  { name: 'Alice', age: 31, scores: [82, 77] },\n  { name: 'Bob', age: 26, scores: [55, 68] },\n  { name: 'Charlie', age: 36, scores: [95, 92, 88] }\n]",
     "concepts": [
-      "closures",
-      "asynchronous timing",
-      "function properties",
-      "higher-order functions"
+      "array filter",
+      "array map",
+      "object mutation",
+      "nested array manipulation"
     ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ]
