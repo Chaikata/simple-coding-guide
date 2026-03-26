@@ -1524,5 +1524,181 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "refactor-messy-code-to-improve-readability-and-maintainability",
+    "title": "Refactor Messy Code to Improve Readability and Maintainability",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "You are given a Python function that calculates the sum of even numbers from a list. The current implementation works correctly but is hard to read and maintain. Your task is to refactor the code to make it cleaner and more Pythonic while keeping the behavior the same.",
+    "prompt": "Refactor the given function to improve readability and maintainability. Make sure the function still returns the sum of all even numbers from the list it receives as input.",
+    "guidance": [
+      "Use meaningful variable names to improve clarity.",
+      "Consider using Python's built-in functions or list comprehensions to simplify the logic.",
+      "Avoid unnecessary code or variables.",
+      "Make sure the function still works correctly for an empty list or list with no even numbers."
+    ],
+    "hints": [
+      "Try using a list comprehension to filter even numbers from the list.",
+      "The sum() function can add all numbers in a list or iterable.",
+      "Remember to use the modulus operator (%) to check if a number is even."
+    ],
+    "starterCode": "def sum_even_numbers(numbers):\n    result = 0\n    for i in range(len(numbers)):\n        if numbers[i] % 2 == 0:\n            result += numbers[i]\n    return result",
+    "expectedOutput": "For input [1, 2, 3, 4, 5, 6], the function should return 12.",
+    "concepts": [
+      "functions",
+      "loops",
+      "conditionals",
+      "list comprehensions",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-rotate-elements-in-an-array",
+    "title": "Build a Function to Rotate Elements in an Array",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a C++ function that rotates the elements of an array to the right by a given number of steps. The rotation should handle cases where the number of steps is larger than the array size.",
+    "prompt": "Create a function named rotateArray that takes a vector of integers and an integer k representing the number of rotation steps. The function should rotate the array to the right by k steps in-place, meaning elements shifted off the end reappear at the front. Return the rotated vector after performing the operation. For example, given nums = {1, 2, 3, 4, 5, 6, 7} and k = 3, the function should return {5, 6, 7, 1, 2, 3, 4}.",
+    "guidance": [
+      "Consider how to handle the case when k is larger than the size of the vector.",
+      "Think about using vector slicing or three-step reversal to achieve the rotation efficiently."
+    ],
+    "hints": [
+      "Using modulo (k % nums.size()) can simplify handling rotations greater than the vector length.",
+      "One approach is to reverse the entire vector, then reverse the first k elements and finally reverse the remaining elements."
+    ],
+    "starterCode": "#include <vector>\nusing namespace std;\n\nvector<int> rotateArray(vector<int>& nums, int k) {\n    // Your code here\n}",
+    "expectedOutput": "rotateArray({1, 2, 3, 4, 5, 6, 7}, 3) -> {5, 6, 7, 1, 2, 3, 4}\nrotateArray({-1, -100, 3, 99}, 2) -> {3, 99, -1, -100}",
+    "concepts": [
+      "arrays",
+      "in-place modification",
+      "modular arithmetic",
+      "vector operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-recursive-cte-with-aggregations-and-window-functions",
+    "title": "Predict the Output of a Recursive CTE with Aggregations and Window Functions",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "query-analysis",
+    "description": "Analyze the output of an advanced SQL query using recursive common table expressions (CTEs), aggregations, and window functions. Predict the final result set given the schema and sample data.",
+    "prompt": "Given the following schema and sample data representing employees and their managers, analyze the provided recursive CTE query. Determine the output—specifically, the final columns and rows returned by the query.\n\n-- Employees Table\nCREATE TABLE Employees(\n  EmployeeID INT PRIMARY KEY,\n  ManagerID INT NULL,\n  Salary INT NOT NULL\n);\n\nINSERT INTO Employees (EmployeeID, ManagerID, Salary) VALUES\n(1, NULL, 100000),\n(2, 1, 80000),\n(3, 1, 90000),\n(4, 2, 70000),\n(5, 2, 60000),\n(6, 3, 85000),\n(7, 3, 65000);\n\n-- Query to analyze\nWITH RECURSIVE HierarchyCTE AS (\n  SELECT EmployeeID, ManagerID, Salary, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n  \n  UNION ALL\n  \n  SELECT e.EmployeeID, e.ManagerID, e.Salary, h.Level + 1\n  FROM Employees e\n  JOIN HierarchyCTE h ON e.ManagerID = h.EmployeeID\n),\nAggregated AS (\n  SELECT\n    ManagerID,\n    COUNT(EmployeeID) AS TeamSize,\n    AVG(Salary) AS AvgSalary\n  FROM HierarchyCTE\n  GROUP BY ManagerID\n),\nRanked AS (\n  SELECT\n    h.EmployeeID,\n    h.ManagerID,\n    h.Level,\n    a.TeamSize,\n    a.AvgSalary,\n    RANK() OVER (PARTITION BY h.ManagerID ORDER BY a.TeamSize DESC) AS TeamRank\n  FROM HierarchyCTE h\n  LEFT JOIN Aggregated a ON h.EmployeeID = a.ManagerID\n)\nSELECT * FROM Ranked\nORDER BY Level, TeamRank, EmployeeID;",
+    "guidance": [
+      "Understand how the recursive CTE builds the hierarchy levels starting from the top manager (ManagerID IS NULL).",
+      "Consider how the Aggregated CTE calculates team size and average salary grouped by manager.",
+      "Analyze how the window function RANK() operates partitioned by ManagerID and ordered by team size descending.",
+      "Trace the joins carefully to see how employees are linked with their team aggregation."
+    ],
+    "hints": [
+      "Remember the base case of the recursion includes only EmployeeID 1 (top-level manager).",
+      "Note the LEFT JOIN in Ranked means some employees might have NULLs for aggregated data if they aren't managers themselves.",
+      "RANK() resets for each ManagerID partition; employees with the same manager get ranked according to their team size."
+    ],
+    "starterCode": "CREATE TABLE Employees(\n  EmployeeID INT PRIMARY KEY,\n  ManagerID INT NULL,\n  Salary INT NOT NULL\n);\n\nINSERT INTO Employees (EmployeeID, ManagerID, Salary) VALUES\n(1, NULL, 100000),\n(2, 1, 80000),\n(3, 1, 90000),\n(4, 2, 70000),\n(5, 2, 60000),\n(6, 3, 85000),\n(7, 3, 65000);\n\nWITH RECURSIVE HierarchyCTE AS (\n  SELECT EmployeeID, ManagerID, Salary, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n  \n  UNION ALL\n  \n  SELECT e.EmployeeID, e.ManagerID, e.Salary, h.Level + 1\n  FROM Employees e\n  JOIN HierarchyCTE h ON e.ManagerID = h.EmployeeID\n),\nAggregated AS (\n  SELECT\n    ManagerID,\n    COUNT(EmployeeID) AS TeamSize,\n    AVG(Salary) AS AvgSalary\n  FROM HierarchyCTE\n  GROUP BY ManagerID\n),\nRanked AS (\n  SELECT\n    h.EmployeeID,\n    h.ManagerID,\n    h.Level,\n    a.TeamSize,\n    a.AvgSalary,\n    RANK() OVER (PARTITION BY h.ManagerID ORDER BY a.TeamSize DESC) AS TeamRank\n  FROM HierarchyCTE h\n  LEFT JOIN Aggregated a ON h.EmployeeID = a.ManagerID\n)\nSELECT * FROM Ranked\nORDER BY Level, TeamRank, EmployeeID;",
+    "expectedOutput": "EmployeeID | ManagerID | Level | TeamSize | AvgSalary | TeamRank\n-----------|-----------|-------|----------|-----------|---------\n1          | NULL      | 1     | 2        | 73333.33  | 1\n2          | 1         | 2     | 2        | 65000     | 1\n3          | 1         | 2     | 2        | 75000     | 1\n4          | 2         | 3     | NULL     | NULL      | 1\n5          | 2         | 3     | NULL     | NULL      | 1\n6          | 3         | 3     | NULL     | NULL      | 1\n7          | 3         | 3     | NULL     | NULL      | 1",
+    "concepts": [
+      "Recursive CTE",
+      "Aggregation",
+      "Window Functions",
+      "Hierarchical Queries"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-contact-list-manager-in-c",
+    "title": "Simple Contact List Manager in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a basic contact list manager where users can add, display, and search contacts using console input and output.",
+    "prompt": "Build a simple console application in C++ that manages a list of contacts. Each contact should have a name and a phone number. The program should allow users to: 1) Add a new contact, 2) Display all contacts, and 3) Search contacts by name and display matching results. Implement a simple menu loop to let the user choose these actions until they decide to exit.",
+    "guidance": [
+      "Use a struct or class to represent a contact with name and phone number fields.",
+      "Store contacts in a simple container such as a vector.",
+      "Use a loop to repeatedly show the menu and execute the selected operation.",
+      "Use basic string input/output and simple loops to display and search contacts."
+    ],
+    "hints": [
+      "Consider using std::vector to hold all your contacts for easy addition and iteration.",
+      "For searching, loop through the vector and compare contact names with the search input using string operations."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Contact {\n    std::string name;\n    std::string phone;\n};\n\nint main() {\n    std::vector<Contact> contacts;\n    int choice = 0;\n    while (choice != 4) {\n        std::cout << \"Menu:\\n1. Add Contact\\n2. Display Contacts\\n3. Search Contact\\n4. Exit\\nEnter choice: \";\n        std::cin >> choice;\n        std::cin.ignore(); // clear newline\n\n        if (choice == 1) {\n            // Add contact\n        } else if (choice == 2) {\n            // Display all contacts\n        } else if (choice == 3) {\n            // Search contacts\n        } else if (choice == 4) {\n            std::cout << \"Exiting...\" << std::endl;\n        } else {\n            std::cout << \"Invalid choice. Try again.\" << std::endl;\n        }\n    }\n    return 0;\n}\n",
+    "expectedOutput": "Menu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 1\nEnter name: Alice\nEnter phone: 12345\nMenu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 2\nContacts List:\nName: Alice, Phone: 12345\nMenu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 3\nEnter name to search: Alice\nFound: Name: Alice, Phone: 12345\nMenu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 4\nExiting...",
+    "concepts": [
+      "structs",
+      "vectors",
+      "loops",
+      "conditional statements"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "create-a-function-to-calculate-moving-average-of-a-list",
+    "title": "Create a Function to Calculate Moving Average of a List",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a Python function that computes the moving average over a specified window size for a list of numerical values.",
+    "prompt": "Write a function named moving_average that takes two parameters: a list of numbers and an integer window size n. The function should return a list of the moving averages calculated over the window n across the list. Each moving average is the average of n consecutive elements. If the window size is larger than the list, return an empty list.",
+    "guidance": [
+      "Iterate through the list by slices of length n to compute each window's average.",
+      "Handle edge cases like an empty list or window size larger than the list length.",
+      "Consider using list comprehension for a clean and concise solution."
+    ],
+    "hints": [
+      "Use slicing: list[i:i+n] to get the current window of elements.",
+      "Sum the elements in the slice and divide by n to get the average.",
+      "Think about how many moving averages you will calculate based on the list length and window size."
+    ],
+    "starterCode": "def moving_average(numbers, n):\n    # Your code here\n    pass",
+    "expectedOutput": "moving_average([1, 2, 3, 4, 5], 3) -> [2.0, 3.0, 4.0]",
+    "concepts": [
+      "list slicing",
+      "loops",
+      "functions",
+      "averages"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-complex-c-class-for-improved-readability-and-maintainability",
+    "title": "Refactor Complex C++ Class for Improved Readability and Maintainability",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Given a complex and messy C++ class implementation, refactor the code to improve readability, maintainability, and follow best OOP practices without changing the program's behavior.",
+    "prompt": "You are provided with a C++ class that manages an inventory of items. The implementation works correctly but is cluttered with deeply nested conditionals, duplicated code, and poor separation of concerns. Refactor the class to improve clarity, structure, and code quality while keeping all existing functionality intact. Avoid changing method signatures and external behavior. Your refactor should focus on reducing code duplication, improving naming, simplifying complex logic, and enhancing code modularity.",
+    "guidance": [
+      "Identify and extract repeated code snippets into helper functions or private methods.",
+      "Replace deeply nested if-else blocks with early returns or guard clauses to simplify flow.",
+      "Review variable and method names, improving clarity and intent.",
+      "Consider applying design principles such as Single Responsibility Principle to enhance modularity."
+    ],
+    "hints": [
+      "Look for patterns where several branches execute similar code with slight variations; these can be unified.",
+      "Extracting small functions not only improves readability but also helps isolate logical units for testing.",
+      "Try replacing boolean flags and counters that track states across methods with well-defined state representations."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nclass Inventory {\npublic:\n    Inventory() {}\n\n    void addItem(std::string name, int quantity) {\n        if (quantity > 0) {\n            int index = -1;\n            for (int i = 0; i < items.size(); ++i) {\n                if (items[i] == name) {\n                    index = i;\n                    break;\n                }\n            }\n            if (index == -1) {\n                items.push_back(name);\n                quantities.push_back(quantity);\n            } else {\n                quantities[index] += quantity;\n            }\n        } else {\n            std::cout << \"Invalid quantity\\n\";\n        }\n    }\n\n    void removeItem(std::string name, int quantity) {\n        if (quantity <= 0) {\n            std::cout << \"Cannot remove non-positive quantity\\n\";\n            return;\n        }\n        for (int i = 0; i < items.size(); ++i) {\n            if (items[i] == name) {\n                if (quantities[i] < quantity) {\n                    std::cout << \"Not enough quantity to remove\\n\";\n                } else {\n                    quantities[i] -= quantity;\n                    if (quantities[i] == 0) {\n                        items.erase(items.begin() + i);\n                        quantities.erase(quantities.begin() + i);\n                    }\n                }\n                return;\n            }\n        }\n        std::cout << \"Item not found\" << std::endl;\n    }\n\n    void printInventory() {\n        if (items.size() == 0) {\n            std::cout << \"Inventory is empty\" << std::endl;\n        } else {\n            for (size_t i = 0; i < items.size(); ++i) {\n                std::cout << items[i] << \": \" << quantities[i] << std::endl;\n            }\n        }\n    }\n\nprivate:\n    std::vector<std::string> items;\n    std::vector<int> quantities;\n};\n\nint main() {\n    Inventory inv;\n    inv.addItem(\"apple\", 10);\n    inv.addItem(\"banana\", 5);\n    inv.removeItem(\"apple\", 3);\n    inv.printInventory();\n    inv.removeItem(\"banana\", 6);\n    inv.printInventory();\n    return 0;\n}",
+    "expectedOutput": "apple: 7\nbanana: 5\nNot enough quantity to remove\napple: 7\nbanana: 5",
+    "concepts": [
+      "Code Refactoring",
+      "C++ Best Practices",
+      "Object-Oriented Programming",
+      "Code Maintenance"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ];
