@@ -22377,5 +22377,479 @@ export const articles = [
         "value": "Remember: always check your database and column collations if you face these errors, and apply the `COLLATE` clause when needed to resolve conflicts and ensure consistent string comparisons."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-javascript-for-real-time-applications",
+    "title": "Building Scalable Data Models in JavaScript for Real-Time Applications",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and efficient data models in JavaScript to power real-time applications with practical examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time applications, such as chat apps, live dashboards, or online games, require data models that can handle frequent updates and fast retrievals efficiently. In this tutorial, we'll explore how to build scalable and maintainable data models in JavaScript, focusing on structures that work well with real-time data flows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understand Your Data First\nBefore coding, it’s important to understand the shape and relationships of your data. For example, if you're building a chat application, you might have Users, Messages, and ChatRooms. Knowing how these data entities relate will help you organize your data models efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Normalized Data Models\nNormalized data helps avoid duplication and makes updates simpler. This means storing related data in separate objects and linking them by unique IDs instead of nesting large data sets inside each other."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example of normalized data to store users and messages:"
+      },
+      {
+        "type": "code",
+        "value": "const users = {\n  'user1': { id: 'user1', name: 'Alice' },\n  'user2': { id: 'user2', name: 'Bob' }\n};\n\nconst messages = {\n  'msg1': { id: 'msg1', userId: 'user1', text: 'Hello!' },\n  'msg2': { id: 'msg2', userId: 'user2', text: 'Hi there!' }\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Efficiently Update Your Model\nIn real-time apps, data changes frequently. Use immutable updates to ensure your application can efficiently detect changes. For example, instead of mutating existing objects, create new objects with the updated data."
+      },
+      {
+        "type": "code",
+        "value": "// Updating a message immutably\nconst updateMessageText = (messages, messageId, newText) => {\n  return {\n    ...messages,\n    [messageId]: {\n      ...messages[messageId],\n      text: newText\n    }\n  };\n};\n\nconst updatedMessages = updateMessageText(messages, 'msg1', 'Hello, world!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Maps for Large Datasets\nJavaScript's Map object can often be more efficient for large datasets compared to plain objects, especially for frequent additions and lookups."
+      },
+      {
+        "type": "code",
+        "value": "const usersMap = new Map();\nusersMap.set('user1', { id: 'user1', name: 'Alice' });\nusersMap.set('user2', { id: 'user2', name: 'Bob' });"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Organize Code Using Classes or Factory Functions\nTo keep your data model code clean and reusable, encapsulate behavior and data together. Here's an example using a class for managing chat messages:"
+      },
+      {
+        "type": "code",
+        "value": "class MessageModel {\n  constructor() {\n    this.messages = new Map();\n  }\n\n  addMessage(id, userId, text) {\n    this.messages.set(id, { id, userId, text });\n  }\n\n  updateMessage(id, newText) {\n    if (this.messages.has(id)) {\n      const msg = this.messages.get(id);\n      this.messages.set(id, { ...msg, text: newText });\n    }\n  }\n\n  getMessage(id) {\n    return this.messages.get(id);\n  }\n}\n\nconst chatMessages = new MessageModel();\nchatMessages.addMessage('msg1', 'user1', 'Hey!');\nchatMessages.updateMessage('msg1', 'Hey there!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBuilding scalable data models in JavaScript for real-time applications involves clear data organization, normalized structures, immutable updates, and efficient data storage choices like Maps. Wrapping functionality in classes or functions helps keep your code maintainable as your application grows."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these principles, you’ll create robust data models ready to handle the demands of real-time user interactions."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-prototype-pollution-in-javascript-data-models",
+    "title": "Understanding Prototype Pollution in JavaScript Data Models",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what prototype pollution is in JavaScript, why it is a security risk, and how to identify and prevent it in your data models.",
+    "videoUrl": "https://www.youtube.com/watch?v=wlkavRpnwKw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Prototype pollution is a type of security vulnerability that affects JavaScript applications by allowing unintended modification of an object's prototype. Because in JavaScript almost all objects inherit properties and methods from their prototype, modifying it can cause serious issues like unexpected behavior or security risks throughout your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, if an attacker can change properties of an object's prototype, they can potentially inject malicious code or cause your program to behave unpredictably. This is especially problematic in applications that handle user input without properly validating or sanitizing it."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example to help illustrate:"
+      },
+      {
+        "type": "code",
+        "value": "const userInput = JSON.parse('{\"__proto__\": {\"isAdmin\": true}}');\n\nconst data = {};\n\n// Merging userInput into data\nObject.assign(data, userInput);\n\nconsole.log(data.isAdmin);         // undefined\nconsole.log({}.isAdmin);            // true - prototype polluted!"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above example, the userInput object contains a special key __proto__. When this is merged into another object (data), it doesn't just add a property to data—it modifies the prototype of all objects. As a result, the isAdmin property is accessible on every object, which should not happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "How can you protect your data models from prototype pollution?"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Avoid directly merging untrusted input**: Never blindly merge user input into your objects using functions like Object.assign or deep merge utilities that don't guard against __proto__ keys.\n\n2. **Validate and sanitize input**: Check for dangerous keys like __proto__, constructor, or prototype and reject or strip them out before using the data.\n\n3. **Use safe merge libraries**: Choose libraries designed to protect against prototype pollution.\n\n4. **Freeze prototypes if possible**: Using Object.freeze on Object.prototype can prevent modification, but this is not always practical."
+      },
+      {
+        "type": "code",
+        "value": "// Safe merge example with a filter\nfunction safeMerge(target, source) {\n  for (const key in source) {\n    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {\n      // Skip dangerous keys\n      continue;\n    }\n    target[key] = source[key];\n  }\n  return target;\n}\n\nconst userInput = JSON.parse('{\"__proto__\": {\"isAdmin\": true}, \"name\": \"Alice\"}');\nconst data = {};\nsafeMerge(data, userInput);\n\nconsole.log(data.name);        // Alice\nconsole.log({}.isAdmin);       // undefined, safe!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Prototype pollution can cause hard-to-debug errors and potential security breaches, so it's important for JavaScript developers to understand and guard against it in their data models and applications."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-typescript-error-handling-for-large-scale-applications",
+    "title": "Optimizing TypeScript Error Handling for Large Scale Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn practical tips for enhancing error handling in large TypeScript applications to make your code more reliable and maintainable.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "As your TypeScript application grows, managing errors effectively becomes crucial. Poor error handling can lead to bugs that are hard to track, poor user experience, and difficulties in debugging. In this article, we'll explore beginner-friendly strategies to optimize error handling in large-scale TypeScript projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, understand that in TypeScript, errors are objects that can have different shapes. Using custom error classes improves clarity and allows you to distinguish error types easily."
+      },
+      {
+        "type": "code",
+        "value": "class AppError extends Error {\n  public readonly isOperational: boolean;\n\n  constructor(message: string, isOperational = true) {\n    super(message);\n    this.isOperational = isOperational;\n    Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain\n    Error.captureStackTrace(this);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Creating a base error class like `AppError` lets you differentiate operational errors (expected problems like network failures) from programmer errors (bugs in code). This distinction helps in deciding when to show users an error message or when to log the issue for developers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, organize your error handling around specific error types. For example, you can extend `AppError` for different modules or situations:"
+      },
+      {
+        "type": "code",
+        "value": "class DatabaseError extends AppError {\n  constructor(message: string) {\n    super(message);\n    this.name = 'DatabaseError';\n  }\n}\n\nclass ValidationError extends AppError {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When catching errors, use type guards or `instanceof` to handle them correctly:"
+      },
+      {
+        "type": "code",
+        "value": "try {\n  // some code that may throw\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.log('Validation issue:', error.message);\n  } else if (error instanceof DatabaseError) {\n    console.error('Database failure:', error.message);\n  } else {\n    console.error('Unexpected error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "For large applications, centralizing error handling logic is important. One way is to create middleware (in backend frameworks) or global error boundaries (in frontend React apps) to catch and handle errors in one place, improving maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Also, consider leveraging TypeScript’s powerful type system to avoid runtime errors. Using `try-catch` wisely and preferring types and interfaces to check data can reduce the number of exceptions thrown."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, implement consistent logging and monitoring so you can track errors in production without overwhelming users. Tools like Sentry or LogRocket can integrate well with TypeScript projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these practices — custom error classes, targeted error handling, centralized logic, and good logging — you can optimize error handling in your large-scale TypeScript application, making it more robust and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-microservices-in-python",
+    "title": "Designing Scalable Microservices in Python: A Step-by-Step Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of building scalable microservices in Python with this beginner-friendly, step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=8Fd2F2MjbnM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices architecture is becoming increasingly popular for building scalable and maintainable applications. This approach breaks down a large application into smaller, independent services that focus on specific functionalities. In this guide, we'll walk through the basics of designing scalable microservices using Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Understand Microservices"
+      },
+      {
+        "type": "paragraph",
+        "value": "Microservices are independently deployable services that communicate over a network, often using HTTP/REST or messaging queues. Each microservice typically owns its own data and logic, which improves modularity and scalability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Set Up a Simple Microservice"
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll use Flask, a lightweight Python web framework, to build a simple microservice. First, install Flask:"
+      },
+      {
+        "type": "code",
+        "value": "pip install Flask"
+      },
+      {
+        "type": "paragraph",
+        "value": "Create a new file called `user_service.py`. This service will manage user data."
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify, request\n\napp = Flask(__name__)\n\nusers = []\n\n@app.route('/users', methods=['GET'])\ndef get_users():\n    return jsonify(users)\n\n@app.route('/users', methods=['POST'])\ndef create_user():\n    user = request.get_json()\n    users.append(user)\n    return jsonify(user), 201\n\nif __name__ == '__main__':\n    app.run(debug=True, port=5000)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This microservice lets us add and retrieve users through HTTP requests."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Running the Microservice"
+      },
+      {
+        "type": "paragraph",
+        "value": "Run the service with:"
+      },
+      {
+        "type": "code",
+        "value": "python user_service.py"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can now send HTTP requests to `http://localhost:5000/users` to add or get users."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Design for Scalability"
+      },
+      {
+        "type": "paragraph",
+        "value": "To design for scalability, consider these key principles:\n- **Decoupling:** Each microservice should operate independently.\n- **Statelessness:** Avoid storing session data in the service itself.\n- **Database per Service:** Each service has its own database to reduce coupling.\n- **API Gateway:** Use an API Gateway to manage communication and routing between clients and services."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Add a Second Microservice"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple inventory service to handle product stock."
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify, request\n\napp = Flask(__name__)\n\ninventory = {}\n\n@app.route('/inventory/<string:product_id>', methods=['GET'])\ndef get_stock(product_id):\n    stock = inventory.get(product_id, 0)\n    return jsonify({'product_id': product_id, 'stock': stock})\n\n@app.route('/inventory/<string:product_id>', methods=['POST'])\ndef update_stock(product_id):\n    data = request.get_json()\n    inventory[product_id] = data.get('stock', 0)\n    return jsonify({'product_id': product_id, 'stock': inventory[product_id]}), 201\n\nif __name__ == '__main__':\n    app.run(debug=True, port=5001)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This service runs independently on port 5001."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Communicate Between Microservices"
+      },
+      {
+        "type": "paragraph",
+        "value": "Often, microservices need to communicate. One method is HTTP requests."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, modify the user_service to check inventory availability from the inventory service."
+      },
+      {
+        "type": "code",
+        "value": "import requests\n\n# Inside your create_user() or other route:\nproduct_id = 'product_123'\nresponse = requests.get(f'http://localhost:5001/inventory/{product_id}')\nif response.status_code == 200:\n    stock_info = response.json()\n    print(f\"Stock for {product_id}: {stock_info['stock']}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 7: Deploying Microservices"
+      },
+      {
+        "type": "paragraph",
+        "value": "For real-world applications, deploy microservices using containers like Docker, orchestrate them with Kubernetes, and use load balancers to handle traffic. Using cloud providers allows easy scalability and monitoring."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "We created basic Python microservices using Flask, learned key scalability principles, and saw how services can interact. As you grow comfortable, explore advanced tools like Celery for background jobs, gRPC for faster communication, and API gateways for better management."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding your scalable microservices!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-exception-chaining-for-advanced-debugging",
+    "title": "Mastering Python's Exception Chaining for Advanced Debugging",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's exception chaining to write clearer error handling code and simplify complex debugging with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=pZY5AhPxebM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python code, errors are inevitable. Handling these errors gracefully and debugging them effectively is a key skill for any developer. One powerful feature in Python that can help with this is exception chaining. Exception chaining allows you to link exceptions together, giving you a clear picture of the original cause of an error even if it’s caught and re-raised later on."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore what exception chaining is, why it's useful, and how to use it with simple, beginner-friendly examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Exception Chaining?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Exception chaining is a feature in Python that helps you keep the traceback of the original exception when a new exception is raised in response to it. This makes debugging easier because you can see the full context of errors instead of losing the original cause."
+      },
+      {
+        "type": "paragraph",
+        "value": "By default, when you raise a new exception inside an except block, Python implicitly links the new exception to the original one. This is done using the `__context__` attribute. Alternatively, you can explicitly chain exceptions using the `from` keyword, which sets the `__cause__` attribute."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Example of Exception Chaining"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError as e:\n        raise ValueError(\"Invalid input: division by zero\") from e\n\ntry:\n    divide(5, 0)\nexcept ValueError as e:\n    print(f\"Error: {e}\")\n    print(\"Original exception:\")\n    print(e.__cause__)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if you try to divide by zero, Python raises a `ZeroDivisionError`. We catch that error and then raise a new `ValueError` to give a clearer, more user-friendly message. With the `from` keyword, Python chains the original `ZeroDivisionError` as the cause of the new exception. This means when debugging, you won’t lose the original error details."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Exception Chaining?"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Improved Debugging:** You can trace back through the chain to find the root cause of an error.\n- **Clearer Error Messages:** You can raise custom exceptions to communicate what went wrong while preserving original error info.\n- **Cleaner Error Handling:** Helps build robust programs by handling errors at different abstraction levels without losing context."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Implicit vs Explicit Exception Chaining"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you raise a new exception inside an except block without using `from`, Python still links the exceptions implicitly via the `__context__` attribute."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    x = 1 / 0\nexcept ZeroDivisionError:\n    raise ValueError(\"Something went wrong\")\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, Python still keeps the `ZeroDivisionError` in the exception context, visible in tracebacks, but the link is less explicit. It's best practice to use `raise NewException() from original_exception` to make your intentions clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Suppressing Exception Context"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you don't want to chain exceptions, you can use `raise ... from None`. This tells Python to suppress the context and only show the new exception."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    x = 1 / 0\nexcept ZeroDivisionError:\n    raise ValueError(\"No context shown\") from None\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Exception chaining in Python is a simple but powerful tool for better error handling and debugging. By chaining exceptions using `from`, you maintain clear visibility of the original issue while raising higher-level exceptions suited to your program’s needs. Practice using exception chaining in your projects to write cleaner, more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy debugging!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-window-functions-vs-group-by-for-advanced-sql-analytics",
+    "title": "Comparing Window Functions vs GROUP BY for Advanced SQL Analytics",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use and understand the key differences between SQL window functions and GROUP BY for advanced analytical queries, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, two powerful tools for data aggregation and analysis are GROUP BY and window functions. Understanding when and how to use each can help you write more efficient and insightful queries. This article explains the key differences between them and provides simple examples to get you started."
+      },
+      {
+        "type": "paragraph",
+        "value": "GROUP BY is used to aggregate data by one or more columns. It collapses multiple rows into single summary rows based on the grouping columns, typically combined with aggregation functions like SUM(), COUNT(), or AVG()."
+      },
+      {
+        "type": "code",
+        "value": "SELECT department, COUNT(*) AS employee_count\nFROM employees\nGROUP BY department;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above query returns one row per department with the total number of employees in each. However, GROUP BY doesn’t allow you to keep all the original rows unless you use it within subqueries or joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions, on the other hand, operate on rows related to the current row defined by an OVER() clause. They allow you to calculate aggregates, ranks, or running totals without collapsing rows. This means you can keep the original row details and add aggregated results as extra columns."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, department, salary,\n       COUNT(*) OVER (PARTITION BY department) AS employees_in_department,\n       AVG(salary) OVER (PARTITION BY department) AS avg_salary_in_department\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the window functions COUNT() and AVG() calculate the number of employees and average salary per department, but each row still represents an individual employee."
+      },
+      {
+        "type": "paragraph",
+        "value": "Use GROUP BY when you want a summarized result set with one row per group. Use window functions when you want to add aggregate information to detailed rows without losing row-level data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Both techniques are often combined in complex reports and analytics, so mastering them will significantly improve your SQL skills."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-window-functions-large-sql-datasets",
+    "title": "Optimizing Window Functions for Large SQL Datasets: A Beginner's Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to avoid common pitfalls and optimize window functions when working with large SQL datasets to improve query performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions are powerful SQL tools that allow you to perform calculations across sets of rows related to the current row. They are frequently used for ranking, running totals, moving averages, and more. However, when working with large datasets, poorly optimized window functions can cause significant performance issues. This guide will help beginners understand common errors and how to optimize window functions for efficient queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is to use window functions without properly indexing or partitioning the dataset. For example, using PARTITION BY on a non-indexed column can lead to full table scans, significantly slowing down query performance."
+      },
+      {
+        "type": "code",
+        "value": "-- Inefficient window function without indexing\nSELECT user_id, order_date, amount,\n       SUM(amount) OVER (PARTITION BY user_id ORDER BY order_date) AS running_total\nFROM orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize, ensure that columns used in PARTITION BY and ORDER BY clauses are indexed. This helps the database engine quickly group and order rows without scanning the entire table."
+      },
+      {
+        "type": "code",
+        "value": "-- Creating indexes to optimize window functions\nCREATE INDEX idx_orders_user_date ON orders (user_id, order_date);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another tip is to avoid unnecessary columns in the window function. Select only the columns needed for your analysis to reduce I/O and computation overhead. Also, consider filtering data early using a WHERE clause to minimize the dataset size before applying window functions."
+      },
+      {
+        "type": "code",
+        "value": "-- Filtering before applying window function\nSELECT user_id, order_date, amount,\n       SUM(amount) OVER (PARTITION BY user_id ORDER BY order_date) AS running_total\nFROM orders\nWHERE order_date >= '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, for very large datasets, consider breaking your query into smaller steps using Common Table Expressions (CTEs) or temporary tables. This allows you to process and index subsets of data, improving performance and manageability."
+      },
+      {
+        "type": "code",
+        "value": "-- Using a CTE to optimize window function workload\nWITH recent_orders AS (\n  SELECT * FROM orders WHERE order_date >= '2023-01-01'\n)\nSELECT user_id, order_date, amount,\n       SUM(amount) OVER (PARTITION BY user_id ORDER BY order_date) AS running_total\nFROM recent_orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these tips—indexing partition/order columns, filtering early, and breaking queries down—you can avoid common errors and optimize window functions for large SQL datasets effectively."
+      }
+    ]
   }
 ];
