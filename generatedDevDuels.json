@@ -1,178 +1,176 @@
 [
   {
-    "slug": "refactor-messy-code-to-improve-readability-and-maintainability",
-    "title": "Refactor Messy Code to Improve Readability and Maintainability",
-    "language": "python",
+    "slug": "build-a-simple-to-do-list-app",
+    "title": "Build a Simple To-Do List App",
+    "language": "javascript",
     "difficulty": "beginner",
-    "category": "code-quality",
-    "description": "You are given a Python function that calculates the sum of even numbers from a list. The current implementation works correctly but is hard to read and maintain. Your task is to refactor the code to make it cleaner and more Pythonic while keeping the behavior the same.",
-    "prompt": "Refactor the given function to improve readability and maintainability. Make sure the function still returns the sum of all even numbers from the list it receives as input.",
+    "category": "mini-projects",
+    "description": "Create a basic to-do list application in JavaScript where users can add, view, and remove tasks. This project helps beginners practice working with arrays, functions, and DOM manipulation.",
+    "prompt": "Write a JavaScript function to manage a to-do list. Your code should allow adding new tasks to the list, displaying all current tasks, and removing a task by its name. You do not need to handle user input from HTML elements; focus on manipulating the task list using functions and arrays.",
     "guidance": [
-      "Use meaningful variable names to improve clarity.",
-      "Consider using Python's built-in functions or list comprehensions to simplify the logic.",
-      "Avoid unnecessary code or variables.",
-      "Make sure the function still works correctly for an empty list or list with no even numbers."
+      "Use an array to store the tasks.",
+      "Create functions: addTask(task), removeTask(task), and getTasks() to manage the list.",
+      "Use simple loops or array methods to find and remove tasks."
     ],
     "hints": [
-      "Try using a list comprehension to filter even numbers from the list.",
-      "The sum() function can add all numbers in a list or iterable.",
-      "Remember to use the modulus operator (%) to check if a number is even."
+      "To add a task, use the array push() method.",
+      "To remove a task, find its index with indexOf() and then use splice().",
+      "getTasks() should return a copy of the array or the array itself to display current tasks."
     ],
-    "starterCode": "def sum_even_numbers(numbers):\n    result = 0\n    for i in range(len(numbers)):\n        if numbers[i] % 2 == 0:\n            result += numbers[i]\n    return result",
-    "expectedOutput": "For input [1, 2, 3, 4, 5, 6], the function should return 12.",
+    "starterCode": "const tasks = [];\n\nfunction addTask(task) {\n  // Your code here\n}\n\nfunction removeTask(task) {\n  // Your code here\n}\n\nfunction getTasks() {\n  // Your code here\n}",
+    "expectedOutput": "addTask('Learn JavaScript');\naddTask('Write a blog post');\nconsole.log(getTasks());\n// Output: ['Learn JavaScript', 'Write a blog post']\n\nremoveTask('Learn JavaScript');\nconsole.log(getTasks());\n// Output: ['Write a blog post']",
     "concepts": [
-      "functions",
+      "Arrays",
+      "Functions",
+      "Array methods",
+      "Basic algorithmic thinking"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-an-sql-query-with-subqueries-and-joins",
+    "title": "Predict the Output of an SQL Query with Subqueries and Joins",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "query-analysis",
+    "description": "Analyze the given SQL query involving JOINs and a correlated subquery, and predict the final output based on a provided sample database schema and data.",
+    "prompt": "Given the following schema and data for two tables, `employees` and `departments`, analyze the accompanying SQL query and predict its output.\n\nTables:\n\nemployees:\n| id | name    | department_id | salary |\n|----|---------|---------------|--------|\n| 1  | Alice   | 10            | 70000  |\n| 2  | Bob     | 20            | 48000  |\n| 3  | Charlie | 10            | 55000  |\n| 4  | Diana   | 30            | 62000  |\n| 5  | Edward  | 20            | 49000  |\n\n\ndepartments:\n| id | name           |\n|----|----------------|\n| 10 | Sales          |\n| 20 | Engineering    |\n| 30 | Human Resources|\n\nSQL Query:\n\nSELECT d.name AS department, e.name AS employee, e.salary\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nWHERE e.salary > (\n    SELECT AVG(salary)\n    FROM employees\n    WHERE department_id = e.department_id\n)\nORDER BY d.name, e.salary DESC;",
+    "guidance": [
+      "Understand how the JOIN operation combines employee and department data.",
+      "Focus on the subquery which calculates the average salary per employee's department.",
+      "Identify which employees' salaries are higher than their department average.",
+      "Pay attention to the ORDER BY clause for the final sorted output."
+    ],
+    "hints": [
+      "The subquery is correlated — it references the outer query's department_id.",
+      "Calculate the average salary per department first to compare each employee's salary to it.",
+      "Check each employee against their department average salary individually."
+    ],
+    "starterCode": "/* Tables and sample data are described above */\n\nSELECT d.name AS department, e.name AS employee, e.salary\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nWHERE e.salary > (\n    SELECT AVG(salary)\n    FROM employees\n    WHERE department_id = e.department_id\n)\nORDER BY d.name, e.salary DESC;",
+    "expectedOutput": "| department    | employee | salary |\n|---------------|----------|--------|\n| Engineering   | Edward   | 49000  |\n| Human Resources| Diana   | 62000  |\n| Sales         | Alice    | 70000  |",
+    "concepts": [
+      "Correlated subqueries",
+      "JOIN operations",
+      "Aggregation functions",
+      "Ordering results"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "implement-a-custom-memoized-recursive-function-for-large-fibonacci-numbers",
+    "title": "Implement a Custom Memoized Recursive Function for Large Fibonacci Numbers",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Write an optimized C++ function to compute Fibonacci numbers using memoization. The function must efficiently handle very large inputs by caching intermediate results to avoid exponential time complexity, showcasing mastery of recursion, dynamic programming, and function optimization.",
+    "prompt": "Create a C++ function named fibonacciMemo that takes a single unsigned integer n and returns the nth Fibonacci number as an unsigned long long. The function must be implemented using recursion and memoization (caching previously computed values) to handle large n values (e.g., n up to 90) efficiently without excessive computation or stack overflow. Avoid global variables for caching; encapsulate memoization logic within the function or helper structures.",
+    "guidance": [
+      "Use a data structure like std::unordered_map or std::vector to store already computed Fibonacci numbers to avoid redundant calculations.",
+      "Define a helper function or use lambda recursion with a memo container passed by reference to keep track of the intermediate results.",
+      "Ensure the function handles base cases (n = 0 and n = 1) correctly to avoid infinite recursion."
+    ],
+    "hints": [
+      "Remember that naive recursive Fibonacci computation has exponential time complexity; memoization reduces this to linear.",
+      "Using std::unordered_map for memoization works but might be slower than std::vector when n is known and limited.",
+      "Be cautious with unsigned long long overflow for very large Fibonacci numbers; this challenge assumes n within the 64-bit result range."
+    ],
+    "starterCode": "unsigned long long fibonacciMemo(unsigned int n) {\n    // Implement this function\n}",
+    "expectedOutput": "fibonacciMemo(10) == 55\nfibonacciMemo(50) == 12586269025\nfibonacciMemo(90) == 2880067194370816120",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dynamic programming",
+      "C++ functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-messy-loop-and-conditionals-in-c",
+    "title": "Refactor Messy Loop and Conditionals in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a C++ function that calculates the sum of even numbers in a vector. Keep its behavior exactly the same while cleaning up the code.",
+    "prompt": "You are given a function that calculates the sum of all even numbers in a vector of integers. The current code works correctly but is hard to read and uses unnecessary variables and convoluted logic. Refactor the function to make it simpler, clearer, and more idiomatic without changing its output or behavior.",
+    "guidance": [
+      "Focus on simplifying loops and conditionals without altering the logic.",
+      "Eliminate unnecessary variables and redundant code.",
+      "Use meaningful variable names and consistent formatting."
+    ],
+    "hints": [
+      "Check if the loop can be replaced or simplified with range-based for loops.",
+      "Use the modulus operator (%) for checking even numbers.",
+      "Consider accumulating the sum directly during iteration, avoiding extra assignments."
+    ],
+    "starterCode": "int sumEvenNumbers(const std::vector<int>& numbers) {\n    int i = 0;\n    int sum = 0;\n    while(i < (int)numbers.size()) {\n        int current = numbers[i];\n        if(current % 2 == 0) {\n            sum = sum + current;\n        } else {\n            sum = sum + 0;\n        }\n        i = i + 1;\n    }\n    return sum;\n}",
+    "expectedOutput": "For input vector {1, 2, 3, 4, 5, 6}, the function should return 12.",
+    "concepts": [
       "loops",
       "conditionals",
-      "list comprehensions",
+      "functions",
       "code readability"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-a-function-to-rotate-elements-in-an-array",
-    "title": "Build a Function to Rotate Elements in an Array",
-    "language": "cpp",
+    "slug": "fix-the-array-filtering-bug-to-return-unique-even-numbers",
+    "title": "Fix the Array Filtering Bug to Return Unique Even Numbers",
+    "language": "javascript",
     "difficulty": "intermediate",
-    "category": "functions",
-    "description": "Write a C++ function that rotates the elements of an array to the right by a given number of steps. The rotation should handle cases where the number of steps is larger than the array size.",
-    "prompt": "Create a function named rotateArray that takes a vector of integers and an integer k representing the number of rotation steps. The function should rotate the array to the right by k steps in-place, meaning elements shifted off the end reappear at the front. Return the rotated vector after performing the operation. For example, given nums = {1, 2, 3, 4, 5, 6, 7} and k = 3, the function should return {5, 6, 7, 1, 2, 3, 4}.",
+    "category": "debugging",
+    "description": "A function meant to filter even numbers from an array and remove duplicates is currently returning incorrect results. Debug the code to ensure it returns only unique even numbers in ascending order.",
+    "prompt": "You are given a function getUniqueEvenNumbers that takes an array of integers and is expected to return an array of unique even numbers sorted in ascending order. However, the provided code currently has bugs that prevent it from functioning correctly. Your task is to fix the bugs so that the function returns the correct output. For example, input [1, 2, 2, 3, 4, 4, 5, 6] should return [2, 4, 6].",
     "guidance": [
-      "Consider how to handle the case when k is larger than the size of the vector.",
-      "Think about using vector slicing or three-step reversal to achieve the rotation efficiently."
+      "Check how the function filters even numbers and removes duplicates.",
+      "Ensure the output array only contains unique even numbers sorted in ascending order."
     ],
     "hints": [
-      "Using modulo (k % nums.size()) can simplify handling rotations greater than the vector length.",
-      "One approach is to reverse the entire vector, then reverse the first k elements and finally reverse the remaining elements."
+      "Remember that Array.filter is helpful for filtering based on conditions.",
+      "Use a Set or similar approach to remove duplicates from an array.",
+      "Make sure sort is applied correctly to numbers (not as strings)."
     ],
-    "starterCode": "#include <vector>\nusing namespace std;\n\nvector<int> rotateArray(vector<int>& nums, int k) {\n    // Your code here\n}",
-    "expectedOutput": "rotateArray({1, 2, 3, 4, 5, 6, 7}, 3) -> {5, 6, 7, 1, 2, 3, 4}\nrotateArray({-1, -100, 3, 99}, 2) -> {3, 99, -1, -100}",
+    "starterCode": "function getUniqueEvenNumbers(arr) {\n  // Filter even numbers\n  const evens = arr.filter(num => num % 2 === 0);\n\n  // Remove duplicates\n  const uniqueEvens = evens.filter((num, index) => evens.indexOf(num) === index);\n\n  // Sort numbers ascending (bug: sorting as strings)\n  uniqueEvens.sort();\n\n  return uniqueEvens;\n}\n\n// Example usage:\nconsole.log(getUniqueEvenNumbers([1, 2, 2, 3, 4, 4, 5, 6]));",
+    "expectedOutput": "[2, 4, 6]",
     "concepts": [
-      "arrays",
-      "in-place modification",
-      "modular arithmetic",
-      "vector operations"
+      "array filtering",
+      "removing duplicates",
+      "sorting arrays",
+      "debugging"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "predict-the-output-of-a-recursive-cte-with-aggregations-and-window-functions",
-    "title": "Predict the Output of a Recursive CTE with Aggregations and Window Functions",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "query-analysis",
-    "description": "Analyze the output of an advanced SQL query using recursive common table expressions (CTEs), aggregations, and window functions. Predict the final result set given the schema and sample data.",
-    "prompt": "Given the following schema and sample data representing employees and their managers, analyze the provided recursive CTE query. Determine the output—specifically, the final columns and rows returned by the query.\n\n-- Employees Table\nCREATE TABLE Employees(\n  EmployeeID INT PRIMARY KEY,\n  ManagerID INT NULL,\n  Salary INT NOT NULL\n);\n\nINSERT INTO Employees (EmployeeID, ManagerID, Salary) VALUES\n(1, NULL, 100000),\n(2, 1, 80000),\n(3, 1, 90000),\n(4, 2, 70000),\n(5, 2, 60000),\n(6, 3, 85000),\n(7, 3, 65000);\n\n-- Query to analyze\nWITH RECURSIVE HierarchyCTE AS (\n  SELECT EmployeeID, ManagerID, Salary, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n  \n  UNION ALL\n  \n  SELECT e.EmployeeID, e.ManagerID, e.Salary, h.Level + 1\n  FROM Employees e\n  JOIN HierarchyCTE h ON e.ManagerID = h.EmployeeID\n),\nAggregated AS (\n  SELECT\n    ManagerID,\n    COUNT(EmployeeID) AS TeamSize,\n    AVG(Salary) AS AvgSalary\n  FROM HierarchyCTE\n  GROUP BY ManagerID\n),\nRanked AS (\n  SELECT\n    h.EmployeeID,\n    h.ManagerID,\n    h.Level,\n    a.TeamSize,\n    a.AvgSalary,\n    RANK() OVER (PARTITION BY h.ManagerID ORDER BY a.TeamSize DESC) AS TeamRank\n  FROM HierarchyCTE h\n  LEFT JOIN Aggregated a ON h.EmployeeID = a.ManagerID\n)\nSELECT * FROM Ranked\nORDER BY Level, TeamRank, EmployeeID;",
-    "guidance": [
-      "Understand how the recursive CTE builds the hierarchy levels starting from the top manager (ManagerID IS NULL).",
-      "Consider how the Aggregated CTE calculates team size and average salary grouped by manager.",
-      "Analyze how the window function RANK() operates partitioned by ManagerID and ordered by team size descending.",
-      "Trace the joins carefully to see how employees are linked with their team aggregation."
-    ],
-    "hints": [
-      "Remember the base case of the recursion includes only EmployeeID 1 (top-level manager).",
-      "Note the LEFT JOIN in Ranked means some employees might have NULLs for aggregated data if they aren't managers themselves.",
-      "RANK() resets for each ManagerID partition; employees with the same manager get ranked according to their team size."
-    ],
-    "starterCode": "CREATE TABLE Employees(\n  EmployeeID INT PRIMARY KEY,\n  ManagerID INT NULL,\n  Salary INT NOT NULL\n);\n\nINSERT INTO Employees (EmployeeID, ManagerID, Salary) VALUES\n(1, NULL, 100000),\n(2, 1, 80000),\n(3, 1, 90000),\n(4, 2, 70000),\n(5, 2, 60000),\n(6, 3, 85000),\n(7, 3, 65000);\n\nWITH RECURSIVE HierarchyCTE AS (\n  SELECT EmployeeID, ManagerID, Salary, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n  \n  UNION ALL\n  \n  SELECT e.EmployeeID, e.ManagerID, e.Salary, h.Level + 1\n  FROM Employees e\n  JOIN HierarchyCTE h ON e.ManagerID = h.EmployeeID\n),\nAggregated AS (\n  SELECT\n    ManagerID,\n    COUNT(EmployeeID) AS TeamSize,\n    AVG(Salary) AS AvgSalary\n  FROM HierarchyCTE\n  GROUP BY ManagerID\n),\nRanked AS (\n  SELECT\n    h.EmployeeID,\n    h.ManagerID,\n    h.Level,\n    a.TeamSize,\n    a.AvgSalary,\n    RANK() OVER (PARTITION BY h.ManagerID ORDER BY a.TeamSize DESC) AS TeamRank\n  FROM HierarchyCTE h\n  LEFT JOIN Aggregated a ON h.EmployeeID = a.ManagerID\n)\nSELECT * FROM Ranked\nORDER BY Level, TeamRank, EmployeeID;",
-    "expectedOutput": "EmployeeID | ManagerID | Level | TeamSize | AvgSalary | TeamRank\n-----------|-----------|-------|----------|-----------|---------\n1          | NULL      | 1     | 2        | 73333.33  | 1\n2          | 1         | 2     | 2        | 65000     | 1\n3          | 1         | 2     | 2        | 75000     | 1\n4          | 2         | 3     | NULL     | NULL      | 1\n5          | 2         | 3     | NULL     | NULL      | 1\n6          | 3         | 3     | NULL     | NULL      | 1\n7          | 3         | 3     | NULL     | NULL      | 1",
-    "concepts": [
-      "Recursive CTE",
-      "Aggregation",
-      "Window Functions",
-      "Hierarchical Queries"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "simple-contact-list-manager-in-c",
-    "title": "Simple Contact List Manager in C++",
-    "language": "cpp",
-    "difficulty": "beginner",
-    "category": "mini-projects",
-    "description": "Create a basic contact list manager where users can add, display, and search contacts using console input and output.",
-    "prompt": "Build a simple console application in C++ that manages a list of contacts. Each contact should have a name and a phone number. The program should allow users to: 1) Add a new contact, 2) Display all contacts, and 3) Search contacts by name and display matching results. Implement a simple menu loop to let the user choose these actions until they decide to exit.",
-    "guidance": [
-      "Use a struct or class to represent a contact with name and phone number fields.",
-      "Store contacts in a simple container such as a vector.",
-      "Use a loop to repeatedly show the menu and execute the selected operation.",
-      "Use basic string input/output and simple loops to display and search contacts."
-    ],
-    "hints": [
-      "Consider using std::vector to hold all your contacts for easy addition and iteration.",
-      "For searching, loop through the vector and compare contact names with the search input using string operations."
-    ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Contact {\n    std::string name;\n    std::string phone;\n};\n\nint main() {\n    std::vector<Contact> contacts;\n    int choice = 0;\n    while (choice != 4) {\n        std::cout << \"Menu:\\n1. Add Contact\\n2. Display Contacts\\n3. Search Contact\\n4. Exit\\nEnter choice: \";\n        std::cin >> choice;\n        std::cin.ignore(); // clear newline\n\n        if (choice == 1) {\n            // Add contact\n        } else if (choice == 2) {\n            // Display all contacts\n        } else if (choice == 3) {\n            // Search contacts\n        } else if (choice == 4) {\n            std::cout << \"Exiting...\" << std::endl;\n        } else {\n            std::cout << \"Invalid choice. Try again.\" << std::endl;\n        }\n    }\n    return 0;\n}\n",
-    "expectedOutput": "Menu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 1\nEnter name: Alice\nEnter phone: 12345\nMenu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 2\nContacts List:\nName: Alice, Phone: 12345\nMenu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 3\nEnter name to search: Alice\nFound: Name: Alice, Phone: 12345\nMenu:\n1. Add Contact\n2. Display Contacts\n3. Search Contact\n4. Exit\nEnter choice: 4\nExiting...",
-    "concepts": [
-      "structs",
-      "vectors",
-      "loops",
-      "conditional statements"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "create-a-function-to-calculate-moving-average-of-a-list",
-    "title": "Create a Function to Calculate Moving Average of a List",
+    "slug": "refactor-legacy-data-processor-for-improved-readability-and-performance",
+    "title": "Refactor Legacy Data Processor for Improved Readability and Performance",
     "language": "python",
-    "difficulty": "intermediate",
-    "category": "functions",
-    "description": "Write a Python function that computes the moving average over a specified window size for a list of numerical values.",
-    "prompt": "Write a function named moving_average that takes two parameters: a list of numbers and an integer window size n. The function should return a list of the moving averages calculated over the window n across the list. Each moving average is the average of n consecutive elements. If the window size is larger than the list, return an empty list.",
-    "guidance": [
-      "Iterate through the list by slices of length n to compute each window's average.",
-      "Handle edge cases like an empty list or window size larger than the list length.",
-      "Consider using list comprehension for a clean and concise solution."
-    ],
-    "hints": [
-      "Use slicing: list[i:i+n] to get the current window of elements.",
-      "Sum the elements in the slice and divide by n to get the average.",
-      "Think about how many moving averages you will calculate based on the list length and window size."
-    ],
-    "starterCode": "def moving_average(numbers, n):\n    # Your code here\n    pass",
-    "expectedOutput": "moving_average([1, 2, 3, 4, 5], 3) -> [2.0, 3.0, 4.0]",
-    "concepts": [
-      "list slicing",
-      "loops",
-      "functions",
-      "averages"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "refactor-complex-c-class-for-improved-readability-and-maintainability",
-    "title": "Refactor Complex C++ Class for Improved Readability and Maintainability",
-    "language": "cpp",
     "difficulty": "advanced",
     "category": "code-quality",
-    "description": "Given a complex and messy C++ class implementation, refactor the code to improve readability, maintainability, and follow best OOP practices without changing the program's behavior.",
-    "prompt": "You are provided with a C++ class that manages an inventory of items. The implementation works correctly but is cluttered with deeply nested conditionals, duplicated code, and poor separation of concerns. Refactor the class to improve clarity, structure, and code quality while keeping all existing functionality intact. Avoid changing method signatures and external behavior. Your refactor should focus on reducing code duplication, improving naming, simplifying complex logic, and enhancing code modularity.",
+    "description": "You are provided with a legacy Python function that processes a list of user records to generate a summary report. Although the function works correctly, it is difficult to read, contains redundant computations, and has inefficient constructs. Your task is to refactor this code to improve readability, maintain the same behavior, and optimize performance while adhering to Python best practices.",
+    "prompt": "Below is a legacy Python function named process_user_data which takes a list of user dictionaries and returns a summary dictionary with average age, count of active users, and a list of usernames sorted alphabetically. Refactor this function to improve code clarity and efficiency without changing its behavior. Pay particular attention to redundant code blocks, repeated calculations, and code structure. Ensure your version is idiomatic Python and easy to understand.",
     "guidance": [
-      "Identify and extract repeated code snippets into helper functions or private methods.",
-      "Replace deeply nested if-else blocks with early returns or guard clauses to simplify flow.",
-      "Review variable and method names, improving clarity and intent.",
-      "Consider applying design principles such as Single Responsibility Principle to enhance modularity."
+      "Identify and eliminate repeated computations or redundant loops.",
+      "Consider using built-in Python functions and comprehensions for clarity and performance.",
+      "Maintain clear naming and structure for variable and function usage."
     ],
     "hints": [
-      "Look for patterns where several branches execute similar code with slight variations; these can be unified.",
-      "Extracting small functions not only improves readability but also helps isolate logical units for testing.",
-      "Try replacing boolean flags and counters that track states across methods with well-defined state representations."
+      "Avoid recalculating the length of lists multiple times; store results when possible.",
+      "Use generator expressions or list comprehensions for filtering and mapping data.",
+      "Utilize built-in functions like sum(), sorted(), and len() efficiently."
     ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nclass Inventory {\npublic:\n    Inventory() {}\n\n    void addItem(std::string name, int quantity) {\n        if (quantity > 0) {\n            int index = -1;\n            for (int i = 0; i < items.size(); ++i) {\n                if (items[i] == name) {\n                    index = i;\n                    break;\n                }\n            }\n            if (index == -1) {\n                items.push_back(name);\n                quantities.push_back(quantity);\n            } else {\n                quantities[index] += quantity;\n            }\n        } else {\n            std::cout << \"Invalid quantity\\n\";\n        }\n    }\n\n    void removeItem(std::string name, int quantity) {\n        if (quantity <= 0) {\n            std::cout << \"Cannot remove non-positive quantity\\n\";\n            return;\n        }\n        for (int i = 0; i < items.size(); ++i) {\n            if (items[i] == name) {\n                if (quantities[i] < quantity) {\n                    std::cout << \"Not enough quantity to remove\\n\";\n                } else {\n                    quantities[i] -= quantity;\n                    if (quantities[i] == 0) {\n                        items.erase(items.begin() + i);\n                        quantities.erase(quantities.begin() + i);\n                    }\n                }\n                return;\n            }\n        }\n        std::cout << \"Item not found\" << std::endl;\n    }\n\n    void printInventory() {\n        if (items.size() == 0) {\n            std::cout << \"Inventory is empty\" << std::endl;\n        } else {\n            for (size_t i = 0; i < items.size(); ++i) {\n                std::cout << items[i] << \": \" << quantities[i] << std::endl;\n            }\n        }\n    }\n\nprivate:\n    std::vector<std::string> items;\n    std::vector<int> quantities;\n};\n\nint main() {\n    Inventory inv;\n    inv.addItem(\"apple\", 10);\n    inv.addItem(\"banana\", 5);\n    inv.removeItem(\"apple\", 3);\n    inv.printInventory();\n    inv.removeItem(\"banana\", 6);\n    inv.printInventory();\n    return 0;\n}",
-    "expectedOutput": "apple: 7\nbanana: 5\nNot enough quantity to remove\napple: 7\nbanana: 5",
+    "starterCode": "def process_user_data(users):\n    total_age = 0\n    count_active = 0\n    usernames = []\n\n    for i in range(len(users)):\n        if users[i]['active'] == True:\n            count_active += 1\n        total_age += users[i]['age']\n\n    for i in range(len(users)):\n        usernames.append(users[i]['username'])\n\n    average_age = total_age / len(users)\n\n    usernames.sort()\n\n    result = {\n        'average_age': average_age,\n        'active_user_count': count_active,\n        'sorted_usernames': usernames\n    }\n\n    return result",
+    "expectedOutput": "{\n  'average_age': 29.6,\n  'active_user_count': 3,\n  'sorted_usernames': ['alice', 'bob', 'charlie', 'diana', 'eve']\n}\n\n# For input example users: [\n#   {'username': 'alice', 'age': 31, 'active': True},\n#   {'username': 'bob', 'age': 22, 'active': False},\n#   {'username': 'charlie', 'age': 29, 'active': True},\n#   {'username': 'diana', 'age': 35, 'active': True},\n#   {'username': 'eve', 'age': 22, 'active': False}\n# ]",
     "concepts": [
-      "Code Refactoring",
-      "C++ Best Practices",
-      "Object-Oriented Programming",
-      "Code Maintenance"
+      "code refactoring",
+      "performance optimization",
+      "Python built-in functions",
+      "list comprehensions"
     ],
     "estimatedTime": "15 minutes",
-    "isFeatured": true
+    "isFeatured": false
   }
 ]

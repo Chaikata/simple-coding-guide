@@ -1700,5 +1700,179 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "build-a-simple-to-do-list-app",
+    "title": "Build a Simple To-Do List App",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a basic to-do list application in JavaScript where users can add, view, and remove tasks. This project helps beginners practice working with arrays, functions, and DOM manipulation.",
+    "prompt": "Write a JavaScript function to manage a to-do list. Your code should allow adding new tasks to the list, displaying all current tasks, and removing a task by its name. You do not need to handle user input from HTML elements; focus on manipulating the task list using functions and arrays.",
+    "guidance": [
+      "Use an array to store the tasks.",
+      "Create functions: addTask(task), removeTask(task), and getTasks() to manage the list.",
+      "Use simple loops or array methods to find and remove tasks."
+    ],
+    "hints": [
+      "To add a task, use the array push() method.",
+      "To remove a task, find its index with indexOf() and then use splice().",
+      "getTasks() should return a copy of the array or the array itself to display current tasks."
+    ],
+    "starterCode": "const tasks = [];\n\nfunction addTask(task) {\n  // Your code here\n}\n\nfunction removeTask(task) {\n  // Your code here\n}\n\nfunction getTasks() {\n  // Your code here\n}",
+    "expectedOutput": "addTask('Learn JavaScript');\naddTask('Write a blog post');\nconsole.log(getTasks());\n// Output: ['Learn JavaScript', 'Write a blog post']\n\nremoveTask('Learn JavaScript');\nconsole.log(getTasks());\n// Output: ['Write a blog post']",
+    "concepts": [
+      "Arrays",
+      "Functions",
+      "Array methods",
+      "Basic algorithmic thinking"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-an-sql-query-with-subqueries-and-joins",
+    "title": "Predict the Output of an SQL Query with Subqueries and Joins",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "query-analysis",
+    "description": "Analyze the given SQL query involving JOINs and a correlated subquery, and predict the final output based on a provided sample database schema and data.",
+    "prompt": "Given the following schema and data for two tables, `employees` and `departments`, analyze the accompanying SQL query and predict its output.\n\nTables:\n\nemployees:\n| id | name    | department_id | salary |\n|----|---------|---------------|--------|\n| 1  | Alice   | 10            | 70000  |\n| 2  | Bob     | 20            | 48000  |\n| 3  | Charlie | 10            | 55000  |\n| 4  | Diana   | 30            | 62000  |\n| 5  | Edward  | 20            | 49000  |\n\n\ndepartments:\n| id | name           |\n|----|----------------|\n| 10 | Sales          |\n| 20 | Engineering    |\n| 30 | Human Resources|\n\nSQL Query:\n\nSELECT d.name AS department, e.name AS employee, e.salary\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nWHERE e.salary > (\n    SELECT AVG(salary)\n    FROM employees\n    WHERE department_id = e.department_id\n)\nORDER BY d.name, e.salary DESC;",
+    "guidance": [
+      "Understand how the JOIN operation combines employee and department data.",
+      "Focus on the subquery which calculates the average salary per employee's department.",
+      "Identify which employees' salaries are higher than their department average.",
+      "Pay attention to the ORDER BY clause for the final sorted output."
+    ],
+    "hints": [
+      "The subquery is correlated — it references the outer query's department_id.",
+      "Calculate the average salary per department first to compare each employee's salary to it.",
+      "Check each employee against their department average salary individually."
+    ],
+    "starterCode": "/* Tables and sample data are described above */\n\nSELECT d.name AS department, e.name AS employee, e.salary\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nWHERE e.salary > (\n    SELECT AVG(salary)\n    FROM employees\n    WHERE department_id = e.department_id\n)\nORDER BY d.name, e.salary DESC;",
+    "expectedOutput": "| department    | employee | salary |\n|---------------|----------|--------|\n| Engineering   | Edward   | 49000  |\n| Human Resources| Diana   | 62000  |\n| Sales         | Alice    | 70000  |",
+    "concepts": [
+      "Correlated subqueries",
+      "JOIN operations",
+      "Aggregation functions",
+      "Ordering results"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "implement-a-custom-memoized-recursive-function-for-large-fibonacci-numbers",
+    "title": "Implement a Custom Memoized Recursive Function for Large Fibonacci Numbers",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Write an optimized C++ function to compute Fibonacci numbers using memoization. The function must efficiently handle very large inputs by caching intermediate results to avoid exponential time complexity, showcasing mastery of recursion, dynamic programming, and function optimization.",
+    "prompt": "Create a C++ function named fibonacciMemo that takes a single unsigned integer n and returns the nth Fibonacci number as an unsigned long long. The function must be implemented using recursion and memoization (caching previously computed values) to handle large n values (e.g., n up to 90) efficiently without excessive computation or stack overflow. Avoid global variables for caching; encapsulate memoization logic within the function or helper structures.",
+    "guidance": [
+      "Use a data structure like std::unordered_map or std::vector to store already computed Fibonacci numbers to avoid redundant calculations.",
+      "Define a helper function or use lambda recursion with a memo container passed by reference to keep track of the intermediate results.",
+      "Ensure the function handles base cases (n = 0 and n = 1) correctly to avoid infinite recursion."
+    ],
+    "hints": [
+      "Remember that naive recursive Fibonacci computation has exponential time complexity; memoization reduces this to linear.",
+      "Using std::unordered_map for memoization works but might be slower than std::vector when n is known and limited.",
+      "Be cautious with unsigned long long overflow for very large Fibonacci numbers; this challenge assumes n within the 64-bit result range."
+    ],
+    "starterCode": "unsigned long long fibonacciMemo(unsigned int n) {\n    // Implement this function\n}",
+    "expectedOutput": "fibonacciMemo(10) == 55\nfibonacciMemo(50) == 12586269025\nfibonacciMemo(90) == 2880067194370816120",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dynamic programming",
+      "C++ functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-messy-loop-and-conditionals-in-c",
+    "title": "Refactor Messy Loop and Conditionals in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a C++ function that calculates the sum of even numbers in a vector. Keep its behavior exactly the same while cleaning up the code.",
+    "prompt": "You are given a function that calculates the sum of all even numbers in a vector of integers. The current code works correctly but is hard to read and uses unnecessary variables and convoluted logic. Refactor the function to make it simpler, clearer, and more idiomatic without changing its output or behavior.",
+    "guidance": [
+      "Focus on simplifying loops and conditionals without altering the logic.",
+      "Eliminate unnecessary variables and redundant code.",
+      "Use meaningful variable names and consistent formatting."
+    ],
+    "hints": [
+      "Check if the loop can be replaced or simplified with range-based for loops.",
+      "Use the modulus operator (%) for checking even numbers.",
+      "Consider accumulating the sum directly during iteration, avoiding extra assignments."
+    ],
+    "starterCode": "int sumEvenNumbers(const std::vector<int>& numbers) {\n    int i = 0;\n    int sum = 0;\n    while(i < (int)numbers.size()) {\n        int current = numbers[i];\n        if(current % 2 == 0) {\n            sum = sum + current;\n        } else {\n            sum = sum + 0;\n        }\n        i = i + 1;\n    }\n    return sum;\n}",
+    "expectedOutput": "For input vector {1, 2, 3, 4, 5, 6}, the function should return 12.",
+    "concepts": [
+      "loops",
+      "conditionals",
+      "functions",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-array-filtering-bug-to-return-unique-even-numbers",
+    "title": "Fix the Array Filtering Bug to Return Unique Even Numbers",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "A function meant to filter even numbers from an array and remove duplicates is currently returning incorrect results. Debug the code to ensure it returns only unique even numbers in ascending order.",
+    "prompt": "You are given a function getUniqueEvenNumbers that takes an array of integers and is expected to return an array of unique even numbers sorted in ascending order. However, the provided code currently has bugs that prevent it from functioning correctly. Your task is to fix the bugs so that the function returns the correct output. For example, input [1, 2, 2, 3, 4, 4, 5, 6] should return [2, 4, 6].",
+    "guidance": [
+      "Check how the function filters even numbers and removes duplicates.",
+      "Ensure the output array only contains unique even numbers sorted in ascending order."
+    ],
+    "hints": [
+      "Remember that Array.filter is helpful for filtering based on conditions.",
+      "Use a Set or similar approach to remove duplicates from an array.",
+      "Make sure sort is applied correctly to numbers (not as strings)."
+    ],
+    "starterCode": "function getUniqueEvenNumbers(arr) {\n  // Filter even numbers\n  const evens = arr.filter(num => num % 2 === 0);\n\n  // Remove duplicates\n  const uniqueEvens = evens.filter((num, index) => evens.indexOf(num) === index);\n\n  // Sort numbers ascending (bug: sorting as strings)\n  uniqueEvens.sort();\n\n  return uniqueEvens;\n}\n\n// Example usage:\nconsole.log(getUniqueEvenNumbers([1, 2, 2, 3, 4, 4, 5, 6]));",
+    "expectedOutput": "[2, 4, 6]",
+    "concepts": [
+      "array filtering",
+      "removing duplicates",
+      "sorting arrays",
+      "debugging"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-legacy-data-processor-for-improved-readability-and-performance",
+    "title": "Refactor Legacy Data Processor for Improved Readability and Performance",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "You are provided with a legacy Python function that processes a list of user records to generate a summary report. Although the function works correctly, it is difficult to read, contains redundant computations, and has inefficient constructs. Your task is to refactor this code to improve readability, maintain the same behavior, and optimize performance while adhering to Python best practices.",
+    "prompt": "Below is a legacy Python function named process_user_data which takes a list of user dictionaries and returns a summary dictionary with average age, count of active users, and a list of usernames sorted alphabetically. Refactor this function to improve code clarity and efficiency without changing its behavior. Pay particular attention to redundant code blocks, repeated calculations, and code structure. Ensure your version is idiomatic Python and easy to understand.",
+    "guidance": [
+      "Identify and eliminate repeated computations or redundant loops.",
+      "Consider using built-in Python functions and comprehensions for clarity and performance.",
+      "Maintain clear naming and structure for variable and function usage."
+    ],
+    "hints": [
+      "Avoid recalculating the length of lists multiple times; store results when possible.",
+      "Use generator expressions or list comprehensions for filtering and mapping data.",
+      "Utilize built-in functions like sum(), sorted(), and len() efficiently."
+    ],
+    "starterCode": "def process_user_data(users):\n    total_age = 0\n    count_active = 0\n    usernames = []\n\n    for i in range(len(users)):\n        if users[i]['active'] == True:\n            count_active += 1\n        total_age += users[i]['age']\n\n    for i in range(len(users)):\n        usernames.append(users[i]['username'])\n\n    average_age = total_age / len(users)\n\n    usernames.sort()\n\n    result = {\n        'average_age': average_age,\n        'active_user_count': count_active,\n        'sorted_usernames': usernames\n    }\n\n    return result",
+    "expectedOutput": "{\n  'average_age': 29.6,\n  'active_user_count': 3,\n  'sorted_usernames': ['alice', 'bob', 'charlie', 'diana', 'eve']\n}\n\n# For input example users: [\n#   {'username': 'alice', 'age': 31, 'active': True},\n#   {'username': 'bob', 'age': 22, 'active': False},\n#   {'username': 'charlie', 'age': 29, 'active': True},\n#   {'username': 'diana', 'age': 35, 'active': True},\n#   {'username': 'eve', 'age': 22, 'active': False}\n# ]",
+    "concepts": [
+      "code refactoring",
+      "performance optimization",
+      "Python built-in functions",
+      "list comprehensions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
