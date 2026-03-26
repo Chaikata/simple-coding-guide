@@ -22851,5 +22851,495 @@ export const articles = [
         "value": "By applying these tips—indexing partition/order columns, filtering early, and breaking queries down—you can avoid common errors and optimize window functions for large SQL datasets effectively."
       }
     ]
+  },
+  {
+    "slug": "building-real-time-chat-application-websocket-nodejs",
+    "title": "Building a Real-Time Chat Application with WebSocket and Node.js",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple real-time chat application using WebSocket and Node.js, perfect for beginners getting started with real-time web development.",
+    "videoUrl": "https://www.youtube.com/watch?v=rxzOqP9YwmM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time communication is an essential feature in many modern applications, especially chat apps. This tutorial will guide you through building a basic real-time chat application using WebSocket and Node.js. WebSockets allow for a full-duplex communication channel between the client and server, making it perfect for chat applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started, ensure you have Node.js installed on your computer. We'll use the popular WebSocket library called `ws` for handling WebSockets in our Node.js server."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, create a new folder for your project and open a terminal in that directory. Initialize a new Node.js project by running:"
+      },
+      {
+        "type": "code",
+        "value": "npm init -y"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, install the WebSocket package:"
+      },
+      {
+        "type": "code",
+        "value": "npm install ws"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, create a file named `server.js`. This will be the WebSocket server that handles client connections and broadcasts messages."
+      },
+      {
+        "type": "code",
+        "value": "const WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', function connection(ws) {\n  console.log('A new client connected!');\n\n  ws.on('message', function incoming(message) {\n    console.log('received: %s', message);\n    // Broadcast the message to all clients\n    wss.clients.forEach(function each(client) {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.send('Welcome to the chat!');\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+      },
+      {
+        "type": "paragraph",
+        "value": "This server listens for new connections and then broadcasts any incoming messages to all connected clients except the sender."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let’s create a simple HTML client to connect to this WebSocket server. Create an `index.html` file with the following content:"
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>WebSocket Chat</title>\n  <style>\n    #messages { list-style-type: none; margin: 0; padding: 0; }\n    #messages li { padding: 8px; background: #f4f4f4; margin-bottom: 5px; border-radius: 4px; }\n  </style>\n</head>\n<body>\n  <ul id=\"messages\"></ul>\n  <input id=\"messageInput\" autocomplete=\"off\" placeholder=\"Type a message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script>\n    const ws = new WebSocket('ws://localhost:8080');\n    const messages = document.getElementById('messages');\n    const input = document.getElementById('messageInput');\n    const sendBtn = document.getElementById('sendBtn');\n\n    ws.onopen = () => {\n      console.log('Connected to server');\n    };\n\n    ws.onmessage = (event) => {\n      const li = document.createElement('li');\n      li.textContent = event.data;\n      messages.appendChild(li);\n    };\n\n    sendBtn.onclick = () => {\n      if(input.value) {\n        ws.send(input.value);\n        input.value = '';\n      }\n    };\n\n    input.addEventListener('keypress', function (e) {\n      if (e.key === 'Enter') {\n        sendBtn.click();\n      }\n    });\n  </script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "This client connects to the server, listens for messages, and displays them in a list. Users can type a message and send it by clicking the send button or pressing Enter."
+      },
+      {
+        "type": "paragraph",
+        "value": "To run your chat application, first start the WebSocket server by running:"
+      },
+      {
+        "type": "code",
+        "value": "node server.js"
+      },
+      {
+        "type": "paragraph",
+        "value": "Then, open the `index.html` file in a browser (you can simply open it by double-clicking, or ideally serve it using a local web server for better cross-browser compatibility). Open multiple tabs or browsers to test real-time messaging between clients."
+      },
+      {
+        "type": "paragraph",
+        "value": "You now have a basic real-time chat application! This project can be extended by adding user names, styling, and persistent storage for messages. WebSockets with Node.js provide a powerful way to build live interactive web apps."
+      }
+    ]
+  },
+  {
+    "slug": "handling-memory-leaks-in-large-scale-javascript-applications",
+    "title": "Handling Memory Leaks in Large Scale JavaScript Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to identify, fix, and prevent memory leaks in large-scale JavaScript applications with simple tips and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks happen when a program keeps holding onto memory it no longer needs. Over time, this causes your JavaScript app to slow down or even crash. This is especially important to handle in large-scale applications where the memory usage is high and the app runs for a long time."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll go over how to spot memory leaks, common causes, and simple ways to prevent and fix them to keep your app running smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Spot Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use browser developer tools like Chrome DevTools to monitor memory usage. Look for continuous growth in the memory graph even when the app is idle or during normal usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Causes of Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Unremoved Event Listeners: Forgetting to remove event listeners can keep unused DOM nodes in memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Forgotten Timers or Intervals: setInterval or setTimeout callbacks holding references to variables."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Closures Holding References: Functions that close over large objects or DOM nodes that are no longer needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Large Data Structures Not Cleared: Arrays or objects that keep growing and are never emptied."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Tips to Fix Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Remove Event Listeners When Not Needed"
+      },
+      {
+        "type": "code",
+        "value": "const button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Button clicked');\n}\n\n// Add event listener\nbutton.addEventListener('click', handleClick);\n\n// Later, when you don't need it anymore\nbutton.removeEventListener('click', handleClick);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Clear Timers and Intervals"
+      },
+      {
+        "type": "code",
+        "value": "const intervalId = setInterval(() => {\n  console.log('Doing something repeatedly');\n}, 1000);\n\n// When no longer needed\nclearInterval(intervalId);"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Avoid Unnecessary Closures Holding Large Objects"
+      },
+      {
+        "type": "code",
+        "value": "function createHandler(largeObject) {\n  return function() {\n    console.log(largeObject.name);\n  };\n}\n\n// If largeObject is big, make sure to null it if handler is no longer needed\nlet handler = createHandler(largeObject);\n// When done\nhandler = null;\nlargeObject = null;"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Manage Large Data Collections Properly"
+      },
+      {
+        "type": "code",
+        "value": "let dataList = [];\n\nfunction addData(item) {\n  dataList.push(item);\n}\n\n// When old data is not needed\nfunction clearData() {\n  dataList = [];\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Weak References When Appropriate"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript offers WeakMap and WeakSet which do not prevent garbage collection of their keys. These are useful for caching without creating memory leaks."
+      },
+      {
+        "type": "code",
+        "value": "const cache = new WeakMap();\n\nfunction cacheData(obj, value) {\n  cache.set(obj, value);\n}\n\n// When no other references to obj remain, it can be garbage collected."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Memory leaks can slow down or crash large JavaScript applications if not handled properly. Regularly monitor your app's memory usage, clean up event listeners, intervals, closures, and large data collections when they are no longer needed. Using WeakMaps can help avoid leaks when caching objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these beginner-friendly tips, your large JavaScript app will be more robust and efficient!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescript-type-guards-a-beginners-guide-to-safer-code",
+    "title": "Understanding TypeScript Type Guards: A Beginner’s Guide to Safer Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript type guards help you write safer code by narrowing down types and preventing errors. This beginner-friendly guide explains type guards with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=4joVrNt4xNU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with TypeScript, one common challenge is handling variables that can be more than one type. TypeScript helps by providing type safety, but sometimes you need to tell the compiler exactly what type you are dealing with at certain points in your code. This is where type guards come in! Type guards let you narrow down types so you can avoid errors and write safer code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards are expressions that perform runtime checks which guarantee the type of a variable within a specific scope. This means that inside an if statement or a similar block, you can confidently use the variable as a specific type."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, let’s say you have a function that accepts a parameter which could be either a string or a number. You want to handle these two cases differently without generating errors."
+      },
+      {
+        "type": "code",
+        "value": "function printValue(value: string | number) {\n  if (typeof value === 'string') {\n    // Here TypeScript knows value is a string\n    console.log('String value:', value.toUpperCase());\n  } else {\n    // Here TypeScript knows value is a number\n    console.log('Number value:', value.toFixed(2));\n  }\n}\n\nprintValue('hello');  // Output: String value: HELLO\nprintValue(123.456);  // Output: Number value: 123.46"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the typeof operator is used as a type guard. Inside the if block, TypeScript treats value as a string, so calling string methods like toUpperCase() is safe. Inside the else block, value is treated as a number, so number methods like toFixed() can be used."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common type guard uses the instanceof operator when working with classes or objects. Suppose you want to check if an object is an instance of a specific class."
+      },
+      {
+        "type": "code",
+        "value": "class Dog {\n  bark() {\n    console.log('Woof!');\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log('Meow!');\n  }\n}\n\nfunction speak(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark();  // Dog instance\n  } else {\n    animal.meow();  // Cat instance\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, instanceof acts as a type guard that narrows the type from Dog | Cat to Dog if true, or Cat if false. This helps prevent runtime errors by making sure you only call methods that exist on the specific type."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create your own custom type guards using functions that return a boolean and use the special syntax `parameterName is Type` in the return type. This lets TypeScript know the type inside an if block that checks your function."
+      },
+      {
+        "type": "code",
+        "value": "interface Bird {\n  fly(): void;\n}\n\ninterface Fish {\n  swim(): void;\n}\n\nfunction isBird(pet: Bird | Fish): pet is Bird {\n  return (pet as Bird).fly !== undefined;\n}\n\nfunction move(pet: Bird | Fish) {\n  if (isBird(pet)) {\n    pet.fly();  // Now safe to call fly\n  } else {\n    pet.swim(); // Safe to call swim\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `isBird` is a custom type guard function. It checks if the pet can fly by looking for the fly method. If true, inside the if block, TypeScript knows pet is a Bird."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, type guards are useful tools in TypeScript to refine types at runtime and make your code safer. Use `typeof`, `instanceof`, or custom type guard functions to help TypeScript understand your values better and prevent type-related errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Get comfortable using these type guards, and you’ll discover that handling multiple types in your applications becomes much easier and less error-prone."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-microservices-with-python",
+    "title": "Designing Scalable Microservices with Python: A Step-by-Step Tutorial",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and maintainable microservices using Python. This beginner-friendly tutorial guides you through setting up, coding, and running Python microservices with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=lTAcCNbJ7KE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices architecture helps create scalable, maintainable, and flexible applications by breaking down a large system into smaller, independent services. Python is a great choice for building microservices because of its simplicity and extensive library support. In this tutorial, we'll walk through the basics of designing scalable microservices with Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "We will create a simple example consisting of two microservices: a User Service and a Product Service. Each microservice will have its own REST API built using Flask, a lightweight Python web framework. We'll also use Docker to containerize the services, making them easy to deploy and scale."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 1: Setting up your environment. Make sure you have Python 3.7+ and Docker installed. You can install Flask using pip."
+      },
+      {
+        "type": "code",
+        "value": "pip install Flask"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 2: Creating the User Service. This service will handle user data and provide an endpoint to fetch users."
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify\n\napp = Flask(__name__)\n\nusers = [\n    {\"id\": 1, \"name\": \"Alice\"},\n    {\"id\": 2, \"name\": \"Bob\"}\n]\n\n@app.route('/users', methods=['GET'])\ndef get_users():\n    return jsonify(users)\n\nif __name__ == '__main__':\n    app.run(host='0.0.0.0', port=5000)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 3: Creating the Product Service. This service will handle product data."
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify\n\napp = Flask(__name__)\n\nproducts = [\n    {\"id\": 1, \"name\": \"Laptop\"},\n    {\"id\": 2, \"name\": \"Smartphone\"}\n]\n\n@app.route('/products', methods=['GET'])\ndef get_products():\n    return jsonify(products)\n\nif __name__ == '__main__':\n    app.run(host='0.0.0.0', port=5001)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 4: Containerizing microservices with Docker. Create a Dockerfile for each service to simplify deployment."
+      },
+      {
+        "type": "code",
+        "value": "# Dockerfile for User Service\nFROM python:3.8-slim\nWORKDIR /app\nCOPY user_service.py ./\nRUN pip install Flask\nEXPOSE 5000\nCMD [\"python\", \"user_service.py\"]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, create a Dockerfile for the Product Service, changing the script name and port accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 5: Running your microservices with Docker."
+      },
+      {
+        "type": "code",
+        "value": "# Build and run User Service\n$ docker build -t user-service .\n$ docker run -d -p 5000:5000 user-service\n\n# Build and run Product Service\n$ docker build -t product-service .\n$ docker run -d -p 5001:5001 product-service"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 6: Testing your microservices. You can access the users endpoint by visiting http://localhost:5000/users and products at http://localhost:5001/products."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 7: Scaling microservices. With Docker, you can create multiple containers of each service and use a load balancer or container orchestration tool like Kubernetes to distribute requests. This allows your services to handle more traffic effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, designing scalable microservices with Python involves creating small, independent services with clear APIs, containerizing them for easy deployment, and using orchestration tools to manage scaling. This tutorial covered a minimal example to get you started."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-effectively-use-pythons-exception-hierarchy-for-cleaner-code",
+    "title": "How to Effectively Use Python’s Exception Hierarchy for Cleaner Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's built-in exception hierarchy to write cleaner, more maintainable error handling code that improves readability and debugging.",
+    "videoUrl": "https://www.youtube.com/watch?v=GIDy0oCfZHg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, handling errors properly is important to make your code robust and user-friendly. Python provides a rich built-in hierarchy of exception classes that you can use to catch specific errors rather than generic ones. Understanding and using this hierarchy effectively can make your error handling cleaner and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "All exceptions in Python inherit from the base class Exception. This means you can catch all errors broadly by catching Exception, but it’s often better to catch specific exceptions to handle different error cases appropriately. For instance, catching a FileNotFoundError separately from a ZeroDivisionError helps you provide meaningful error messages or recover gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of catching multiple exceptions separately using Python’s exception hierarchy:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    filename = input(\"Enter a filename to open: \")\n    with open(filename, 'r') as file:\n        data = file.read()\n    number = int(input(\"Enter a number to divide 100 by: \"))\n    result = 100 / number\n    print(f\"Result is {result}\")\nexcept FileNotFoundError:\n    print(\"Sorry, that file was not found.\")\nexcept ZeroDivisionError:\n    print(\"You cannot divide by zero.\")\nexcept ValueError:\n    print(\"Please enter a valid number.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "By catching these specific exceptions (FileNotFoundError, ZeroDivisionError, ValueError), the program can respond differently based on what went wrong. This is more informative for users and makes bugs easier to track."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to catch multiple related exceptions in a single block, Python lets you group them as a tuple:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # some code that may raise IOError or FileNotFoundError\n    with open('somefile.txt', 'r') as f:\n        content = f.read()\nexcept (IOError, FileNotFoundError) as e:\n    print(f\"File related error occurred: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Note that FileNotFoundError is a subclass of IOError in Python 3, so catching IOError alone would also catch FileNotFoundError. But sometimes, catching the subclass separately helps to give more specific feedback."
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid catching the base Exception class unless necessary. Catching Exception can hide unexpected bugs because it catches all exceptions, including those you might not have anticipated. Instead, catch the specific exceptions you expect could happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using Python’s exception hierarchy effectively means:\n\n- Know the common exception types your code might raise.\n- Catch specific exceptions to provide clear handling.\n- Use multi-exception handling when needed.\n- Avoid overly broad except blocks that can hide bugs.\n\nThis approach leads to cleaner, more maintainable, and user-friendly code."
+      }
+    ]
+  },
+  {
+    "slug": "handling-complex-date-and-time-edge-cases-in-sql-queries",
+    "title": "Handling Complex Date and Time Edge Cases in SQL Queries: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to handle tricky date and time edge cases in SQL queries with practical tips and examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=h6KPCP0fnNs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in SQL can be challenging, especially when you encounter edge cases like leap years, time zones, and daylight saving time changes. This beginner-friendly guide will help you understand these tricky situations and show you how to write reliable queries that handle complex date and time scenarios."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common edge case is the leap year. Every four years, an extra day is added to February (February 29). To check if a year is a leap year in SQL, you can use the following logic:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  CASE \n    WHEN (year % 400 = 0) THEN 'Leap Year'\n    WHEN (year % 100 = 0) THEN 'Not a Leap Year'\n    WHEN (year % 4 = 0) THEN 'Leap Year'\n    ELSE 'Not a Leap Year'\n  END AS leap_year_status\nFROM (SELECT 2024 AS year) AS years;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query checks the rules for leap years: divisible by 4, but if divisible by 100, then it must also be divisible by 400. You can replace `2024` with any year you want to test."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common edge case is handling daylight saving time (DST). When the clocks go forward or backward, some timestamps may not exist or may appear twice. If you store timestamps in UTC, this problem is minimized. To convert UTC to a specific time zone and handle DST, you can use the `AT TIME ZONE` feature (available in SQL Server and some other systems):"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  YourUtcColumn AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS LocalTime\nFROM YourTable;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This converts UTC time to Eastern Time, automatically adjusting for DST as needed. Make sure your SQL database supports time zone conversion functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "When working with date ranges, be careful with inclusive and exclusive bounds. For example, if you want to select rows between two dates, including the end date fully, make sure to use a query like:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM Orders\nWHERE OrderDate >= '2023-01-01'\n  AND OrderDate < '2023-02-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that the end date is exclusive (`< '2023-02-01'`), which includes all times up to but not including midnight on February 1st. This approach avoids problems with orders placed at any time during January 31st."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, when calculating durations or intervals, be mindful of the data type you use and the unit you calculate with. Different SQL dialects have different functions for date arithmetic, but here's a simple example to calculate the number of days between two dates:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  DATEDIFF(day, '2024-01-01', '2024-02-01') AS DaysBetween;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example works in SQL Server. In PostgreSQL, you would do:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  DATE '2024-02-01' - DATE '2024-01-01' AS DaysBetween;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, handling complex date and time edge cases involves understanding your SQL dialect's date functions, being careful with time zones and daylight saving time, and correctly setting your date ranges. With these tips, your SQL queries will be more accurate and reliable."
+      }
+    ]
+  },
+  {
+    "slug": "handling-overflow-and-underflow-in-sql-numeric-data-types",
+    "title": "Handling Overflow and Underflow in SQL Numeric Data Types",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to prevent and manage overflow and underflow errors when working with numeric data types in SQL. This beginner-friendly guide explains common issues and practical solutions.",
+    "videoUrl": "https://www.youtube.com/watch?v=H2noOh0a8Yk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with numeric data types in SQL, you might encounter errors related to overflow or underflow. These errors happen when the number you try to store is larger or smaller than what the data type can hold. Understanding these limits and how to handle such errors is important for maintaining data integrity and avoiding crashes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Numeric data types in SQL include INT, BIGINT, DECIMAL, FLOAT, and others. Each has a specific range of allowed values. For example, an INT typically holds values from -2,147,483,648 to 2,147,483,647. If you try to insert a number outside this range, SQL throws an overflow error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Underflow is similar but usually relates to very small floating-point numbers that become zero or lose precision. Although less common than overflow, underflow can cause inaccurate calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are practical ways to handle overflow and underflow in SQL:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Choose the right data type: Use a data type that fits the range of your data. For larger numbers, use BIGINT instead of INT. For precise decimal values, use DECIMAL with sufficient precision and scale."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Validate input data: Before inserting or updating numerical values, add checks to ensure the values fall within the range of the column's data type."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use TRY_CAST or TRY_CONVERT: In SQL Server, these functions attempt to cast values and return NULL instead of an error when overflow happens."
+      },
+      {
+        "type": "code",
+        "value": "-- Example of overflow error\nCREATE TABLE Numbers (\n    Num INT\n);\n\n-- This will cause an overflow error because the value exceeds INT max size\nINSERT INTO Numbers (Num) VALUES (3000000000);\n\n-- Solution: Use BIGINT instead\nCREATE TABLE BigNumbers (\n    Num BIGINT\n);\n\nINSERT INTO BigNumbers (Num) VALUES (3000000000);"
+      },
+      {
+        "type": "code",
+        "value": "-- Using TRY_CAST to avoid errors\nSELECT TRY_CAST('3000000000' AS INT) AS Result; -- Returns NULL because it overflows INT\nSELECT TRY_CAST('3000000000' AS BIGINT) AS Result; -- Successfully returns 3000000000"
+      },
+      {
+        "type": "paragraph",
+        "value": "By choosing the correct data type and adding validation, you can avoid most overflow and underflow issues. Functions like TRY_CAST help safely manage unexpected data without breaking your SQL code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling numeric limits carefully improves your database's reliability and ensures your application runs smoothly without unexpected numeric errors."
+      }
+    ]
   }
 ];
