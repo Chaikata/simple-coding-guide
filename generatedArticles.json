@@ -1,125 +1,265 @@
 [
   {
-    "slug": "comparing-javascript-promises-vs-async-await-best-practices-for-clean-code",
-    "title": "Comparing JavaScript Promises vs Async/Await: Best Practices for Clean Code",
+    "slug": "scalable-event-driven-architectures-nodejs-kafka",
+    "title": "Designing Scalable Event-Driven Architectures with Node.js and Kafka",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn the differences between JavaScript Promises and async/await with practical examples and best practices for writing clean, readable asynchronous code.",
-    "videoUrl": "https://www.youtube.com/watch?v=obaSQBBWZLk",
+    "description": "Learn how to build scalable and resilient event-driven applications using Node.js and Apache Kafka in this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is known for its asynchronous nature, and two common ways to handle asynchronous code are Promises and async/await. Both help manage operations like fetching data or reading files without blocking the main thread. This tutorial explains Promises and async/await, compares them, and shares best practices to keep your code clean and readable."
+        "value": "Event-driven architecture (EDA) is an approach to software design where components communicate by emitting and responding to events. This method enhances scalability and decouples services, making it ideal for modern distributed systems. Apache Kafka, a distributed event streaming platform, is widely used for building scalable and fault-tolerant event-driven applications. In this tutorial, we'll explore how to design a simple event-driven system using Node.js and Kafka."
       },
       {
         "type": "paragraph",
-        "value": "### What are Promises?  \nPromises represent the eventual result of an asynchronous operation. They have three states: pending, fulfilled, or rejected. Promises use `.then()` and `.catch()` methods to handle success and errors."
+        "value": "Before we start, ensure you have Node.js installed (version 12 or higher) and a Kafka cluster or a local Kafka environment running. You can run Kafka locally using tools like Confluent Platform or Kafka's official binaries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's begin by creating a new Node.js project and installing the Kafka client library `kafkajs`, which is a modern Kafka client for Node.js."
       },
       {
         "type": "code",
-        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data loaded');\n      } else {\n        reject('Error loading data');\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(data => console.log(data))\n  .catch(error => console.error(error));"
+        "value": "npm init -y\nnpm install kafkajs"
       },
       {
         "type": "paragraph",
-        "value": "### What is Async/Await?  \nAsync/await is syntactic sugar built on top of Promises, introduced in ES2017. It lets you write asynchronous code that looks synchronous, improving readability. The `async` keyword marks a function as asynchronous, and `await` pauses execution until the Promise resolves."
+        "value": "### Step 1: Setting up the Kafka Producer\nThe producer is responsible for sending messages (events) to a Kafka topic. Here's how to create a simple producer in Node.js."
       },
       {
         "type": "code",
-        "value": "async function getData() {\n  try {\n    const data = await fetchData();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+        "value": "const { Kafka } = require('kafkajs');\n\n// Create a Kafka client instance\nconst kafka = new Kafka({\n  clientId: 'my-app',\n  brokers: ['localhost:9092'] // Adjust based on your Kafka server location\n});\n\n// Create a producer instance\nconst producer = kafka.producer();\n\nconst runProducer = async () => {\n  await producer.connect();\n  console.log('Producer connected');\n\n  // Send a message to the 'events' topic every 5 seconds\n  setInterval(async () => {\n    try {\n      const message = { value: `Event at ${new Date().toISOString()}` };\n      await producer.send({\n        topic: 'events',\n        messages: [message],\n      });\n      console.log('Message sent:', message);\n    } catch (error) {\n      console.error('Error sending message', error);\n    }\n  }, 5000);\n};\n\nrunProducer().catch(console.error);"
       },
       {
         "type": "paragraph",
-        "value": "### Comparing Promises vs Async/Await  \n- **Readability:** Async/await code is usually easier to read and understand. You write code in a top-down sequence without chaining `.then()` calls.\n- **Error Handling:** Async/await uses `try/catch` blocks, which are familiar from synchronous programming, making error handling simpler.\n- **Debugging:** Async/await stacks are easier to trace during debugging.\n- **Use Cases:** Promises are handy for multiple concurrent operations (e.g., `Promise.all()`), while async/await excels in sequential asynchronous steps."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices for Clean Code"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use async/await for better readability:** Prefer async/await for handling asynchronous code unless you need to handle multiple Promises concurrently.\n2. **Always handle errors:** Use try/catch with async/await or `.catch()` with Promises.\n3. **Keep functions single-purpose:** Write small, focused async functions.\n4. **Avoid mixing styles:** Try not to mix `.then()` chaining with async/await in the same code block to keep consistency.\n5. **Use Promise utilities:** Use `Promise.all()` for parallel async operations."
+        "value": "### Step 2: Setting up the Kafka Consumer\nThe consumer listens to Kafka topics and processes incoming events. Let's create a simple consumer that prints the received messages."
       },
       {
         "type": "code",
-        "value": "// Example: Using Promise.all with async/await\nasync function fetchAllData() {\n  try {\n    const [user, posts] = await Promise.all([\n      fetchUser(),\n      fetchPosts()\n    ]);\n    console.log(user, posts);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}"
+        "value": "const { Kafka } = require('kafkajs');\n\nconst kafka = new Kafka({\n  clientId: 'my-app',\n  brokers: ['localhost:9092']\n});\n\nconst consumer = kafka.consumer({ groupId: 'event-group' });\n\nconst runConsumer = async () => {\n  await consumer.connect();\n  console.log('Consumer connected');\n\n  await consumer.subscribe({ topic: 'events', fromBeginning: true });\n\n  await consumer.run({\n    eachMessage: async ({ topic, partition, message }) => {\n      console.log(`Received message: ${message.value.toString()}`);\n    }\n  });\n};\n\nrunConsumer().catch(console.error);"
       },
       {
         "type": "paragraph",
-        "value": "### Summary  \nPromises and async/await both help write asynchronous JavaScript code. Async/await is generally preferred for clean, readable code, especially when operations are sequential. Promises remain useful for concurrency and when you want more granular control. Following best practices ensures your asynchronous code stays readable, maintainable, and error-resistant."
+        "value": "### Step 3: Running the Example\n1. Start your Kafka broker (for example, using Confluent or Kafka's own tools).\n2. Run the consumer script:\n\nbash\nnode consumer.js\n\n\n3. Run the producer script in another terminal:\n\nbash\nnode producer.js\n\n\nYou should see the producer sending events every 5 seconds and the consumer printing them as they arrive."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Scaling and Best Practices\n- **Decoupling:** With event-driven design, producers and consumers don't depend on each other directly. You can add more consumers to handle increased load.\n- **Consumer Groups:** Multiple consumer instances in the same group will share the work, enabling horizontal scaling.\n- **Error Handling:** Add retry logic and monitoring to ensure message processing reliability.\n- **Schema Management:** Use schema registries to maintain consistent event formats.\n\nThis setup forms the foundation of scalable and resilient event-driven systems."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following this tutorial, you now understand how to leverage Node.js and Kafka to build event-driven architectures. As you grow more comfortable, you can explore advanced Kafka features like partitioning, transactions, and stream processing to enhance your applications."
       }
     ]
   },
   {
-    "slug": "mastering-javascript-async-error-handling-best-practices-patterns",
-    "title": "Mastering JavaScript Async Error Handling: Best Practices and Patterns",
+    "slug": "handling-memory-leaks-in-javascript-system-design-practical-strategies",
+    "title": "Handling Memory Leaks in JavaScript System Design: Practical Strategies",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to handle errors effectively in asynchronous JavaScript using best practices and common patterns, perfect for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "description": "Learn how to identify and fix memory leaks in JavaScript with practical strategies that improve your system design and ensure optimal performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=IkoGmbNJolo",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is well-known for its asynchronous capabilities, but dealing with errors in async code can sometimes be tricky for beginners. This article will guide you through the most practical and beginner-friendly ways to handle errors in asynchronous JavaScript, focusing on promises and async/await syntax."
+        "value": "Memory leaks in JavaScript happen when your code unintentionally holds onto more memory than needed, causing your application to slow down or crash over time. In this beginner-friendly article, we'll explore what memory leaks are, why they are important in system design, and some practical ways to detect and fix them."
       },
       {
         "type": "paragraph",
-        "value": "When you work with asynchronous code, errors don’t behave the same way as they do in synchronous code. If an error happens inside a promise or an async function, you need specific techniques to catch and handle those errors gracefully."
+        "value": "A memory leak occurs when objects in your application are no longer necessary but are still referenced somewhere in the code, preventing the JavaScript garbage collector from freeing up that memory. This usually happens due to improper handling of references in closures, event listeners, or global variables."
       },
       {
         "type": "paragraph",
-        "value": "The two main ways to manage async errors are using promise catch handlers and try/catch blocks with async/await syntax. Let’s start by looking at error handling in promises."
+        "value": "Here are some practical strategies to avoid and fix memory leaks in JavaScript:"
       },
       {
         "type": "paragraph",
-        "value": "### Handling Errors in Promises"
-      },
-      {
-        "type": "paragraph",
-        "value": "When using promises, you handle errors using the `.catch()` method. This method catches any error that happens in the promise chain."
+        "value": "1. **Remove Event Listeners When They Are No Longer Needed**: Event listeners keep references to elements and functions, so forgetting to remove them can cause leaks."
       },
       {
         "type": "code",
-        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('There was a problem:', error.message);\n  });"
+        "value": "const button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Button clicked!');\n}\n\nbutton.addEventListener('click', handleClick);\n\n// Later, when you no longer need the listener\nbutton.removeEventListener('click', handleClick);"
       },
       {
         "type": "paragraph",
-        "value": "In this example, if the fetch or JSON parsing fails, the error will be caught by the `.catch()` handler, helping you avoid unhandled promise rejections."
+        "value": "2. **Avoid Global Variables**: Globals live for the entire lifetime of your app, so they can easily accumulate unnecessary data. Use local variables or module scopes instead."
       },
       {
         "type": "paragraph",
-        "value": "### Using try/catch with Async/Await"
+        "value": "3. **Be Careful With Closures**: Closures capture variable references, which can unintentionally keep large objects alive. Make sure you do not keep references longer than necessary."
       },
       {
         "type": "paragraph",
-        "value": "Async/await syntax let you write asynchronous code that looks and behaves like synchronous code. You can use traditional `try` and `catch` blocks to handle any errors."
+        "value": "4. **Null Out References**: If you have variables holding big objects that you no longer need, set them to `null` so the garbage collector can reclaim memory."
       },
       {
         "type": "code",
-        "value": "async function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Fetching data failed:', error.message);\n  }\n}\n\ngetData();"
+        "value": "let bigObject = {\n  data: new Array(1000000).fill('some data')\n};\n\n// When done using bigObject\nbigObject = null;"
       },
       {
         "type": "paragraph",
-        "value": "This pattern is often preferred because it makes the flow easier to read and understand, especially when dealing with multiple asynchronous operations."
+        "value": "5. **Use Developer Tools to Detect Memory Leaks**: Most browsers have memory profiling tools that allow you to take heap snapshots and find objects that are not being garbage collected."
       },
       {
         "type": "paragraph",
-        "value": "### Best Practices for Async Error Handling"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Always handle promise rejections using `.catch()` or try/catch. Unhandled rejections can cause your application to fail silently.\n\n2. Provide meaningful error messages. This makes debugging much easier.\n\n3. Avoid nesting too many `.then()` calls; prefer async/await for cleaner, more readable code.\n\n4. Use custom error classes if you want to distinguish between different kinds of errors.\n\n5. Log errors or notify users as appropriate to help maintain a good user experience."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example of Custom Error Handling"
+        "value": "6. **Watch Out for Timers and Intervals**: Clearing timeouts and intervals when done is important to prevent memory from hanging around."
       },
       {
         "type": "code",
-        "value": "class APIError extends Error {\n  constructor(message, status) {\n    super(message);\n    this.name = 'APIError';\n    this.status = status;\n  }\n}\n\nasync function fetchUserData(userId) {\n  try {\n    const response = await fetch(`https://api.example.com/users/${userId}`);\n    if (!response.ok) {\n      throw new APIError('Failed to fetch user data', response.status);\n    }\n    const user = await response.json();\n    return user;\n  } catch (error) {\n    if (error instanceof APIError) {\n      console.error(`API Error (${error.status}): ${error.message}`);\n    } else {\n      console.error('Unexpected Error:', error.message);\n    }\n    throw error; // Rethrow if needed\n  }\n}\n\nfetchUserData(123).catch(err => {\n  console.log('Error handled in caller:', err.message);\n});"
+        "value": "const intervalId = setInterval(() => {\n  console.log('Running interval');\n}, 1000);\n\n// Clear interval when no longer needed\nclearInterval(intervalId);"
       },
       {
         "type": "paragraph",
-        "value": "In this example, a custom error class helps you differentiate between API-related errors and other unexpected failures, allowing better error management."
+        "value": "By following these simple strategies, you can design JavaScript systems that are efficient and less prone to memory leaks. Always test your application for memory usage and optimize where needed to maintain a smooth user experience."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-building-scalable-and-reusable-components",
+    "title": "Mastering TypeScript Generics: Building Scalable and Reusable Components",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to create flexible, scalable, and reusable components that improve your code quality and maintainability.",
+    "videoUrl": "https://www.youtube.com/watch?v=ZA3G-y1Y1l4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are a powerful feature that allow you to create components and functions which can work with a variety of data types instead of being limited to one. This flexibility helps you write reusable code components and improve scalability in your projects. In this tutorial, we'll explore the basics of generics and build practical examples to master this concept."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics work by defining a placeholder type parameter, usually with a letter like <T>. This placeholder can be replaced with any type when the function or class is used. Let's start with a simple example of a generic function."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst output1 = identity<string>(\"Hello Generics!\"); // Output is string\nconst output2 = identity<number>(42); // Output is number\n\nconsole.log(output1); // Hello Generics!\nconsole.log(output2); // 42"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, function identity takes an argument of type T and returns the same type. When calling the function, you specify the type, and TypeScript enforces that the argument and return types match."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's create a generic interface for an array wrapper that ensures type safety but works with many types."
+      },
+      {
+        "type": "code",
+        "value": "interface MyArray<T> {\n  items: T[];\n  add(item: T): void;\n  get(index: number): T;\n}\n\nclass ArrayWrapper<T> implements MyArray<T> {\n  items: T[] = [];\n\n  add(item: T): void {\n    this.items.push(item);\n  }\n\n  get(index: number): T {\n    return this.items[index];\n  }\n}\n\nconst numberArray = new ArrayWrapper<number>();\nnumberArray.add(10);\nnumberArray.add(20);\nconsole.log(numberArray.get(1)); // 20\n\nconst stringArray = new ArrayWrapper<string>();\nstringArray.add(\"hello\");\nstringArray.add(\"world\");\nconsole.log(stringArray.get(0)); // hello"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the ArrayWrapper class uses generics to handle arrays of any type, but retains strict type checking. This means you can't accidentally add a string to a number array, reducing bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics also shine when building reusable React components or utility functions. For instance, a generic function to merge two objects can be written as follows:"
+      },
+      {
+        "type": "code",
+        "value": "function mergeObjects<T extends object, U extends object>(obj1: T, obj2: U): T & U {\n  return { ...obj1, ...obj2 };\n}\n\nconst merged = mergeObjects(\n  { name: \"Alice\" },\n  { age: 30 }\n);\n\nconsole.log(merged.name); // Alice\nconsole.log(merged.age);  // 30"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, two objects of different types are merged and the resulting object has a combined type of both. Using extends object ensures we only accept objects and the return type reflects the merged type, enhancing type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, here are key points to master TypeScript generics:\n\n- Use generics to write flexible functions, interfaces, and classes.\n- Define generic type parameters inside angle brackets: <T>.\n- Use constraints like extends to restrict acceptable types.\n- Generics help catch errors early and improve code reuse and scalability.\n\nTry incorporating generics in your next TypeScript project to experience clearer and more maintainable code!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescript-type-inference-failures-and-how-to-debug-them",
+    "title": "Comparing TypeScript Type Inference Failures and How to Debug Them",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to identify common TypeScript type inference failures and practical debugging tips for beginners to improve code quality and reduce errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=GpCFhB1pRBU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful superset of JavaScript that adds static typing, allowing developers to catch errors early. One of its key features is type inference, where the compiler automatically figures out the types without explicit annotations. However, sometimes type inference fails or creates confusing error messages, especially for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we compare common scenarios where TypeScript's type inference fails and provide practical tips to debug these issues effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scenario 1: Inferring types of function parameters from untyped values"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you pass an untyped or loosely typed value to a function, TypeScript may infer an overly broad type or produce an error if it can’t match the expected type."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log(`Hello, ${name.toUpperCase()}`);\n}\n\nconst user = { firstName: 'Alice' };\ngreet(user.firstName); // works\n\ngreet(user); // Error: Argument of type '{ firstName: string; }' is not assignable to parameter of type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `greet` expects a string, but passing the whole user object leads to an error. Always check if the inferred type matches the function parameter type, and access the correct property if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scenario 2: Inferring array types with mixed elements"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you create an array with mixed types, TypeScript infers the type as a union of those element types. Sometimes this isn't what you expected."
+      },
+      {
+        "type": "code",
+        "value": "const values = [1, 'two', 3];\n\n// TypeScript infers (string | number)[]\n\nvalues.forEach(val => {\n  // val can be number or string here\n  if (typeof val === 'string') {\n    console.log(val.toUpperCase());\n  } else {\n    console.log(val.toFixed(2));\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to restrict the array to a single type, add explicit type annotations. Otherwise, always use type guards (like `typeof`) to safely handle different types."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scenario 3: Type widening and literal types"
+      },
+      {
+        "type": "paragraph",
+        "value": "By default, TypeScript widens literal types (like `'hello'`) to their general types (`string`). This can cause inference failures when you expect a specific literal type."
+      },
+      {
+        "type": "code",
+        "value": "const action = 'SAVE';\n\nfunction performAction(type: 'SAVE' | 'DELETE') {\n  console.log(type);\n}\n\nperformAction(action); // Error: Argument of type 'string' is not assignable to parameter of type '\"SAVE\" | \"DELETE\"'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Issue happens because `action` is inferred as `string`, not the literal type `'SAVE'`. To fix, use `as const` or explicitly type the variable:"
+      },
+      {
+        "type": "code",
+        "value": "const action = 'SAVE' as const;\nperformAction(action); // Works\n\n// or\nconst action2: 'SAVE' = 'SAVE';\nperformAction(action2); // Works"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Debugging Tips for Type Inference Failures"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Add explicit type annotations.** Even a small annotation can help the compiler understand your intention."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use the TypeScript language service in your editor.** Hovering over variables usually shows their inferred types."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Leverage type assertions carefully.** Use `as` syntax to tell TypeScript what type to expect, but avoid overusing it to keep type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Check error messages closely.** They often hint whether TypeScript expected a literal, union, or a more general type."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Break down complex expressions.** Assign intermediate values to variables with explicit types to isolate inference issues."
       },
       {
         "type": "paragraph",
@@ -127,189 +267,221 @@
       },
       {
         "type": "paragraph",
-        "value": "Mastering asynchronous error handling is essential for writing robust JavaScript applications. Use `.catch()` to handle promise errors and try/catch blocks with async/await for cleaner code. Remember to provide clear messages and consider custom errors for improving maintainability and debugging."
+        "value": "Type inference in TypeScript helps write cleaner code by reducing boilerplate but can sometimes cause confusing errors if the inferred types don’t match expectations. Understanding common failure scenarios and employing debugging techniques like explicit annotations and type guards will improve your coding experience and help you write safer, more predictable TypeScript."
       }
     ]
   },
   {
-    "slug": "typescript-vs-javascript-type-safety-developer-productivity",
-    "title": "TypeScript vs JavaScript: Deep Dive into Type Safety and Developer Productivity",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Explore how TypeScript enhances type safety and boosts developer productivity compared to plain JavaScript with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "JavaScript is one of the most popular programming languages used for web development. However, it is a dynamically typed language, which means you don't explicitly define the types of variables. This flexibility can sometimes lead to errors that are hard to detect during development."
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a superset of JavaScript that adds static type checking. This means you can declare variable types upfront, making your code easier to understand, maintain, and less prone to runtime errors. In this article, we will compare TypeScript and JavaScript focusing on type safety and developer productivity."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at a simple example where we add two numbers in JavaScript and TypeScript."
-      },
-      {
-        "type": "code",
-        "value": "function addNumbers(a, b) {\n  return a + b;\n}\n\nconsole.log(addNumbers(5, 10)); // Output: 15\nconsole.log(addNumbers('5', 10)); // Output: 510 (unexpected)"
-      },
-      {
-        "type": "paragraph",
-        "value": "In JavaScript, nothing prevents you from passing a string instead of a number. This can lead to unexpected results or bugs that might only surface at runtime."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let's see the same function in TypeScript with type annotations."
-      },
-      {
-        "type": "code",
-        "value": "function addNumbers(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(addNumbers(5, 10)); // Output: 15\n// console.log(addNumbers('5', 10)); // Error: Argument of type 'string' is not assignable to parameter of type 'number'."
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript’s type system alerts you during development if you try to pass a value of the wrong type. This early feedback helps catch bugs early and improves code reliability."
-      },
-      {
-        "type": "paragraph",
-        "value": "Type safety is not just about avoiding bugs. It also increases developer productivity by offering better tooling support such as autocomplete, code navigation, and easy refactoring."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, if you define an interface for a user object, TypeScript helps you ensure that every user object you create or manipulate has the expected shape."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string; // optional property\n}\n\nfunction getUserName(user: User): string {\n  return user.name;\n}\n\nconst user = { id: 1, name: 'Alice' };\nconsole.log(getUserName(user)); // Output: Alice\n\n// const invalidUser = { id: 'abc', name: 123 };\n// getUserName(invalidUser); // Error: Type 'string' is not assignable to type 'number'."
-      },
-      {
-        "type": "paragraph",
-        "value": "With TypeScript, the IDE can warn you if you mistype property names or provide wrong types, making your development faster and safer."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- JavaScript is flexible but can lead to runtime errors due to lack of type checking.\n- TypeScript adds static typing for better type safety and early error detection.\n- TypeScript enhances developer productivity with better tooling and code maintainability.\n- For beginners, learning TypeScript can help develop more robust applications and improve coding skills."
-      },
-      {
-        "type": "paragraph",
-        "value": "If you are starting a new web development project or want to improve your JavaScript codebase, consider using TypeScript to gain these benefits. It integrates well with existing JavaScript libraries and frameworks, making the transition smooth."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-typescripts-advanced-error-handling-with-custom-error-classes",
-    "title": "Mastering TypeScript's Advanced Error Handling with Custom Error Classes",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to enhance your error handling in TypeScript by creating custom error classes. This beginner-friendly guide explains why and how to extend built-in errors for cleaner and more maintainable code.",
-    "videoUrl": "https://www.youtube.com/watch?v=d5eyTy0QOgg",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Error handling is a crucial part of building reliable applications. While JavaScript and TypeScript provide basic Error objects, creating custom error classes allows developers to represent different error types clearly and handle them appropriately. In this article, we'll explore how to create and use custom error classes in TypeScript to handle errors more effectively."
-      },
-      {
-        "type": "paragraph",
-        "value": "Why should you create custom error classes? Imagine you have different kinds of errors such as validation errors, database errors, or network errors. Using generic errors might make it difficult to identify and handle these cases correctly. Custom error classes let you categorize and provide specific details for each error type."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with creating a simple custom error class in TypeScript. We extend the built-in `Error` class and add a name for easy identification."
-      },
-      {
-        "type": "code",
-        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n    Object.setPrototypeOf(this, ValidationError.prototype); // important for instanceof\n  }\n}\n\n// Example usage:\nfunction validateUsername(username: string) {\n  if (username.length < 3) {\n    throw new ValidationError('Username must be at least 3 characters long.');\n  }\n  return true;\n}\n\ntry {\n  validateUsername('ab');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error(`Validation Error: ${error.message}`);\n  } else {\n    console.error('Unknown error:', error);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Notice the use of `Object.setPrototypeOf(this, ValidationError.prototype);`. This line ensures the custom error works correctly with `instanceof`. Without it, some JavaScript environments may not recognize the error as an instance of your custom class."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also add additional properties to your custom errors to provide more context. Here's an example of a `DatabaseError` that includes an error code:"
-      },
-      {
-        "type": "code",
-        "value": "class DatabaseError extends Error {\n  public code: number;\n\n  constructor(message: string, code: number) {\n    super(message);\n    this.code = code;\n    this.name = 'DatabaseError';\n    Object.setPrototypeOf(this, DatabaseError.prototype);\n  }\n}\n\nfunction fetchUserFromDB(userId: string) {\n  // Simulated database error\n  throw new DatabaseError('User not found in database.', 404);\n}\n\ntry {\n  fetchUserFromDB('123');\n} catch (error) {\n  if (error instanceof DatabaseError) {\n    console.error(`Database Error (${error.code}): ${error.message}`);\n  } else {\n    console.error('Unknown error:', error);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using custom error classes lets you write cleaner error handling code and respond to different error types more precisely. It is particularly helpful when working with complex applications or APIs."
-      },
-      {
-        "type": "paragraph",
-        "value": "In conclusion, to master advanced error handling in TypeScript, start by creating custom error classes. Remember to extend `Error`, set the correct prototype, and optionally add more error context through properties. This approach will make your application more robust and easier to maintain."
-      }
-    ]
-  },
-  {
-    "slug": "handling-python-floating-point-precision-edge-cases-in-financial-applications",
-    "title": "Handling Python Floating Point Precision Edge Cases in Financial Applications",
+    "slug": "building-a-personal-finance-tracker-with-python-and-sqlite",
+    "title": "Building a Personal Finance Tracker with Python and SQLite: A Beginner’s Guide",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to manage floating point precision issues in Python to build accurate financial applications without errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=hgq_qcvoxr4",
+    "description": "Learn how to create a simple and effective personal finance tracker using Python and SQLite. This beginner-friendly tutorial walks you through setting up a database, adding expenses, and viewing your financial data.",
+    "videoUrl": "https://www.youtube.com/watch?v=mJLI-99RhbM",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with financial data in Python, precision is critical. Floating point numbers can introduce small rounding errors that lead to inaccuracies, especially when dealing with money calculations. This tutorial will help beginners understand why these errors happen and how to handle them properly."
+        "value": "Managing your personal finances is an important skill, and having a tool to track income and expenses can make it easier. In this tutorial, you'll learn how to build a basic personal finance tracker using Python and SQLite. SQLite is a lightweight and easy-to-use database that is perfect for beginners, and Python’s built-in library makes it straightforward to integrate."
       },
       {
         "type": "paragraph",
-        "value": "Python uses the IEEE 754 standard for floating point arithmetic, which can cause precision problems because some decimal numbers cannot be represented exactly in binary form. For example, simple sums like 0.1 + 0.2 may not exactly equal 0.3 due to tiny floating point errors."
+        "value": "We will create a program that helps you add income and expenses, store them in a SQLite database, and view a summary of your transactions. Let's get started!"
       },
       {
         "type": "paragraph",
-        "value": "Let's see an example of this problem:"
+        "value": "First, let's import the necessary module `sqlite3` and set up our database and table for storing finance records."
       },
       {
         "type": "code",
-        "value": "print(0.1 + 0.2 == 0.3)\n# Output: False\n\nprint(0.1 + 0.2)\n# Output: 0.30000000000000004"
+        "value": "import sqlite3\n\n# Connect to SQLite database or create it\nconn = sqlite3.connect('finance.db')\ncursor = conn.cursor()\n\n# Create table for transactions\ncursor.execute('''\nCREATE TABLE IF NOT EXISTS transactions (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    date TEXT NOT NULL,\n    description TEXT NOT NULL,\n    amount REAL NOT NULL\n)\n''')\n\nconn.commit()"
       },
       {
         "type": "paragraph",
-        "value": "In financial applications, this kind of subtle difference may cause errors in balances, reports or transactions. So, how can we avoid it? There are two common ways:"
+        "value": "Our `transactions` table will have four columns. `id` is a unique identifier for each transaction. `date` is the date of the transaction, `description` tells what the transaction was, and `amount` indicates the money involved — positive for income and negative for expenses."
       },
       {
         "type": "paragraph",
-        "value": "1. Use the `decimal` module which provides exact decimal representation.\n2. Use integer arithmetic by working with smallest currency units (like cents)."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using the decimal module"
-      },
-      {
-        "type": "paragraph",
-        "value": "The `decimal` module gives you control over precision and avoids floating-point errors by storing numbers as decimal objects rather than binary floats."
+        "value": "Next, let's create a function to add transactions to the database. This function will require the date, description, and amount."
       },
       {
         "type": "code",
-        "value": "from decimal import Decimal, getcontext\n\n# Set precision if needed\ngetcontext().prec = 10\n\nprice1 = Decimal('0.1')\nprice2 = Decimal('0.2')\nsum_price = price1 + price2\n\nprint(sum_price == Decimal('0.3'))\n# Output: True\nprint(sum_price)\n# Output: 0.3"
+        "value": "def add_transaction(date, description, amount):\n    cursor.execute('INSERT INTO transactions (date, description, amount) VALUES (?, ?, ?)',\n                   (date, description, amount))\n    conn.commit()\n    print('Transaction added successfully!')"
       },
       {
         "type": "paragraph",
-        "value": "Using strings to initialize Decimal objects is important to avoid inheriting floating-point errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using integer arithmetic for currency"
-      },
-      {
-        "type": "paragraph",
-        "value": "Another approach is to store currency values as integers representing the smallest units, for example cents instead of dollars. This way, you use integers for all calculations, which avoids floating-point problems entirely."
+        "value": "You can now use this function to add income or expenses. For example, to record a salary payment:"
       },
       {
         "type": "code",
-        "value": "# Represent $1.23 as 123 cents\nprice1_cents = 10  # 10 cents = $0.10\nprice2_cents = 20  # 20 cents = $0.20\n\nsum_cents = price1_cents + price2_cents\nprint(sum_cents == 30)\n# Output: True\n\n# Convert back to dollars for display\nprint(f\"${sum_cents / 100:.2f}\")\n# Output: $0.30"
+        "value": "# Example usage\nadd_transaction('2024-06-01', 'Salary', 3000.00)"
       },
       {
         "type": "paragraph",
-        "value": "This method is efficient and precise but requires converting values when displaying or interacting with users."
+        "value": "And to record an expense like buying groceries:"
+      },
+      {
+        "type": "code",
+        "value": "add_transaction('2024-06-03', 'Groceries', -150.75)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's create a function to view all transactions and print a summary including total income, total expenses, and balance."
+      },
+      {
+        "type": "code",
+        "value": "def view_transactions():\n    cursor.execute('SELECT date, description, amount FROM transactions ORDER BY date')\n    rows = cursor.fetchall()\n    \n    print('Date       | Description         | Amount')\n    print('-' * 40)\n    total_income = 0\n    total_expense = 0\n    for row in rows:\n        date, desc, amount = row\n        print(f'{date} | {desc:<18} | {amount:>7.2f}')\n        if amount > 0:\n            total_income += amount\n        else:\n            total_expense += amount\n    print('-' * 40)\n    print(f'Total Income:  ${total_income:.2f}')\n    print(f'Total Expense: ${-total_expense:.2f}')\n    print(f'Balance:      ${total_income + total_expense:.2f}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can call this function to see your current finances in a clean table format."
+      },
+      {
+        "type": "code",
+        "value": "# View transactions and summary\nview_transactions()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, don’t forget to close your database connection when you’re done:"
+      },
+      {
+        "type": "code",
+        "value": "conn.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nIn this tutorial, you learned how to create a simple personal finance tracker using Python and SQLite. You:\n- Set up a database to store transactions\n- Added income and expense records\n- Retrieved and displayed transactions with a summary\n\nThis tracker can be expanded with features like categories, monthly reports, or even a graphical interface. But as a beginner-friendly project, it provides a solid foundation to manage your personal finances programmatically."
+      }
+    ]
+  },
+  {
+    "slug": "handling-api-rate-limit-errors-gracefully-python",
+    "title": "Handling API Rate Limit Errors Gracefully in Python Projects",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle API rate limit errors gracefully in Python projects with easy-to-follow techniques and example code.",
+    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with APIs, especially free or public ones, you might encounter rate limits. These limits restrict how many requests you can make to the API in a certain time period to avoid overloading the server. If you exceed these limits, the API usually returns an error, often with a status code like 429 (Too Many Requests). Handling these errors gracefully in your Python projects is important for building reliable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll cover how to detect rate limit errors and automatically wait before retrying requests. This helps avoid crashing your application and plays nicely with the API service."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common approach is to catch the rate limit error, read the \"Retry-After\" header returned by many APIs (if available), and pause requests accordingly. If that header is not provided, you can use a fixed wait time or an exponentially increasing backoff."
+      },
+      {
+        "type": "paragraph",
+        "value": "Below is a simple example using the popular `requests` library in Python. We'll create a function that makes a GET request and retries automatically when a rate limit error occurs."
+      },
+      {
+        "type": "code",
+        "value": "import time\nimport requests\n\n\ndef fetch_data_with_rate_limit(url, max_retries=3):\n    \"\"\"\n    Fetch data from the API handling rate limit errors gracefully.\n\n    Args:\n        url (str): The API endpoint to call.\n        max_retries (int): Maximum number of retries after hitting the rate limit.\n\n    Returns:\n        Response JSON data if successful, None otherwise.\n    \"\"\"\n    retries = 0\n\n    while retries <= max_retries:\n        response = requests.get(url)\n\n        if response.status_code == 200:\n            return response.json()\n\n        elif response.status_code == 429:\n            # Rate limit hit\n            retry_after = response.headers.get(\"Retry-After\")\n\n            if retry_after:\n                wait_time = int(retry_after)\n                print(f\"Rate limited. Waiting for {wait_time} seconds before retrying...\")\n            else:\n                wait_time = 5  # default wait time in seconds if header is missing\n                print(f\"Rate limited. 'Retry-After' header missing. Waiting for {wait_time} seconds...\")\n\n            time.sleep(wait_time)\n            retries += 1\n        else:\n            # Other errors\n            print(f\"Request failed with status code {response.status_code}.\")\n            return None\n\n    print(\"Max retries reached. Giving up.\")\n    return None\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the function `fetch_data_with_rate_limit` takes an API endpoint URL and attempts to fetch data from it. If the API responds with a 429 status, it looks for the `Retry-After` header to decide how long to wait before retrying. If this header isn't present, it waits a default 5 seconds. It repeats this process up to a maximum number of retries, then stops gracefully if the limit is still reached."
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach helps your program abide by the API's usage policies and improves user experience by avoiding unexpected crashes or interruptions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, different APIs may handle rate limiting differently, so always check the API documentation to understand how it signals limits and preferred retry strategies."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-use-window-functions-in-sql-for-advanced-data-analysis",
+    "title": "How to Use Window Functions in SQL for Advanced Data Analysis",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to leverage window functions in SQL to perform advanced data analysis, including ranking, running totals, and moving averages with simple examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions in SQL provide a powerful way to perform calculations across a set of rows related to the current query row, without collapsing the results into a single output row. They are extremely useful for advanced data analysis like running totals, rankings, and moving averages, while preserving the original row structure."
+      },
+      {
+        "type": "paragraph",
+        "value": "Unlike aggregate functions that group rows together, window functions allow you to perform aggregates and calculations over a \"window\" or partition of rows while still returning individual row details."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a beginner-friendly introduction to some common window functions and how to use them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Table: sales_data\nAssume you have a table named sales_data with the following columns:\n- id (unique sale ID)\n- employee_id (ID of the salesperson)\n- sale_date (date of the sale)\n- amount (sale amount)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Using ROW_NUMBER() to Rank Sales per Employee"
+      },
+      {
+        "type": "paragraph",
+        "value": "You might want to assign a rank to each sale by amount per employee."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  employee_id,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY amount DESC) AS sale_rank\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query assigns a ranking within each employee’s sales, ordering from highest to lowest sale amount."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Calculating Running Total (Cumulative Sum) of Sales per Employee"
+      },
+      {
+        "type": "paragraph",
+        "value": "To calculate the running total of sales for each employee ordered by date:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY employee_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This shows a cumulative sum of sales amounts for each employee up to the current sale date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Calculating Moving Average of Sales"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also calculate a moving average, for example, a 3-sale moving average per employee ordered by sale_date:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  amount,\n  AVG(amount) OVER (PARTITION BY employee_id ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This takes the average of the current sale and the two previous sales for each employee."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Using LAG() and LEAD() to Compare Previous or Next Rows"
+      },
+      {
+        "type": "paragraph",
+        "value": "The LAG() function lets you access data from the previous row, while LEAD() accesses data from the next. For example, to see the previous sale amount for each sale:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  sale_date,\n  amount,\n  LAG(amount) OVER (PARTITION BY employee_id ORDER BY sale_date) AS previous_sale_amount,\n  LEAD(amount) OVER (PARTITION BY employee_id ORDER BY sale_date) AS next_sale_amount\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is useful to compare changes in sales amounts between consecutive sales."
       },
       {
         "type": "paragraph",
@@ -317,297 +489,85 @@
       },
       {
         "type": "paragraph",
-        "value": "Floating point precision errors in Python can cause problems for financial applications. By using the `decimal` module or storing currency as integers, you can avoid these edge cases and keep your financial data accurate and reliable."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try these methods in your financial projects to ensure precision and trustworthiness!"
+        "value": "Window functions open up advanced data analysis possibilities while keeping your result sets detailed and easy to manipulate. Remember to:\n- Use PARTITION BY to define your groups\n- Use ORDER BY to define the order inside each group\n- Use ROWS BETWEEN or RANGE BETWEEN to control the window frame\n\nTry combining these functions to create detailed, insightful reports with simple SQL."
       }
     ]
   },
   {
-    "slug": "python-unexpected-eof-error-causes-debugging",
-    "title": "Python’s Unexpected EOF Error: Causes and Debugging Strategies",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn what Python's Unexpected EOF error means, common causes, and easy ways to fix it with practical debugging tips for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=xopg3R9TTb4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When coding in Python, one common error beginners face is the \"Unexpected EOF while parsing\" error. EOF stands for \"End of File,\" and this error means Python reached the end of your code unexpectedly while it was still expecting more input. In simpler terms, your program’s code structure is incomplete or missing something that Python needs to finish reading your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "This error typically happens when Python expects a closing bracket, quote, or statement but doesn't find it by the time it reaches the end of your file or code block. Understanding why it happens and how to fix it early on will save you a lot of debugging time."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here are some common causes of the Unexpected EOF error:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Missing closing parentheses, brackets, or braces.\n2. An unclosed string literal (forgetting the closing quote).\n3. Incomplete compound statements like if, for, while, or function definitions.\n4. Copy-pasting code that cuts off before completing a block."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at some examples and solutions."
-      },
-      {
-        "type": "code",
-        "value": "print('Hello World'\n# Missing closing parenthesis will cause the unexpected EOF error"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, Python expects a closing ')' after the string, but it reaches the end of the line and throws the Unexpected EOF error. The fix is simple—add the missing parenthesis:"
-      },
-      {
-        "type": "code",
-        "value": "print('Hello World')"
-      },
-      {
-        "type": "paragraph",
-        "value": "Another common example is an unclosed string literal:"
-      },
-      {
-        "type": "code",
-        "value": "name = \"Alice\nprint(name)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, the opening quote for the string is not matched with a closing quote, so Python doesn’t know where the string ends. Adding the closing quote fixes this:"
-      },
-      {
-        "type": "code",
-        "value": "name = \"Alice\"\nprint(name)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, an incomplete block like this:"
-      },
-      {
-        "type": "code",
-        "value": "if 5 > 2:\n    print(\"Five is greater\")\n# Missing code or next line causes EOF error"
-      },
-      {
-        "type": "paragraph",
-        "value": "If there’s an incomplete block or missing indentation, Python may expect more code following the colon ':' from the if statement and throw the EOF error if it finds end of file instead. Ensure your blocks are complete and properly indented."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here are some debugging strategies to fix Unexpected EOF errors:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Check for matching brackets and parentheses:** Count your opening and closing symbols. Most code editors highlight matching pairs or show errors if unmatched."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Verify all strings have closing quotes:** Review every string to ensure both start and end quotes are present."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Complete compound statements:** Ensure if, for, while, def, and class blocks are not cut off and are properly indented with following lines."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Use your editor’s syntax highlighting:** Many modern editors will point out incomplete code segments or highlight errors before running the script."
-      },
-      {
-        "type": "paragraph",
-        "value": "5. **Run smaller chunks:** If possible, run parts of your code separately to isolate where the EOF error occurs."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding what Python expects when reading your code and carefully reviewing your code structure, you can quickly fix Unexpected EOF errors and write smoother, error-free programs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Happy coding!"
-      }
-    ]
-  },
-  {
-    "slug": "advanced-indexing-strategies-sql-performance",
-    "title": "Advanced Indexing Strategies for SQL Query Performance Enhancement",
-    "language": "sql",
-    "type": "tutorials",
-    "description": "Learn practical and beginner-friendly advanced indexing strategies to improve your SQL query performance with clear examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=BIlFTFrEFOI",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Indexes are essential tools for speeding up data retrieval in SQL databases. While basic indexes improve query performance for common searches, advanced indexing strategies can help you tackle complex queries and large datasets efficiently. This tutorial introduces beginner-friendly advanced indexing techniques to enhance your SQL query performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by reviewing a common index. Suppose you have a 'users' table and frequently query users by their email address. A simple index might look like this:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_users_email ON users(email);"
-      },
-      {
-        "type": "paragraph",
-        "value": "This index improves lookups by 'email' but may not help if you have queries with multiple conditions or search patterns. Here are three advanced indexing strategies to consider:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Composite Indexes: Index multiple columns together for queries filtering by more than one column."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, if you frequently query users by 'last_name' and 'first_name':"
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_users_last_first ON users(last_name, first_name);"
-      },
-      {
-        "type": "paragraph",
-        "value": "This index boosts performance when your WHERE clause includes both columns, or just the leading column 'last_name'."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. Partial Indexes: Index only a subset of data where a condition holds true. This reduces index size and is great for filtering specific categories."
-      },
-      {
-        "type": "paragraph",
-        "value": "For instance, if you only often query active users:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_active_users ON users(email) WHERE status = 'active';"
-      },
-      {
-        "type": "paragraph",
-        "value": "This index is smaller but faster for queries on active users, improving efficiency."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. Functional Indexes: Index the result of a function or expression instead of a plain column. Useful for case-insensitive searches or computed values."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, if you often query emails ignoring case:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_lower_email ON users(LOWER(email));"
-      },
-      {
-        "type": "paragraph",
-        "value": "Queries like this will then efficiently use the index:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM users WHERE LOWER(email) = 'example@example.com';"
-      },
-      {
-        "type": "paragraph",
-        "value": "By using composite, partial, and functional indexes, you can significantly enhance your SQL query performance even with complex filtering requirements. Always analyze your queries, understand your data patterns, and create indexes accordingly to maximize efficiency."
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember to monitor your database with EXPLAIN plans and measure performance improvements after adding indexes. Over-indexing can lead to slower writes and increased storage, so find the right balance based on your workload."
-      },
-      {
-        "type": "paragraph",
-        "value": "Advanced indexing is a powerful skill to master for optimizing SQL queries and scaling your applications smoothly."
-      }
-    ]
-  },
-  {
-    "slug": "diagnosing-and-resolving-complex-data-type-conversion-issues-in-sql",
-    "title": "Diagnosing and Resolving Complex Data Type Conversion Issues in SQL",
+    "slug": "optimizing-complex-join-conditions-to-avoid-data-anomalies-in-sql-data-models",
+    "title": "Optimizing Complex Join Conditions to Avoid Data Anomalies in SQL Data Models",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to identify and fix common complex data type conversion errors in SQL with easy-to-understand tips and examples designed for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=o4LDIDfbjFM",
+    "description": "Learn how to optimize complex join conditions in SQL to prevent data anomalies such as duplicates and incorrect results in your queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=DXpsNQqSFQw",
     "content": [
       {
         "type": "paragraph",
-        "value": "Data type conversion is a common task in SQL, but it can sometimes lead to errors — especially when you work with complex data types or mixed data formats. Understanding how SQL converts data and how to diagnose conversion errors is essential for writing robust and bug-free queries."
+        "value": "When working with SQL joins, especially complex ones involving multiple conditions, it’s common to encounter data anomalies like duplicates, missing records, or incorrect aggregations. These issues often arise from poorly written join conditions or misunderstanding the data relationships. This article will guide beginners through optimizing join conditions to ensure accurate, clean results."
       },
       {
         "type": "paragraph",
-        "value": "In this guide, we’ll look at common causes of data type conversion errors in SQL and show practical ways to resolve them with clear examples."
+        "value": "A join condition defines how rows from two or more tables are matched. If the condition is too broad or incorrectly specified, SQL can generate result sets with duplicate rows or mismatches. The key is to write precise join conditions that reflect the underlying data relationships without causing unwanted row multiplication."
       },
       {
         "type": "paragraph",
-        "value": "### Common Causes of Data Type Conversion Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Implicit conversions failing due to incompatible formats:** For example, trying to convert a text string that doesn’t represent a valid date or number."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Mismatched data types in expressions or comparisons:** Comparing an integer column to a varchar column without explicit conversion can cause errors or unexpected results."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Overflow or truncation issues:** Converting a large number into a smaller integer type or a long string into a shorter varchar can cause errors or data loss."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Diagnosing Conversion Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "When you encounter an error like `Conversion failed when converting the varchar value to data type int`, start by identifying which column or expression is causing the problem. Running simple SELECT queries to isolate faulty data can help."
+        "value": "Consider this simple example where we join orders to customers based on customer ID, but also include a date condition:"
       },
       {
         "type": "code",
-        "value": "-- Find rows with non-numeric text that causes int conversion to fail\nSELECT your_column\nFROM your_table\nWHERE TRY_CAST(your_column AS INT) IS NULL\nAND your_column IS NOT NULL;"
+        "value": "SELECT orders.order_id, customers.customer_name, orders.order_date\nFROM orders\nJOIN customers ON orders.customer_id = customers.customer_id\nWHERE orders.order_date >= '2024-01-01';"
       },
       {
         "type": "paragraph",
-        "value": "The example uses `TRY_CAST` which returns NULL when conversion fails, letting you pinpoint problematic rows without failing the whole query."
+        "value": "This query works fine since the join condition only relates customers to orders by customer_id, and the filtering by date is done separately in the WHERE clause. But what if you want to join only orders placed in 2024 while also matching customers?"
       },
       {
         "type": "paragraph",
-        "value": "### Practical Fixes"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use TRY_CAST or TRY_CONVERT to safely attempt conversions without stopping the query:**"
+        "value": "A common mistake is trying to put complex conditions directly into the join clause that don’t properly limit the join, which can cause multiple rows for each customer, for example:"
       },
       {
         "type": "code",
-        "value": "SELECT TRY_CAST(your_column AS INT) AS converted_value\nFROM your_table;"
+        "value": "SELECT orders.order_id, customers.customer_name, orders.order_date\nFROM orders\nJOIN customers ON orders.customer_id = customers.customer_id\n  AND orders.order_date >= '2024-01-01';"
       },
       {
         "type": "paragraph",
-        "value": "2. **Clean your data before converting:** Remove unwanted characters or trim spaces."
+        "value": "While this is still valid SQL, if there are multiple orders per customer in 2024, this join can return multiple records per customer. If your intention was to get unique customers with orders in 2024, you should first filter orders and then join."
+      },
+      {
+        "type": "paragraph",
+        "value": "A better approach is to filter the orders in a subquery or a Common Table Expression (CTE) before joining:"
       },
       {
         "type": "code",
-        "value": "SELECT CAST(TRIM(your_column) AS INT)\nFROM your_table\nWHERE your_column LIKE '%[0-9]%';"
+        "value": "WITH filtered_orders AS (\n  SELECT *\n  FROM orders\n  WHERE order_date >= '2024-01-01'\n)\nSELECT fo.order_id, c.customer_name, fo.order_date\nFROM filtered_orders fo\nJOIN customers c ON fo.customer_id = c.customer_id;"
       },
       {
         "type": "paragraph",
-        "value": "3. **Explicitly convert data types instead of relying on implicit conversions:** This improves readability and control."
+        "value": "This ensures only relevant orders are joined to customers, minimizing row duplication."
       },
       {
         "type": "paragraph",
-        "value": "4. **Use correct conversion functions for complex types:** For example, converting JSON strings or dates."
+        "value": "Another frequent cause of data anomalies is joining tables without specifying all necessary keys. For example, if an orders table includes multiple shipping addresses per order, joining on order_id only might cause unexpected duplicates. Always verify your data model and use all key columns needed to uniquely identify rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of a more complex join condition with multiple keys to avoid duplicates:"
       },
       {
         "type": "code",
-        "value": "-- Convert string to date\nSELECT CAST('2023-04-25' AS DATE) AS converted_date;"
+        "value": "SELECT o.order_id, s.shipment_id, c.customer_name\nFROM orders o\nJOIN shipments s ON o.order_id = s.order_id AND o.shipment_number = s.shipment_number\nJOIN customers c ON o.customer_id = c.customer_id;"
       },
       {
         "type": "paragraph",
-        "value": "5. **Check for data limitations:** Ensure the target type can hold the value (e.g., varchar length or numeric range)."
+        "value": "In summary, to optimize complex join conditions and avoid data anomalies:"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "1. Understand the data model and relationships thoroughly.\n2. Use complete keys in join conditions to uniquely identify related rows.\n3. Filter data in subqueries or CTEs before joining when possible.\n4. Test queries on smaller data sets to verify results and spot duplicates early.\n5. Use DISTINCT or aggregation carefully, but focus first on correct join logic."
       },
       {
         "type": "paragraph",
-        "value": "Diagnosing complex data type conversion issues starts with isolating bad data and understanding how SQL handles conversions. Using functions like TRY_CAST, cleaning data, and explicitly specifying data types can save you from common errors and make your SQL queries more reliable."
+        "value": "Mastering these practices will help you build accurate and efficient SQL queries that prevent common pitfalls related to joins."
       }
     ]
   }
