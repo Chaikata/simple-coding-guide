@@ -2043,5 +2043,173 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "create-a-sql-function-to-calculate-running-sales-total-per-customer",
+    "title": "Create a SQL Function to Calculate Running Sales Total per Customer",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "queries",
+    "description": "Build a SQL function that calculates the running total of sales for each customer ordered by the sale date.",
+    "prompt": "Write a SQL function named calculate_running_total that takes no parameters and returns a table showing each customer's sales transactions with a running total of their sales amount ordered by sale_date. The input table 'sales' has columns: customer_id (INT), sale_date (DATE), and amount (DECIMAL). Your function should output columns: customer_id, sale_date, amount, running_total. The running_total is the cumulative sum of the amount for each customer ordered by sale_date.",
+    "guidance": [
+      "Use window functions with PARTITION BY to sum the amount per customer.",
+      "Order the running total calculation by sale_date to maintain correct cumulative sums.",
+      "Return the results as a table with all specified columns."
+    ],
+    "hints": [
+      "Consider using the SQL window function SUM() OVER (PARTITION BY customer_id ORDER BY sale_date).",
+      "Make sure the function returns a table with the correct columns and types.",
+      "Pay attention to the order of rows when calculating the running total."
+    ],
+    "starterCode": "CREATE FUNCTION calculate_running_total()\nRETURNS TABLE (\n  customer_id INT,\n  sale_date DATE,\n  amount DECIMAL(10,2),\n  running_total DECIMAL(10,2)\n) AS $$\nBEGIN\n  RETURN QUERY\n  -- your query here\n;\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "customer_id | sale_date  | amount  | running_total\n------------|------------|---------|--------------\n1           | 2023-01-01 | 100.00  | 100.00\n1           | 2023-01-05 | 50.00   | 150.00\n2           | 2023-01-02 | 200.00  | 200.00\n2           | 2023-01-10 | 100.00  | 300.00",
+    "concepts": [
+      "window functions",
+      "running total",
+      "SQL function",
+      "partition by"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-optimize-complex-data-processing-function",
+    "title": "Refactor and Optimize Complex Data Processing Function",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Given a large-function script that processes a nested data structure with redundant loops and poor readability, refactor the code to improve maintainability, reduce complexity, and optimize performance without changing its output.",
+    "prompt": "You are provided a Python function `process_data(data)` that takes a list of dictionaries with nested data. The function performs multiple nested loops, redundant computations, and has low readability due to variable naming and structure.\n\nYour task is to refactor this function to:\n- Improve readability and maintainability by using meaningful variable names and modularizing repeated logic into helper functions.\n- Optimize performance by minimizing redundant iterations and using efficient data access techniques.\n- Keep the behavior of the function exactly the same, ensuring output correctness.\n\nSubmit the refactored version of the function only.",
+    "guidance": [
+      "Break down the monolithic function into smaller helper functions with single responsibilities.",
+      "Use list comprehensions or generator expressions where appropriate to simplify loops.",
+      "Avoid redundant loops by combining data processing steps when possible.",
+      "Rename variables to clearly indicate their purpose and data content."
+    ],
+    "hints": [
+      "Consider using dictionary lookups to replace repeated searches through the list.",
+      "Extract reusable blocks of code into separate functions for clarity.",
+      "Use pythonic constructs like enumerate and zip to simplify nested loops."
+    ],
+    "starterCode": "def process_data(data):\n    result = []\n    for i in range(len(data)):\n        temp = []\n        for j in range(len(data[i]['items'])):\n            item = data[i]['items'][j]\n            if item['value'] > 10:\n                acc = 0\n                for k in range(len(item['subitems'])):\n                    subitem = item['subitems'][k]\n                    acc += subitem['metric']\n                temp.append({'name': item['name'], 'total_metric': acc})\n        result.append({'id': data[i]['id'], 'processed': temp})\n    return result",
+    "expectedOutput": "[{'id': 1, 'processed': [{'name': 'itemA', 'total_metric': 25}]}, {'id': 2, 'processed': []}]",
+    "concepts": [
+      "code refactoring",
+      "performance optimization",
+      "code readability",
+      "nested data processing"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-function-to-calculate-the-area-of-a-rectangle",
+    "title": "Build a Function to Calculate the Area of a Rectangle",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Write a simple C++ function that calculates the area of a rectangle given its width and height.",
+    "prompt": "Create a function named calculateArea that takes two integers, width and height, and returns the area of the rectangle (width * height). The function should return an integer representing the area.",
+    "guidance": [
+      "Define a function with the name calculateArea that accepts two integer parameters.",
+      "Use the return statement to send back the product of width and height.",
+      "Make sure your function has the correct return type."
+    ],
+    "hints": [
+      "The area of a rectangle is width multiplied by height.",
+      "The function signature should look like: int calculateArea(int width, int height)."
+    ],
+    "starterCode": "int calculateArea(int width, int height) {\n    // Your code here\n}",
+    "expectedOutput": "calculateArea(5, 10) should return 50\ncalculateArea(3, 7) should return 21",
+    "concepts": [
+      "functions",
+      "return statement"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-nested-array-and-object-destructuring-with-defaults",
+    "title": "Predict the Output of Nested Array and Object Destructuring with Defaults",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given JavaScript code involving nested array and object destructuring with default values and predict the final output.",
+    "prompt": "Consider the following JavaScript snippet. Predict the output printed to the console without running the code:\n\nconst data = [\n  { id: 1, values: [10, 20] },\n  { id: 2 },\n  { id: 3, values: [30] }\n];\n\nconst [\n  { values: [a, b] = [0, 0] },\n  { values: [c, d] = [5, 5] },\n  { values: [e, f] = [7, 7] }\n] = data;\n\nconsole.log(a, b, c, d, e, f);\n\nWhat values are logged to the console?",
+    "guidance": [
+      "Review how destructuring assignment works with nested arrays and objects",
+      "Recall that default values in destructuring only apply when the property being destructured is undefined",
+      "Look at each element of 'data' and consider what happens when that element does or does not have the 'values' property"
+    ],
+    "hints": [
+      "For the second object in the array, 'values' is missing, so the default array [5,5] is used during destructuring",
+      "For the first object, 'values' is present, so the default [0,0] is ignored",
+      "Remember that when destructuring arrays, missing elements default to 'undefined' unless a default is provided"
+    ],
+    "starterCode": "const data = [\n  { id: 1, values: [10, 20] },\n  { id: 2 },\n  { id: 3, values: [30] }\n];\n\nconst [\n  { values: [a, b] = [0, 0] },\n  { values: [c, d] = [5, 5] },\n  { values: [e, f] = [7, 7] }\n] = data;\n\nconsole.log(a, b, c, d, e, f);",
+    "expectedOutput": "10 20 5 5 30 undefined",
+    "concepts": [
+      "JavaScript destructuring",
+      "default values in destructuring",
+      "arrays and objects"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-complex-recursive-and-memoized-function",
+    "title": "Predict the Output of a Complex Recursive and Memoized Function",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze the provided JavaScript function that uses recursion, memoization, and bitwise operations to determine its output when called with a specific input.",
+    "prompt": "Consider the following JavaScript code snippet. Predict the output when executing `mysteryFunction(10)`. Explain your reasoning about how the recursion and memoization influence the outcome.",
+    "guidance": [
+      "Trace the recursion flow and understand how memoization caches results to avoid repeated calculations.",
+      "Pay attention to bitwise operations and how they alter the function parameters and results.",
+      "Focus on how the combination of recursion and bitwise shifts affects the base cases and final returned values."
+    ],
+    "hints": [
+      "Memoization drastically reduces the number of calls by caching results.",
+      "Bitwise operations change the value and effectively partition subproblems in recursion.",
+      "Consider writing down or using a tree diagram to visualize recursive calls and returns."
+    ],
+    "starterCode": "function mysteryFunction(n, memo = {}) {\n  if (n <= 1) return n;\n  if (memo[n]) return memo[n];\n\n  const left = mysteryFunction(n >> 1, memo);\n  const right = mysteryFunction(n >> 2, memo);\n  memo[n] = left + right + (n & 1);\n\n  return memo[n];\n}\n\nconsole.log(mysteryFunction(10));",
+    "expectedOutput": "6",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "bitwise operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-rotate-a-vector-by-k-positions",
+    "title": "Build a Function to Rotate a Vector by k Positions",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a C++ function that takes a vector of integers and an integer k, and returns the vector rotated to the right by k positions. This exercise tests your understanding of vector manipulation, modular arithmetic, and function implementation.",
+    "prompt": "Create a function named rotateVector that accepts a vector<int> and an integer k. The function should return a new vector where the elements are rotated to the right by k positions. For example, rotating [1, 2, 3, 4, 5] by 2 positions results in [4, 5, 1, 2, 3]. Make sure the function handles cases where k is greater than the length of the vector.",
+    "guidance": [
+      "Use modular arithmetic to handle rotation values greater than the vector size.",
+      "Consider creating a new vector and placing elements at their rotated positions.",
+      "Avoid modifying the input vector directly if you want to preserve immutability."
+    ],
+    "hints": [
+      "To find the new position for an element originally at index i, use (i + k) % size.",
+      "Think about how to split and recombine the vector into two parts to achieve rotation efficiently."
+    ],
+    "starterCode": "#include <vector>\nusing namespace std;\n\nvector<int> rotateVector(const vector<int>& nums, int k) {\n    // Your code here\n}",
+    "expectedOutput": "[4, 5, 1, 2, 3]",
+    "concepts": [
+      "vectors",
+      "modular arithmetic",
+      "function implementation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
