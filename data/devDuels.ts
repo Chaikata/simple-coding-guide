@@ -1874,5 +1874,174 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "refactor-nested-loops-and-conditionals-for-student-grade-processing",
+    "title": "Refactor Nested Loops and Conditionals for Student Grade Processing",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability and efficiency of a Python function that processes student grades to calculate averages and determine pass/fail status.",
+    "prompt": "You are given a Python function that processes a list of student dictionaries containing their names and grades across subjects. The function calculates the average grade for each student and assigns a 'passed' or 'failed' status based on a threshold of 60. However, the current implementation uses nested loops and multiple conditionals making it hard to maintain and less efficient. Refactor the function to improve code clarity, remove redundant checks, and use Pythonic structures such as list comprehensions and helper functions without changing its behavior.",
+    "guidance": [
+      "Avoid nested loops by utilizing built-in functions like sum() and len() to calculate averages.",
+      "Use list comprehensions or map functions to simplify list manipulation.",
+      "Extract repetitive logic into helper functions to enhance readability."
+    ],
+    "hints": [
+      "Consider calculating the average grade with a single expression rather than nested loops.",
+      "Use Python's ternary operator to assign the pass/fail status concisely."
+    ],
+    "starterCode": "def process_student_grades(students):\n    results = []\n    for student in students:\n        total = 0\n        count = 0\n        for subject, grade in student['grades'].items():\n            if grade is not None:\n                total += grade\n                count += 1\n        if count > 0:\n            average = total / count\n        else:\n            average = 0\n        if average >= 60:\n            status = 'passed'\n        else:\n            status = 'failed'\n        results.append({'name': student['name'], 'average': average, 'status': status})\n    return results",
+    "expectedOutput": "[\n  {'name': 'Alice', 'average': 75.0, 'status': 'passed'},\n  {'name': 'Bob', 'average': 58.75, 'status': 'failed'},\n  {'name': 'Charlie', 'average': 91.0, 'status': 'passed'}\n]",
+    "concepts": [
+      "refactoring",
+      "list comprehensions",
+      "helper functions",
+      "conditional expressions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "design-and-implement-a-scalable-e-commerce-order-tracking-data-model",
+    "title": "Design and Implement a Scalable E-Commerce Order Tracking Data Model",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "data-modeling",
+    "description": "Build a comprehensive SQL data model supporting order tracking, including customers, products, orders, shipments, and status history, ensuring efficient querying for complex business insights.",
+    "prompt": "You are tasked with creating a scalable, normalized data model suitable for an e-commerce platform's order tracking system. Your model must include tables for Customers, Products, Orders, Order Items, Shipments, and Order Status History. Each order can contain multiple products, and each shipment can include multiple orders or partial shipments. Additionally, you must track each status change of an order over time to support historical queries.\n\nUsing standard SQL (DDL), create the full schema with appropriate primary keys, foreign keys, indexing considerations, and constraints to maintain data integrity. Think carefully about the relationships between tables and the historical tracking of status updates. Your model should optimize for queries such as retrieving all shipments for a customer, the status history of a particular order, and identifying delayed shipments.\n\nConsider edge cases like split shipments and orders with multiple status changes. The resulting schema should be normalized to at least 3NF and allow for efficient inserts and queries.",
+    "guidance": [
+      "Focus on designing clear one-to-many and many-to-many relationships with junction tables where needed.",
+      "Use status history tables to track changes with timestamps rather than overwriting existing order status.",
+      "Add indexes on foreign keys and commonly queried columns to optimize performance."
+    ],
+    "hints": [
+      "A junction table like OrderItems is necessary to model multiple products per order.",
+      "To track multiple shipments per order, consider a Shipments table with a linking table between Orders and Shipments.",
+      "Use a dedicated OrderStatusHistory table with an order_id, status, and timestamp column for status tracking."
+    ],
+    "starterCode": "CREATE TABLE Customers (\n  customer_id INT PRIMARY KEY,\n  customer_name VARCHAR(255),\n  email VARCHAR(255) UNIQUE\n);\n\n-- Define Products, Orders, OrderItems, Shipments, and OrderStatusHistory tables as part of the task.",
+    "expectedOutput": "A set of SQL CREATE TABLE statements defining Customers, Products, Orders, OrderItems, Shipments, and OrderStatusHistory with keys, constraints, and indexes.",
+    "concepts": [
+      "SQL schema design",
+      "Data normalization",
+      "Relational modeling",
+      "Indexing and constraints"
+    ],
+    "estimatedTime": "40 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-the-sum-of-even-numbers-function",
+    "title": "Fix the Bug in the Sum of Even Numbers Function",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple Python function is intended to sum all even numbers from a list, but it contains a bug. Your task is to identify and fix the bug so the function returns the correct sum of even numbers.",
+    "prompt": "The function sum_even_numbers(nums) is supposed to take a list of integers and return the sum of all even numbers in the list. However, it currently returns the wrong result. Fix the bug in the function so it returns the correct sum.",
+    "guidance": [
+      "Check how the function is checking if a number is even.",
+      "Ensure the function correctly accumulates the sum of even numbers only.",
+      "Test the function with different lists to confirm the fix."
+    ],
+    "hints": [
+      "Recall that even numbers are divisible by 2 with no remainder.",
+      "Look carefully at the if condition that checks for even numbers."
+    ],
+    "starterCode": "def sum_even_numbers(nums):\n    total = 0\n    for num in nums:\n        if num % 2 == 1:\n            total += num\n    return total",
+    "expectedOutput": "sum_even_numbers([1, 2, 3, 4, 5, 6]) should return 12",
+    "concepts": [
+      "modulus operator",
+      "for loops",
+      "conditional statements",
+      "accumulators"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-merge-and-sort-two-arrays",
+    "title": "Build a Function to Merge and Sort Two Arrays",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a C++ function that takes two integer arrays as inputs, merges them into a single array, removes duplicates, and returns the sorted result.",
+    "prompt": "Create a function named mergeAndSort that accepts two vectors of integers. The function should merge both vectors into one, eliminate any duplicate values, and return a new vector sorted in ascending order.",
+    "guidance": [
+      "Use STL containers like std::vector and algorithms to manage the arrays efficiently.",
+      "Think about how to remove duplicates after merging before sorting the array."
+    ],
+    "hints": [
+      "Consider using std::set or sorting the merged vector then removing duplicates with std::unique.",
+      "Remember that std::sort and std::unique require including the <algorithm> header."
+    ],
+    "starterCode": "#include <vector>\n\nstd::vector<int> mergeAndSort(const std::vector<int>& arr1, const std::vector<int>& arr2) {\n    // Your implementation here\n    return {};\n}",
+    "expectedOutput": "[1, 2, 3, 4, 5, 6, 7]",
+    "concepts": [
+      "vectors",
+      "sorting",
+      "duplicates removal"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-dynamic-form-builder-with-validation-in-javascript",
+    "title": "Advanced Dynamic Form Builder with Validation in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a reusable dynamic form builder function that generates interactive forms based on a JSON schema, including custom validations and conditional field visibility.",
+    "prompt": "Create a function named buildDynamicForm(schema) that accepts a JSON schema representing a form configuration and dynamically generates a HTML form. The function should render input fields, apply custom validation rules, handle conditional field visibility based on other inputs, and provide real-time validation feedback. When the form is submitted, the data should be returned as an object if all validations pass, or show appropriate error messages otherwise. The schema will include field types, labels, validation criteria (e.g., required, min/max length, regex), and dependencies for conditional display.",
+    "guidance": [
+      "Parse the JSON schema to dynamically create form elements including text inputs, selects, checkboxes, etc.",
+      "Implement validation logic that runs on input change and on form submission to provide immediate feedback.",
+      "Manage conditional logic to hide or show fields dynamically based on other field values using event listeners.",
+      "Structure your code to support extensibility for adding new field types and validation rules in the future."
+    ],
+    "hints": [
+      "Use event delegation or direct listeners to handle input changes for validation and conditional fields.",
+      "Consider maintaining a state object mapping each field's current value for easy validation and conditional checks.",
+      "Leverage HTML5 validation attributes where possible and supplement with custom functions for complex rules."
+    ],
+    "starterCode": "function buildDynamicForm(schema) {\n  const form = document.createElement('form');\n  // Your code to dynamically build form elements\n  // Add validation and conditional logic\n  form.addEventListener('submit', (event) => {\n    event.preventDefault();\n    // Validate and gather data\n    // Show errors or return form data\n  });\n  return form;\n}",
+    "expectedOutput": "A fully functional HTML form generated from the provided schema, that enforces validations, shows/hides fields conditionally, and returns form data as an object on successful submission.",
+    "concepts": [
+      "dynamic DOM manipulation",
+      "custom validation logic",
+      "event handling",
+      "state management"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-sql-query-to-correctly-calculate-average-salary",
+    "title": "Fix the SQL Query to Correctly Calculate Average Salary",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "This challenge requires you to debug a simple SQL query that attempts to calculate the average salary from an employees table, but the query contains syntax errors that prevent it from running correctly.",
+    "prompt": "You are given a broken SQL query that is supposed to return the average salary from the employees table. The query currently throws a syntax error. Identify and fix the errors so that the query runs successfully and returns the correct average salary.",
+    "guidance": [
+      "Check the function name spelling and syntax used for calculating averages.",
+      "Ensure all necessary keywords like SELECT and FROM are included correctly.",
+      "Verify that the table and column names are referenced correctly and consistently."
+    ],
+    "hints": [
+      "The SQL aggregate function to calculate average is spelled 'AVG', not 'average'.",
+      "Every SELECT query must specify columns after SELECT and a source table after FROM.",
+      "Pay attention to commas and parentheses placement in your query."
+    ],
+    "starterCode": "SELECT average(salary FROM employees;",
+    "expectedOutput": "A single numeric value representing the average salary from the employees table.",
+    "concepts": [
+      "SQL syntax basics",
+      "Aggregate functions",
+      "Basic SELECT queries"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
