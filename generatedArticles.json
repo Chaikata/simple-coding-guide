@@ -1,487 +1,137 @@
 [
   {
-    "slug": "scalable-event-driven-architectures-nodejs-kafka",
-    "title": "Designing Scalable Event-Driven Architectures with Node.js and Kafka",
+    "slug": "javascript-closures-explained-with-practical-examples-for-beginners",
+    "title": "JavaScript Closures Explained with Practical Examples for Beginners",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build scalable and resilient event-driven applications using Node.js and Apache Kafka in this beginner-friendly tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "description": "Learn what JavaScript closures are and how to use them with simple examples perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
     "content": [
       {
         "type": "paragraph",
-        "value": "Event-driven architecture (EDA) is an approach to software design where components communicate by emitting and responding to events. This method enhances scalability and decouples services, making it ideal for modern distributed systems. Apache Kafka, a distributed event streaming platform, is widely used for building scalable and fault-tolerant event-driven applications. In this tutorial, we'll explore how to design a simple event-driven system using Node.js and Kafka."
+        "value": "Closures are a fundamental concept in JavaScript that every beginner should understand. They allow functions to access variables from an outer function even after that outer function has finished executing. This opens up powerful ways to write flexible and concise code."
       },
       {
         "type": "paragraph",
-        "value": "Before we start, ensure you have Node.js installed (version 12 or higher) and a Kafka cluster or a local Kafka environment running. You can run Kafka locally using tools like Confluent Platform or Kafka's official binaries."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's begin by creating a new Node.js project and installing the Kafka client library `kafkajs`, which is a modern Kafka client for Node.js."
+        "value": "Let's start with a simple example to explain what a closure is."
       },
       {
         "type": "code",
-        "value": "npm init -y\nnpm install kafkajs"
+        "value": "function outer() {\n  let count = 0;\n  function inner() {\n    count++;\n    console.log(count);\n  }\n  return inner;\n}\n\nconst increment = outer();\nincrement(); // Output: 1\nincrement(); // Output: 2\nincrement(); // Output: 3"
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setting up the Kafka Producer\nThe producer is responsible for sending messages (events) to a Kafka topic. Here's how to create a simple producer in Node.js."
+        "value": "In this example, `outer` declares a variable `count` and defines an inner function `inner` that increments and prints `count`. When we call `outer()`, it returns the `inner` function. The variable `increment` now holds this returned function."
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though the `outer` function has finished running, the inner function still has access to the `count` variable. This happens because `inner` forms a closure—keeping the environment of `outer` alive. Each time you call `increment()`, you increase the same `count` value."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are often used to create private variables or to implement function factories. Here's an example of a function factory using closures:"
       },
       {
         "type": "code",
-        "value": "const { Kafka } = require('kafkajs');\n\n// Create a Kafka client instance\nconst kafka = new Kafka({\n  clientId: 'my-app',\n  brokers: ['localhost:9092'] // Adjust based on your Kafka server location\n});\n\n// Create a producer instance\nconst producer = kafka.producer();\n\nconst runProducer = async () => {\n  await producer.connect();\n  console.log('Producer connected');\n\n  // Send a message to the 'events' topic every 5 seconds\n  setInterval(async () => {\n    try {\n      const message = { value: `Event at ${new Date().toISOString()}` };\n      await producer.send({\n        topic: 'events',\n        messages: [message],\n      });\n      console.log('Message sent:', message);\n    } catch (error) {\n      console.error('Error sending message', error);\n    }\n  }, 5000);\n};\n\nrunProducer().catch(console.error);"
+        "value": "function makeMultiplier(multiplier) {\n  return function (number) {\n    return number * multiplier;\n  }\n}\n\nconst double = makeMultiplier(2);\nconst triple = makeMultiplier(3);\n\nconsole.log(double(5)); // Output: 10\nconsole.log(triple(5)); // Output: 15"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Setting up the Kafka Consumer\nThe consumer listens to Kafka topics and processes incoming events. Let's create a simple consumer that prints the received messages."
-      },
-      {
-        "type": "code",
-        "value": "const { Kafka } = require('kafkajs');\n\nconst kafka = new Kafka({\n  clientId: 'my-app',\n  brokers: ['localhost:9092']\n});\n\nconst consumer = kafka.consumer({ groupId: 'event-group' });\n\nconst runConsumer = async () => {\n  await consumer.connect();\n  console.log('Consumer connected');\n\n  await consumer.subscribe({ topic: 'events', fromBeginning: true });\n\n  await consumer.run({\n    eachMessage: async ({ topic, partition, message }) => {\n      console.log(`Received message: ${message.value.toString()}`);\n    }\n  });\n};\n\nrunConsumer().catch(console.error);"
+        "value": "Here, `makeMultiplier` returns a new function that multiplies its input by the given `multiplier`. Each returned function remembers the original `multiplier` value thanks to the closure."
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Running the Example\n1. Start your Kafka broker (for example, using Confluent or Kafka's own tools).\n2. Run the consumer script:\n\nbash\nnode consumer.js\n\n\n3. Run the producer script in another terminal:\n\nbash\nnode producer.js\n\n\nYou should see the producer sending events every 5 seconds and the consumer printing them as they arrive."
+        "value": "To summarize, closures let functions remember the scope in which they were created. This is extremely useful for data privacy, creating function factories, and maintaining state in asynchronous code."
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Scaling and Best Practices\n- **Decoupling:** With event-driven design, producers and consumers don't depend on each other directly. You can add more consumers to handle increased load.\n- **Consumer Groups:** Multiple consumer instances in the same group will share the work, enabling horizontal scaling.\n- **Error Handling:** Add retry logic and monitoring to ensure message processing reliability.\n- **Schema Management:** Use schema registries to maintain consistent event formats.\n\nThis setup forms the foundation of scalable and resilient event-driven systems."
-      },
-      {
-        "type": "paragraph",
-        "value": "By following this tutorial, you now understand how to leverage Node.js and Kafka to build event-driven architectures. As you grow more comfortable, you can explore advanced Kafka features like partitioning, transactions, and stream processing to enhance your applications."
+        "value": "Keep practicing closures with different examples, and soon you'll feel comfortable using this powerful JavaScript feature!"
       }
     ]
   },
   {
-    "slug": "handling-memory-leaks-in-javascript-system-design-practical-strategies",
-    "title": "Handling Memory Leaks in JavaScript System Design: Practical Strategies",
+    "slug": "designing-resilient-javascript-systems-handling-race-conditions-in-asynchronous-code",
+    "title": "Designing Resilient JavaScript Systems: Handling Race Conditions in Asynchronous Code",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to identify and fix memory leaks in JavaScript with practical strategies that improve your system design and ensure optimal performance.",
-    "videoUrl": "https://www.youtube.com/watch?v=IkoGmbNJolo",
+    "description": "Learn how to identify and handle race conditions in asynchronous JavaScript code to build more reliable and resilient applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=K2Sd8JCT-kU",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks in JavaScript happen when your code unintentionally holds onto more memory than needed, causing your application to slow down or crash over time. In this beginner-friendly article, we'll explore what memory leaks are, why they are important in system design, and some practical ways to detect and fix them."
+        "value": "Asynchronous JavaScript allows your programs to be non-blocking and efficient. However, it can also introduce issues like race conditions, which occur when two or more asynchronous operations try to update or use the same data concurrently, leading to unpredictable results."
       },
       {
         "type": "paragraph",
-        "value": "A memory leak occurs when objects in your application are no longer necessary but are still referenced somewhere in the code, preventing the JavaScript garbage collector from freeing up that memory. This usually happens due to improper handling of references in closures, event listeners, or global variables."
+        "value": "In this article, we'll explain what race conditions are and provide beginner-friendly examples and techniques to avoid them in your JavaScript code."
       },
       {
         "type": "paragraph",
-        "value": "Here are some practical strategies to avoid and fix memory leaks in JavaScript:"
+        "value": "### What is a Race Condition?"
       },
       {
         "type": "paragraph",
-        "value": "1. **Remove Event Listeners When They Are No Longer Needed**: Event listeners keep references to elements and functions, so forgetting to remove them can cause leaks."
-      },
-      {
-        "type": "code",
-        "value": "const button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Button clicked!');\n}\n\nbutton.addEventListener('click', handleClick);\n\n// Later, when you no longer need the listener\nbutton.removeEventListener('click', handleClick);"
+        "value": "A race condition happens when multiple pieces of asynchronous code access and modify shared data at the same time, and the final outcome depends on the order in which they complete. Because JavaScript is single-threaded but can run async tasks concurrently, race conditions often happen when dealing with APIs, timers, or other async operations."
       },
       {
         "type": "paragraph",
-        "value": "2. **Avoid Global Variables**: Globals live for the entire lifetime of your app, so they can easily accumulate unnecessary data. Use local variables or module scopes instead."
+        "value": "### Example of a Race Condition"
       },
       {
         "type": "paragraph",
-        "value": "3. **Be Careful With Closures**: Closures capture variable references, which can unintentionally keep large objects alive. Make sure you do not keep references longer than necessary."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Null Out References**: If you have variables holding big objects that you no longer need, set them to `null` so the garbage collector can reclaim memory."
+        "value": "Imagine you want to fetch user data from two different sources and update the UI with the first response you get:"
       },
       {
         "type": "code",
-        "value": "let bigObject = {\n  data: new Array(1000000).fill('some data')\n};\n\n// When done using bigObject\nbigObject = null;"
+        "value": "let userData;\n\nfetch('/api/user')\n  .then(response => response.json())\n  .then(data => {\n    userData = data;\n    console.log('User data updated from /api/user:', userData);\n  });\n\nfetch('/backup-api/user')\n  .then(response => response.json())\n  .then(data => {\n    userData = data;\n    console.log('User data updated from /backup-api/user:', userData);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "5. **Use Developer Tools to Detect Memory Leaks**: Most browsers have memory profiling tools that allow you to take heap snapshots and find objects that are not being garbage collected."
+        "value": "Because both fetch requests run asynchronously, whichever finishes last will overwrite the value of `userData`. This is a race condition because the result depends on network speed or server response time, causing unpredictable final data."
       },
       {
         "type": "paragraph",
-        "value": "6. **Watch Out for Timers and Intervals**: Clearing timeouts and intervals when done is important to prevent memory from hanging around."
-      },
-      {
-        "type": "code",
-        "value": "const intervalId = setInterval(() => {\n  console.log('Running interval');\n}, 1000);\n\n// Clear interval when no longer needed\nclearInterval(intervalId);"
+        "value": "### How to Prevent Race Conditions"
       },
       {
         "type": "paragraph",
-        "value": "By following these simple strategies, you can design JavaScript systems that are efficient and less prone to memory leaks. Always test your application for memory usage and optimize where needed to maintain a smooth user experience."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-typescript-generics-building-scalable-and-reusable-components",
-    "title": "Mastering TypeScript Generics: Building Scalable and Reusable Components",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to use TypeScript generics to create flexible, scalable, and reusable components that improve your code quality and maintainability.",
-    "videoUrl": "https://www.youtube.com/watch?v=ZA3G-y1Y1l4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript generics are a powerful feature that allow you to create components and functions which can work with a variety of data types instead of being limited to one. This flexibility helps you write reusable code components and improve scalability in your projects. In this tutorial, we'll explore the basics of generics and build practical examples to master this concept."
+        "value": "One effective way to handle race conditions is to \"cancel\" or ignore outdated asynchronous operations when a newer one starts or completes first."
       },
       {
         "type": "paragraph",
-        "value": "Generics work by defining a placeholder type parameter, usually with a letter like <T>. This placeholder can be replaced with any type when the function or class is used. Let's start with a simple example of a generic function."
+        "value": "#### 1. Use a Token or Versioning Approach"
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep track of the latest request version and ignore results of outdated requests:"
       },
       {
         "type": "code",
-        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst output1 = identity<string>(\"Hello Generics!\"); // Output is string\nconst output2 = identity<number>(42); // Output is number\n\nconsole.log(output1); // Hello Generics!\nconsole.log(output2); // 42"
+        "value": "let lastRequestId = 0;\nlet userData;\n\nfunction fetchUserData() {\n  const currentRequestId = ++lastRequestId;\n\n  fetch('/api/user')\n    .then(response => response.json())\n    .then(data => {\n      if (currentRequestId === lastRequestId) {\n        userData = data;\n        console.log('User data updated:', userData);\n      } else {\n        console.log('Discarded outdated response');\n      }\n    });\n}\n\n// Call fetchUserData multiple times, only latest response is used\nfetchUserData();\nfetchUserData();"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, function identity takes an argument of type T and returns the same type. When calling the function, you specify the type, and TypeScript enforces that the argument and return types match."
+        "value": "#### 2. Use Async/Await with `Promise.race`"
       },
       {
         "type": "paragraph",
-        "value": "Next, let's create a generic interface for an array wrapper that ensures type safety but works with many types."
+        "value": "You can also use `Promise.race` to only handle the fastest response:"
       },
       {
         "type": "code",
-        "value": "interface MyArray<T> {\n  items: T[];\n  add(item: T): void;\n  get(index: number): T;\n}\n\nclass ArrayWrapper<T> implements MyArray<T> {\n  items: T[] = [];\n\n  add(item: T): void {\n    this.items.push(item);\n  }\n\n  get(index: number): T {\n    return this.items[index];\n  }\n}\n\nconst numberArray = new ArrayWrapper<number>();\nnumberArray.add(10);\nnumberArray.add(20);\nconsole.log(numberArray.get(1)); // 20\n\nconst stringArray = new ArrayWrapper<string>();\nstringArray.add(\"hello\");\nstringArray.add(\"world\");\nconsole.log(stringArray.get(0)); // hello"
+        "value": "async function fetchFastestUserData() {\n  const fetch1 = fetch('/api/user').then(res => res.json());\n  const fetch2 = fetch('/backup-api/user').then(res => res.json());\n\n  try {\n    const userData = await Promise.race([fetch1, fetch2]);\n    console.log('Fastest user data:', userData);\n  } catch (err) {\n    console.error('Fetch failed:', err);\n  }\n}\n\nfetchFastestUserData();"
       },
       {
         "type": "paragraph",
-        "value": "Here, the ArrayWrapper class uses generics to handle arrays of any type, but retains strict type checking. This means you can't accidentally add a string to a number array, reducing bugs."
+        "value": "This approach ensures you take the first completed fetch, preventing race conditions between the two requests."
       },
       {
         "type": "paragraph",
-        "value": "Generics also shine when building reusable React components or utility functions. For instance, a generic function to merge two objects can be written as follows:"
-      },
-      {
-        "type": "code",
-        "value": "function mergeObjects<T extends object, U extends object>(obj1: T, obj2: U): T & U {\n  return { ...obj1, ...obj2 };\n}\n\nconst merged = mergeObjects(\n  { name: \"Alice\" },\n  { age: 30 }\n);\n\nconsole.log(merged.name); // Alice\nconsole.log(merged.age);  // 30"
+        "value": "#### 3. Use Mutex or Locking (Advanced)"
       },
       {
         "type": "paragraph",
-        "value": "In this example, two objects of different types are merged and the resulting object has a combined type of both. Using extends object ensures we only accept objects and the return type reflects the merged type, enhancing type safety."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize, here are key points to master TypeScript generics:\n\n- Use generics to write flexible functions, interfaces, and classes.\n- Define generic type parameters inside angle brackets: <T>.\n- Use constraints like extends to restrict acceptable types.\n- Generics help catch errors early and improve code reuse and scalability.\n\nTry incorporating generics in your next TypeScript project to experience clearer and more maintainable code!"
-      }
-    ]
-  },
-  {
-    "slug": "comparing-typescript-type-inference-failures-and-how-to-debug-them",
-    "title": "Comparing TypeScript Type Inference Failures and How to Debug Them",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to identify common TypeScript type inference failures and practical debugging tips for beginners to improve code quality and reduce errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=GpCFhB1pRBU",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful superset of JavaScript that adds static typing, allowing developers to catch errors early. One of its key features is type inference, where the compiler automatically figures out the types without explicit annotations. However, sometimes type inference fails or creates confusing error messages, especially for beginners."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this article, we compare common scenarios where TypeScript's type inference fails and provide practical tips to debug these issues effectively."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Scenario 1: Inferring types of function parameters from untyped values"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you pass an untyped or loosely typed value to a function, TypeScript may infer an overly broad type or produce an error if it can’t match the expected type."
-      },
-      {
-        "type": "code",
-        "value": "function greet(name: string) {\n  console.log(`Hello, ${name.toUpperCase()}`);\n}\n\nconst user = { firstName: 'Alice' };\ngreet(user.firstName); // works\n\ngreet(user); // Error: Argument of type '{ firstName: string; }' is not assignable to parameter of type 'string'."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, `greet` expects a string, but passing the whole user object leads to an error. Always check if the inferred type matches the function parameter type, and access the correct property if needed."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Scenario 2: Inferring array types with mixed elements"
-      },
-      {
-        "type": "paragraph",
-        "value": "When you create an array with mixed types, TypeScript infers the type as a union of those element types. Sometimes this isn't what you expected."
-      },
-      {
-        "type": "code",
-        "value": "const values = [1, 'two', 3];\n\n// TypeScript infers (string | number)[]\n\nvalues.forEach(val => {\n  // val can be number or string here\n  if (typeof val === 'string') {\n    console.log(val.toUpperCase());\n  } else {\n    console.log(val.toFixed(2));\n  }\n});"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you want to restrict the array to a single type, add explicit type annotations. Otherwise, always use type guards (like `typeof`) to safely handle different types."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Scenario 3: Type widening and literal types"
-      },
-      {
-        "type": "paragraph",
-        "value": "By default, TypeScript widens literal types (like `'hello'`) to their general types (`string`). This can cause inference failures when you expect a specific literal type."
-      },
-      {
-        "type": "code",
-        "value": "const action = 'SAVE';\n\nfunction performAction(type: 'SAVE' | 'DELETE') {\n  console.log(type);\n}\n\nperformAction(action); // Error: Argument of type 'string' is not assignable to parameter of type '\"SAVE\" | \"DELETE\"'."
-      },
-      {
-        "type": "paragraph",
-        "value": "Issue happens because `action` is inferred as `string`, not the literal type `'SAVE'`. To fix, use `as const` or explicitly type the variable:"
-      },
-      {
-        "type": "code",
-        "value": "const action = 'SAVE' as const;\nperformAction(action); // Works\n\n// or\nconst action2: 'SAVE' = 'SAVE';\nperformAction(action2); // Works"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Debugging Tips for Type Inference Failures"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Add explicit type annotations.** Even a small annotation can help the compiler understand your intention."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Use the TypeScript language service in your editor.** Hovering over variables usually shows their inferred types."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Leverage type assertions carefully.** Use `as` syntax to tell TypeScript what type to expect, but avoid overusing it to keep type safety."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Check error messages closely.** They often hint whether TypeScript expected a literal, union, or a more general type."
-      },
-      {
-        "type": "paragraph",
-        "value": "5. **Break down complex expressions.** Assign intermediate values to variables with explicit types to isolate inference issues."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Type inference in TypeScript helps write cleaner code by reducing boilerplate but can sometimes cause confusing errors if the inferred types don’t match expectations. Understanding common failure scenarios and employing debugging techniques like explicit annotations and type guards will improve your coding experience and help you write safer, more predictable TypeScript."
-      }
-    ]
-  },
-  {
-    "slug": "building-a-personal-finance-tracker-with-python-and-sqlite",
-    "title": "Building a Personal Finance Tracker with Python and SQLite: A Beginner’s Guide",
-    "language": "python",
-    "type": "tutorials",
-    "description": "Learn how to create a simple and effective personal finance tracker using Python and SQLite. This beginner-friendly tutorial walks you through setting up a database, adding expenses, and viewing your financial data.",
-    "videoUrl": "https://www.youtube.com/watch?v=mJLI-99RhbM",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Managing your personal finances is an important skill, and having a tool to track income and expenses can make it easier. In this tutorial, you'll learn how to build a basic personal finance tracker using Python and SQLite. SQLite is a lightweight and easy-to-use database that is perfect for beginners, and Python’s built-in library makes it straightforward to integrate."
-      },
-      {
-        "type": "paragraph",
-        "value": "We will create a program that helps you add income and expenses, store them in a SQLite database, and view a summary of your transactions. Let's get started!"
-      },
-      {
-        "type": "paragraph",
-        "value": "First, let's import the necessary module `sqlite3` and set up our database and table for storing finance records."
-      },
-      {
-        "type": "code",
-        "value": "import sqlite3\n\n# Connect to SQLite database or create it\nconn = sqlite3.connect('finance.db')\ncursor = conn.cursor()\n\n# Create table for transactions\ncursor.execute('''\nCREATE TABLE IF NOT EXISTS transactions (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    date TEXT NOT NULL,\n    description TEXT NOT NULL,\n    amount REAL NOT NULL\n)\n''')\n\nconn.commit()"
-      },
-      {
-        "type": "paragraph",
-        "value": "Our `transactions` table will have four columns. `id` is a unique identifier for each transaction. `date` is the date of the transaction, `description` tells what the transaction was, and `amount` indicates the money involved — positive for income and negative for expenses."
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, let's create a function to add transactions to the database. This function will require the date, description, and amount."
-      },
-      {
-        "type": "code",
-        "value": "def add_transaction(date, description, amount):\n    cursor.execute('INSERT INTO transactions (date, description, amount) VALUES (?, ?, ?)',\n                   (date, description, amount))\n    conn.commit()\n    print('Transaction added successfully!')"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can now use this function to add income or expenses. For example, to record a salary payment:"
-      },
-      {
-        "type": "code",
-        "value": "# Example usage\nadd_transaction('2024-06-01', 'Salary', 3000.00)"
-      },
-      {
-        "type": "paragraph",
-        "value": "And to record an expense like buying groceries:"
-      },
-      {
-        "type": "code",
-        "value": "add_transaction('2024-06-03', 'Groceries', -150.75)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let's create a function to view all transactions and print a summary including total income, total expenses, and balance."
-      },
-      {
-        "type": "code",
-        "value": "def view_transactions():\n    cursor.execute('SELECT date, description, amount FROM transactions ORDER BY date')\n    rows = cursor.fetchall()\n    \n    print('Date       | Description         | Amount')\n    print('-' * 40)\n    total_income = 0\n    total_expense = 0\n    for row in rows:\n        date, desc, amount = row\n        print(f'{date} | {desc:<18} | {amount:>7.2f}')\n        if amount > 0:\n            total_income += amount\n        else:\n            total_expense += amount\n    print('-' * 40)\n    print(f'Total Income:  ${total_income:.2f}')\n    print(f'Total Expense: ${-total_expense:.2f}')\n    print(f'Balance:      ${total_income + total_expense:.2f}')"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can call this function to see your current finances in a clean table format."
-      },
-      {
-        "type": "code",
-        "value": "# View transactions and summary\nview_transactions()"
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, don’t forget to close your database connection when you’re done:"
-      },
-      {
-        "type": "code",
-        "value": "conn.close()"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nIn this tutorial, you learned how to create a simple personal finance tracker using Python and SQLite. You:\n- Set up a database to store transactions\n- Added income and expense records\n- Retrieved and displayed transactions with a summary\n\nThis tracker can be expanded with features like categories, monthly reports, or even a graphical interface. But as a beginner-friendly project, it provides a solid foundation to manage your personal finances programmatically."
-      }
-    ]
-  },
-  {
-    "slug": "handling-api-rate-limit-errors-gracefully-python",
-    "title": "Handling API Rate Limit Errors Gracefully in Python Projects",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn how to handle API rate limit errors gracefully in Python projects with easy-to-follow techniques and example code.",
-    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When working with APIs, especially free or public ones, you might encounter rate limits. These limits restrict how many requests you can make to the API in a certain time period to avoid overloading the server. If you exceed these limits, the API usually returns an error, often with a status code like 429 (Too Many Requests). Handling these errors gracefully in your Python projects is important for building reliable applications."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this article, we'll cover how to detect rate limit errors and automatically wait before retrying requests. This helps avoid crashing your application and plays nicely with the API service."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common approach is to catch the rate limit error, read the \"Retry-After\" header returned by many APIs (if available), and pause requests accordingly. If that header is not provided, you can use a fixed wait time or an exponentially increasing backoff."
-      },
-      {
-        "type": "paragraph",
-        "value": "Below is a simple example using the popular `requests` library in Python. We'll create a function that makes a GET request and retries automatically when a rate limit error occurs."
-      },
-      {
-        "type": "code",
-        "value": "import time\nimport requests\n\n\ndef fetch_data_with_rate_limit(url, max_retries=3):\n    \"\"\"\n    Fetch data from the API handling rate limit errors gracefully.\n\n    Args:\n        url (str): The API endpoint to call.\n        max_retries (int): Maximum number of retries after hitting the rate limit.\n\n    Returns:\n        Response JSON data if successful, None otherwise.\n    \"\"\"\n    retries = 0\n\n    while retries <= max_retries:\n        response = requests.get(url)\n\n        if response.status_code == 200:\n            return response.json()\n\n        elif response.status_code == 429:\n            # Rate limit hit\n            retry_after = response.headers.get(\"Retry-After\")\n\n            if retry_after:\n                wait_time = int(retry_after)\n                print(f\"Rate limited. Waiting for {wait_time} seconds before retrying...\")\n            else:\n                wait_time = 5  # default wait time in seconds if header is missing\n                print(f\"Rate limited. 'Retry-After' header missing. Waiting for {wait_time} seconds...\")\n\n            time.sleep(wait_time)\n            retries += 1\n        else:\n            # Other errors\n            print(f\"Request failed with status code {response.status_code}.\")\n            return None\n\n    print(\"Max retries reached. Giving up.\")\n    return None\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, the function `fetch_data_with_rate_limit` takes an API endpoint URL and attempts to fetch data from it. If the API responds with a 429 status, it looks for the `Retry-After` header to decide how long to wait before retrying. If this header isn't present, it waits a default 5 seconds. It repeats this process up to a maximum number of retries, then stops gracefully if the limit is still reached."
-      },
-      {
-        "type": "paragraph",
-        "value": "This approach helps your program abide by the API's usage policies and improves user experience by avoiding unexpected crashes or interruptions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember, different APIs may handle rate limiting differently, so always check the API documentation to understand how it signals limits and preferred retry strategies."
-      }
-    ]
-  },
-  {
-    "slug": "how-to-use-window-functions-in-sql-for-advanced-data-analysis",
-    "title": "How to Use Window Functions in SQL for Advanced Data Analysis",
-    "language": "sql",
-    "type": "tutorials",
-    "description": "Learn how to leverage window functions in SQL to perform advanced data analysis, including ranking, running totals, and moving averages with simple examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Window functions in SQL provide a powerful way to perform calculations across a set of rows related to the current query row, without collapsing the results into a single output row. They are extremely useful for advanced data analysis like running totals, rankings, and moving averages, while preserving the original row structure."
-      },
-      {
-        "type": "paragraph",
-        "value": "Unlike aggregate functions that group rows together, window functions allow you to perform aggregates and calculations over a \"window\" or partition of rows while still returning individual row details."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s a beginner-friendly introduction to some common window functions and how to use them."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example Table: sales_data\nAssume you have a table named sales_data with the following columns:\n- id (unique sale ID)\n- employee_id (ID of the salesperson)\n- sale_date (date of the sale)\n- amount (sale amount)"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Using ROW_NUMBER() to Rank Sales per Employee"
-      },
-      {
-        "type": "paragraph",
-        "value": "You might want to assign a rank to each sale by amount per employee."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  id,\n  employee_id,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY amount DESC) AS sale_rank\nFROM sales_data;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query assigns a ranking within each employee’s sales, ordering from highest to lowest sale amount."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. Calculating Running Total (Cumulative Sum) of Sales per Employee"
-      },
-      {
-        "type": "paragraph",
-        "value": "To calculate the running total of sales for each employee ordered by date:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  employee_id,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY employee_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales_data;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This shows a cumulative sum of sales amounts for each employee up to the current sale date."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Calculating Moving Average of Sales"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also calculate a moving average, for example, a 3-sale moving average per employee ordered by sale_date:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  employee_id,\n  sale_date,\n  amount,\n  AVG(amount) OVER (PARTITION BY employee_id ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales_data;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This takes the average of the current sale and the two previous sales for each employee."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. Using LAG() and LEAD() to Compare Previous or Next Rows"
-      },
-      {
-        "type": "paragraph",
-        "value": "The LAG() function lets you access data from the previous row, while LEAD() accesses data from the next. For example, to see the previous sale amount for each sale:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  employee_id,\n  sale_date,\n  amount,\n  LAG(amount) OVER (PARTITION BY employee_id ORDER BY sale_date) AS previous_sale_amount,\n  LEAD(amount) OVER (PARTITION BY employee_id ORDER BY sale_date) AS next_sale_amount\nFROM sales_data;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This is useful to compare changes in sales amounts between consecutive sales."
+        "value": "More complex systems might require mutex (mutual exclusion) to ensure only one async operation modifies shared state at a time. JavaScript libraries like `async-mutex` can help with this for advanced use cases."
       },
       {
         "type": "paragraph",
@@ -489,85 +139,379 @@
       },
       {
         "type": "paragraph",
-        "value": "Window functions open up advanced data analysis possibilities while keeping your result sets detailed and easy to manipulate. Remember to:\n- Use PARTITION BY to define your groups\n- Use ORDER BY to define the order inside each group\n- Use ROWS BETWEEN or RANGE BETWEEN to control the window frame\n\nTry combining these functions to create detailed, insightful reports with simple SQL."
+        "value": "Race conditions in JavaScript asynchronous code are a common source of bugs, but by understanding when and how they occur, you can design systems that handle async data safely. Start with simple techniques like version checks or using `Promise.race`, and for complex needs, consider locking mechanisms."
+      },
+      {
+        "type": "paragraph",
+        "value": "By writing resilient asynchronous code, your JavaScript applications will be more predictable, stable, and easier to maintain."
       }
     ]
   },
   {
-    "slug": "optimizing-complex-join-conditions-to-avoid-data-anomalies-in-sql-data-models",
-    "title": "Optimizing Complex Join Conditions to Avoid Data Anomalies in SQL Data Models",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn how to optimize complex join conditions in SQL to prevent data anomalies such as duplicates and incorrect results in your queries.",
-    "videoUrl": "https://www.youtube.com/watch?v=DXpsNQqSFQw",
+    "slug": "building-a-simple-to-do-app-with-typescript-step-by-step-beginner-tutorial",
+    "title": "Building a Simple To-Do App with TypeScript: Step-by-Step Beginner Tutorial",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build a simple and functional To-Do application using TypeScript. This step-by-step guide is perfect for beginners wanting to practice TypeScript basics with practical coding.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL joins, especially complex ones involving multiple conditions, it’s common to encounter data anomalies like duplicates, missing records, or incorrect aggregations. These issues often arise from poorly written join conditions or misunderstanding the data relationships. This article will guide beginners through optimizing join conditions to ensure accurate, clean results."
+        "value": "Welcome to this beginner-friendly tutorial where we will build a simple To-Do app using TypeScript. If you have some basic understanding of JavaScript or TypeScript, this guide will help you create an app that lets users add and remove tasks. We will focus on clear, easy-to-follow steps with code examples you can use right away."
       },
       {
         "type": "paragraph",
-        "value": "A join condition defines how rows from two or more tables are matched. If the condition is too broad or incorrectly specified, SQL can generate result sets with duplicate rows or mismatches. The key is to write precise join conditions that reflect the underlying data relationships without causing unwanted row multiplication."
-      },
-      {
-        "type": "paragraph",
-        "value": "Consider this simple example where we join orders to customers based on customer ID, but also include a date condition:"
+        "value": "First, let's set up a basic TypeScript environment. You can use any code editor like VS Code. Make sure you have Node.js installed, then create a new folder for your project and initialize it with npm:"
       },
       {
         "type": "code",
-        "value": "SELECT orders.order_id, customers.customer_name, orders.order_date\nFROM orders\nJOIN customers ON orders.customer_id = customers.customer_id\nWHERE orders.order_date >= '2024-01-01';"
+        "value": "npm init -y\nnpm install typescript --save-dev\nnpx tsc --init"
       },
       {
         "type": "paragraph",
-        "value": "This query works fine since the join condition only relates customers to orders by customer_id, and the filtering by date is done separately in the WHERE clause. But what if you want to join only orders placed in 2024 while also matching customers?"
-      },
-      {
-        "type": "paragraph",
-        "value": "A common mistake is trying to put complex conditions directly into the join clause that don’t properly limit the join, which can cause multiple rows for each customer, for example:"
+        "value": "This sets up a TypeScript project. Next, create a file called `app.ts` where we will write our code. Our To-Do app will manage a list of tasks using an array of objects. Each task will have an ID, a description, and a completed status."
       },
       {
         "type": "code",
-        "value": "SELECT orders.order_id, customers.customer_name, orders.order_date\nFROM orders\nJOIN customers ON orders.customer_id = customers.customer_id\n  AND orders.order_date >= '2024-01-01';"
+        "value": "type Task = {\n  id: number;\n  description: string;\n  completed: boolean;\n};\n\nlet tasks: Task[] = [];"
       },
       {
         "type": "paragraph",
-        "value": "While this is still valid SQL, if there are multiple orders per customer in 2024, this join can return multiple records per customer. If your intention was to get unique customers with orders in 2024, you should first filter orders and then join."
-      },
-      {
-        "type": "paragraph",
-        "value": "A better approach is to filter the orders in a subquery or a Common Table Expression (CTE) before joining:"
+        "value": "Now, let's add a function to create new tasks and add them to the list. This function will accept a task description as a string and push a new task object to the tasks array."
       },
       {
         "type": "code",
-        "value": "WITH filtered_orders AS (\n  SELECT *\n  FROM orders\n  WHERE order_date >= '2024-01-01'\n)\nSELECT fo.order_id, c.customer_name, fo.order_date\nFROM filtered_orders fo\nJOIN customers c ON fo.customer_id = c.customer_id;"
+        "value": "function addTask(description: string): void {\n  const newTask: Task = {\n    id: tasks.length + 1,\n    description: description,\n    completed: false\n  };\n  tasks.push(newTask);\n  console.log(`Task added: ${description}`);\n}"
       },
       {
         "type": "paragraph",
-        "value": "This ensures only relevant orders are joined to customers, minimizing row duplication."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another frequent cause of data anomalies is joining tables without specifying all necessary keys. For example, if an orders table includes multiple shipping addresses per order, joining on order_id only might cause unexpected duplicates. Always verify your data model and use all key columns needed to uniquely identify rows."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is an example of a more complex join condition with multiple keys to avoid duplicates:"
+        "value": "To display all tasks, let's write a function that prints them in a readable form. We will show the task ID, description, and whether it’s completed."
       },
       {
         "type": "code",
-        "value": "SELECT o.order_id, s.shipment_id, c.customer_name\nFROM orders o\nJOIN shipments s ON o.order_id = s.order_id AND o.shipment_number = s.shipment_number\nJOIN customers c ON o.customer_id = c.customer_id;"
+        "value": "function listTasks(): void {\n  if (tasks.length === 0) {\n    console.log(\"No tasks yet!\");\n    return;\n  }\n  console.log(\"Current Tasks:\");\n  tasks.forEach(task => {\n    const status = task.completed ? \"✔\" : \"✘\";\n    console.log(`${task.id}. [${status}] ${task.description}`);\n  });\n}"
       },
       {
         "type": "paragraph",
-        "value": "In summary, to optimize complex join conditions and avoid data anomalies:"
+        "value": "Next, we will add a function to mark a task as completed by its ID. This function will find the task and update its completed property."
+      },
+      {
+        "type": "code",
+        "value": "function completeTask(id: number): void {\n  const task = tasks.find(t => t.id === id);\n  if (task) {\n    task.completed = true;\n    console.log(`Task completed: ${task.description}`);\n  } else {\n    console.log(`Task with ID ${id} not found.`);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "1. Understand the data model and relationships thoroughly.\n2. Use complete keys in join conditions to uniquely identify related rows.\n3. Filter data in subqueries or CTEs before joining when possible.\n4. Test queries on smaller data sets to verify results and spot duplicates early.\n5. Use DISTINCT or aggregation carefully, but focus first on correct join logic."
+        "value": "Finally, we want to remove a task from the list after completion or if it is no longer needed. Let's implement a function for that."
+      },
+      {
+        "type": "code",
+        "value": "function removeTask(id: number): void {\n  const index = tasks.findIndex(t => t.id === id);\n  if (index !== -1) {\n    const removed = tasks.splice(index, 1)[0];\n    console.log(`Task removed: ${removed.description}`);\n  } else {\n    console.log(`Task with ID ${id} not found.`);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Mastering these practices will help you build accurate and efficient SQL queries that prevent common pitfalls related to joins."
+        "value": "Let's put it all together by calling these methods and observing the output."
+      },
+      {
+        "type": "code",
+        "value": "addTask(\"Learn TypeScript basics\");\naddTask(\"Build a simple To-Do app\");\nlistTasks();\ncompleteTask(1);\nlistTasks();\nremoveTask(2);\nlistTasks();"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run your TypeScript code (compiled to JavaScript using `npx tsc app.ts` and then `node app.js`), you should see tasks being added, marked as complete, and removed with the console reflecting each change."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple app demonstrates some of TypeScript's power like type safety and structured code design. You can extend this app by adding features like task editing, saving tasks to local storage, or even building a user interface with frameworks like React. But for now, you have a solid beginner project to practice TypeScript basics and understand fundamental concepts."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding and keep exploring TypeScript!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescript-type-narrowing-practical-examples-for-beginners",
+    "title": "Understanding TypeScript’s Type Narrowing: Practical Examples for Beginners",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's type narrowing helps you write safer and clearer code with practical examples designed for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=YVdA86aSBGY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful programming language that builds on JavaScript by adding static types. One of its key features is type narrowing, which helps the compiler understand the exact type of a variable in specific sections of your code. This reduces errors and improves code safety. In this article, we’ll explain type narrowing with simple examples to help beginners grasp the concept easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing occurs when TypeScript analyzes your code and infers more specific types from general ones based on control flow, such as conditionals like if statements or type checks. This allows you to safely use properties and methods that belong to narrowed types, without manually casting types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a practical example:"
+      },
+      {
+        "type": "code",
+        "value": "function printLength(value: string | string[]) {\n  if (typeof value === 'string') {\n    // Here TypeScript knows 'value' is a string\n    console.log(value.length);\n  } else {\n    // Here TypeScript knows 'value' is an array\n    console.log(value.length);\n  }\n}\n\nprintLength('hello');  // Output: 5\nprintLength(['a', 'b', 'c']);  // Output: 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the function above, the parameter `value` can be either a string or an array of strings. Inside the if block, TypeScript narrows the type to just `string` when checking `typeof value === 'string'`. In the else block, TypeScript safely treats `value` as a string array. This prevents errors that would happen if you tried to use string methods on arrays or vice versa."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript provides several ways to narrow types beyond just `typeof`. Here’s an example using `instanceof` to differentiate between classes:"
+      },
+      {
+        "type": "code",
+        "value": "class Dog {\n  bark() {\n    console.log('Woof!');\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log('Meow!');\n  }\n}\n\nfunction makeSound(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark();  // Safe to call bark\n  } else {\n    animal.meow();  // Safe to call meow\n  }\n}\n\nmakeSound(new Dog()); // Woof!\nmakeSound(new Cat()); // Meow!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `instanceof` helps TypeScript know the exact class of the object. This enables you to call class-specific methods without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use custom type guards — functions that return a boolean and tell TypeScript more about a type. Here’s an example on how to implement one:"
+      },
+      {
+        "type": "code",
+        "value": "interface Fish {\n  swim: () => void;\n}\n\ninterface Bird {\n  fly: () => void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();\n  } else {\n    pet.fly();\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "The custom type guard `isFish` lets TypeScript know type information based on runtime checks, enabling safe access to specific methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize: TypeScript's type narrowing improves code accuracy by reducing the guesswork about variable types in different parts of your code. Using `typeof`, `instanceof`, or custom guards, you help TypeScript understand data types better, preventing many common runtime errors early on during development."
+      },
+      {
+        "type": "paragraph",
+        "value": "As you continue exploring TypeScript, practicing type narrowing will become second nature, making your code more reliable and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "building-real-time-weather-dashboard-python-openweathermap",
+    "title": "Building a Real-Time Weather Dashboard Using Python and OpenWeatherMap API",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a simple real-time weather dashboard in Python using the OpenWeatherMap API. This beginner-friendly tutorial walks you through fetching and displaying live weather data.",
+    "videoUrl": "https://www.youtube.com/watch?v=aQZzMJgPMqQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, you will learn how to create a real-time weather dashboard using Python and the OpenWeatherMap API. This app fetches weather data for any city and displays useful information like temperature, humidity, and weather description."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you need to sign up for a free API key at OpenWeatherMap (https://openweathermap.org/api). This key allows you to access their weather data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, you will write Python code to send a request to the API, parse the response, and display the weather information."
+      },
+      {
+        "type": "code",
+        "value": "import requests\n\ndef get_weather(city, api_key):\n    url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric'\n    response = requests.get(url)\n    if response.status_code == 200:\n        data = response.json()\n        weather = {\n            'city': data['name'],\n            'temperature': data['main']['temp'],\n            'humidity': data['main']['humidity'],\n            'description': data['weather'][0]['description']\n        }\n        return weather\n    else:\n        return None\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function `get_weather` accepts a city name and your API key, calls the OpenWeatherMap API, and returns a dictionary with useful weather details like temperature, humidity, and a brief description."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's create a simple user interface in the terminal to enter a city and display the weather."
+      },
+      {
+        "type": "code",
+        "value": "def main():\n    api_key = 'YOUR_API_KEY_HERE'  # Replace with your OpenWeatherMap API key\n    city = input('Enter city name: ')\n    weather = get_weather(city, api_key)\n    if weather:\n        print(f\"Weather in {weather['city']}:\\n\"\n              f\"Temperature: {weather['temperature']}°C\\n\"\n              f\"Humidity: {weather['humidity']}%\\n\"\n              f\"Description: {weather['description'].capitalize()}\")\n    else:\n        print('Sorry, could not retrieve weather data. Check the city name or your API key.')\n\nif __name__ == '__main__':\n    main()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Replace `'YOUR_API_KEY_HERE'` with your actual API key. When you run this program, it will ask you to type a city name and then print out the current weather information."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple console dashboard is a great start. To enhance it, you can add error handling, fetch weather for multiple cities, or create a graphical user interface using libraries like Tkinter or PyQt."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-typeerror-vs-valueerror",
+    "title": "Understanding Python's TypeError vs ValueError: When and Why Each Occurs",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the difference between Python's TypeError and ValueError, understand when they occur, and see practical examples to help you debug your code more effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When coding in Python, encountering errors is common, especially for beginners. Two common but sometimes confusing error types are TypeError and ValueError. Understanding the difference between them can make debugging easier and help you write more robust code."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeError happens when an operation or function receives an argument of the wrong type. In contrast, ValueError is raised when a function gets an argument of the correct type but an inappropriate or invalid value."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore both with some simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### TypeError Example:\nIf you try to add a number and a string, Python doesn't know how to combine these different types, so it raises a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\n\n# This will raise a TypeError\nresult = num + text"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error message will look like this:\n\nTypeError: unsupported operand type(s) for +: 'int' and 'str'\n\nThis means Python can’t add an integer and a string directly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### ValueError Example:\nValueError occurs when the type is right, but the content is not. For instance, converting a string to an integer requires the string to represent a valid number."
+      },
+      {
+        "type": "code",
+        "value": "invalid_number = \"abc\"\n\n# This will raise a ValueError\nnum = int(invalid_number)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the string \"abc\" is of the correct type (a string), but it does not represent a number, so Python raises:\n\nValueError: invalid literal for int() with base 10: 'abc'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Expect Each Error\n- Use TypeError as a signal that your code tried to perform an operation on incompatible types.\n- Use ValueError when your input data type is correct but the value is invalid for the operation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling These Errors\nYou can handle these errors using try-except blocks to make your programs more user-friendly."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    num = int(input(\"Enter a number: \"))\n    print(10 / num)\nexcept ValueError:\n    print(\"That's not a valid number!\")\nexcept ZeroDivisionError:\n    print(\"Can't divide by zero!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if the user inputs something that isn’t a number, a ValueError is caught and a friendly message is shown."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- **TypeError**: Wrong type used in an operation (e.g., adding string to number).\n- **ValueError**: Right type but invalid value (e.g., converting 'abc' to int).\n\nBeing able to distinguish these makes debugging and coding in Python easier and more effective."
+      }
+    ]
+  },
+  {
+    "slug": "building-an-inventory-management-system-with-sql-step-by-step-tutorial",
+    "title": "Building an Inventory Management System with SQL: Step-by-Step Tutorial",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create a simple and effective inventory management system using SQL in this beginner-friendly step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=kbKty5ZVKMY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Inventory management is essential for businesses to keep track of their products, monitor stock levels, and ensure smooth operations. In this tutorial, you'll learn how to build a basic inventory management system using SQL. We will cover creating tables, inserting data, and running queries to manage and track inventory effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 1: Creating the Database Tables. We need tables to store product information, categories, suppliers, and stock transactions."
+      },
+      {
+        "type": "code",
+        "value": "-- Create table to store product categories\nCREATE TABLE Categories (\n  CategoryID INT PRIMARY KEY AUTO_INCREMENT, \n  CategoryName VARCHAR(100) NOT NULL\n);\n\n-- Create table for suppliers\nCREATE TABLE Suppliers (\n  SupplierID INT PRIMARY KEY AUTO_INCREMENT,\n  SupplierName VARCHAR(100) NOT NULL,\n  ContactEmail VARCHAR(100)\n);\n\n-- Create table for products\nCREATE TABLE Products (\n  ProductID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductName VARCHAR(100) NOT NULL,\n  CategoryID INT,\n  SupplierID INT,\n  UnitPrice DECIMAL(10, 2) NOT NULL,\n  QuantityInStock INT DEFAULT 0,\n  FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID),\n  FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)\n);\n\n-- Create table for stock transactions\nCREATE TABLE StockTransactions (\n  TransactionID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductID INT NOT NULL,\n  TransactionType ENUM('IN', 'OUT') NOT NULL,\n  Quantity INT NOT NULL,\n  TransactionDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 2: Inserting Sample Data. Let's add some categories, suppliers, and products to begin."
+      },
+      {
+        "type": "code",
+        "value": "-- Inserting categories\nINSERT INTO Categories (CategoryName) VALUES ('Electronics'), ('Books'), ('Clothing');\n\n-- Inserting suppliers\nINSERT INTO Suppliers (SupplierName, ContactEmail) VALUES ('Tech Supplies Co.', 'contact@techsupplies.com'), ('Book World', 'sales@bookworld.com');\n\n-- Inserting products\nINSERT INTO Products (ProductName, CategoryID, SupplierID, UnitPrice, QuantityInStock) VALUES\n('Laptop', 1, 1, 999.99, 10),\n('Science Fiction Novel', 2, 2, 19.99, 50),\n('T-Shirt', 3, NULL, 9.99, 100);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 3: Recording Stock Transactions. Whenever stock arrives or is sold, you update transactions and adjust stock counts."
+      },
+      {
+        "type": "code",
+        "value": "-- Add new stock for Laptop\nINSERT INTO StockTransactions (ProductID, TransactionType, Quantity) VALUES (1, 'IN', 5);\n\n-- Update stock for Laptop\nUPDATE Products SET QuantityInStock = QuantityInStock + 5 WHERE ProductID = 1;\n\n-- Sale of Science Fiction Novel\nINSERT INTO StockTransactions (ProductID, TransactionType, Quantity) VALUES (2, 'OUT', 3);\n\n-- Update stock after sale\nUPDATE Products SET QuantityInStock = QuantityInStock - 3 WHERE ProductID = 2;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 4: Querying Your Inventory. Let's check current stock levels and view product information."
+      },
+      {
+        "type": "code",
+        "value": "-- View all products with their category and current stock\nSELECT p.ProductID, p.ProductName, c.CategoryName, p.QuantityInStock, p.UnitPrice\nFROM Products p\nLEFT JOIN Categories c ON p.CategoryID = c.CategoryID;\n\n-- Find products with low stock (less than 10)\nSELECT ProductName, QuantityInStock\nFROM Products\nWHERE QuantityInStock < 10;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 5: Tracking Transactions by Date. It's helpful to monitor stock movement over time."
+      },
+      {
+        "type": "code",
+        "value": "-- View recent stock transactions\nSELECT t.TransactionID, p.ProductName, t.TransactionType, t.Quantity, t.TransactionDate\nFROM StockTransactions t\nJOIN Products p ON t.ProductID = p.ProductID\nORDER BY t.TransactionDate DESC\nLIMIT 10;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple inventory management system in SQL can be expanded with additional features like user roles, reorder alerts, or integration with other business tools. Practice these basics, and you'll create a reliable backend for managing your inventory efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-complex-joins-to-prevent-data-model-inconsistencies-in-sql",
+    "title": "Optimizing Complex Joins to Prevent Data Model Inconsistencies in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize complex SQL joins to avoid common data model inconsistencies, ensuring accurate and reliable query results for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=xuxgxdbCPnY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, joining multiple tables is common to retrieve related data. However, complex joins can cause data inconsistencies like duplicates, missing rows, or mismatched data if not optimized properly. For beginners, understanding how to write and optimize joins will help maintain data integrity and improve query performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common issue is joining tables without considering the type of join that fits your data relationship. INNER JOIN returns only matching rows, while OUTER JOINs (LEFT, RIGHT, FULL) can include unmatched rows too. Using the wrong join type may produce inconsistent results or unexpected gaps."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another cause of inconsistency is joining on non-unique or incorrect columns. Always join on primary keys or columns that uniquely identify records to avoid duplicate rows or incorrect matches. Also, filtering data before joining can help reduce processing and eliminate irrelevant records."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of a poorly optimized join that may cause duplicates:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT orders.order_id, customers.customer_name, products.product_name\nFROM orders\nJOIN customers ON orders.customer_id = customers.customer_id\nJOIN products ON orders.product_id = products.product_id\nWHERE customers.region = 'North America';"
+      },
+      {
+        "type": "paragraph",
+        "value": "If the 'orders' table contains multiple orders per customer and multiple products per order, this can create duplicates because the join returns all combinations. Instead, consider aggregating or limiting joins carefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize joins and avoid inconsistencies, you can use subqueries or Common Table Expressions (CTEs) to pre-select distinct or relevant data before joining:"
+      },
+      {
+        "type": "code",
+        "value": "WITH filtered_customers AS (\n  SELECT DISTINCT customer_id, customer_name\n  FROM customers\n  WHERE region = 'North America'\n)\nSELECT o.order_id, fc.customer_name, p.product_name\nFROM orders o\nJOIN filtered_customers fc ON o.customer_id = fc.customer_id\nJOIN products p ON o.product_id = p.product_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this approach ensures you’re joining only the necessary data, preventing unexpected duplicates or missing results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Additionally, always validate join conditions and test your query with sample data. Checking for duplicates using COUNT and DISTINCT can help identify inconsistencies early."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing complex joins involves choosing the right join type, joining on unique identifiers, filtering data before joining, and testing results to ensure consistent and accurate data retrieval."
       }
     ]
   }
