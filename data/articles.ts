@@ -25411,5 +25411,351 @@ export const articles = [
         "value": "By understanding execution plans and applying these practical tips—indexing strategically, partitioning data, matching data types, and maintaining your database—you can greatly improve query performance and avoid errors in large-scale distributed SQL systems."
       }
     ]
+  },
+  {
+    "slug": "typescript-vs-javascript-key-differences-every-developer-should-know",
+    "title": "TypeScript vs JavaScript: Key Differences Every Developer Should Know",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Discover the essential differences between TypeScript and JavaScript, helping beginners understand when and why to use each language with clear examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=HCXPJmtV47I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a popular programming language widely used to build web applications. TypeScript, on the other hand, is a superset of JavaScript that adds static typing and additional features to help developers catch errors early and write more maintainable code. In this tutorial, we'll explore the key differences between these two languages to help you decide which one to use."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is JavaScript?\nJavaScript is a dynamically typed language, meaning variables can hold any type of data, and the type can change at runtime. It runs in browsers and on servers through environments like Node.js. Its flexibility is great for beginners but sometimes leads to hard-to-find bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple JavaScript example:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  return 'Hello, ' + name + '!';\n}\n\nconsole.log(greet('Alice')); // Hello, Alice!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that in JavaScript, we don't specify the type of the function parameter `name`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is TypeScript?\nTypeScript builds on top of JavaScript by adding optional static types. This means you can specify what types a variable or function should accept, helping catch mistakes before running your code. TypeScript code needs to be compiled (or transpiled) into JavaScript for browsers to understand it."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's the same example written in TypeScript with type annotations:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string): string {\n  return 'Hello, ' + name + '!';\n}\n\nconsole.log(greet('Alice')); // Hello, Alice!"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `name: string` means the function expects a parameter of type string. The function is also explicitly marked to return a string."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Typing**: JavaScript is dynamically typed, while TypeScript supports static typing, enabling better error checking during development.\n2. **Compilation**: TypeScript must be compiled to JavaScript before running, whereas JavaScript runs directly in browsers or Node.js.\n3. **Tooling and IDE support**: TypeScript's static types make code editors provide better autocompletion, navigation, and refactoring tools.\n4. **Learning Curve**: JavaScript is easier for absolute beginners; TypeScript adds a learning step but offers long-term benefits for complex projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When Should You Use TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you're building a large-scale application or working in a team, TypeScript can help keep your codebase clean and reduce bugs. However, for small scripts or when learning programming basics, JavaScript might be simpler."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both TypeScript and JavaScript are powerful tools. JavaScript offers quick and flexible coding, while TypeScript provides added safety and better developer experience. Understanding their differences helps you pick the right tool for your project and improve your coding skills."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try writing your own simple functions in both languages and see how TypeScript's type system helps you catch errors before running the code!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-type-guards-for-advanced-error-handling",
+    "title": "Mastering TypeScript's Type Guards for Advanced Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's type guards to write advanced, safe, and readable error handling code even as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=D3CoaqP_GF4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a critical aspect of any application, and TypeScript helps developers write safer and more predictable error handling code. In this article, we'll explore how to use TypeScript's type guards to distinguish between different error types, enabling you to handle errors more effectively and avoid common pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards in TypeScript are special checks that allow you to narrow down the type of a variable within a conditional block. This is especially helpful when dealing with errors that can be of any type, such as generic JavaScript \"unknown\" errors thrown from third-party libraries or API calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you want to write a function that handles errors thrown when fetching user data. You might receive different error types like network errors, API errors with specific properties, or even simple strings thrown as errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can create custom type guards and use them for better error handling:"
+      },
+      {
+        "type": "code",
+        "value": "interface ApiError {\n  statusCode: number;\n  message: string;\n}\n\nfunction isApiError(error: any): error is ApiError {\n  return (\n    error &&\n    typeof error === 'object' &&\n    'statusCode' in error &&\n    typeof error.statusCode === 'number' &&\n    'message' in error &&\n    typeof error.message === 'string'\n  );\n}\n\nfunction handleError(error: unknown): void {\n  if (isApiError(error)) {\n    console.error(`API Error ${error.statusCode}: ${error.message}`);\n  } else if (error instanceof Error) {\n    console.error(`General Error: ${error.message}`);\n  } else if (typeof error === 'string') {\n    console.error(`Error String: ${error}`);\n  } else {\n    console.error('Unknown error type');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `isApiError` function is a type guard that checks if the error matches the `ApiError` interface. Inside the `handleError` function, TypeScript understands the precise type inside each conditional block, meaning you get full type safety and auto-completion."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using type guards with error handling prevents common bugs like accessing undefined properties on errors or missing important error details. As a beginner, it's a powerful tool to write robust and maintainable TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a quick summary of useful practices when using type guards for error handling in TypeScript:\n\n- Always type your error parameter as `unknown` when you expect different error types.\n- Use custom type guards to narrow down to specific error interfaces.\n- Use the built-in `instanceof` guard for JavaScript's native `Error` objects.\n- Handle fallback cases to catch any unexpected or unknown errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering TypeScript's type guards, you can confidently handle errors in complex applications and provide clear, user-friendly error messages or recovery options."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-list-comprehensions-a-beginners-guide-to-cleaner-python-code",
+    "title": "Mastering List Comprehensions: A Beginner's Guide to Cleaner Python Code",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use list comprehensions in Python to write clean, concise, and efficient code with this easy-to-follow beginner's tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=YlY2g2xrl6Q",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to Python or programming in general, you might find yourself writing repetitive loops to create or manipulate lists. Luckily, Python offers a powerful feature called list comprehensions that helps you write cleaner and more readable code with less effort."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore what list comprehensions are, how to use them, and why they're so useful. By the end, you'll be able to replace many of your traditional loops with elegant one-liners."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a List Comprehension?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A list comprehension is a concise way to create lists. It consists of brackets containing an expression followed by a for clause, and optional if clauses. The syntax looks like this:"
+      },
+      {
+        "type": "code",
+        "value": "[expression for item in iterable if condition]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break that down with an example."
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you want to create a list of squares for numbers 1 through 5:"
+      },
+      {
+        "type": "code",
+        "value": "squares = [x**2 for x in range(1, 6)]\nprint(squares)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:"
+      },
+      {
+        "type": "code",
+        "value": "[1, 4, 9, 16, 25]"
+      },
+      {
+        "type": "paragraph",
+        "value": "This single line replaces what would traditionally take a multi-line for loop."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Adding Conditions with if"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also filter items with an if clause to include only those that meet a condition."
+      },
+      {
+        "type": "code",
+        "value": "even_squares = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(even_squares)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:"
+      },
+      {
+        "type": "code",
+        "value": "[4, 16, 36, 64, 100]"
+      },
+      {
+        "type": "paragraph",
+        "value": "This list contains squares of only the even numbers from 1 to 10."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using List Comprehensions Instead of Loops"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you might use a traditional loop to create the same list of squares:"
+      },
+      {
+        "type": "code",
+        "value": "squares = []\nfor x in range(1, 6):\n    squares.append(x**2)\nprint(squares)"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this works perfectly, list comprehensions give you a more compact and readable way to write it."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Nested List Comprehensions"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can even use list comprehensions inside other list comprehensions! For example, to create a 3x3 matrix:"
+      },
+      {
+        "type": "code",
+        "value": "matrix = [[row * col for col in range(1, 4)] for row in range(1, 4)]\nprint(matrix)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:"
+      },
+      {
+        "type": "code",
+        "value": "[[1, 2, 3], [2, 4, 6], [3, 6, 9]]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Writing Clear List Comprehensions"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Keep it simple: if the comprehension gets too complex, consider breaking it into smaller pieces.\n- Use meaningful variable names.\n- Avoid side effects like modifying external variables inside the comprehension.\n- Remember that readability matters."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "List comprehensions are a powerful Python tool to help you write cleaner, shorter, and more efficient code when working with lists. Start experimenting with them in your projects, and you'll quickly see how they can simplify your code!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-api-rate-limit-errors-python",
+    "title": "Handling API Rate Limit Errors in Python Projects: Best Practices and Strategies",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle API rate limit errors in Python projects with practical best practices and strategies for smooth, error-free API interactions.",
+    "videoUrl": "https://www.youtube.com/watch?v=0Z2A5EoF0x0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with APIs in your Python projects, you might encounter rate limit errors. These happen when you exceed the allowed number of requests in a given time frame set by the API provider. Handling these errors gracefully is important to avoid your program crashing and ensure a good user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "API rate limits help servers handle traffic fairly and prevent abuse. Commonly, APIs return HTTP status code 429 (Too Many Requests) when you hit the limit. Your code should detect this and wait before retrying the request. Let's explore practical ways to do this."
+      },
+      {
+        "type": "paragraph",
+        "value": "A simple approach is to catch the 429 error and use Python's time module to pause your script before retrying. Here's an example using the popular requests library:"
+      },
+      {
+        "type": "code",
+        "value": "import requests\nimport time\n\nurl = 'https://api.example.com/data'\nheaders = {'Authorization': 'Bearer YOUR_API_KEY'}\n\nfor i in range(5):  # Try up to 5 times\n    response = requests.get(url, headers=headers)\n    if response.status_code == 429:\n        print('Rate limit reached! Waiting to retry...')\n        retry_after = int(response.headers.get('Retry-After', 10))  # Default to 10 seconds\n        time.sleep(retry_after)  # Wait before retrying\n    else:\n        break\n\nif response.status_code == 200:\n    print('Success:', response.json())\nelse:\n    print('Request failed with status:', response.status_code)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we check if the response code is 429. If it is, we look for the 'Retry-After' header to know how many seconds to wait, then retry. This is a polite way to respect the API's request limits."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more advanced control, you can implement exponential backoff. This means you wait longer after each failed attempt to reduce load on the server:"
+      },
+      {
+        "type": "code",
+        "value": "import requests\nimport time\n\nurl = 'https://api.example.com/data'\nheaders = {'Authorization': 'Bearer YOUR_API_KEY'}\n\nmax_retries = 5\nbackoff = 1  # Start with 1 second delay\n\nfor attempt in range(max_retries):\n    response = requests.get(url, headers=headers)\n    if response.status_code == 429:\n        print(f'Rate limited. Backing off for {backoff} seconds...')\n        time.sleep(backoff)\n        backoff *= 2  # Double the wait time for next retry\n    else:\n        break\n\nif response.status_code == 200:\n    print('Success:', response.json())\nelse:\n    print('Failed after retries. Status:', response.status_code)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach progressively increases the wait time, which reduces the chance of hitting the rate limit again quickly. Always check the API's documentation for rate limit policies and recommended retry methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, best practices for handling API rate limit errors in Python include:\n- Detecting HTTP 429 status codes\n- Reading the 'Retry-After' response header\n- Implementing wait-and-retry logic\n- Using exponential backoff\n- Monitoring and logging API usage to avoid hitting limits\n\nBy following these strategies, your Python applications will be more robust and reliable when working with APIs."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-query-performance-with-execution-plan-anomalies",
+    "title": "Optimizing Query Performance by Diagnosing Execution Plan Anomalies in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve your SQL query performance by identifying and fixing execution plan anomalies with simple, practical steps for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=P--vcF9cnpY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, sometimes queries take longer than expected. One common reason is an anomaly in the execution plan. An execution plan shows how the database engine runs your query, including which indexes it uses and the order of operations. Diagnosing anomalies in these plans can help you optimize performance efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "To start, you need to view the execution plan for your query. In many SQL environments, you can use the `EXPLAIN` keyword to see this plan. For example:"
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT * FROM Employees WHERE DepartmentID = 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This command shows how the database retrieves rows that match the condition. Look for operations like 'Seq Scan' (sequential scan), which means the database reads the entire table. This is slower for large tables compared to 'Index Scan', which uses an index to quickly find matching rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you notice a sequential scan on a large table when filtering by a column, it may mean there's no index on that column. Creating an index can improve query speed:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_department ON Employees(DepartmentID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After creating the index, run `EXPLAIN` again. You should now see an 'Index Scan' instead of a 'Seq Scan'. This change indicates that the query optimizer is using the index to speed up data retrieval."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common anomaly is a mismatch between statistics and actual data, causing poor plan choices. To fix this, update your table statistics so the optimizer has accurate data:"
+      },
+      {
+        "type": "code",
+        "value": "ANALYZE Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always aim for simple, clean queries and proper indexing. Use execution plans regularly to catch anomalies early and keep your database performing well."
+      }
+    ]
   }
 ];
