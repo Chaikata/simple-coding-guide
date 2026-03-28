@@ -26207,5 +26207,585 @@ export const articles = [
         "value": "By following these best practices, you can minimize errors and inconsistencies related to time zones in your SQL queries and ensure your global users see accurate date and time data."
       }
     ]
+  },
+  {
+    "slug": "mastering-lazy-loading-in-javascript-to-boost-web-app-performance",
+    "title": "Mastering Lazy Loading in JavaScript to Boost Web App Performance",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to improve your web application's performance by mastering lazy loading techniques in JavaScript. This beginner-friendly tutorial covers the basics and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=zexoA0om6Es",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Lazy loading is a powerful technique that delays loading of non-essential resources until they are needed. It helps improve the initial loading speed of your web app, reduces bandwidth usage, and provides a smoother user experience. In this tutorial, you will learn what lazy loading is, why it matters, and how to implement it in JavaScript step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Lazy Loading?\nLazy loading means loading parts of your web application only when the user needs them instead of loading everything upfront. For example, images, videos, or components below the fold can be loaded only when the user scrolls near them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Lazy Loading?\n- Faster initial page load\n- Saves bandwidth by loading less upfront\n- Reduces CPU and memory usage initially\n- Improves perceived performance and user experience"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Lazy Loading Images Using `loading` Attribute\nThe easiest way to lazy load images is by using the native `loading` attribute in HTML. Set `loading=\"lazy\"` on your `<img>` tags to enable lazy loading in modern browsers."
+      },
+      {
+        "type": "code",
+        "value": "<img src=\"example.jpg\" alt=\"Example Image\" loading=\"lazy\" />"
+      },
+      {
+        "type": "paragraph",
+        "value": "This tells the browser to only load the image when it is close to entering the viewport. No extra JavaScript is required."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Lazy Loading with Intersection Observer API\nFor more control, especially with custom elements or components, JavaScript's Intersection Observer API is perfect. It allows you to detect when an element enters the viewport and then trigger loading."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example for lazy loading images:"
+      },
+      {
+        "type": "code",
+        "value": "document.addEventListener('DOMContentLoaded', () => {\n  const images = document.querySelectorAll('img[data-src]');\n\n  const observer = new IntersectionObserver((entries, observer) => {\n    entries.forEach(entry => {\n      if (entry.isIntersecting) {\n        const img = entry.target;\n        img.src = img.getAttribute('data-src');\n        img.removeAttribute('data-src');\n        observer.unobserve(img);\n      }\n    });\n  });\n\n  images.forEach(img => {\n    observer.observe(img);\n  });\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In your HTML, you use `<img>` tags with a `data-src` attribute instead of `src`, which delays the image loading:"
+      },
+      {
+        "type": "code",
+        "value": "<img data-src=\"example.jpg\" alt=\"Example Image\" />"
+      },
+      {
+        "type": "paragraph",
+        "value": "When the image scrolls into view, the Intersection Observer callback sets the real `src`, causing the browser to load it."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Lazy Loading JavaScript Modules\nYou can also lazy load JavaScript code modules dynamically with `import()`. This only downloads and runs the code when necessary."
+      },
+      {
+        "type": "code",
+        "value": "button.addEventListener('click', async () => {\n  // Load the module only when the button is clicked\n  const module = await import('./heavyModule.js');\n  module.doHeavyWork();\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "This technique is especially useful in large web apps where you want to split code into smaller chunks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nLazy loading is an essential performance optimization technique that is easy to implement in modern JavaScript applications. Start by using native browser features like the `loading=\"lazy\"` attribute for images, then explore the Intersection Observer API and dynamic imports for advanced lazy loading needs. This approach will make your web app faster and more responsive, delighting your users."
+      }
+    ]
+  },
+  {
+    "slug": "handling-asynchronous-data-fetching-errors-in-javascript-projects",
+    "title": "Handling Asynchronous Data Fetching Errors in JavaScript Projects",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors during asynchronous data fetching in JavaScript to build more robust and user-friendly applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with JavaScript, especially in web applications, fetching data from APIs or external sources is a common task. This process is asynchronous, meaning the code runs independently and doesn't block the rest of the program. However, since the data source is external, errors like network issues, server problems, or incorrect URLs can occur. It's important to handle these errors properly to improve user experience and prevent your application from breaking."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are two common ways to fetch data asynchronously in JavaScript: using Promises with `.then()` and `.catch()`, or using the newer `async/await` syntax which looks more like synchronous code but works asynchronously under the hood. We will focus on both approaches and how to handle errors gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example using `fetch()` with `.then()` and `.catch()` to handle errors when fetching data from an API:"
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok ' + response.statusText);\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('There has been a problem with your fetch operation:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we first check if the response is successful using `response.ok`. If it's false, we throw an error with a message containing the status text. The `catch` block then handles any errors, such as network failures or bad responses, allowing you to display error messages or retry fetching."
+      },
+      {
+        "type": "paragraph",
+        "value": "The newer and more readable way to write the same code is with `async` and `await`. You can combine it with a `try...catch` block to handle errors efficiently:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok ' + response.statusText);\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this pattern, the `try` block contains the code that might fail, and if any error is thrown during the `fetch` or while parsing the JSON, the `catch` block captures it. This helps keep your asynchronous code clean and readable."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, handling errors during asynchronous data fetching in JavaScript involves checking the response status and catching any exceptions that might occur. Whether using `.then()`/`.catch()` or `async/await`, proper error handling ensures your app can gracefully handle failures and inform users accordingly."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-typescript-generics-for-optimized-data-structures-and-algorithms",
+    "title": "Harnessing TypeScript Generics for Optimized Data Structures and Algorithms",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to build flexible, reusable data structures and algorithms that work with any data type effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=hd2RbdfGlJ8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics provide a powerful way to write reusable, type-safe code. When working with data structures and algorithms, generics allow you to create components that can work with any data type while maintaining strong typing. This tutorial will guide you through the basics of TypeScript generics and demonstrate how to optimize data structures and algorithms by leveraging them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Generics? Generics are like placeholders for types. Instead of writing a function or a class for each data type, generics enable us to write one version that works with many types. This reduces code duplication and increases flexibility."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple generic function:"
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst num = identity<number>(42);  // works with number\nconst str = identity<string>('Hello');  // works with string"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `<T>` represents a generic type parameter. When calling the function, you specify the actual type you want to use. This function just returns the same value it receives, but it's type-safe and flexible."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Data Structures: Implementing a Stack"
+      },
+      {
+        "type": "paragraph",
+        "value": "Stacks are basic data structures with Last In, First Out (LIFO) behavior. We can create a generic stack class to handle any type of items:"
+      },
+      {
+        "type": "code",
+        "value": "class Stack<T> {\n  private items: T[] = [];\n\n  push(item: T): void {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n\n  peek(): T | undefined {\n    return this.items[this.items.length - 1];\n  }\n\n  isEmpty(): boolean {\n    return this.items.length === 0;\n  }\n\n  size(): number {\n    return this.items.length;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, you can create stacks for different data types without rewriting the logic:"
+      },
+      {
+        "type": "code",
+        "value": "const numberStack = new Stack<number>();\nnumberStack.push(10);\nnumberStack.push(20);\nconsole.log(numberStack.pop()); // 20\n\nconst stringStack = new Stack<string>();\nstringStack.push('hello');\nstringStack.push('world');\nconsole.log(stringStack.pop()); // 'world'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Algorithms: Finding the Largest Element"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's write a generic function that finds the largest element in an array. To compare elements, we'll require the generic type to extend a comparable interface."
+      },
+      {
+        "type": "code",
+        "value": "interface Comparable {\n  compareTo(other: this): number;\n}\n\nfunction findLargest<T extends Comparable>(items: T[]): T | null {\n  if (items.length === 0) return null;\n\n  let largest = items[0];\n  for (const item of items) {\n    if (item.compareTo(largest) > 0) {\n      largest = item;\n    }\n  }\n  return largest;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose we want to find the largest number wrapped in a class that implements `Comparable`:"
+      },
+      {
+        "type": "code",
+        "value": "class NumberWrapper implements Comparable {\n  constructor(public value: number) {}\n\n  compareTo(other: NumberWrapper): number {\n    return this.value - other.value;\n  }\n}\n\nconst numbers = [new NumberWrapper(10), new NumberWrapper(42), new NumberWrapper(7)];\nconst largest = findLargest(numbers);\nconsole.log(largest ? largest.value : 'No items'); // 42"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using generics helps you write code that is:\n- **Reusable**: Write once and use for any type.\n- **Type-safe**: Avoid runtime errors due to type mismatches.\n- **Readable and easier to maintain**: Less duplication means easier maintenance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are essential for writing scalable and efficient code, especially when dealing with data structures and algorithms. By mastering generics, you can create flexible components that adapt to different data types while ensuring strong type safety. Practice building generic classes and functions to deepen your understanding and improve your TypeScript skills."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types-for-robust-data-modeling",
+    "title": "Mastering TypeScript Utility Types for Robust Data Modeling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript utility types to create strong, error-free data models with practical examples designed for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=YXbJGXdb5Bc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool for building scalable and maintainable applications because it adds type safety to JavaScript. One key feature that helps in creating robust data models is utility types. These utility types help you transform and refine existing types without duplicating code, reducing errors in your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll cover some common TypeScript utility types like Partial, Required, Readonly, Pick, and Omit. Understanding these will help you avoid common errors and write cleaner, safer code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple interface representing a user:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `email` is optional. Now, suppose you want to update a user, but you only want to require some of the fields. This is where `Partial` comes in handy. `Partial<T>` makes all properties optional."
+      },
+      {
+        "type": "code",
+        "value": "function updateUser(id: number, userUpdates: Partial<User>) {\n  // Only the fields passed in userUpdates will be updated\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to make sure all properties are present, use `Required<T>`. It converts optional properties to required."
+      },
+      {
+        "type": "code",
+        "value": "const completeUser: Required<User> = {\n  id: 1,\n  name: \"Alice\",\n  email: \"alice@example.com\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent any changes to an object once it's created, use `Readonly<T>`. This helps avoid accidental mutations that cause bugs."
+      },
+      {
+        "type": "code",
+        "value": "const readonlyUser: Readonly<User> = {\n  id: 2,\n  name: \"Bob\",\n  email: \"bob@example.com\"\n};\n\n// readonlyUser.id = 10; // Error: Cannot assign to 'id' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you only want to work with a subset of properties. The utility `Pick<T, K>` helps by selecting specific keys from a type."
+      },
+      {
+        "type": "code",
+        "value": "type UserPreview = Pick<User, \"id\" | \"name\">;\n\nconst preview: UserPreview = {\n  id: 3,\n  name: \"Charlie\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "`Omit<T, K>` is useful for creating a type without certain keys. For example, if you want everything except the email:"
+      },
+      {
+        "type": "code",
+        "value": "type UserWithoutEmail = Omit<User, \"email\">;\n\nconst userNoEmail: UserWithoutEmail = {\n  id: 4,\n  name: \"Dana\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "These utility types reduce errors by enforcing the shape of your data. They also make your code more flexible and easier to maintain by avoiding repetition and allowing controlled data transformations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Begin incorporating these utility types to make your TypeScript models safer and your development process smoother!"
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-microservices-python-step-by-step",
+    "title": "Building Scalable Microservices in Python: A Step-by-Step Tutorial",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create scalable microservices in Python with this beginner-friendly step-by-step tutorial. Understand key concepts and implement a simple microservice using Flask and Docker.",
+    "videoUrl": "https://www.youtube.com/watch?v=lL_j7ilk7rc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices architecture is an approach to developing applications as a collection of small, independently deployable services. This helps improve scalability, development speed, and fault isolation. In this tutorial, we will build a simple microservice in Python, using Flask as our web framework and Docker for containerization."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, ensure you have Python installed (preferably Python 3.7 or above) and Docker on your machine. We'll start by creating a basic Flask application that exposes a RESTful API."
+      },
+      {
+        "type": "paragraph",
+        "value": "Create a file named `app.py` and add the following code:"
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify, request\n\napp = Flask(__name__)\n\n# A simple in-memory data store\nitems = []\n\n@app.route('/items', methods=['GET'])\ndef get_items():\n    return jsonify(items)\n\n@app.route('/items', methods=['POST'])\ndef add_item():\n    data = request.get_json()\n    item = {'id': len(items) + 1, 'name': data.get('name')}\n    items.append(item)\n    return jsonify(item), 201\n\nif __name__ == '__main__':\n    app.run(host='0.0.0.0', port=5000)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This basic microservice allows clients to add items and retrieve a list of items. Next, let's test it locally before containerizing it."
+      },
+      {
+        "type": "paragraph",
+        "value": "Run the Flask app with:"
+      },
+      {
+        "type": "code",
+        "value": "python app.py"
+      },
+      {
+        "type": "paragraph",
+        "value": "Open another terminal and test the API using `curl` or any REST client:\n\nAdd an item:\n\nbash\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"name\": \"Item1\"}' http://localhost:5000/items\n\n\nGet items:\n\nbash\ncurl http://localhost:5000/items\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Once you confirm the service works, it's time to containerize it with Docker. Create a file named `Dockerfile` in the same directory:"
+      },
+      {
+        "type": "code",
+        "value": "FROM python:3.9-slim\n\nWORKDIR /app\n\nCOPY app.py /app\n\nRUN pip install flask\n\nEXPOSE 5000\n\nCMD [\"python\", \"app.py\"]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Build your Docker image with the command:"
+      },
+      {
+        "type": "code",
+        "value": "docker build -t python-microservice ."
+      },
+      {
+        "type": "paragraph",
+        "value": "Run the Docker container:"
+      },
+      {
+        "type": "code",
+        "value": "docker run -p 5000:5000 python-microservice"
+      },
+      {
+        "type": "paragraph",
+        "value": "Your microservice is now running inside a Docker container and accessible on port 5000. To build scalable microservices, you can deploy multiple container instances behind a load balancer and use orchestration tools like Kubernetes."
+      },
+      {
+        "type": "paragraph",
+        "value": "This tutorial covered the basics: creating a Python Flask microservice, testing it, and containerizing with Docker. As you get comfortable, explore adding databases, API versioning, authentication, and service discovery to make your microservices production-ready."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-pythons-typeerror-common-causes-and-how-to-avoid-them",
+    "title": "Understanding Python's TypeError: Common Causes and How to Avoid Them",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what Python's TypeError is, discover common causes of this error, and find simple ways to avoid it when writing your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=JG1livF44_E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you are new to Python, you might encounter the TypeError while running your code. This error happens when an operation or function is applied to a value of the wrong type. Understanding why TypeError occurs will help you write better code and fix bugs faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a TypeError?\n\nPython is a dynamically typed language, but it still expects certain types to work together. When you try to do something like adding a string and an integer, Python will raise a TypeError because these types don’t mix in that context."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "a = 'Hello'\nb = 5\nprint(a + b)  # This will cause a TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "The code above tries to add a string (`a`) and an integer (`b`). Since these types can’t be added directly, Python raises a TypeError like:\n\n`TypeError: can only concatenate str (not \"int\") to str`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Causes of TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Mixing data types in operations** — Adding, subtracting, or combining incompatible types.\n\n2. **Calling a function with the wrong data type** — Passing a list when an integer is expected, for example.\n\n3. **Using incorrect method for a data type** — Trying to use a string method on a list or vice versa.\n\n4. **Iterating over a non-iterable type** — Using a `for` loop on an integer or `None`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Avoid TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Check your data types** before performing operations. Use the `type()` function for debugging:\n"
+      },
+      {
+        "type": "code",
+        "value": "x = 10\nprint(type(x))  # <class 'int'>"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Convert data types explicitly** if needed. For example, convert an integer to a string using `str()` before concatenation."
+      },
+      {
+        "type": "code",
+        "value": "a = 'The number is: '\nb = 5\nprint(a + str(b))  # This works fine"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use error handling** to catch TypeErrors and handle them gracefully."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 'Age: ' + 30\nexcept TypeError:\n    result = 'Age: ' + str(30)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Read function documentation** to know what types of arguments your functions expect."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nTypeErrors are common when operations or functions receive inputs of incompatible types. By understanding Python’s data types, checking your inputs, and converting types when necessary, you can avoid most TypeErrors. Remember to test your code and handle exceptions to write more robust programs."
+      }
+    ]
+  },
+  {
+    "slug": "handling-complex-null-comparisons-in-sql-queries",
+    "title": "Handling Complex Null Comparisons in SQL Queries: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to properly handle complex NULL value comparisons in SQL with simple examples and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=-JcYgeVO8jo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, dealing with NULL values is a common and important task. NULL represents the absence of a value, but it can cause unexpected results in your queries if not handled carefully. This tutorial will explain how to handle complex NULL comparisons effectively, so your SQL queries behave as you expect."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to remember that NULL is not equal to anything, not even to another NULL. This means comparing NULL with = or <> results in UNKNOWN rather than TRUE or FALSE. Let's look at a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above query will not return any results because the condition 'manager_id = NULL' is never TRUE. To properly check for NULL, you need to use the 'IS NULL' operator as shown below:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, to find records where a value is not NULL, use 'IS NOT NULL':"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's explore a slightly more complex case. Imagine you want to compare two columns that might both contain NULLs, and you want to consider NULLs as equal for the purpose of your logic. Since direct equality doesn't work with NULLs, you need to use additional logic."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees\nWHERE (phone_number = emergency_contact_phone) \n   OR (phone_number IS NULL AND emergency_contact_phone IS NULL);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns rows where the phone number and emergency contact phone are either the same or both NULL. The OR condition explicitly checks for both columns being NULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "For even more complex queries, SQL provides the <=> operator in some databases like MySQL, known as the 'NULL-safe equal' operator. Here's how to use it:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees\nWHERE phone_number <=> emergency_contact_phone;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This operator treats NULLs as equal and simplifies queries where you want to compare columns that may contain NULLs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, when handling NULL comparisons in SQL:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use 'IS NULL' or 'IS NOT NULL' to check for NULL values.\n- To compare columns when NULLs should be considered equal, explicitly check both columns for NULL or use database-specific features like the NULL-safe equal operator.\n- Remember that NULL is not equal to NULL using the standard '=' or '<>' operators."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these practices, you can avoid common pitfalls and write more accurate SQL queries involving NULL values."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-query-performance-analyzing-execution-plans-sql",
+    "title": "Optimizing Query Performance by Analyzing Execution Plans in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize SQL query performance by understanding and analyzing execution plans. This beginner-friendly guide explains how to read execution plans to spot common errors and inefficiencies.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, slow queries can cause frustration and impact application performance. One of the best ways to improve query speed is by analyzing the execution plan generated by the SQL engine. Execution plans show how the database engine runs your query step-by-step, helping you identify errors or inefficient operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "To view an execution plan in SQL Server, you can use the `SET SHOWPLAN_TEXT ON` command or the graphical execution plan in SQL Server Management Studio (SSMS). For example, to get a text-based plan before running a query, use:"
+      },
+      {
+        "type": "code",
+        "value": "SET SHOWPLAN_TEXT ON;\nGO\nSELECT * FROM Employees WHERE Department = 'Sales';\nGO\nSET SHOWPLAN_TEXT OFF;\nGO"
+      },
+      {
+        "type": "paragraph",
+        "value": "This command will not run the query but show the execution plan instead. Execution plans typically include operations like scans, seeks, joins, and sorts. Here are common issues to look for:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Table Scans**: The entire table is read because there is no index. This is slow for large tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Index Scans vs. Index Seeks**: An index seek is efficient because the engine uses the index to quickly find rows. An index scan reads all index rows and can be slower."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Key Lookups**: Occur when the query needs columns not covered by the index. This means extra reads that can slow down queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of a query with a key lookup issue. Suppose you have a non-clustered index on `Department` but the query also selects `Salary`:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE NONCLUSTERED INDEX idx_Department ON Employees(Department);\n\nSELECT EmployeeID, Department, Salary FROM Employees WHERE Department = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "The execution plan will use the index on `Department` but then perform a key lookup to fetch the `Salary` column. To fix this, you can include `Salary` in the index to cover the query:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE NONCLUSTERED INDEX idx_Department_Salary ON Employees(Department) INCLUDE (Salary);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After creating this covering index, the execution plan should no longer have key lookups, and the query will run faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, always check execution plans to:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Identify scans and consider adding indexes."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Look for expensive operations like sorts or joins and optimize them."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Pay attention to key lookups and consider covering indexes."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding and optimizing based on execution plans, you can make your SQL queries much more efficient."
+      }
+    ]
   }
 ];
