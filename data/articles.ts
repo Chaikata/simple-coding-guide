@@ -26787,5 +26787,517 @@ export const articles = [
         "value": "By understanding and optimizing based on execution plans, you can make your SQL queries much more efficient."
       }
     ]
+  },
+  {
+    "slug": "optimizing-javascript-array-methods-for-maximum-performance",
+    "title": "Optimizing JavaScript Array Methods for Maximum Performance",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn practical tips to optimize popular JavaScript array methods for better speed and efficiency in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=koky8mDdtAk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript arrays come with many built-in methods like map, filter, reduce, and forEach that make coding easier and more readable. However, when working with large datasets or performance-critical applications, knowing how to optimize these methods can make your code faster and more efficient."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll look into common array methods and simple optimization techniques that are beginner-friendly. These tips will help you write code that runs better without sacrificing clarity."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Use Simple Loops for Heavy Operations"
+      },
+      {
+        "type": "paragraph",
+        "value": "While array methods like map or filter are concise and readable, traditional for loops are sometimes faster, especially with large arrays, because they avoid the overhead of function calls."
+      },
+      {
+        "type": "code",
+        "value": "const arr = [1, 2, 3, 4, 5];\n\n// Using map\nconst doubledMap = arr.map(x => x * 2);\n\n// Using for loop\nconst doubledFor = [];\nfor (let i = 0; i < arr.length; i++) {\n  doubledFor.push(arr[i] * 2);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "If performance is very important, try testing both and see what works best in your use case."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Avoid Creating Functions Inside Loops"
+      },
+      {
+        "type": "paragraph",
+        "value": "Creating functions inside loops or repeatedly inside array methods can slow down your code. Instead, define functions outside and reuse them."
+      },
+      {
+        "type": "code",
+        "value": "function isEven(num) {\n  return num % 2 === 0;\n}\n\nconst numbers = [1, 2, 3, 4, 5];\nconst evens = numbers.filter(isEven);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, you avoid creating a new function on every iteration."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Combine Multiple Array Methods"
+      },
+      {
+        "type": "paragraph",
+        "value": "Chaining many array methods causes multiple passes over your data. Where possible, combine operations in a single loop or use reduce."
+      },
+      {
+        "type": "code",
+        "value": "// Multiple passes\nconst processed = arr.filter(x => x > 1).map(x => x * 2);\n\n// Single pass using reduce\nconst processedReduce = arr.reduce((acc, x) => {\n  if (x > 1) acc.push(x * 2);\n  return acc;\n}, []);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Single-pass approaches reduce the number of iterations and improve speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use Break and Continue Statements"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to stop looping early (e.g., when you find an item). Regular array methods like forEach don't support breaking out of loops, but for or for...of loops do."
+      },
+      {
+        "type": "code",
+        "value": "const items = [1, 2, 3, 4, 5];\nlet found = false;\nfor (const item of items) {\n  if (item === 3) {\n    found = true;\n    break; // Stop looping once found\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using breaks can save unnecessary iterations, improving performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "While JavaScript array methods are great for clean and readable code, keeping performance in mind is important when working with large data or critical tasks. Use simple loops, avoid creating functions repeatedly, combine operations, and control loop execution with break or continue when needed. Experiment with these tips to find the right balance between speed and readability for your project."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-schema-design-in-javascript-best-practices-for-error-resistant-data-models",
+    "title": "Mastering Schema Design in JavaScript: Best Practices for Error-Resistant Data Models",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to create robust and error-resistant data models in JavaScript by mastering schema design with practical best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=fc6o1gwqZuA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications in JavaScript, managing and validating data correctly is crucial for a smooth experience and fewer bugs. Errors often occur when data doesn't meet the expected structure, especially when data is coming from external sources like APIs or user inputs. Schema design helps you define clear rules for your data, which reduces runtime errors and improves maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore how to design error-resistant data models using simple JavaScript, and introduce popular tools that help you enforce schemas effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Schema Design?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Schema design is the process of defining the structure, types, and constraints of your data. For example, if you have a user object, your schema will define that a user must have a name (string), an email (string), and an optional age (number). This provides a blueprint against which the data can be validated."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Schema Design in JavaScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Prevent bugs caused by unexpected data types or missing properties\n- Improve code readability and documentation\n- Make debugging easier by catching errors early\n- Simplify data validation and transformation"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Schema Validation in Plain JavaScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can start by writing simple validation functions that check the shape of your data. Let's create a schema and validate a user object:"
+      },
+      {
+        "type": "code",
+        "value": "function validateUser(user) {\n  if (typeof user !== 'object' || user === null) {\n    throw new Error('User must be an object');\n  }\n  if (typeof user.name !== 'string') {\n    throw new Error('User name must be a string');\n  }\n  if (typeof user.email !== 'string') {\n    throw new Error('User email must be a string');\n  }\n  if ('age' in user && typeof user.age !== 'number') {\n    throw new Error('User age must be a number if provided');\n  }\n  return true;\n}\n\n// Example usage:\ntry {\n  const userInput = { name: 'Jane Doe', email: 'jane@example.com', age: 28 };\n  validateUser(userInput);\n  console.log('User is valid!');\n} catch (error) {\n  console.error(error.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this approach works for small projects, it becomes hard to maintain for bigger and more complex data. This is where libraries dedicated to schema validation shine."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using a Schema Validation Library: Joi Example"
+      },
+      {
+        "type": "paragraph",
+        "value": "[Joi](https://joi.dev) is a popular JavaScript library for schema validation that makes defining and enforcing data rules easier."
+      },
+      {
+        "type": "code",
+        "value": "const Joi = require('joi');\n\nconst userSchema = Joi.object({\n  name: Joi.string().required(),\n  email: Joi.string().email().required(),\n  age: Joi.number().integer().min(0).optional()\n});\n\n// Validate user data\nconst userInput = { name: 'Jane Doe', email: 'jane@example.com', age: 28 };\nconst validation = userSchema.validate(userInput);\n\nif (validation.error) {\n  console.error('Validation error:', validation.error.details[0].message);\n} else {\n  console.log('User data is valid!');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Joi automatically checks all rules and provides detailed error messages. This improves error handling and makes your data model more robust."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Schema Design"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Always define clear data types:** Avoid guessing types during usage.\n- **Use required and optional fields:** This clarifies which data is mandatory.\n- **Add constraints like min/max or regex:** To ensure the data fits your expected format.\n- **Validate early:** Validate input data as soon as possible, especially from external sources.\n- **Keep schemas documented:** It helps other developers understand data expectations.\n- **Leverage libraries:** Use tools like Joi, Yup, or AJV to reduce boilerplate and improve validation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering schema design in JavaScript is a key step toward writing error-resistant applications. Whether you start with simple validation functions or use advanced libraries like Joi, defining explicit rules for your data can greatly reduce runtime errors and make your code more maintainable. Follow best practices by clearly defining your data models and validating early to build reliable JavaScript applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-lazy-loading-in-typescript-for-faster-web-applications",
+    "title": "Mastering Lazy Loading in TypeScript for Faster Web Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to implement lazy loading in TypeScript to improve the performance and speed of your web applications with simple, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Lazy loading is a technique that delays the loading of resources until they are actually needed. This can significantly improve the speed and performance of your web applications by reducing the initial load time. In this tutorial, we will explore how to use lazy loading in TypeScript, a popular typed superset of JavaScript, making your app faster and more efficient."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Lazy Loading?\nLazy loading means breaking your app into smaller chunks and loading only the parts that the user needs right now. For example, instead of loading all components and modules at once, you load some parts only when the user wants to see them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Lazy Loading?\n- Faster initial page loads\n- Reduced bandwidth usage\n- Improved user experience\n- Optimized resource management"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Setting Up Lazy Loading in TypeScript\nTypeScript supports dynamic `import()` expressions, allowing you to load modules asynchronously. Let's see how to use this feature."
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you have a module called `HeavyComponent.ts` that you want to load only when a button is clicked."
+      },
+      {
+        "type": "code",
+        "value": "export function renderHeavyComponent() {\n  console.log('Heavy component is loaded and rendered!');\n  // Imagine heavy UI logic here\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can lazy load this module using dynamic `import()` like this:"
+      },
+      {
+        "type": "code",
+        "value": "async function loadHeavyComponent() {\n  const module = await import('./HeavyComponent');\n  module.renderHeavyComponent();\n}\n\n// Trigger loading when user clicks a button\nconst button = document.getElementById('loadBtn');\nbutton?.addEventListener('click', () => {\n  loadHeavyComponent();\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Explanation:\n- `import('./HeavyComponent')`: This dynamically loads the module only when called.\n- `await`: Waits for the module to be loaded.\n- `module.renderHeavyComponent()`: Calls the function from the loaded module.\n\nThis approach keeps your main bundle small and loads extra code only when needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Real-World Usage with React (Optional)\nIf you are using React with TypeScript, lazy loading can be even easier with `React.lazy` and `Suspense`."
+      },
+      {
+        "type": "code",
+        "value": "import React, { Suspense } from 'react';\n\nconst HeavyComponent = React.lazy(() => import('./HeavyComponent'));\n\nfunction App() {\n  return (\n    <div>\n      <Suspense fallback={<div>Loading...</div>}>\n        <HeavyComponent />\n      </Suspense>\n    </div>\n  );\n}\n\nexport default App;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nLazy loading is a powerful method to make TypeScript web applications faster by loading code only when necessary. Using dynamic `import()` lets you achieve this easily in plain TypeScript, while frameworks like React offer additional tools to manage lazy loading smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing lazy loading with your projects to master this essential performance optimization technique!"
+      }
+    ]
+  },
+  {
+    "slug": "typescript-vs-javascript-how-typescript-prevents-runtime-errors",
+    "title": "TypeScript vs JavaScript: How TypeScript's Type System Prevents Runtime Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript’s type system helps catch errors early compared to JavaScript, making your code more reliable and easier to maintain.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a versatile and widely-used language, but it is dynamically typed. This means types are checked only at runtime, sometimes causing unexpected errors when the code executes. TypeScript, on the other hand, is a superset of JavaScript that adds static typing. It checks for type errors during development, helping you catch mistakes before you even run your program."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see an example in JavaScript. Imagine you have a function that adds two numbers:"
+      },
+      {
+        "type": "code",
+        "value": "function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(10, 20)); // 30\nconsole.log(add('10', 20)); // '1020' (unexpected string concatenation)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that in JavaScript, if you accidentally pass a string for the first argument, instead of adding numbers, it concatenates the string and the number. This might lead to bugs that only show when you run the code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's write the same function using TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "function add(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(add(10, 20)); // 30\n// console.log(add('10', 20)); // Error: Argument of type 'string' is not assignable to parameter of type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, we've declared that the function parameters \"a\" and \"b\" must be numbers, and the return value is also a number. If you try to pass a string, the TypeScript compiler immediately raises an error before the code runs. This prevents unexpected behavior and helps you fix mistakes early."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript’s type system supports many types, such as strings, numbers, booleans, arrays, and even custom types. This system makes your code self-documenting and easier to understand for others (and yourself in the future). It also integrates well with modern editors to provide helpful error messages and autocomplete."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript prevents many common JavaScript runtime errors by checking types at compile time. This leads to safer, more predictable code and a better development experience, especially for beginners who want to avoid classic pitfalls."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-context-managers-create-your-own",
+    "title": "Mastering Python's Context Managers: Creating Your Own with __enter__ and __exit__",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create your own context managers in Python by implementing the __enter__ and __exit__ methods. This beginner-friendly guide makes managing resources simple and clean.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's context managers are powerful tools that help you manage resources like files, network connections, or locks. The `with` statement simplifies your code by ensuring resources are properly acquired and released. While many context managers come built-in, you can create your own by defining the special methods `__enter__` and `__exit__`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding how `with` works. When Python enters the `with` block, it calls the object's `__enter__` method. When the block ends, whether normally or because of an exception, the object's `__exit__` method is called to clean up."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example: imagine you want to create a context manager that prints messages at the start and end of a block."
+      },
+      {
+        "type": "code",
+        "value": "class MyContext:\n    def __enter__(self):\n        print('Entering the block')\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print('Exiting the block')\n        if exc_type:\n            print(f'An exception occurred: {exc_val}')\n        # Return False to propagate the exception, True to suppress it\n        return False\n\nwith MyContext() as ctx:\n    print('Inside the with block')"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, you'll see messages before and after the block. The parameters of `__exit__` help you manage exceptions if they occur inside the block."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's create a practical context manager for opening and closing files. This is similar to Python's built-in `open()` but implemented manually."
+      },
+      {
+        "type": "code",
+        "value": "class FileOpener:\n    def __init__(self, filename, mode):\n        self.filename = filename\n        self.mode = mode\n        self.file = None\n\n    def __enter__(self):\n        self.file = open(self.filename, self.mode)\n        return self.file\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if self.file:\n            self.file.close()\n        if exc_type:\n            print(f'Exception: {exc_val}')\n        # Returning False will propagate the exception if there is one\n        return False\n\nwith FileOpener('test.txt', 'w') as f:\n    f.write('Hello, Context Managers!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This `FileOpener` class safely opens the file on entering the block and closes it no matter what happens inside. Even if an error occurs, the file is closed properly, preventing resource leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to create your own context manager in Python, define a class with `__enter__` and `__exit__` methods. Use `__enter__` to set up resources and `__exit__` to clean up, making your code cleaner and safer."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding! Experiment with your own context managers to get comfortable with this powerful tool."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-loops-techniques-to-boost-performance",
+    "title": "Optimizing Python Loops: Techniques to Boost Performance Without Changing Logic",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn beginner-friendly techniques to optimize your Python loops for better performance without altering your program's logic. Enhance your code speed and efficiency with simple tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python loops are easy to write and understand, but when working with large datasets or complex programs, slow loops can cause performance bottlenecks. Fortunately, you can optimize Python loops without changing how your program works, often improving speed dramatically. Let's explore some beginner-friendly ways to make your loops faster and more efficient."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid Repeated Calculations Inside Loops\nRepeatedly calling the same function or calculating a value inside the loop wastes time. Instead, calculate it once before the loop starts."
+      },
+      {
+        "type": "code",
+        "value": "items = [1, 2, 3, 4, 5]\n\n# Less efficient\nfor i in range(len(items)):\n    squared = items[i] ** 2\n    print(squared)\n\n# More efficient (no repeated calls like len())\nlength = len(items)\nfor i in range(length):\n    squared = items[i] ** 2\n    print(squared)"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use Local Variables Inside Loops\nAccessing local variables is faster than globals or attributes. If you use a function or method repeatedly in the loop, assign it to a local variable before the loop."
+      },
+      {
+        "type": "code",
+        "value": "my_list = [1, 2, 3, 4]\nappend_func = my_list.append\n\nfor num in range(5):\n    append_func(num)"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use List Comprehensions or Generator Expressions\nWhen possible, replace loops that build lists with list comprehensions. They run faster and make code cleaner."
+      },
+      {
+        "type": "code",
+        "value": "# Using loop\ndoubled = []\nfor i in range(10):\n    doubled.append(i * 2)\n\n# Using list comprehension\nn_doubled = [i * 2 for i in range(10)]"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Avoid Unnecessary Condition Checks Inside Loops\nPut conditions outside the loop if they don't depend on the loop variable. This reduces redundant checks."
+      },
+      {
+        "type": "code",
+        "value": "threshold = 10\nnumbers = [1, 5, 15, 20, 7]\n\nif threshold > 0:\n    for num in numbers:\n        print(num * 2)"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Use Built-in Functions and Modules\nBuilt-in Python functions (like map, filter, sum) are implemented in C and much faster than manual loops in Python code."
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3, 4, 5]\n\n# Using built-in sum function instead of a loop\ntotal = sum(numbers)\nprint(total)"
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Minimize Function Calls Inside the Loop\nEvery function call adds overhead. If a function called in the loop does simple work, consider moving or inlining it if possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, you can significantly speed up your Python loops without changing their logic or expected results. Optimizing loops leads to better program responsiveness and a smoother coding experience — all while keeping your code easy to read and maintain."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-for-advanced-sql-performance-optimization",
+    "title": "Mastering Window Functions for Advanced SQL Performance Optimization",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to write efficient queries that enhance your database performance and simplify complex data analysis.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions are a powerful feature in SQL that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not collapse rows but return values for each row, providing advanced analytical capabilities without complex subqueries or joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "This tutorial introduces the basics of window functions and demonstrates how they help optimize SQL performance, especially for ranking, running totals, and moving averages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example using the ROW_NUMBER() function. Suppose you have a sales table and want to assign a rank to sales reps based on their sales amount within each region."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  region,\n  sales_rep,\n  sales_amount,\n  ROW_NUMBER() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, the ROW_NUMBER() function assigns a ranking number to each sales rep within their specific region, ordered by sales amount descending. The PARTITION BY clause resets the numbering for each region."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's calculate a running total of sales for each region. Window functions like SUM() can be used for this purpose without a GROUP BY clause."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  region,\n  sales_date,\n  sales_amount,\n  SUM(sales_amount) OVER (PARTITION BY region ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query computes a running total of sales_amount ordered by sales_date within each region. The frame clause ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW defines the window frame for the cumulative sum."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, window functions can calculate moving averages efficiently without complex joins or subqueries. For example, to compute a 3-day moving average of sales in each region:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  region,\n  sales_date,\n  sales_amount,\n  AVG(sales_amount) OVER (PARTITION BY region ORDER BY sales_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, AVG() calculates the average sales_amount over the current row and the two preceding rows, creating a moving average for easy trend analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions improve performance by avoiding costly joins and subqueries, leveraging native database engine optimizations. They also make your queries cleaner and easier to read."
+      },
+      {
+        "type": "paragraph",
+        "value": "To master window functions, practice with your own datasets and experiment with different functions like RANK(), DENSE_RANK(), LAG(), LEAD(), and NTILE() to uncover powerful insights with optimized SQL."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-data-modeling-pitfalls-that-lead-to-inconsistent-sql-query-results",
+    "title": "Understanding Data Modeling Pitfalls That Lead to Inconsistent SQL Query Results",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn common data modeling mistakes that cause inconsistent SQL query results and how to avoid them for more reliable database queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=rcrsqyFtJ_4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL and databases, it’s important to have a well-designed data model. Poor data modeling can lead to inconsistent or unexpected results in your SQL queries, which can be frustrating especially for beginners. In this article, we will explore common data modeling pitfalls and show examples of how they affect SQL query results."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common pitfall is missing or incorrect primary keys. Primary keys uniquely identify rows in a table. Without them, SQL joins and queries can produce duplicate or missing results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider these two tables: `Customers` and `Orders`. If `Customers` lacks a unique primary key, joining these tables may produce duplicate customer information if multiple orders exist."
+      },
+      {
+        "type": "code",
+        "value": "-- Customers table without primary key\nCREATE TABLE Customers (\n  Name VARCHAR(50),\n  Email VARCHAR(50)  -- Not unique\n);\n\n-- Orders table with foreign key referencing Email\nCREATE TABLE Orders (\n  OrderID INT PRIMARY KEY,\n  CustomerEmail VARCHAR(50),\n  Amount DECIMAL(10, 2),\n  FOREIGN KEY (CustomerEmail) REFERENCES Customers(Email)\n);\n\n-- Insert sample data\nINSERT INTO Customers VALUES ('Alice', 'alice@email.com');\nINSERT INTO Orders VALUES (1, 'alice@email.com', 100), (2, 'alice@email.com', 50);\n\n-- Join query\nSELECT c.Name, o.OrderID, o.Amount\nFROM Customers c\nJOIN Orders o ON c.Email = o.CustomerEmail;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that if `Email` in `Customers` is not unique, the join might return multiple rows for what should be a single customer, leading to confusion or double counting. Defining a proper primary key (e.g., a unique CustomerID) helps avoid this."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another pitfall is inconsistent data types between related columns. For instance, if the foreign key column's data type does not match the referenced primary key's data type, joins may fail silently or return empty results."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect data types example\nCREATE TABLE Products (\n  ProductID INT PRIMARY KEY,\n  ProductName VARCHAR(50)\n);\n\n-- Foreign key with VARCHAR instead of INT\nCREATE TABLE Sales (\n  SaleID INT PRIMARY KEY,\n  ProductID VARCHAR(10),  -- Wrong type\n  Quantity INT\n);\n\n-- Query joining these tables may not work as expected\nSELECT p.ProductName, s.Quantity\nFROM Products p\nJOIN Sales s ON p.ProductID = s.ProductID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Since `ProductID` in `Products` is `INT` and in `Sales` is `VARCHAR`, the database may not join these columns correctly, leading to missing or inconsistent query results. Matching data types is crucial."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, redundant or duplicated data can create inconsistencies. Avoid storing the same piece of information in multiple places without guarantees of synchronization. This can cause your SQL queries to show conflicting values depending on which table or column you reference."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to avoid inconsistent SQL query results caused by data modeling issues:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always define unique primary keys on tables.\n- Ensure foreign keys reference columns of matching data types.\n- Normalize your data to minimize redundancy.\n- Use constraints to enforce data integrity where possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Following these best practices makes your database easier to query reliably and reduces bugs caused by data inconsistencies."
+      }
+    ]
   }
 ];
