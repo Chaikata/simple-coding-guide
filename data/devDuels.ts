@@ -2211,5 +2211,173 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-bug-in-a-simple-temperature-converter",
+    "title": "Fix the Bug in a Simple Temperature Converter",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Debug a basic C++ function that is supposed to convert temperatures from Celsius to Fahrenheit but currently produces incorrect results.",
+    "prompt": "You are given a function meant to convert temperature values from Celsius to Fahrenheit using the formula F = (C * 9/5) + 32. However, the current implementation returns incorrect values. Identify and fix the bug so the function returns the correct Fahrenheit temperature for any Celsius input.",
+    "guidance": [
+      "Review the arithmetic operations and their order in the formula.",
+      "Watch out for integer division pitfalls in C++.",
+      "Test the function with common values like 0°C (should return 32°F) and 100°C (should return 212°F)."
+    ],
+    "hints": [
+      "Check if the division 9/5 is computed as integer division which may cause truncation.",
+      "Make sure multiplication and addition are done in the right order without losing precision."
+    ],
+    "starterCode": "double celsiusToFahrenheit(int celsius) {\n    return celsius * 9 / 5 + 32;\n}",
+    "expectedOutput": "celsiusToFahrenheit(0) should return 32\ncelsiusToFahrenheit(100) should return 212",
+    "concepts": [
+      "arithmetic operations",
+      "operator precedence",
+      "data types and integer division"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-complex-sql-query-for-improved-performance-and-readability",
+    "title": "Refactor Complex SQL Query for Improved Performance and Readability",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "optimization",
+    "description": "You are given a large and complex SQL query that fetches sales summary data with multiple subqueries and redundant joins. Refactor the query to improve its readability and optimize performance while ensuring the output remains exactly the same.",
+    "prompt": "Given the following SQL query, refactor it to improve clarity and reduce execution time without altering the results. Focus on eliminating unnecessary subqueries, optimizing joins, and leveraging window functions or CTEs if appropriate. The query aggregates sales data by product category and month, combining information from orders, products, and customers tables.",
+    "guidance": [
+      "Identify and remove redundant subqueries and joins that can be combined or simplified.",
+      "Consider using Common Table Expressions (CTEs) to break down complex parts for better readability.",
+      "Use window functions to replace subqueries where possible for efficiency."
+    ],
+    "hints": [
+      "Check if some joins or filters can be pushed earlier to limit data processed.",
+      "Look for repeated aggregations that can be calculated once and reused.",
+      "Review the use of GROUP BY and see if aggregations can be combined."
+    ],
+    "starterCode": "SELECT\n  c.category_name,\n  DATE_TRUNC('month', o.order_date) AS order_month,\n  (SELECT COUNT(*) FROM orders WHERE product_id = p.product_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', o.order_date)) AS total_orders,\n  (SELECT SUM(quantity) FROM order_items oi WHERE oi.product_id = p.product_id AND oi.order_id IN (SELECT order_id FROM orders WHERE DATE_TRUNC('month', order_date) = DATE_TRUNC('month', o.order_date))) AS total_quantity,\n  (SELECT SUM(oi.price * oi.quantity) FROM order_items oi WHERE oi.product_id = p.product_id AND oi.order_id IN (SELECT order_id FROM orders WHERE DATE_TRUNC('month', order_date) = DATE_TRUNC('month', o.order_date))) AS total_revenue\nFROM orders o\nJOIN products p ON o.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, order_month\nORDER BY c.category_name, order_month;",
+    "expectedOutput": "Table with columns: category_name, order_month (first day of month), total_orders, total_quantity, total_revenue showing aggregated sales data per category per month, sorted by category_name and order_month.",
+    "concepts": [
+      "SQL query optimization",
+      "Common Table Expressions (CTEs)",
+      "Window functions",
+      "Query refactoring"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-sql-function-to-calculate-moving-average-sales-over-dynamic-time-windows",
+    "title": "Create a SQL Function to Calculate Moving Average Sales Over Dynamic Time Windows",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "queries",
+    "description": "Build a SQL function that calculates the moving average of daily sales for a specified product over a dynamic number of previous days. The function should handle gaps in dates and provide efficient performance for large sales datasets.",
+    "prompt": "Write a SQL function named `moving_average_sales` that takes three parameters: a product ID, a date, and a window size N (integer). The function returns the average of the sales quantity for that product over the N days ending on the given date (inclusive). Assume the existence of a `sales` table with columns: `product_id` (int), `sale_date` (date), and `quantity` (int). Your function should handle cases where some dates in the window have no sales records by treating missing days as zero sales. Optimize the function for large datasets.",
+    "guidance": [
+      "Use window functions or aggregation with date range filtering to calculate sums over the specified date window.",
+      "Handle missing dates by generating all dates within the window for the product and joining with the sales data.",
+      "Ensure the function is optimized with indexes on `product_id` and `sale_date`."
+    ],
+    "hints": [
+      "Consider using a calendar table or generate_series function (if available) to fill in missing dates within the window.",
+      "Filtering the sales data before aggregation improves query performance.",
+      "Use COALESCE to treat NULL sales quantities as zero when calculating the average."
+    ],
+    "starterCode": "CREATE OR REPLACE FUNCTION moving_average_sales(p_product_id INT, p_date DATE, p_window INT) RETURNS NUMERIC AS $$\nBEGIN\n  -- Your implementation here\n  RETURN 0;\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "For example, moving_average_sales(101, '2024-06-30', 7) returns the average sales quantity for product 101 from 2024-06-24 to 2024-06-30 inclusive.",
+    "concepts": [
+      "window functions",
+      "date range queries",
+      "aggregation",
+      "SQL functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-expense-tracker-with-category-summaries",
+    "title": "Build a Expense Tracker with Category Summaries",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a Python function that manages a list of expenses and produces a summary by category, enabling users to track their spending habits effectively.",
+    "prompt": "Write a function `expense_summary` that takes a list of expenses, where each expense is represented as a dictionary with keys `amount` (a float) and `category` (a string). Your function should return a dictionary that summarizes the total spending per category. Additionally, include a key 'total' in the output dictionary representing the total amount spent across all categories.\n\nFor example, given the input:\n\n[{'amount': 15.50, 'category': 'food'}, {'amount': 20.00, 'category': 'transport'}, {'amount': 5.00, 'category': 'food'}]\n\nyour function should return:\n\n{'food': 20.50, 'transport': 20.00, 'total': 40.50}\n\nMake sure your code is efficient and handles the case when the input list is empty.",
+    "guidance": [
+      "Loop through each expense to aggregate amounts by category using a dictionary.",
+      "Keep a running total of all expenses to include in the result under the 'total' key.",
+      "Consider edge cases like empty input lists and ensure your function returns an empty summary with a total of 0."
+    ],
+    "hints": [
+      "Use the dict.get() method to simplify adding amounts to categories in the summary.",
+      "Initialize the total spending variable outside the loop and update it for each expense.",
+      "To handle empty input, the default output should be {'total': 0} with no category keys."
+    ],
+    "starterCode": "def expense_summary(expenses):\n    # Implement your solution here\n    pass",
+    "expectedOutput": "{'food': 20.50, 'transport': 20.00, 'total': 40.50}",
+    "concepts": [
+      "dictionaries",
+      "list iteration",
+      "aggregation",
+      "handling edge cases"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-aggregation-bug-in-employee-salary-report-query",
+    "title": "Fix the Aggregation Bug in Employee Salary Report Query",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "An SQL query intended to generate a report summarizing total salaries by department and job title has incorrect aggregation logic causing wrong results. Your task is to identify and fix the bugs in the query to produce accurate aggregation.",
+    "prompt": "Given the following broken SQL query that aims to calculate total salaries grouped by department and job title from the Employees table, identify the bug(s) and correct the query so it produces the correct aggregated sums for each department and job title combination.",
+    "guidance": [
+      "Check for missing or incorrect GROUP BY clauses that affect aggregation behavior.",
+      "Review JOIN conditions and SELECT columns to ensure consistent grouping.",
+      "Validate that aggregate functions like SUM() include only relevant columns."
+    ],
+    "hints": [
+      "Look for columns in the SELECT clause that are neither aggregated nor included in GROUP BY.",
+      "Check if any JOINs cause row multiplication affecting totals.",
+      "Consider using GROUP BY on all non-aggregated columns to fix issues."
+    ],
+    "starterCode": "SELECT d.department_name, e.job_title, SUM(e.salary) total_salary\nFROM Employees e\nJOIN Departments d ON e.department_id = d.id\nWHERE e.hire_date > '2020-01-01'\nORDER BY d.department_name, e.job_title;",
+    "expectedOutput": "A result table with columns: department_name, job_title, total_salary, where total_salary is the sum of salary for each department-job_title group accurately aggregated.",
+    "concepts": [
+      "SQL aggregation",
+      "GROUP BY clause",
+      "JOIN operations",
+      "Aggregate functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-function-to-flatten-a-nested-list-of-integers",
+    "title": "Build a Function to Flatten a Nested List of Integers",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a Python function that takes a nested list of integers and returns a flat list containing all the integers in their original order.",
+    "prompt": "Write a function named flatten_list that accepts a single parameter: a list which can contain integers or other lists (which themselves may contain integers or other lists, and so on). Your function should return a new flat list containing all the integers from the nested structure in the same left-to-right order.",
+    "guidance": [
+      "Use recursion to handle arbitrarily nested lists.",
+      "Check the type of each element to decide if it’s an integer or a sublist."
+    ],
+    "hints": [
+      "Use isinstance(element, list) to check if an element is a list.",
+      "If an element is an integer, append it to the result list; if it's a list, recursively call flatten_list on it."
+    ],
+    "starterCode": "def flatten_list(nested_list):\n    # Your code here\n    pass",
+    "expectedOutput": "flatten_list([1, [2, [3, 4], 5], 6])  # returns [1, 2, 3, 4, 5, 6]",
+    "concepts": [
+      "recursion",
+      "list manipulation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
