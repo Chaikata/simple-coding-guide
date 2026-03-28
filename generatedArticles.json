@@ -1,223 +1,75 @@
 [
   {
-    "slug": "building-scalable-microservices-architecture-with-nodejs-express",
-    "title": "Building Scalable Microservices Architecture with Node.js and Express",
+    "slug": "mastering-closures-in-javascript-a-beginners-guide",
+    "title": "Mastering Closures in JavaScript: A Beginner's Guide with Practical Examples",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build a scalable microservices architecture using Node.js and Express with this beginner-friendly tutorial, including practical examples to get started quickly.",
-    "videoUrl": "https://www.youtube.com/watch?v=n_MDBaKLuG4",
+    "description": "Learn what closures are in JavaScript, why they are useful, and how to use them effectively with simple, practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
     "content": [
       {
         "type": "paragraph",
-        "value": "Microservices architecture is a design approach where a large application is divided into smaller, independent services. Each microservice handles a specific business function and communicates with others via APIs. This approach helps improve scalability, maintainability, and development speed. In this tutorial, we will focus on building a simple microservices setup using Node.js and Express."
+        "value": "If you're new to JavaScript or programming in general, you might have heard the term \"closure\" and wondered what it means. In simple terms, a closure is a powerful feature in JavaScript that allows a function to remember and access variables from an outer function even after that outer function has finished executing."
       },
       {
         "type": "paragraph",
-        "value": "Why use Node.js and Express? Node.js is lightweight and event-driven, making it ideal for building efficient network applications. Express is a minimal and flexible web framework that works well to create APIs quickly. Together, they allow you to build scalable microservices with ease."
+        "value": "Closures can be a bit confusing at first, but once you understand them, they become incredibly useful. They allow for data privacy, function factories, and help you manage and organize your code better. Let’s break down closures with simple examples that anyone can follow."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setup two simple microservices"
+        "value": "### What is a Closure?"
       },
       {
         "type": "paragraph",
-        "value": "Let's create two microservices. One will be a User Service to manage user data, and the other will be an Order Service. Each service runs independently."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, create a folder for each service: `user-service` and `order-service`. Inside each, run `npm init -y` to initialize, then install Express with `npm install express`."
+        "value": "When a function is defined inside another function, the inner function has access to the outer function's variables. This inner function, along with its scope of variables from the outer function, is called a closure."
       },
       {
         "type": "code",
-        "value": "const express = require('express');\nconst app = express();\napp.use(express.json());\n\nconst users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' }\n];\n\napp.get('/users', (req, res) => {\n  res.json(users);\n});\n\napp.get('/users/:id', (req, res) => {\n  const user = users.find(u => u.id === parseInt(req.params.id));\n  if (user) res.json(user);\n  else res.status(404).send('User not found');\n});\n\nconst PORT = 3000;\napp.listen(PORT, () => {\n  console.log(`User Service running on port ${PORT}`);\n});"
+        "value": "function outer() {\n  let name = 'Alice';\n  function inner() {\n    console.log('Hello, ' + name);\n  }\n  return inner;\n}\n\nconst greet = outer();\ngreet(); // Output: Hello, Alice"
       },
       {
         "type": "paragraph",
-        "value": "This is the User Service code in `user-service/index.js`. It exposes simple endpoints to get all users or a specific user by ID."
+        "value": "Here, the inner function `inner` remembers the variable `name` even after the `outer` function has run. When we call `greet()`, it still has access to `name` — this is a closure in action."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example 1: Creating a Counter"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using closures, you can create a counter that keeps track of its state even between function calls."
       },
       {
         "type": "code",
-        "value": "const express = require('express');\nconst app = express();\napp.use(express.json());\n\nconst orders = [\n  { id: 1, userId: 1, product: 'Book' },\n  { id: 2, userId: 2, product: 'Pen' }\n];\n\napp.get('/orders', (req, res) => {\n  res.json(orders);\n});\n\napp.get('/orders/:id', (req, res) => {\n  const order = orders.find(o => o.id === parseInt(req.params.id));\n  if (order) res.json(order);\n  else res.status(404).send('Order not found');\n});\n\nconst PORT = 3001;\napp.listen(PORT, () => {\n  console.log(`Order Service running on port ${PORT}`);\n});"
+        "value": "function createCounter() {\n  let count = 0;\n  return function() {\n    count += 1;\n    return count;\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3"
       },
       {
         "type": "paragraph",
-        "value": "Now, the Order Service code is placed in `order-service/index.js`. It manages orders and their association to users."
+        "value": "Here, `count` is a private variable that the returned function can access and update. The outer function `createCounter` runs once, and the inner function that updates and returns `count` continues to remember that state."
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Running Services"
+        "value": "### Practical Example 2: Data Privacy"
       },
       {
         "type": "paragraph",
-        "value": "Open two terminals to run the services simultaneously. In the `user-service` folder, run `node index.js`, and in the `order-service` folder, run `node index.js`. You now have two independent services running on different ports."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 3: Communicating between Microservices"
-      },
-      {
-        "type": "paragraph",
-        "value": "Microservices often need to communicate. You can use HTTP requests between services. For example, the Order Service might call the User Service to enrich order data with user details."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's how you can fetch user data from the Order Service using the `node-fetch` package."
+        "value": "Closures let you hide data from the outside world, exposing only methods to interact with it."
       },
       {
         "type": "code",
-        "value": "const fetch = require('node-fetch');\n\napp.get('/orders-with-user/:id', async (req, res) => {\n  const order = orders.find(o => o.id === parseInt(req.params.id));\n  if (!order) return res.status(404).send('Order not found');\n\n  try {\n    const userResponse = await fetch(`http://localhost:3000/users/${order.userId}`);\n    if (!userResponse.ok) return res.status(502).send('Failed to fetch user');\n    const user = await userResponse.json();\n\n    res.json({ ...order, user });\n  } catch (error) {\n    res.status(500).send('Internal Server Error');\n  }\n});"
+        "value": "function secretHolder(secret) {\n  return {\n    getSecret: function() {\n      return secret;\n    },\n    setSecret: function(newSecret) {\n      secret = newSecret;\n    }\n  };\n}\n\nconst mySecret = secretHolder('I love JavaScript!');\nconsole.log(mySecret.getSecret()); // I love JavaScript!\nmySecret.setSecret('Closures are awesome!');\nconsole.log(mySecret.getSecret()); // Closures are awesome!"
       },
       {
         "type": "paragraph",
-        "value": "In this example, we add a new endpoint `/orders-with-user/:id` in the Order Service that fetches order information and enriches it with user details by calling the User Service."
+        "value": "In this example, the variable `secret` cannot be accessed directly, but you can interact with it through the returned methods. This gives you control over how the data is accessed or modified."
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Scaling Microservices"
+        "value": "### Why Use Closures?"
       },
       {
         "type": "paragraph",
-        "value": "Your microservices are easily scalable. Since they run independently, you can deploy each on separate servers or containers and scale them based on load. Using tools like Docker and Kubernetes can make this process seamless."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Final Thoughts"
-      },
-      {
-        "type": "paragraph",
-        "value": "This tutorial showed a very basic microservices setup with Node.js and Express. Real-world projects require attention to service discovery, load balancing, authentication, and asynchronous communication methods like message queues. Nonetheless, this foundation helps you start building scalable applications using microservices architecture."
-      }
-    ]
-  },
-  {
-    "slug": "optimizing-javascript-event-loop-for-high-performance-web-applications",
-    "title": "Optimizing JavaScript Event Loop for High-Performance Web Applications",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn how to optimize the JavaScript event loop to improve the performance of your web applications by avoiding common pitfalls and handling asynchronous tasks efficiently.",
-    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "The JavaScript event loop is a fundamental concept that allows asynchronous operations to run smoothly without blocking the main thread. Understanding how it works and how to optimize it is key to building high-performance web applications. This article will explain common errors beginners make with the event loop and provide practical advice to avoid them."
-      },
-      {
-        "type": "paragraph",
-        "value": "The event loop processes messages in the queue one by one, executing JavaScript code, handling events, and running callbacks. A major performance bottleneck occurs when heavy synchronous code blocks this loop, causing your app to freeze or become unresponsive."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example of a blocking operation that causes the event loop to stop processing other tasks:"
-      },
-      {
-        "type": "code",
-        "value": "function blockEventLoop() {\n  const start = Date.now();\n  while (Date.now() - start < 3000) {\n    // Blocking loop for 3 seconds\n  }\n  console.log('Finished blocking operation');\n}\n\nblockEventLoop();\nconsole.log('This runs after the blocking function.');"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, the while loop blocks the event loop for 3 seconds, making the page unresponsive. To improve performance, avoid long synchronous code inside the main thread."
-      },
-      {
-        "type": "paragraph",
-        "value": "Instead, break heavy tasks into smaller chunks or use asynchronous methods like `setTimeout` or Promises to yield control back to the event loop:"
-      },
-      {
-        "type": "code",
-        "value": "function nonBlockingTask() {\n  let count = 0;\n  function doChunk() {\n    for (let i = 0; i < 1000; i++) {\n      count++;\n    }\n    console.log('Processed chunk, count:', count);\n    if (count < 100000) {\n      setTimeout(doChunk, 0); // Yield control so UI stays responsive\n    }\n  }\n  doChunk();\n}\n\nnonBlockingTask();"
-      },
-      {
-        "type": "paragraph",
-        "value": "Another common error is misusing Promises or async functions in a way that still blocks the main thread or creates too many microtasks. Always avoid synchronous loops or heavy computations inside `then` or `async` functions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, use browser developer tools to monitor your event loop and check for performance bottlenecks. This practice helps you identify and fix issues before they affect users."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, optimizing the event loop involves avoiding long synchronous code on the main thread, breaking work into smaller asynchronous chunks, and properly using async patterns to maintain a smooth user experience."
-      }
-    ]
-  },
-  {
-    "slug": "comparing-typescript-interfaces-vs-type-aliases",
-    "title": "Comparing TypeScript Interfaces vs. Type Aliases: When and How to Use Each",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn the key differences between TypeScript interfaces and type aliases, and discover when to use each to write clearer, more maintainable code.",
-    "videoUrl": "https://www.youtube.com/watch?v=BTBftM7D9v8",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript offers two popular ways to define custom types: interfaces and type aliases. Both help describe the shape of data and improve code safety. However, they have subtle differences and unique features that can impact your decision to use one or the other. This tutorial will explain these differences clearly with examples, so you know when to use an interface or a type alias in your projects."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is an Interface?"
-      },
-      {
-        "type": "paragraph",
-        "value": "An interface in TypeScript is used to define the shape of an object. You can specify properties and their types, and interfaces support extending other interfaces for reusability."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string; // optional property\n}\n\nconst user1: User = {\n  id: 1,\n  name: \"Alice\"\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "Interfaces are open-ended, meaning you can add more properties to an interface by declaring it multiple times (declaration merging). This is useful for extending types especially when working with third-party libraries."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is a Type Alias?"
-      },
-      {
-        "type": "paragraph",
-        "value": "A type alias lets you create a new name for any type, including primitives, unions, tuples, and object types. Unlike interfaces, type aliases are closed, and you cannot reopen or extend them after declaration."
-      },
-      {
-        "type": "code",
-        "value": "type ID = number | string;\n\ntype User = {\n  id: ID;\n  name: string;\n  email?: string;\n};\n\nconst user2: User = {\n  id: \"abc123\",\n  name: \"Bob\",\n  email: \"bob@example.com\"\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "Type aliases are more flexible for complex types like unions or tuples, which interfaces cannot represent."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Key Differences Between Interfaces and Type Aliases"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Extending:** Interfaces can extend one or more interfaces; type aliases can use intersections (`&`) to combine types.\n- **Declaration Merging:** Interfaces support merging multiple declarations. Type aliases do not.\n- **Complex Types:** Type aliases can represent unions, primitives, tuples, etc., interfaces cannot.\n- **Use with Classes:** Interfaces are often preferred to define contracts for classes."
-      },
-      {
-        "type": "paragraph",
-        "value": "### When to Use Each?"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use **interfaces** when you want to define the shape of an object that may be extended or implemented by classes.\n- Use **type aliases** when dealing with union types, tuples, or more complex type combinations.\n- If you need declaration merging or expect others to extend your types, prefer interfaces.\n- For most object shapes, both work fine, so it can sometimes be a matter of style or team preference."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Examples of Extending"
-      },
-      {
-        "type": "paragraph",
-        "value": "Extending interfaces:"
-      },
-      {
-        "type": "code",
-        "value": "interface Animal {\n  name: string;\n}\n\ninterface Dog extends Animal {\n  breed: string;\n}\n\nconst myDog: Dog = {\n  name: \"Buddy\",\n  breed: \"Golden Retriever\"\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "Extending type aliases using intersection:"
-      },
-      {
-        "type": "code",
-        "value": "type Animal = {\n  name: string;\n};\n\ntype Dog = Animal & {\n  breed: string;\n};\n\nconst myDog: Dog = {\n  name: \"Buddy\",\n  breed: \"Golden Retriever\"\n};"
+        "value": "Closures are useful for many reasons:\n- **Data encapsulation:** Keep variables private and secure.\n- **Function factories:** Create customized functions.\n- **Maintaining state:** Preserve variable values across function calls without global variables."
       },
       {
         "type": "paragraph",
@@ -225,317 +77,513 @@
       },
       {
         "type": "paragraph",
-        "value": "Both interfaces and type aliases are powerful tools for TypeScript type definitions. Interfaces are perfect for object-oriented patterns and extensibility, while type aliases offer flexibility with complex and union types. As you grow more familiar with TypeScript, you’ll find situations where one is more suitable than the other and can choose based on your needs."
+        "value": "Closures are a core concept in JavaScript that help you write more modular, clean, and efficient code. With practice, you’ll find many creative ways to use closures to simplify your programming tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep experimenting with closures, and soon you'll master this powerful concept!"
       }
     ]
   },
   {
-    "slug": "understanding-typescripts-strict-null-checks",
-    "title": "Understanding TypeScript's Strict Null Checks: A Beginner's Guide to Avoiding Runtime Errors",
+    "slug": "mastering-javascript-memory-leaks-advanced-detection-and-prevention-techniques",
+    "title": "Mastering JavaScript Memory Leaks: Advanced Detection and Prevention Techniques",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to detect and prevent JavaScript memory leaks with advanced yet beginner-friendly techniques to keep your apps performant and error-free.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in JavaScript occur when your program keeps holding onto memory it no longer needs, causing your application to use more and more memory over time. This can slow down your app and even crash the browser. Understanding how to detect and prevent these leaks is key for writing efficient, high-performance JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into some advanced but beginner-friendly ways to detect and stop memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Detect Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use Chrome DevTools Memory Tab**: Open DevTools, go to the 'Memory' tab, and take heap snapshots while interacting with your app. If you see objects continuously increasing without release, you might have a leak."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Allocation Timelines**: This helps track memory allocations over time. Use it to identify when memory spikes happen and in which functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Performance Monitoring Tools**: Tools like Lighthouse, or using performance.memory in some browsers, can help detect if memory use grows unusually during normal app use."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Causes of Memory Leaks and How to Prevent Them"
+      },
+      {
+        "type": "paragraph",
+        "value": "**1. Forgotten Event Listeners**"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you add event listeners to DOM elements, always remove them if those elements are removed or no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "// Adding and removing event listeners\nconst button = document.querySelector('button');\nfunction onClick() {\n  console.log('Clicked!');\n}\n\nbutton.addEventListener('click', onClick);\n\n// Later when button is removed or not needed\nbutton.removeEventListener('click', onClick);"
+      },
+      {
+        "type": "paragraph",
+        "value": "**2. Closures Holding Large Objects**"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are powerful but can unintentionally keep variables in memory. Avoid storing large objects inside closures if not necessary."
+      },
+      {
+        "type": "code",
+        "value": "function createCounter() {\n  let count = 0;\n  let largeArray = new Array(1000000).fill('memory');\n  return function() {\n    count++;\n    console.log(count);\n  };\n}\n\nconst counter = createCounter();\n// largeArray stays in memory because of closure"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, only keep necessary variables inside the closure."
+      },
+      {
+        "type": "paragraph",
+        "value": "**3. Detached DOM Nodes**"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you remove an element from the DOM but still keep a reference to it in your JavaScript, it won't be garbage collected."
+      },
+      {
+        "type": "code",
+        "value": "let detachedElement = document.createElement('div');\ndetachedElement.innerText = 'I am detached';\n// Not added to DOM but referenced\n// Memory leak if we keep referencing this after it's needed"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always nullify references if you don’t need the element anymore."
+      },
+      {
+        "type": "code",
+        "value": "detachedElement = null;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices to Prevent Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Remove all event listeners when elements are removed.\n- Avoid unnecessary global variables.\n- Be mindful of closures and what variables they keep.\n- Use weak references like WeakMap or WeakSet for caching if possible.\n- Regularly profile your application’s memory using DevTools."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Using WeakMap for Cache to Avoid Memory Leaks"
+      },
+      {
+        "type": "code",
+        "value": "const cache = new WeakMap();\nfunction getData(obj) {\n  if (!cache.has(obj)) {\n    const data = heavyComputation(obj);\n    cache.set(obj, data);\n  }\n  return cache.get(obj);\n}\n\nfunction heavyComputation(obj) {\n  // Simulate expensive calculation\n  return { computed: true };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Since WeakMap holds weak references, if the `obj` disappears elsewhere, it is removed from cache automatically, avoiding a memory leak."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these detection and prevention techniques, you'll build more reliable and performant JavaScript applications with fewer memory-related issues."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types-for-cleaner-code",
+    "title": "Mastering TypeScript Utility Types for Cleaner Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript utility types like Partial, Readonly, Pick, and Omit to write cleaner, more maintainable code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=eJ6R1knfsoc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful superset of JavaScript that adds static types to the language, making your code easier to understand and maintain. One of its strongest features is utility types — built-in generic types designed to transform and manipulate types quickly. In this article, we'll explore some of the most useful TypeScript utility types to help you write cleaner code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Partial<T>\n\nThe `Partial` utility type creates a new type where all properties of `T` are optional. This is useful when you want to update only some properties of an object without requiring all of them."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nfunction updateUser(id: number, userUpdates: Partial<User>) {\n  // Imagine this updates a user in a database\n  console.log(`Updating user ${id} with`, userUpdates);\n}\n\n// You can update just one field\nupdateUser(1, { email: \"newemail@example.com\" });"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Readonly<T>\n\n`Readonly` makes all properties in a type read-only, preventing modification after initialization. It's helpful for ensuring certain objects aren’t changed accidentally."
+      },
+      {
+        "type": "code",
+        "value": "const user: Readonly<User> = {\n  id: 1,\n  name: \"Alice\",\n  email: \"alice@example.com\"\n};\n\n// user.name = \"Bob\"; // Error: Cannot assign to 'name' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Pick<T, K>\n\n`Pick` lets you create a new type by selecting certain properties `K` from type `T`. This is great for creating smaller, more specific types."
+      },
+      {
+        "type": "code",
+        "value": "type UserPreview = Pick<User, \"id\" | \"name\">;\n\nconst previewUser: UserPreview = {\n  id: 1,\n  name: \"Alice\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Omit<T, K>\n\nWhile `Pick` selects properties, `Omit` removes properties `K` from type `T`. Use it when you want a type similar to another but without certain fields."
+      },
+      {
+        "type": "code",
+        "value": "type UserWithoutEmail = Omit<User, \"email\">;\n\nconst userNoEmail: UserWithoutEmail = {\n  id: 1,\n  name: \"Alice\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Wrapping Up\nUtility types provide a clean way to modify your types on the fly without redefining them. They make your code more flexible and readable, helping you avoid bugs and repetitive type definitions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try incorporating these utility types into your TypeScript projects to write cleaner, more maintainable code. As you get comfortable, explore others such as `Record`, `Required`, and `Exclude`!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-typescript-error-handling-for-scalable-web-applications",
+    "title": "Optimizing TypeScript Error Handling for Scalable Web Applications",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how TypeScript's strict null checks help you avoid runtime errors by ensuring variables aren't unexpectedly null or undefined.",
+    "description": "Learn how to improve error handling in TypeScript to build scalable and maintainable web applications with clear examples and best practices.",
     "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you’re new to TypeScript, you might encounter errors related to null or undefined values that cause bugs during runtime. TypeScript’s strict null checks feature is designed to help you catch these issues early by forcing you to handle null and undefined explicitly in your code."
+        "value": "Error handling is an essential aspect of building scalable web applications. In TypeScript, handling errors properly not only helps you avoid crashes but also improves user experience and maintainability. This article will guide you through beginner-friendly techniques to optimize error handling in TypeScript projects."
       },
       {
         "type": "paragraph",
-        "value": "When strict null checks are enabled, TypeScript won’t allow you to assign null or undefined to a variable unless you explicitly declare it as a union type with null or undefined. This helps prevent unexpected runtime errors like \"Cannot read property '...' of null\"."
+        "value": "### Why Optimize Error Handling?"
       },
       {
         "type": "paragraph",
-        "value": "Here’s an example without strict null checks enabled:"
+        "value": "As your application grows, simple `try/catch` blocks become insufficient. You want a structured approach that categorizes errors, logs them appropriately, and provides meaningful feedback to users or developers. TypeScript’s static typing helps catch many errors early, but runtime errors still need careful handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Define Custom Error Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "Creating custom error classes helps you identify and handle different kinds of errors distinctly. This approach is better than relying on generic `Error` objects."
       },
       {
         "type": "code",
-        "value": "function greet(name: string) {\n  console.log(\"Hello, \" + name.toUpperCase());\n}\n\ngreet(null); // This compiles, but will throw an error at runtime."
+        "value": "class NotFoundError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NotFoundError';\n  }\n}\n\nclass ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In this case, `name` is expected to be a string, but we pass `null`, which compiles but causes a runtime error when trying to use `toUpperCase()` on `null`."
+        "value": "### Step 2: Use Type Guards to Identify Errors"
       },
       {
         "type": "paragraph",
-        "value": "Now, let's enable strict null checks in the `tsconfig.json` file:"
+        "value": "Type guards help you detect specific error types during runtime to apply customized logic."
       },
       {
         "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
+        "value": "function isNotFoundError(error: unknown): error is NotFoundError {\n  return error instanceof NotFoundError;\n}\n\nfunction isValidationError(error: unknown): error is ValidationError {\n  return error instanceof ValidationError;\n}"
       },
       {
         "type": "paragraph",
-        "value": "With strict null checks enabled, TypeScript will show an error if you try to pass `null` to a function that doesn't expect it."
+        "value": "### Step 3: Handle Errors Gracefully"
       },
       {
         "type": "paragraph",
-        "value": "To fix the above error, you can explicitly allow `null` as a valid type and handle it:"
+        "value": "Wrap your code in `try/catch` blocks and handle each error type appropriately. This improves your app's robustness and user communication."
       },
       {
         "type": "code",
-        "value": "function greet(name: string | null) {\n  if (name === null) {\n    console.log(\"Hello, guest!\");\n  } else {\n    console.log(\"Hello, \" + name.toUpperCase());\n  }\n}\n\ngreet(null); // Output: Hello, guest!\ngreet(\"Alice\"); // Output: Hello, ALICE"
+        "value": "async function fetchUser(userId: string) {\n  try {\n    const data = await fetch(`/api/users/${userId}`);\n    if (!data.ok) {\n      throw new NotFoundError('User not found');\n    }\n    return await data.json();\n  } catch (error: unknown) {\n    if (isNotFoundError(error)) {\n      console.error('Not found error:', error.message);\n      // Show user-friendly message\n    } else if (error instanceof Error) {\n      console.error('General error:', error.message);\n    } else {\n      console.error('Unknown error');\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "By explicitly checking for `null`, you protect your code from runtime errors and make it clear how `null` values are handled."
+        "value": "### Step 4: Centralize Error Logging"
       },
       {
         "type": "paragraph",
-        "value": "In summary, enabling `strictNullChecks` improves the safety of your TypeScript code by ensuring you consider `null` and `undefined` values upfront, helping you avoid common runtime errors caused by unexpected null values."
+        "value": "Create a logging function or use external services to track errors in one place. This helps with monitoring and debugging."
+      },
+      {
+        "type": "code",
+        "value": "function logError(error: Error) {\n  // Example: Send error details to a logging server\n  console.log(`[LOG] ${error.name}: ${error.message}`);\n}\n\ntry {\n  // some code\n} catch (error) {\n  if (error instanceof Error) {\n    logError(error);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "To enable this feature, make sure your `tsconfig.json` has the following setting:\n\n\n{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}\n"
+        "value": "### Step 5: Use Result Types for Functional Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of throwing errors, some applications benefit from using \"Result\" types, which make error handling explicit in function returns."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> =\n  | { success: true; data: T }\n  | { success: false; error: Error };\n\nfunction divide(a: number, b: number): Result<number> {\n  if (b === 0) {\n    return { success: false, error: new Error('Division by zero') };\n  }\n  return { success: true, data: a / b };\n}\n\nconst result = divide(10, 0);\nif (!result.success) {\n  console.error('Error:', result.error.message);\n} else {\n  console.log('Result:', result.data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Optimizing error handling in TypeScript improves your web app’s resilience and maintainability. Using custom errors, type guards, centralized logging, and result types provides a scalable and clear error management strategy. Start incorporating these practices to build robust applications that handle errors gracefully!"
       }
     ]
   },
   {
-    "slug": "mastering-asyncio-building-high-performance-python-applications-with-advanced-coroutines",
-    "title": "Mastering Asyncio: Building High-Performance Python Applications with Advanced Coroutines",
+    "slug": "mastering-python-generators-handling-edge-cases-in-data-streams",
+    "title": "Mastering Python Generators: Handling Edge Cases in Data Streams",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to harness Python's asyncio library to write efficient, non-blocking code using advanced coroutines for high-performance applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "description": "Learn how to use Python generators for efficient data streaming and practical tips to handle common edge cases, ensuring robust code.",
+    "videoUrl": "https://www.youtube.com/watch?v=bEYiBrNIJEE",
     "content": [
       {
         "type": "paragraph",
-        "value": "In modern Python development, asynchronous programming is a powerful technique to improve the performance of your applications, especially when dealing with I/O-bound tasks. Python's built-in asyncio library lets you write concurrent code using the async/await syntax. This tutorial will guide beginners through mastering asyncio and using advanced coroutines to build high-performance applications."
+        "value": "Python generators are a powerful tool to handle data streams efficiently. Unlike lists that store all values in memory, generators produce items one at a time, which makes them ideal for working with large data or continuous streams. In this tutorial, we'll explore how to write simple generators and how to handle common edge cases that might occur when processing data streams."
       },
       {
         "type": "paragraph",
-        "value": "### What is Asyncio and Why Use It?\nAsyncio is a library to write concurrent code using an event loop. Unlike threading or multiprocessing, asyncio runs tasks cooperatively, making it lightweight and effective for many tasks like network operations, file I/O, or database queries — where waiting for resources would otherwise block your program."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Basic Coroutine Example\nLet's start by creating a simple coroutine that waits asynchronously without blocking the main thread."
+        "value": "First, let's quickly recap how a basic generator function works. A generator uses the `yield` keyword to produce a sequence of values lazily."
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def say_hello():\n    print('Hello')\n    await asyncio.sleep(1)  # non-blocking wait\n    print('World!')\n\nasyncio.run(say_hello())"
+        "value": "def count_up_to(max_num):\n    count = 1\n    while count <= max_num:\n        yield count\n        count += 1\n\n# Using the generator\nfor number in count_up_to(5):\n    print(number)"
       },
       {
         "type": "paragraph",
-        "value": "Here, `async def` defines a coroutine, and `await` pauses the coroutine without blocking the program, allowing other tasks to run in the meantime."
+        "value": "This generator yields numbers from 1 up to `max_num`. Each iteration generates the next value only when requested, saving memory. But when using generators with real-world data streams, such as reading files or processing network data, several edge cases may arise."
       },
       {
         "type": "paragraph",
-        "value": "### Running Multiple Coroutines Concurrently\nOne major power of asyncio is running many coroutines at the same time. For example, fetching data from multiple URLs asynchronously."
+        "value": "### 1. Handling Empty Data Streams\nSometimes a generator may receive or process an empty data source. It's important your code handles this gracefully without errors."
       },
       {
         "type": "code",
-        "value": "import asyncio\nimport aiohttp\n\nasync def fetch_url(session, url):\n    async with session.get(url) as response:\n        return await response.text()\n\nasync def main():\n    urls = [\n        'https://example.com',\n        'https://python.org',\n        'https://asyncio.org'\n    ]\n    async with aiohttp.ClientSession() as session:\n        tasks = [asyncio.create_task(fetch_url(session, url)) for url in urls]\n        results = await asyncio.gather(*tasks)\n        for content in results:\n            print(f'Retrieved {len(content)} characters')\n\nasyncio.run(main())"
+        "value": "def generate_lines(file_path):\n    try:\n        with open(file_path, 'r') as file:\n            for line in file:\n                yield line.strip()\n    except FileNotFoundError:\n        print(f\"File not found: {file_path}\")\n        return\n\nlines = list(generate_lines('empty_file.txt'))\nif not lines:\n    print('No lines to process.')"
       },
       {
         "type": "paragraph",
-        "value": "Here, `asyncio.gather` runs all fetch tasks concurrently, making it much faster than sequential requests."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Advanced Coroutines with async generators\nAsyncio supports async generators, allowing you to generate values asynchronously. This is helpful when processing data streams or large datasets."
+        "value": "### 2. Catching Exceptions Inside Generators\nGenerators can encounter exceptions while producing values. Wrapping code inside try-except blocks ensures your generator yields as many valid values as possible."
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def countdown(n):\n    while n > 0:\n        await asyncio.sleep(1)\n        yield n\n        n -= 1\n\nasync def main():\n    async for number in countdown(5):\n        print(f'Countdown: {number}')\n\nasyncio.run(main())"
+        "value": "def safe_divide(numbers, divisor):\n    for num in numbers:\n        try:\n            yield num / divisor\n        except ZeroDivisionError:\n            yield float('inf')  # Use infinity as fallback\n\nfor result in safe_divide([10, 20, 30], 0):\n    print(result)"
       },
       {
         "type": "paragraph",
-        "value": "This example demonstrates `async for` loop to consume an async generator that yields values asynchronously."
+        "value": "### 3. Using `send()` to Handle Dynamic Data\nSome advanced generators accept input via `send()` to adjust their behavior on the fly, which can help handle unexpected cases dynamically."
+      },
+      {
+        "type": "code",
+        "value": "def running_average():\n    total = 0\n    count = 0\n    average = None\n    while True:\n        new_value = yield average\n        if new_value is None:\n            break  # Stop generator on None\n        total += new_value\n        count += 1\n        average = total / count\n\naverager = running_average()\nnext(averager)  # Prime the generator\nprint(averager.send(10))  # Output: 10.0\nprint(averager.send(20))  # Output: 15.0\nprint(averager.send(30))  # Output: 20.0\naverager.send(None)  # Stops the generator"
       },
       {
         "type": "paragraph",
-        "value": "### Tips for Writing Efficient Asyncio Code\n- Use `asyncio.create_task()` to schedule coroutines concurrently.\n- Favor asyncio-compatible libraries (e.g., aiohttp) for non-blocking I/O.\n- Avoid blocking calls like `time.sleep()`. Use `await asyncio.sleep()` instead.\n- Use proper exception handling within coroutines to handle errors gracefully.\n- Leverage cancellation and timeouts with `asyncio.wait_for()` to prevent hanging tasks."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nMastering asyncio and advanced coroutines enables you to build highly efficient Python applications, especially for networked and I/O-bound tasks. By writing non-blocking, concurrent code, you can significantly improve your application's speed and responsiveness."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start experimenting with asyncio today and unlock the power of asynchronous programming in Python!"
+        "value": "### Summary\nGenerators are great for managing large or continuous data streams efficiently in Python. Handling edge cases like empty inputs, exceptions during generation, and dynamic input through `send()` will make your code more robust and flexible. Start using these techniques to master Python generators and write cleaner, memory-efficient code."
       }
     ]
   },
   {
-    "slug": "mastering-data-validation-errors-python-pydantic",
-    "title": "Mastering Data Validation Errors in Python Data Models with Pydantic",
+    "slug": "mastering-pythons-exception-hierarchy-for-effective-error-handling",
+    "title": "Mastering Python's Exception Hierarchy for Effective Error Handling",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to handle and understand data validation errors effectively using Pydantic in Python. This beginner-friendly guide covers error catching and interpreting validation issues in your data models.",
-    "videoUrl": "https://www.youtube.com/watch?v=7aBRk_JP-qY",
+    "description": "Learn how Python's exception hierarchy works to handle errors effectively. This beginner-friendly guide covers common exceptions and how to catch them properly.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with data models in Python, ensuring data validity is crucial for building reliable applications. Pydantic is a powerful library that helps validate data by using Python type hints and produces clear error messages when data doesn’t conform to expectations. In this article, we'll explore how to work with Pydantic validation errors in an easy-to-understand way."
+        "value": "Understanding Python's exception hierarchy is essential for writing robust and maintainable code. When your Python program encounters errors, it raises exceptions. Handling these exceptions properly prevents your program from crashing unexpectedly."
       },
       {
         "type": "paragraph",
-        "value": "First, let's start by defining a simple Pydantic model. Imagine we want to define a User model that requires a name as a string and an age as an integer."
+        "value": "At the top of the hierarchy is the base class `BaseException`, which includes almost all exceptions in Python. Most user-defined and built-in exceptions inherit from `Exception`, which means catching `Exception` can handle most errors you encounter. However, you should avoid catching `BaseException` directly, as it also includes system-exiting exceptions like `SystemExit` and `KeyboardInterrupt`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple visualization of part of the hierarchy:"
       },
       {
         "type": "code",
-        "value": "from pydantic import BaseModel\n\nclass User(BaseModel):\n    name: str\n    age: int"
+        "value": "BaseException\n └── Exception\n      ├── ArithmeticError\n      │    ├── ZeroDivisionError\n      │    └── OverflowError\n      ├── LookupError\n      │    ├── IndexError\n      │    └── KeyError\n      └── ValueError\n"
       },
       {
         "type": "paragraph",
-        "value": "Now, let's try to create a User instance with invalid data, such as passing a string for age instead of an integer. Pydantic will raise a ValidationError, which we can catch and inspect."
+        "value": "Let's see how to catch specific exceptions so you can handle different error types appropriately."
       },
       {
         "type": "code",
-        "value": "from pydantic import ValidationError\n\ntry:\n    user = User(name='Alice', age='twenty')  # Invalid age\nexcept ValidationError as e:\n    print(\"Validation error occurred:\")\n    print(e)"
+        "value": "try:\n    number = int(input(\"Enter a number: \"))\n    result = 10 / number\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nexcept ValueError:\n    print(\"That was not a valid number!\")\nelse:\n    print(f\"Result is {result}\")"
       },
       {
         "type": "paragraph",
-        "value": "The output will show detailed information about the error, including the location and nature of the issue."
+        "value": "In this example, `ZeroDivisionError` is caught separately from `ValueError`. This granularity allows you to offer specific feedback based on what went wrong."
       },
       {
         "type": "paragraph",
-        "value": "You can also access the error details programmatically via the `errors()` method, which returns a list of errors describing the field, error type, and message."
+        "value": "If you want to catch any exception that inherits from `Exception`, you can use a general `except Exception` clause. But be cautious; catching all exceptions can hide bugs that you want to be alerted about."
       },
       {
         "type": "code",
-        "value": "try:\n    user = User(name='Alice', age='twenty')\nexcept ValidationError as e:\n    for error in e.errors():\n        print(f\"Field: {error['loc'][0]} - Error: {error['msg']}\")"
+        "value": "try:\n    # some code\n    pass\nexcept Exception as e:\n    print(f\"An error occurred: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "This approach lets you build custom error handling or user-friendly messages in your application. Pydantic makes data validation transparent and manageable even for beginners."
+        "value": "To summarize, mastering the exception hierarchy means knowing which exceptions to catch and when. Use specific exceptions to handle expected errors, use `Exception` cautiously for general cases, and avoid catching `BaseException` unless you have very good reasons."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, here are a few tips when working with Pydantic validation errors:\n- Always use try-except blocks around model instantiation when you expect input might be invalid.\n- Use the `errors()` method to get structured error info.\n- Leverage error details to provide feedback or corrective steps to users."
-      },
-      {
-        "type": "paragraph",
-        "value": "By mastering these basics, you can confidently handle complex data validation scenarios in your Python projects."
+        "value": "By understanding and applying Python's exception hierarchy correctly, you can create programs that not only handle errors gracefully but also remain easy to debug and maintain."
       }
     ]
   },
   {
-    "slug": "optimizing-complex-joins-best-practices-for-high-performance-sql-queries",
-    "title": "Optimizing Complex Joins: Best Practices for High-Performance SQL Queries",
+    "slug": "mastering-window-functions-in-sql-for-advanced-data-analysis",
+    "title": "Mastering Window Functions in SQL for Advanced Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to optimize complex SQL joins with simple best practices for faster, more efficient database queries. Perfect for SQL beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how to use SQL window functions to perform powerful and advanced data analysis with easy-to-understand examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Writing efficient SQL queries is essential when dealing with complex joins, especially as your data grows in size. Slow queries can significantly affect application performance. In this tutorial, we will cover beginner-friendly best practices to optimize your SQL joins for high performance."
+        "value": "Window functions are powerful SQL tools that let you perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions don't group rows into a single output row; instead, they preserve the original rows while adding valuable analytical data."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand what a join is. In SQL, a join combines rows from two or more tables based on related columns. Complex joins often involve multiple tables and various join types (INNER, LEFT, RIGHT, etc.). The goal is to retrieve data quickly without overloading the database."
+        "value": "In this tutorial, we'll cover the basics of window functions and explore some common examples like running totals, ranking, and moving averages, to help you master advanced data analysis using SQL."
       },
       {
         "type": "paragraph",
-        "value": "Here are some best practices to optimize your complex joins:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use Proper Indexing:** Ensure that the columns used in join conditions are indexed. Indexes speed up lookups and matching rows."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Choose the Right Join Type:** Use INNER JOIN when you only need matching records from both tables. LEFT JOIN can be slower if it returns lots of NULLs unnecessarily."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Filter Early with WHERE Clauses:** Apply filters before joining if possible, to reduce the amount of data being processed."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Avoid SELECT *:** Select only the columns you need. Retrieving unnecessary data increases processing time and memory usage."
-      },
-      {
-        "type": "paragraph",
-        "value": "5. **Analyze Query Plans:** Use the database’s EXPLAIN or EXPLAIN ANALYZE feature to understand how your query runs and spot bottlenecks."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at an example that joins three tables: `orders`, `customers`, and `products`. First, an unoptimized query:"
+        "value": "Let's start with the general syntax of a window function: you use it with an OVER() clause that defines the window (the set of rows to perform calculations on)."
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM orders o\nLEFT JOIN customers c ON o.customer_id = c.id\nLEFT JOIN products p ON o.product_id = p.id;"
+        "value": "SELECT column1, \n       window_function() OVER (PARTITION BY column2 ORDER BY column3) AS result\nFROM table_name;"
       },
       {
         "type": "paragraph",
-        "value": "This query uses `SELECT *` and LEFT JOINs without filtering, which may retrieve unnecessary data. Now, let's optimize it:"
+        "value": "Here, PARTITION BY divides the rows into groups (like a GROUP BY but without aggregation), and ORDER BY specifies the order in which to process rows within each partition."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Calculate Running Total\nSuppose you have a sales table with columns: sale_date, salesperson_id, and sale_amount. You want to calculate a cumulative sum of sales per salesperson ordered by date."
       },
       {
         "type": "code",
-        "value": "SELECT o.order_id, c.customer_name, p.product_name, o.order_date\nFROM orders o\nINNER JOIN customers c ON o.customer_id = c.id\nINNER JOIN products p ON o.product_id = p.id\nWHERE o.order_date >= '2023-01-01';"
+        "value": "SELECT \n  salesperson_id,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY salesperson_id, sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "Optimization improvements include selecting specific columns, using INNER JOINs assuming we only want completed orders with valid customers and products, and filtering orders by date to reduce the dataset."
+        "value": "This query computes a running total of sales for each salesperson, ordered by date. The SUM() window function aggregates sale_amounts up to the current row."
       },
       {
         "type": "paragraph",
-        "value": "Finally, remember to analyze and add indexes on `orders.customer_id`, `orders.product_id`, and `orders.order_date` columns to speed up joins and filters."
+        "value": "### Example 2: Ranking Rows\nWindow functions also let you assign ranks to rows within partitions. For instance, to rank employees within each department by their salary:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  employee_id,\n  department_id,\n  salary,\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "By following these simple best practices, you can enhance the performance of your complex SQL joins and ensure your applications run smoothly even with growing datasets."
+        "value": "RANK() assigns ranking numbers starting at 1 within each department, sorting employees from highest to lowest salary."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Moving Average\nTo smooth trends in data, moving averages are helpful. Here's how to calculate a 3-day moving average of sales for each salesperson:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson_id,\n  sale_date,\n  sale_amount,\n  AVG(sale_amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg_3_days\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The ROWS BETWEEN clause defines a window frame of the current row and two preceding rows, helping compute the average over these rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nWindow functions provide great flexibility for advanced data analysis tasks by enabling calculations across related rows without collapsing row structure. Start experimenting with SUM(), RANK(), AVG(), and ROW_NUMBER() window functions to unlock meaningful insights from your data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Practice these examples with your dataset and deepen your understanding by exploring other window functions and framing options supported by your SQL database."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-query-performance-with-indexing-best-practices",
-    "title": "Optimizing SQL Query Performance with Indexing Best Practices",
+    "slug": "optimizing-sql-queries-to-prevent-performance-bottlenecks-and-error-cascades",
+    "title": "Optimizing SQL Queries to Prevent Performance Bottlenecks and Error Cascades",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to improve your SQL query speed by using indexing best practices. This beginner-friendly guide explains common errors and how to avoid them.",
-    "videoUrl": "https://www.youtube.com/watch?v=BIlFTFrEFOI",
+    "description": "Learn how to optimize SQL queries to avoid slow performance and cascading errors with simple, beginner-friendly tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=B3WCP98RBlo",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL indexes help databases find data quickly, much like an index in a book. However, beginners often make mistakes when creating or using indexes, which can hurt performance instead of improving it."
+        "value": "SQL queries are the backbone of many applications, but poorly written queries can lead to performance bottlenecks and error cascades that affect your entire system. Optimizing SQL queries not only improves speed but also helps prevent errors that may compound and become difficult to troubleshoot. In this article, we’ll cover some essential tips for writing efficient, error-resistant SQL queries."
       },
       {
         "type": "paragraph",
-        "value": "A common error is creating too many indexes. While indexes speed up SELECT queries, they slow down INSERT, UPDATE, and DELETE operations because the database must update each index. Always balance your need for quick reads with write performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another mistake is indexing columns that are rarely used in WHERE clauses or JOIN conditions. Indexes only improve query speed when they are used to filter or join data. Avoid indexing columns that don't participate in filtering or sorting."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let’s see how to create a simple index on a column frequently used in queries:"
+        "value": "One of the first things to check is indexing. Indexes speed up data retrieval by allowing the database to find rows faster without scanning the entire table. For example, if you frequently query a column like user_id, adding an index on that column can improve performance significantly."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_customer_lastname ON customers(last_name);"
+        "value": "CREATE INDEX idx_user_id ON orders(user_id);"
       },
       {
         "type": "paragraph",
-        "value": "This index helps when you search customers by their last name, like this:"
+        "value": "Using SELECT * is common in beginner queries but can cause unnecessary data loading and slow performance. Always select only the columns you need."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM customers WHERE last_name = 'Smith';"
+        "value": "SELECT order_id, order_date, total_amount FROM orders WHERE user_id = 101;"
       },
       {
         "type": "paragraph",
-        "value": "Avoid indexing columns with high cardinality but low selectivity, like boolean flags or columns with many repeated values. Indexes on such columns often do not speed up queries."
-      },
-      {
-        "type": "paragraph",
-        "value": "Composite indexes are useful when your queries filter by multiple columns. The order of columns in the index matters. For example, to speed up queries filtering by last name and first name, create an index like this:"
+        "value": "Avoid nested subqueries when possible. Instead, try to use JOINs which are often faster and easier to optimize."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_customer_name ON customers(last_name, first_name);"
+        "value": "SELECT u.user_id, u.name, o.total_amount FROM users u JOIN orders o ON u.user_id = o.user_id WHERE o.total_amount > 100;"
       },
       {
         "type": "paragraph",
-        "value": "Remember to use your database's EXPLAIN or EXPLAIN PLAN command to see if your index is being used by SQL queries. This helps you identify missing or unused indexes."
+        "value": "Be cautious with NULL values. Queries that do not handle NULLs properly can cause unexpected errors or skip rows unintentionally. Use IS NULL or IS NOT NULL explicitly."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE last_login IS NOT NULL;"
       },
       {
         "type": "paragraph",
-        "value": "In summary, to optimize SQL query performance with indexes: create indexes on columns frequently used in WHERE, JOIN, and ORDER BY clauses; avoid indexing columns with little filtering benefit; limit the number of indexes to maintain good write speed; and analyze query execution plans regularly."
+        "value": "Set a reasonable limit on your queries to prevent large, slow data retrievals that overload your server and cause cascading failures."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM products WHERE category = 'Books' LIMIT 50;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always test your queries with EXPLAIN (or similar tools) to understand how the database plans to execute them. This helps identify slow operations and potential bottlenecks."
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT order_id FROM orders WHERE user_id = 101;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these simple tips—indexing key columns, selecting only necessary fields, avoiding complex subqueries, handling NULLs carefully, limiting result sets, and understanding query execution plans—you can optimize your SQL queries to run efficiently and reduce error cascades. This leads to a smoother, more reliable application experience."
       }
     ]
   }

@@ -27839,5 +27839,355 @@ export const articles = [
         "value": "In summary, to optimize SQL query performance with indexes: create indexes on columns frequently used in WHERE, JOIN, and ORDER BY clauses; avoid indexing columns with little filtering benefit; limit the number of indexes to maintain good write speed; and analyze query execution plans regularly."
       }
     ]
+  },
+  {
+    "slug": "mastering-closures-in-javascript-a-beginners-guide",
+    "title": "Mastering Closures in JavaScript: A Beginner's Guide with Practical Examples",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn what closures are in JavaScript, why they are useful, and how to use them effectively with simple, practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to JavaScript or programming in general, you might have heard the term \"closure\" and wondered what it means. In simple terms, a closure is a powerful feature in JavaScript that allows a function to remember and access variables from an outer function even after that outer function has finished executing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures can be a bit confusing at first, but once you understand them, they become incredibly useful. They allow for data privacy, function factories, and help you manage and organize your code better. Let’s break down closures with simple examples that anyone can follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Closure?"
+      },
+      {
+        "type": "paragraph",
+        "value": "When a function is defined inside another function, the inner function has access to the outer function's variables. This inner function, along with its scope of variables from the outer function, is called a closure."
+      },
+      {
+        "type": "code",
+        "value": "function outer() {\n  let name = 'Alice';\n  function inner() {\n    console.log('Hello, ' + name);\n  }\n  return inner;\n}\n\nconst greet = outer();\ngreet(); // Output: Hello, Alice"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the inner function `inner` remembers the variable `name` even after the `outer` function has run. When we call `greet()`, it still has access to `name` — this is a closure in action."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example 1: Creating a Counter"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using closures, you can create a counter that keeps track of its state even between function calls."
+      },
+      {
+        "type": "code",
+        "value": "function createCounter() {\n  let count = 0;\n  return function() {\n    count += 1;\n    return count;\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `count` is a private variable that the returned function can access and update. The outer function `createCounter` runs once, and the inner function that updates and returns `count` continues to remember that state."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example 2: Data Privacy"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures let you hide data from the outside world, exposing only methods to interact with it."
+      },
+      {
+        "type": "code",
+        "value": "function secretHolder(secret) {\n  return {\n    getSecret: function() {\n      return secret;\n    },\n    setSecret: function(newSecret) {\n      secret = newSecret;\n    }\n  };\n}\n\nconst mySecret = secretHolder('I love JavaScript!');\nconsole.log(mySecret.getSecret()); // I love JavaScript!\nmySecret.setSecret('Closures are awesome!');\nconsole.log(mySecret.getSecret()); // Closures are awesome!"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the variable `secret` cannot be accessed directly, but you can interact with it through the returned methods. This gives you control over how the data is accessed or modified."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Closures?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are useful for many reasons:\n- **Data encapsulation:** Keep variables private and secure.\n- **Function factories:** Create customized functions.\n- **Maintaining state:** Preserve variable values across function calls without global variables."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are a core concept in JavaScript that help you write more modular, clean, and efficient code. With practice, you’ll find many creative ways to use closures to simplify your programming tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep experimenting with closures, and soon you'll master this powerful concept!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-typescript-error-handling-for-scalable-web-applications",
+    "title": "Optimizing TypeScript Error Handling for Scalable Web Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to improve error handling in TypeScript to build scalable and maintainable web applications with clear examples and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is an essential aspect of building scalable web applications. In TypeScript, handling errors properly not only helps you avoid crashes but also improves user experience and maintainability. This article will guide you through beginner-friendly techniques to optimize error handling in TypeScript projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Optimize Error Handling?"
+      },
+      {
+        "type": "paragraph",
+        "value": "As your application grows, simple `try/catch` blocks become insufficient. You want a structured approach that categorizes errors, logs them appropriately, and provides meaningful feedback to users or developers. TypeScript’s static typing helps catch many errors early, but runtime errors still need careful handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Define Custom Error Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "Creating custom error classes helps you identify and handle different kinds of errors distinctly. This approach is better than relying on generic `Error` objects."
+      },
+      {
+        "type": "code",
+        "value": "class NotFoundError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NotFoundError';\n  }\n}\n\nclass ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Use Type Guards to Identify Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards help you detect specific error types during runtime to apply customized logic."
+      },
+      {
+        "type": "code",
+        "value": "function isNotFoundError(error: unknown): error is NotFoundError {\n  return error instanceof NotFoundError;\n}\n\nfunction isValidationError(error: unknown): error is ValidationError {\n  return error instanceof ValidationError;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Handle Errors Gracefully"
+      },
+      {
+        "type": "paragraph",
+        "value": "Wrap your code in `try/catch` blocks and handle each error type appropriately. This improves your app's robustness and user communication."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUser(userId: string) {\n  try {\n    const data = await fetch(`/api/users/${userId}`);\n    if (!data.ok) {\n      throw new NotFoundError('User not found');\n    }\n    return await data.json();\n  } catch (error: unknown) {\n    if (isNotFoundError(error)) {\n      console.error('Not found error:', error.message);\n      // Show user-friendly message\n    } else if (error instanceof Error) {\n      console.error('General error:', error.message);\n    } else {\n      console.error('Unknown error');\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Centralize Error Logging"
+      },
+      {
+        "type": "paragraph",
+        "value": "Create a logging function or use external services to track errors in one place. This helps with monitoring and debugging."
+      },
+      {
+        "type": "code",
+        "value": "function logError(error: Error) {\n  // Example: Send error details to a logging server\n  console.log(`[LOG] ${error.name}: ${error.message}`);\n}\n\ntry {\n  // some code\n} catch (error) {\n  if (error instanceof Error) {\n    logError(error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Use Result Types for Functional Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of throwing errors, some applications benefit from using \"Result\" types, which make error handling explicit in function returns."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> =\n  | { success: true; data: T }\n  | { success: false; error: Error };\n\nfunction divide(a: number, b: number): Result<number> {\n  if (b === 0) {\n    return { success: false, error: new Error('Division by zero') };\n  }\n  return { success: true, data: a / b };\n}\n\nconst result = divide(10, 0);\nif (!result.success) {\n  console.error('Error:', result.error.message);\n} else {\n  console.log('Result:', result.data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Optimizing error handling in TypeScript improves your web app’s resilience and maintainability. Using custom errors, type guards, centralized logging, and result types provides a scalable and clear error management strategy. Start incorporating these practices to build robust applications that handle errors gracefully!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-generators-handling-edge-cases-in-data-streams",
+    "title": "Mastering Python Generators: Handling Edge Cases in Data Streams",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python generators for efficient data streaming and practical tips to handle common edge cases, ensuring robust code.",
+    "videoUrl": "https://www.youtube.com/watch?v=bEYiBrNIJEE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python generators are a powerful tool to handle data streams efficiently. Unlike lists that store all values in memory, generators produce items one at a time, which makes them ideal for working with large data or continuous streams. In this tutorial, we'll explore how to write simple generators and how to handle common edge cases that might occur when processing data streams."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's quickly recap how a basic generator function works. A generator uses the `yield` keyword to produce a sequence of values lazily."
+      },
+      {
+        "type": "code",
+        "value": "def count_up_to(max_num):\n    count = 1\n    while count <= max_num:\n        yield count\n        count += 1\n\n# Using the generator\nfor number in count_up_to(5):\n    print(number)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This generator yields numbers from 1 up to `max_num`. Each iteration generates the next value only when requested, saving memory. But when using generators with real-world data streams, such as reading files or processing network data, several edge cases may arise."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Handling Empty Data Streams\nSometimes a generator may receive or process an empty data source. It's important your code handles this gracefully without errors."
+      },
+      {
+        "type": "code",
+        "value": "def generate_lines(file_path):\n    try:\n        with open(file_path, 'r') as file:\n            for line in file:\n                yield line.strip()\n    except FileNotFoundError:\n        print(f\"File not found: {file_path}\")\n        return\n\nlines = list(generate_lines('empty_file.txt'))\nif not lines:\n    print('No lines to process.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Catching Exceptions Inside Generators\nGenerators can encounter exceptions while producing values. Wrapping code inside try-except blocks ensures your generator yields as many valid values as possible."
+      },
+      {
+        "type": "code",
+        "value": "def safe_divide(numbers, divisor):\n    for num in numbers:\n        try:\n            yield num / divisor\n        except ZeroDivisionError:\n            yield float('inf')  # Use infinity as fallback\n\nfor result in safe_divide([10, 20, 30], 0):\n    print(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Using `send()` to Handle Dynamic Data\nSome advanced generators accept input via `send()` to adjust their behavior on the fly, which can help handle unexpected cases dynamically."
+      },
+      {
+        "type": "code",
+        "value": "def running_average():\n    total = 0\n    count = 0\n    average = None\n    while True:\n        new_value = yield average\n        if new_value is None:\n            break  # Stop generator on None\n        total += new_value\n        count += 1\n        average = total / count\n\naverager = running_average()\nnext(averager)  # Prime the generator\nprint(averager.send(10))  # Output: 10.0\nprint(averager.send(20))  # Output: 15.0\nprint(averager.send(30))  # Output: 20.0\naverager.send(None)  # Stops the generator"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nGenerators are great for managing large or continuous data streams efficiently in Python. Handling edge cases like empty inputs, exceptions during generation, and dynamic input through `send()` will make your code more robust and flexible. Start using these techniques to master Python generators and write cleaner, memory-efficient code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-exception-hierarchy-for-effective-error-handling",
+    "title": "Mastering Python's Exception Hierarchy for Effective Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how Python's exception hierarchy works to handle errors effectively. This beginner-friendly guide covers common exceptions and how to catch them properly.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Understanding Python's exception hierarchy is essential for writing robust and maintainable code. When your Python program encounters errors, it raises exceptions. Handling these exceptions properly prevents your program from crashing unexpectedly."
+      },
+      {
+        "type": "paragraph",
+        "value": "At the top of the hierarchy is the base class `BaseException`, which includes almost all exceptions in Python. Most user-defined and built-in exceptions inherit from `Exception`, which means catching `Exception` can handle most errors you encounter. However, you should avoid catching `BaseException` directly, as it also includes system-exiting exceptions like `SystemExit` and `KeyboardInterrupt`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple visualization of part of the hierarchy:"
+      },
+      {
+        "type": "code",
+        "value": "BaseException\n └── Exception\n      ├── ArithmeticError\n      │    ├── ZeroDivisionError\n      │    └── OverflowError\n      ├── LookupError\n      │    ├── IndexError\n      │    └── KeyError\n      └── ValueError\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how to catch specific exceptions so you can handle different error types appropriately."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input(\"Enter a number: \"))\n    result = 10 / number\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nexcept ValueError:\n    print(\"That was not a valid number!\")\nelse:\n    print(f\"Result is {result}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `ZeroDivisionError` is caught separately from `ValueError`. This granularity allows you to offer specific feedback based on what went wrong."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to catch any exception that inherits from `Exception`, you can use a general `except Exception` clause. But be cautious; catching all exceptions can hide bugs that you want to be alerted about."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # some code\n    pass\nexcept Exception as e:\n    print(f\"An error occurred: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering the exception hierarchy means knowing which exceptions to catch and when. Use specific exceptions to handle expected errors, use `Exception` cautiously for general cases, and avoid catching `BaseException` unless you have very good reasons."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding and applying Python's exception hierarchy correctly, you can create programs that not only handle errors gracefully but also remain easy to debug and maintain."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-to-prevent-performance-bottlenecks-and-error-cascades",
+    "title": "Optimizing SQL Queries to Prevent Performance Bottlenecks and Error Cascades",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize SQL queries to avoid slow performance and cascading errors with simple, beginner-friendly tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=B3WCP98RBlo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL queries are the backbone of many applications, but poorly written queries can lead to performance bottlenecks and error cascades that affect your entire system. Optimizing SQL queries not only improves speed but also helps prevent errors that may compound and become difficult to troubleshoot. In this article, we’ll cover some essential tips for writing efficient, error-resistant SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the first things to check is indexing. Indexes speed up data retrieval by allowing the database to find rows faster without scanning the entire table. For example, if you frequently query a column like user_id, adding an index on that column can improve performance significantly."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_user_id ON orders(user_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using SELECT * is common in beginner queries but can cause unnecessary data loading and slow performance. Always select only the columns you need."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date, total_amount FROM orders WHERE user_id = 101;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid nested subqueries when possible. Instead, try to use JOINs which are often faster and easier to optimize."
+      },
+      {
+        "type": "code",
+        "value": "SELECT u.user_id, u.name, o.total_amount FROM users u JOIN orders o ON u.user_id = o.user_id WHERE o.total_amount > 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Be cautious with NULL values. Queries that do not handle NULLs properly can cause unexpected errors or skip rows unintentionally. Use IS NULL or IS NOT NULL explicitly."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE last_login IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Set a reasonable limit on your queries to prevent large, slow data retrievals that overload your server and cause cascading failures."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM products WHERE category = 'Books' LIMIT 50;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always test your queries with EXPLAIN (or similar tools) to understand how the database plans to execute them. This helps identify slow operations and potential bottlenecks."
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT order_id FROM orders WHERE user_id = 101;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these simple tips—indexing key columns, selecting only necessary fields, avoiding complex subqueries, handling NULLs carefully, limiting result sets, and understanding query execution plans—you can optimize your SQL queries to run efficiently and reduce error cascades. This leads to a smoother, more reliable application experience."
+      }
+    ]
   }
 ];
