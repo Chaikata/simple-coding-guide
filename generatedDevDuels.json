@@ -1,170 +1,171 @@
 [
   {
-    "slug": "fix-the-bug-in-a-simple-temperature-converter",
-    "title": "Fix the Bug in a Simple Temperature Converter",
-    "language": "cpp",
+    "slug": "predict-the-output-of-a-simple-sql-select-with-where-clause",
+    "title": "Predict the Output of a Simple SQL SELECT with WHERE Clause",
+    "language": "sql",
     "difficulty": "beginner",
-    "category": "debugging",
-    "description": "Debug a basic C++ function that is supposed to convert temperatures from Celsius to Fahrenheit but currently produces incorrect results.",
-    "prompt": "You are given a function meant to convert temperature values from Celsius to Fahrenheit using the formula F = (C * 9/5) + 32. However, the current implementation returns incorrect values. Identify and fix the bug so the function returns the correct Fahrenheit temperature for any Celsius input.",
+    "category": "query-analysis",
+    "description": "Analyze a basic SQL query that filters data using a WHERE clause and predict what the output will be based on the given data.",
+    "prompt": "Given the following table 'Employees' and SQL query, what will be the result of the query? Describe which rows are returned and why.\n\nTable: Employees\n| id | name    | department | salary |\n|----|---------|------------|--------|\n| 1  | Alice   | Sales      | 50000  |\n| 2  | Bob     | Marketing  | 60000  |\n| 3  | Charlie | Sales      | 70000  |\n| 4  | David   | HR         | 45000  |\n\nQuery:\nSELECT name, salary FROM Employees WHERE department = 'Sales' AND salary > 55000;",
     "guidance": [
-      "Review the arithmetic operations and their order in the formula.",
-      "Watch out for integer division pitfalls in C++.",
-      "Test the function with common values like 0°C (should return 32°F) and 100°C (should return 212°F)."
+      "Look carefully at which conditions the query filters on in the WHERE clause.",
+      "Identify each row in the table that meets both conditions: department must be 'Sales' and salary must be greater than 55000."
     ],
     "hints": [
-      "Check if the division 9/5 is computed as integer division which may cause truncation.",
-      "Make sure multiplication and addition are done in the right order without losing precision."
+      "Remember that both conditions in the WHERE clause must be true for a row to be included.",
+      "Check each employee's department and salary one by one against the filter."
     ],
-    "starterCode": "double celsiusToFahrenheit(int celsius) {\n    return celsius * 9 / 5 + 32;\n}",
-    "expectedOutput": "celsiusToFahrenheit(0) should return 32\ncelsiusToFahrenheit(100) should return 212",
+    "starterCode": "SELECT name, salary FROM Employees WHERE department = 'Sales' AND salary > 55000;",
+    "expectedOutput": "| name    | salary |\n|---------|--------|\n| Charlie | 70000  |",
     "concepts": [
-      "arithmetic operations",
-      "operator precedence",
-      "data types and integer division"
+      "SELECT statement",
+      "WHERE clause filtering"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-complex-sql-query-for-improved-performance-and-readability",
-    "title": "Refactor Complex SQL Query for Improved Performance and Readability",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "optimization",
-    "description": "You are given a large and complex SQL query that fetches sales summary data with multiple subqueries and redundant joins. Refactor the query to improve its readability and optimize performance while ensuring the output remains exactly the same.",
-    "prompt": "Given the following SQL query, refactor it to improve clarity and reduce execution time without altering the results. Focus on eliminating unnecessary subqueries, optimizing joins, and leveraging window functions or CTEs if appropriate. The query aggregates sales data by product category and month, combining information from orders, products, and customers tables.",
-    "guidance": [
-      "Identify and remove redundant subqueries and joins that can be combined or simplified.",
-      "Consider using Common Table Expressions (CTEs) to break down complex parts for better readability.",
-      "Use window functions to replace subqueries where possible for efficiency."
-    ],
-    "hints": [
-      "Check if some joins or filters can be pushed earlier to limit data processed.",
-      "Look for repeated aggregations that can be calculated once and reused.",
-      "Review the use of GROUP BY and see if aggregations can be combined."
-    ],
-    "starterCode": "SELECT\n  c.category_name,\n  DATE_TRUNC('month', o.order_date) AS order_month,\n  (SELECT COUNT(*) FROM orders WHERE product_id = p.product_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', o.order_date)) AS total_orders,\n  (SELECT SUM(quantity) FROM order_items oi WHERE oi.product_id = p.product_id AND oi.order_id IN (SELECT order_id FROM orders WHERE DATE_TRUNC('month', order_date) = DATE_TRUNC('month', o.order_date))) AS total_quantity,\n  (SELECT SUM(oi.price * oi.quantity) FROM order_items oi WHERE oi.product_id = p.product_id AND oi.order_id IN (SELECT order_id FROM orders WHERE DATE_TRUNC('month', order_date) = DATE_TRUNC('month', o.order_date))) AS total_revenue\nFROM orders o\nJOIN products p ON o.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, order_month\nORDER BY c.category_name, order_month;",
-    "expectedOutput": "Table with columns: category_name, order_month (first day of month), total_orders, total_quantity, total_revenue showing aggregated sales data per category per month, sorted by category_name and order_month.",
-    "concepts": [
-      "SQL query optimization",
-      "Common Table Expressions (CTEs)",
-      "Window functions",
-      "Query refactoring"
-    ],
-    "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "create-a-sql-function-to-calculate-moving-average-sales-over-dynamic-time-windows",
-    "title": "Create a SQL Function to Calculate Moving Average Sales Over Dynamic Time Windows",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "queries",
-    "description": "Build a SQL function that calculates the moving average of daily sales for a specified product over a dynamic number of previous days. The function should handle gaps in dates and provide efficient performance for large sales datasets.",
-    "prompt": "Write a SQL function named `moving_average_sales` that takes three parameters: a product ID, a date, and a window size N (integer). The function returns the average of the sales quantity for that product over the N days ending on the given date (inclusive). Assume the existence of a `sales` table with columns: `product_id` (int), `sale_date` (date), and `quantity` (int). Your function should handle cases where some dates in the window have no sales records by treating missing days as zero sales. Optimize the function for large datasets.",
-    "guidance": [
-      "Use window functions or aggregation with date range filtering to calculate sums over the specified date window.",
-      "Handle missing dates by generating all dates within the window for the product and joining with the sales data.",
-      "Ensure the function is optimized with indexes on `product_id` and `sale_date`."
-    ],
-    "hints": [
-      "Consider using a calendar table or generate_series function (if available) to fill in missing dates within the window.",
-      "Filtering the sales data before aggregation improves query performance.",
-      "Use COALESCE to treat NULL sales quantities as zero when calculating the average."
-    ],
-    "starterCode": "CREATE OR REPLACE FUNCTION moving_average_sales(p_product_id INT, p_date DATE, p_window INT) RETURNS NUMERIC AS $$\nBEGIN\n  -- Your implementation here\n  RETURN 0;\nEND;\n$$ LANGUAGE plpgsql;",
-    "expectedOutput": "For example, moving_average_sales(101, '2024-06-30', 7) returns the average sales quantity for product 101 from 2024-06-24 to 2024-06-30 inclusive.",
-    "concepts": [
-      "window functions",
-      "date range queries",
-      "aggregation",
-      "SQL functions"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "build-a-expense-tracker-with-category-summaries",
-    "title": "Build a Expense Tracker with Category Summaries",
+    "slug": "predict-the-output-of-a-nested-list-and-dictionary-manipulation",
+    "title": "Predict the Output of a Nested List and Dictionary Manipulation",
     "language": "python",
     "difficulty": "intermediate",
-    "category": "mini-projects",
-    "description": "Create a Python function that manages a list of expenses and produces a summary by category, enabling users to track their spending habits effectively.",
-    "prompt": "Write a function `expense_summary` that takes a list of expenses, where each expense is represented as a dictionary with keys `amount` (a float) and `category` (a string). Your function should return a dictionary that summarizes the total spending per category. Additionally, include a key 'total' in the output dictionary representing the total amount spent across all categories.\n\nFor example, given the input:\n\n[{'amount': 15.50, 'category': 'food'}, {'amount': 20.00, 'category': 'transport'}, {'amount': 5.00, 'category': 'food'}]\n\nyour function should return:\n\n{'food': 20.50, 'transport': 20.00, 'total': 40.50}\n\nMake sure your code is efficient and handles the case when the input list is empty.",
+    "category": "logic",
+    "description": "Analyze the given Python code that manipulates nested lists and dictionaries, and predict its exact printed output.",
+    "prompt": "Examine the provided Python code snippet carefully. The code defines nested lists and dictionaries, modifies some values, and prints results after these changes. Your task is to determine exactly what the output will be when this code runs.",
     "guidance": [
-      "Loop through each expense to aggregate amounts by category using a dictionary.",
-      "Keep a running total of all expenses to include in the result under the 'total' key.",
-      "Consider edge cases like empty input lists and ensure your function returns an empty summary with a total of 0."
+      "Follow the flow of the code step-by-step, focusing on how lists and dictionaries are modified.",
+      "Keep track of variable references, especially how changes to one object affect others that reference the same object."
     ],
     "hints": [
-      "Use the dict.get() method to simplify adding amounts to categories in the summary.",
-      "Initialize the total spending variable outside the loop and update it for each expense.",
-      "To handle empty input, the default output should be {'total': 0} with no category keys."
+      "Remember that lists and dictionaries are mutable objects and assignments can create references, not copies.",
+      "Look closely at the order of operations—the modifications after initializations affect later prints."
     ],
-    "starterCode": "def expense_summary(expenses):\n    # Implement your solution here\n    pass",
-    "expectedOutput": "{'food': 20.50, 'transport': 20.00, 'total': 40.50}",
+    "starterCode": "data = [{'a': [1, 2, 3]}, {'b': [4, 5]}]\nref = data[0]['a']\nref.append(4)\ndata[1]['b'] = ref\nprint(data)\nprint(ref)",
+    "expectedOutput": "[{'a': [1, 2, 3, 4]}, {'b': [1, 2, 3, 4]}]\n[1, 2, 3, 4]",
     "concepts": [
-      "dictionaries",
-      "list iteration",
-      "aggregation",
-      "handling edge cases"
+      "mutable objects",
+      "list and dictionary references",
+      "object mutation"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-the-aggregation-bug-in-employee-salary-report-query",
-    "title": "Fix the Aggregation Bug in Employee Salary Report Query",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "debugging",
-    "description": "An SQL query intended to generate a report summarizing total salaries by department and job title has incorrect aggregation logic causing wrong results. Your task is to identify and fix the bugs in the query to produce accurate aggregation.",
-    "prompt": "Given the following broken SQL query that aims to calculate total salaries grouped by department and job title from the Employees table, identify the bug(s) and correct the query so it produces the correct aggregated sums for each department and job title combination.",
-    "guidance": [
-      "Check for missing or incorrect GROUP BY clauses that affect aggregation behavior.",
-      "Review JOIN conditions and SELECT columns to ensure consistent grouping.",
-      "Validate that aggregate functions like SUM() include only relevant columns."
-    ],
-    "hints": [
-      "Look for columns in the SELECT clause that are neither aggregated nor included in GROUP BY.",
-      "Check if any JOINs cause row multiplication affecting totals.",
-      "Consider using GROUP BY on all non-aggregated columns to fix issues."
-    ],
-    "starterCode": "SELECT d.department_name, e.job_title, SUM(e.salary) total_salary\nFROM Employees e\nJOIN Departments d ON e.department_id = d.id\nWHERE e.hire_date > '2020-01-01'\nORDER BY d.department_name, e.job_title;",
-    "expectedOutput": "A result table with columns: department_name, job_title, total_salary, where total_salary is the sum of salary for each department-job_title group accurately aggregated.",
-    "concepts": [
-      "SQL aggregation",
-      "GROUP BY clause",
-      "JOIN operations",
-      "Aggregate functions"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "build-a-function-to-flatten-a-nested-list-of-integers",
-    "title": "Build a Function to Flatten a Nested List of Integers",
-    "language": "python",
+    "slug": "build-a-function-to-group-objects-by-a-key",
+    "title": "Build a Function to Group Objects by a Key",
+    "language": "javascript",
     "difficulty": "intermediate",
     "category": "functions",
-    "description": "Create a Python function that takes a nested list of integers and returns a flat list containing all the integers in their original order.",
-    "prompt": "Write a function named flatten_list that accepts a single parameter: a list which can contain integers or other lists (which themselves may contain integers or other lists, and so on). Your function should return a new flat list containing all the integers from the nested structure in the same left-to-right order.",
+    "description": "Create a JavaScript function that groups an array of objects by a specified key, returning an object where each key maps to an array of items sharing that key's value.",
+    "prompt": "Write a function named 'groupBy' that takes two parameters: an array of objects, and a string that represents the key to group by. The function should return an object where each property is a unique value from the specified key in the objects, and the corresponding value is an array of all objects that have that key value.\n\nExample:\ngroupBy([{age: 23, name: 'Alice'}, {age: 23, name: 'Bob'}, {age: 30, name: 'Charlie'}], 'age')\nshould return:\n{\n  23: [{age: 23, name: 'Alice'}, {age: 23, name: 'Bob'}],\n  30: [{age: 30, name: 'Charlie'}]\n}\n\nMake sure your function works for any key and array size.",
     "guidance": [
-      "Use recursion to handle arbitrarily nested lists.",
-      "Check the type of each element to decide if it’s an integer or a sublist."
+      "Iterate through each object in the input array.",
+      "Check if the grouping key's value already exists in the result object.",
+      "If it does, push the current object into the appropriate array; otherwise, create a new array with the current object."
     ],
     "hints": [
-      "Use isinstance(element, list) to check if an element is a list.",
-      "If an element is an integer, append it to the result list; if it's a list, recursively call flatten_list on it."
+      "Use the array 'reduce' method to accumulate grouped results efficiently.",
+      "Remember that object properties can be accessed dynamically using bracket notation.",
+      "Check if the key exists by using 'hasOwnProperty' or a simple truthy check."
     ],
-    "starterCode": "def flatten_list(nested_list):\n    # Your code here\n    pass",
-    "expectedOutput": "flatten_list([1, [2, [3, 4], 5], 6])  # returns [1, 2, 3, 4, 5, 6]",
+    "starterCode": "function groupBy(array, key) {\n  const result = {};\n  // Your code here\n  return result;\n}",
+    "expectedOutput": "{\n  23: [ { age: 23, name: 'Alice' }, { age: 23, name: 'Bob' } ],\n  30: [ { age: 30, name: 'Charlie' } ]\n}",
+    "concepts": [
+      "arrays",
+      "objects",
+      "iteration",
+      "higher-order functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-serialize-and-deserialize-nested-dictionaries-with-custom-rules",
+    "title": "Build a Function to Serialize and Deserialize Nested Dictionaries with Custom Rules",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a Python function to serialize a nested dictionary into a custom string format and another function to revert it back, handling complex nesting and type conversions.",
+    "prompt": "Write two functions: serialize_dict and deserialize_dict. The serialize_dict function takes a nested dictionary and converts it into a custom string format where keys and values are joined by '=', pairs are separated by ';', and nested dictionaries are enclosed in parentheses, preserving nesting structure. The deserialize_dict function takes such a string and reconstructs the original dictionary, converting numeric strings back to integers or floats as appropriate. For example, given {'a': 1, 'b': {'c': 2, 'd': 3}}, serialize_dict should return 'a=1;b=(c=2;d=3)'. Then deserialize_dict('a=1;b=(c=2;d=3)') should return the original nested dictionary.",
+    "guidance": [
+      "Think recursively to handle arbitrarily deep nested dictionaries during serialization and deserialization.",
+      "Ensure to properly distinguish between string values and nested dictionaries during both operations.",
+      "Implement numeric detection to convert strings back to integers or floats in deserialization."
+    ],
+    "hints": [
+      "You can use recursion inside both functions to process nested dictionaries.",
+      "Use parentheses to mark boundaries of nested dictionaries during serialization.",
+      "When deserializing, carefully parse substrings to isolate keys and values and convert numeric strings."
+    ],
+    "starterCode": "def serialize_dict(d):\n    # Implement this function\n    pass\n\ndef deserialize_dict(s):\n    # Implement this function\n    pass",
+    "expectedOutput": "{\"a\": 1, \"b\": {\"c\": 2, \"d\": 3}}",
     "concepts": [
       "recursion",
-      "list manipulation"
+      "string parsing",
+      "data serialization",
+      "type conversion"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-improve-readability-of-a-data-filtering-function",
+    "title": "Refactor and Improve Readability of a Data Filtering Function",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Refactor a given Python function that filters and processes a list of dictionaries to improve its code quality, readability, and maintainability without altering its output behavior.",
+    "prompt": "You are given a Python function that takes a list of user dictionaries and filters out those who are inactive or under 18, then returns a new list containing usernames in uppercase. The function works correctly but is hard to read and maintain. Refactor the function to improve its readability, logic clarity, and structure without changing the functionality or output.",
+    "guidance": [
+      "Break complex statements into smaller, descriptive helper functions if appropriate.",
+      "Use list comprehensions or built-in functions for filtering and mapping clearly.",
+      "Add meaningful variable names and remove redundant code or checks."
+    ],
+    "hints": [
+      "Consider combining filtering criteria into one step using list comprehensions.",
+      "Avoid mutating input data; work with copies or create new objects if needed.",
+      "Use built-in functions like map or filter for clearer intent."
+    ],
+    "starterCode": "def process_users(users):\n    result = []\n    for u in users:\n        if u['active'] == True:\n            if u['age'] >=18:\n                result.append(u['username'].upper())\n    return result",
+    "expectedOutput": "['ALICE', 'CHARLIE']",
+    "concepts": [
+      "code refactoring",
+      "list comprehensions",
+      "conditional filtering",
+      "string manipulation"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "refactor-complex-data-processing-function-for-improved-readability-and-performance",
+    "title": "Refactor Complex Data Processing Function for Improved Readability and Performance",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Given a verbose and inefficient JavaScript function that processes and transforms a large dataset, refactor the code to enhance readability, maintainability, and performance without altering its output.",
+    "prompt": "You are provided with a JavaScript function that processes an array of user objects, performing multiple filtering, mapping, and aggregation steps in a convoluted way. Your task is to refactor this function to improve code clarity, remove redundancy, and optimize performance, while making sure the final output remains exactly the same. Avoid changing the function signature or expected data structure of the output.",
+    "guidance": [
+      "Analyze the original function to understand its transformation steps and output format thoroughly before refactoring.",
+      "Look for repeated computations that can be memoized or computed once and reused.",
+      "Consider leveraging modern ES6+ features such as destructuring, arrow functions, and array methods to make the code cleaner and more expressive.",
+      "Ensure no change in output data; use thorough testing to validate correctness after refactoring."
+    ],
+    "hints": [
+      "Break down large chained operations into smaller named helper functions or intermediate variables to improve readability.",
+      "Use 'reduce' where appropriate to combine multiple steps efficiently.",
+      "Avoid mutation of input data; use pure functions and immutable patterns where possible."
+    ],
+    "starterCode": "function processUsers(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i].isActive) {\n      let user = users[i];\n      let scoreSum = 0;\n      for (let j = 0; j < user.scores.length; j++) {\n        if (user.scores[j] > 50) {\n          scoreSum += user.scores[j];\n        }\n      }\n      if (scoreSum > 200) {\n        let nameParts = user.name.split(' ');\n        result.push({\n          firstName: nameParts[0],\n          lastName: nameParts.length > 1 ? nameParts.slice(1).join(' ') : '',\n          averageScore: scoreSum / user.scores.length\n        });\n      }\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "[\n  { firstName: 'Alice', lastName: 'Smith', averageScore: 72.5 },\n  { firstName: 'Bob', lastName: '', averageScore: 80 }\n]",
+    "concepts": [
+      "code refactoring",
+      "array manipulation",
+      "performance optimization",
+      "functional programming",
+      "ES6 features"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ]

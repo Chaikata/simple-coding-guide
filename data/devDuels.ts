@@ -2379,5 +2379,174 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-simple-sql-select-with-where-clause",
+    "title": "Predict the Output of a Simple SQL SELECT with WHERE Clause",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "query-analysis",
+    "description": "Analyze a basic SQL query that filters data using a WHERE clause and predict what the output will be based on the given data.",
+    "prompt": "Given the following table 'Employees' and SQL query, what will be the result of the query? Describe which rows are returned and why.\n\nTable: Employees\n| id | name    | department | salary |\n|----|---------|------------|--------|\n| 1  | Alice   | Sales      | 50000  |\n| 2  | Bob     | Marketing  | 60000  |\n| 3  | Charlie | Sales      | 70000  |\n| 4  | David   | HR         | 45000  |\n\nQuery:\nSELECT name, salary FROM Employees WHERE department = 'Sales' AND salary > 55000;",
+    "guidance": [
+      "Look carefully at which conditions the query filters on in the WHERE clause.",
+      "Identify each row in the table that meets both conditions: department must be 'Sales' and salary must be greater than 55000."
+    ],
+    "hints": [
+      "Remember that both conditions in the WHERE clause must be true for a row to be included.",
+      "Check each employee's department and salary one by one against the filter."
+    ],
+    "starterCode": "SELECT name, salary FROM Employees WHERE department = 'Sales' AND salary > 55000;",
+    "expectedOutput": "| name    | salary |\n|---------|--------|\n| Charlie | 70000  |",
+    "concepts": [
+      "SELECT statement",
+      "WHERE clause filtering"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-nested-list-and-dictionary-manipulation",
+    "title": "Predict the Output of a Nested List and Dictionary Manipulation",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given Python code that manipulates nested lists and dictionaries, and predict its exact printed output.",
+    "prompt": "Examine the provided Python code snippet carefully. The code defines nested lists and dictionaries, modifies some values, and prints results after these changes. Your task is to determine exactly what the output will be when this code runs.",
+    "guidance": [
+      "Follow the flow of the code step-by-step, focusing on how lists and dictionaries are modified.",
+      "Keep track of variable references, especially how changes to one object affect others that reference the same object."
+    ],
+    "hints": [
+      "Remember that lists and dictionaries are mutable objects and assignments can create references, not copies.",
+      "Look closely at the order of operations—the modifications after initializations affect later prints."
+    ],
+    "starterCode": "data = [{'a': [1, 2, 3]}, {'b': [4, 5]}]\nref = data[0]['a']\nref.append(4)\ndata[1]['b'] = ref\nprint(data)\nprint(ref)",
+    "expectedOutput": "[{'a': [1, 2, 3, 4]}, {'b': [1, 2, 3, 4]}]\n[1, 2, 3, 4]",
+    "concepts": [
+      "mutable objects",
+      "list and dictionary references",
+      "object mutation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-group-objects-by-a-key",
+    "title": "Build a Function to Group Objects by a Key",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a JavaScript function that groups an array of objects by a specified key, returning an object where each key maps to an array of items sharing that key's value.",
+    "prompt": "Write a function named 'groupBy' that takes two parameters: an array of objects, and a string that represents the key to group by. The function should return an object where each property is a unique value from the specified key in the objects, and the corresponding value is an array of all objects that have that key value.\n\nExample:\ngroupBy([{age: 23, name: 'Alice'}, {age: 23, name: 'Bob'}, {age: 30, name: 'Charlie'}], 'age')\nshould return:\n{\n  23: [{age: 23, name: 'Alice'}, {age: 23, name: 'Bob'}],\n  30: [{age: 30, name: 'Charlie'}]\n}\n\nMake sure your function works for any key and array size.",
+    "guidance": [
+      "Iterate through each object in the input array.",
+      "Check if the grouping key's value already exists in the result object.",
+      "If it does, push the current object into the appropriate array; otherwise, create a new array with the current object."
+    ],
+    "hints": [
+      "Use the array 'reduce' method to accumulate grouped results efficiently.",
+      "Remember that object properties can be accessed dynamically using bracket notation.",
+      "Check if the key exists by using 'hasOwnProperty' or a simple truthy check."
+    ],
+    "starterCode": "function groupBy(array, key) {\n  const result = {};\n  // Your code here\n  return result;\n}",
+    "expectedOutput": "{\n  23: [ { age: 23, name: 'Alice' }, { age: 23, name: 'Bob' } ],\n  30: [ { age: 30, name: 'Charlie' } ]\n}",
+    "concepts": [
+      "arrays",
+      "objects",
+      "iteration",
+      "higher-order functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-serialize-and-deserialize-nested-dictionaries-with-custom-rules",
+    "title": "Build a Function to Serialize and Deserialize Nested Dictionaries with Custom Rules",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a Python function to serialize a nested dictionary into a custom string format and another function to revert it back, handling complex nesting and type conversions.",
+    "prompt": "Write two functions: serialize_dict and deserialize_dict. The serialize_dict function takes a nested dictionary and converts it into a custom string format where keys and values are joined by '=', pairs are separated by ';', and nested dictionaries are enclosed in parentheses, preserving nesting structure. The deserialize_dict function takes such a string and reconstructs the original dictionary, converting numeric strings back to integers or floats as appropriate. For example, given {'a': 1, 'b': {'c': 2, 'd': 3}}, serialize_dict should return 'a=1;b=(c=2;d=3)'. Then deserialize_dict('a=1;b=(c=2;d=3)') should return the original nested dictionary.",
+    "guidance": [
+      "Think recursively to handle arbitrarily deep nested dictionaries during serialization and deserialization.",
+      "Ensure to properly distinguish between string values and nested dictionaries during both operations.",
+      "Implement numeric detection to convert strings back to integers or floats in deserialization."
+    ],
+    "hints": [
+      "You can use recursion inside both functions to process nested dictionaries.",
+      "Use parentheses to mark boundaries of nested dictionaries during serialization.",
+      "When deserializing, carefully parse substrings to isolate keys and values and convert numeric strings."
+    ],
+    "starterCode": "def serialize_dict(d):\n    # Implement this function\n    pass\n\ndef deserialize_dict(s):\n    # Implement this function\n    pass",
+    "expectedOutput": "{\"a\": 1, \"b\": {\"c\": 2, \"d\": 3}}",
+    "concepts": [
+      "recursion",
+      "string parsing",
+      "data serialization",
+      "type conversion"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-improve-readability-of-a-data-filtering-function",
+    "title": "Refactor and Improve Readability of a Data Filtering Function",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Refactor a given Python function that filters and processes a list of dictionaries to improve its code quality, readability, and maintainability without altering its output behavior.",
+    "prompt": "You are given a Python function that takes a list of user dictionaries and filters out those who are inactive or under 18, then returns a new list containing usernames in uppercase. The function works correctly but is hard to read and maintain. Refactor the function to improve its readability, logic clarity, and structure without changing the functionality or output.",
+    "guidance": [
+      "Break complex statements into smaller, descriptive helper functions if appropriate.",
+      "Use list comprehensions or built-in functions for filtering and mapping clearly.",
+      "Add meaningful variable names and remove redundant code or checks."
+    ],
+    "hints": [
+      "Consider combining filtering criteria into one step using list comprehensions.",
+      "Avoid mutating input data; work with copies or create new objects if needed.",
+      "Use built-in functions like map or filter for clearer intent."
+    ],
+    "starterCode": "def process_users(users):\n    result = []\n    for u in users:\n        if u['active'] == True:\n            if u['age'] >=18:\n                result.append(u['username'].upper())\n    return result",
+    "expectedOutput": "['ALICE', 'CHARLIE']",
+    "concepts": [
+      "code refactoring",
+      "list comprehensions",
+      "conditional filtering",
+      "string manipulation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-complex-data-processing-function-for-improved-readability-and-performance",
+    "title": "Refactor Complex Data Processing Function for Improved Readability and Performance",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Given a verbose and inefficient JavaScript function that processes and transforms a large dataset, refactor the code to enhance readability, maintainability, and performance without altering its output.",
+    "prompt": "You are provided with a JavaScript function that processes an array of user objects, performing multiple filtering, mapping, and aggregation steps in a convoluted way. Your task is to refactor this function to improve code clarity, remove redundancy, and optimize performance, while making sure the final output remains exactly the same. Avoid changing the function signature or expected data structure of the output.",
+    "guidance": [
+      "Analyze the original function to understand its transformation steps and output format thoroughly before refactoring.",
+      "Look for repeated computations that can be memoized or computed once and reused.",
+      "Consider leveraging modern ES6+ features such as destructuring, arrow functions, and array methods to make the code cleaner and more expressive.",
+      "Ensure no change in output data; use thorough testing to validate correctness after refactoring."
+    ],
+    "hints": [
+      "Break down large chained operations into smaller named helper functions or intermediate variables to improve readability.",
+      "Use 'reduce' where appropriate to combine multiple steps efficiently.",
+      "Avoid mutation of input data; use pure functions and immutable patterns where possible."
+    ],
+    "starterCode": "function processUsers(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i].isActive) {\n      let user = users[i];\n      let scoreSum = 0;\n      for (let j = 0; j < user.scores.length; j++) {\n        if (user.scores[j] > 50) {\n          scoreSum += user.scores[j];\n        }\n      }\n      if (scoreSum > 200) {\n        let nameParts = user.name.split(' ');\n        result.push({\n          firstName: nameParts[0],\n          lastName: nameParts.length > 1 ? nameParts.slice(1).join(' ') : '',\n          averageScore: scoreSum / user.scores.length\n        });\n      }\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "[\n  { firstName: 'Alice', lastName: 'Smith', averageScore: 72.5 },\n  { firstName: 'Bob', lastName: '', averageScore: 80 }\n]",
+    "concepts": [
+      "code refactoring",
+      "array manipulation",
+      "performance optimization",
+      "functional programming",
+      "ES6 features"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
