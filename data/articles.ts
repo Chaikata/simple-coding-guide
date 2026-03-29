@@ -29171,5 +29171,452 @@ export const articles = [
         "value": "By following these beginner-friendly tips—indexing columns, limiting selected columns, using proper JOINs, and avoiding functions on indexed columns—you can significantly improve query performance in SQL Server and reduce common errors in large-scale e-commerce applications."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-error-stacks-debug-like-a-pro-with-custom-trace-formatting",
+    "title": "Mastering JavaScript Error Stacks: Debug Like a Pro with Custom Trace Formatting",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to understand and customize JavaScript error stacks for better debugging and easier problem solving, even as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=4yWpMz1__-Q",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you run into errors in JavaScript, the error stack (or stack trace) is your best friend. It shows you the path the program took before it crashed, helping you find the source of the problem quickly. This article will introduce you to JavaScript error stacks and show you how to customize them for clearer and more helpful debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Whenever an error occurs, JavaScript creates an Error object that contains a `stack` property. This property is a string that describes the function calls leading to the error. Here's a simple example to see a stack trace in action:"
+      },
+      {
+        "type": "code",
+        "value": "function first() {\n  second();\n}\n\nfunction second() {\n  third();\n}\n\nfunction third() {\n  // This will throw an error\n  throw new Error('Oops! Something went wrong.');\n}\n\ntry {\n  first();\n} catch (error) {\n  console.log(error.stack);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When this code runs, it prints a stack trace showing which functions were called in order until the error happened. The output looks like this (format can vary between browsers and environments):"
+      },
+      {
+        "type": "code",
+        "value": "Error: Oops! Something went wrong.\n    at third (<anonymous>:8:9)\n    at second (<anonymous>:4:3)\n    at first (<anonymous>:1:3)\n    at <anonymous>:12:3"
+      },
+      {
+        "type": "paragraph",
+        "value": "This stack trace helps you understand where and why your code failed, but sometimes you may want to format it for readability or to add custom information. You can do this by parsing the stack string or by creating your own custom errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's make a simple function to extract and format the stack trace lines to focus only on function names and line numbers:"
+      },
+      {
+        "type": "code",
+        "value": "function formatStack(error) {\n  if (!error.stack) return '';\n  const lines = error.stack.split('\\n').slice(1);  // remove the error message\n  return lines.map(line => {\n    // Example stack line: ' at functionName (file:line:column)'\n    const match = line.match(/at\\s+(\\S+)\\s+\\((.*):(\\d+):(\\d+)\\)/);\n    if (match) {\n      const [, functionName, file, lineNum, colNum] = match;\n      return `${functionName} at ${file}:${lineNum}:${colNum}`;\n    }\n    return line.trim();\n  }).join('\\n');\n}\n\ntry {\n  first();\n} catch (error) {\n  console.log('Custom formatted stack trace:\\n' + formatStack(error));\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function uses a regular expression to get the function name and location info from each line of the stack trace and formats it in a simpler way. You can expand on this to include timestamps, custom messages, or log to a file or error tracking system."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another advanced technique is creating custom error classes where you control how the stack is captured and formatted. Here's a basic example of a custom error capturing the stack trace with a special format:"
+      },
+      {
+        "type": "code",
+        "value": "class CustomError extends Error {\n  constructor(message) {\n    super(message);\n    this.name = 'CustomError';\n    if (Error.captureStackTrace) {\n      Error.captureStackTrace(this, CustomError);\n    }\n  }\n\n  getFormattedStack() {\n    return this.stack.split('\\n')\n      .slice(1)\n      .map(line => `--> ${line.trim()}`)\n      .join('\\n');\n  }\n}\n\ntry {\n  throw new CustomError('Something went terribly wrong');\n} catch (err) {\n  console.log(err.name + ': ' + err.message);\n  console.log(err.getFormattedStack());\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This custom error class adds a method to format the stack trace with arrows to improve readability. You can customize it further depending on your debugging or logging needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, mastering JavaScript error stacks means not only reading them effectively but also customizing and formatting them to save time and reduce frustration when debugging. Start experimenting with these methods, and you'll debug like a pro in no time!"
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-typescript-ecommerce",
+    "title": "Building Scalable Data Models in TypeScript for E-Commerce Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create scalable and maintainable data models in TypeScript tailored for e-commerce applications, with practical code examples and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Creating scalable data models is essential when building e-commerce applications that grow over time. TypeScript, with its strong typing capabilities, helps developers define clear and robust data structures. In this tutorial, we'll walk through building scalable data models for an e-commerce app, focusing on products, categories, users, and orders."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll start by defining core interfaces to represent entities such as Product, Category, User, and Order. By creating reusable and extendable types, we ensure our code remains maintainable as new features are added."
+      },
+      {
+        "type": "code",
+        "value": "interface Category {\n  id: string;\n  name: string;\n  description?: string; // optional property\n}\n\ninterface Product {\n  id: string;\n  name: string;\n  description: string;\n  price: number;\n  category: Category; // relation between product and category\n  tags?: string[]; // optional array of tags\n  stock: number;\n  createdAt: Date;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The Category interface is simple but expandable. The Product interface references Category to establish a relationship between products and their categories. Optional properties like description and tags provide flexibility without forcing all data to be present."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let’s define a User and an Order model to represent customers and their purchases."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: string;\n  name: string;\n  email: string;\n  address?: string;\n  phone?: string;\n  createdAt: Date;\n}\n\ninterface OrderItem {\n  product: Product;\n  quantity: number;\n}\n\ninterface Order {\n  id: string;\n  user: User;\n  items: OrderItem[];\n  totalAmount: number;\n  createdAt: Date;\n  status: 'pending' | 'shipped' | 'delivered' | 'cancelled';\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The User interface captures basic customer information. The Order interface uses an array of OrderItem objects, allowing multiple products with quantities per order. Status is defined as a union type, making it easy to manage and restrict order states."
+      },
+      {
+        "type": "paragraph",
+        "value": "To scale your models, consider these best practices:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use interfaces and types to clearly define the shape of your data.\n- Leverage optional properties for flexibility.\n- Use union types for enumerations like order statuses.\n- Compose smaller interfaces into larger ones to maintain readability.\n- Consider immutability and readonly properties when applicable.\n- Keep relationships explicit and structured."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, let's look at how you might create an example product and order instance based on the models."
+      },
+      {
+        "type": "code",
+        "value": "const electronicsCategory: Category = {\n  id: 'cat1',\n  name: 'Electronics',\n  description: 'Gadgets and electronic devices'\n};\n\nconst smartphone: Product = {\n  id: 'prod1',\n  name: 'Smartphone',\n  description: 'Latest model smartphone with high-end specs.',\n  price: 799.99,\n  category: electronicsCategory,\n  tags: ['mobile', 'gadgets', 'technology'],\n  stock: 50,\n  createdAt: new Date()\n};\n\nconst userJohn: User = {\n  id: 'user1',\n  name: 'John Doe',\n  email: 'john@example.com',\n  createdAt: new Date()\n};\n\nconst order1: Order = {\n  id: 'order1',\n  user: userJohn,\n  items: [\n    { product: smartphone, quantity: 2 }\n  ],\n  totalAmount: smartphone.price * 2,\n  createdAt: new Date(),\n  status: 'pending'\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "This basic setup can be expanded and customized to suit complex needs, such as adding payment methods, shipment tracking, or product variants. By clearly defining your data models with TypeScript, you enhance code quality and reduce bugs in your e-commerce app's data handling."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-type-narrowing-to-prevent-runtime-errors",
+    "title": "Mastering TypeScript’s Type Narrowing to Prevent Runtime Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript’s type narrowing helps catch errors early, making your code safer and more reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=16BLnBoNH-0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. One of its most useful features is type narrowing. Type narrowing lets TypeScript narrow down the type of a variable within a specific block of code based on checks you perform, reducing the chances of runtime errors like accessing properties on undefined or wrong types."
+      },
+      {
+        "type": "paragraph",
+        "value": "For beginners, understanding type narrowing is essential because it helps you write safer code. It allows TypeScript to think more precisely about what kind of data your variables hold at any point, so you avoid surprises when the code runs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example. Imagine you have a function that takes a parameter which can either be a string or null. If you try to call `.toUpperCase()` directly without checking the type, TypeScript will warn you about a potential runtime error."
+      },
+      {
+        "type": "code",
+        "value": "function shout(input: string | null) {\n  // Error: Object is possibly 'null'.\n  // console.log(input.toUpperCase());\n\n  if (input !== null) {\n    // Here, TypeScript knows input is a string\n    console.log(input.toUpperCase());\n  } else {\n    console.log('No input provided');\n  }\n}\n\nshout('hello');\nshout(null);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the function above, the check `input !== null` narrows the type from `string | null` down to just `string` inside the `if` block. This way, TypeScript allows `.toUpperCase()` safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript supports several ways to narrow types, including `typeof` checks, `instanceof`, checking for `null` or `undefined`, and even user-defined type guards. Here's a quick look at using `typeof`."
+      },
+      {
+        "type": "code",
+        "value": "function printId(id: number | string) {\n  if (typeof id === 'string') {\n    // id is a string here\n    console.log(id.toUpperCase());\n  } else {\n    // id is a number here\n    console.log(id.toFixed(2));\n  }\n}\n\nprintId('abc');\nprintId(123);"
+      },
+      {
+        "type": "paragraph",
+        "value": "By using `typeof`, TypeScript narrows the `id` parameter within each block. This prevents type errors like trying to run `.toUpperCase()` on a number or `.toFixed()` on a string."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you work with objects that can be multiple shapes or classes. `instanceof` helps narrow the type based on the object’s constructor."
+      },
+      {
+        "type": "code",
+        "value": "class Dog {\n  bark() {\n    console.log('Woof!');\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log('Meow!');\n  }\n}\n\nfunction speak(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark(); // Animal is Dog here\n  } else {\n    animal.meow(); // Animal is Cat here\n  }\n}\n\nspeak(new Dog());\nspeak(new Cat());"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering type narrowing helps you write robust TypeScript code by preventing common runtime errors caused by unexpected types. Always use checks like `typeof`, `instanceof`, or explicit comparisons to guide TypeScript in understanding your code’s data flow. This practice leads to clearer, safer programs."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-exception-handling-try-except-vs-contextlib-suppress",
+    "title": "Comparing Python Exception Handling Mechanisms: try-except vs. contextlib.suppress",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the differences between Python's try-except blocks and contextlib.suppress for handling exceptions in beginner-friendly terms with clear examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, handling errors gracefully is essential for creating robust and user-friendly code. Two common ways to suppress or handle exceptions are using try-except blocks and the contextlib.suppress context manager. In this article, we'll explore these two mechanisms, understand their differences, and learn when to use each one."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using try-except blocks"
+      },
+      {
+        "type": "paragraph",
+        "value": "The try-except block is the most common and explicit way to catch and handle exceptions in Python. You write code inside the try block, and if an error occurs, Python looks for a matching except block to handle it."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / 0  # This will raise ZeroDivisionError\nexcept ZeroDivisionError:\n    print(\"Oops! You can't divide by zero.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, dividing 10 by zero raises a ZeroDivisionError. The except block catches this exception and prints a friendly message instead of crashing the program."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using contextlib.suppress"
+      },
+      {
+        "type": "paragraph",
+        "value": "The contextlib module provides a convenient context manager called suppress that can be used to ignore specified exceptions silently. It is useful when you want to run code but don't care if certain errors happen."
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import suppress\n\nwith suppress(FileNotFoundError):\n    open('non_existent_file.txt')  # No error message, exception is suppressed"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the FileNotFoundError caused by trying to open a file that doesn't exist is suppressed. No error is raised, and the program continues silently. This provides cleaner code when you don't need to react to the error."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **try-except:** Allows you to handle the error, log a message, or run alternate code. More flexible but sometimes verbose.\n- **contextlib.suppress:** Silently ignores specified exceptions inside a with block. Good for ignoring known, harmless errors with less code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to use each?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use try-except blocks when you need to respond to exceptions, such as showing user messages, logging, or cleaning up resources. Use contextlib.suppress when you want to ignore specific exceptions because they do not affect your program's flow and don't require any special action."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both try-except and contextlib.suppress are useful for managing exceptions in Python. Understanding their differences helps you write clearer and more effective error handling code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-temporal-tables-in-sql-for-effective-data-versioning",
+    "title": "Mastering Temporal Tables in SQL for Effective Data Versioning",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use temporal tables in SQL to track data changes over time seamlessly. This beginner-friendly tutorial covers key concepts, setup, and practical examples to implement versioned data storage.",
+    "videoUrl": "https://www.youtube.com/watch?v=T3kXFw3fuho",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Temporal tables in SQL are a powerful feature that allows you to track historical changes of data automatically. They are also known as system-versioned tables. This approach simplifies auditing, data recovery, and version control directly within the database engine."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll break down how temporal tables work, how to create them, and how to query both current and historical data efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Temporal Tables?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Temporal tables automatically keep a full history of data changes. When you update or delete a row, the database stores the previous version of the row in a separate history table linked to the main table."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Temporal Table"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple employees table that tracks changes in employee position and salary over time."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    Name NVARCHAR(100),\n    Position NVARCHAR(50),\n    Salary DECIMAL(10, 2),\n    ValidFrom DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,\n    ValidTo DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,\n    PERIOD FOR SYSTEM_TIME (ValidFrom, ValidTo)\n)\nWITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.EmployeesHistory));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's the breakdown of this table definition:\n- `ValidFrom` and `ValidTo` are datetime columns that track the period when a row version is valid.\n- `PERIOD FOR SYSTEM_TIME` defines the period columns that SQL Server uses to manage row versions.\n- `SYSTEM_VERSIONING = ON` enables the automatic history tracking and specifies the history table."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Adding Data"
+      },
+      {
+        "type": "paragraph",
+        "value": "Add some initial data into the Employees table."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Employees (EmployeeID, Name, Position, Salary) VALUES\n(1, 'Alice Johnson', 'Developer', 70000),\n(2, 'Bob Smith', 'Designer', 65000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Updating Data and Capturing History"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's update Alice's salary and position. The original row will be moved to the history table automatically."
+      },
+      {
+        "type": "code",
+        "value": "UPDATE Employees\nSET Position = 'Senior Developer', Salary = 85000\nWHERE EmployeeID = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Querying Current Data"
+      },
+      {
+        "type": "paragraph",
+        "value": "To get the current data only, simply query the main table:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Querying Historical Data"
+      },
+      {
+        "type": "paragraph",
+        "value": "To see all previous versions of a row, query the history table:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM EmployeesHistory WHERE EmployeeID = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Querying Data As It Was at a Specific Point in Time"
+      },
+      {
+        "type": "paragraph",
+        "value": "Temporal tables support querying data as it existed at a particular time using the `FOR SYSTEM_TIME` clause."
+      },
+      {
+        "type": "code",
+        "value": "DECLARE @QueryTime DATETIME2 = '2024-01-01 12:00:00';\n\nSELECT * FROM Employees\nFOR SYSTEM_TIME AS OF @QueryTime\nWHERE EmployeeID = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using Temporal Tables"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Automates change tracking and auditing.\n- Simplifies implementation of slowly changing dimensions.\n- Enables easy point-in-time analysis.\n- Assures data accuracy with built-in version control."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Temporal tables provide a robust, easy-to-implement solution for effective data versioning within SQL Server. By utilizing temporal tables, beginner and experienced developers alike can maintain data history, access previous data states, and ensure better data integrity for your applications."
+      }
+    ]
+  },
+  {
+    "slug": "handling-nulls-in-complex-sql-joins-best-practices-and-pitfalls",
+    "title": "Handling NULLs in Complex SQL Joins: Best Practices and Pitfalls",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to handle NULL values effectively in complex SQL joins with practical tips and common pitfalls to avoid, perfect for SQL beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=Yh4CrPHVBdE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL joins, especially complex joins involving multiple tables, handling NULL values is crucial. NULLs represent missing or unknown data, and they can affect your join results unexpectedly if not treated carefully. This article will guide beginners through best practices for dealing with NULLs in joins, common errors to watch out for, and clear examples to improve your SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it’s important to understand how NULL behaves in joins. For INNER JOINs, rows with NULLs in join columns are usually excluded because NULL does not equal any value, not even another NULL. For LEFT JOINs or RIGHT JOINs, rows from one table may appear with NULLs in columns from the other table if there's no match. Recognizing this behavior helps you write clearer and more accurate queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s look at a simple example of a LEFT JOIN where NULLs appear:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nLEFT JOIN departments ON employees.department_id = departments.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, employees without a matching department will show NULL for department_name. This is expected, but when using WHERE clauses, you need to be careful as filtering on columns from the right table can remove these NULL rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, this query will not return employees without departments:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nLEFT JOIN departments ON employees.department_id = departments.department_id\nWHERE departments.department_name = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Because the WHERE clause filters on departments.department_name, rows with NULL in that column are excluded, effectively turning the LEFT JOIN into an INNER JOIN. To avoid this, use conditions on the joined table inside the JOIN itself or add NULL checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Better approach:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nLEFT JOIN departments ON employees.department_id = departments.department_id \n  AND departments.department_name = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Or explicitly handle NULL in WHERE:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, departments.department_name\nFROM employees\nLEFT JOIN departments ON employees.department_id = departments.department_id\nWHERE departments.department_name = 'Sales' OR departments.department_name IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another important tip is when using multiple joins and NULL-sensitive functions like ISNULL or COALESCE, make sure you understand what default value you want to assign for missing data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example with COALESCE:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employees.name, COALESCE(departments.department_name, 'No Department') as dept_name\nFROM employees\nLEFT JOIN departments ON employees.department_id = departments.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By using COALESCE, you provide a friendly default when department_name is NULL, which helps in report generation or user interfaces."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, remember that NULL comparison requires special care. Never use equality operators (= or !=) directly on NULLs because they won’t return true. Instead, use IS NULL or IS NOT NULL to check for NULL values."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Understand how different joins handle NULLs\n- Avoid filtering on right table columns in WHERE when using LEFT/RIGHT JOINs\n- Use JOIN conditions to filter if applicable\n- Use COALESCE or ISNULL to assign default values\n- Use IS NULL / IS NOT NULL to test for NULL explicitly\n\nFollowing these best practices will help you write robust SQL queries that handle NULLs correctly, avoiding common errors that plague beginners."
+      }
+    ]
   }
 ];
