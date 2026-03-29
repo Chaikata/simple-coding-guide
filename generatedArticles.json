@@ -1,75 +1,113 @@
 [
   {
-    "slug": "mastering-closures-in-javascript-a-beginners-guide",
-    "title": "Mastering Closures in JavaScript: A Beginner's Guide with Practical Examples",
+    "slug": "building-real-time-chat-application-websockets-javascript",
+    "title": "Building a Real-Time Chat Application with WebSockets in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn what closures are in JavaScript, why they are useful, and how to use them effectively with simple, practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
+    "description": "Learn how to create a simple real-time chat application using WebSockets in JavaScript. This beginner-friendly tutorial covers building both server and client sides for instant messaging.",
+    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to JavaScript or programming in general, you might have heard the term \"closure\" and wondered what it means. In simple terms, a closure is a powerful feature in JavaScript that allows a function to remember and access variables from an outer function even after that outer function has finished executing."
+        "value": "Real-time communication is a key feature in modern web applications, and WebSockets provide a full-duplex communication channel over a single TCP connection. This tutorial will guide you through building a simple real-time chat app using JavaScript on both the server and client sides."
       },
       {
         "type": "paragraph",
-        "value": "Closures can be a bit confusing at first, but once you understand them, they become incredibly useful. They allow for data privacy, function factories, and help you manage and organize your code better. Let’s break down closures with simple examples that anyone can follow."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is a Closure?"
-      },
-      {
-        "type": "paragraph",
-        "value": "When a function is defined inside another function, the inner function has access to the outer function's variables. This inner function, along with its scope of variables from the outer function, is called a closure."
+        "value": "We will use Node.js with the 'ws' library to create a WebSocket server and plain JavaScript on the client side to connect and send messages. Let's start by setting up the server."
       },
       {
         "type": "code",
-        "value": "function outer() {\n  let name = 'Alice';\n  function inner() {\n    console.log('Hello, ' + name);\n  }\n  return inner;\n}\n\nconst greet = outer();\ngreet(); // Output: Hello, Alice"
+        "value": "const WebSocket = require('ws');\n\n// Create a WebSocket server on port 8080\nconst wss = new WebSocket.Server({ port: 8080 });\n\n// Broadcast to all clients except the sender\nfunction broadcast(data, sender) {\n  wss.clients.forEach(client => {\n    if (client !== sender && client.readyState === WebSocket.OPEN) {\n      client.send(data);\n    }\n  });\n}\n\n// Setup connection event\nwss.on('connection', ws => {\n  console.log('New client connected');\n\n  // Handle incoming messages\n  ws.on('message', message => {\n    console.log(`Received: ${message}`);\n    // Broadcast message to other clients\n    broadcast(message, ws);\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "Here, the inner function `inner` remembers the variable `name` even after the `outer` function has run. When we call `greet()`, it still has access to `name` — this is a closure in action."
+        "value": "Save the above code in a file named `server.js`. Run it with `node server.js`. This WebSocket server listens on port 8080, receives messages from clients, and broadcasts them to all other connected clients."
       },
       {
         "type": "paragraph",
-        "value": "### Practical Example 1: Creating a Counter"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using closures, you can create a counter that keeps track of its state even between function calls."
+        "value": "Next, let's create a simple client to connect to this server and send/receive chat messages."
       },
       {
         "type": "code",
-        "value": "function createCounter() {\n  let count = 0;\n  return function() {\n    count += 1;\n    return count;\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>WebSocket Chat Client</title>\n  <style>\n    #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }\n    #input { width: 80%; }\n    #send { width: 18%; }\n  </style>\n</head>\n<body>\n  <h2>Simple WebSocket Chat</h2>\n  <div id=\"messages\"></div>\n  <input id=\"input\" type=\"text\" placeholder=\"Type your message...\" />\n  <button id=\"send\">Send</button>\n\n  <script>\n    const ws = new WebSocket('ws://localhost:8080');\n    const messages = document.getElementById('messages');\n    const input = document.getElementById('input');\n    const send = document.getElementById('send');\n\n    // Show connection status\n    ws.onopen = () => {\n      messages.innerHTML += '<p><em>Connected to the server.</em></p>';\n    };\n\n    ws.onmessage = event => {\n      messages.innerHTML += `<p>${event.data}</p>`;\n      messages.scrollTop = messages.scrollHeight; // Auto-scroll\n    };\n\n    ws.onclose = () => {\n      messages.innerHTML += '<p><em>Disconnected from server.</em></p>';\n    };\n\n    // Send message to server\n    send.onclick = () => {\n      const message = input.value.trim();\n      if (message) {\n        ws.send(message);\n        messages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;\n        input.value = '';\n        messages.scrollTop = messages.scrollHeight;\n      }\n    };\n\n    // Also send message with Enter key\n    input.addEventListener('keyup', event => {\n      if (event.key === 'Enter') {\n        send.click();\n      }\n    });\n  </script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "Here, `count` is a private variable that the returned function can access and update. The outer function `createCounter` runs once, and the inner function that updates and returns `count` continues to remember that state."
+        "value": "Open this HTML file in your browser. When you type a message and press send, it is transmitted to the WebSocket server, which then broadcasts it to other connected clients. You can open multiple browser tabs to test real-time messaging."
       },
       {
         "type": "paragraph",
-        "value": "### Practical Example 2: Data Privacy"
+        "value": "This simple chat app demonstrates how WebSockets enable instant, two-way communication between clients and servers without constantly polling the server. From here, you can enhance it with features like user authentication, rooms, or message history."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-javascript-systems-handling-race-conditions-gracefully",
+    "title": "Designing Resilient JavaScript Systems: Handling Race Conditions Gracefully",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle race conditions in JavaScript to build more resilient and error-free applications. This beginner-friendly guide explains race conditions and practical solutions in simple terms.",
+    "videoUrl": "https://www.youtube.com/watch?v=kmJz8w5ij8Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building JavaScript applications, especially those that involve asynchronous operations like fetching data from APIs or interacting with a database, you might encounter a tricky problem called a race condition. This happens when the outcome depends on the timing or order of events, which can lead to unexpected bugs and inconsistent data."
       },
       {
         "type": "paragraph",
-        "value": "Closures let you hide data from the outside world, exposing only methods to interact with it."
+        "value": "In this article, we'll explain what race conditions are, why they occur in JavaScript, and how you can handle them gracefully to design more resilient systems. We will also walk through some practical examples and solutions that are easy to understand and use."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Race Condition?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A race condition occurs when two or more pieces of code run at the same time and share or modify the same resource, but the final result depends on the order in which they finish. Because JavaScript is single-threaded but uses asynchronous code (like promises, timeouts, or API calls), race conditions can easily happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, imagine two API calls fetching a user's profile, and both try to update the UI or store data. If the slower API call finishes last, it might override the data from the faster one, causing inconsistent or outdated information to be shown."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example of a Race Condition in JavaScript"
       },
       {
         "type": "code",
-        "value": "function secretHolder(secret) {\n  return {\n    getSecret: function() {\n      return secret;\n    },\n    setSecret: function(newSecret) {\n      secret = newSecret;\n    }\n  };\n}\n\nconst mySecret = secretHolder('I love JavaScript!');\nconsole.log(mySecret.getSecret()); // I love JavaScript!\nmySecret.setSecret('Closures are awesome!');\nconsole.log(mySecret.getSecret()); // Closures are awesome!"
+        "value": "let userData = {};\n\nfunction fetchUserName() {\n  return new Promise(resolve => {\n    setTimeout(() => resolve('Alice'), 300);\n  });\n}\n\nfunction fetchUserAge() {\n  return new Promise(resolve => {\n    setTimeout(() => resolve(30), 200);\n  });\n}\n\n// Both functions update userData, but in an unpredictable order\nfetchUserName().then(name => {\n  userData.name = name;\n  console.log('Name updated:', userData);\n});\n\nfetchUserAge().then(age => {\n  userData.age = age;\n  console.log('Age updated:', userData);\n});"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the variable `secret` cannot be accessed directly, but you can interact with it through the returned methods. This gives you control over how the data is accessed or modified."
+        "value": "In this code, fetchUserName takes 300ms to complete while fetchUserAge takes 200ms. Depending on which one finishes last, the console logs may show userData in different partial states. This can be confusing and cause bugs."
       },
       {
         "type": "paragraph",
-        "value": "### Why Use Closures?"
+        "value": "### How to Handle Race Conditions Gracefully"
       },
       {
         "type": "paragraph",
-        "value": "Closures are useful for many reasons:\n- **Data encapsulation:** Keep variables private and secure.\n- **Function factories:** Create customized functions.\n- **Maintaining state:** Preserve variable values across function calls without global variables."
+        "value": "1. **Use Promise.all() to wait for all asynchronous tasks:** This ensures you only update the state when all data is ready."
+      },
+      {
+        "type": "code",
+        "value": "Promise.all([fetchUserName(), fetchUserAge()])\n  .then(([name, age]) => {\n    userData.name = name;\n    userData.age = age;\n    console.log('All data updated:', userData);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use async/await for easier-to-read asynchronous code:** This syntax helps sequence operations clearly."
+      },
+      {
+        "type": "code",
+        "value": "async function updateUserData() {\n  const name = await fetchUserName();\n  const age = await fetchUserAge();\n  userData.name = name;\n  userData.age = age;\n  console.log('UserData updated:', userData);\n}\n\nupdateUserData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Cancel outdated updates:** If operations can be triggered multiple times, cancel or ignore results from older calls to avoid stale data."
+      },
+      {
+        "type": "code",
+        "value": "let latestRequest = 0;\n\nasync function fetchUserData(currentRequest) {\n  const name = await fetchUserName();\n  const age = await fetchUserAge();\n  if (currentRequest === latestRequest) {\n    userData.name = name;\n    userData.age = age;\n    console.log('Latest data updated:', userData);\n  } else {\n    console.log('Stale response ignored');\n  }\n}\n\nfunction updateRequest() {\n  latestRequest += 1;\n  fetchUserData(latestRequest);\n}\n\n// Simulate multiple rapid updates\nupdateRequest();\nsetTimeout(updateRequest, 100);"
       },
       {
         "type": "paragraph",
@@ -77,513 +115,391 @@
       },
       {
         "type": "paragraph",
-        "value": "Closures are a core concept in JavaScript that help you write more modular, clean, and efficient code. With practice, you’ll find many creative ways to use closures to simplify your programming tasks."
+        "value": "Race conditions are common in JavaScript apps dealing with asynchronous operations. By understanding how they occur and applying practical patterns like Promise.all, async/await, and request tracking, you can design more resilient systems that handle race conditions gracefully."
       },
       {
         "type": "paragraph",
-        "value": "Keep experimenting with closures, and soon you'll master this powerful concept!"
+        "value": "Keep practicing these techniques in your projects, and you'll write more reliable, predictable, and easy-to-maintain JavaScript code."
       }
     ]
   },
   {
-    "slug": "mastering-javascript-memory-leaks-advanced-detection-and-prevention-techniques",
-    "title": "Mastering JavaScript Memory Leaks: Advanced Detection and Prevention Techniques",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn how to detect and prevent JavaScript memory leaks with advanced yet beginner-friendly techniques to keep your apps performant and error-free.",
-    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Memory leaks in JavaScript occur when your program keeps holding onto memory it no longer needs, causing your application to use more and more memory over time. This can slow down your app and even crash the browser. Understanding how to detect and prevent these leaks is key for writing efficient, high-performance JavaScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's dive into some advanced but beginner-friendly ways to detect and stop memory leaks."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How to Detect Memory Leaks"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use Chrome DevTools Memory Tab**: Open DevTools, go to the 'Memory' tab, and take heap snapshots while interacting with your app. If you see objects continuously increasing without release, you might have a leak."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Allocation Timelines**: This helps track memory allocations over time. Use it to identify when memory spikes happen and in which functions."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Performance Monitoring Tools**: Tools like Lighthouse, or using performance.memory in some browsers, can help detect if memory use grows unusually during normal app use."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Causes of Memory Leaks and How to Prevent Them"
-      },
-      {
-        "type": "paragraph",
-        "value": "**1. Forgotten Event Listeners**"
-      },
-      {
-        "type": "paragraph",
-        "value": "When you add event listeners to DOM elements, always remove them if those elements are removed or no longer needed."
-      },
-      {
-        "type": "code",
-        "value": "// Adding and removing event listeners\nconst button = document.querySelector('button');\nfunction onClick() {\n  console.log('Clicked!');\n}\n\nbutton.addEventListener('click', onClick);\n\n// Later when button is removed or not needed\nbutton.removeEventListener('click', onClick);"
-      },
-      {
-        "type": "paragraph",
-        "value": "**2. Closures Holding Large Objects**"
-      },
-      {
-        "type": "paragraph",
-        "value": "Closures are powerful but can unintentionally keep variables in memory. Avoid storing large objects inside closures if not necessary."
-      },
-      {
-        "type": "code",
-        "value": "function createCounter() {\n  let count = 0;\n  let largeArray = new Array(1000000).fill('memory');\n  return function() {\n    count++;\n    console.log(count);\n  };\n}\n\nconst counter = createCounter();\n// largeArray stays in memory because of closure"
-      },
-      {
-        "type": "paragraph",
-        "value": "To fix this, only keep necessary variables inside the closure."
-      },
-      {
-        "type": "paragraph",
-        "value": "**3. Detached DOM Nodes**"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you remove an element from the DOM but still keep a reference to it in your JavaScript, it won't be garbage collected."
-      },
-      {
-        "type": "code",
-        "value": "let detachedElement = document.createElement('div');\ndetachedElement.innerText = 'I am detached';\n// Not added to DOM but referenced\n// Memory leak if we keep referencing this after it's needed"
-      },
-      {
-        "type": "paragraph",
-        "value": "Always nullify references if you don’t need the element anymore."
-      },
-      {
-        "type": "code",
-        "value": "detachedElement = null;"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices to Prevent Memory Leaks"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Remove all event listeners when elements are removed.\n- Avoid unnecessary global variables.\n- Be mindful of closures and what variables they keep.\n- Use weak references like WeakMap or WeakSet for caching if possible.\n- Regularly profile your application’s memory using DevTools."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Using WeakMap for Cache to Avoid Memory Leaks"
-      },
-      {
-        "type": "code",
-        "value": "const cache = new WeakMap();\nfunction getData(obj) {\n  if (!cache.has(obj)) {\n    const data = heavyComputation(obj);\n    cache.set(obj, data);\n  }\n  return cache.get(obj);\n}\n\nfunction heavyComputation(obj) {\n  // Simulate expensive calculation\n  return { computed: true };\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Since WeakMap holds weak references, if the `obj` disappears elsewhere, it is removed from cache automatically, avoiding a memory leak."
-      },
-      {
-        "type": "paragraph",
-        "value": "By mastering these detection and prevention techniques, you'll build more reliable and performant JavaScript applications with fewer memory-related issues."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-typescript-utility-types-for-cleaner-code",
-    "title": "Mastering TypeScript Utility Types for Cleaner Code",
+    "slug": "mastering-lazy-loading-typescript",
+    "title": "Mastering Lazy Loading in TypeScript for Improved Web App Performance",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript utility types like Partial, Readonly, Pick, and Omit to write cleaner, more maintainable code with practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=eJ6R1knfsoc",
+    "description": "Learn how to implement lazy loading in TypeScript to boost your web application's performance by loading components only when needed.",
+    "videoUrl": "https://www.youtube.com/watch?v=aLTdWCdn4XQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful superset of JavaScript that adds static types to the language, making your code easier to understand and maintain. One of its strongest features is utility types — built-in generic types designed to transform and manipulate types quickly. In this article, we'll explore some of the most useful TypeScript utility types to help you write cleaner code."
+        "value": "Lazy loading is a powerful technique to improve web app performance by loading only the necessary parts of your app when required. This reduces the initial load time and makes your app faster and more efficient. In this tutorial, we'll explore how to implement lazy loading in TypeScript, especially focusing on dynamically importing modules."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Partial<T>\n\nThe `Partial` utility type creates a new type where all properties of `T` are optional. This is useful when you want to update only some properties of an object without requiring all of them."
+        "value": "Normally, when you import modules in TypeScript or JavaScript, all the imported components are bundled and loaded at once. With lazy loading, you tell the app to load parts of the code on demand, such as when a user visits a particular route or clicks a button."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into a simple example to see how this works."
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nfunction updateUser(id: number, userUpdates: Partial<User>) {\n  // Imagine this updates a user in a database\n  console.log(`Updating user ${id} with`, userUpdates);\n}\n\n// You can update just one field\nupdateUser(1, { email: \"newemail@example.com\" });"
+        "value": "async function loadComponent() {\n  const module = await import('./MyComponent');\n  const MyComponent = module.default;\n  MyComponent.render();\n}\n\n// Usage example:\ndocument.getElementById('load-btn')?.addEventListener('click', () => {\n  loadComponent();\n});"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Readonly<T>\n\n`Readonly` makes all properties in a type read-only, preventing modification after initialization. It's helpful for ensuring certain objects aren’t changed accidentally."
+        "value": "In this example, the `import()` function dynamically loads the `MyComponent` module only when the user clicks the button with the ID `load-btn`. Until the button is clicked, the component is not loaded, saving initial load time."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you are using frameworks like React with TypeScript, lazy loading can be even easier with built-in support."
       },
       {
         "type": "code",
-        "value": "const user: Readonly<User> = {\n  id: 1,\n  name: \"Alice\",\n  email: \"alice@example.com\"\n};\n\n// user.name = \"Bob\"; // Error: Cannot assign to 'name' because it is a read-only property."
+        "value": "import React, { Suspense } from 'react';\n\nconst LazyComponent = React.lazy(() => import('./LazyComponent'));\n\nfunction App() {\n  return (\n    <div>\n      <h1>Welcome</h1>\n      <Suspense fallback={<div>Loading...</div>}>\n        <LazyComponent />\n      </Suspense>\n    </div>\n  );\n}"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Pick<T, K>\n\n`Pick` lets you create a new type by selecting certain properties `K` from type `T`. This is great for creating smaller, more specific types."
-      },
-      {
-        "type": "code",
-        "value": "type UserPreview = Pick<User, \"id\" | \"name\">;\n\nconst previewUser: UserPreview = {\n  id: 1,\n  name: \"Alice\"\n};"
+        "value": "In this React example, the `LazyComponent` is loaded only when it is rendered. The `Suspense` component shows a fallback UI while the component loads, improving user experience."
       },
       {
         "type": "paragraph",
-        "value": "### 4. Omit<T, K>\n\nWhile `Pick` selects properties, `Omit` removes properties `K` from type `T`. Use it when you want a type similar to another but without certain fields."
-      },
-      {
-        "type": "code",
-        "value": "type UserWithoutEmail = Omit<User, \"email\">;\n\nconst userNoEmail: UserWithoutEmail = {\n  id: 1,\n  name: \"Alice\"\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Wrapping Up\nUtility types provide a clean way to modify your types on the fly without redefining them. They make your code more flexible and readable, helping you avoid bugs and repetitive type definitions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try incorporating these utility types into your TypeScript projects to write cleaner, more maintainable code. As you get comfortable, explore others such as `Record`, `Required`, and `Exclude`!"
+        "value": "To sum up, lazy loading in TypeScript helps optimize your app's performance by reducing the bundle size and loading times. Use dynamic imports (`import()`) or framework-specific features like React's `React.lazy` to implement this technique smoothly."
       }
     ]
   },
   {
-    "slug": "optimizing-typescript-error-handling-for-scalable-web-applications",
-    "title": "Optimizing TypeScript Error Handling for Scalable Web Applications",
+    "slug": "understanding-typescripts-type-narrowing-with-practical-examples",
+    "title": "Understanding TypeScript's Type Narrowing with Practical Examples",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to improve error handling in TypeScript to build scalable and maintainable web applications with clear examples and best practices.",
-    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "description": "Learn how TypeScript's type narrowing helps catch errors early by refining variable types during coding, with simple examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=YVdA86aSBGY",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is an essential aspect of building scalable web applications. In TypeScript, handling errors properly not only helps you avoid crashes but also improves user experience and maintainability. This article will guide you through beginner-friendly techniques to optimize error handling in TypeScript projects."
+        "value": "TypeScript is a powerful tool that adds static types to JavaScript, helping developers catch errors before running their code. One of TypeScript's key features is type narrowing. Type narrowing means refining a variable's type into a more specific one based on conditions, making code safer and clearer."
       },
       {
         "type": "paragraph",
-        "value": "### Why Optimize Error Handling?"
+        "value": "Let's explore some practical examples to see how type narrowing works in TypeScript."
       },
       {
         "type": "paragraph",
-        "value": "As your application grows, simple `try/catch` blocks become insufficient. You want a structured approach that categorizes errors, logs them appropriately, and provides meaningful feedback to users or developers. TypeScript’s static typing helps catch many errors early, but runtime errors still need careful handling."
+        "value": "### Example 1: Narrowing with typeof"
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Define Custom Error Classes"
-      },
-      {
-        "type": "paragraph",
-        "value": "Creating custom error classes helps you identify and handle different kinds of errors distinctly. This approach is better than relying on generic `Error` objects."
+        "value": "If a variable can be of multiple types, TypeScript allows you to narrow it down by checking its type using the typeof operator."
       },
       {
         "type": "code",
-        "value": "class NotFoundError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NotFoundError';\n  }\n}\n\nclass ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}"
+        "value": "function printId(id: number | string) {\n  if (typeof id === \"string\") {\n    console.log(id.toUpperCase()); // Here id is treated as string\n  } else {\n    console.log(id); // Here id is treated as number\n  }\n}\nprintId(\"abc123\");\nprintId(101);"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Use Type Guards to Identify Errors"
+        "value": "In this example, TypeScript knows inside the if-block that `id` is a string, so it lets us call string methods like `toUpperCase()`. Outside that block, it treats `id` as a number."
       },
       {
         "type": "paragraph",
-        "value": "Type guards help you detect specific error types during runtime to apply customized logic."
+        "value": "### Example 2: Narrowing with instanceof"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also narrow types using the `instanceof` operator to check if an object belongs to a specific class."
       },
       {
         "type": "code",
-        "value": "function isNotFoundError(error: unknown): error is NotFoundError {\n  return error instanceof NotFoundError;\n}\n\nfunction isValidationError(error: unknown): error is ValidationError {\n  return error instanceof ValidationError;\n}"
+        "value": "class Dog {\n  bark() {\n    console.log(\"Woof!\");\n  }\n}\nclass Cat {\n  meow() {\n    console.log(\"Meow!\");\n  }\n}\n\nfunction makeSound(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark(); // Narrowed to Dog\n  } else {\n    animal.meow(); // Narrowed to Cat\n  }\n}\n\nmakeSound(new Dog());\nmakeSound(new Cat());"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Handle Errors Gracefully"
+        "value": "TypeScript knows the exact class of the object inside each condition, which allows safe access to methods specific to the class."
       },
       {
         "type": "paragraph",
-        "value": "Wrap your code in `try/catch` blocks and handle each error type appropriately. This improves your app's robustness and user communication."
+        "value": "### Example 3: Narrowing with Equality Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another way to narrow types is by comparing a variable to a specific value."
       },
       {
         "type": "code",
-        "value": "async function fetchUser(userId: string) {\n  try {\n    const data = await fetch(`/api/users/${userId}`);\n    if (!data.ok) {\n      throw new NotFoundError('User not found');\n    }\n    return await data.json();\n  } catch (error: unknown) {\n    if (isNotFoundError(error)) {\n      console.error('Not found error:', error.message);\n      // Show user-friendly message\n    } else if (error instanceof Error) {\n      console.error('General error:', error.message);\n    } else {\n      console.error('Unknown error');\n    }\n  }\n}"
+        "value": "function printStatus(status: \"success\" | \"error\" | \"loading\") {\n  if (status === \"success\") {\n    console.log(\"Operation was successful!\");\n  } else if (status === \"error\") {\n    console.log(\"There was an error.\");\n  } else {\n    console.log(\"Loading...\");\n  }\n}\nprintStatus(\"success\");"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Centralize Error Logging"
+        "value": "Here, TypeScript narrows the `status` type inside each branch, helping prevent mistakes like calling methods that only exist on one string literal."
       },
       {
         "type": "paragraph",
-        "value": "Create a logging function or use external services to track errors in one place. This helps with monitoring and debugging."
-      },
-      {
-        "type": "code",
-        "value": "function logError(error: Error) {\n  // Example: Send error details to a logging server\n  console.log(`[LOG] ${error.name}: ${error.message}`);\n}\n\ntry {\n  // some code\n} catch (error) {\n  if (error instanceof Error) {\n    logError(error);\n  }\n}"
+        "value": "### Why is Type Narrowing Important?"
       },
       {
         "type": "paragraph",
-        "value": "### Step 5: Use Result Types for Functional Error Handling"
+        "value": "Type narrowing reduces runtime errors by making sure you only use methods or properties valid for the currently known type. It also improves code readability and helps IDEs provide better suggestions."
       },
       {
         "type": "paragraph",
-        "value": "Instead of throwing errors, some applications benefit from using \"Result\" types, which make error handling explicit in function returns."
-      },
-      {
-        "type": "code",
-        "value": "type Result<T> =\n  | { success: true; data: T }\n  | { success: false; error: Error };\n\nfunction divide(a: number, b: number): Result<number> {\n  if (b === 0) {\n    return { success: false, error: new Error('Division by zero') };\n  }\n  return { success: true, data: a / b };\n}\n\nconst result = divide(10, 0);\nif (!result.success) {\n  console.error('Error:', result.error.message);\n} else {\n  console.log('Result:', result.data);\n}"
+        "value": "### Summary"
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Optimizing error handling in TypeScript improves your web app’s resilience and maintainability. Using custom errors, type guards, centralized logging, and result types provides a scalable and clear error management strategy. Start incorporating these practices to build robust applications that handle errors gracefully!"
+        "value": "TypeScript's type narrowing is a beginner-friendly concept that improves your code safety. By using conditions like `typeof`, `instanceof`, or equality checks, you guide TypeScript in understanding your code better, which helps avoid common mistakes and bugs."
       }
     ]
   },
   {
-    "slug": "mastering-python-generators-handling-edge-cases-in-data-streams",
-    "title": "Mastering Python Generators: Handling Edge Cases in Data Streams",
+    "slug": "building-scalable-data-models-python-ecommerce",
+    "title": "Building Scalable Data Models in Python for E-commerce Platforms",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python generators for efficient data streaming and practical tips to handle common edge cases, ensuring robust code.",
-    "videoUrl": "https://www.youtube.com/watch?v=bEYiBrNIJEE",
+    "description": "Learn how to design and build scalable data models in Python tailored for e-commerce platforms, focusing on flexibility and growth.",
+    "videoUrl": "https://www.youtube.com/watch?v=EWS_CIxttVw",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python generators are a powerful tool to handle data streams efficiently. Unlike lists that store all values in memory, generators produce items one at a time, which makes them ideal for working with large data or continuous streams. In this tutorial, we'll explore how to write simple generators and how to handle common edge cases that might occur when processing data streams."
+        "value": "Creating a scalable data model is essential for any e-commerce platform that wants to handle growth efficiently and maintain flexibility. Python, with its simplicity and strong data handling capabilities, is an excellent choice for building such models. In this tutorial, we'll walk through the basics of designing scalable data models for an e-commerce platform using Python."
       },
       {
         "type": "paragraph",
-        "value": "First, let's quickly recap how a basic generator function works. A generator uses the `yield` keyword to produce a sequence of values lazily."
+        "value": "We will focus on key entities such as Products, Customers, and Orders. Our approach will emphasize clarity, maintainability, and scalability. We'll use Python classes to model each entity and consider relationships between them to avoid common pitfalls like data duplication."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by defining a Product class that can handle product details and allow adding multiple variants, such as sizes or colors, that are typical for an e-commerce platform."
       },
       {
         "type": "code",
-        "value": "def count_up_to(max_num):\n    count = 1\n    while count <= max_num:\n        yield count\n        count += 1\n\n# Using the generator\nfor number in count_up_to(5):\n    print(number)"
+        "value": "class Product:\n    def __init__(self, product_id, name, description, price):\n        self.product_id = product_id\n        self.name = name\n        self.description = description\n        self.price = price\n        self.variants = []  # List to hold different product variants\n\n    def add_variant(self, variant):\n        self.variants.append(variant)\n\nclass Variant:\n    def __init__(self, variant_id, color, size, stock):\n        self.variant_id = variant_id\n        self.color = color\n        self.size = size\n        self.stock = stock\n\n# Example usage\nproduct = Product(1, 'T-Shirt', 'Comfortable cotton t-shirt', 20.0)\nvariant1 = Variant(101, 'Red', 'M', 50)\nvariant2 = Variant(102, 'Blue', 'L', 30)\n\nproduct.add_variant(variant1)\nproduct.add_variant(variant2)\n\nprint(f\"Product: {product.name} with variants:\")\nfor v in product.variants:\n    print(f\"- {v.color} size {v.size} with {v.stock} in stock\")"
       },
       {
         "type": "paragraph",
-        "value": "This generator yields numbers from 1 up to `max_num`. Each iteration generates the next value only when requested, saving memory. But when using generators with real-world data streams, such as reading files or processing network data, several edge cases may arise."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Handling Empty Data Streams\nSometimes a generator may receive or process an empty data source. It's important your code handles this gracefully without errors."
+        "value": "Next, let's create a Customer class. We’ll include basic customer details and a way to track their orders using a list. This model keeps customer data organized and helps when scaling your user base."
       },
       {
         "type": "code",
-        "value": "def generate_lines(file_path):\n    try:\n        with open(file_path, 'r') as file:\n            for line in file:\n                yield line.strip()\n    except FileNotFoundError:\n        print(f\"File not found: {file_path}\")\n        return\n\nlines = list(generate_lines('empty_file.txt'))\nif not lines:\n    print('No lines to process.')"
+        "value": "class Customer:\n    def __init__(self, customer_id, name, email):\n        self.customer_id = customer_id\n        self.name = name\n        self.email = email\n        self.orders = []  # List to track orders\n\n    def add_order(self, order):\n        self.orders.append(order)\n\n# Example usage\ncustomer = Customer(1, 'Alice Smith', 'alice@example.com')"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Catching Exceptions Inside Generators\nGenerators can encounter exceptions while producing values. Wrapping code inside try-except blocks ensures your generator yields as many valid values as possible."
+        "value": "The Orders class will manage individual orders placed by customers. Each order can include multiple items, and we will relate them to the Product variants to maintain consistency and avoid duplicating product details."
       },
       {
         "type": "code",
-        "value": "def safe_divide(numbers, divisor):\n    for num in numbers:\n        try:\n            yield num / divisor\n        except ZeroDivisionError:\n            yield float('inf')  # Use infinity as fallback\n\nfor result in safe_divide([10, 20, 30], 0):\n    print(result)"
+        "value": "class OrderItem:\n    def __init__(self, product_variant, quantity):\n        self.product_variant = product_variant\n        self.quantity = quantity\n\nclass Order:\n    def __init__(self, order_id, customer):\n        self.order_id = order_id\n        self.customer = customer\n        self.items = []\n\n    def add_item(self, order_item):\n        self.items.append(order_item)\n\n    def total_price(self):\n        return sum(item.product_variant.stock * item.quantity for item in self.items)\n\n# Example usage\norder = Order(5001, customer)\norder_item1 = OrderItem(variant1, 2)  # 2 red medium T-shirts\norder_item2 = OrderItem(variant2, 1)  # 1 blue large T-shirt\norder.add_item(order_item1)\norder.add_item(order_item2)\n\ncustomer.add_order(order)\n\nprint(f\"Customer {customer.name} placed order {order.order_id} with {len(order.items)} items.\")"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Using `send()` to Handle Dynamic Data\nSome advanced generators accept input via `send()` to adjust their behavior on the fly, which can help handle unexpected cases dynamically."
-      },
-      {
-        "type": "code",
-        "value": "def running_average():\n    total = 0\n    count = 0\n    average = None\n    while True:\n        new_value = yield average\n        if new_value is None:\n            break  # Stop generator on None\n        total += new_value\n        count += 1\n        average = total / count\n\naverager = running_average()\nnext(averager)  # Prime the generator\nprint(averager.send(10))  # Output: 10.0\nprint(averager.send(20))  # Output: 15.0\nprint(averager.send(30))  # Output: 20.0\naverager.send(None)  # Stops the generator"
+        "value": "By structuring your models this way, each class has a clear responsibility, making the code easier to manage and extend. You can add more properties, like product categories, customer addresses, or payment details, without cluttering your design."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nGenerators are great for managing large or continuous data streams efficiently in Python. Handling edge cases like empty inputs, exceptions during generation, and dynamic input through `send()` will make your code more robust and flexible. Start using these techniques to master Python generators and write cleaner, memory-efficient code."
+        "value": "When your platform scales, you might want to move these models to a database and use an ORM (Object Relational Mapper) like SQLAlchemy. But starting with clear Python classes helps you prototype and understand relationships before diving into database design."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, building scalable data models involves:\n- Defining core entities with clear responsibilities\n- Using composition to model relationships (e.g., Product -> Variant, Order -> OrderItems)\n- Keeping data duplication minimal\n- Planning for future extensions \n\nThis beginner-friendly approach lays a solid foundation for developing more complex e-commerce systems using Python."
       }
     ]
   },
   {
-    "slug": "mastering-pythons-exception-hierarchy-for-effective-error-handling",
-    "title": "Mastering Python's Exception Hierarchy for Effective Error Handling",
+    "slug": "how-to-handle-type-conversion-errors-gracefully-in-python-applications",
+    "title": "How to Handle Type Conversion Errors Gracefully in Python Applications",
     "language": "python",
     "type": "errors",
-    "description": "Learn how Python's exception hierarchy works to handle errors effectively. This beginner-friendly guide covers common exceptions and how to catch them properly.",
+    "description": "Learn practical ways to handle type conversion errors in Python, ensuring your applications run smoothly even with unexpected input.",
     "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Understanding Python's exception hierarchy is essential for writing robust and maintainable code. When your Python program encounters errors, it raises exceptions. Handling these exceptions properly prevents your program from crashing unexpectedly."
+        "value": "In Python, converting data types is a common task, such as turning strings into integers or floats. However, when the input data is not in the expected format, Python raises type conversion errors like ValueError or TypeError. These errors can cause your program to crash if not handled properly. In this article, we'll explore how to gracefully handle these conversion errors, improving your program's robustness and user experience."
       },
       {
         "type": "paragraph",
-        "value": "At the top of the hierarchy is the base class `BaseException`, which includes almost all exceptions in Python. Most user-defined and built-in exceptions inherit from `Exception`, which means catching `Exception` can handle most errors you encounter. However, you should avoid catching `BaseException` directly, as it also includes system-exiting exceptions like `SystemExit` and `KeyboardInterrupt`."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is a simple visualization of part of the hierarchy:"
+        "value": "One of the simplest ways to handle type conversion errors is by using a try-except block. This allows your program to catch errors when they occur and respond accordingly without stopping execution."
       },
       {
         "type": "code",
-        "value": "BaseException\n └── Exception\n      ├── ArithmeticError\n      │    ├── ZeroDivisionError\n      │    └── OverflowError\n      ├── LookupError\n      │    ├── IndexError\n      │    └── KeyError\n      └── ValueError\n"
+        "value": "user_input = input('Enter a number: ')\n\ntry:\n    number = int(user_input)\n    print(f'You entered the number {number}')\nexcept ValueError:\n    print('Oops! That was not a valid number. Please try again.')"
       },
       {
         "type": "paragraph",
-        "value": "Let's see how to catch specific exceptions so you can handle different error types appropriately."
+        "value": "In this example, if the user enters something that can’t be converted to an integer, such as \"abc\", the except block will run, showing a helpful message. This keeps the program from crashing and guides the user to enter correct data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you might want to repeatedly ask the user for input until they provide a valid number. You can do this by using a loop combined with try-except."
       },
       {
         "type": "code",
-        "value": "try:\n    number = int(input(\"Enter a number: \"))\n    result = 10 / number\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nexcept ValueError:\n    print(\"That was not a valid number!\")\nelse:\n    print(f\"Result is {result}\")"
+        "value": "while True:\n    user_input = input('Enter a valid integer: ')\n    try:\n        number = int(user_input)\n        break  # exit loop if conversion is successful\n    except ValueError:\n        print('Invalid input. Please enter a valid integer.')\n\nprint(f'Great! You entered {number}.')"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `ZeroDivisionError` is caught separately from `ValueError`. This granularity allows you to offer specific feedback based on what went wrong."
+        "value": "This approach improves the user experience by ensuring the program only continues after receiving correct input. It prevents errors downstream where the invalid input might cause bugs."
       },
       {
         "type": "paragraph",
-        "value": "If you want to catch any exception that inherits from `Exception`, you can use a general `except Exception` clause. But be cautious; catching all exceptions can hide bugs that you want to be alerted about."
+        "value": "Another useful technique is creating helper functions for conversion that return None or a default value instead of raising errors. This can be handy when working with data from files or external sources."
       },
       {
         "type": "code",
-        "value": "try:\n    # some code\n    pass\nexcept Exception as e:\n    print(f\"An error occurred: {e}\")"
+        "value": "def safe_int_convert(value, default=None):\n    try:\n        return int(value)\n    except (ValueError, TypeError):\n        return default\n\n# Using the function\nresult = safe_int_convert('123')  # returns 123\nbad_result = safe_int_convert('abc', default=0)  # returns 0 instead of raising an error\n\nprint(result)     # Output: 123\nprint(bad_result) # Output: 0"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, mastering the exception hierarchy means knowing which exceptions to catch and when. Use specific exceptions to handle expected errors, use `Exception` cautiously for general cases, and avoid catching `BaseException` unless you have very good reasons."
+        "value": "This function tries to convert a value to an integer but returns a default when it fails. You can customize the default to whatever makes sense for your application, like 0, None, or even an error message."
       },
       {
         "type": "paragraph",
-        "value": "By understanding and applying Python's exception hierarchy correctly, you can create programs that not only handle errors gracefully but also remain easy to debug and maintain."
+        "value": "In summary, gracefully handling type conversion errors in Python involves anticipating potential failure points and using try-except blocks, loops, or helper functions to manage these cases. Doing so helps build applications that are resilient and user-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start by applying these simple techniques in your programs, and you'll improve both stability and usability in your Python applications."
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-in-sql-for-advanced-data-analysis",
-    "title": "Mastering Window Functions in SQL for Advanced Data Analysis",
+    "slug": "mastering-sql-window-functions-beginners-tutorial",
+    "title": "Mastering SQL Window Functions: A Beginner's Step-by-Step Tutorial",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform powerful and advanced data analysis with easy-to-understand examples.",
+    "description": "Learn how to use SQL window functions with easy-to-follow explanations and examples. This beginner-friendly tutorial will help you understand and master window functions for powerful data analysis.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions are powerful SQL tools that let you perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions don't group rows into a single output row; instead, they preserve the original rows while adding valuable analytical data."
+        "value": "SQL window functions are a powerful tool that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not cause rows to be grouped into a single output row — they retain the original number of rows while calculating values that consider neighboring rows or partitions."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll cover the basics of window functions and explore some common examples like running totals, ranking, and moving averages, to help you master advanced data analysis using SQL."
+        "value": "In this tutorial, we will explore some of the most common window functions, how they work, and practical examples to help you master them. We'll use a simple sales table to demonstrate."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with the general syntax of a window function: you use it with an OVER() clause that defines the window (the set of rows to perform calculations on)."
+        "value": "Assume we have a table called 'sales' with these columns: id (sale ID), salesperson, region, and amount (sale amount)."
       },
       {
         "type": "code",
-        "value": "SELECT column1, \n       window_function() OVER (PARTITION BY column2 ORDER BY column3) AS result\nFROM table_name;"
+        "value": "CREATE TABLE sales (\n    id INT,\n    salesperson VARCHAR(50),\n    region VARCHAR(50),\n    amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales (id, salesperson, region, amount) VALUES\n(1, 'Alice', 'East', 500.00),\n(2, 'Bob', 'West', 300.00),\n(3, 'Alice', 'East', 700.00),\n(4, 'Bob', 'West', 200.00),\n(5, 'Charlie', 'East', 400.00);\n"
       },
       {
         "type": "paragraph",
-        "value": "Here, PARTITION BY divides the rows into groups (like a GROUP BY but without aggregation), and ORDER BY specifies the order in which to process rows within each partition."
+        "value": "### 1. Using ROW_NUMBER() to Assign Unique Row Numbers"
       },
       {
         "type": "paragraph",
-        "value": "### Example 1: Calculate Running Total\nSuppose you have a sales table with columns: sale_date, salesperson_id, and sale_amount. You want to calculate a cumulative sum of sales per salesperson ordered by date."
+        "value": "ROW_NUMBER() assigns a unique sequential integer to rows within the partition of a result set, ordered by the specified column(s). It’s helpful when you want to number each row."
       },
       {
         "type": "code",
-        "value": "SELECT \n  salesperson_id,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY salesperson_id, sale_date;"
+        "value": "SELECT\n  id,\n  salesperson,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS row_num\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "This query computes a running total of sales for each salesperson, ordered by date. The SUM() window function aggregates sale_amounts up to the current row."
+        "value": "This query numbers each sale for every salesperson starting from 1 for their highest sale."
       },
       {
         "type": "paragraph",
-        "value": "### Example 2: Ranking Rows\nWindow functions also let you assign ranks to rows within partitions. For instance, to rank employees within each department by their salary:"
+        "value": "### 2. Calculating Running Totals with SUM() OVER"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can calculate a running total of sales amounts partitioned by salesperson using the SUM() window function."
       },
       {
         "type": "code",
-        "value": "SELECT \n  employee_id,\n  department_id,\n  salary,\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;"
+        "value": "SELECT\n  salesperson,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "RANK() assigns ranking numbers starting at 1 within each department, sorting employees from highest to lowest salary."
+        "value": "This query adds up the sale amounts for each salesperson in order of sale id, providing a cumulative total."
       },
       {
         "type": "paragraph",
-        "value": "### Example 3: Moving Average\nTo smooth trends in data, moving averages are helpful. Here's how to calculate a 3-day moving average of sales for each salesperson:"
+        "value": "### 3. Finding the Average Sale Amount with AVG() OVER"
+      },
+      {
+        "type": "paragraph",
+        "value": "To find the average sale amount per region without grouping and losing row-level detail, you can use AVG() as a window function."
       },
       {
         "type": "code",
-        "value": "SELECT \n  salesperson_id,\n  sale_date,\n  sale_amount,\n  AVG(sale_amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg_3_days\nFROM sales;"
+        "value": "SELECT\n  id,\n  region,\n  amount,\n  AVG(amount) OVER (PARTITION BY region) AS avg_region_sale\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "The ROWS BETWEEN clause defines a window frame of the current row and two preceding rows, helping compute the average over these rows."
+        "value": "Here, each row shows the sale details along with the average sales amount of its region."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nWindow functions provide great flexibility for advanced data analysis tasks by enabling calculations across related rows without collapsing row structure. Start experimenting with SUM(), RANK(), AVG(), and ROW_NUMBER() window functions to unlock meaningful insights from your data."
+        "value": "### 4. Using LAG() and LEAD() to Access Neighboring Rows"
       },
       {
         "type": "paragraph",
-        "value": "Practice these examples with your dataset and deepen your understanding by exploring other window functions and framing options supported by your SQL database."
+        "value": "LAG() and LEAD() functions allow you to look at previous or next row values without using self-joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  salesperson,\n  amount,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY id) AS previous_sale,\n  LEAD(amount) OVER (PARTITION BY salesperson ORDER BY id) AS next_sale\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query lets you compare each sale amount with the previous and next sales made by the same salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are essential for advanced data analysis without losing the detail of each row. They help calculate rankings, running totals, averages, and compare rows effectively. Practice the examples provided and explore more window functions like RANK(), DENSE_RANK(), and NTILE() to expand your SQL skills."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-queries-to-prevent-performance-bottlenecks-and-error-cascades",
-    "title": "Optimizing SQL Queries to Prevent Performance Bottlenecks and Error Cascades",
+    "slug": "handling-null-edge-cases-in-sql-queries-for-accurate-data-analysis",
+    "title": "Handling NULL Edge Cases in SQL Queries for Accurate Data Analysis",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to optimize SQL queries to avoid slow performance and cascading errors with simple, beginner-friendly tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=B3WCP98RBlo",
+    "description": "Learn how to properly handle NULL values in SQL queries to avoid errors and ensure accurate data analysis results.",
+    "videoUrl": "https://www.youtube.com/watch?v=qQ8JogECmBU",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL queries are the backbone of many applications, but poorly written queries can lead to performance bottlenecks and error cascades that affect your entire system. Optimizing SQL queries not only improves speed but also helps prevent errors that may compound and become difficult to troubleshoot. In this article, we’ll cover some essential tips for writing efficient, error-resistant SQL queries."
+        "value": "When working with SQL queries, NULL values can often cause unexpected results or errors if not handled correctly. NULL represents the absence of a value, which is different from zero or an empty string. Understanding how to handle NULL edge cases is essential for beginners who want to perform accurate data analysis."
       },
       {
         "type": "paragraph",
-        "value": "One of the first things to check is indexing. Indexes speed up data retrieval by allowing the database to find rows faster without scanning the entire table. For example, if you frequently query a column like user_id, adding an index on that column can improve performance significantly."
+        "value": "A common mistake is using standard comparison operators with NULL values. For example, the expression `column = NULL` will not return true for NULL entries because NULL is unknown, not a value. Instead, you must use the `IS NULL` or `IS NOT NULL` operators to check for NULLs."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_user_id ON orders(user_id);"
+        "value": "-- Correct way to filter rows with NULL values\nSELECT *\nFROM employees\nWHERE manager_id IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "Using SELECT * is common in beginner queries but can cause unnecessary data loading and slow performance. Always select only the columns you need."
+        "value": "Another common issue arises when using aggregate functions such as SUM or AVG. SQL ignores NULL values in these calculations, which can lead to misleading results if you are not careful. To manage this, consider using the `COALESCE` function, which replaces NULL with a specified value."
       },
       {
         "type": "code",
-        "value": "SELECT order_id, order_date, total_amount FROM orders WHERE user_id = 101;"
+        "value": "-- Using COALESCE to treat NULL as zero\nSELECT department_id, SUM(COALESCE(bonus, 0)) AS total_bonus\nFROM employees\nGROUP BY department_id;"
       },
       {
         "type": "paragraph",
-        "value": "Avoid nested subqueries when possible. Instead, try to use JOINs which are often faster and easier to optimize."
+        "value": "You might also encounter NULL values when performing JOIN operations. When joining two tables, unmatched rows will result in NULLs in columns from the non-matching table. To handle these situations, you can use functions like `COALESCE` to provide default values and prevent NULL-related errors."
       },
       {
         "type": "code",
-        "value": "SELECT u.user_id, u.name, o.total_amount FROM users u JOIN orders o ON u.user_id = o.user_id WHERE o.total_amount > 100;"
+        "value": "-- Handling NULLs after a LEFT JOIN\nSELECT e.employee_id, e.name, COALESCE(d.department_name, 'No Department') AS department\nFROM employees e\nLEFT JOIN departments d ON e.department_id = d.department_id;"
       },
       {
         "type": "paragraph",
-        "value": "Be cautious with NULL values. Queries that do not handle NULLs properly can cause unexpected errors or skip rows unintentionally. Use IS NULL or IS NOT NULL explicitly."
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM users WHERE last_login IS NOT NULL;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Set a reasonable limit on your queries to prevent large, slow data retrievals that overload your server and cause cascading failures."
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM products WHERE category = 'Books' LIMIT 50;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, always test your queries with EXPLAIN (or similar tools) to understand how the database plans to execute them. This helps identify slow operations and potential bottlenecks."
-      },
-      {
-        "type": "code",
-        "value": "EXPLAIN SELECT order_id FROM orders WHERE user_id = 101;"
-      },
-      {
-        "type": "paragraph",
-        "value": "By following these simple tips—indexing key columns, selecting only necessary fields, avoiding complex subqueries, handling NULLs carefully, limiting result sets, and understanding query execution plans—you can optimize your SQL queries to run efficiently and reduce error cascades. This leads to a smoother, more reliable application experience."
+        "value": "In summary, always remember these key points for NULL handling in SQL:\n- Use `IS NULL` and `IS NOT NULL` to check for NULL values.\n- Use `COALESCE` to provide default values instead of NULL.\n- Be cautious in aggregate functions as NULLs are ignored.\n- Consider NULLs carefully when performing JOINs.\nFollowing these tips will help you avoid errors and make your data analysis more reliable."
       }
     ]
   }

@@ -28189,5 +28189,467 @@ export const articles = [
         "value": "By following these simple tips—indexing key columns, selecting only necessary fields, avoiding complex subqueries, handling NULLs carefully, limiting result sets, and understanding query execution plans—you can optimize your SQL queries to run efficiently and reduce error cascades. This leads to a smoother, more reliable application experience."
       }
     ]
+  },
+  {
+    "slug": "designing-resilient-javascript-systems-handling-race-conditions-gracefully",
+    "title": "Designing Resilient JavaScript Systems: Handling Race Conditions Gracefully",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle race conditions in JavaScript to build more resilient and error-free applications. This beginner-friendly guide explains race conditions and practical solutions in simple terms.",
+    "videoUrl": "https://www.youtube.com/watch?v=kmJz8w5ij8Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building JavaScript applications, especially those that involve asynchronous operations like fetching data from APIs or interacting with a database, you might encounter a tricky problem called a race condition. This happens when the outcome depends on the timing or order of events, which can lead to unexpected bugs and inconsistent data."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explain what race conditions are, why they occur in JavaScript, and how you can handle them gracefully to design more resilient systems. We will also walk through some practical examples and solutions that are easy to understand and use."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Race Condition?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A race condition occurs when two or more pieces of code run at the same time and share or modify the same resource, but the final result depends on the order in which they finish. Because JavaScript is single-threaded but uses asynchronous code (like promises, timeouts, or API calls), race conditions can easily happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, imagine two API calls fetching a user's profile, and both try to update the UI or store data. If the slower API call finishes last, it might override the data from the faster one, causing inconsistent or outdated information to be shown."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example of a Race Condition in JavaScript"
+      },
+      {
+        "type": "code",
+        "value": "let userData = {};\n\nfunction fetchUserName() {\n  return new Promise(resolve => {\n    setTimeout(() => resolve('Alice'), 300);\n  });\n}\n\nfunction fetchUserAge() {\n  return new Promise(resolve => {\n    setTimeout(() => resolve(30), 200);\n  });\n}\n\n// Both functions update userData, but in an unpredictable order\nfetchUserName().then(name => {\n  userData.name = name;\n  console.log('Name updated:', userData);\n});\n\nfetchUserAge().then(age => {\n  userData.age = age;\n  console.log('Age updated:', userData);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, fetchUserName takes 300ms to complete while fetchUserAge takes 200ms. Depending on which one finishes last, the console logs may show userData in different partial states. This can be confusing and cause bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Handle Race Conditions Gracefully"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use Promise.all() to wait for all asynchronous tasks:** This ensures you only update the state when all data is ready."
+      },
+      {
+        "type": "code",
+        "value": "Promise.all([fetchUserName(), fetchUserAge()])\n  .then(([name, age]) => {\n    userData.name = name;\n    userData.age = age;\n    console.log('All data updated:', userData);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use async/await for easier-to-read asynchronous code:** This syntax helps sequence operations clearly."
+      },
+      {
+        "type": "code",
+        "value": "async function updateUserData() {\n  const name = await fetchUserName();\n  const age = await fetchUserAge();\n  userData.name = name;\n  userData.age = age;\n  console.log('UserData updated:', userData);\n}\n\nupdateUserData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Cancel outdated updates:** If operations can be triggered multiple times, cancel or ignore results from older calls to avoid stale data."
+      },
+      {
+        "type": "code",
+        "value": "let latestRequest = 0;\n\nasync function fetchUserData(currentRequest) {\n  const name = await fetchUserName();\n  const age = await fetchUserAge();\n  if (currentRequest === latestRequest) {\n    userData.name = name;\n    userData.age = age;\n    console.log('Latest data updated:', userData);\n  } else {\n    console.log('Stale response ignored');\n  }\n}\n\nfunction updateRequest() {\n  latestRequest += 1;\n  fetchUserData(latestRequest);\n}\n\n// Simulate multiple rapid updates\nupdateRequest();\nsetTimeout(updateRequest, 100);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Race conditions are common in JavaScript apps dealing with asynchronous operations. By understanding how they occur and applying practical patterns like Promise.all, async/await, and request tracking, you can design more resilient systems that handle race conditions gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing these techniques in your projects, and you'll write more reliable, predictable, and easy-to-maintain JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-lazy-loading-typescript",
+    "title": "Mastering Lazy Loading in TypeScript for Improved Web App Performance",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to implement lazy loading in TypeScript to boost your web application's performance by loading components only when needed.",
+    "videoUrl": "https://www.youtube.com/watch?v=aLTdWCdn4XQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Lazy loading is a powerful technique to improve web app performance by loading only the necessary parts of your app when required. This reduces the initial load time and makes your app faster and more efficient. In this tutorial, we'll explore how to implement lazy loading in TypeScript, especially focusing on dynamically importing modules."
+      },
+      {
+        "type": "paragraph",
+        "value": "Normally, when you import modules in TypeScript or JavaScript, all the imported components are bundled and loaded at once. With lazy loading, you tell the app to load parts of the code on demand, such as when a user visits a particular route or clicks a button."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into a simple example to see how this works."
+      },
+      {
+        "type": "code",
+        "value": "async function loadComponent() {\n  const module = await import('./MyComponent');\n  const MyComponent = module.default;\n  MyComponent.render();\n}\n\n// Usage example:\ndocument.getElementById('load-btn')?.addEventListener('click', () => {\n  loadComponent();\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `import()` function dynamically loads the `MyComponent` module only when the user clicks the button with the ID `load-btn`. Until the button is clicked, the component is not loaded, saving initial load time."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you are using frameworks like React with TypeScript, lazy loading can be even easier with built-in support."
+      },
+      {
+        "type": "code",
+        "value": "import React, { Suspense } from 'react';\n\nconst LazyComponent = React.lazy(() => import('./LazyComponent'));\n\nfunction App() {\n  return (\n    <div>\n      <h1>Welcome</h1>\n      <Suspense fallback={<div>Loading...</div>}>\n        <LazyComponent />\n      </Suspense>\n    </div>\n  );\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this React example, the `LazyComponent` is loaded only when it is rendered. The `Suspense` component shows a fallback UI while the component loads, improving user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, lazy loading in TypeScript helps optimize your app's performance by reducing the bundle size and loading times. Use dynamic imports (`import()`) or framework-specific features like React's `React.lazy` to implement this technique smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-type-narrowing-with-practical-examples",
+    "title": "Understanding TypeScript's Type Narrowing with Practical Examples",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's type narrowing helps catch errors early by refining variable types during coding, with simple examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=YVdA86aSBGY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool that adds static types to JavaScript, helping developers catch errors before running their code. One of TypeScript's key features is type narrowing. Type narrowing means refining a variable's type into a more specific one based on conditions, making code safer and clearer."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some practical examples to see how type narrowing works in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Narrowing with typeof"
+      },
+      {
+        "type": "paragraph",
+        "value": "If a variable can be of multiple types, TypeScript allows you to narrow it down by checking its type using the typeof operator."
+      },
+      {
+        "type": "code",
+        "value": "function printId(id: number | string) {\n  if (typeof id === \"string\") {\n    console.log(id.toUpperCase()); // Here id is treated as string\n  } else {\n    console.log(id); // Here id is treated as number\n  }\n}\nprintId(\"abc123\");\nprintId(101);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, TypeScript knows inside the if-block that `id` is a string, so it lets us call string methods like `toUpperCase()`. Outside that block, it treats `id` as a number."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Narrowing with instanceof"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also narrow types using the `instanceof` operator to check if an object belongs to a specific class."
+      },
+      {
+        "type": "code",
+        "value": "class Dog {\n  bark() {\n    console.log(\"Woof!\");\n  }\n}\nclass Cat {\n  meow() {\n    console.log(\"Meow!\");\n  }\n}\n\nfunction makeSound(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark(); // Narrowed to Dog\n  } else {\n    animal.meow(); // Narrowed to Cat\n  }\n}\n\nmakeSound(new Dog());\nmakeSound(new Cat());"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript knows the exact class of the object inside each condition, which allows safe access to methods specific to the class."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Narrowing with Equality Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another way to narrow types is by comparing a variable to a specific value."
+      },
+      {
+        "type": "code",
+        "value": "function printStatus(status: \"success\" | \"error\" | \"loading\") {\n  if (status === \"success\") {\n    console.log(\"Operation was successful!\");\n  } else if (status === \"error\") {\n    console.log(\"There was an error.\");\n  } else {\n    console.log(\"Loading...\");\n  }\n}\nprintStatus(\"success\");"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, TypeScript narrows the `status` type inside each branch, helping prevent mistakes like calling methods that only exist on one string literal."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why is Type Narrowing Important?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing reduces runtime errors by making sure you only use methods or properties valid for the currently known type. It also improves code readability and helps IDEs provide better suggestions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript's type narrowing is a beginner-friendly concept that improves your code safety. By using conditions like `typeof`, `instanceof`, or equality checks, you guide TypeScript in understanding your code better, which helps avoid common mistakes and bugs."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-python-ecommerce",
+    "title": "Building Scalable Data Models in Python for E-commerce Platforms",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to design and build scalable data models in Python tailored for e-commerce platforms, focusing on flexibility and growth.",
+    "videoUrl": "https://www.youtube.com/watch?v=EWS_CIxttVw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Creating a scalable data model is essential for any e-commerce platform that wants to handle growth efficiently and maintain flexibility. Python, with its simplicity and strong data handling capabilities, is an excellent choice for building such models. In this tutorial, we'll walk through the basics of designing scalable data models for an e-commerce platform using Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "We will focus on key entities such as Products, Customers, and Orders. Our approach will emphasize clarity, maintainability, and scalability. We'll use Python classes to model each entity and consider relationships between them to avoid common pitfalls like data duplication."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by defining a Product class that can handle product details and allow adding multiple variants, such as sizes or colors, that are typical for an e-commerce platform."
+      },
+      {
+        "type": "code",
+        "value": "class Product:\n    def __init__(self, product_id, name, description, price):\n        self.product_id = product_id\n        self.name = name\n        self.description = description\n        self.price = price\n        self.variants = []  # List to hold different product variants\n\n    def add_variant(self, variant):\n        self.variants.append(variant)\n\nclass Variant:\n    def __init__(self, variant_id, color, size, stock):\n        self.variant_id = variant_id\n        self.color = color\n        self.size = size\n        self.stock = stock\n\n# Example usage\nproduct = Product(1, 'T-Shirt', 'Comfortable cotton t-shirt', 20.0)\nvariant1 = Variant(101, 'Red', 'M', 50)\nvariant2 = Variant(102, 'Blue', 'L', 30)\n\nproduct.add_variant(variant1)\nproduct.add_variant(variant2)\n\nprint(f\"Product: {product.name} with variants:\")\nfor v in product.variants:\n    print(f\"- {v.color} size {v.size} with {v.stock} in stock\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's create a Customer class. We’ll include basic customer details and a way to track their orders using a list. This model keeps customer data organized and helps when scaling your user base."
+      },
+      {
+        "type": "code",
+        "value": "class Customer:\n    def __init__(self, customer_id, name, email):\n        self.customer_id = customer_id\n        self.name = name\n        self.email = email\n        self.orders = []  # List to track orders\n\n    def add_order(self, order):\n        self.orders.append(order)\n\n# Example usage\ncustomer = Customer(1, 'Alice Smith', 'alice@example.com')"
+      },
+      {
+        "type": "paragraph",
+        "value": "The Orders class will manage individual orders placed by customers. Each order can include multiple items, and we will relate them to the Product variants to maintain consistency and avoid duplicating product details."
+      },
+      {
+        "type": "code",
+        "value": "class OrderItem:\n    def __init__(self, product_variant, quantity):\n        self.product_variant = product_variant\n        self.quantity = quantity\n\nclass Order:\n    def __init__(self, order_id, customer):\n        self.order_id = order_id\n        self.customer = customer\n        self.items = []\n\n    def add_item(self, order_item):\n        self.items.append(order_item)\n\n    def total_price(self):\n        return sum(item.product_variant.stock * item.quantity for item in self.items)\n\n# Example usage\norder = Order(5001, customer)\norder_item1 = OrderItem(variant1, 2)  # 2 red medium T-shirts\norder_item2 = OrderItem(variant2, 1)  # 1 blue large T-shirt\norder.add_item(order_item1)\norder.add_item(order_item2)\n\ncustomer.add_order(order)\n\nprint(f\"Customer {customer.name} placed order {order.order_id} with {len(order.items)} items.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "By structuring your models this way, each class has a clear responsibility, making the code easier to manage and extend. You can add more properties, like product categories, customer addresses, or payment details, without cluttering your design."
+      },
+      {
+        "type": "paragraph",
+        "value": "When your platform scales, you might want to move these models to a database and use an ORM (Object Relational Mapper) like SQLAlchemy. But starting with clear Python classes helps you prototype and understand relationships before diving into database design."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, building scalable data models involves:\n- Defining core entities with clear responsibilities\n- Using composition to model relationships (e.g., Product -> Variant, Order -> OrderItems)\n- Keeping data duplication minimal\n- Planning for future extensions \n\nThis beginner-friendly approach lays a solid foundation for developing more complex e-commerce systems using Python."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-handle-type-conversion-errors-gracefully-in-python-applications",
+    "title": "How to Handle Type Conversion Errors Gracefully in Python Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn practical ways to handle type conversion errors in Python, ensuring your applications run smoothly even with unexpected input.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In Python, converting data types is a common task, such as turning strings into integers or floats. However, when the input data is not in the expected format, Python raises type conversion errors like ValueError or TypeError. These errors can cause your program to crash if not handled properly. In this article, we'll explore how to gracefully handle these conversion errors, improving your program's robustness and user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the simplest ways to handle type conversion errors is by using a try-except block. This allows your program to catch errors when they occur and respond accordingly without stopping execution."
+      },
+      {
+        "type": "code",
+        "value": "user_input = input('Enter a number: ')\n\ntry:\n    number = int(user_input)\n    print(f'You entered the number {number}')\nexcept ValueError:\n    print('Oops! That was not a valid number. Please try again.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if the user enters something that can’t be converted to an integer, such as \"abc\", the except block will run, showing a helpful message. This keeps the program from crashing and guides the user to enter correct data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you might want to repeatedly ask the user for input until they provide a valid number. You can do this by using a loop combined with try-except."
+      },
+      {
+        "type": "code",
+        "value": "while True:\n    user_input = input('Enter a valid integer: ')\n    try:\n        number = int(user_input)\n        break  # exit loop if conversion is successful\n    except ValueError:\n        print('Invalid input. Please enter a valid integer.')\n\nprint(f'Great! You entered {number}.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach improves the user experience by ensuring the program only continues after receiving correct input. It prevents errors downstream where the invalid input might cause bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful technique is creating helper functions for conversion that return None or a default value instead of raising errors. This can be handy when working with data from files or external sources."
+      },
+      {
+        "type": "code",
+        "value": "def safe_int_convert(value, default=None):\n    try:\n        return int(value)\n    except (ValueError, TypeError):\n        return default\n\n# Using the function\nresult = safe_int_convert('123')  # returns 123\nbad_result = safe_int_convert('abc', default=0)  # returns 0 instead of raising an error\n\nprint(result)     # Output: 123\nprint(bad_result) # Output: 0"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function tries to convert a value to an integer but returns a default when it fails. You can customize the default to whatever makes sense for your application, like 0, None, or even an error message."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, gracefully handling type conversion errors in Python involves anticipating potential failure points and using try-except blocks, loops, or helper functions to manage these cases. Doing so helps build applications that are resilient and user-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start by applying these simple techniques in your programs, and you'll improve both stability and usability in your Python applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-beginners-tutorial",
+    "title": "Mastering SQL Window Functions: A Beginner's Step-by-Step Tutorial",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions with easy-to-follow explanations and examples. This beginner-friendly tutorial will help you understand and master window functions for powerful data analysis.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are a powerful tool that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not cause rows to be grouped into a single output row — they retain the original number of rows while calculating values that consider neighboring rows or partitions."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we will explore some of the most common window functions, how they work, and practical examples to help you master them. We'll use a simple sales table to demonstrate."
+      },
+      {
+        "type": "paragraph",
+        "value": "Assume we have a table called 'sales' with these columns: id (sale ID), salesperson, region, and amount (sale amount)."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n    id INT,\n    salesperson VARCHAR(50),\n    region VARCHAR(50),\n    amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales (id, salesperson, region, amount) VALUES\n(1, 'Alice', 'East', 500.00),\n(2, 'Bob', 'West', 300.00),\n(3, 'Alice', 'East', 700.00),\n(4, 'Bob', 'West', 200.00),\n(5, 'Charlie', 'East', 400.00);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Using ROW_NUMBER() to Assign Unique Row Numbers"
+      },
+      {
+        "type": "paragraph",
+        "value": "ROW_NUMBER() assigns a unique sequential integer to rows within the partition of a result set, ordered by the specified column(s). It’s helpful when you want to number each row."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  salesperson,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS row_num\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query numbers each sale for every salesperson starting from 1 for their highest sale."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Calculating Running Totals with SUM() OVER"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can calculate a running total of sales amounts partitioned by salesperson using the SUM() window function."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query adds up the sale amounts for each salesperson in order of sale id, providing a cumulative total."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Finding the Average Sale Amount with AVG() OVER"
+      },
+      {
+        "type": "paragraph",
+        "value": "To find the average sale amount per region without grouping and losing row-level detail, you can use AVG() as a window function."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  region,\n  amount,\n  AVG(amount) OVER (PARTITION BY region) AS avg_region_sale\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, each row shows the sale details along with the average sales amount of its region."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Using LAG() and LEAD() to Access Neighboring Rows"
+      },
+      {
+        "type": "paragraph",
+        "value": "LAG() and LEAD() functions allow you to look at previous or next row values without using self-joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  salesperson,\n  amount,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY id) AS previous_sale,\n  LEAD(amount) OVER (PARTITION BY salesperson ORDER BY id) AS next_sale\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query lets you compare each sale amount with the previous and next sales made by the same salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are essential for advanced data analysis without losing the detail of each row. They help calculate rankings, running totals, averages, and compare rows effectively. Practice the examples provided and explore more window functions like RANK(), DENSE_RANK(), and NTILE() to expand your SQL skills."
+      }
+    ]
+  },
+  {
+    "slug": "handling-null-edge-cases-in-sql-queries-for-accurate-data-analysis",
+    "title": "Handling NULL Edge Cases in SQL Queries for Accurate Data Analysis",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to properly handle NULL values in SQL queries to avoid errors and ensure accurate data analysis results.",
+    "videoUrl": "https://www.youtube.com/watch?v=qQ8JogECmBU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL queries, NULL values can often cause unexpected results or errors if not handled correctly. NULL represents the absence of a value, which is different from zero or an empty string. Understanding how to handle NULL edge cases is essential for beginners who want to perform accurate data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is using standard comparison operators with NULL values. For example, the expression `column = NULL` will not return true for NULL entries because NULL is unknown, not a value. Instead, you must use the `IS NULL` or `IS NOT NULL` operators to check for NULLs."
+      },
+      {
+        "type": "code",
+        "value": "-- Correct way to filter rows with NULL values\nSELECT *\nFROM employees\nWHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common issue arises when using aggregate functions such as SUM or AVG. SQL ignores NULL values in these calculations, which can lead to misleading results if you are not careful. To manage this, consider using the `COALESCE` function, which replaces NULL with a specified value."
+      },
+      {
+        "type": "code",
+        "value": "-- Using COALESCE to treat NULL as zero\nSELECT department_id, SUM(COALESCE(bonus, 0)) AS total_bonus\nFROM employees\nGROUP BY department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You might also encounter NULL values when performing JOIN operations. When joining two tables, unmatched rows will result in NULLs in columns from the non-matching table. To handle these situations, you can use functions like `COALESCE` to provide default values and prevent NULL-related errors."
+      },
+      {
+        "type": "code",
+        "value": "-- Handling NULLs after a LEFT JOIN\nSELECT e.employee_id, e.name, COALESCE(d.department_name, 'No Department') AS department\nFROM employees e\nLEFT JOIN departments d ON e.department_id = d.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, always remember these key points for NULL handling in SQL:\n- Use `IS NULL` and `IS NOT NULL` to check for NULL values.\n- Use `COALESCE` to provide default values instead of NULL.\n- Be cautious in aggregate functions as NULLs are ignored.\n- Consider NULLs carefully when performing JOINs.\nFollowing these tips will help you avoid errors and make your data analysis more reliable."
+      }
+    ]
   }
 ];
