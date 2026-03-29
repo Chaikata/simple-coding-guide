@@ -29618,5 +29618,486 @@ export const articles = [
         "value": "- Understand how different joins handle NULLs\n- Avoid filtering on right table columns in WHERE when using LEFT/RIGHT JOINs\n- Use JOIN conditions to filter if applicable\n- Use COALESCE or ISNULL to assign default values\n- Use IS NULL / IS NOT NULL to test for NULL explicitly\n\nFollowing these best practices will help you write robust SQL queries that handle NULLs correctly, avoiding common errors that plague beginners."
       }
     ]
+  },
+  {
+    "slug": "mastering-async-error-handling-in-javascript-beyond-try-catch",
+    "title": "Mastering Async Error Handling in JavaScript: Beyond Try-Catch",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle errors in asynchronous JavaScript code effectively. Explore techniques beyond traditional try-catch blocks for cleaner, safer, and more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=wlTKcthuNnY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling errors is a crucial part of writing robust JavaScript applications. When dealing with asynchronous code—such as promises or async/await—error handling can be trickier than with synchronous code. In this article, we'll explore common methods to catch errors beyond the traditional try-catch, ensuring your async code remains clean and reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common way to handle errors in asynchronous functions that use async/await is with try-catch blocks. This works well, but as your code gets complex, nested try-catch blocks can make it hard to read and maintain."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "While try-catch is straightforward, there are alternative patterns that can help you write more concise and readable error handling in asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "One popular pattern is to separate the success and failure paths by manually handling promise rejections with `.then()` and `.catch()`. This avoids try-catch but can get messy if overused."
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('Error fetching data:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "A cleaner and more scalable approach for async error handling is to use a utility function that wraps promises and returns an array with error and data. This pattern reduces the need for try-catch blocks by returning errors as values you can check easily."
+      },
+      {
+        "type": "code",
+        "value": "function to(promise) {\n  return promise\n    .then(data => [null, data])\n    .catch(err => [err]);\n}\n\nasync function getData() {\n  const [error, data] = await to(fetch('https://api.example.com/data').then(res => res.json()));\n  if (error) {\n    console.error('Fetch error:', error);\n    return;\n  }\n  console.log('Fetched data:', data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this `to` helper function, your async functions become cleaner, making error handling explicit and reducing nested try-catch blocks, which improves readability especially in larger applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, remember that unhandled promise rejections can cause silent failures, especially in Node.js environments. Always handle errors either with try-catch or by attaching `.catch()` handlers to your promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, while try-catch is the easiest way to handle async errors when using async/await, using helper functions like the pattern shown can help you write cleaner and more maintainable code. Explore these techniques to master async error handling in your JavaScript projects!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types-for-edge-case-handling",
+    "title": "Mastering TypeScript Utility Types for Edge Case Handling",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript utility types to handle common edge cases effectively, making your code safer and easier to maintain.",
+    "videoUrl": "https://www.youtube.com/watch?v=6I1Zk79QHZs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript's utility types are powerful tools that help you handle edge cases and make your code safer and more expressive. These utilities simplify the process of working with types, especially when you want to modify or adapt existing types to handle scenarios like optional properties, required fields, readonly objects, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll cover some of the most commonly used TypeScript utility types: Partial, Required, Readonly, Pick, and Omit. You'll learn how to apply these to handle edge cases in your projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple interface representing a User:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string;\n  readonly createdAt: Date;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Partial<T>\n\nThe `Partial` utility converts all properties of a type to optional. This is great when you want to update only some properties of an object."
+      },
+      {
+        "type": "code",
+        "value": "function updateUser(id: number, newDetails: Partial<User>) {\n  // Implementation would update user using newDetails\n}\n\n// Usage:\nupdateUser(1, { email: \"new.email@example.com\" });  // Only email is updated"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Required<T>\n\nThe `Required` utility makes all properties required. This is helpful when you want to ensure that no property is missing."
+      },
+      {
+        "type": "code",
+        "value": "type CompleteUser = Required<User>;\n\nconst user: CompleteUser = {\n  id: 123,\n  name: \"Alice\",\n  email: \"alice@example.com\",  // Now required\n  createdAt: new Date()\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Readonly<T>\n\n`Readonly` marks all properties as readonly, meaning they cannot be reassigned. This is useful to prevent accidental modifications."
+      },
+      {
+        "type": "code",
+        "value": "const readOnlyUser: Readonly<User> = {\n  id: 1,\n  name: \"Bob\",\n  createdAt: new Date()\n};\n\n// readOnlyUser.id = 2; // Error: Cannot assign to 'id' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Pick<T, K>\n\n`Pick` creates a new type by selecting a subset of properties from an existing type. This is handy when you need only certain fields."
+      },
+      {
+        "type": "code",
+        "value": "type UserPreview = Pick<User, \"id\" | \"name\">;\n\nconst preview: UserPreview = {\n  id: 5,\n  name: \"Carol\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Omit<T, K>\n\n`Omit` does the opposite of Pick by excluding certain properties from a type."
+      },
+      {
+        "type": "code",
+        "value": "type UserWithoutEmail = Omit<User, \"email\">;\n\nconst userNoEmail: UserWithoutEmail = {\n  id: 7,\n  name: \"Dave\",\n  createdAt: new Date()\n  // email is excluded\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Edge Cases\n\nBy combining these utilities, you can handle many edge cases like optional updates, immutable objects, and tailored data views without duplicating types."
+      },
+      {
+        "type": "code",
+        "value": "function createUser(data: Required<Pick<User, \"name\" | \"email\">>): User {\n  return {\n    id: Math.floor(Math.random() * 1000),\n    name: data.name,\n    email: data.email,\n    createdAt: new Date()\n  };\n}\n\n// Usage:\nconst newUser = createUser({ name: \"Emma\", email: \"emma@example.com\" });"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\n\nUsing TypeScript utility types can dramatically reduce boilerplate and improve your code's clarity and reliability. As you master Partial, Required, Readonly, Pick, and Omit, you'll be better equipped to handle edge cases with confidence."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-typescripts-type-guards-for-smarter-error-handling",
+    "title": "Harnessing TypeScript's Type Guards for Smarter Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's type guards to improve error handling in your applications with clear, beginner-friendly examples.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with errors in TypeScript, it's common to encounter different kinds of error objects. Sometimes you might receive a standard Error, but other times the error could be a string, null, or even a custom error type. Using TypeScript's type guards helps you write safer, smarter error-handling code by checking the error type before accessing its properties."
+      },
+      {
+        "type": "paragraph",
+        "value": "A type guard is a function that checks the type of a value at runtime and informs the TypeScript compiler about it. This way, TypeScript can narrow down the type and provide better type checking and autocomplete suggestions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of a custom type guard function to check whether an error is an instance of the standard Error class."
+      },
+      {
+        "type": "code",
+        "value": "function isError(error: unknown): error is Error {\n  return error instanceof Error;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this function, `error is Error` tells TypeScript that when this function returns true, the `error` variable should be treated as an Error object. Now, you can use this type guard in a try-catch block to handle different error types safely."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  throw new Error('Something went wrong');\n} catch (err) {\n  if (isError(err)) {\n    // Now TypeScript knows err is of type Error\n    console.log('Error message:', err.message);\n  } else {\n    // Handle unknown error types\n    console.log('Unexpected error:', err);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can extend this approach to more complex error handling by creating other custom type guards. For example, imagine your application throws custom error objects with extra properties."
+      },
+      {
+        "type": "code",
+        "value": "interface NetworkError {\n  message: string;\n  code: number;\n  url: string;\n}\n\nfunction isNetworkError(error: any): error is NetworkError {\n  return (\n    error &&\n    typeof error.message === 'string' &&\n    typeof error.code === 'number' &&\n    typeof error.url === 'string'\n  );\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this guard, you can detect network errors and respond accordingly:"
+      },
+      {
+        "type": "code",
+        "value": "function handleError(error: unknown) {\n  if (isNetworkError(error)) {\n    console.log(`Network error at ${error.url} with code ${error.code}`);\n  } else if (isError(error)) {\n    console.log('General error:', error.message);\n  } else {\n    console.log('Unknown error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By using type guards, your error handling becomes more precise, and TypeScript can help prevent bugs by making sure you only access properties that exist on the specific error type. This leads to clearer, safer, and easier-to-maintain code—especially in large applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, start by defining simple type guard functions for your error types. Use them in your catch blocks or error handling code to validate the error type before accessing its properties. This technique leverages TypeScript’s strengths and makes your debugging and error handling smarter."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-generators-memory-efficient-data-processing",
+    "title": "Mastering Python Generators for Memory-Efficient Data Processing",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python generators to process large data efficiently without consuming much memory. This beginner-friendly guide explains generators and their practical use cases with clear examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=IfKlGhRc7Dc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python generators are a powerful tool to handle data efficiently, especially when working with large datasets that may not fit into memory all at once. Unlike lists that store all elements, generators produce items one at a time and only when required. This makes them excellent for memory-efficient data processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "A generator is a special type of iterator in Python created using functions and the `yield` keyword. When a generator function is called, it returns a generator object which can be iterated over. The function’s execution pauses at each `yield` statement and resumes when the next item is requested."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example of a generator function that yields numbers from 1 to 5:"
+      },
+      {
+        "type": "code",
+        "value": "def count_up_to_five():\n    for number in range(1, 6):\n        yield number\n\n# Create generator object\ngen = count_up_to_five()\n\n# Iterate over generator and print values\nfor value in gen:\n    print(value)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n1\n2\n3\n4\n5\n\nNotice how the function yields each number and pauses, resuming only when the next value is needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Why use generators? Consider a situation where you want to process a large file line-by-line. Reading all lines at once into a list might use a lot of memory. Using a generator allows you to read and process one line at a time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example: Reading a large file using a generator:"
+      },
+      {
+        "type": "code",
+        "value": "def read_large_file(file_path):\n    with open(file_path, 'r') as file:\n        for line in file:\n            yield line.strip()  # yield one line at a time\n\n# Usage:\nfor line in read_large_file('large_data.txt'):\n    print(line)  # Process each line without loading the whole file"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also build pipelines using generators, chaining them for efficient data transformations. For example, suppose you want to filter and transform data on the fly."
+      },
+      {
+        "type": "code",
+        "value": "def even_numbers(numbers):\n    for num in numbers:\n        if num % 2 == 0:\n            yield num\n\ndef square_numbers(numbers):\n    for num in numbers:\n        yield num * num\n\nnums = range(1, 11)\nevens = even_numbers(nums)\nsquares = square_numbers(evens)\n\nfor value in squares:\n    print(value)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n4\n16\n36\n64\n100\n\nIn this example, numbers flow through two generators without creating intermediate lists, saving memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, generators help:\n- Save memory by yielding one item at a time\n- Enable lazy evaluation\n- Allow for cleaner and readable code with data streams\n\nStart incorporating generators in your Python projects when dealing with large datasets or streams to improve performance and memory usage."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-memory-leaks-python-debugging-prevention",
+    "title": "Mastering Memory Leaks in Python: Debugging and Prevention Techniques for Scalable Systems",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to identify, debug, and prevent memory leaks in Python to build scalable and efficient applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=tGD3653BrZ8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks can cause your Python applications to consume more and more memory over time, leading to slowdowns or crashes—especially in long-running or scalable systems. Understanding how memory leaks happen and how to prevent them is crucial for building efficient Python software."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, memory is managed automatically via a garbage collector that frees up unused objects. However, memory leaks occur when objects are still referenced unintentionally and can never be garbage-collected."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some common causes of memory leaks in Python:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Circular references that the garbage collector cannot clean up if `__del__` methods are present.\n- Global variables or caches growing indefinitely.\n- Unclosed resources like file handlers or network connections.\n- Holding references in long-lived data structures such as lists or dictionaries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example causing a memory leak using a self-referencing object:"
+      },
+      {
+        "type": "code",
+        "value": "class Leak:\n    def __init__(self):\n        self.ref = self  # Self-reference causing a cycle\n\nleak_list = []\nfor _ in range(10000):\n    leak_list.append(Leak())"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, each `Leak` object references itself, creating a reference cycle. Although Python's garbage collector can handle most cycles, if the object defines a `__del__` method, these cycles are harder to collect causing leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Debugging Memory Leaks\nTo find memory leaks, Python provides several useful tools. One common way is to use the `tracemalloc` module to track memory allocations."
+      },
+      {
+        "type": "code",
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code running here\n\nsnapshot1 = tracemalloc.take_snapshot()\n# ... run code that might leak memory ...\nsnapshot2 = tracemalloc.take_snapshot()\n\ntop_stats = snapshot2.compare_to(snapshot1, 'lineno')\n\nfor stat in top_stats[:10]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows you the top lines where memory usage increased, helping pinpoint leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another handy tool is the `objgraph` package, which helps you visualize object relationships and find unexpected references. You can install it with `pip install objgraph`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Prevention Techniques"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some beginner-friendly tips to avoid memory leaks:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Avoid unnecessarily keeping references to objects.\n- Use context managers (`with` statements) to ensure resources like files and connections are properly closed.\n- Periodically clear cache or temporary data structures.\n- Be cautious with global variables and large data containers.\n- Break circular references if possible, or use `weakref` module to hold weak references."
+      },
+      {
+        "type": "code",
+        "value": "import weakref\n\nclass Data:\n    pass\n\nobj = Data()\nweak_obj_ref = weakref.ref(obj)\n\nprint(weak_obj_ref())  # Prints <__main__.Data object ...>\n\nobj = None\n\nprint(weak_obj_ref())  # Prints None because object was garbage collected"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using weak references lets Python garbage collector clean up objects even if something holds a reference."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nMemory leaks can be subtle but cause severe problems in scalable Python systems. By understanding the causes, using debugging tools like `tracemalloc` and `objgraph`, and following prevention practices such as using context managers and weak references, you can build more efficient, reliable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Regularly monitoring memory usage and cleaning up unwanted references will keep your Python apps running smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "handling-sparse-data-efficiently-with-sql-window-functions",
+    "title": "Handling Sparse Data Efficiently with SQL Window Functions",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to efficiently handle sparse data using SQL window functions with clear, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=cVCncfEE2ak",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Sparse data is common in many datasets where some values are missing or irregularly spaced across time or categories. Handling sparse data efficiently can be challenging, but SQL window functions provide powerful tools to fill gaps, carry forward values, and perform calculations over partitions of data without complex joins or subqueries."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we will explore how to use window functions like LAG(), LEAD(), ROW_NUMBER(), and LAST_VALUE() to handle sparse data in a beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine a simple sales table where some days have missing sales data. Our goal is to fill those missing days or interpolate the missing values efficiently."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n    sales_date DATE,\n    amount INT\n);\n\nINSERT INTO sales (sales_date, amount) VALUES\n('2024-01-01', 100),\n('2024-01-02', NULL),\n('2024-01-04', 200),\n('2024-01-05', NULL);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, January 2nd and January 5th have NULL sales amounts which represent sparse or missing data. Let's start by filling these NULL values with the last known non-NULL value using the window function LAST_VALUE() combined with IGNORE NULLS (if supported) or a method using LAG()."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  sales_date,\n  amount,\n  LAST_VALUE(amount) IGNORE NULLS OVER (\n    ORDER BY sales_date\n    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n  ) AS filled_amount\nFROM sales\nORDER BY sales_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If your SQL dialect does not support IGNORE NULLS, you can use a common workaround like this:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sales_date,\n  amount,\n  MAX(amount) OVER (\n    ORDER BY sales_date\n    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n  ) AS filled_amount\nFROM sales\nORDER BY sales_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query uses the MAX() window function to carry forward the last non-NULL value. Since MAX() ignores NULLs, it effectively fills missing values based on previous known amounts."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, if you want to identify where data is missing so you can, for instance, insert blank rows for those missing dates, you might generate a series of dates (if your SQL supports it) and then LEFT JOIN your sales table to this series."
+      },
+      {
+        "type": "code",
+        "value": "-- Assuming your SQL supports generate_series (like PostgreSQL)\nWITH date_series AS (\n  SELECT generate_series('2024-01-01'::date, '2024-01-05'::date, INTERVAL '1 day') AS sales_date\n)\nSELECT \n  ds.sales_date,\n  s.amount\nFROM date_series ds\nLEFT JOIN sales s ON ds.sales_date = s.sales_date\nORDER BY ds.sales_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Once you have this complete sequence including missing dates, you can apply the previous window functions to fill forward or interpolate values."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, SQL window functions are powerful tools to efficiently handle sparse data without complicated joins or loops. They enable you to perform calculations across rows that share a common attribute or order, making it easier to fill in blanks, compute running totals, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try these window functions with your data and see how they simplify sparse data handling!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-with-advanced-indexing-techniques",
+    "title": "Optimizing SQL Query Performance with Advanced Indexing Techniques",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve SQL query speed using advanced indexing methods in this beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, slow queries can be a common problem, especially as your data grows. One of the most effective ways to boost performance is through indexing. However, not all indexes are created equal. Advanced indexing techniques can make your queries lightning fast, but beginners often make mistakes that cause errors or degrade performance. This article will guide you through these techniques and how to avoid common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's review the basics. An index is a special data structure that allows the database to find rows quickly without scanning the entire table. The most common index type is the B-tree index. Here's a simple example to create an index on a column named \"customer_id\":"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this basic index works for many cases, more advanced techniques can yield better performance depending on your data and queries. Let's explore some common indexing methods and related errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Composite Indexes**: These indexes cover multiple columns. They are useful when your queries filter or sort on several columns. For example:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_date ON orders(customer_id, order_date);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error: Creating composite indexes in the wrong column order can cause the index not to be used effectively. The order matters because the database uses the leftmost prefix to optimize queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Covering Indexes**: These indexes include all columns needed by a query, allowing the database to retrieve results directly from the index without accessing the table data. For example:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_covering ON orders(customer_id, order_date, total_amount);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This index helps with queries like: SELECT order_date, total_amount FROM orders WHERE customer_id = ?;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error: Adding too many columns can make the index large and slow down write operations. Aim for a balance."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Partial Indexes** (supported in some databases like PostgreSQL): Index only rows matching a condition, making the index smaller and faster."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_recent_orders ON orders(order_date) WHERE order_date > '2024-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error: Using partial indexes incorrectly or with queries that don't match the condition will cause the index to be ignored."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Function-Based Indexes**: Indexes on expressions or functions allow faster searching on computed values."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_lower_email ON users(LOWER(email));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error: Forgetting to use the same function in your queries (e.g., WHERE LOWER(email) = 'example@example.com') means the index won't be used."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always check your query plans using EXPLAIN or similar commands to ensure that your indexes are used as expected. Also, avoid over-indexing because indexes slow down inserts, updates, and deletes."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding and applying these advanced indexing techniques carefully, you can significantly optimize your SQL query performance without running into common errors."
+      }
+    ]
   }
 ];
