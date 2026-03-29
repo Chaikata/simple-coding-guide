@@ -1,174 +1,176 @@
 [
   {
-    "slug": "advanced-data-pipeline-build-a-custom-etl-framework-in-python",
-    "title": "Advanced Data Pipeline: Build a Custom ETL Framework in Python",
-    "language": "python",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Create a scalable, modular Extract-Transform-Load (ETL) mini-project that reads data from multiple formats, applies complex transformations, and loads the result into a target data structure.",
-    "prompt": "Build a Python function `run_etl_pipeline(sources, transform_functions, destination)` that handles an advanced ETL process:\n\n1. **Extraction**: The `sources` parameter is a list of dictionaries, each specifying a data source. Each source dictionary includes a `type` key ('csv', 'json', 'api') and a `data` key with either a string path or a raw JSON string or API endpoint URL.\n\n2. **Transformation**: The `transform_functions` parameter is a list of user-defined functions that take and return Python data objects (e.g., lists of dicts). Apply these functions sequentially to the combined extracted data.\n\n3. **Loading**: The `destination` parameter specifies the output location and format (e.g., dictionary with keys like `type`: 'memory', 'csv', or 'json' and a `target` value for file path or memory object).\n\nYour ETL pipeline should:\n- Extract data from multiple sources of different types.\n- Handle data merging without data duplication.\n- Apply complex transformations (e.g., filtering, aggregation, enrichment).\n- Load the resulting data according to destination specifications.\n\nReturn the final loaded data if destination is 'memory'.",
+    "slug": "fix-the-incorrect-join-logic-in-customer-orders-query",
+    "title": "Fix the Incorrect JOIN Logic in Customer Orders Query",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "Debug and fix a SQL query that attempts to retrieve customer names alongside their total order counts, but currently returns incorrect results due to improper JOIN usage and grouping.",
+    "prompt": "You are given a query that tries to list each customer's name along with the total number of orders they have placed. However, the results are inaccurate: some customers appear multiple times, and order counts are incorrect. Identify the issues in the provided SQL query, fix the JOIN logic and grouping, and produce a correct query that returns each customer name exactly once with the correct total order count.",
     "guidance": [
-      "Implement modular extraction functions for each source type, ensuring consistent output format.",
-      "Ensure transformation functions are applied in order to the full combined dataset.",
-      "Build a flexible loader to export or store data based on the destination configuration."
+      "Check whether the JOIN between customers and orders is appropriate for the desired result.",
+      "Look carefully at the GROUP BY clause to ensure it's grouping by the correct columns."
     ],
     "hints": [
-      "Use Python's csv, json, and requests libraries to handle different types of data extraction.",
-      "Normalize all extracted data into a common structure such as a list of dictionaries before transformations.",
-      "For the loader, consider writing to files or returning data directly based on the destination type."
+      "INNER JOIN might exclude customers with no orders; consider whether you want to include them.",
+      "GROUP BY should include all selected non-aggregated columns to avoid duplicate rows."
     ],
-    "starterCode": "import csv\nimport json\nimport requests\n\ndef extract_csv(path):\n    data = []\n    with open(path, 'r') as f:\n        reader = csv.DictReader(f)\n        for row in reader:\n            data.append(row)\n    return data\n\ndef extract_json(json_str):\n    return json.loads(json_str)\n\ndef extract_api(url):\n    response = requests.get(url)\n    response.raise_for_status()\n    return response.json()\n\ndef run_etl_pipeline(sources, transform_functions, destination):\n    # Your implementation here\n    pass",
-    "expectedOutput": "If destination['type'] is 'memory', the function returns a list of dictionaries representing the transformed data.",
+    "starterCode": "SELECT c.customer_name, COUNT(o.order_id) AS total_orders\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\nGROUP BY o.customer_id;",
+    "expectedOutput": "A result set where each row contains a distinct customer_name and a total_orders count representing how many orders that customer placed. Customers with no orders should appear with a count of 0 if you adjust the JOIN accordingly.",
     "concepts": [
-      "ETL pipeline design",
-      "modular programming",
-      "data extraction and parsing",
-      "data transformation",
-      "file and API handling"
+      "SQL JOINs",
+      "GROUP BY",
+      "Aggregate Functions",
+      "Debugging SQL Queries"
     ],
-    "estimatedTime": "90 minutes",
+    "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "predict-the-output-of-a-simple-number-check-function",
-    "title": "Predict the Output of a Simple Number Check Function",
-    "language": "python",
-    "difficulty": "beginner",
-    "category": "logic",
-    "description": "Analyze a Python function that checks if a number is positive, negative, or zero, and predict its output for given inputs.",
-    "prompt": "Below is a Python function that takes a number as input and returns a string indicating if the number is positive, negative, or zero. Predict the output of the function calls for the numbers: 10, -5, and 0.",
+    "slug": "fix-bug-in-advanced-debounce-function-implementation",
+    "title": "Fix Bug in Advanced Debounce Function Implementation",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided advanced debounce function implementation that prevents it from correctly delaying callback execution and handling immediate invocations.",
+    "prompt": "You are given a debounce function that is intended to delay the invocation of a callback until after a specified wait time has elapsed since the last time the debounced function was called. It also supports an 'immediate' flag to trigger the callback at the start instead of the end of the delay period. However, the existing implementation contains a logical bug causing unexpected multiple invocations or no invocation at all in certain edge cases. Your task is to find and fix the bug so the debounce function works as expected in all scenarios.",
     "guidance": [
-      "Read through the function to understand how it classifies numbers based on conditions.",
-      "Trace the function's behavior for each input to determine the return value."
+      "Carefully analyze how the timer is being managed and reset inside the function.",
+      "Pay special attention to the behavior when the 'immediate' flag is set to true.",
+      "Check how the context and arguments are preserved for callback invocation."
     ],
     "hints": [
-      "Remember that zero is neither positive nor negative.",
-      "Check the order of the if, elif, and else conditions carefully."
+      "The current implementation incorrectly handles the clearing of the timer which leads to missed or repeated calls.",
+      "Review where the timer is reset and when the callback is finally invoked.",
+      "Remember that when 'immediate' is true, the callback should trigger on the leading edge, not the trailing edge."
     ],
-    "starterCode": "def check_number(num):\n    if num > 0:\n        return \"Positive\"\n    elif num < 0:\n        return \"Negative\"\n    else:\n        return \"Zero\"\n\nprint(check_number(10))\nprint(check_number(-5))\nprint(check_number(0))",
-    "expectedOutput": "Positive\nNegative\nZero",
+    "starterCode": "function debounce(func, wait, immediate) {\n  let timeout;\n  return function() {\n    const context = this,\n          args = arguments;\n    const later = function() {\n      timeout = null;\n      if (!immediate) func.apply(context, args);\n    };\n    const callNow = immediate && !timeout;\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n    if (callNow) func.apply(context, args);\n  };\n}\n\n// Example usage:\n// const debouncedLog = debounce(() => console.log('Called!'), 1000, true);\n// debouncedLog();\n// debouncedLog();\n// Expected output: 'Called!' only once immediately on first call",
+    "expectedOutput": "'Called!' printed only once on first call when immediate is true, and exactly once after delay when immediate is false.",
     "concepts": [
-      "conditionals",
-      "functions"
+      "debounce",
+      "timers",
+      "closures",
+      "function context (this)"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": true
+    "isFeatured": false
   },
   {
-    "slug": "refactor-a-function-to-cleanly-aggregate-user-purchases",
-    "title": "Refactor a Function to Cleanly Aggregate User Purchases",
-    "language": "javascript",
+    "slug": "refactor-a-function-to-cleanly-process-and-summarize-sales-data",
+    "title": "Refactor a Function to Cleanly Process and Summarize Sales Data",
+    "language": "python",
     "difficulty": "intermediate",
     "category": "code-quality",
-    "description": "The provided JavaScript function processes an array of user purchase objects to calculate total spending per user. The existing code works but is messy and repetitive. Refactor it for clarity, reusability, and improved readability without changing its behavior.",
-    "prompt": "You are given a function that takes an array of purchase objects. Each object has two properties: userId (string) and amount (number). The function processes the array and returns an object mapping each userId to the total sum of their purchases.\n\nYour task is to refactor the function to improve its readability, reduce repetition, and adhere to best code practices while keeping the exact same output and behavior.\n\nDo not change how the function handles invalid or missing data (assume input is valid).",
+    "description": "Improve the clarity, efficiency, and readability of a Python function that processes a list of sales records and returns a summary of total sales by product category.",
+    "prompt": "You are given a function that takes a list of sales records as input. Each record is a dictionary with keys: 'product', 'category', and 'amount'. The function calculates the total sales per category but is written in a convoluted way with redundant computations and unclear variable names.\n\nRefactor the function to keep the exact same behavior but improve its readability, maintainability, and efficiency. Ensure the function is Pythonic and avoids unnecessary loops or computations.",
     "guidance": [
-      "Break down complex loops or repeated code into smaller helper functions if needed.",
-      "Use descriptive variable names and avoid unnecessary temporary variables.",
-      "Aim for clear and concise logic using JavaScript array methods to improve readability."
+      "Use clear and meaningful variable names.",
+      "Leverage appropriate Python data structures for aggregation (e.g., dictionaries or collections).",
+      "Avoid recalculating or looping over the same data multiple times.",
+      "Aim to write code that is easy to read and understand."
     ],
     "hints": [
-      "Consider using Array.prototype.reduce() to accumulate totals.",
-      "Avoid mutating the input array; build the output immutably if possible.",
-      "You can use object destructuring to access properties cleanly."
+      "Consider using a dictionary to accumulate totals per category as you iterate through the sales records.",
+      "The built-in dict.get() method can help simplify updating totals without explicit conditional checks.",
+      "Avoid nested loops or multiple passes over the data when one will suffice."
     ],
-    "starterCode": "function calculateTotals(purchases) {\n  let totals = {};\n  for (let i = 0; i < purchases.length; i++) {\n    let user = purchases[i].userId;\n    let amount = purchases[i].amount;\n    if (totals[user] === undefined) {\n      totals[user] = 0;\n    }\n    totals[user] = totals[user] + amount;\n  }\n  return totals;\n}",
-    "expectedOutput": "calculateTotals([{ userId: 'alice', amount: 30 }, { userId: 'bob', amount: 20 }, { userId: 'alice', amount: 10 }]) // returns { alice: 40, bob: 20 }",
+    "starterCode": "def summarize_sales(sales):\n    categories = []\n    for record in sales:\n        if record['category'] not in categories:\n            categories.append(record['category'])\n\n    totals = {}\n    for cat in categories:\n        total_amount = 0\n        for record in sales:\n            if record['category'] == cat:\n                total_amount += record['amount']\n        totals[cat] = total_amount\n    return totals",
+    "expectedOutput": "{\"electronics\": 4500, \"clothing\": 3400}",
     "concepts": [
-      "JavaScript arrays",
-      "Object manipulation",
-      "Array reduce method",
-      "Code readability"
+      "data aggregation",
+      "dictionary operations",
+      "code readability",
+      "loop optimization"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": true
+    "isFeatured": false
   },
   {
-    "slug": "refactor-and-optimize-complex-sales-reporting-sql-query",
-    "title": "Refactor and Optimize Complex Sales Reporting SQL Query",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "optimization",
-    "description": "Optimize a poorly written, inefficient SQL query that aggregates sales data by region and product category while filtering on multiple conditions. Improve readability, performance and ensure the output remains correct.",
-    "prompt": "You are given a complex query that calculates total sales, average order amount, and number of unique customers by region and product category for the last fiscal year. The existing query uses multiple nested subqueries, redundant joins, and lacks proper indexing hints, causing slow performance on large datasets.\n\nRefactor the query to:\n1. Remove unnecessary subqueries and joins.\n2. Utilize efficient JOIN types and filtering methods.\n3. Add appropriate aggregation and grouping logic.\n4. Ensure the query returns the same results but executes faster.\n\nThe database schema includes the following tables:\n- sales(order_id, customer_id, product_id, amount, order_date)\n- customers(customer_id, region)\n- products(product_id, category)\n\nOutput columns should be: region, category, total_sales, avg_order_amount, unique_customers.",
+    "slug": "simple-task-tracker-mini-project-in-c",
+    "title": "Simple Task Tracker Mini-Project in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a basic console-based task tracker app in C++ that allows users to add, view, and remove tasks. Practice working with vectors, loops, and conditionals while creating a helpful daily tool.",
+    "prompt": "Create a simple task tracker program in C++ with the following features: \n1. Display a menu to the user with options to add a task, remove a task by its number, view all tasks, and exit.\n2. Use a vector<string> to store the tasks.\n3. After adding or removing a task, show the updated list.\n4. The program should keep running until the user chooses to exit.\n\nYour program should handle invalid input gracefully and provide clear prompts to the user.",
     "guidance": [
-      "Focus on simplifying JOINs and removing redundant intermediate aggregations.",
-      "Consider using window functions or CTEs for clarity and performance.",
-      "Make sure filtering on order_date is applied as early as possible."
+      "Use a vector to store the tasks dynamically as the user adds them.",
+      "Use a loop to repeatedly show the menu and process user choices.",
+      "Remember to check if the task number for removal is valid before deleting."
     ],
     "hints": [
-      "Try replacing nested subqueries with Common Table Expressions (CTEs) to improve readability and allow SQL engine optimization.",
-      "Use INNER JOIN instead of LEFT JOIN if you are certain all referenced rows exist, to improve join efficiency.",
-      "Apply WHERE filters before joining and aggregating to reduce dataset size early."
+      "Use std::getline to read the whole line for task descriptions.",
+      "You can use vector::erase(tasks.begin() + index) to remove a task at a specific position.",
+      "Displaying the tasks with their indices helps users know which number to remove."
     ],
-    "starterCode": "SELECT\n  c.region,\n  p.category,\n  SUM(s.amount) AS total_sales,\n  AVG(s.amount) AS avg_order_amount,\n  COUNT(DISTINCT s.customer_id) AS unique_customers\nFROM sales s\nJOIN customers c ON s.customer_id = c.customer_id\nJOIN products p ON s.product_id = p.product_id\nWHERE s.order_date BETWEEN '2023-01-01' AND '2023-12-31'\nGROUP BY c.region, p.category;",
-    "expectedOutput": "region | category    | total_sales | avg_order_amount | unique_customers\n-------+-------------+-------------+------------------+------------------\nNorth  | Electronics |  1250000.00 |           250.00 |              500\nSouth  | Furniture   |   850000.00 |           170.00 |              400\nEast   | Toys        |   765000.00 |           255.00 |              300\nWest   | Clothing    |   980000.00 |           245.00 |              450",
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nint main() {\n    std::vector<std::string> tasks;\n    int choice;\n    do {\n        std::cout << \"Task Tracker Menu:\\n\";\n        std::cout << \"1. Add Task\\n\";\n        std::cout << \"2. Remove Task\\n\";\n        std::cout << \"3. View All Tasks\\n\";\n        std::cout << \"4. Exit\\n\";\n        std::cout << \"Choose an option: \";\n        std::cin >> choice;\n        std::cin.ignore(); // to ignore newline after number input\n\n        if (choice == 1) {\n            // Add task logic\n        } else if (choice == 2) {\n            // Remove task logic\n        } else if (choice == 3) {\n            // View tasks logic\n        }\n    } while (choice != 4);\n    std::cout << \"Goodbye!\" << std::endl;\n    return 0;\n}",
+    "expectedOutput": "Task Tracker Menu:\n1. Add Task\n2. Remove Task\n3. View All Tasks\n4. Exit\nChoose an option: 1\nEnter a new task: Buy groceries\nTask added.\n\nTask Tracker Menu:\n1. Add Task\n2. Remove Task\n3. View All Tasks\n4. Exit\nChoose an option: 3\nTasks:\n1. Buy groceries\n\nTask Tracker Menu:\n1. Add Task\n2. Remove Task\n3. View All Tasks\n4. Exit\nChoose an option: 4\nGoodbye!",
     "concepts": [
-      "SQL optimization",
-      "Joins and subqueries",
-      "Aggregation and grouping",
-      "Query refactoring"
+      "vectors",
+      "loops",
+      "conditionals",
+      "input/output"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-compute-running-median-from-a-stream-of-integers",
+    "title": "Build a Function to Compute Running Median from a Stream of Integers",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a C++ function that accepts a vector of integers representing a stream of numbers and returns a vector containing the running median after each new number is added.",
+    "prompt": "Create a function named `runningMedian` that takes a const reference to a vector of integers. For each new integer added from the stream, the function should compute the median of all numbers seen so far and append it to a result vector. Return the vector of running medians. The median of a list is the middle number after sorting; if the size is even, the median is the average of the two middle numbers (as a double).",
+    "guidance": [
+      "Use appropriate data structures to efficiently maintain the elements seen so far in sorted order.",
+      "Consider how to find the median quickly after each insertion without sorting the entire list every time.",
+      "Make sure to handle both odd- and even-sized sets correctly when computing the median.",
+      "Return the medians as vector<double> to handle fractional medians."
+    ],
+    "hints": [
+      "Use two heaps (priority queues) — a max heap for the lower half, a min heap for the upper half — to track medians efficiently.",
+      "Balance the heaps so they differ in size by no more than one element.",
+      "The median can be derived from the top elements of the two heaps depending on their sizes."
+    ],
+    "starterCode": "#include <vector>\n#include <queue>\n\nstd::vector<double> runningMedian(const std::vector<int>& stream) {\n    // Implement your solution here\n}",
+    "expectedOutput": "For input: {2, 1, 5, 7, 2, 0, 5}\nOutput: {2.0, 1.5, 2.0, 3.5, 2.0, 2.0, 2.0}",
+    "concepts": [
+      "heaps",
+      "priority_queue",
+      "median calculation",
+      "stream processing"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "implement-a-memoized-recursive-function-to-compute-the-nth-catalan-number",
+    "title": "Implement a Memoized Recursive Function to Compute the nth Catalan Number",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an efficient C++ function that calculates the nth Catalan number using recursion with memoization. Catalan numbers appear in various combinatorial problems and grow quickly, so naive recursion is inefficient for larger inputs.",
+    "prompt": "Write a C++ function named `catalan` that takes an integer `n` and returns the nth Catalan number. Your solution must use recursion combined with memoization to optimize repeated subproblems. The Catalan numbers are defined as: C0 = 1 and for n > 0: Cn = sum of Ci * C(n-1-i) for i from 0 to n-1. Implement memoization either internally (static or global) or by passing a data structure as argument.",
+    "guidance": [
+      "Use a helper function or static data structure to cache results for previously computed values.",
+      "Recall the recursive formula: Cn = Σ (Ci * C(n - 1 - i)) for i in [0 .. n-1] with C0 = 1.",
+      "Optimize to avoid recomputation that leads to exponential time complexity."
+    ],
+    "hints": [
+      "Consider using a std::unordered_map or std::vector for memoization storage indexed by n.",
+      "Make sure to handle the base case correctly to stop infinite recursion.",
+      "Memoization can radically improve performance from exponential to polynomial."
+    ],
+    "starterCode": "long long catalan(int n) {\n    // Implement your memoized recursive solution here\n}",
+    "expectedOutput": "catalan(0) = 1\ncatalan(5) = 42\ncatalan(10) = 16796",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dynamic programming",
+      "combinatorics"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
-  },
-  {
-    "slug": "build-a-simple-inventory-management-system-in-c",
-    "title": "Build a Simple Inventory Management System in C++",
-    "language": "cpp",
-    "difficulty": "intermediate",
-    "category": "mini-projects",
-    "description": "Create a console-based inventory management mini-project using C++. Implement features to add, update, delete, and display items stored in an inventory using vectors and classes.",
-    "prompt": "Design a simple inventory management system in C++. You will create an Item class representing an inventory item, including item id, name, quantity, and price. Implement an Inventory class that stores multiple items and supports the following operations:\n\n1. Add a new item to the inventory.\n2. Update the quantity or price of an existing item by item id.\n3. Remove an item from the inventory by item id.\n4. Display all items currently in the inventory.\n\nYour program should handle invalid input gracefully and prevent duplicate item ids.",
-    "guidance": [
-      "Use a vector<Item> to store the inventory items inside the Inventory class.",
-      "Implement member functions in Inventory to perform add, update, delete, and display operations.",
-      "Use loops and conditionals to search items by id and check for duplicates."
-    ],
-    "hints": [
-      "Use std::find_if with a lambda or a simple for loop to look for items by id.",
-      "Remember to check if an item id already exists before adding a new item.",
-      "Keep your Item class members private and use public getter and setter functions."
-    ],
-    "starterCode": "class Item {\nprivate:\n    int id;\n    std::string name;\n    int quantity;\n    double price;\n\npublic:\n    Item(int id, const std::string& name, int quantity, double price);\n    int getId() const;\n    void setQuantity(int quantity);\n    void setPrice(double price);\n    void display() const;\n};\n\nclass Inventory {\nprivate:\n    std::vector<Item> items;\n\npublic:\n    void addItem(const Item& item);\n    void updateItem(int id, int quantity, double price);\n    void removeItem(int id);\n    void displayItems() const;\n};",
-    "expectedOutput": "After adding, updating, deleting items, displaying items should print a list such as:\nItem ID: 101, Name: Pencil, Quantity: 50, Price: 0.50\nItem ID: 102, Name: Notebook, Quantity: 20, Price: 2.00",
-    "concepts": [
-      "classes and objects",
-      "std::vector",
-      "loops and conditionals",
-      "basic error handling"
-    ],
-    "estimatedTime": "20 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "predict-the-output-of-a-complex-window-function-and-cte-sql-query",
-    "title": "Predict the Output of a Complex Window Function and CTE SQL Query",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "query-analysis",
-    "description": "Analyze the given SQL query involving multiple CTEs and window functions to determine the exact output produced by the final SELECT statement.",
-    "prompt": "Given the following SQL query using common table expressions (CTEs) and window functions, predict the exact output table returned by the final SELECT statement. Focus on understanding the window frame specifications, partitioning, ordering, and how these influence the ranking and aggregation results.",
-    "guidance": [
-      "Carefully trace the intermediate results created by each CTE before the final SELECT.",
-      "Pay attention to how window functions like ROW_NUMBER() and SUM() OVER() are partitioned and ordered.",
-      "Consider the effect of filtering conditions applied after CTEs and before the final output."
-    ],
-    "hints": [
-      "Start by evaluating the first CTE results, then move on to how the window functions modify the data.",
-      "Remember that ROW_NUMBER() resets for each partition defined in the OVER clause.",
-      "The combination of WHERE clauses after the CTEs may exclude certain rows, affecting the final output."
-    ],
-    "starterCode": "\nWITH Sales AS (\n    SELECT\n        salesperson_id,\n        region,\n        sale_amount,\n        sale_date\n    FROM sales_data\n),\nRankedSales AS (\n    SELECT\n        salesperson_id,\n        region,\n        sale_amount,\n        sale_date,\n        ROW_NUMBER() OVER (PARTITION BY region ORDER BY sale_amount DESC, sale_date ASC) AS region_rank,\n        SUM(sale_amount) OVER (PARTITION BY region ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\n    FROM Sales\n),\nFilteredSales AS (\n    SELECT * FROM RankedSales\n    WHERE region_rank <= 3\n)\nSELECT region, salesperson_id, sale_amount, region_rank, running_total\nFROM FilteredSales\nORDER BY region, region_rank;",
-    "expectedOutput": "A result set displaying the top 3 sales (by sale_amount descending and sale_date ascending as tie-breaker) for each region from the sales_data table, containing columns: region, salesperson_id, sale_amount, region_rank (1 to 3), and running_total (cumulative sum of sale_amount ordered by sale_date within each region). Rows should be ordered by region alphabetically, then by region_rank ascending.",
-    "concepts": [
-      "CTEs",
-      "Window Functions",
-      "ROW_NUMBER",
-      "Aggregation",
-      "Partitioning and Ordering"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
   }
 ]

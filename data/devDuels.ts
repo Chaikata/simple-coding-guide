@@ -2720,5 +2720,179 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-incorrect-join-logic-in-customer-orders-query",
+    "title": "Fix the Incorrect JOIN Logic in Customer Orders Query",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "Debug and fix a SQL query that attempts to retrieve customer names alongside their total order counts, but currently returns incorrect results due to improper JOIN usage and grouping.",
+    "prompt": "You are given a query that tries to list each customer's name along with the total number of orders they have placed. However, the results are inaccurate: some customers appear multiple times, and order counts are incorrect. Identify the issues in the provided SQL query, fix the JOIN logic and grouping, and produce a correct query that returns each customer name exactly once with the correct total order count.",
+    "guidance": [
+      "Check whether the JOIN between customers and orders is appropriate for the desired result.",
+      "Look carefully at the GROUP BY clause to ensure it's grouping by the correct columns."
+    ],
+    "hints": [
+      "INNER JOIN might exclude customers with no orders; consider whether you want to include them.",
+      "GROUP BY should include all selected non-aggregated columns to avoid duplicate rows."
+    ],
+    "starterCode": "SELECT c.customer_name, COUNT(o.order_id) AS total_orders\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\nGROUP BY o.customer_id;",
+    "expectedOutput": "A result set where each row contains a distinct customer_name and a total_orders count representing how many orders that customer placed. Customers with no orders should appear with a count of 0 if you adjust the JOIN accordingly.",
+    "concepts": [
+      "SQL JOINs",
+      "GROUP BY",
+      "Aggregate Functions",
+      "Debugging SQL Queries"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-advanced-debounce-function-implementation",
+    "title": "Fix Bug in Advanced Debounce Function Implementation",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided advanced debounce function implementation that prevents it from correctly delaying callback execution and handling immediate invocations.",
+    "prompt": "You are given a debounce function that is intended to delay the invocation of a callback until after a specified wait time has elapsed since the last time the debounced function was called. It also supports an 'immediate' flag to trigger the callback at the start instead of the end of the delay period. However, the existing implementation contains a logical bug causing unexpected multiple invocations or no invocation at all in certain edge cases. Your task is to find and fix the bug so the debounce function works as expected in all scenarios.",
+    "guidance": [
+      "Carefully analyze how the timer is being managed and reset inside the function.",
+      "Pay special attention to the behavior when the 'immediate' flag is set to true.",
+      "Check how the context and arguments are preserved for callback invocation."
+    ],
+    "hints": [
+      "The current implementation incorrectly handles the clearing of the timer which leads to missed or repeated calls.",
+      "Review where the timer is reset and when the callback is finally invoked.",
+      "Remember that when 'immediate' is true, the callback should trigger on the leading edge, not the trailing edge."
+    ],
+    "starterCode": "function debounce(func, wait, immediate) {\n  let timeout;\n  return function() {\n    const context = this,\n          args = arguments;\n    const later = function() {\n      timeout = null;\n      if (!immediate) func.apply(context, args);\n    };\n    const callNow = immediate && !timeout;\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n    if (callNow) func.apply(context, args);\n  };\n}\n\n// Example usage:\n// const debouncedLog = debounce(() => console.log('Called!'), 1000, true);\n// debouncedLog();\n// debouncedLog();\n// Expected output: 'Called!' only once immediately on first call",
+    "expectedOutput": "'Called!' printed only once on first call when immediate is true, and exactly once after delay when immediate is false.",
+    "concepts": [
+      "debounce",
+      "timers",
+      "closures",
+      "function context (this)"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-function-to-cleanly-process-and-summarize-sales-data",
+    "title": "Refactor a Function to Cleanly Process and Summarize Sales Data",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the clarity, efficiency, and readability of a Python function that processes a list of sales records and returns a summary of total sales by product category.",
+    "prompt": "You are given a function that takes a list of sales records as input. Each record is a dictionary with keys: 'product', 'category', and 'amount'. The function calculates the total sales per category but is written in a convoluted way with redundant computations and unclear variable names.\n\nRefactor the function to keep the exact same behavior but improve its readability, maintainability, and efficiency. Ensure the function is Pythonic and avoids unnecessary loops or computations.",
+    "guidance": [
+      "Use clear and meaningful variable names.",
+      "Leverage appropriate Python data structures for aggregation (e.g., dictionaries or collections).",
+      "Avoid recalculating or looping over the same data multiple times.",
+      "Aim to write code that is easy to read and understand."
+    ],
+    "hints": [
+      "Consider using a dictionary to accumulate totals per category as you iterate through the sales records.",
+      "The built-in dict.get() method can help simplify updating totals without explicit conditional checks.",
+      "Avoid nested loops or multiple passes over the data when one will suffice."
+    ],
+    "starterCode": "def summarize_sales(sales):\n    categories = []\n    for record in sales:\n        if record['category'] not in categories:\n            categories.append(record['category'])\n\n    totals = {}\n    for cat in categories:\n        total_amount = 0\n        for record in sales:\n            if record['category'] == cat:\n                total_amount += record['amount']\n        totals[cat] = total_amount\n    return totals",
+    "expectedOutput": "{\"electronics\": 4500, \"clothing\": 3400}",
+    "concepts": [
+      "data aggregation",
+      "dictionary operations",
+      "code readability",
+      "loop optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-task-tracker-mini-project-in-c",
+    "title": "Simple Task Tracker Mini-Project in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a basic console-based task tracker app in C++ that allows users to add, view, and remove tasks. Practice working with vectors, loops, and conditionals while creating a helpful daily tool.",
+    "prompt": "Create a simple task tracker program in C++ with the following features: \n1. Display a menu to the user with options to add a task, remove a task by its number, view all tasks, and exit.\n2. Use a vector<string> to store the tasks.\n3. After adding or removing a task, show the updated list.\n4. The program should keep running until the user chooses to exit.\n\nYour program should handle invalid input gracefully and provide clear prompts to the user.",
+    "guidance": [
+      "Use a vector to store the tasks dynamically as the user adds them.",
+      "Use a loop to repeatedly show the menu and process user choices.",
+      "Remember to check if the task number for removal is valid before deleting."
+    ],
+    "hints": [
+      "Use std::getline to read the whole line for task descriptions.",
+      "You can use vector::erase(tasks.begin() + index) to remove a task at a specific position.",
+      "Displaying the tasks with their indices helps users know which number to remove."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nint main() {\n    std::vector<std::string> tasks;\n    int choice;\n    do {\n        std::cout << \"Task Tracker Menu:\\n\";\n        std::cout << \"1. Add Task\\n\";\n        std::cout << \"2. Remove Task\\n\";\n        std::cout << \"3. View All Tasks\\n\";\n        std::cout << \"4. Exit\\n\";\n        std::cout << \"Choose an option: \";\n        std::cin >> choice;\n        std::cin.ignore(); // to ignore newline after number input\n\n        if (choice == 1) {\n            // Add task logic\n        } else if (choice == 2) {\n            // Remove task logic\n        } else if (choice == 3) {\n            // View tasks logic\n        }\n    } while (choice != 4);\n    std::cout << \"Goodbye!\" << std::endl;\n    return 0;\n}",
+    "expectedOutput": "Task Tracker Menu:\n1. Add Task\n2. Remove Task\n3. View All Tasks\n4. Exit\nChoose an option: 1\nEnter a new task: Buy groceries\nTask added.\n\nTask Tracker Menu:\n1. Add Task\n2. Remove Task\n3. View All Tasks\n4. Exit\nChoose an option: 3\nTasks:\n1. Buy groceries\n\nTask Tracker Menu:\n1. Add Task\n2. Remove Task\n3. View All Tasks\n4. Exit\nChoose an option: 4\nGoodbye!",
+    "concepts": [
+      "vectors",
+      "loops",
+      "conditionals",
+      "input/output"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-compute-running-median-from-a-stream-of-integers",
+    "title": "Build a Function to Compute Running Median from a Stream of Integers",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a C++ function that accepts a vector of integers representing a stream of numbers and returns a vector containing the running median after each new number is added.",
+    "prompt": "Create a function named `runningMedian` that takes a const reference to a vector of integers. For each new integer added from the stream, the function should compute the median of all numbers seen so far and append it to a result vector. Return the vector of running medians. The median of a list is the middle number after sorting; if the size is even, the median is the average of the two middle numbers (as a double).",
+    "guidance": [
+      "Use appropriate data structures to efficiently maintain the elements seen so far in sorted order.",
+      "Consider how to find the median quickly after each insertion without sorting the entire list every time.",
+      "Make sure to handle both odd- and even-sized sets correctly when computing the median.",
+      "Return the medians as vector<double> to handle fractional medians."
+    ],
+    "hints": [
+      "Use two heaps (priority queues) — a max heap for the lower half, a min heap for the upper half — to track medians efficiently.",
+      "Balance the heaps so they differ in size by no more than one element.",
+      "The median can be derived from the top elements of the two heaps depending on their sizes."
+    ],
+    "starterCode": "#include <vector>\n#include <queue>\n\nstd::vector<double> runningMedian(const std::vector<int>& stream) {\n    // Implement your solution here\n}",
+    "expectedOutput": "For input: {2, 1, 5, 7, 2, 0, 5}\nOutput: {2.0, 1.5, 2.0, 3.5, 2.0, 2.0, 2.0}",
+    "concepts": [
+      "heaps",
+      "priority_queue",
+      "median calculation",
+      "stream processing"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "implement-a-memoized-recursive-function-to-compute-the-nth-catalan-number",
+    "title": "Implement a Memoized Recursive Function to Compute the nth Catalan Number",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an efficient C++ function that calculates the nth Catalan number using recursion with memoization. Catalan numbers appear in various combinatorial problems and grow quickly, so naive recursion is inefficient for larger inputs.",
+    "prompt": "Write a C++ function named `catalan` that takes an integer `n` and returns the nth Catalan number. Your solution must use recursion combined with memoization to optimize repeated subproblems. The Catalan numbers are defined as: C0 = 1 and for n > 0: Cn = sum of Ci * C(n-1-i) for i from 0 to n-1. Implement memoization either internally (static or global) or by passing a data structure as argument.",
+    "guidance": [
+      "Use a helper function or static data structure to cache results for previously computed values.",
+      "Recall the recursive formula: Cn = Σ (Ci * C(n - 1 - i)) for i in [0 .. n-1] with C0 = 1.",
+      "Optimize to avoid recomputation that leads to exponential time complexity."
+    ],
+    "hints": [
+      "Consider using a std::unordered_map or std::vector for memoization storage indexed by n.",
+      "Make sure to handle the base case correctly to stop infinite recursion.",
+      "Memoization can radically improve performance from exponential to polynomial."
+    ],
+    "starterCode": "long long catalan(int n) {\n    // Implement your memoized recursive solution here\n}",
+    "expectedOutput": "catalan(0) = 1\ncatalan(5) = 42\ncatalan(10) = 16796",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dynamic programming",
+      "combinatorics"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ];
