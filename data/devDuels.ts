@@ -2548,5 +2548,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "advanced-data-pipeline-build-a-custom-etl-framework-in-python",
+    "title": "Advanced Data Pipeline: Build a Custom ETL Framework in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a scalable, modular Extract-Transform-Load (ETL) mini-project that reads data from multiple formats, applies complex transformations, and loads the result into a target data structure.",
+    "prompt": "Build a Python function `run_etl_pipeline(sources, transform_functions, destination)` that handles an advanced ETL process:\n\n1. **Extraction**: The `sources` parameter is a list of dictionaries, each specifying a data source. Each source dictionary includes a `type` key ('csv', 'json', 'api') and a `data` key with either a string path or a raw JSON string or API endpoint URL.\n\n2. **Transformation**: The `transform_functions` parameter is a list of user-defined functions that take and return Python data objects (e.g., lists of dicts). Apply these functions sequentially to the combined extracted data.\n\n3. **Loading**: The `destination` parameter specifies the output location and format (e.g., dictionary with keys like `type`: 'memory', 'csv', or 'json' and a `target` value for file path or memory object).\n\nYour ETL pipeline should:\n- Extract data from multiple sources of different types.\n- Handle data merging without data duplication.\n- Apply complex transformations (e.g., filtering, aggregation, enrichment).\n- Load the resulting data according to destination specifications.\n\nReturn the final loaded data if destination is 'memory'.",
+    "guidance": [
+      "Implement modular extraction functions for each source type, ensuring consistent output format.",
+      "Ensure transformation functions are applied in order to the full combined dataset.",
+      "Build a flexible loader to export or store data based on the destination configuration."
+    ],
+    "hints": [
+      "Use Python's csv, json, and requests libraries to handle different types of data extraction.",
+      "Normalize all extracted data into a common structure such as a list of dictionaries before transformations.",
+      "For the loader, consider writing to files or returning data directly based on the destination type."
+    ],
+    "starterCode": "import csv\nimport json\nimport requests\n\ndef extract_csv(path):\n    data = []\n    with open(path, 'r') as f:\n        reader = csv.DictReader(f)\n        for row in reader:\n            data.append(row)\n    return data\n\ndef extract_json(json_str):\n    return json.loads(json_str)\n\ndef extract_api(url):\n    response = requests.get(url)\n    response.raise_for_status()\n    return response.json()\n\ndef run_etl_pipeline(sources, transform_functions, destination):\n    # Your implementation here\n    pass",
+    "expectedOutput": "If destination['type'] is 'memory', the function returns a list of dictionaries representing the transformed data.",
+    "concepts": [
+      "ETL pipeline design",
+      "modular programming",
+      "data extraction and parsing",
+      "data transformation",
+      "file and API handling"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-simple-number-check-function",
+    "title": "Predict the Output of a Simple Number Check Function",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "logic",
+    "description": "Analyze a Python function that checks if a number is positive, negative, or zero, and predict its output for given inputs.",
+    "prompt": "Below is a Python function that takes a number as input and returns a string indicating if the number is positive, negative, or zero. Predict the output of the function calls for the numbers: 10, -5, and 0.",
+    "guidance": [
+      "Read through the function to understand how it classifies numbers based on conditions.",
+      "Trace the function's behavior for each input to determine the return value."
+    ],
+    "hints": [
+      "Remember that zero is neither positive nor negative.",
+      "Check the order of the if, elif, and else conditions carefully."
+    ],
+    "starterCode": "def check_number(num):\n    if num > 0:\n        return \"Positive\"\n    elif num < 0:\n        return \"Negative\"\n    else:\n        return \"Zero\"\n\nprint(check_number(10))\nprint(check_number(-5))\nprint(check_number(0))",
+    "expectedOutput": "Positive\nNegative\nZero",
+    "concepts": [
+      "conditionals",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-function-to-cleanly-aggregate-user-purchases",
+    "title": "Refactor a Function to Cleanly Aggregate User Purchases",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "The provided JavaScript function processes an array of user purchase objects to calculate total spending per user. The existing code works but is messy and repetitive. Refactor it for clarity, reusability, and improved readability without changing its behavior.",
+    "prompt": "You are given a function that takes an array of purchase objects. Each object has two properties: userId (string) and amount (number). The function processes the array and returns an object mapping each userId to the total sum of their purchases.\n\nYour task is to refactor the function to improve its readability, reduce repetition, and adhere to best code practices while keeping the exact same output and behavior.\n\nDo not change how the function handles invalid or missing data (assume input is valid).",
+    "guidance": [
+      "Break down complex loops or repeated code into smaller helper functions if needed.",
+      "Use descriptive variable names and avoid unnecessary temporary variables.",
+      "Aim for clear and concise logic using JavaScript array methods to improve readability."
+    ],
+    "hints": [
+      "Consider using Array.prototype.reduce() to accumulate totals.",
+      "Avoid mutating the input array; build the output immutably if possible.",
+      "You can use object destructuring to access properties cleanly."
+    ],
+    "starterCode": "function calculateTotals(purchases) {\n  let totals = {};\n  for (let i = 0; i < purchases.length; i++) {\n    let user = purchases[i].userId;\n    let amount = purchases[i].amount;\n    if (totals[user] === undefined) {\n      totals[user] = 0;\n    }\n    totals[user] = totals[user] + amount;\n  }\n  return totals;\n}",
+    "expectedOutput": "calculateTotals([{ userId: 'alice', amount: 30 }, { userId: 'bob', amount: 20 }, { userId: 'alice', amount: 10 }]) // returns { alice: 40, bob: 20 }",
+    "concepts": [
+      "JavaScript arrays",
+      "Object manipulation",
+      "Array reduce method",
+      "Code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-optimize-complex-sales-reporting-sql-query",
+    "title": "Refactor and Optimize Complex Sales Reporting SQL Query",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "optimization",
+    "description": "Optimize a poorly written, inefficient SQL query that aggregates sales data by region and product category while filtering on multiple conditions. Improve readability, performance and ensure the output remains correct.",
+    "prompt": "You are given a complex query that calculates total sales, average order amount, and number of unique customers by region and product category for the last fiscal year. The existing query uses multiple nested subqueries, redundant joins, and lacks proper indexing hints, causing slow performance on large datasets.\n\nRefactor the query to:\n1. Remove unnecessary subqueries and joins.\n2. Utilize efficient JOIN types and filtering methods.\n3. Add appropriate aggregation and grouping logic.\n4. Ensure the query returns the same results but executes faster.\n\nThe database schema includes the following tables:\n- sales(order_id, customer_id, product_id, amount, order_date)\n- customers(customer_id, region)\n- products(product_id, category)\n\nOutput columns should be: region, category, total_sales, avg_order_amount, unique_customers.",
+    "guidance": [
+      "Focus on simplifying JOINs and removing redundant intermediate aggregations.",
+      "Consider using window functions or CTEs for clarity and performance.",
+      "Make sure filtering on order_date is applied as early as possible."
+    ],
+    "hints": [
+      "Try replacing nested subqueries with Common Table Expressions (CTEs) to improve readability and allow SQL engine optimization.",
+      "Use INNER JOIN instead of LEFT JOIN if you are certain all referenced rows exist, to improve join efficiency.",
+      "Apply WHERE filters before joining and aggregating to reduce dataset size early."
+    ],
+    "starterCode": "SELECT\n  c.region,\n  p.category,\n  SUM(s.amount) AS total_sales,\n  AVG(s.amount) AS avg_order_amount,\n  COUNT(DISTINCT s.customer_id) AS unique_customers\nFROM sales s\nJOIN customers c ON s.customer_id = c.customer_id\nJOIN products p ON s.product_id = p.product_id\nWHERE s.order_date BETWEEN '2023-01-01' AND '2023-12-31'\nGROUP BY c.region, p.category;",
+    "expectedOutput": "region | category    | total_sales | avg_order_amount | unique_customers\n-------+-------------+-------------+------------------+------------------\nNorth  | Electronics |  1250000.00 |           250.00 |              500\nSouth  | Furniture   |   850000.00 |           170.00 |              400\nEast   | Toys        |   765000.00 |           255.00 |              300\nWest   | Clothing    |   980000.00 |           245.00 |              450",
+    "concepts": [
+      "SQL optimization",
+      "Joins and subqueries",
+      "Aggregation and grouping",
+      "Query refactoring"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-simple-inventory-management-system-in-c",
+    "title": "Build a Simple Inventory Management System in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a console-based inventory management mini-project using C++. Implement features to add, update, delete, and display items stored in an inventory using vectors and classes.",
+    "prompt": "Design a simple inventory management system in C++. You will create an Item class representing an inventory item, including item id, name, quantity, and price. Implement an Inventory class that stores multiple items and supports the following operations:\n\n1. Add a new item to the inventory.\n2. Update the quantity or price of an existing item by item id.\n3. Remove an item from the inventory by item id.\n4. Display all items currently in the inventory.\n\nYour program should handle invalid input gracefully and prevent duplicate item ids.",
+    "guidance": [
+      "Use a vector<Item> to store the inventory items inside the Inventory class.",
+      "Implement member functions in Inventory to perform add, update, delete, and display operations.",
+      "Use loops and conditionals to search items by id and check for duplicates."
+    ],
+    "hints": [
+      "Use std::find_if with a lambda or a simple for loop to look for items by id.",
+      "Remember to check if an item id already exists before adding a new item.",
+      "Keep your Item class members private and use public getter and setter functions."
+    ],
+    "starterCode": "class Item {\nprivate:\n    int id;\n    std::string name;\n    int quantity;\n    double price;\n\npublic:\n    Item(int id, const std::string& name, int quantity, double price);\n    int getId() const;\n    void setQuantity(int quantity);\n    void setPrice(double price);\n    void display() const;\n};\n\nclass Inventory {\nprivate:\n    std::vector<Item> items;\n\npublic:\n    void addItem(const Item& item);\n    void updateItem(int id, int quantity, double price);\n    void removeItem(int id);\n    void displayItems() const;\n};",
+    "expectedOutput": "After adding, updating, deleting items, displaying items should print a list such as:\nItem ID: 101, Name: Pencil, Quantity: 50, Price: 0.50\nItem ID: 102, Name: Notebook, Quantity: 20, Price: 2.00",
+    "concepts": [
+      "classes and objects",
+      "std::vector",
+      "loops and conditionals",
+      "basic error handling"
+    ],
+    "estimatedTime": "20 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-complex-window-function-and-cte-sql-query",
+    "title": "Predict the Output of a Complex Window Function and CTE SQL Query",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "query-analysis",
+    "description": "Analyze the given SQL query involving multiple CTEs and window functions to determine the exact output produced by the final SELECT statement.",
+    "prompt": "Given the following SQL query using common table expressions (CTEs) and window functions, predict the exact output table returned by the final SELECT statement. Focus on understanding the window frame specifications, partitioning, ordering, and how these influence the ranking and aggregation results.",
+    "guidance": [
+      "Carefully trace the intermediate results created by each CTE before the final SELECT.",
+      "Pay attention to how window functions like ROW_NUMBER() and SUM() OVER() are partitioned and ordered.",
+      "Consider the effect of filtering conditions applied after CTEs and before the final output."
+    ],
+    "hints": [
+      "Start by evaluating the first CTE results, then move on to how the window functions modify the data.",
+      "Remember that ROW_NUMBER() resets for each partition defined in the OVER clause.",
+      "The combination of WHERE clauses after the CTEs may exclude certain rows, affecting the final output."
+    ],
+    "starterCode": "\nWITH Sales AS (\n    SELECT\n        salesperson_id,\n        region,\n        sale_amount,\n        sale_date\n    FROM sales_data\n),\nRankedSales AS (\n    SELECT\n        salesperson_id,\n        region,\n        sale_amount,\n        sale_date,\n        ROW_NUMBER() OVER (PARTITION BY region ORDER BY sale_amount DESC, sale_date ASC) AS region_rank,\n        SUM(sale_amount) OVER (PARTITION BY region ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\n    FROM Sales\n),\nFilteredSales AS (\n    SELECT * FROM RankedSales\n    WHERE region_rank <= 3\n)\nSELECT region, salesperson_id, sale_amount, region_rank, running_total\nFROM FilteredSales\nORDER BY region, region_rank;",
+    "expectedOutput": "A result set displaying the top 3 sales (by sale_amount descending and sale_date ascending as tie-breaker) for each region from the sales_data table, containing columns: region, salesperson_id, sale_amount, region_rank (1 to 3), and running_total (cumulative sum of sale_amount ordered by sale_date within each region). Rows should be ordered by region alphabetically, then by region_rank ascending.",
+    "concepts": [
+      "CTEs",
+      "Window Functions",
+      "ROW_NUMBER",
+      "Aggregation",
+      "Partitioning and Ordering"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
