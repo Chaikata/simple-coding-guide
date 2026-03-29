@@ -28651,5 +28651,525 @@ export const articles = [
         "value": "In summary, always remember these key points for NULL handling in SQL:\n- Use `IS NULL` and `IS NOT NULL` to check for NULL values.\n- Use `COALESCE` to provide default values instead of NULL.\n- Be cautious in aggregate functions as NULLs are ignored.\n- Consider NULLs carefully when performing JOINs.\nFollowing these tips will help you avoid errors and make your data analysis more reliable."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-chat-app-javascript-websocket",
+    "title": "Building a Scalable Chat Application with JavaScript and WebSocket",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple and scalable chat application using JavaScript and WebSocket technology. This beginner-friendly tutorial guides you through setting up the server and client step-by-step.",
+    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "WebSocket is a great technology to build real-time applications like chat apps because it provides a full-duplex communication channel between the server and the client. In this tutorial, we'll build a simple scalable chat application using JavaScript and WebSocket."
+      },
+      {
+        "type": "paragraph",
+        "value": "We will start by creating a WebSocket server using Node.js and the popular `ws` library. Then, we'll create a basic client-side chat interface that connects to the WebSocket server and exchanges messages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's get started by setting up your project. Make sure you have Node.js installed on your machine."
+      },
+      {
+        "type": "code",
+        "value": "mkdir scalable-chat-app\ncd scalable-chat-app\nnpm init -y\nnpm install ws"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now create a file called `server.js` and add the following code. This creates a WebSocket server that listens for connections and broadcasts messages to all connected clients."
+      },
+      {
+        "type": "code",
+        "value": "const WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', function connection(ws) {\n  console.log('A new client connected');\n\n  ws.on('message', function incoming(message) {\n    console.log('received: %s', message);\n    // Broadcast message to all clients\n    wss.clients.forEach(function each(client) {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.send('Welcome to the chat!');\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above server listens on port 8080, accepts WebSocket connections, and broadcasts incoming messages to all connected clients except the sender."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's create a very simple client interface. Create an `index.html` file with the following content. This will connect to the WebSocket server and allow users to send and receive messages in real-time."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html>\n<head>\n  <title>Chat App</title>\n  <style>\n    #chat {\n      width: 300px;\n      height: 400px;\n      border: 1px solid #ccc;\n      padding: 10px;\n      overflow-y: scroll;\n    }\n    #messageInput {\n      width: 240px;\n    }\n  </style>\n</head>\n<body>\n  <div id=\"chat\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type a message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script>\n    const chat = document.getElementById('chat');\n    const messageInput = document.getElementById('messageInput');\n    const sendBtn = document.getElementById('sendBtn');\n\n    const ws = new WebSocket('ws://localhost:8080');\n\n    ws.onopen = () => {\n      appendMessage('Connected to chat server');\n    };\n\n    ws.onmessage = (event) => {\n      appendMessage(`Friend: ${event.data}`);\n    };\n\n    ws.onerror = (error) => {\n      console.error('WebSocket error:', error);\n    };\n\n    sendBtn.onclick = () => {\n      const message = messageInput.value;\n      if (message) {\n        ws.send(message);\n        appendMessage(`You: ${message}`);\n        messageInput.value = '';\n      }\n    };\n\n    function appendMessage(message) {\n      const msgDiv = document.createElement('div');\n      msgDiv.textContent = message;\n      chat.appendChild(msgDiv);\n      chat.scrollTop = chat.scrollHeight;\n    }\n  </script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "With this setup, open `index.html` in your browser and start the server with `node server.js`. You can open multiple browser windows to simulate multiple users. When one user sends a message, it is broadcast to all other connected users."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scaling Tips\n\n1. **Use a load balancer**: When your app grows, use load balancers to distribute WebSocket connections across multiple server instances.\n2. **Use a message broker**: To synchronize messages between servers, use Redis Pub/Sub or similar message brokers.\n3. **Handle reconnection**: Implement client-side reconnection logic for a better user experience.\n4. **Security**: Use secure WebSocket (wss://), authenticate users, and validate messages to protect your app."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple example gives a great starting point for building scalable real-time chat applications. You can extend it further by adding user authentication, message persistence, and private chat rooms."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-event-loop-and-async-error-handling",
+    "title": "Understanding JavaScript's Event Loop and Its Impact on Asynchronous Error Handling",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript's event loop works and why it matters for catching errors in asynchronous code. This beginner-friendly guide explains concepts with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=eiC58R16hb8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, meaning it executes code one task at a time. However, JavaScript can handle asynchronous operations, like fetching data or reading files, without blocking the main thread. Understanding how this works involves learning about the event loop, which manages the order tasks run, and how errors behave in asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The event loop continuously checks the call stack and the task queue. When the call stack is empty, it pushes the next task from the queue to the stack. Synchronous code runs immediately, while async callbacks wait in the task queue until the stack is clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example to illustrate the event loop:"
+      },
+      {
+        "type": "code",
+        "value": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('Async callback');\n}, 0);\n\nconsole.log('End');"
+      },
+      {
+        "type": "paragraph",
+        "value": "The output will be:\nStart\nEnd\nAsync callback\n\nEven though the delay is 0, the callback runs after all synchronous code because it's placed in the task queue by setTimeout."
+      },
+      {
+        "type": "paragraph",
+        "value": "When handling errors in asynchronous code, you can't use traditional try-catch blocks around async calls like setTimeout or Promise callbacks because those callbacks run later, outside the current call stack."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, this won't catch the error:"
+      },
+      {
+        "type": "code",
+        "value": "try {\n  setTimeout(() => {\n    throw new Error('Async error');\n  }, 100);\n} catch (error) {\n  console.log('Caught error:', error.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error is not caught because it happens asynchronously, after the try block completes."
+      },
+      {
+        "type": "paragraph",
+        "value": "To properly handle async errors, use error events, callbacks with error arguments, or Promise catch methods. Here's how to catch errors with Promises:"
+      },
+      {
+        "type": "code",
+        "value": "new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(new Error('Promise error'));\n  }, 100);\n})\n  .catch(error => {\n    console.log('Caught error:', error.message);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Or with async/await and try-catch:"
+      },
+      {
+        "type": "code",
+        "value": "async function runAsync() {\n  try {\n    await new Promise((_, reject) => setTimeout(() => reject(new Error('Async/Await error')), 100));\n  } catch (error) {\n    console.log('Caught error:', error.message);\n  }\n}\n\nrunAsync();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding JavaScript's event loop helps you realize why asynchronous errors behave differently and how to handle them correctly. Using Promise catch handlers or async/await with try-catch blocks is the recommended way to catch async errors effectively."
+      }
+    ]
+  },
+  {
+    "slug": "beginners-guide-to-typescript-generics-writing-reusable-functions-and-classes",
+    "title": "Beginner's Guide to TypeScript Generics: Writing Reusable Functions and Classes",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to create reusable and type-safe functions and classes. This beginner-friendly guide includes practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics allow you to write flexible, reusable code components that work with multiple types instead of a single one. This helps improve code maintainability and safety by preserving type information across functions and classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this guide, we'll explore the basics of TypeScript generics by building reusable functions and classes. Let's start with a simple generic function."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\n// Usage:\nlet output1 = identity<string>(\"hello\");\nlet output2 = identity<number>(42);\n\nconsole.log(output1); // Output: hello\nconsole.log(output2); // Output: 42"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `identity` is a generic function with type parameter `T`. Whatever type you provide, the function receives and returns a value of that type. This means you get type safety while keeping the function reusable."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also let TypeScript infer the type argument based on the passed value, so it's not always necessary to specify the type explicitly."
+      },
+      {
+        "type": "code",
+        "value": "let output3 = identity(\"inferred\"); // TypeScript infers that T is string\nconsole.log(output3); // Output: inferred"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's create a generic class to understand how generics apply there. Imagine a simple container that can hold a value of any type."
+      },
+      {
+        "type": "code",
+        "value": "class Container<T> {\n  private value: T;\n\n  constructor(value: T) {\n    this.value = value;\n  }\n\n  getValue(): T {\n    return this.value;\n  }\n\n  setValue(newValue: T): void {\n    this.value = newValue;\n  }\n}\n\n// Usage:\nconst stringContainer = new Container<string>(\"my string\");\nconsole.log(stringContainer.getValue()); // Output: my string\n\nconst numberContainer = new Container<number>(100);\nconsole.log(numberContainer.getValue()); // Output: 100"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `Container` class uses a generic type parameter `T` to store a value of any type. This way, you can create multiple instances of this container for different types, all while preserving type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can also work with multiple type parameters. For example, a generic pair class can hold two different types."
+      },
+      {
+        "type": "code",
+        "value": "class Pair<T, U> {\n  constructor(public first: T, public second: U) {}\n\n  getPair(): [T, U] {\n    return [this.first, this.second];\n  }\n}\n\nconst pair = new Pair<string, number>(\"age\", 30);\nconsole.log(pair.getPair()); // Output: [ 'age', 30 ]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using generics helps avoid the need to write multiple versions of functions or classes for different types, making your code more concise and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, generics in TypeScript enable you to create reusable, type-safe functions and classes by parameterizing types. Start using generics in your projects to make your code more robust and flexible."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-strict-type-checking-to-prevent-runtime-errors",
+    "title": "Mastering TypeScript's Strict Type-Checking to Prevent Runtime Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's strict type-checking features to catch errors early and write safer, more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. This helps detect errors at compile-time rather than during runtime. One of the best ways to utilize TypeScript effectively is to enable strict type-checking options in your project. These options make TypeScript more vigilant, helping you catch common bugs like null or undefined checks, type mismatches, and logic errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "To enable strict mode, you simply add a few settings to your tsconfig.json file:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"strict\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The \"strict\": true flag turns on all strict type-checking options, including noImplicitAny, strictNullChecks, strictFunctionTypes, and more. Let's look at some important strict features:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. strictNullChecks: This option ensures that variables can't be null or undefined unless you explicitly allow it. For example:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log(\"Hello, \" + name.toUpperCase());\n}\n\ngreet(null); // Error with strictNullChecks enabled"
+      },
+      {
+        "type": "paragraph",
+        "value": "Without strictNullChecks, passing null causes a runtime error because name.toUpperCase() fails. But with strictNullChecks, TypeScript flags this during compilation, making your code safer."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. noImplicitAny: When this option is enabled, TypeScript won't let variables or functions have an inferred type of 'any', which disables most type checking. This encourages you to define types explicitly."
+      },
+      {
+        "type": "code",
+        "value": "function add(a, b) {\n  return a + b;\n}\n\n// Error: Parameter 'a' and 'b' implicitly have an 'any' type."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, provide type annotations:"
+      },
+      {
+        "type": "code",
+        "value": "function add(a: number, b: number): number {\n  return a + b;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. strictFunctionTypes: This setting makes function type checking more accurate, preventing errors where functions with incompatible parameter types are assigned to each other."
+      },
+      {
+        "type": "code",
+        "value": "type FuncA = (x: string) => void;\n\ntype FuncB = (x: string | number) => void;\n\nlet f1: FuncA = (x) => {};\nlet f2: FuncB = f1; // Error with strictFunctionTypes enabled"
+      },
+      {
+        "type": "paragraph",
+        "value": "This prevents confusing or unsafe assignments and promotes better function interface designs."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these strict options, you can prevent many runtime errors before the code even runs. This means fewer bugs, easier debugging, and higher code quality."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, start by enabling \"strict\" mode in your tsconfig.json, and gradually learn what each strict flag offers. The extra type safety might feel strict at first, but it pays off with more reliable programs and confident coding."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-python-with-pydantic",
+    "title": "Building Scalable Data Models in Python with Pydantic: A Practical Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and maintainable data models in Python using Pydantic. This practical guide covers the basics and best practices for data validation and model creation.",
+    "videoUrl": "https://www.youtube.com/watch?v=Af6Zr0tNNdE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building Python applications, handling data validation and serialization can become complex as the project grows. Pydantic is a powerful library that simplifies this process by providing data models powered by Python type hints. This guide will walk you through creating scalable data models using Pydantic, ideal for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's install Pydantic if you haven't already:"
+      },
+      {
+        "type": "code",
+        "value": "pip install pydantic"
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic models are created by subclassing BaseModel and using Python type annotations to define fields. Here's a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create an instance of this model and Pydantic will automatically validate the data types:"
+      },
+      {
+        "type": "code",
+        "value": "user = User(id=1, name='Alice', email='alice@example.com')\nprint(user)\n\n# This will raise a validation error due to incorrect type\n# User(id='one', name='Alice', email='alice@example.com')"
+      },
+      {
+        "type": "paragraph",
+        "value": "For scalability, you can organize your models in modules and use model inheritance or nested models. Let's see nested models in action:"
+      },
+      {
+        "type": "code",
+        "value": "from typing import List\nfrom pydantic import BaseModel\n\nclass Address(BaseModel):\n    street: str\n    city: str\n    zip_code: str\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: str\n    addresses: List[Address]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, you can create a User with multiple addresses:"
+      },
+      {
+        "type": "code",
+        "value": "user = User(\n    id=1,\n    name='Alice',\n    email='alice@example.com',\n    addresses=[\n        {'street': '123 Elm St', 'city': 'Springfield', 'zip_code': '12345'},\n        {'street': '456 Maple Ave', 'city': 'Shelbyville', 'zip_code': '67890'}\n    ]\n)\nprint(user)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic also supports data validation with custom validators, which helps maintain data integrity. Here's an example to ensure the email field contains a valid email:"
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, EmailStr, ValidationError\n\nclass User(BaseModel):\n    id: int\n    name: str\n    email: EmailStr\n\ntry:\n    user = User(id=1, name='Alice', email='not-an-email')\nexcept ValidationError as e:\n    print(e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using Pydantic models in your projects makes your data layer clean, reliable, and easy to extend. As your application grows, you can break models into smaller components and nest them, keeping your code organized and scalable."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, Pydantic helps you:\n- Define clear data models using Python types\n- Validate and parse data easily\n- Build nested and complex data structures\n- Add custom validation with ease\n\nTry incorporating Pydantic into your next Python project to handle data modeling effectively."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-exception-hierarchy-for-cleaner-code-maintenance",
+    "title": "Mastering Python's Exception Hierarchy for Cleaner Code Maintenance",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's exception hierarchy effectively to write cleaner, maintainable code by handling errors smartly.",
+    "videoUrl": "https://www.youtube.com/watch?v=7__pVFnvous",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python code, handling errors gracefully is key to building robust programs. Python's built-in exception hierarchy offers a structured way to catch and handle errors, making your code easier to maintain and debug. In this article, we'll explore the basics of Python's exception hierarchy and how mastering it can help you write cleaner code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python organizes exceptions in a tree structure. At the top is the base class `BaseException`, which branches into several subclasses. Most user-defined or typical errors you'll encounter derive from `Exception`, a key subclass that groups common runtime errors. Understanding this hierarchy allows you to catch specific exceptions or groups of related exceptions without hiding other bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some important built-in exceptions you should know:"
+      },
+      {
+        "type": "code",
+        "value": "ArithmeticError\n  ├── ZeroDivisionError\n  ├── OverflowError\n  ├── FloatingPointError\nLookupError\n  ├── IndexError\n  ├── KeyError\nException\n  ├── ValueError\n  ├── TypeError\n  ├── NameError\n  └── IOError (alias OSError in Python 3)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Catching exceptions broadly by using `except Exception:` can be helpful, but it might also hide bugs you didn't anticipate. Instead, try to handle specific exceptions to make your code clearer and errors easier to trace."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider this example where we try to convert user input to an integer and divide 100 by that number. We handle two specific exceptions: `ValueError` for invalid number input, and `ZeroDivisionError` for division by zero."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    num = int(input('Enter a number: '))\n    result = 100 / num\n    print(f'Result is {result}')\nexcept ValueError:\n    print('That was not a valid number!')\nexcept ZeroDivisionError:\n    print('Cannot divide by zero!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how the specific exceptions give clear feedback to the user depending on the error. This makes debugging and maintenance much easier compared to catching a generic exception."
+      },
+      {
+        "type": "paragraph",
+        "value": "For even more control, you can catch multiple exceptions in one block by specifying them as a tuple. This is useful when you want to handle different exceptions similarly."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # some code that may raise KeyError or IndexError\n    data = {'name': 'Alice'}\n    print(data['age'])\nexcept (KeyError, IndexError):\n    print('Missing data!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to avoid using a bare `except:` block, as it will catch all exceptions, including system-exiting ones like `KeyboardInterrupt`. This can make your program harder to stop or debug."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering Python's exception hierarchy by catching specific exceptions improves your code's readability and maintenance. Use the hierarchy to write clear error handling — distinguish between expected errors and bugs, and always provide helpful feedback."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-dynamic-financial-dashboard-using-sql-window-functions",
+    "title": "Building a Dynamic Financial Dashboard Using SQL Window Functions",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create a powerful and dynamic financial dashboard using SQL window functions, perfect for beginners looking to analyze and visualize financial data effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=baVm9YUgBIQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Financial dashboards are essential for tracking business performance over time, providing quick insights into sales, revenue, expenses, and other key financial metrics. SQL window functions are powerful tools that allow you to perform complex calculations across rows while maintaining individual row context. In this tutorial, you'll learn how to build a simple and dynamic financial dashboard by leveraging SQL window functions like ROW_NUMBER(), RANK(), SUM(), and AVG()."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's assume you have a table named `financials` with the following structure:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE financials (\n  transaction_id INT,\n  transaction_date DATE,\n  department VARCHAR(50),\n  amount DECIMAL(10, 2)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This table stores financial transactions by date, department, and amount. To build a dynamic dashboard, we want to calculate metrics such as cumulative revenue, monthly averages, and rank departments by total revenue."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's calculate the cumulative revenue over time, which gives a running total of all transactions ordered by date."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  transaction_date,\n  SUM(amount) AS daily_revenue,\n  SUM(amount) OVER (ORDER BY transaction_date) AS cumulative_revenue\nFROM financials\nORDER BY transaction_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, `SUM(amount) OVER (ORDER BY transaction_date)` calculates the cumulative sum of amounts ordered by the transaction date. This helps visualize how revenue grows day by day."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's calculate the average monthly revenue. Using `PARTITION BY` allows you to segment data by each month."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  DATE_TRUNC('month', transaction_date) AS month,\n  SUM(amount) AS total_revenue,\n  AVG(SUM(amount)) OVER () AS average_monthly_revenue\nFROM financials\nGROUP BY month\nORDER BY month;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `DATE_TRUNC('month', transaction_date)` groups data by month, and `AVG(SUM(amount)) OVER ()` computes the average revenue across all months."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful dashboard metric is ranking departments by total revenue. Window functions like `RANK()` can help you identify top-performing departments."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  department,\n  SUM(amount) AS total_revenue,\n  RANK() OVER (ORDER BY SUM(amount) DESC) AS revenue_rank\nFROM financials\nGROUP BY department\nORDER BY revenue_rank;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `RANK()` function assigns a rank to each department based on total revenue in descending order, enabling easy identification of top revenue contributors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, let's combine some of these ideas to create a more comprehensive view, showing department revenue, cumulative revenue within each department, and rank."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  department,\n  transaction_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY department ORDER BY transaction_date) AS cumulative_department_revenue,\n  RANK() OVER (PARTITION BY department ORDER BY transaction_date) AS transaction_rank\nFROM financials\nORDER BY department, transaction_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query uses `PARTITION BY` to reset cumulative sums and ranks for each department individually, giving you detailed insights into how revenue accumulates over time within each department."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, SQL window functions help you create dynamic and insightful financial dashboards by enabling running totals, rankings, moving averages, and more — all while maintaining row-level details. Experiment with these examples and tweak them to your dataset to build your own customized financial dashboard."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy querying!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-query-performance-sql-server-large-scale-ecommerce",
+    "title": "Optimizing Query Performance in SQL Server for Large-Scale E-commerce Applications",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve SQL Server query performance in large e-commerce databases with beginner-friendly tips and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=xuxgxdbCPnY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Large-scale e-commerce applications handle huge volumes of data, making efficient query performance essential for a smooth user experience. Beginners often run into common SQL errors or slow query responses when working with complex and large datasets. This article explains practical tips to optimize your SQL Server queries and avoid common mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "One typical error is missing indexes on columns used in WHERE clauses and JOIN conditions. Indexes help SQL Server quickly locate data without scanning the entire table. Let’s say you have a table named Orders where you often filter by CustomerID:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX IDX_CustomerID ON Orders(CustomerID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Creating this index speeds up searches by CustomerID, reducing query time. Another common problem is selecting too many columns or using SELECT * unnecessarily. Instead, select only the columns you really need to reduce data load and avoid extra processing."
+      },
+      {
+        "type": "code",
+        "value": "SELECT OrderID, OrderDate, TotalAmount FROM Orders WHERE CustomerID = 123;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Writing efficient JOINs is also crucial. Use INNER JOIN when you need matching records and avoid CROSS JOINs unless necessary, as they produce large datasets and slow down queries. Here’s a good example joining Customers and Orders:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT c.CustomerName, o.OrderDate, o.TotalAmount\nFROM Customers c\nINNER JOIN Orders o ON c.CustomerID = o.CustomerID\nWHERE c.Country = 'USA';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, watch out for errors like using functions on indexed columns in WHERE clauses, for example: WHERE YEAR(OrderDate) = 2023. This disables index usage and causes full table scans. Instead, write range queries:"
+      },
+      {
+        "type": "code",
+        "value": "WHERE OrderDate >= '2023-01-01' AND OrderDate < '2024-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these beginner-friendly tips—indexing columns, limiting selected columns, using proper JOINs, and avoiding functions on indexed columns—you can significantly improve query performance in SQL Server and reduce common errors in large-scale e-commerce applications."
+      }
+    ]
   }
 ];
