@@ -2894,5 +2894,178 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "create-a-sql-function-to-calculate-running-median-by-group",
+    "title": "Create a SQL Function to Calculate Running Median by Group",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "queries",
+    "description": "Build an advanced SQL function that calculates the running median of a numeric column grouped by a category column over a dynamic order, using window functions and optimized querying.",
+    "prompt": "Write a SQL function named `running_median_by_group` that takes a table name, a numeric column name, a grouping column name, and an ordering column name as parameters. The function should return a result set showing each row with an additional column containing the median of the numeric column calculated over all previous rows (including the current row) within the same group, ordered by the specified ordering column. The function should efficiently handle large datasets with multiple groups and dynamic input parameters.",
+    "guidance": [
+      "Use window functions to partition data by the grouping column and order by the ordering column.",
+      "Calculate the median dynamically by selecting the middle value(s) over the window frame for each row.",
+      "Ensure the function works with varying table and column names provided as parameters."
+    ],
+    "hints": [
+      "To compute a median in SQL, consider using percentile_cont(0.5) within a window function.",
+      "Dynamic SQL execution may be necessary to allow flexible table and column names.",
+      "Test the function on smaller datasets before scaling."
+    ],
+    "starterCode": "CREATE OR REPLACE FUNCTION running_median_by_group(\n    tbl_name TEXT,\n    num_col TEXT,\n    grp_col TEXT,\n    order_col TEXT\n) RETURNS TABLE(*) AS $$\nDECLARE\n    sql_query TEXT;\nBEGIN\n    sql_query := FORMAT(\n        'SELECT *,\n         percentile_cont(0.5) WITHIN GROUP (ORDER BY %1$I) OVER (PARTITION BY %2$I ORDER BY %3$I ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_median\n         FROM %4$I', num_col, grp_col, order_col, tbl_name\n    );\n    RETURN QUERY EXECUTE sql_query;\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "Returns the original table rows with an additional 'running_median' column representing the median of the numeric column calculated cumulatively within each group, ordered by the specified column.",
+    "concepts": [
+      "window functions",
+      "dynamic SQL",
+      "median calculation",
+      "SQL functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "basic-calculator-cli-mini-project-in-c",
+    "title": "Basic Calculator CLI Mini-Project in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a simple command-line calculator program in C++ that performs basic arithmetic operations like addition, subtraction, multiplication, and division based on user input.",
+    "prompt": "Write a C++ program that asks the user to input two numbers and an operation (+, -, *, /). The program should then calculate and display the result of applying the chosen operation to the two numbers. Make sure to handle division by zero gracefully by displaying an error message.",
+    "guidance": [
+      "Use basic variables to store user inputs for numbers and the operator.",
+      "Use if-else or switch-case statements to decide the operation.",
+      "Check for division by zero before performing division to avoid errors."
+    ],
+    "hints": [
+      "Use the 'cin' object to get input from the user.",
+      "Remember to include checks for invalid operators.",
+      "Use 'cout' to display the result or error messages."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double num1, num2;\n    char op;\n\n    cout << \"Enter first number: \";\n    cin >> num1;\n    cout << \"Enter an operator (+, -, *, /): \";\n    cin >> op;\n    cout << \"Enter second number: \";\n    cin >> num2;\n\n    // Your code here\n\n    return 0;\n}",
+    "expectedOutput": "Example run:\nEnter first number: 8\nEnter an operator (+, -, *, /): /\nEnter second number: 2\nResult: 4",
+    "concepts": [
+      "variables",
+      "conditional statements",
+      "input/output",
+      "basic arithmetic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-personal-expense-tracker-mini-project",
+    "title": "Build a Personal Expense Tracker Mini Project",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a Python program that allows users to add, view, and analyze their personal expenses over time, helping them track spending habits.",
+    "prompt": "Build a Python function named `expense_tracker` that manages personal expenses. The function should allow users to add new expenses (including date, category, and amount), view all expenses, and get a summary of total spending by category. The program should store expenses in a list of dictionaries, where each dictionary represents one expense. Provide options to add an expense, view all expenses, and show total expenses grouped by category. Your function should continue prompting the user until they choose to exit.",
+    "guidance": [
+      "Use a list of dictionaries to store expenses, with keys such as 'date', 'category', and 'amount'.",
+      "Implement a simple text-based menu to allow users to select actions like adding expenses, viewing expenses, and summarizing spending.",
+      "For summarizing, iterate over the expenses and accumulate totals per category."
+    ],
+    "hints": [
+      "Consider using a while loop to keep the menu running until the user opts to exit.",
+      "To group and sum amounts by category, you can use a dictionary with categories as keys and sums as values.",
+      "Remember to convert amount input to a float for proper mathematical operations."
+    ],
+    "starterCode": "def expense_tracker():\n    expenses = []\n    while True:\n        print('1. Add Expense')\n        print('2. View Expenses')\n        print('3. Summary by Category')\n        print('4. Exit')\n        choice = input('Choose an option: ')\n        if choice == '1':\n            # Add your code to add an expense here\n            pass\n        elif choice == '2':\n            # Add your code to display all expenses here\n            pass\n        elif choice == '3':\n            # Add your code to summarize expenses here\n            pass\n        elif choice == '4':\n            break\n        else:\n            print('Invalid option, please try again.')",
+    "expectedOutput": "After adding some expenses and choosing 'View Expenses', the output should list all inputs, e.g., date, category, and amount. Choosing 'Summary by Category' should show total amounts spent in each category, e.g., Food: 150.00, Transport: 75.50.",
+    "concepts": [
+      "lists and dictionaries",
+      "loop and conditionals",
+      "data aggregation",
+      "user input handling"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "advanced-multithreaded-file-processing-and-data-aggregation-in-c",
+    "title": "Advanced Multithreaded File Processing and Data Aggregation in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a performant C++ application that reads multiple large text files concurrently, processes the extracted data to compute aggregate statistics, and outputs a sorted summary report.",
+    "prompt": "Build a C++ program that accepts a list of file paths, reads each file in parallel using multithreading, extracts integer values from each line, and calculates the total sum, average, maximum, and minimum values across all files. Finally, output a summary report sorted by file name that includes these statistics for each file and a combined aggregate for all files.",
+    "guidance": [
+      "Use C++11 or later thread support libraries (e.g., std::thread, std::mutex) for concurrent file reading.",
+      "Design thread-safe data structures or use synchronization primitives to aggregate data safely.",
+      "Optimize file reading and parsing to handle large files without excessive memory usage."
+    ],
+    "hints": [
+      "Consider having each thread process its file and store statistics locally before merging results.",
+      "Use locks or atomic operations only when updating shared aggregate data to avoid performance bottlenecks.",
+      "Use standard algorithms from <algorithm> for computing min, max, and sorting results."
+    ],
+    "starterCode": "#include <iostream>\n#include <fstream>\n#include <vector>\n#include <string>\n#include <thread>\n#include <mutex>\n#include <map>\n#include <numeric>\n#include <limits>\n\nstruct Statistics {\n    long long sum = 0;\n    int count = 0;\n    int max = std::numeric_limits<int>::min();\n    int min = std::numeric_limits<int>::max();\n};\n\nstd::mutex mtx;\nstd::map<std::string, Statistics> fileStats;\nStatistics totalStats;\n\nvoid processFile(const std::string& filename) {\n    std::ifstream file(filename);\n    if (!file.is_open()) {\n        std::cerr << \"Failed to open \" << filename << std::endl;\n        return;\n    }\n    Statistics localStats;\n    std::string line;\n    while (std::getline(file, line)) {\n        try {\n            int number = std::stoi(line);\n            localStats.sum += number;\n            localStats.count++;\n            if (number > localStats.max) localStats.max = number;\n            if (number < localStats.min) localStats.min = number;\n        } catch (...) {\n            continue; // ignore lines that aren't integers\n        }\n    }\n    std::lock_guard<std::mutex> lock(mtx);\n    fileStats[filename] = localStats;\n    totalStats.sum += localStats.sum;\n    totalStats.count += localStats.count;\n    if (localStats.max > totalStats.max) totalStats.max = localStats.max;\n    if (localStats.min < totalStats.min) totalStats.min = localStats.min;\n}\n\nint main(int argc, char* argv[]) {\n    if (argc < 2) {\n        std::cerr << \"Usage: \" << argv[0] << \" <file1> [file2 ...]\" << std::endl;\n        return 1;\n    }\n    std::vector<std::thread> threads;\n    for (int i = 1; i < argc; ++i) {\n        threads.emplace_back(processFile, argv[i]);\n    }\n    for (auto& t : threads) {\n        t.join();\n    }\n\n    // Output sorted summary report\n    std::cout << \"File Stats (sorted by file name):\" << std::endl;\n    for (auto& [filename, stats] : fileStats) {\n        double avg = stats.count ? static_cast<double>(stats.sum) / stats.count : 0;\n        std::cout << filename << \": sum=\" << stats.sum << \", avg=\" << avg\n                  << \", max=\" << stats.max << \", min=\" << stats.min << std::endl;\n    }\n    double totalAvg = totalStats.count ? static_cast<double>(totalStats.sum) / totalStats.count : 0;\n    std::cout << \"Combined: sum=\" << totalStats.sum << \", avg=\" << totalAvg\n              << \", max=\" << totalStats.max << \", min=\" << totalStats.min << std::endl;\n    return 0;\n}\n",
+    "expectedOutput": "File Stats (sorted by file name):\nfile1.txt: sum=123456, avg=123.45, max=999, min=1\nfile2.txt: sum=234567, avg=234.56, max=999, min=2\n...\nCombined: sum=358023, avg=179.01, max=999, min=1",
+    "concepts": [
+      "Multithreading",
+      "File I/O",
+      "Data Aggregation",
+      "Synchronization",
+      "Sorting"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-calculate-the-square-of-a-number",
+    "title": "Create a Function to Calculate the Square of a Number",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Write a Python function that takes a single number as input and returns its square. This is a fundamental exercise to practice defining functions and using arithmetic operators.",
+    "prompt": "Build a function named square_number that accepts one parameter (a number) and returns the square of that number. For example, if the input is 4, the function should return 16.",
+    "guidance": [
+      "Define a function using the def keyword.",
+      "Use the parameter inside the function to perform multiplication.",
+      "Return the result using the return statement."
+    ],
+    "hints": [
+      "Remember that squaring a number means multiplying it by itself.",
+      "If your function parameter is n, then the square is n * n."
+    ],
+    "starterCode": "def square_number(n):\n    # Your code here",
+    "expectedOutput": "square_number(5) should return 25\nsquare_number(10) should return 100",
+    "concepts": [
+      "functions",
+      "arithmetic operators",
+      "return statement"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-function-to-calculate-total-price-with-tax",
+    "title": "Fix the Bug in Function to Calculate Total Price with Tax",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple Python function is intended to calculate the total price of an item after adding tax. However, the function contains a bug causing incorrect results. Your task is to find and fix the bug so the function returns the correct total price.",
+    "prompt": "The function calculate_total_price is supposed to take a price and a tax rate, then return the total price including tax. However, it currently returns the wrong value. Identify the bug in the code below and fix it so the function returns the correct total price including tax.",
+    "guidance": [
+      "Check the calculation logic inside the function carefully.",
+      "Remember that tax should be *added* to the original price, not subtracted or incorrectly multiplied.",
+      "Test your fixed function with different price and tax values."
+    ],
+    "hints": [
+      "Think about how to correctly calculate the total including tax: total = price + (price * tax_rate).",
+      "Check the operator precedence and parentheses in the expression.",
+      "Make sure the tax_rate is treated as a decimal (e.g., 0.1 for 10%)."
+    ],
+    "starterCode": "def calculate_total_price(price, tax_rate):\n    # This function should return price including tax\n    total = price * tax_rate + price\n    return total\n\n# Example usage:\nprint(calculate_total_price(100, 0.1))  # Expected output: 110.0",
+    "expectedOutput": "110.0",
+    "concepts": [
+      "basic arithmetic operations",
+      "function definitions",
+      "operator precedence",
+      "return statements"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
