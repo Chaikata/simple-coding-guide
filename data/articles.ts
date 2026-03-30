@@ -31037,5 +31037,497 @@ export const articles = [
         "value": "By following these simple tips—ensuring correct JOINs, using filters, managing aggregates properly, handling NULLs, and analyzing performance—you can optimize your SQL queries and avoid unexpected results even in large databases."
       }
     ]
+  },
+  {
+    "slug": "mastering-closure-scopes-unlock-advanced-javascript-performance-tricks",
+    "title": "Mastering Closure Scopes: Unlock Advanced JavaScript Performance Tricks",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how JavaScript closures and scopes work to enhance your coding skills and boost performance with practical beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=PbNoqTkHTqE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript closures are a powerful concept that lets you write more efficient, flexible, and maintainable code. Understanding closure scopes will help you unlock advanced performance tricks by controlling variable access and memory usage in your functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, a closure is created when a function remembers the variables from its outer scope even after the outer function has finished executing. This ability allows you to keep some variables private and maintain state in a clean way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  return function() {\n    console.log('Hello, ' + name + '!');\n  };\n}\n\nconst greetJohn = greet('John');\ngreetJohn(); // Output: Hello, John!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the inner function returned from greet() keeps access to the name parameter of its outer function even after greet() has finished running. This is a closure in action!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Why is this useful for performance? Imagine you want to avoid repeatedly recalculating values or re-fetching data in your code. Closures let you store the result in an outer scope variable without polluting the global namespace."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider this example for performance optimization with closures:"
+      },
+      {
+        "type": "code",
+        "value": "function createMultiplier(multiplier) {\n  return function (num) {\n    return num * multiplier;\n  };\n}\n\nconst double = createMultiplier(2);\nconst triple = createMultiplier(3);\n\nconsole.log(double(5)); // 10\nconsole.log(triple(5)); // 15"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of calculating the multiplier every time, createMultiplier saves it and provides a faster way to multiply any number. This avoids redundancy and makes the code cleaner and faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures also help in creating private variables that cannot be accessed directly from outside, improving security and reducing bugs:"
+      },
+      {
+        "type": "code",
+        "value": "function counter() {\n  let count = 0;\n  return {\n    increment() {\n      count++;\n      console.log(count);\n    },\n    decrement() {\n      count--;\n      console.log(count);\n    }\n  };\n}\n\nconst myCounter = counter();\nmyCounter.increment(); // 1\nmyCounter.increment(); // 2\nmyCounter.decrement(); // 1"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, count is stored inside the closure and can only be changed through the increment and decrement methods, protecting it from accidental change."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, mastering closures and scope in JavaScript can help you:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Write efficient, reusable code\n- Protect data with private variables\n- Reduce unnecessary calculations for better performance\n- Keep your global namespace clean\n\nTry experimenting with closures in your projects and notice how they can improve your code quality and speed."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-javascript-error-monitoring-systems-large-web-applications",
+    "title": "Designing Scalable JavaScript Error Monitoring Systems for Large Web Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to build a scalable and beginner-friendly JavaScript error monitoring system to efficiently track and manage errors in large web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=b4TpO9pYpqk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building large web applications, it's important to have a robust system to monitor and handle JavaScript errors. This helps developers quickly find, understand, and fix problems that users might encounter. In this article, we'll discuss how to design a scalable error monitoring system for JavaScript applications that is beginner-friendly and practical."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Do We Need Error Monitoring?\nErrors can happen for many reasons: network issues, unexpected user actions, browser differences, or bugs in the code. Without a good monitoring system, these errors go unnoticed until users report them, making fixing issues slow and difficult."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Components of an Error Monitoring System\n1. **Error Catching:** Capture errors when they occur in your app.\n2. **Error Reporting:** Send error information to a backend or logging service.\n3. **Error Storage:** Store errors for analysis and tracking.\n4. **Error Alerting:** Notify developers about new or critical issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Catching Errors in JavaScript\nYou can catch errors globally using `window.onerror` and `window.onunhandledrejection` for promise rejections. Here's an example:"
+      },
+      {
+        "type": "code",
+        "value": "window.onerror = function(message, source, lineno, colno, error) {\n  const errorInfo = {\n    message: message,\n    source: source,\n    lineno: lineno,\n    colno: colno,\n    stack: error ? error.stack : null,\n    time: new Date().toISOString()\n  };\n  // Send errorInfo to your monitoring server\n  sendError(errorInfo);\n};\n\nwindow.onunhandledrejection = function(event) {\n  const errorInfo = {\n    message: event.reason.message || 'Unhandled Rejection',\n    stack: event.reason.stack || null,\n    time: new Date().toISOString()\n  };\n  // Send errorInfo to your monitoring server\n  sendError(errorInfo);\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Sending Error Data to a Server\nTo analyze errors, send the error information to a backend or a logging service. You can use the Fetch API to do this asynchronously without blocking the user's experience."
+      },
+      {
+        "type": "code",
+        "value": "function sendError(errorInfo) {\n  fetch('https://your-error-monitoring-api.com/log', {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json'\n    },\n    body: JSON.stringify(errorInfo)\n  })\n  .catch(err => {\n    // In case reporting fails, optionally log to console\n    console.error('Failed to send error:', err);\n  });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Handling Errors Efficiently\nFor large applications, you might get thousands of error reports. To make your monitoring scalable:\n- **Throttle Reports:** Prevent flooding your server by limiting how often the same error is sent.\n- **Batch Errors:** Send multiple errors together in one request if they happen close in time.\n- **Filter Errors:** Ignore common or irrelevant errors that don’t affect users.\n- **Add Context:** Attach user info, app version, and environment details to each error for easier debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example to throttle error reporting by only sending the same error once every 10 minutes:"
+      },
+      {
+        "type": "code",
+        "value": "const errorCache = new Map();\n\nfunction sendThrottledError(errorInfo) {\n  const key = errorInfo.message + errorInfo.source + errorInfo.lineno + errorInfo.colno;\n  const now = Date.now();\n\n  if (!errorCache.has(key) || now - errorCache.get(key) > 10 * 60 * 1000) {\n    sendError(errorInfo);\n    errorCache.set(key, now);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Bonus Tip: Use Existing Tools\nIf building from scratch sounds overwhelming, consider integrating popular error monitoring tools like Sentry, Bugsnag, or LogRocket. They offer powerful SDKs for JavaScript and automatically handle many complexities around error collection, aggregation, and alerting."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nDesigning a scalable error monitoring system in JavaScript involves capturing errors globally, sending them to a backend efficiently, and managing them smartly to avoid overload. Start simple with global error listeners and build up throttling and batching as your app grows to keep your error monitoring system effective and perform well."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-vs-javascript-key-differences-for-modern-web-development",
+    "title": "TypeScript vs JavaScript: Key Differences for Modern Web Development",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Discover the main differences between TypeScript and JavaScript, and learn how TypeScript can help you write safer and cleaner code for modern web development.",
+    "videoUrl": "https://www.youtube.com/watch?v=HCXPJmtV47I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is the most widely-used programming language for web development. However, as projects grow larger, JavaScript's flexibility can sometimes lead to bugs and maintenance challenges. This is where TypeScript steps in. TypeScript is a superset of JavaScript that adds static typing and other powerful features to help developers catch errors early and write more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore the key differences between JavaScript and TypeScript, and see practical examples of how TypeScript can improve your development experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Static Typing**\n\nJavaScript is a dynamically typed language, meaning variable types can change at runtime. TypeScript introduces static typing, which allows you to specify the types of variables, function parameters, and return values. This helps catch errors during development rather than at runtime."
+      },
+      {
+        "type": "code",
+        "value": "// JavaScript example\nfunction greet(name) {\n  return 'Hello, ' + name;\n}\n\nconsole.log(greet(42)); // Output: Hello, 42 (unexpected behavior)\n\n// TypeScript example\nfunction greetTS(name: string): string {\n  return 'Hello, ' + name;\n}\n\n// greetTS(42); // Error: Argument of type 'number' is not assignable to parameter of type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Better Tooling and Autocompletion**\n\nTypeScript's type system enhances editor support with intelligent autocompletion, inline documentation, and error detection. This results in a smoother coding experience and fewer bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Support for Modern JavaScript Features**\n\nTypeScript supports upcoming JavaScript features and can transpile modern code to compatible versions for older browsers. This means you can use future-proof syntax today while ensuring compatibility."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Interfaces and Type Aliases**\n\nTypeScript allows you to define interfaces and custom types to describe object shapes precisely, improving code readability and consistency."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string; // Optional property\n}\n\nfunction getUser(user: User): string {\n  return `User: ${user.name} (ID: ${user.id})`;\n}\n\nconst user1 = { id: 1, name: 'Alice' };\nconsole.log(getUser(user1));"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Learning Curve**\n\nWhile TypeScript adds many benefits, it requires learning new syntax and concepts. However, if you already know JavaScript, picking up TypeScript is straightforward thanks to its close relationship with JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\n- JavaScript is dynamic, TypeScript is statically typed.\n- TypeScript catches errors at compile time, reducing runtime errors.\n- TypeScript improves tooling and code readability.\n- TypeScript supports modern features and compiles to JavaScript.\n\nFor beginners and larger projects, TypeScript is a great choice to improve code quality and maintainability. However, JavaScript remains essential and will always be the foundation of modern web development."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start exploring TypeScript today by gradually adding type annotations to your existing JavaScript code for a smooth transition!"
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-typescript-utility-types-to-model-complex-data-structures",
+    "title": "Leveraging TypeScript Utility Types to Model Complex Data Structures Without Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript utility types to create clean, maintainable, and type-safe complex data structures, minimizing errors and improving developer experience.",
+    "videoUrl": "https://www.youtube.com/watch?v=2FG0bP0GBdE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool that helps you write safer and more predictable code by adding types to JavaScript. When working with complex data structures, errors can easily creep in if the types are not well-defined. Luckily, TypeScript provides built-in utility types that make it easier to create and manipulate types without hassle."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore some commonly used utility types: `Partial`, `Pick`, `Omit`, and `Record`. We'll see how they help represent complex data structures while avoiding common type errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "`Partial` makes all properties of a type optional. This is useful when you want to update only a subset of properties in an object."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Partial<User> makes all fields optional\nfunction updateUser(id: number, userUpdates: Partial<User>) {\n  // Implementation...\n}\n\n// Valid calls\nupdateUser(1, { name: \"Alice\" });\nupdateUser(2, { email: \"bob@example.com\" });"
+      },
+      {
+        "type": "paragraph",
+        "value": "`Pick` creates a new type by selecting a subset of properties from an existing type. This helps when you want only specific fields without including the whole object."
+      },
+      {
+        "type": "code",
+        "value": "type UserPreview = Pick<User, \"id\" | \"name\">;\n\nconst preview: UserPreview = {\n  id: 1,\n  name: \"Alice\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "`Omit` is the opposite of `Pick`: it creates a type by excluding certain properties from the original type."
+      },
+      {
+        "type": "code",
+        "value": "type UserWithoutEmail = Omit<User, \"email\">;\n\nconst userNoEmail: UserWithoutEmail = {\n  id: 1,\n  name: \"Alice\"\n  // email is not allowed here\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "`Record` lets you create an object type with specific keys and uniform property types. This is helpful for modeling dictionaries or maps."
+      },
+      {
+        "type": "code",
+        "value": "type Role = \"admin\" | \"user\" | \"guest\";\n\n// Record maps Role keys to boolean values\nconst permissions: Record<Role, boolean> = {\n  admin: true,\n  user: false,\n  guest: false\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "By combining these utilities, you can create complex, well-structured types without repetitive manual typing and dramatically reduce type errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, suppose you want to represent a product with optional discount info. You can write:"
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: number;\n  name: string;\n  price: number;\n  discount?: {\n    amount: number;\n    expires: Date;\n  };\n}\n\n// To update discount partially\nfunction updateDiscount(product: Product, discountUpdates: Partial<Product[\"discount\"]>) {\n  if (product.discount) {\n    product.discount = { ...product.discount, ...discountUpdates };\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using utility types helps keep your code safe from mistakes, like accidentally forgetting a required property or assigning incompatible types. This leads to better maintainability and fewer runtime bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering TypeScript's utility types is a key skill for modeling complex data structures efficiently and error-free. Experiment with them in your next project to experience safer and cleaner code."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-python-generators-memory-efficient-data-processing",
+    "title": "Harnessing Python Generators for Memory-Efficient Data Processing",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python generators to process large datasets efficiently, reducing memory usage and improving program performance with beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=j-8TkhpIDgo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large amounts of data in Python, memory usage can quickly become a problem. Loading huge datasets all at once can slow down your program or even cause it to crash. This is where Python generators come in handy. Generators allow you to iterate over data one item at a time, without needing to store the entire dataset in memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we’ll explore what generators are, how they work, and how to use them to write memory-efficient code. We'll cover basic generator syntax and provide examples that a beginner can follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Generator?\n\nA generator is a special type of function that returns an iterator. Instead of returning all values at once, it yields them one at a time. This means you only have one item in memory at a time while looping through data."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Generator\n\nYou create a generator just like a regular function, but you use the `yield` keyword to provide values one at a time."
+      },
+      {
+        "type": "code",
+        "value": "def count_up_to(max):\n    count = 1\n    while count <= max:\n        yield count\n        count += 1\n\nfor number in count_up_to(5):\n    print(number)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `count_up_to` function yields numbers from 1 to 5, one at a time. Unlike returning a list of numbers, it keeps the memory footprint low."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Generators?\n\n1. **Memory efficiency:** You don't load all data at once.\n2. **Lazy evaluation:** Values are generated only when needed.\n3. **Simpler iteration:** Useful for reading large files or streams."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Generators to Read Large Files\n\nImagine you want to process a large text file line by line without loading it all at once. Here's how a generator can help."
+      },
+      {
+        "type": "code",
+        "value": "def read_large_file(file_path):\n    with open(file_path, 'r') as file:\n        for line in file:\n            yield line.strip()  # Yield one line at a time without newline\n\n# Example usage:\nfor line in read_large_file('large_file.txt'):\n    print(line)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This generator reads and yields one line at a time, allowing you to handle files that are bigger than your available memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generator Expressions\n\nGenerators can also be created using generator expressions, which look like list comprehensions but use parentheses instead of square brackets."
+      },
+      {
+        "type": "code",
+        "value": "squares = (x * x for x in range(10))\nfor square in squares:\n    print(square)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generator expressions are a concise way to create generators, especially for simple cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nGenerators are powerful tools in Python for working with large data efficiently. By yielding values one at a time, they help save memory and improve performance. Practice writing generator functions and expressions to harness their benefits in your own projects."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-tracebacks-beginners-guide-debugging-runtime-errors",
+    "title": "Understanding Python Tracebacks: A Beginner's Guide to Debugging Runtime Errors",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to read and understand Python tracebacks to find and fix runtime errors with this beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=NIWwJbo-9_8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to Python programming, encountering errors can be frustrating. One common type of error is a runtime error, which happens when the program is running. Python provides useful information about these errors through a message called a traceback. Understanding how to read a traceback is a key skill for debugging your code effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "A traceback is a report that shows the sequence of function calls that led to the error. It helps you pinpoint where in your code the error happened, what type of error it was, and sometimes why it occurred."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s look at a simple example. Suppose you have the following code:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, Python will show a traceback like this:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 5, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to read it step-by-step:\n- The traceback lists the most recent call last, meaning you read it from bottom to top.\n- The last line tells you the error type and message. Here, it’s a ZeroDivisionError, which means you tried to divide by zero.\n- The lines above show the call stack: which files and lines were involved. The error happened in the function divide (line 2) called on line 5."
+      },
+      {
+        "type": "paragraph",
+        "value": "Knowing this helps you quickly locate and fix the problem. You might add a check to avoid dividing by zero:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    return a / b\n\nresult = divide(10, 0)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, tracebacks are your friend. When you see one, don’t panic:\n- Read the error message at the bottom.\n- Look at the file names and line numbers listed.\n- Use this information to find the mistake in your code.\nAs you get more practice, you’ll become more confident at debugging errors using tracebacks."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-scalable-inventory-management-system-with-sql-step-by-step-tutorial",
+    "title": "Building a Scalable Inventory Management System with SQL: Step-by-Step Tutorial",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to build a scalable inventory management system using SQL with this beginner-friendly step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=kbKty5ZVKMY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Managing inventory efficiently is essential for many businesses. SQL, a popular language for managing databases, is an excellent tool to build scalable inventory management systems. In this tutorial, we will walk you through designing and implementing a simple inventory system using SQL. This guide is beginner-friendly and focuses on practical steps to get you started."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 1: Designing the Database Schema. Before creating tables, it's important to think about what data we need to store. For an inventory system, we typically need information about products, categories, and stock levels. We will create three tables:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Categories: to group products into logical categories.\n- Products: to store product details.\n- Inventory: to track stock quantities for each product."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 2: Creating the Categories Table. This table will hold category IDs and names."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Categories (\n  CategoryID INT PRIMARY KEY AUTO_INCREMENT,\n  CategoryName VARCHAR(100) NOT NULL\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 3: Creating the Products Table. This table links products to categories and includes product details."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Products (\n  ProductID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductName VARCHAR(255) NOT NULL,\n  CategoryID INT,\n  Price DECIMAL(10, 2) NOT NULL,\n  FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 4: Creating the Inventory Table. This table keeps track of stock quantities for each product."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Inventory (\n  InventoryID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductID INT NOT NULL,\n  Quantity INT DEFAULT 0,\n  LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 5: Populating Tables with Sample Data. Let's insert some sample categories and products."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Categories (CategoryName) VALUES\n('Electronics'),\n('Books'),\n('Clothing');\n\nINSERT INTO Products (ProductName, CategoryID, Price) VALUES\n('Laptop', 1, 999.99),\n('Mouse', 1, 25.50),\n('Novel Book', 2, 15.00),\n('T-shirt', 3, 10.00);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 6: Adding Inventory Stock. Now, add stock quantities for the products."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Inventory (ProductID, Quantity) VALUES\n(1, 50),\n(2, 150),\n(3, 30),\n(4, 100);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 7: Querying Inventory Information. To check available stock for each product, you can use a JOIN query."
+      },
+      {
+        "type": "code",
+        "value": "SELECT p.ProductName, c.CategoryName, i.Quantity, p.Price\nFROM Products p\nJOIN Categories c ON p.CategoryID = c.CategoryID\nJOIN Inventory i ON p.ProductID = i.ProductID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 8: Updating Stock. To update the stock quantity after new shipments or sales, use the UPDATE statement."
+      },
+      {
+        "type": "code",
+        "value": "UPDATE Inventory\nSET Quantity = Quantity + 20\nWHERE ProductID = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 9: Scaling Your Inventory System. As your inventory grows, consider adding these features:\n- Indexes on foreign keys (e.g., CategoryID, ProductID) for faster queries.\n- Additional tables for suppliers, orders, or sales.\n- Use transactions to ensure data consistency.\n- Schedule regular backups to protect data."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these steps, you can build a solid and scalable inventory management system using SQL. This system can be extended and integrated with applications or reporting tools as your business needs evolve."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-null-handling-in-sql-avoiding-common-pitfalls-for-beginners",
+    "title": "Understanding NULL Handling in SQL: Avoiding Common Pitfalls for Beginners",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to properly handle NULL values in SQL to avoid common errors and unexpected behavior in your database queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=hF6wqnDIuK0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, NULL represents the absence of a value or unknown data. Unlike empty strings or zeros, NULL is a special marker and requires careful handling. Beginners often face errors or unexpected results because NULL behaves differently than regular values in comparisons and functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is attempting to check for NULL using standard equality operators (= or !=). These comparisons do not work as expected because NULL is not equal to anything, not even another NULL. Instead, you should use the IS NULL or IS NOT NULL operators."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect NULL comparison\nSELECT * FROM employees WHERE manager_id = NULL;\n\n-- Correct NULL check\nSELECT * FROM employees WHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common pitfall is that NULL values can cause aggregate functions like COUNT, AVG, or SUM to behave unexpectedly if not handled carefully. For example, COUNT(column_name) will only count non-NULL values, whereas COUNT(*) counts every row regardless of NULLs."
+      },
+      {
+        "type": "code",
+        "value": "-- Counting all rows\nSELECT COUNT(*) FROM sales;\n\n-- Counting only rows with non-NULL sales_amount\nSELECT COUNT(sales_amount) FROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "When using conditional expressions or calculations with NULL, results can become NULL, leading to confusion. To avoid this, SQL provides the COALESCE function, which returns the first non-NULL value from a list, making it useful for substituting defaults."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, COALESCE(bonus, 0) AS bonus_amount FROM payroll;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, always remember to use IS NULL / IS NOT NULL for NULL checks, be mindful of how NULL affects aggregate functions, and use COALESCE to handle potential NULLs in calculations. These practices will help you avoid common errors and write more reliable SQL queries."
+      }
+    ]
   }
 ];
