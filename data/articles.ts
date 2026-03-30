@@ -31529,5 +31529,423 @@ export const articles = [
         "value": "In summary, always remember to use IS NULL / IS NOT NULL for NULL checks, be mindful of how NULL affects aggregate functions, and use COALESCE to handle potential NULLs in calculations. These practices will help you avoid common errors and write more reliable SQL queries."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-event-loop-optimizing-async-code-performance",
+    "title": "Mastering JavaScript Event Loop: Optimizing Async Code Performance",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of JavaScript's event loop and how to write optimized asynchronous code for better performance and smoother user experiences.",
+    "videoUrl": "https://www.youtube.com/watch?v=bqU9nyy-M4U",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, meaning it can only execute one piece of code at a time. However, it can handle asynchronous operations like timers, network requests, or file reads without blocking the main thread. This magic happens thanks to the event loop. Understanding the event loop is key to writing efficient asynchronous code and improving performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, the event loop continuously checks the call stack and the message queue (also known as task queue). When the call stack is empty, it picks the first task from the queue and pushes it to the stack, allowing asynchronous callbacks to run."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's demonstrate the event loop with an example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('Timeout callback');\n}, 0);\n\nconsole.log('End');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Despite the timeout being set to 0 milliseconds, the 'Timeout callback' logs last. This happens because the `setTimeout` callback is put into the message queue and only runs after the main call stack is empty."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Microtasks vs Macrotasks\n\nJavaScript queues two kinds of tasks: macrotasks and microtasks. Examples of macrotasks include `setTimeout` and `setInterval`. Microtasks include Promises and `process.nextTick` in Node.js. Microtasks have higher priority and run immediately after the current stack, before any macrotask."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example showing how microtasks run before macrotasks:"
+      },
+      {
+        "type": "code",
+        "value": "console.log('Script start');\n\nsetTimeout(() => {\n  console.log('setTimeout');\n}, 0);\n\nPromise.resolve().then(() => {\n  console.log('Promise');\n});\n\nconsole.log('Script end');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n\nScript start\nScript end\nPromise\nsetTimeout\n\n\nThe Promise callback executes before the `setTimeout` callback, even though both are scheduled during the script execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips to Optimize Async Code\n\n1. **Use Promises and async/await:** They work with microtasks, giving better control and performance.\n\n2. **Avoid long-running synchronous code:** Long blocking code delays the event loop, making async callbacks slower.\n\n3. **Batch DOM updates:** When updating the UI, batch changes together to avoid layout thrashing.\n\n4. **Use requestAnimationFrame for animations:** It’s synchronized with the browser’s repaint cycle.\n\n5. **Debounce expensive operations:** Use techniques like debouncing to limit how often an async function runs.\n\nLet's see how `async/await` simplifies asynchronous flow and improves readability:"
+      },
+      {
+        "type": "code",
+        "value": "function timeout(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function fetchData() {\n  console.log('Fetching data...');\n  await timeout(1000);\n  console.log('Data fetched');\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `fetchData` waits for 1 second before logging 'Data fetched', all without blocking the main thread."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\n- The event loop handles async operations by managing call stack and task queues.\n- Microtasks run before macrotasks, so promises are processed promptly.\n- Writing async code with Promises and async/await optimizes performance and clarity.\n- Avoid blocking the main thread for a smooth user experience.\n\nMastering the JavaScript event loop empowers you to write faster, non-blocking async code that feels seamless to users."
+      }
+    ]
+  },
+  {
+    "slug": "using-javascript-proxies-to-enforce-data-model-integrity",
+    "title": "Using JavaScript Proxies to Enforce Data Model Integrity",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use JavaScript Proxies to enforce rules and prevent invalid data assignments, maintaining the integrity of your data models.",
+    "videoUrl": "https://www.youtube.com/watch?v=09la2YuPQuY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In JavaScript development, ensuring that your data models remain consistent and valid throughout your program can be challenging. One powerful tool to help maintain data integrity is the JavaScript Proxy object. Proxies allow you to intercept and customize operations performed on objects, such as property access, assignment, and deletion."
+      },
+      {
+        "type": "paragraph",
+        "value": "This article introduces how to use Proxies to enforce validation rules on your data models, so invalid data assignments throw errors immediately. This approach helps catch bugs early and keeps your data clean."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you have a simple user model object where the \"age\" property must always be a positive number, and the \"name\" must be a non-empty string. Using a Proxy, you can enforce these rules easily."
+      },
+      {
+        "type": "code",
+        "value": "const userModel = {\n  name: 'Alice',\n  age: 30\n};\n\nconst userValidator = {\n  set(target, property, value) {\n    if (property === 'age') {\n      if (typeof value !== 'number' || value <= 0) {\n        throw new TypeError('Age must be a positive number');\n      }\n    }\n    if (property === 'name') {\n      if (typeof value !== 'string' || value.trim() === '') {\n        throw new TypeError('Name must be a non-empty string');\n      }\n    }\n    target[property] = value;\n    return true;\n  }\n};\n\nconst user = new Proxy(userModel, userValidator);\n\n// Valid assignments\nuser.age = 25;    // works fine\nuser.name = 'Bob'; // works fine\n\n// Invalid assignments\ntry {\n  user.age = -5;   // throws error\n} catch (e) {\n  console.error(e.message);\n}\n\ntry {\n  user.name = '';  // throws error\n} catch (e) {\n  console.error(e.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the proxy's `set` trap checks the type and value before allowing any change. If the new value does not meet the defined requirements, it throws an error, preventing the invalid assignment."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using proxies this way can help you maintain data integrity without scattering validation logic throughout your application. This centralized validation also makes your code easier to maintain and debug."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep in mind that proxies do not replace all data validation needs. You might still want to validate inputs in UI forms or API layers, but Proxies serve as a last line of defense ensuring your internal data models remain consistent."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with Proxies in your JavaScript projects to enforce your own custom data validation rules and model behaviors. They are a versatile feature worth mastering for building reliable applications."
+      }
+    ]
+  },
+  {
+    "slug": "building-your-first-to-do-app-with-typescript",
+    "title": "Building Your First To-Do App with TypeScript: A Step-by-Step Tutorial",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build a simple and functional To-Do application using TypeScript with this easy step-by-step tutorial designed for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=jBmrduvKl5w",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Welcome to this beginner-friendly tutorial where you will build your very first To-Do app using TypeScript! This step-by-step guide will teach you the fundamentals of TypeScript while creating a practical app that lets users add and manage tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before we start coding, make sure you have Node.js installed on your computer. Also, we'll use a simple HTML page and TypeScript to create the app. Let's begin by setting up the structure."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>To-Do App with TypeScript</title>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Enter a new task\" />\n  <button id=\"addTaskBtn\">Add Task</button>\n  <ul id=\"taskList\"></ul>\n\n  <script src=\"app.js\"></script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is a simple HTML setup with an input box to enter tasks, a button to add tasks, and an unordered list to display the tasks. Now, let's write the TypeScript code that will power the app."
+      },
+      {
+        "type": "code",
+        "value": "interface Task {\n  id: number;\n  description: string;\n  completed: boolean;\n}\n\nconst taskInput = document.getElementById('taskInput') as HTMLInputElement;\nconst addTaskBtn = document.getElementById('addTaskBtn') as HTMLButtonElement;\nconst taskList = document.getElementById('taskList') as HTMLUListElement;\n\nlet tasks: Task[] = [];\nlet taskId = 0;\n\nfunction addTask(description: string) {\n  const newTask: Task = {\n    id: taskId++,\n    description,\n    completed: false,\n  };\n  tasks.push(newTask);\n  renderTasks();\n}\n\nfunction renderTasks() {\n  taskList.innerHTML = '';\n  tasks.forEach(task => {\n    const li = document.createElement('li');\n\n    const checkbox = document.createElement('input');\n    checkbox.type = 'checkbox';\n    checkbox.checked = task.completed;\n    checkbox.addEventListener('change', () => toggleTaskCompletion(task.id));\n\n    const span = document.createElement('span');\n    span.textContent = task.description;\n    if (task.completed) {\n      span.style.textDecoration = 'line-through';\n    }\n\n    const deleteBtn = document.createElement('button');\n    deleteBtn.textContent = 'Delete';\n    deleteBtn.addEventListener('click', () => deleteTask(task.id));\n\n    li.appendChild(checkbox);\n    li.appendChild(span);\n    li.appendChild(deleteBtn);\n    taskList.appendChild(li);\n  });\n}\n\nfunction toggleTaskCompletion(id: number) {\n  tasks = tasks.map(task => \n    task.id === id ? { ...task, completed: !task.completed } : task\n  );\n  renderTasks();\n}\n\nfunction deleteTask(id: number) {\n  tasks = tasks.filter(task => task.id !== id);\n  renderTasks();\n}\n\naddTaskBtn.addEventListener('click', () => {\n  const description = taskInput.value.trim();\n  if(description) {\n    addTask(description);\n    taskInput.value = '';\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down what this code does. We define a Task interface describing each to-do item with an id, description, and whether it’s completed. We keep track of tasks in an array and use functions to add, render, toggle completion, and delete tasks. Event listeners are used to respond when the user clicks buttons or checks off tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "To try this app out, save the HTML in an index.html file and the TypeScript code in an app.ts file. Use the TypeScript compiler (tsc) to compile app.ts to app.js by running `tsc app.ts` in your terminal. Then open index.html in your browser to interact with your To-Do app."
+      },
+      {
+        "type": "paragraph",
+        "value": "Congratulations! You have successfully built a simple To-Do app using TypeScript. This project introduced you to basic TypeScript features like interfaces, types, and DOM manipulation. Keep exploring TypeScript and try adding more features like task editing or persistent storage. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-never-type-practical-use-cases-for-beginners",
+    "title": "Understanding TypeScript's Never Type: Practical Use Cases for Beginners",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn what the TypeScript 'never' type is, why it matters, and how to use it in your code with simple examples and practical use cases perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=30LWjhZzg50",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When starting with TypeScript, you might come across the special type called `never`. It can be confusing at first since it's not like other types such as `string` or `number`. Understanding `never` is important because it helps you write safer, error-free code by clearly signaling unreachable code or impossible states."
+      },
+      {
+        "type": "paragraph",
+        "value": "So, what exactly is the `never` type? In TypeScript, `never` represents values that never occur. It’s used to indicate functions that don't return anything because they either throw an error or have infinite loops. Also, it’s useful to catch impossible cases in your code, making it easier to debug and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at some practical examples to get a better idea."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Function that never returns"
+      },
+      {
+        "type": "code",
+        "value": "function throwError(message: string): never {\n  throw new Error(message);\n}\n\n// This function never returns a value because it always throws an error\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the function `throwError` always throws an error and never reaches the end of the function to return. TypeScript correctly infers its return type as `never`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Exhaustive checks with `never` in switch statements"
+      },
+      {
+        "type": "code",
+        "value": "type Fruit = 'apple' | 'banana' | 'orange';\n\nfunction getFruitColor(fruit: Fruit): string {\n  switch (fruit) {\n    case 'apple':\n      return 'red';\n    case 'banana':\n      return 'yellow';\n    case 'orange':\n      return 'orange';\n    default:\n      // Using never to catch unexpected cases\n      const _exhaustiveCheck: never = fruit;\n      return _exhaustiveCheck;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `default` case in the switch uses a variable typed as `never`. This tells TypeScript that all possible cases should have been covered above. If you add a new fruit to the `Fruit` type but forget to update the switch, TypeScript will show an error, helping you catch the missing case."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why use `never`?"
+      },
+      {
+        "type": "paragraph",
+        "value": "`never` helps communicate intent. When a function throws an error or never finishes, marking it with `never` is clearer than `void` or other types. It also strengthens TypeScript's type checking by ensuring you handle all cases, reducing bugs from unhandled inputs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `never` type might seem tricky at first, but once you understand it, it's a powerful tool in your TypeScript toolbox. Use it for functions that never return and for exhaustive checks to make your code safer and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Practice adding `never` checks in your own TypeScript projects whenever you handle errors or switch over known literal types — it will improve your code quality over time!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-handling-best-practices-for-beginners",
+    "title": "Mastering Python Exception Handling: Best Practices for Beginners",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to effectively manage errors in your Python programs by mastering exception handling with simple best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In Python programming, errors are inevitable. Exception handling allows your program to respond to unexpected issues gracefully without crashing. This article will introduce you to Python's exception handling and share best practices to write robust, beginner-friendly code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The basic structure for exception handling in Python is the try-except block. You write the code that might cause an error inside the try block, and handle the error inside the except block."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input('Enter a number: '))\n    print(f'The number you entered is {number}')\nexcept ValueError:\n    print('Oops! That was not a valid number. Please try again.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if the user enters something that cannot be converted to an integer, a ValueError is raised. The except block catches this specific error and prints a friendly message instead of stopping the program abruptly."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also handle multiple exceptions by specifying them in a tuple or using multiple except blocks."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / int(input('Enter a divisor: '))\n    print(f'Result is {result}')\nexcept ValueError:\n    print('Please enter a valid integer.')\nexcept ZeroDivisionError:\n    print('Division by zero is not allowed.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid using a bare except clause (except:) because it catches all exceptions including system-exiting exceptions, making debugging harder."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you want to run cleanup or final code whether or not an exception occurs. For this, use the finally block."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    file = open('data.txt', 'r')\n    data = file.read()\n    print(data)\nexcept FileNotFoundError:\n    print('File not found.')\nfinally:\n    file.close()\n    print('File closed.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Best practices for exception handling in Python include:\n- Catch specific exceptions to avoid hiding bugs.\n- Use exception messages or logging to understand what went wrong.\n- Keep try blocks small to isolate error sources.\n- Clean up resources using finally or context managers (with statement).\n- Avoid using exceptions for regular control flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, you can master Python exception handling and build programs that are reliable and user-friendly."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-temporal-data-modeling-in-sql",
+    "title": "Mastering Temporal Data Modeling in SQL for Time-Variant Data Analysis",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of temporal data modeling in SQL to effectively manage and analyze time-variant data in your databases.",
+    "videoUrl": "https://www.youtube.com/watch?v=wNbq6DxFcwU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Temporal data modeling is a crucial skill when working with datasets that change over time. It allows you to track historical data and analyze how values evolve. This tutorial introduces you to the concept of temporal data in SQL and shows how to design and query tables that store time-variant data."
+      },
+      {
+        "type": "paragraph",
+        "value": "In temporal data modeling, we often want to capture changes of an entity over specific periods rather than just storing the latest state. There are different techniques such as valid-time, transaction-time, and bi-temporal modeling. For this tutorial, we’ll focus on valid-time modeling, where we record the time period an attribute was valid."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a simple table to track employee job titles with their valid time periods."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE EmployeeJobTitles (\n  EmployeeID INT,\n  JobTitle VARCHAR(100),\n  ValidFrom DATE,\n  ValidTo DATE,\n  PRIMARY KEY (EmployeeID, ValidFrom)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this table, each row represents an employee's job title during a specific period from ValidFrom to ValidTo. The ValidTo date is exclusive, meaning the job title is valid up to but not including the ValidTo date."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's insert some sample data showing employee job title history."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO EmployeeJobTitles VALUES\n(1, 'Junior Developer', '2021-01-01', '2022-06-01'),\n(1, 'Senior Developer', '2022-06-01', '9999-12-31'),\n(2, 'Analyst', '2020-03-15', '2023-01-01'),\n(2, 'Lead Analyst', '2023-01-01', '9999-12-31');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how the ValidTo date for current records can be set to a distant future date like '9999-12-31' to indicate the record is currently active."
+      },
+      {
+        "type": "paragraph",
+        "value": "To retrieve the current job titles for all employees, we can write a query that filters on the current date."
+      },
+      {
+        "type": "code",
+        "value": "SELECT EmployeeID, JobTitle\nFROM EmployeeJobTitles\nWHERE CURRENT_DATE >= ValidFrom AND CURRENT_DATE < ValidTo;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns the job titles valid today. Conversely, you can query historical data by specifying any date within the ValidFrom and ValidTo range."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also find the job titles at a specific point in time, for example, on '2022-05-15' as follows:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT EmployeeID, JobTitle\nFROM EmployeeJobTitles\nWHERE '2022-05-15' >= ValidFrom AND '2022-05-15' < ValidTo;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To add a new job title, you insert a new record with a ValidFrom date that starts when the old title ends, and update the old record’s ValidTo to the new ValidFrom date, effectively marking the time periods without overlap."
+      },
+      {
+        "type": "paragraph",
+        "value": "Temporal data modeling allows you to maintain a full history of changes rather than overwriting previous data. It helps with audit trails, trend analysis, and enables answers to temporal queries such as \"What was the job title of employee 1 on January 1st, 2022?\""
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the key points are:\n- Use ValidFrom and ValidTo columns to store the effective date ranges.\n- Use proper indexing on date columns for performant time-based queries.\n- Handle open-ended records with a future date for current validity.\n- Write queries filtering on date intervals to retrieve time-specific data."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these basics, you can start modeling and querying temporal data in your SQL databases to gain insights from how your data changes over time."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-by-understanding-execution-plans-deeply",
+    "title": "Optimizing SQL Queries by Understanding Execution Plans Deeply",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize SQL queries by understanding and analyzing execution plans, improving database performance with beginner-friendly tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing SQL queries, sometimes they run slower than expected. One of the best ways to improve query performance is by examining the query execution plan. Execution plans show the step-by-step process the database engine uses to run your SQL statement. Understanding them helps you find errors or inefficiencies."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by looking at a simple SQL query and how to view its execution plan. Suppose you have a table named `employees`."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE department = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "To see the execution plan, you can use the `EXPLAIN` keyword before your query in many databases. For example:"
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT * FROM employees WHERE department = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "The output will describe how the database searches through the table. For example, it might show a \"Seq Scan\" (sequential scan), meaning it checks every row, which is slow for large tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's discuss common errors and how to fix them by understanding the plan:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Seq Scan on large tables:** This means the database is scanning every row. If you filter on a column often (like `department`), adding an index can help."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_department ON employees(department);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After adding the index, running `EXPLAIN` again should show an \"Index Scan,\" which is faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Unexpected joins or operations:** If the plan shows many nested loops or hash joins, it might indicate inefficient joins or missing join conditions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Ensure your JOIN conditions are using indexed columns and that you join on keys properly to reduce workload."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Using SELECT * unnecessarily:** Selecting all columns can slow down your query, especially when you only need a few columns."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, name FROM employees WHERE department = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "By selecting only needed columns, the execution plan usually becomes simpler and faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding execution plans can feel complex at first, but by identifying common errors like full table scans or inefficient joins and using tools like indexes and proper join syntax, you can optimize your SQL queries significantly."
+      }
+    ]
   }
 ];
