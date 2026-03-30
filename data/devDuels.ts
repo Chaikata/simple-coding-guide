@@ -3067,5 +3067,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-a-to-do-list-with-javascript-using-objects-and-arrays",
+    "title": "Build a To-Do List with JavaScript Using Objects and Arrays",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a simple interactive to-do list mini-project where users can add, remove, and mark tasks as completed. This challenge focuses on manipulating arrays of objects and implementing multi-step logic to manage a list of tasks.",
+    "prompt": "Write a function named manageTodoList that accepts two parameters: the current array of to-do items (each an object with properties id, task, and completed) and an action object describing what to do. The action object will have a type (add, remove, toggle) and relevant data for that action. Your function should return a new updated array of to-dos based on the action performed. For 'add', add a new task with a unique id and completed = false. For 'remove', remove the task by id. For 'toggle', toggle the completed status of the specified task id.",
+    "guidance": [
+      "Use array methods like map, filter, and concat to produce new arrays instead of mutating the original.",
+      "Generate unique ids for new tasks by incrementing from the highest existing id or using a timestamp.",
+      "Use switch or if-else statements to handle different action types clearly."
+    ],
+    "hints": [
+      "Remember not to mutate the original tasks array directly; always return a new array.",
+      "For toggling task completion, map over the array and update the matching task by id.",
+      "When adding, create a new task object with the given task string and completed set to false."
+    ],
+    "starterCode": "function manageTodoList(todos, action) {\n  switch (action.type) {\n    case 'add':\n      // Your code here\n      break;\n    case 'remove':\n      // Your code here\n      break;\n    case 'toggle':\n      // Your code here\n      break;\n    default:\n      return todos;\n  }\n}",
+    "expectedOutput": "manageTodoList([{id: 1, task: 'Learn JS', completed: false}], {type: 'add', task: 'Write code'})\n// Returns: [\n//   {id: 1, task: 'Learn JS', completed: false},\n//   {id: 2, task: 'Write code', completed: false}\n// ]",
+    "concepts": [
+      "arrays",
+      "objects",
+      "immutability",
+      "control flow"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-repetitive-sql-query-to-use-better-aggregation",
+    "title": "Refactor a Repetitive SQL Query to Use Better Aggregation",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve a basic SQL query by refactoring repetitive SELECT statements with better use of aggregation and GROUP BY to optimize the code while maintaining the original result.",
+    "prompt": "You have a table named Sales with columns: region (text), product (text), and amount (integer). The current query selects total sales for each product but repeats almost the same SELECT statements for each product individually. Refactor the query to output the same result—a list of products and their total sales—using a single query without repetition.",
+    "guidance": [
+      "Identify repetitive code segments that can be combined.",
+      "Use GROUP BY and aggregation functions like SUM to simplify the query."
+    ],
+    "hints": [
+      "Think about how GROUP BY works to aggregate multiple rows into summary results.",
+      "Try to write a query that scans the table just once instead of multiple times."
+    ],
+    "starterCode": "SELECT 'Apple' AS product, SUM(amount) AS total_sales FROM Sales WHERE product = 'Apple'\nUNION ALL\nSELECT 'Banana' AS product, SUM(amount) AS total_sales FROM Sales WHERE product = 'Banana'\nUNION ALL\nSELECT 'Cherry' AS product, SUM(amount) AS total_sales FROM Sales WHERE product = 'Cherry';",
+    "expectedOutput": "product | total_sales\n--------|------------\nApple   | 1000\nBanana  | 850\nCherry  | 400",
+    "concepts": [
+      "GROUP BY",
+      "SUM()",
+      "UNION ALL",
+      "Query Optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-a-bug-in-an-sql-query-for-aggregated-sales-performance-with-window-functions",
+    "title": "Fix a Bug in an SQL Query for Aggregated Sales Performance with Window Functions",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a complex SQL query that attempts to calculate monthly sales performance rankings by salesperson, using window functions and joins.",
+    "prompt": "You are given a broken SQL query that is intended to rank salespersons based on their total monthly sales. The query uses window functions over joined tables but currently returns incorrect ranks and missing sales totals for some salespersons. Your task is to identify and correct the bugs so the query correctly returns salesperson_id, month, total_sales, and rank within each month sorted by total_sales descending.",
+    "guidance": [
+      "Check if the joins between sales and salesperson tables are correct and do not create duplicates that distort aggregation.",
+      "Inspect the window function PARTITION BY logic to ensure rankings reset for each month properly.",
+      "Verify that aggregation sums total sales correctly before applying the rank function."
+    ],
+    "hints": [
+      "Look for misplaced GROUP BY clauses that can cause incorrect sums or rankings.",
+      "Confirm if the window function ORDER BY clause orders by the correct alias or aggregated column.",
+      "Review if any filtering conditions exclude salespersons or months incorrectly."
+    ],
+    "starterCode": "SELECT s.salesperson_id, DATE_TRUNC('month', sa.sale_date) AS month,\n       SUM(sa.amount) AS total_sales,\n       RANK() OVER (PARTITION BY DATE_TRUNC('month', sa.sale_date) ORDER BY SUM(sa.amount) DESC) AS rank\nFROM sales sa\nJOIN salesperson s ON s.salesperson_id = sa.salesperson_id\nGROUP BY s.salesperson_id, month\nORDER BY month, rank;",
+    "expectedOutput": "salesperson_id |    month    | total_sales | rank\n---------------|-------------|-------------|------\n1              | 2024-01-01  | 125000      | 1\n3              | 2024-01-01  | 98000       | 2\n2              | 2024-01-01  | 86000       | 3\n1              | 2024-02-01  | 140000      | 1\n3              | 2024-02-01  | 79000       | 2\n...             | ...         | ...         | ...",
+    "concepts": [
+      "window functions",
+      "SQL aggregation",
+      "joins",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "create-a-simple-to-do-list-manager",
+    "title": "Create a Simple To-Do List Manager",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a basic to-do list manager function that allows adding tasks, marking them as complete, and viewing remaining tasks.",
+    "prompt": "Write a Python function called manage_todo_list that accepts two parameters: a list of current tasks (each task is a dictionary with keys 'task' and 'completed'), and a command dictionary with keys 'action' and optionally 'task'. The function should support three actions: 'add' to add a new task (provided in the command dictionary), 'complete' to mark an existing task as completed by its name, and 'view' to return a list of task names that are not yet completed. If an action is unrecognized, return the string 'Invalid action'.",
+    "guidance": [
+      "Use simple loops and conditionals to process the tasks list based on the command.",
+      "Make sure to handle cases where the task to complete may not exist.",
+      "Return the list of incomplete task names only for the 'view' action."
+    ],
+    "hints": [
+      "To mark a task complete, loop through the tasks to find the matching task name.",
+      "Remember that 'add' action requires a new task name in the command dictionary.",
+      "Return values should match the action: return updated tasks list for 'add' and 'complete', and a list of task names for 'view'."
+    ],
+    "starterCode": "def manage_todo_list(tasks, command):\n    # Your code here\n    pass",
+    "expectedOutput": "For input tasks = [{'task': 'buy milk', 'completed': False}], command = {'action': 'add', 'task': 'walk dog'}\n=> returns [{'task': 'buy milk', 'completed': False}, {'task': 'walk dog', 'completed': False}]\n\nFor command = {'action': 'complete', 'task': 'buy milk'}\n=> returns [{'task': 'buy milk', 'completed': True}, {'task': 'walk dog', 'completed': False}]\n\nFor command = {'action': 'view'}\n=> returns ['walk dog']",
+    "concepts": [
+      "lists",
+      "dictionaries",
+      "loops",
+      "conditionals",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-portfolio-management-system-in-c",
+    "title": "Advanced Portfolio Management System in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a mini-project to design and implement a portfolio management system that tracks multiple investment assets, calculates real-time portfolio value, and supports transaction history and performance analysis.",
+    "prompt": "Build a C++ portfolio management system that allows users to add multiple assets (stocks, bonds, ETFs), record buy/sell transactions, and calculate real-time portfolio metrics such as total value, return on investment (ROI), and asset allocation percentages. Your system should also handle transaction history with timestamps and provide functions to generate portfolio performance reports over a given period.",
+    "guidance": [
+      "Design appropriate classes to represent Assets, Transactions, and the Portfolio itself.",
+      "Implement methods for adding/removing assets and recording buy/sell transactions with timestamps.",
+      "Calculate portfolio metrics dynamically considering current prices and historical transactions.",
+      "Ensure your system can generate reports summarizing portfolio performance over specified time ranges."
+    ],
+    "hints": [
+      "Use a map or unordered_map keyed by asset symbol for efficient lookups.",
+      "Store transactions in a vector or list and consider sorting/filtering by date when generating reports.",
+      "Use appropriate data structures and member functions to maintain data encapsulation and modularity."
+    ],
+    "starterCode": "#include <iostream>\n#include <string>\n#include <vector>\n#include <unordered_map>\n#include <ctime>\n\nstruct Transaction {\n    enum Type { BUY, SELL } type;\n    std::string assetSymbol;\n    int quantity;\n    double pricePerUnit;\n    std::time_t timestamp;\n};\n\nclass Asset {\npublic:\n    Asset(const std::string& symbol, double currentPrice);\n    std::string getSymbol() const;\n    double getCurrentPrice() const;\n    void setCurrentPrice(double price);\nprivate:\n    std::string symbol;\n    double currentPrice;\n};\n\nclass Portfolio {\npublic:\n    void addAsset(const Asset& asset);\n    void recordTransaction(const Transaction& transaction);\n    double getTotalValue() const;\n    double getROI() const;\n    void printPerformanceReport(std::time_t startTime, std::time_t endTime) const;\n\nprivate:\n    std::unordered_map<std::string, Asset> assets;\n    std::vector<Transaction> transactions;\n};",
+    "expectedOutput": "Expected outputs vary depending on implementation and usage but include correctly computed portfolio total value, ROI percentages, and formatted performance reports with asset allocations and summaries.",
+    "concepts": [
+      "classes and objects",
+      "data structures (maps, vectors)",
+      "time handling",
+      "financial calculations"
+    ],
+    "estimatedTime": "120 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-to-optimize-simple-select-with-case",
+    "title": "Refactor SQL Query to Optimize Simple SELECT with CASE",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve the readability and efficiency of a beginner-level SQL query that uses multiple CASE statements to classify product sales data without changing its behavior.",
+    "prompt": "You are given a SQL query that retrieves product sales data and categorizes the sales amount using multiple CASE statements, but the query has redundant conditions and can be simplified. Refactor the query to eliminate unnecessary repetition and improve clarity while keeping the exact same output results.",
+    "guidance": [
+      "Look for repeated CASE conditions that can be simplified or combined.",
+      "Ensure that the refactored query returns exactly the same results as the original.",
+      "Focus on improving readability by reducing nested or duplicated conditions."
+    ],
+    "hints": [
+      "Try using one CASE statement with multiple WHEN clauses instead of multiple CASE statements.",
+      "Look for common conditions inside CASE expressions that can be merged."
+    ],
+    "starterCode": "SELECT product_id, sales_amount,\n  CASE WHEN sales_amount > 1000 THEN 'High'\n       ELSE 'Low'\n  END AS sales_category,\n  CASE WHEN sales_amount > 1000 THEN 'High'\n       WHEN sales_amount BETWEEN 500 AND 1000 THEN 'Medium'\n       ELSE 'Low'\n  END AS sales_class\nFROM product_sales;",
+    "expectedOutput": "product_id | sales_amount | sales_category | sales_class\n-----------+--------------+----------------+------------\n1          | 1200         | High           | High\n2          | 700          | Low            | Medium\n3          | 300          | Low            | Low",
+    "concepts": [
+      "CASE statements",
+      "SQL query refactoring",
+      "query readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
