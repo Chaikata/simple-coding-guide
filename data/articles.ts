@@ -33089,5 +33089,515 @@ export const articles = [
         "value": "To summarize, mastering recursive CTEs requires understanding these core principles: a clear base case, correct self-reference, and tidy termination conditions. With practice, they become an invaluable tool for querying hierarchical data efficiently."
       }
     ]
+  },
+  {
+    "slug": "mastering-async-await-cool-javascript-patterns-for-cleaner-code",
+    "title": "Mastering Async/Await: Cool JavaScript Patterns for Cleaner Code",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use async/await in JavaScript to write cleaner, more readable asynchronous code with practical examples and helpful patterns.",
+    "videoUrl": "https://www.youtube.com/watch?v=ZsLAhZZBjzA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous JavaScript can get tricky and messy when using traditional callbacks or even Promises alone. Thankfully, the async/await syntax introduced in ES2017 makes handling asynchronous operations much cleaner and easier to understand. In this tutorial, we'll explore basic async/await usage and some cool patterns that help make your JavaScript code more readable and maintainable."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Async/Await? \nAsync functions let you write asynchronous code that looks synchronous. The `async` keyword before a function means the function will always return a Promise, and `await` pauses the execution of that function until the Promise settles (either resolves or rejects)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of using async/await to fetch data from an API:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUser() {\n  try {\n    const response = await fetch('https://jsonplaceholder.typicode.com/users/1');\n    const user = await response.json();\n    console.log(user);\n  } catch (error) {\n    console.error('Error fetching user:', error);\n  }\n}\n\nfetchUser();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `await fetch(...)` waits for the fetch call to complete. If the fetch succeeds, the code continues to get the JSON response; if it fails, the error is caught in the `catch` block."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pattern 1: Sequential vs Parallel Execution\nSometimes you want to run multiple asynchronous tasks one after another (sequential), or at the same time (parallel). Async/await can handle both."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sequential execution example (tasks run one after another):"
+      },
+      {
+        "type": "code",
+        "value": "async function sequentialTasks() {\n  const first = await fetch('https://jsonplaceholder.typicode.com/posts/1').then(res => res.json());\n  console.log('First post:', first.title);\n\n  const second = await fetch('https://jsonplaceholder.typicode.com/posts/2').then(res => res.json());\n  console.log('Second post:', second.title);\n}\n\nsequentialTasks();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Parallel execution example (tasks run at the same time):"
+      },
+      {
+        "type": "code",
+        "value": "async function parallelTasks() {\n  const [first, second] = await Promise.all([\n    fetch('https://jsonplaceholder.typicode.com/posts/1').then(res => res.json()),\n    fetch('https://jsonplaceholder.typicode.com/posts/2').then(res => res.json())\n  ]);\n  console.log('First post:', first.title);\n  console.log('Second post:', second.title);\n}\n\nparallelTasks();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `Promise.all` with await allows you to start all your promises concurrently and wait for all of them to complete, often making your app faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pattern 2: Handling Errors with Async/Await\nTry/catch blocks are your best friend when handling errors inside async functions. This keeps error handling clean and easy to follow."
+      },
+      {
+        "type": "code",
+        "value": "async function loadData() {\n  try {\n    const response = await fetch('https://some-invalid-url.com');\n    if (!response.ok) {\n      throw new Error('Network response not ok');\n    }\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Failed to load data:', error);\n  }\n}\n\nloadData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pattern 3: Async Functions in Loops\nAvoid using `await` directly inside a `.forEach()` because it does not handle async callbacks as you might expect. Use a regular `for...of` loop to properly await asynchronous operations."
+      },
+      {
+        "type": "code",
+        "value": "async function processItems(items) {\n  for (const item of items) {\n    const result = await someAsyncOperation(item);\n    console.log(result);\n  }\n}\n\nfunction someAsyncOperation(item) {\n  return new Promise(resolve => {\n    setTimeout(() => resolve(`Processed ${item}`), 1000);\n  });\n}\n\nprocessItems(['a', 'b', 'c']);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern ensures each asynchronous operation finishes before starting the next, which is especially important when order matters."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nUsing async/await can drastically improve the readability of asynchronous JavaScript. Remember these tips:\n\n- Use `async` functions to work with Promises more naturally.\n- Use `await` to pause execution until a Promise resolves.\n- Use `Promise.all` with `await` for parallel execution.\n- Use try/catch blocks to handle errors clearly.\n- Use `for...of` loops instead of `forEach` for async operations.\n\nTry applying these patterns next time you work on asynchronous code to make your JavaScript cleaner and more maintainable!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-javascript-memory-usage-best-practices-and-tools",
+    "title": "Optimizing JavaScript Memory Usage: Best Practices and Tools",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to optimize JavaScript memory usage with simple best practices and useful tools to avoid common memory-related errors and improve application performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=uEsSye9tKFs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a powerful language, but inefficient memory use can slow down your app or even cause it to crash. Beginners often face memory-related errors without knowing how to diagnose or fix them. This article introduces practical tips and tools to help you optimize your JavaScript memory usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Understand Memory Leaks\nMemory leaks happen when your code holds references to objects that are no longer needed, preventing JavaScript's garbage collector from freeing that memory. This buildup can cause your app to get slower over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Avoid Global Variables When Possible\nGlobal variables stay in memory for the lifetime of your app. Limit their use by defining variables inside functions or blocks."
+      },
+      {
+        "type": "code",
+        "value": "function example() {\n  let localVar = 'I exist only in this function';\n}\n\n// Avoid doing this:\nvar globalVar = 'I stay in memory!';"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Clean Up Event Listeners\nEvent listeners attached to DOM elements keep references, preventing garbage collection. Always remove event listeners when they are no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "const btn = document.getElementById('myBtn');\n\nfunction onClick() {\n  console.log('Clicked!');\n}\n\nbtn.addEventListener('click', onClick);\n\n// Later, when the listener is no longer needed:\nbtn.removeEventListener('click', onClick);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use WeakMap and WeakSet for Temporary References\nWeakMap and WeakSet allow you to hold references to objects without preventing garbage collection, which helps to avoid memory leaks."
+      },
+      {
+        "type": "code",
+        "value": "const cache = new WeakMap();\n\nfunction process(obj) {\n  if (!cache.has(obj)) {\n    cache.set(obj, expensiveCalculation(obj));\n  }\n  return cache.get(obj);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Monitor Memory Usage with Browser DevTools\nModern browsers like Chrome and Firefox offer built-in tools to profile JavaScript memory usage, find leaks, and track down memory-heavy functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "To access memory profiling in Chrome:\n- Open DevTools (F12 or Ctrl+Shift+I)\n- Go to the \"Memory\" tab\n- Take heap snapshots or record allocation timelines to analyze memory usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. Avoid Creating Unnecessary Closures\nClosures can retain references to outer scope variables longer than intended. Make sure closures don't accidentally keep large objects alive."
+      },
+      {
+        "type": "code",
+        "value": "function outer() {\n  let largeData = new Array(1000000).fill('*');\n  return function inner() {\n    console.log('Doing something');\n  };\n}\n\nconst fn = outer(); // largeData remains in memory because inner() references it"
+      },
+      {
+        "type": "paragraph",
+        "value": "Try to avoid capturing large data inside closures if it’s not needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nOptimizing JavaScript memory usage involves writing mindful code: avoiding unnecessary globals, cleaning up event listeners, using Weak references, and properly managing closures. Take advantage of browser DevTools to monitor and troubleshoot memory issues. Following these best practices will help you build faster and more reliable web applications."
+      }
+    ]
+  },
+  {
+    "slug": "handling-recursive-types-in-typescript-a-practical-guide",
+    "title": "Handling Recursive Types in TypeScript: A Practical Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to effectively define and work with recursive types in TypeScript with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=9N7F9yy5AwM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive types are types that refer to themselves. They are useful for representing hierarchical or nested data structures such as trees, JSON objects, or file systems. In this guide, we'll explain what recursive types are and how to handle them in TypeScript, making your code more powerful and type-safe."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example: a tree-like structure where each node can have multiple child nodes."
+      },
+      {
+        "type": "code",
+        "value": "interface TreeNode {\n  value: string;\n  children?: TreeNode[];\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the TreeNode interface contains a property children which is an array of TreeNode itself. This makes it recursive. The question mark (?) means that children is optional, allowing us to define leaves without children."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's see an example of creating a tree with this recursive type:"
+      },
+      {
+        "type": "code",
+        "value": "const tree: TreeNode = {\n  value: \"root\",\n  children: [\n    { value: \"child1\" },\n    {\n      value: \"child2\",\n      children: [\n        { value: \"grandchild1\" },\n        { value: \"grandchild2\" }\n      ]\n    }\n  ]\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "We can also create functions that work with recursive types. For example, a function to print all node values."
+      },
+      {
+        "type": "code",
+        "value": "function printTree(node: TreeNode, indent: string = \"\"): void {\n  console.log(indent + node.value);\n  if (node.children) {\n    node.children.forEach(child => printTree(child, indent + \"  \"));\n  }\n}\n\nprintTree(tree);"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript handles recursive types well, but sometimes you may want to use type aliases instead of interfaces."
+      },
+      {
+        "type": "code",
+        "value": "type NestedArray = number | NestedArray[];\n\nconst example1: NestedArray = 1;\nconst example2: NestedArray = [1, [2, 3], 4];"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, NestedArray is a recursive type alias representing a number or an array of NestedArray itself, allowing deep nesting."
+      },
+      {
+        "type": "paragraph",
+        "value": "When using recursive types, keep these tips in mind:\n- Always allow a termination case (like the value: string property) so recursion won't loop infinitely.\n- Use optional properties or unions to break recursion at some point.\n- Keep your types clear to improve readability and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, recursive types in TypeScript help you define complex nested data structures safely. By using interfaces or type aliases that reference themselves, you can model trees, JSON-like objects, and many other hierarchies easily."
+      }
+    ]
+  },
+  {
+    "slug": "deep-dive-into-typescripts-type-inference-errors-and-how-to-harness-them",
+    "title": "Deep Dive into TypeScript's Type Inference Errors and How to Harness Them",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn about TypeScript's type inference errors, why they happen, and practical ways to fix and use them to write better code.",
+    "videoUrl": "https://www.youtube.com/watch?v=dljJx8S48T0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding types. One of its best features is type inference—TypeScript automatically figures out the types of variables and expressions even when you don't explicitly declare them. While this helps catch errors early and improves code quality, sometimes TypeScript raises type inference errors that can confuse beginners. In this article, we'll explore what these errors are, why they occur, and how you can harness them to write safer, clearer code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Type Inference in TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type inference means TypeScript analyzes your code and guesses the type of a variable based on the value you assign or how you use it. For example:"
+      },
+      {
+        "type": "code",
+        "value": "let message = \"Hello, TypeScript!\";\n// TypeScript infers 'message' as a string\n\nlet count = 42;\n// count is inferred as a number"
+      },
+      {
+        "type": "paragraph",
+        "value": "You don’t have to write `let message: string = \"Hello\";` because TypeScript understands the type from the value."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Situations When Type Inference Errors Occur"
+      },
+      {
+        "type": "paragraph",
+        "value": "Despite its usefulness, TypeScript can sometimes get confused or infer types that cause errors. Here are some common cases:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Uninitialized variables:** When you declare a variable without assigning a value, TypeScript infers it as `any` or `undefined`, which can cause issues later."
+      },
+      {
+        "type": "code",
+        "value": "let username;\n// Error: Variable 'username' implicitly has an 'any' type."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Mixed types in arrays or objects:** When your data can be of multiple types, TypeScript tries to infer a union type, but incorrect usage might cause errors."
+      },
+      {
+        "type": "code",
+        "value": "const values = [1, \"two\", 3];\n// values is inferred as (string | number)[]"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Function return types:** When a function returns different types depending on conditions, TypeScript may infer a union type or cause errors."
+      },
+      {
+        "type": "code",
+        "value": "function getResult(input: number) {\n  if (input > 0) return \"Positive\";\n  return null;\n}\n// Return type inferred as 'string | null'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Fix and Harness Type Inference Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Explicitly declare types when necessary:** If TypeScript can’t infer the type well, declaring it helps avoid errors and improves readability."
+      },
+      {
+        "type": "code",
+        "value": "let username: string;\nusername = \"Alice\";"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use type unions carefully:** When a variable can hold multiple types, declare it explicitly as a union to make your intent clear."
+      },
+      {
+        "type": "code",
+        "value": "let value: number | string;\nvalue = 10;\nvalue = \"ten\";"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Provide return types for functions:** This helps TypeScript catch mistakes and makes your code easier to understand."
+      },
+      {
+        "type": "code",
+        "value": "function getResult(input: number): string | null {\n  if (input > 0) return \"Positive\";\n  return null;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use `as` keyword for type assertions:** When you know more than TypeScript about a value’s type, you can assert it—but use this carefully to avoid runtime errors."
+      },
+      {
+        "type": "code",
+        "value": "let someValue: any = \"this is a string\";\nlet strLength: number = (someValue as string).length;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Embrace Type Inference Errors?"
+      },
+      {
+        "type": "paragraph",
+        "value": "While errors can seem frustrating at first, they're TypeScript’s way to help you write safer code. When you face a type inference error, it means TypeScript has found a place where your assumptions about data could be wrong. By fixing these early, you avoid bugs that are much harder to track down later."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type inference is a powerful TypeScript feature that helps keep your code clean and error-free. Sometimes, however, TypeScript can’t infer the types perfectly, leading to errors. By understanding these errors and using explicit types, union types, function return types, and type assertions carefully, you can harness these errors to write clearer, safer, and more reliable TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing, and type inference errors will become a helpful guide towards better coding!"
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-event-driven-systems-with-python-and-kafka",
+    "title": "Building Scalable Event-Driven Systems with Python and Kafka",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create scalable, event-driven systems using Python and Apache Kafka. This beginner-friendly tutorial covers setting up Kafka, producing and consuming messages, and scaling your system effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=-RDyEFvnTXI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture (EDA) is a design paradigm where components communicate by producing and consuming events. This approach helps build systems that are loosely coupled, scalable, and easy to maintain. Apache Kafka is one of the most popular platforms used for implementing event-driven systems because of its high throughput and reliability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, you'll learn how to build a basic event-driven system using Python and Kafka. We will cover installing Kafka, creating producers and consumers in Python, and discuss some best practices for scaling. Let’s get started!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What You Need\n- Python 3.6 or higher\n- Kafka installed locally (or access to a Kafka cluster)\n- `kafka-python` library for Python Kafka integration\n\nIf Kafka is not installed locally, you can download it from the Apache Kafka website and start it on your machine."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Install kafka-python\nLet's install the Python client for Kafka called `kafka-python`:\n\nbash\npip install kafka-python\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Start Kafka and Zookeeper\nKafka requires Zookeeper to run. After installing Kafka, start Zookeeper and Kafka services (commands might vary based on your installation):\n\nbash\n# Start Zookeeper\nbin/zookeeper-server-start.sh config/zookeeper.properties\n\n# Start Kafka\nbin/kafka-server-start.sh config/server.properties\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Create a Kafka producer in Python\nThe producer sends messages (events) to a Kafka topic. Here’s a simple example to send messages to topic `events`:"
+      },
+      {
+        "type": "code",
+        "value": "from kafka import KafkaProducer\nimport json\n\nproducer = KafkaProducer(\n    bootstrap_servers=['localhost:9092'],\n    value_serializer=lambda v: json.dumps(v).encode('utf-8')\n)\n\ndef send_event(event):\n    producer.send('events', event)\n    producer.flush()  # Make sure messages are sent\n\n# Example usage\nsend_event({'user_id': 123, 'action': 'login'})"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Create a Kafka consumer in Python\nThe consumer listens for messages on the topic and processes them:"
+      },
+      {
+        "type": "code",
+        "value": "from kafka import KafkaConsumer\nimport json\n\nconsumer = KafkaConsumer(\n    'events',\n    bootstrap_servers=['localhost:9092'],\n    auto_offset_reset='earliest',\n    enable_auto_commit=True,\n    group_id='event-consumers',\n    value_deserializer=lambda m: json.loads(m.decode('utf-8'))\n)\n\nfor message in consumer:\n    event = message.value\n    print(f\"Received event: {event}\")\n    # Process the event here"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Scaling Your System\nOne advantage of Kafka is easy scalability. To scale your consumers, simply run multiple consumer instances with the same `group_id`. Kafka will distribute partitions among consumers in the group, enabling parallel processing.\n\nSimilarly, producers can be scaled horizontally by running multiple instances producing events concurrently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices\n- Use meaningful topic names.\n- Handle exceptions and retries properly when producing/consuming.\n- Use partitions wisely to balance load.\n- Monitor Kafka cluster health and consumer lags.\n\nBy following these steps, you can build scalable and resilient event-driven systems using Python and Kafka."
+      },
+      {
+        "type": "paragraph",
+        "value": "This tutorial introduces the essential concepts and code needed to get started with Kafka in Python. As you become more familiar, you can explore additional Kafka features such as streaming, schema registries, and exactly-once semantics to build advanced event-driven applications."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-exception-hierarchies-for-cleaner-code",
+    "title": "Understanding Python Exception Hierarchies for Cleaner Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how Python's exception hierarchies work to write cleaner, more maintainable error handling in your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, errors can happen — from simple typos to unexpected conditions like file errors or invalid inputs. Python uses exceptions to handle these errors gracefully. Understanding Python's exception hierarchy helps you write clearer, more specific error handling, which improves your code's reliability and readability."
+      },
+      {
+        "type": "paragraph",
+        "value": "At the top of Python's exception hierarchy is the built-in class Exception. All standard errors inherit from Exception, and specific error types are nested beneath it. For example, IOError (or its modern equivalent OSError), ValueError, and TypeError all derive from Exception."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple view of some common exception classes:"
+      },
+      {
+        "type": "code",
+        "value": "Exception\n├── LookupError\n│   ├── IndexError\n│   └── KeyError\n├── ValueError\n├── TypeError\n└── OSError (includes IOError, FileNotFoundError, etc.)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Knowing this hierarchy allows you to catch specific exceptions or group related ones together. For example, if you want to handle any input-related errors (like ValueError or TypeError), you can catch them individually or simply catch Exception, but catching too general an exception is discouraged."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a practical example demonstrating how to use Python exception hierarchies for clean error handling:"
+      },
+      {
+        "type": "code",
+        "value": "def divide_numbers(num1, num2):\n    try:\n        result = num1 / num2\n    except ZeroDivisionError:\n        print(\"Error: You can't divide by zero.\")\n    except TypeError:\n        print(\"Error: Please provide numeric inputs.\")\n    else:\n        print(f\"Result is {result}\")\n\n# Using the function\n# Case 1: valid input\ndivide_numbers(10, 2)  # Output: Result is 5.0\n\n# Case 2: division by zero\ndivide_numbers(10, 0)  # Output: Error: You can't divide by zero.\n\n# Case 3: wrong input type\ndivide_numbers(10, 'a')  # Output: Error: Please provide numeric inputs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above code, we catch ZeroDivisionError and TypeError separately. This is cleaner than catching a generic Exception because the error messages are specific and helpful."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create custom exceptions by subclassing Exception when you want to raise specific errors related to your application’s logic. For example:"
+      },
+      {
+        "type": "code",
+        "value": "class NegativeNumberError(Exception):\n    pass\n\ndef calculate_square_root(x):\n    if x < 0:\n        raise NegativeNumberError(\"Cannot calculate square root of negative numbers.\")\n    return x ** 0.5\n\ntry:\n    print(calculate_square_root(-4))\nexcept NegativeNumberError as e:\n    print(f\"Custom error caught: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach makes your code easier to read and maintain because you handle exceptions deliberately and explicitly, guiding users and developers with meaningful feedback."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Understand Python’s exception hierarchy for better error handling.\n- Catch specific exceptions instead of a generic Exception to provide clear error messages.\n- Use custom exceptions to signal errors specific to your application's logic.\n- Avoid catching overly broad exceptions unless absolutely necessary."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering exception hierarchies in Python helps you write safer, cleaner, and more professional code — a great skill for every beginner to develop!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-star-schemas-data-warehousing-sql",
+    "title": "Designing Scalable Star Schemas for Data Warehousing in SQL: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design efficient and scalable star schemas for data warehousing using SQL, perfect for beginners seeking practical insights.",
+    "videoUrl": "https://www.youtube.com/watch?v=hQvCOBv_-LE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data warehousing is essential for analyzing large volumes of data in a way that supports business decision-making. One of the most popular data modeling techniques in data warehousing is the star schema, known for its simplicity and speed in query performance. In this tutorial, we will explore the basics of designing scalable star schemas using SQL concepts, focusing on how to organize fact and dimension tables effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "A star schema consists of one central fact table connected to multiple dimension tables. The fact table holds quantitative data (measures), while the dimension tables provide context (descriptive attributes). The design aims for simplicity and ease of querying."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Identify the Fact Table\nFirst, determine the core business process you want to analyze. For example, if you are analyzing sales data, your fact table will store sales transactions, including values such as quantity sold and total price."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE fact_sales (\n    sales_id INT PRIMARY KEY,\n    product_id INT,\n    customer_id INT,\n    store_id INT,\n    time_id INT,\n    quantity_sold INT,\n    total_amount DECIMAL(10, 2)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Define Dimension Tables\nDimension tables provide descriptive information about each fact. For our sales example, we could have Product, Customer, Store, and Time dimensions."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE dim_product (\n    product_id INT PRIMARY KEY,\n    product_name VARCHAR(100),\n    category VARCHAR(50),\n    brand VARCHAR(50)\n);\n\nCREATE TABLE dim_customer (\n    customer_id INT PRIMARY KEY,\n    customer_name VARCHAR(100),\n    city VARCHAR(50),\n    state VARCHAR(50)\n);\n\nCREATE TABLE dim_store (\n    store_id INT PRIMARY KEY,\n    store_name VARCHAR(100),\n    location VARCHAR(100)\n);\n\nCREATE TABLE dim_time (\n    time_id INT PRIMARY KEY,\n    date DATE,\n    day_of_week VARCHAR(10),\n    month INT,\n    quarter INT,\n    year INT\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Establish Foreign Key Relationships\nThe fact table references the dimension tables through foreign keys. This design allows for efficient joins and aggregation."
+      },
+      {
+        "type": "code",
+        "value": "ALTER TABLE fact_sales\nADD CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES dim_product(product_id);\n\nALTER TABLE fact_sales\nADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES dim_customer(customer_id);\n\nALTER TABLE fact_sales\nADD CONSTRAINT fk_store FOREIGN KEY (store_id) REFERENCES dim_store(store_id);\n\nALTER TABLE fact_sales\nADD CONSTRAINT fk_time FOREIGN KEY (time_id) REFERENCES dim_time(time_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Populate Dimension Tables First\nLoad dimension tables before inserting data into the fact table. This order maintains referential integrity and supports scalable data loading procedures."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Consider Scalability and Performance\n- Keep dimension tables denormalized (flattened) for faster reads.\n- Use surrogate keys (integer IDs) as primary keys for efficient joins.\n- Partition large fact tables by time or other criteria.\n- Create indexes on foreign keys within the fact table to speed up joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Query\nRetrieve total sales by product category and month:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n    p.category,\n    t.month,\n    SUM(f.total_amount) AS total_sales\nFROM fact_sales f\nJOIN dim_product p ON f.product_id = p.product_id\nJOIN dim_time t ON f.time_id = t.time_id\nGROUP BY p.category, t.month\nORDER BY p.category, t.month;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following this structure, you will create a clean, scalable star schema that eases analytical query writing and improves performance. Start simple and iterate based on your business requirements!"
+      }
+    ]
   }
 ];
