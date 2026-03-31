@@ -31947,5 +31947,412 @@ export const articles = [
         "value": "Understanding execution plans can feel complex at first, but by identifying common errors like full table scans or inefficient joins and using tools like indexes and proper join syntax, you can optimize your SQL queries significantly."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-data-models-with-javascript-classes-and-prototypes",
+    "title": "Building Scalable Data Models with JavaScript Classes and Prototypes",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create scalable and maintainable data models using JavaScript classes and prototypes, perfect for beginners starting with object-oriented programming.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications, organizing your data in a clear and reusable way is essential. JavaScript offers powerful tools for modeling data through classes and prototypes. This tutorial will guide you step-by-step on how to create scalable data models using these features, keeping your code organized and easy to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before ES6 introduced classes, JavaScript used prototypes to implement shared behavior. Understanding both can help you build efficient data models. Let's start by exploring how to define a simple data model with ES6 classes."
+      },
+      {
+        "type": "code",
+        "value": "class Product {\n  constructor(name, price) {\n    this.name = name;\n    this.price = price;\n  }\n\n  display() {\n    console.log(`${this.name} costs $${this.price}`);\n  }\n}\n\nconst apple = new Product('Apple', 0.99);\napple.display(); // Output: Apple costs $0.99"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we created a `Product` class with two properties: `name` and `price`. The `display` method prints a formatted string to the console. The `constructor` function initializes new objects with specific data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's see how prototype-based inheritance works. This is how JavaScript internally shares methods between instances to save memory."
+      },
+      {
+        "type": "code",
+        "value": "// Constructor function\nfunction Product(name, price) {\n  this.name = name;\n  this.price = price;\n}\n\n// Adding method to prototype\nProduct.prototype.display = function() {\n  console.log(`${this.name} costs $${this.price}`);\n};\n\nconst banana = new Product('Banana', 1.2);\nbanana.display(); // Output: Banana costs $1.2"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, instead of using ES6 classes, we define a `Product` constructor and add the `display` method to its prototype. This way, all instances of `Product` share the same `display` method rather than having copies stored individually, improving memory efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's build a more scalable example. Imagine we want different kinds of products, like Books and Electronics, each with unique properties and behavior but sharing some common features."
+      },
+      {
+        "type": "code",
+        "value": "class Product {\n  constructor(name, price) {\n    this.name = name;\n    this.price = price;\n  }\n\n  display() {\n    console.log(`${this.name} costs $${this.price}`);\n  }\n}\n\nclass Book extends Product {\n  constructor(name, price, author) {\n    super(name, price);\n    this.author = author;\n  }\n\n  display() {\n    console.log(`${this.name} by ${this.author} costs $${this.price}`);\n  }\n}\n\nclass Electronic extends Product {\n  constructor(name, price, brand) {\n    super(name, price);\n    this.brand = brand;\n  }\n\n  display() {\n    console.log(`${this.brand} ${this.name} costs $${this.price}`);\n  }\n}\n\nconst novel = new Book('Invisible Man', 15, 'Ralph Ellison');\nconst laptop = new Electronic('XPS 13', 999, 'Dell');\n\nnovel.display();   // Output: Invisible Man by Ralph Ellison costs $15\nlaptop.display(); // Output: Dell XPS 13 costs $999"
+      },
+      {
+        "type": "paragraph",
+        "value": "We used ES6 class inheritance to create specific product types that extend a base `Product` class. Each subclass overrides the `display` method to provide tailored output. This structure scales well as your application grows and you add more product types."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use ES6 classes for clearer, more modern syntax.\n- Leverage prototypes for shared methods, improving memory efficiency.\n- Use inheritance to build scalable and reusable data models.\n- Override methods in subclasses to customize behaviors."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these tools, you can create maintainable and extensible JavaScript models that grow with your project."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-data-validation-techniques-in-javascript-for-robust-data-modeling",
+    "title": "Mastering Data Validation Techniques in JavaScript for Robust Data Modeling",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn beginner-friendly data validation techniques in JavaScript to build reliable and error-free data models for your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=zO6CHvTErxE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data validation is a crucial step in any JavaScript application that handles user input or external data. Without proper validation, your app might accept incorrect, incomplete, or malicious data, leading to bugs or security issues. This article will guide you through simple and effective validation techniques to ensure your data is clean and reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, data validation is about checking data against certain rules before using it in your application. These rules can include checking data types, required fields, value ranges, or formats such as email addresses or phone numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a simple function to validate a user object with fields like name, age, and email."
+      },
+      {
+        "type": "code",
+        "value": "function validateUser(user) {\n  const errors = [];\n\n  // Check if name exists and is a non-empty string\n  if (!user.name || typeof user.name !== 'string' || user.name.trim() === '') {\n    errors.push('Name is required and must be a non-empty string.');\n  }\n\n  // Check if age is a number between 0 and 120\n  if (typeof user.age !== 'number' || user.age < 0 || user.age > 120) {\n    errors.push('Age must be a number between 0 and 120.');\n  }\n\n  // Simple email format validation\n  const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  if (!user.email || !emailPattern.test(user.email)) {\n    errors.push('A valid email address is required.');\n  }\n\n  return {\n    isValid: errors.length === 0,\n    errors\n  };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The function validateUser accepts a user object and returns an object showing if the data is valid along with any errors found. Here, we check that the name is a non-empty string, age is a number within a realistic range, and the email matches a simple format pattern."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how to use this validation function in practice."
+      },
+      {
+        "type": "code",
+        "value": "const userInput = {\n  name: 'Alice',\n  age: 25,\n  email: 'alice@example.com'\n};\n\nconst result = validateUser(userInput);\nif (result.isValid) {\n  console.log('User data is valid!');\n} else {\n  console.error('Validation errors:', result.errors);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "If any field does not meet validation criteria, the errors array gives you specific messages to help debug or inform users about what went wrong."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more complex scenarios, libraries like Joi or Yup provide powerful schemas for validation, but learning these basic techniques helps you understand the core principles of validating data efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, validating data early in your workflow prevents unexpected errors later and improves the overall reliability and security of your software."
+      }
+    ]
+  },
+  {
+    "slug": "handling-precision-issues-in-typescript-number-calculations-best-practices",
+    "title": "Handling Precision Issues in TypeScript Number Calculations: Best Practices",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to handle common precision issues in TypeScript number calculations with practical, beginner-friendly methods and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=2gIxbTn7GSc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with numbers in TypeScript, especially floating-point numbers, you might notice some unexpected behavior due to precision limitations. For example, calculations like 0.1 + 0.2 don't always result in 0.3 exactly. This is because JavaScript and TypeScript use IEEE 754 double-precision floating-point format, which cannot represent some decimal numbers precisely."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore common precision issues and share best practices to handle them effectively in your TypeScript projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Precision Problem Example"
+      },
+      {
+        "type": "code",
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst sum = a + b;\nconsole.log(sum); // Outputs: 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, instead of 0.3, the output is 0.30000000000000004. This can cause issues in financial calculations, comparisons, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 1: Use `toFixed` or `toPrecision` for Display"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you only need to display numbers, you can format them using `toFixed()` to control decimal places."
+      },
+      {
+        "type": "code",
+        "value": "const sumFixed = sum.toFixed(2);\nconsole.log(sumFixed); // Outputs: \"0.30\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Note: `toFixed` returns a string, so you may need to convert it back to a number if necessary."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 2: Use Integer Arithmetic"
+      },
+      {
+        "type": "paragraph",
+        "value": "When precision is critical, convert decimals to integers before calculation by multiplying by a power of 10. For example, when working with cents instead of dollars."
+      },
+      {
+        "type": "code",
+        "value": "const price1 = 0.1;\nconst price2 = 0.2;\n\n// Convert to cents\nconst price1Cents = Math.round(price1 * 100);\nconst price2Cents = Math.round(price2 * 100);\nconst totalCents = price1Cents + price2Cents;\n\nconst total = totalCents / 100;\nconsole.log(total); // Outputs: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach avoids floating-point imprecision by working with whole numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 3: Use Libraries for Precise Calculations"
+      },
+      {
+        "type": "paragraph",
+        "value": "For complex or critical calculations, consider using libraries such as `decimal.js` or `big.js` which provide arbitrary precision decimals."
+      },
+      {
+        "type": "code",
+        "value": "import Decimal from 'decimal.js';\n\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\n\nconsole.log(sum.toString()); // Outputs: \"0.3\""
+      },
+      {
+        "type": "paragraph",
+        "value": "These libraries help ensure accurate calculations without rounding errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 4: Use `Number.EPSILON` for Comparison"
+      },
+      {
+        "type": "paragraph",
+        "value": "When comparing floating-point numbers, avoid direct equality checks. Instead, check if the difference is within an acceptable range using `Number.EPSILON`, which represents the smallest difference between two representable numbers."
+      },
+      {
+        "type": "code",
+        "value": "function areAlmostEqual(a: number, b: number): boolean {\n  return Math.abs(a - b) < Number.EPSILON;\n}\n\nconsole.log(areAlmostEqual(0.1 + 0.2, 0.3)); // Outputs: true"
+      },
+      {
+        "type": "paragraph",
+        "value": "This technique helps avoid errors in conditional statements due to minor floating-point differences."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Floating-point precision issues are common in TypeScript (and JavaScript) but can be managed effectively. Use formatting methods for display, integer arithmetic for calculations, specialized libraries for precision-critical work, and always use epsilon-based comparisons for equality checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these best practices, you can write more reliable and precise numeric code in your TypeScript applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-advanced-type-guards-for-elegant-error-handling",
+    "title": "Mastering TypeScript’s Advanced Type Guards for Elegant Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript’s advanced type guards to handle errors more effectively and write cleaner, safer code.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling errors gracefully is key to building robust applications. TypeScript provides powerful tools known as type guards that help you distinguish between different types at runtime, making error handling more precise and elegant. In this article, we'll explore how to master advanced type guards to improve your error handling approach."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards are functions or expressions that perform runtime checks to narrow down the type of a variable within a conditional block. By using type guards, you can safely differentiate between error types or custom objects and handle them appropriately without losing TypeScript's type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Suppose you have a function that can throw different kinds of errors, and you want to handle them differently based on their type."
+      },
+      {
+        "type": "code",
+        "value": "class NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NetworkError';\n  }\n}\n\nclass ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction isNetworkError(error: unknown): error is NetworkError {\n  return error instanceof NetworkError;\n}\n\nfunction isValidationError(error: unknown): error is ValidationError {\n  return error instanceof ValidationError;\n}\n\nfunction handleError(error: unknown) {\n  if (isNetworkError(error)) {\n    console.log('Network error occurred:', error.message);\n  } else if (isValidationError(error)) {\n    console.log('Validation failed:', error.message);\n  } else if (error instanceof Error) {\n    console.log('General error:', error.message);\n  } else {\n    console.log('Unknown error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we define two custom error classes: `NetworkError` and `ValidationError`. We then create two type guard functions, `isNetworkError` and `isValidationError`, which narrow down the `error` variable to the specific error types using the `instanceof` operator."
+      },
+      {
+        "type": "paragraph",
+        "value": "Calling these type guard functions within the `handleError` function allows TypeScript to understand the exact error type inside each conditional branch, enabling safer and more readable error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced type guards aren't limited to checking instances — you can also guard objects based on their shape or properties. Here's an example of how you might distinguish between error objects with different structures."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiError {\n  errorCode: number;\n  message: string;\n}\n\ninterface DatabaseError {\n  dbCode: string;\n  description: string;\n}\n\nfunction isApiError(error: any): error is ApiError {\n  return typeof error.errorCode === 'number' && typeof error.message === 'string';\n}\n\nfunction isDatabaseError(error: any): error is DatabaseError {\n  return typeof error.dbCode === 'string' && typeof error.description === 'string';\n}\n\nfunction logError(error: unknown) {\n  if (isApiError(error)) {\n    console.error(`API Error (${error.errorCode}): ${error.message}`);\n  } else if (isDatabaseError(error)) {\n    console.error(`DB Error (${error.dbCode}): ${error.description}`);\n  } else {\n    console.error('Unknown error', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern works well when errors don't have a shared class hierarchy but can be differentiated by their properties. Using these guards, you can elegantly handle diverse error shapes."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering advanced type guards allows you to write cleaner, more maintainable error handling logic in TypeScript. You get all the benefits of static type checking combined with flexible runtime checks — leading to fewer bugs and better developer experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start incorporating these patterns in your projects today to handle errors gracefully and with confidence!"
+      }
+    ]
+  },
+  {
+    "slug": "building-python-web-scraper-to-monitor-ecommerce-price-trends",
+    "title": "Building a Python Web Scraper to Monitor and Analyze E-commerce Price Trends",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a beginner-friendly Python web scraper to track and analyze price changes on e-commerce websites, helping you make smarter buying decisions.",
+    "videoUrl": "https://www.youtube.com/watch?v=8i4byohvlNA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping is a useful technique to extract data from websites, and an excellent project for beginners is building a price monitoring tool for e-commerce platforms. In this tutorial, we'll create a Python web scraper to track product prices, store the data, and do simple trend analysis. This helps you monitor when prices drop and make informed purchase decisions."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll use common Python libraries like requests to fetch web pages, BeautifulSoup to parse HTML content, and pandas to analyze data. This project keeps things beginner-friendly while demonstrating real-world applications of web scraping."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's get started by installing the libraries. Run this command in your terminal:"
+      },
+      {
+        "type": "code",
+        "value": "pip install requests beautifulsoup4 pandas"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we'll write a simple function to scrape the price and name of a product from a sample e-commerce page. Note that different websites have different HTML structures, so you can inspect page elements in your browser to find the correct tags and classes."
+      },
+      {
+        "type": "code",
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://example.com/product-page'\n\nheaders = {'User-Agent': 'Mozilla/5.0'}  # To mimic a browser\n\nresponse = requests.get(url, headers=headers)\n\n# Check request success\nif response.status_code == 200:\n    soup = BeautifulSoup(response.text, 'html.parser')\n\n    # Example selectors - change based on the actual website\n    product_name = soup.find('h1', class_='product-title').text.strip()\n    price = soup.find('span', class_='price').text.strip()\n\n    print(f'Product: {product_name}')\n    print(f'Price: {price}')\nelse:\n    print('Failed to retrieve the page')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Once you have successfully extracted name and price, you want to store this information with the date to monitor changes over time. Pandas is great for this purpose."
+      },
+      {
+        "type": "code",
+        "value": "import pandas as pd\nfrom datetime import datetime\n\n# Example data (replace with scraped data)\ndata = {\n    'date': [datetime.now()],\n    'product_name': [product_name],\n    'price': [price]\n}\n\ndf = pd.DataFrame(data)\n\n# Save or append to CSV file\ncsv_file = 'price_data.csv'\n\ntry:\n    existing_df = pd.read_csv(csv_file)\n    df = pd.concat([existing_df, df])\n    df.drop_duplicates(inplace=True)\nexcept FileNotFoundError:\n    pass\n\ndf.to_csv(csv_file, index=False)\nprint(f'Data saved to {csv_file}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Note that price values are often strings with currency symbols, so you'll want to clean and convert them to floats for analysis."
+      },
+      {
+        "type": "code",
+        "value": "def clean_price(price_str):\n    # Remove currency symbols and commas, convert to float\n    return float(price_str.replace('$', '').replace(',', '').strip())\n\n# Usage example\nprice_float = clean_price(price)\nprint(f'Cleaned price: {price_float}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "After collecting price data over days or weeks, you can plot the trend using pandas and matplotlib."
+      },
+      {
+        "type": "code",
+        "value": "import matplotlib.pyplot as plt\n\n# Load saved data\nprices_df = pd.read_csv(csv_file)\n\n# Convert date column to datetime\nprices_df['date'] = pd.to_datetime(prices_df['date'])\n# Clean the price column\nprices_df['price'] = prices_df['price'].apply(clean_price)\n\n# Plot price over time\nplt.figure(figsize=(10,5))\nplt.plot(prices_df['date'], prices_df['price'], marker='o')\nplt.title(f\"Price Trend for {product_name}\")\nplt.xlabel('Date')\nplt.ylabel('Price (USD)')\nplt.grid(True)\nplt.show()"
+      },
+      {
+        "type": "paragraph",
+        "value": "To automate this scraping daily, you can run the script on your computer using Task Scheduler, cron jobs, or cloud services. Always check the website's terms of service and robots.txt to comply with their scraping policies."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, this beginner-friendly project demonstrates how Python helps you scrape, store, and analyze price trends on e-commerce websites. With some practice, you can extend this to multiple products or websites and build more complex alert systems."
+      }
+    ]
+  },
+  {
+    "slug": "sql-window-functions-vs-aggregate-functions",
+    "title": "SQL Window Functions vs Aggregate Functions: When and How to Use Each",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the difference between SQL window functions and aggregate functions with beginner-friendly examples. Understand when to use each for effective data analysis.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In SQL, both window functions and aggregate functions let you summarize and analyze data, but they work in different ways. Aggregate functions group rows together and give a single summary value per group, while window functions calculate values across a set of rows related to the current row without collapsing the results. This tutorial helps beginners understand when and how to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "Aggregate functions are used with the GROUP BY clause. They return one result per group of rows. Common aggregate functions include SUM(), AVG(), COUNT(), MIN(), and MAX(). For example, to find the total sales per department, you'd use:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT department_id, SUM(sales) AS total_sales\nFROM sales_data\nGROUP BY department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query groups data by department_id and calculates the total sales for each group. Notice that the result set has one row per department."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions, on the other hand, do not reduce the number of rows returned. Instead, they perform calculations across a 'window' of rows related to the current row according to your specification. They are often used with the OVER() clause."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, to calculate the total sales per department but still show each individual sale row, you can use:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  department_id,\n  sales,\n  SUM(sales) OVER (PARTITION BY department_id) AS total_sales_per_dept\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, SUM(sales) OVER (PARTITION BY department_id) calculates the total sales per department but keeps all rows. This means each row shows the individual sale plus the total sales for its department."
+      },
+      {
+        "type": "paragraph",
+        "value": "When to use each?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use aggregate functions when you want to reduce data by grouping rows and getting a single summary value per group."
+      },
+      {
+        "type": "paragraph",
+        "value": "Use window functions when you want to calculate aggregates without losing the detail of individual rows. This is helpful for running totals, ranking, moving averages, and comparing each row to a group."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another example: Suppose you want to rank employees by their salary within each department:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  department_id,\n  salary,\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query uses the window function RANK() to assign a rank based on salary within each department. You get the ranking without losing any employee data."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, aggregate functions simplify data by grouping and summarizing. Window functions keep row details while adding your desired calculations. Both are essential tools in SQL for data analysis."
+      }
+    ]
   }
 ];
