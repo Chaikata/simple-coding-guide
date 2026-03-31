@@ -3239,5 +3239,173 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "fix-the-sql-query-to-retrieve-employees-with-salary-over-50000",
+    "title": "Fix the SQL Query to Retrieve Employees with Salary Over 50000",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "In this challenge, you are given a broken SQL query intended to select all employees earning more than 50000. Your task is to identify and fix the bugs so that the query returns the correct results.",
+    "prompt": "The following SQL query is supposed to retrieve all employees whose salary is greater than 50000 from the employees table. However, it contains syntax and logical errors that prevent it from working properly. Fix the query so it executes correctly and returns the correct rows.",
+    "guidance": [
+      "Check the SELECT statement syntax for missing or misplaced keywords.",
+      "Ensure that the WHERE clause condition correctly compares the salary column to 50000.",
+      "Verify the table name and column names match the given schema."
+    ],
+    "hints": [
+      "Remember that column names must be spelled correctly and consistently.",
+      "The comparison operator should be a standard SQL operator like >, <, =, etc."
+    ],
+    "starterCode": "SELECT * FORM employees WHERE salary => 50000;",
+    "expectedOutput": "All rows from employees table where salary is greater than 50000",
+    "concepts": [
+      "SQL SELECT statement",
+      "WHERE clause",
+      "Comparison operators"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-function-to-compute-unique-elements-frequency",
+    "title": "Refactor a Function to Compute Unique Elements Frequency",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the provided Python function that calculates the frequency of unique elements in a list. Refactor the code for better readability, efficiency, and Pythonic style without changing its behavior.",
+    "prompt": "You are given a Python function that takes a list of elements and returns a dictionary with the frequency count of each unique element. The current function works correctly but is verbose and not optimized. Your task is to refactor the code for clarity, conciseness, and performance, using best Python practices while preserving the original functionality.",
+    "guidance": [
+      "Consider using Python collections or built-in library functions to simplify frequency counting.",
+      "Avoid unnecessary loops or repeated operations like multiple .count() calls on the list.",
+      "Make sure the output dictionary key order is maintained if possible, or clearly document if it changes."
+    ],
+    "hints": [
+      "Look into the collections.Counter class for an efficient frequency dictionary.",
+      "Try to avoid counting elements multiple times by iterating the list once.",
+      "Consider readability improvements such as meaningful variable names and removing redundant code."
+    ],
+    "starterCode": "def count_frequencies(lst):\n    freq = {}\n    for item in lst:\n        if item not in freq:\n            freq[item] = lst.count(item)\n    return freq",
+    "expectedOutput": "{'apple': 3, 'banana': 2, 'orange': 1}  # e.g. input ['apple', 'banana', 'apple', 'orange', 'banana', 'apple']",
+    "concepts": [
+      "dictionary",
+      "collections.Counter",
+      "code refactoring",
+      "algorithm efficiency"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "debugging-an-inefficient-employee-salary-ranking-query",
+    "title": "Debugging an Inefficient Employee Salary Ranking Query",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Fix a broken SQL query that attempts to rank employees by salary within each department but produces incorrect rankings and poor performance due to improper use of window functions and filters.",
+    "prompt": "The current SQL query tries to rank employees by their salary within their department using ROW_NUMBER(), but it returns incorrect rankings and duplicates when employees have the same salary. Additionally, it filters on row numbers incorrectly causing performance issues. Your task is to identify and fix the bugs in the query so it correctly ranks employees by salary descending per department, handles ties with DENSE_RANK(), and optimizes the filtering to avoid unnecessary computations.",
+    "guidance": [
+      "Review the window function used: understand differences between ROW_NUMBER(), RANK(), and DENSE_RANK().",
+      "Check where the filtering on rank is applied; applying filters on window functions in the WHERE clause breaks the logic.",
+      "Consider moving the filtering to an outer query or use a CTE to improve readability and performance."
+    ],
+    "hints": [
+      "ROW_NUMBER() assigns unique ranks even if salaries are the same; consider using DENSE_RANK() or RANK() for correct tie handling.",
+      "Do not filter on window function results directly in the WHERE clause; use a subquery or CTE instead.",
+      "Use ORDER BY inside the window function correctly to rank salaries in descending order."
+    ],
+    "starterCode": "SELECT employee_id, department_id, salary, ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary) AS salary_rank\nFROM employees\nWHERE salary_rank <= 3;",
+    "expectedOutput": "Should return top 3 employees by highest salary per department with correct ranking, including ties sharing the same rank.",
+    "concepts": [
+      "Window Functions",
+      "SQL Ranking Functions",
+      "Query Optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-an-optimized-debounced-function-creator-in-javascript",
+    "title": "Build an Optimized Debounced Function Creator in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a higher-order function that returns a debounced version of a given input function, ensuring optimized invocation timing and immediate execution control.",
+    "prompt": "Write a function named 'createDebouncedFunction' that accepts two parameters: a callback function 'fn' and a delay time in milliseconds 'delay'. It should return a new function that when called, delays the invocation of 'fn' until after 'delay' milliseconds have elapsed since the last time the returned function was called. Additionally, this returned function should have two methods attached: 'cancel' to cancel any pending invocation, and 'flush' to immediately invoke the delayed function if pending. Ensure the implementation handles the context and arguments correctly when invoking 'fn'.",
+    "guidance": [
+      "Use closures to keep track of the timer and ensure that multiple calls reset the timer correctly.",
+      "Attach 'cancel' and 'flush' methods as properties of the returned debounced function for external control.",
+      "Preserve the 'this' context and arguments when invoking the original callback function."
+    ],
+    "hints": [
+      "Use 'setTimeout' and 'clearTimeout' to implement the delay functionality.",
+      "Store the timer id in a variable scoped inside 'createDebouncedFunction'.",
+      "Use 'apply' or 'call' to invoke 'fn' with proper context and arguments."
+    ],
+    "starterCode": "function createDebouncedFunction(fn, delay) {\n  // Your code here\n}",
+    "expectedOutput": "const debounced = createDebouncedFunction(console.log, 1000);\ndebounced('Hello');\n// If no new calls happen within 1000ms, logs: Hello\n// debounced.cancel() cancels pending call\n// debounced.flush() immediately calls the pending invocation",
+    "concepts": [
+      "closures",
+      "higher-order functions",
+      "timers",
+      "function context and arguments"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-complex-nested-loop-with-conditional-logic-in-c",
+    "title": "Predict the Output of a Complex Nested Loop with Conditional Logic in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given C++ code that uses nested loops with conditional statements to manipulate variables. Predict the output without running the code.",
+    "prompt": "Examine the following C++ program carefully. The program uses nested loops and conditional if-else statements to update values of variables 'a' and 'b'. Predict the output of the program when executed. Provide a detailed explanation of your reasoning.",
+    "guidance": [
+      "Trace the values of 'a' and 'b' after each iteration of the inner and outer loops.",
+      "Pay special attention to the conditional statements and how they affect the increments or decrements of the variables."
+    ],
+    "hints": [
+      "Focus on how many times the inner loop runs and under what conditions the values of 'a' and 'b' change.",
+      "Remember that post-increment and pre-increment operators can affect the value in subtle ways."
+    ],
+    "starterCode": "#include <iostream>\n\nint main() {\n    int a = 0, b = 0;\n    for (int i = 1; i <= 3; i++) {\n        for (int j = 1; j <= 4; j++) {\n            if (i % 2 == 0) {\n                a += j;\n                b += i;\n            } else {\n                if (j % 2 == 0) {\n                    a -= i;\n                } else {\n                    b += j;\n                }\n            }\n        }\n    }\n    std::cout << \"a = \" << a << \", b = \" << b << std::endl;\n    return 0;\n}\n",
+    "expectedOutput": "a = 2, b = 28",
+    "concepts": [
+      "nested loops",
+      "conditional statements",
+      "variable manipulation",
+      "arithmetic operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-advanced-asynchronous-array-processing-function",
+    "title": "Fix the Bug in Advanced Asynchronous Array Processing Function",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the asynchronous function that processes an array of URLs to fetch JSON data and extract specific fields. The current implementation leads to incorrect results and unhandled errors.",
+    "prompt": "You are given a broken asynchronous JavaScript function `fetchAndExtract` that accepts an array of URLs and a key string. It should fetch JSON data from each URL, extract the value corresponding to the given key, and return an array of those values. The function is intended to process requests in parallel but currently returns incorrect results or throws unhandled errors. Identify and fix the issues to make sure it works reliably with proper error handling and returns the extracted values in the same order as the input URLs.",
+    "guidance": [
+      "Check how asynchronous promises are created and handled within the function.",
+      "Ensure the function handles errors gracefully for failed fetches without breaking the whole operation.",
+      "Make sure the values are returned in the same order as the input URLs regardless of fetch response times."
+    ],
+    "hints": [
+      "Look carefully at how Promise.all and async/await are used; mixing them improperly can cause bugs.",
+      "Consider wrapping each fetch in a try-catch block or using Promise.allSettled for robust error handling."
+    ],
+    "starterCode": "async function fetchAndExtract(urls, key) {\n  const results = [];\n  urls.forEach(async (url) => {\n    const response = await fetch(url);\n    const data = await response.json();\n    results.push(data[key]);\n  });\n  return results;\n}",
+    "expectedOutput": "For input urls ['https://api.example.com/user/1', 'https://api.example.com/user/2'] and key 'name', the function should return ['Alice', 'Bob'] (assuming those are the names in the fetched JSON data).",
+    "concepts": [
+      "asynchronous programming",
+      "Promise handling",
+      "error handling",
+      "arrays"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];

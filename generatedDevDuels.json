@@ -1,174 +1,170 @@
 [
   {
-    "slug": "build-a-to-do-list-with-javascript-using-objects-and-arrays",
-    "title": "Build a To-Do List with JavaScript Using Objects and Arrays",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "mini-projects",
-    "description": "Create a simple interactive to-do list mini-project where users can add, remove, and mark tasks as completed. This challenge focuses on manipulating arrays of objects and implementing multi-step logic to manage a list of tasks.",
-    "prompt": "Write a function named manageTodoList that accepts two parameters: the current array of to-do items (each an object with properties id, task, and completed) and an action object describing what to do. The action object will have a type (add, remove, toggle) and relevant data for that action. Your function should return a new updated array of to-dos based on the action performed. For 'add', add a new task with a unique id and completed = false. For 'remove', remove the task by id. For 'toggle', toggle the completed status of the specified task id.",
-    "guidance": [
-      "Use array methods like map, filter, and concat to produce new arrays instead of mutating the original.",
-      "Generate unique ids for new tasks by incrementing from the highest existing id or using a timestamp.",
-      "Use switch or if-else statements to handle different action types clearly."
-    ],
-    "hints": [
-      "Remember not to mutate the original tasks array directly; always return a new array.",
-      "For toggling task completion, map over the array and update the matching task by id.",
-      "When adding, create a new task object with the given task string and completed set to false."
-    ],
-    "starterCode": "function manageTodoList(todos, action) {\n  switch (action.type) {\n    case 'add':\n      // Your code here\n      break;\n    case 'remove':\n      // Your code here\n      break;\n    case 'toggle':\n      // Your code here\n      break;\n    default:\n      return todos;\n  }\n}",
-    "expectedOutput": "manageTodoList([{id: 1, task: 'Learn JS', completed: false}], {type: 'add', task: 'Write code'})\n// Returns: [\n//   {id: 1, task: 'Learn JS', completed: false},\n//   {id: 2, task: 'Write code', completed: false}\n// ]",
-    "concepts": [
-      "arrays",
-      "objects",
-      "immutability",
-      "control flow"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "refactor-a-repetitive-sql-query-to-use-better-aggregation",
-    "title": "Refactor a Repetitive SQL Query to Use Better Aggregation",
+    "slug": "fix-the-sql-query-to-retrieve-employees-with-salary-over-50000",
+    "title": "Fix the SQL Query to Retrieve Employees with Salary Over 50000",
     "language": "sql",
     "difficulty": "beginner",
-    "category": "optimization",
-    "description": "Improve a basic SQL query by refactoring repetitive SELECT statements with better use of aggregation and GROUP BY to optimize the code while maintaining the original result.",
-    "prompt": "You have a table named Sales with columns: region (text), product (text), and amount (integer). The current query selects total sales for each product but repeats almost the same SELECT statements for each product individually. Refactor the query to output the same result—a list of products and their total sales—using a single query without repetition.",
+    "category": "debugging",
+    "description": "In this challenge, you are given a broken SQL query intended to select all employees earning more than 50000. Your task is to identify and fix the bugs so that the query returns the correct results.",
+    "prompt": "The following SQL query is supposed to retrieve all employees whose salary is greater than 50000 from the employees table. However, it contains syntax and logical errors that prevent it from working properly. Fix the query so it executes correctly and returns the correct rows.",
     "guidance": [
-      "Identify repetitive code segments that can be combined.",
-      "Use GROUP BY and aggregation functions like SUM to simplify the query."
+      "Check the SELECT statement syntax for missing or misplaced keywords.",
+      "Ensure that the WHERE clause condition correctly compares the salary column to 50000.",
+      "Verify the table name and column names match the given schema."
     ],
     "hints": [
-      "Think about how GROUP BY works to aggregate multiple rows into summary results.",
-      "Try to write a query that scans the table just once instead of multiple times."
+      "Remember that column names must be spelled correctly and consistently.",
+      "The comparison operator should be a standard SQL operator like >, <, =, etc."
     ],
-    "starterCode": "SELECT 'Apple' AS product, SUM(amount) AS total_sales FROM Sales WHERE product = 'Apple'\nUNION ALL\nSELECT 'Banana' AS product, SUM(amount) AS total_sales FROM Sales WHERE product = 'Banana'\nUNION ALL\nSELECT 'Cherry' AS product, SUM(amount) AS total_sales FROM Sales WHERE product = 'Cherry';",
-    "expectedOutput": "product | total_sales\n--------|------------\nApple   | 1000\nBanana  | 850\nCherry  | 400",
+    "starterCode": "SELECT * FORM employees WHERE salary => 50000;",
+    "expectedOutput": "All rows from employees table where salary is greater than 50000",
     "concepts": [
-      "GROUP BY",
-      "SUM()",
-      "UNION ALL",
-      "Query Optimization"
+      "SQL SELECT statement",
+      "WHERE clause",
+      "Comparison operators"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": false
+    "isFeatured": true
   },
   {
-    "slug": "fix-a-bug-in-an-sql-query-for-aggregated-sales-performance-with-window-functions",
-    "title": "Fix a Bug in an SQL Query for Aggregated Sales Performance with Window Functions",
+    "slug": "refactor-a-function-to-compute-unique-elements-frequency",
+    "title": "Refactor a Function to Compute Unique Elements Frequency",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the provided Python function that calculates the frequency of unique elements in a list. Refactor the code for better readability, efficiency, and Pythonic style without changing its behavior.",
+    "prompt": "You are given a Python function that takes a list of elements and returns a dictionary with the frequency count of each unique element. The current function works correctly but is verbose and not optimized. Your task is to refactor the code for clarity, conciseness, and performance, using best Python practices while preserving the original functionality.",
+    "guidance": [
+      "Consider using Python collections or built-in library functions to simplify frequency counting.",
+      "Avoid unnecessary loops or repeated operations like multiple .count() calls on the list.",
+      "Make sure the output dictionary key order is maintained if possible, or clearly document if it changes."
+    ],
+    "hints": [
+      "Look into the collections.Counter class for an efficient frequency dictionary.",
+      "Try to avoid counting elements multiple times by iterating the list once.",
+      "Consider readability improvements such as meaningful variable names and removing redundant code."
+    ],
+    "starterCode": "def count_frequencies(lst):\n    freq = {}\n    for item in lst:\n        if item not in freq:\n            freq[item] = lst.count(item)\n    return freq",
+    "expectedOutput": "{'apple': 3, 'banana': 2, 'orange': 1}  # e.g. input ['apple', 'banana', 'apple', 'orange', 'banana', 'apple']",
+    "concepts": [
+      "dictionary",
+      "collections.Counter",
+      "code refactoring",
+      "algorithm efficiency"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "debugging-an-inefficient-employee-salary-ranking-query",
+    "title": "Debugging an Inefficient Employee Salary Ranking Query",
     "language": "sql",
     "difficulty": "advanced",
     "category": "debugging",
-    "description": "Identify and fix the bug in a complex SQL query that attempts to calculate monthly sales performance rankings by salesperson, using window functions and joins.",
-    "prompt": "You are given a broken SQL query that is intended to rank salespersons based on their total monthly sales. The query uses window functions over joined tables but currently returns incorrect ranks and missing sales totals for some salespersons. Your task is to identify and correct the bugs so the query correctly returns salesperson_id, month, total_sales, and rank within each month sorted by total_sales descending.",
+    "description": "Fix a broken SQL query that attempts to rank employees by salary within each department but produces incorrect rankings and poor performance due to improper use of window functions and filters.",
+    "prompt": "The current SQL query tries to rank employees by their salary within their department using ROW_NUMBER(), but it returns incorrect rankings and duplicates when employees have the same salary. Additionally, it filters on row numbers incorrectly causing performance issues. Your task is to identify and fix the bugs in the query so it correctly ranks employees by salary descending per department, handles ties with DENSE_RANK(), and optimizes the filtering to avoid unnecessary computations.",
     "guidance": [
-      "Check if the joins between sales and salesperson tables are correct and do not create duplicates that distort aggregation.",
-      "Inspect the window function PARTITION BY logic to ensure rankings reset for each month properly.",
-      "Verify that aggregation sums total sales correctly before applying the rank function."
+      "Review the window function used: understand differences between ROW_NUMBER(), RANK(), and DENSE_RANK().",
+      "Check where the filtering on rank is applied; applying filters on window functions in the WHERE clause breaks the logic.",
+      "Consider moving the filtering to an outer query or use a CTE to improve readability and performance."
     ],
     "hints": [
-      "Look for misplaced GROUP BY clauses that can cause incorrect sums or rankings.",
-      "Confirm if the window function ORDER BY clause orders by the correct alias or aggregated column.",
-      "Review if any filtering conditions exclude salespersons or months incorrectly."
+      "ROW_NUMBER() assigns unique ranks even if salaries are the same; consider using DENSE_RANK() or RANK() for correct tie handling.",
+      "Do not filter on window function results directly in the WHERE clause; use a subquery or CTE instead.",
+      "Use ORDER BY inside the window function correctly to rank salaries in descending order."
     ],
-    "starterCode": "SELECT s.salesperson_id, DATE_TRUNC('month', sa.sale_date) AS month,\n       SUM(sa.amount) AS total_sales,\n       RANK() OVER (PARTITION BY DATE_TRUNC('month', sa.sale_date) ORDER BY SUM(sa.amount) DESC) AS rank\nFROM sales sa\nJOIN salesperson s ON s.salesperson_id = sa.salesperson_id\nGROUP BY s.salesperson_id, month\nORDER BY month, rank;",
-    "expectedOutput": "salesperson_id |    month    | total_sales | rank\n---------------|-------------|-------------|------\n1              | 2024-01-01  | 125000      | 1\n3              | 2024-01-01  | 98000       | 2\n2              | 2024-01-01  | 86000       | 3\n1              | 2024-02-01  | 140000      | 1\n3              | 2024-02-01  | 79000       | 2\n...             | ...         | ...         | ...",
+    "starterCode": "SELECT employee_id, department_id, salary, ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary) AS salary_rank\nFROM employees\nWHERE salary_rank <= 3;",
+    "expectedOutput": "Should return top 3 employees by highest salary per department with correct ranking, including ties sharing the same rank.",
     "concepts": [
-      "window functions",
-      "SQL aggregation",
-      "joins",
-      "debugging"
+      "Window Functions",
+      "SQL Ranking Functions",
+      "Query Optimization"
     ],
     "estimatedTime": "15 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "create-a-simple-to-do-list-manager",
-    "title": "Create a Simple To-Do List Manager",
-    "language": "python",
-    "difficulty": "beginner",
-    "category": "mini-projects",
-    "description": "Build a basic to-do list manager function that allows adding tasks, marking them as complete, and viewing remaining tasks.",
-    "prompt": "Write a Python function called manage_todo_list that accepts two parameters: a list of current tasks (each task is a dictionary with keys 'task' and 'completed'), and a command dictionary with keys 'action' and optionally 'task'. The function should support three actions: 'add' to add a new task (provided in the command dictionary), 'complete' to mark an existing task as completed by its name, and 'view' to return a list of task names that are not yet completed. If an action is unrecognized, return the string 'Invalid action'.",
-    "guidance": [
-      "Use simple loops and conditionals to process the tasks list based on the command.",
-      "Make sure to handle cases where the task to complete may not exist.",
-      "Return the list of incomplete task names only for the 'view' action."
-    ],
-    "hints": [
-      "To mark a task complete, loop through the tasks to find the matching task name.",
-      "Remember that 'add' action requires a new task name in the command dictionary.",
-      "Return values should match the action: return updated tasks list for 'add' and 'complete', and a list of task names for 'view'."
-    ],
-    "starterCode": "def manage_todo_list(tasks, command):\n    # Your code here\n    pass",
-    "expectedOutput": "For input tasks = [{'task': 'buy milk', 'completed': False}], command = {'action': 'add', 'task': 'walk dog'}\n=> returns [{'task': 'buy milk', 'completed': False}, {'task': 'walk dog', 'completed': False}]\n\nFor command = {'action': 'complete', 'task': 'buy milk'}\n=> returns [{'task': 'buy milk', 'completed': True}, {'task': 'walk dog', 'completed': False}]\n\nFor command = {'action': 'view'}\n=> returns ['walk dog']",
-    "concepts": [
-      "lists",
-      "dictionaries",
-      "loops",
-      "conditionals",
-      "functions"
-    ],
-    "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "advanced-portfolio-management-system-in-c",
-    "title": "Advanced Portfolio Management System in C++",
-    "language": "cpp",
+    "slug": "build-an-optimized-debounced-function-creator-in-javascript",
+    "title": "Build an Optimized Debounced Function Creator in JavaScript",
+    "language": "javascript",
     "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Create a mini-project to design and implement a portfolio management system that tracks multiple investment assets, calculates real-time portfolio value, and supports transaction history and performance analysis.",
-    "prompt": "Build a C++ portfolio management system that allows users to add multiple assets (stocks, bonds, ETFs), record buy/sell transactions, and calculate real-time portfolio metrics such as total value, return on investment (ROI), and asset allocation percentages. Your system should also handle transaction history with timestamps and provide functions to generate portfolio performance reports over a given period.",
+    "category": "functions",
+    "description": "Create a higher-order function that returns a debounced version of a given input function, ensuring optimized invocation timing and immediate execution control.",
+    "prompt": "Write a function named 'createDebouncedFunction' that accepts two parameters: a callback function 'fn' and a delay time in milliseconds 'delay'. It should return a new function that when called, delays the invocation of 'fn' until after 'delay' milliseconds have elapsed since the last time the returned function was called. Additionally, this returned function should have two methods attached: 'cancel' to cancel any pending invocation, and 'flush' to immediately invoke the delayed function if pending. Ensure the implementation handles the context and arguments correctly when invoking 'fn'.",
     "guidance": [
-      "Design appropriate classes to represent Assets, Transactions, and the Portfolio itself.",
-      "Implement methods for adding/removing assets and recording buy/sell transactions with timestamps.",
-      "Calculate portfolio metrics dynamically considering current prices and historical transactions.",
-      "Ensure your system can generate reports summarizing portfolio performance over specified time ranges."
+      "Use closures to keep track of the timer and ensure that multiple calls reset the timer correctly.",
+      "Attach 'cancel' and 'flush' methods as properties of the returned debounced function for external control.",
+      "Preserve the 'this' context and arguments when invoking the original callback function."
     ],
     "hints": [
-      "Use a map or unordered_map keyed by asset symbol for efficient lookups.",
-      "Store transactions in a vector or list and consider sorting/filtering by date when generating reports.",
-      "Use appropriate data structures and member functions to maintain data encapsulation and modularity."
+      "Use 'setTimeout' and 'clearTimeout' to implement the delay functionality.",
+      "Store the timer id in a variable scoped inside 'createDebouncedFunction'.",
+      "Use 'apply' or 'call' to invoke 'fn' with proper context and arguments."
     ],
-    "starterCode": "#include <iostream>\n#include <string>\n#include <vector>\n#include <unordered_map>\n#include <ctime>\n\nstruct Transaction {\n    enum Type { BUY, SELL } type;\n    std::string assetSymbol;\n    int quantity;\n    double pricePerUnit;\n    std::time_t timestamp;\n};\n\nclass Asset {\npublic:\n    Asset(const std::string& symbol, double currentPrice);\n    std::string getSymbol() const;\n    double getCurrentPrice() const;\n    void setCurrentPrice(double price);\nprivate:\n    std::string symbol;\n    double currentPrice;\n};\n\nclass Portfolio {\npublic:\n    void addAsset(const Asset& asset);\n    void recordTransaction(const Transaction& transaction);\n    double getTotalValue() const;\n    double getROI() const;\n    void printPerformanceReport(std::time_t startTime, std::time_t endTime) const;\n\nprivate:\n    std::unordered_map<std::string, Asset> assets;\n    std::vector<Transaction> transactions;\n};",
-    "expectedOutput": "Expected outputs vary depending on implementation and usage but include correctly computed portfolio total value, ROI percentages, and formatted performance reports with asset allocations and summaries.",
+    "starterCode": "function createDebouncedFunction(fn, delay) {\n  // Your code here\n}",
+    "expectedOutput": "const debounced = createDebouncedFunction(console.log, 1000);\ndebounced('Hello');\n// If no new calls happen within 1000ms, logs: Hello\n// debounced.cancel() cancels pending call\n// debounced.flush() immediately calls the pending invocation",
     "concepts": [
-      "classes and objects",
-      "data structures (maps, vectors)",
-      "time handling",
-      "financial calculations"
+      "closures",
+      "higher-order functions",
+      "timers",
+      "function context and arguments"
     ],
-    "estimatedTime": "120 minutes",
+    "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "refactor-sql-query-to-optimize-simple-select-with-case",
-    "title": "Refactor SQL Query to Optimize Simple SELECT with CASE",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "optimization",
-    "description": "Improve the readability and efficiency of a beginner-level SQL query that uses multiple CASE statements to classify product sales data without changing its behavior.",
-    "prompt": "You are given a SQL query that retrieves product sales data and categorizes the sales amount using multiple CASE statements, but the query has redundant conditions and can be simplified. Refactor the query to eliminate unnecessary repetition and improve clarity while keeping the exact same output results.",
+    "slug": "predict-the-output-of-a-complex-nested-loop-with-conditional-logic-in-c",
+    "title": "Predict the Output of a Complex Nested Loop with Conditional Logic in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given C++ code that uses nested loops with conditional statements to manipulate variables. Predict the output without running the code.",
+    "prompt": "Examine the following C++ program carefully. The program uses nested loops and conditional if-else statements to update values of variables 'a' and 'b'. Predict the output of the program when executed. Provide a detailed explanation of your reasoning.",
     "guidance": [
-      "Look for repeated CASE conditions that can be simplified or combined.",
-      "Ensure that the refactored query returns exactly the same results as the original.",
-      "Focus on improving readability by reducing nested or duplicated conditions."
+      "Trace the values of 'a' and 'b' after each iteration of the inner and outer loops.",
+      "Pay special attention to the conditional statements and how they affect the increments or decrements of the variables."
     ],
     "hints": [
-      "Try using one CASE statement with multiple WHEN clauses instead of multiple CASE statements.",
-      "Look for common conditions inside CASE expressions that can be merged."
+      "Focus on how many times the inner loop runs and under what conditions the values of 'a' and 'b' change.",
+      "Remember that post-increment and pre-increment operators can affect the value in subtle ways."
     ],
-    "starterCode": "SELECT product_id, sales_amount,\n  CASE WHEN sales_amount > 1000 THEN 'High'\n       ELSE 'Low'\n  END AS sales_category,\n  CASE WHEN sales_amount > 1000 THEN 'High'\n       WHEN sales_amount BETWEEN 500 AND 1000 THEN 'Medium'\n       ELSE 'Low'\n  END AS sales_class\nFROM product_sales;",
-    "expectedOutput": "product_id | sales_amount | sales_category | sales_class\n-----------+--------------+----------------+------------\n1          | 1200         | High           | High\n2          | 700          | Low            | Medium\n3          | 300          | Low            | Low",
+    "starterCode": "#include <iostream>\n\nint main() {\n    int a = 0, b = 0;\n    for (int i = 1; i <= 3; i++) {\n        for (int j = 1; j <= 4; j++) {\n            if (i % 2 == 0) {\n                a += j;\n                b += i;\n            } else {\n                if (j % 2 == 0) {\n                    a -= i;\n                } else {\n                    b += j;\n                }\n            }\n        }\n    }\n    std::cout << \"a = \" << a << \", b = \" << b << std::endl;\n    return 0;\n}\n",
+    "expectedOutput": "a = 2, b = 28",
     "concepts": [
-      "CASE statements",
-      "SQL query refactoring",
-      "query readability"
+      "nested loops",
+      "conditional statements",
+      "variable manipulation",
+      "arithmetic operations"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-advanced-asynchronous-array-processing-function",
+    "title": "Fix the Bug in Advanced Asynchronous Array Processing Function",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the asynchronous function that processes an array of URLs to fetch JSON data and extract specific fields. The current implementation leads to incorrect results and unhandled errors.",
+    "prompt": "You are given a broken asynchronous JavaScript function `fetchAndExtract` that accepts an array of URLs and a key string. It should fetch JSON data from each URL, extract the value corresponding to the given key, and return an array of those values. The function is intended to process requests in parallel but currently returns incorrect results or throws unhandled errors. Identify and fix the issues to make sure it works reliably with proper error handling and returns the extracted values in the same order as the input URLs.",
+    "guidance": [
+      "Check how asynchronous promises are created and handled within the function.",
+      "Ensure the function handles errors gracefully for failed fetches without breaking the whole operation.",
+      "Make sure the values are returned in the same order as the input URLs regardless of fetch response times."
+    ],
+    "hints": [
+      "Look carefully at how Promise.all and async/await are used; mixing them improperly can cause bugs.",
+      "Consider wrapping each fetch in a try-catch block or using Promise.allSettled for robust error handling."
+    ],
+    "starterCode": "async function fetchAndExtract(urls, key) {\n  const results = [];\n  urls.forEach(async (url) => {\n    const response = await fetch(url);\n    const data = await response.json();\n    results.push(data[key]);\n  });\n  return results;\n}",
+    "expectedOutput": "For input urls ['https://api.example.com/user/1', 'https://api.example.com/user/2'] and key 'name', the function should return ['Alice', 'Bob'] (assuming those are the names in the fetched JSON data).",
+    "concepts": [
+      "asynchronous programming",
+      "Promise handling",
+      "error handling",
+      "arrays"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ]
