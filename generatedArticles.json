@@ -1,517 +1,461 @@
 [
   {
-    "slug": "building-scalable-data-models-with-javascript-classes-and-prototypes",
-    "title": "Building Scalable Data Models with JavaScript Classes and Prototypes",
+    "slug": "mastering-asynchronous-javascript-optimization-techniques-for-faster-web-apps",
+    "title": "Mastering Asynchronous JavaScript: Optimization Techniques for Faster Web Apps",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to create scalable and maintainable data models using JavaScript classes and prototypes, perfect for beginners starting with object-oriented programming.",
-    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "description": "Learn beginner-friendly asynchronous JavaScript optimization techniques to build faster, more efficient web applications using promises, async/await, and concurrency controls.",
+    "videoUrl": "https://www.youtube.com/watch?v=Mus_vwhTCq0",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building applications, organizing your data in a clear and reusable way is essential. JavaScript offers powerful tools for modeling data through classes and prototypes. This tutorial will guide you step-by-step on how to create scalable data models using these features, keeping your code organized and easy to maintain."
+        "value": "Asynchronous JavaScript allows your web applications to perform tasks without freezing the user interface. This results in smoother, faster experiences. In this tutorial, you'll learn beginner-friendly optimization techniques including the use of Promises, async/await, and concurrency control to make your web apps more efficient."
       },
       {
         "type": "paragraph",
-        "value": "Before ES6 introduced classes, JavaScript used prototypes to implement shared behavior. Understanding both can help you build efficient data models. Let's start by exploring how to define a simple data model with ES6 classes."
+        "value": "First, let's explore how asynchronous code works using Promises. Promises let you handle asynchronous operations like data fetching without blocking the main thread."
       },
       {
         "type": "code",
-        "value": "class Product {\n  constructor(name, price) {\n    this.name = name;\n    this.price = price;\n  }\n\n  display() {\n    console.log(`${this.name} costs $${this.price}`);\n  }\n}\n\nconst apple = new Product('Apple', 0.99);\napple.display(); // Output: Apple costs $0.99"
+        "value": "function fetchData(url) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      resolve(`Data from ${url}`);\n    }, 1000);\n  });\n}\n\nfetchData('https://api.example.com').then(data => {\n  console.log(data);\n});"
       },
       {
         "type": "paragraph",
-        "value": "In this example, we created a `Product` class with two properties: `name` and `price`. The `display` method prints a formatted string to the console. The `constructor` function initializes new objects with specific data."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let's see how prototype-based inheritance works. This is how JavaScript internally shares methods between instances to save memory."
+        "value": "While Promises are powerful, async/await syntax makes writing and reading asynchronous code more straightforward, behaving like synchronous code but non-blocking underneath."
       },
       {
         "type": "code",
-        "value": "// Constructor function\nfunction Product(name, price) {\n  this.name = name;\n  this.price = price;\n}\n\n// Adding method to prototype\nProduct.prototype.display = function() {\n  console.log(`${this.name} costs $${this.price}`);\n};\n\nconst banana = new Product('Banana', 1.2);\nbanana.display(); // Output: Banana costs $1.2"
+        "value": "async function getData() {\n  try {\n    const data = await fetchData('https://api.example.com');\n    console.log(data);\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\ngetData();"
       },
       {
         "type": "paragraph",
-        "value": "Here, instead of using ES6 classes, we define a `Product` constructor and add the `display` method to its prototype. This way, all instances of `Product` share the same `display` method rather than having copies stored individually, improving memory efficiency."
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, let's build a more scalable example. Imagine we want different kinds of products, like Books and Electronics, each with unique properties and behavior but sharing some common features."
+        "value": "One common optimization is running multiple asynchronous tasks concurrently instead of sequentially. Using Promise.all will run the promises in parallel and wait for all to complete."
       },
       {
         "type": "code",
-        "value": "class Product {\n  constructor(name, price) {\n    this.name = name;\n    this.price = price;\n  }\n\n  display() {\n    console.log(`${this.name} costs $${this.price}`);\n  }\n}\n\nclass Book extends Product {\n  constructor(name, price, author) {\n    super(name, price);\n    this.author = author;\n  }\n\n  display() {\n    console.log(`${this.name} by ${this.author} costs $${this.price}`);\n  }\n}\n\nclass Electronic extends Product {\n  constructor(name, price, brand) {\n    super(name, price);\n    this.brand = brand;\n  }\n\n  display() {\n    console.log(`${this.brand} ${this.name} costs $${this.price}`);\n  }\n}\n\nconst novel = new Book('Invisible Man', 15, 'Ralph Ellison');\nconst laptop = new Electronic('XPS 13', 999, 'Dell');\n\nnovel.display();   // Output: Invisible Man by Ralph Ellison costs $15\nlaptop.display(); // Output: Dell XPS 13 costs $999"
+        "value": "async function fetchMultiple() {\n  const urls = ['url1', 'url2', 'url3'];\n  const promises = urls.map(url => fetchData(url));\n  const results = await Promise.all(promises);\n  console.log(results);\n}\n\nfetchMultiple();"
       },
       {
         "type": "paragraph",
-        "value": "We used ES6 class inheritance to create specific product types that extend a base `Product` class. Each subclass overrides the `display` method to provide tailored output. This structure scales well as your application grows and you add more product types."
+        "value": "Sometimes, handling too many concurrent tasks can overwhelm your resources or server. To optimize, control concurrency by limiting how many promises run at once using libraries like p-limit, or by writing simple concurrency control yourself."
       },
       {
         "type": "paragraph",
-        "value": "To summarize:"
+        "value": "Here's a simple example controlling concurrency with async/await by processing URLs in batches."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithConcurrencyLimit(urls, limit) {\n  let i = 0;\n  const results = [];\n  async function worker() {\n    while(i < urls.length) {\n      const current = i++;\n      results[current] = await fetchData(urls[current]);\n    }\n  }\n\n  const workers = Array(limit).fill(worker).map(w => w());\n  await Promise.all(workers);\n  return results;\n}\n\nfetchWithConcurrencyLimit(['url1', 'url2', 'url3', 'url4'], 2).then(console.log);"
       },
       {
         "type": "paragraph",
-        "value": "- Use ES6 classes for clearer, more modern syntax.\n- Leverage prototypes for shared methods, improving memory efficiency.\n- Use inheritance to build scalable and reusable data models.\n- Override methods in subclasses to customize behaviors."
-      },
-      {
-        "type": "paragraph",
-        "value": "With these tools, you can create maintainable and extensible JavaScript models that grow with your project."
+        "value": "To sum up, mastering asynchronous JavaScript helps you build faster, more responsive web apps by:\n- Using Promises and async/await for readable async code\n- Running multiple operations in parallel with Promise.all\n- Controlling concurrency to optimize resource use\nImplement these basic techniques to optimize your projects and improve user experience."
       }
     ]
   },
   {
-    "slug": "mastering-data-validation-techniques-in-javascript-for-robust-data-modeling",
-    "title": "Mastering Data Validation Techniques in JavaScript for Robust Data Modeling",
+    "slug": "optimizing-javascript-memory-usage-for-high-performance-web-apps",
+    "title": "Optimizing JavaScript Memory Usage for High-Performance Web Apps",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn beginner-friendly data validation techniques in JavaScript to build reliable and error-free data models for your applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=zO6CHvTErxE",
+    "description": "Learn how to optimize JavaScript memory usage to create faster, smoother web applications. Avoid common memory errors and improve app performance with practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=uEsSye9tKFs",
     "content": [
       {
         "type": "paragraph",
-        "value": "Data validation is a crucial step in any JavaScript application that handles user input or external data. Without proper validation, your app might accept incorrect, incomplete, or malicious data, leading to bugs or security issues. This article will guide you through simple and effective validation techniques to ensure your data is clean and reliable."
+        "value": "When building web apps, managing memory efficiently is crucial to ensure your app runs smoothly and doesn't slow down or crash. JavaScript runs in a browser environment where memory limits exist, so understanding common memory issues and how to fix them helps you build high-performance apps."
       },
       {
         "type": "paragraph",
-        "value": "At its core, data validation is about checking data against certain rules before using it in your application. These rules can include checking data types, required fields, value ranges, or formats such as email addresses or phone numbers."
+        "value": "One common error developers encounter is memory leaks. These happen when your code keeps references to objects that are no longer needed, so the browser cannot free that memory. Over time, leaks increase memory usage and cause your app to become slow or even crash."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by creating a simple function to validate a user object with fields like name, age, and email."
+        "value": "Here are practical tips to optimize memory usage in JavaScript and avoid common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid global variables: Globals stay in memory for the entire app lifecycle. Use local variables inside functions whenever possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Clear event listeners: Event listeners keep references to objects. Remove them when no longer needed."
       },
       {
         "type": "code",
-        "value": "function validateUser(user) {\n  const errors = [];\n\n  // Check if name exists and is a non-empty string\n  if (!user.name || typeof user.name !== 'string' || user.name.trim() === '') {\n    errors.push('Name is required and must be a non-empty string.');\n  }\n\n  // Check if age is a number between 0 and 120\n  if (typeof user.age !== 'number' || user.age < 0 || user.age > 120) {\n    errors.push('Age must be a number between 0 and 120.');\n  }\n\n  // Simple email format validation\n  const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  if (!user.email || !emailPattern.test(user.email)) {\n    errors.push('A valid email address is required.');\n  }\n\n  return {\n    isValid: errors.length === 0,\n    errors\n  };\n}"
+        "value": "const button = document.getElementById('myButton');\n\nfunction onClick() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', onClick);\n\n// Later, when button is no longer needed\nbutton.removeEventListener('click', onClick);"
       },
       {
         "type": "paragraph",
-        "value": "The function validateUser accepts a user object and returns an object showing if the data is valid along with any errors found. Here, we check that the name is a non-empty string, age is a number within a realistic range, and the email matches a simple format pattern."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's see how to use this validation function in practice."
+        "value": "3. Manage timers properly: Cancel intervals or timeouts when not required to avoid keeping memory."
       },
       {
         "type": "code",
-        "value": "const userInput = {\n  name: 'Alice',\n  age: 25,\n  email: 'alice@example.com'\n};\n\nconst result = validateUser(userInput);\nif (result.isValid) {\n  console.log('User data is valid!');\n} else {\n  console.error('Validation errors:', result.errors);\n}"
+        "value": "const intervalId = setInterval(() => {\n  console.log('Doing something repeatedly');\n}, 1000);\n\n// When you want to stop\nclearInterval(intervalId);"
       },
       {
         "type": "paragraph",
-        "value": "If any field does not meet validation criteria, the errors array gives you specific messages to help debug or inform users about what went wrong."
+        "value": "4. Be cautious with closures: Closures can unintentionally hold references to outer variables, preventing garbage collection."
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const largeData = new Array(1000000).fill('*');\n\n  return function show() {\n    console.log('Data length:', largeData.length);\n  };\n}\n\nconst display = setup();\n// largeData stays in memory because display closure references it"
       },
       {
         "type": "paragraph",
-        "value": "For more complex scenarios, libraries like Joi or Yup provide powerful schemas for validation, but learning these basic techniques helps you understand the core principles of validating data efficiently."
+        "value": "5. Release DOM references: If you remove DOM nodes, make sure you also remove references to them in JavaScript variables."
       },
       {
         "type": "paragraph",
-        "value": "Remember, validating data early in your workflow prevents unexpected errors later and improves the overall reliability and security of your software."
+        "value": "By following these tips, you can minimize memory errors like leaks and optimize the performance of your JavaScript web applications. Always test your app in browsers' developer tools and monitor memory usage as you develop."
       }
     ]
   },
   {
-    "slug": "handling-precision-issues-in-typescript-number-calculations-best-practices",
-    "title": "Handling Precision Issues in TypeScript Number Calculations: Best Practices",
+    "slug": "mastering-typescript-utility-types-for-cleaner-code",
+    "title": "Mastering TypeScript Utility Types for Cleaner Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to handle common precision issues in TypeScript number calculations with practical, beginner-friendly methods and best practices.",
-    "videoUrl": "https://www.youtube.com/watch?v=2gIxbTn7GSc",
+    "description": "Learn how to use TypeScript utility types to write cleaner, more maintainable code with practical examples perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=eJ6R1knfsoc",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with numbers in TypeScript, especially floating-point numbers, you might notice some unexpected behavior due to precision limitations. For example, calculations like 0.1 + 0.2 don't always result in 0.3 exactly. This is because JavaScript and TypeScript use IEEE 754 double-precision floating-point format, which cannot represent some decimal numbers precisely."
+        "value": "TypeScript utility types are powerful tools that help you manipulate types efficiently without writing repetitive code. They can make your code cleaner, easier to read, and less error-prone. In this tutorial, we will explore some of the most commonly used utility types like Partial, Readonly, Pick, and Omit, along with simple examples."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore common precision issues and share best practices to handle them effectively in your TypeScript projects."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Precision Problem Example"
+        "value": "Before diving in, let's define a simple interface that we'll use throughout the examples:"
       },
       {
         "type": "code",
-        "value": "const a = 0.1;\nconst b = 0.2;\nconst sum = a + b;\nconsole.log(sum); // Outputs: 0.30000000000000004"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  isActive: boolean;\n}"
       },
       {
         "type": "paragraph",
-        "value": "As you can see, instead of 0.3, the output is 0.30000000000000004. This can cause issues in financial calculations, comparisons, and more."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice 1: Use `toFixed` or `toPrecision` for Display"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you only need to display numbers, you can format them using `toFixed()` to control decimal places."
+        "value": "### Partial<Type>\nPartial makes all properties of a type optional. It's useful when you want to update part of an object without requiring all properties."
       },
       {
         "type": "code",
-        "value": "const sumFixed = sum.toFixed(2);\nconsole.log(sumFixed); // Outputs: \"0.30\""
+        "value": "function updateUser(id: number, userUpdates: Partial<User>) {\n  // Imagine this updates the user in the database\n  console.log(`Updating user ${id} with`, userUpdates);\n}\n\nupdateUser(1, { email: 'newemail@example.com' });"
       },
       {
         "type": "paragraph",
-        "value": "Note: `toFixed` returns a string, so you may need to convert it back to a number if necessary."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice 2: Use Integer Arithmetic"
-      },
-      {
-        "type": "paragraph",
-        "value": "When precision is critical, convert decimals to integers before calculation by multiplying by a power of 10. For example, when working with cents instead of dollars."
+        "value": "### Readonly<Type>\nReadonly makes all properties of a type immutable, preventing accidental modifications."
       },
       {
         "type": "code",
-        "value": "const price1 = 0.1;\nconst price2 = 0.2;\n\n// Convert to cents\nconst price1Cents = Math.round(price1 * 100);\nconst price2Cents = Math.round(price2 * 100);\nconst totalCents = price1Cents + price2Cents;\n\nconst total = totalCents / 100;\nconsole.log(total); // Outputs: 0.3"
+        "value": "const readonlyUser: Readonly<User> = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com',\n  isActive: true\n};\n\n// readonlyUser.name = 'Bob'; // Error: Cannot assign to 'name' because it is a read-only property."
       },
       {
         "type": "paragraph",
-        "value": "This approach avoids floating-point imprecision by working with whole numbers."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice 3: Use Libraries for Precise Calculations"
-      },
-      {
-        "type": "paragraph",
-        "value": "For complex or critical calculations, consider using libraries such as `decimal.js` or `big.js` which provide arbitrary precision decimals."
+        "value": "### Pick<Type, Keys>\nPick creates a new type by selecting a subset of properties from an existing type. It's perfect when you need only specific fields."
       },
       {
         "type": "code",
-        "value": "import Decimal from 'decimal.js';\n\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\n\nconsole.log(sum.toString()); // Outputs: \"0.3\""
+        "value": "type UserPreview = Pick<User, 'id' | 'name'>;\n\nconst preview: UserPreview = {\n  id: 2,\n  name: 'Bob'\n};"
       },
       {
         "type": "paragraph",
-        "value": "These libraries help ensure accurate calculations without rounding errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice 4: Use `Number.EPSILON` for Comparison"
-      },
-      {
-        "type": "paragraph",
-        "value": "When comparing floating-point numbers, avoid direct equality checks. Instead, check if the difference is within an acceptable range using `Number.EPSILON`, which represents the smallest difference between two representable numbers."
+        "value": "### Omit<Type, Keys>\nOmit creates a new type by excluding specified properties. This is helpful when you want a type without certain sensitive or unnecessary fields."
       },
       {
         "type": "code",
-        "value": "function areAlmostEqual(a: number, b: number): boolean {\n  return Math.abs(a - b) < Number.EPSILON;\n}\n\nconsole.log(areAlmostEqual(0.1 + 0.2, 0.3)); // Outputs: true"
+        "value": "type UserWithoutEmail = Omit<User, 'email'>;\n\nconst userNoEmail: UserWithoutEmail = {\n  id: 3,\n  name: 'Charlie',\n  isActive: false\n};"
       },
       {
         "type": "paragraph",
-        "value": "This technique helps avoid errors in conditional statements due to minor floating-point differences."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Floating-point precision issues are common in TypeScript (and JavaScript) but can be managed effectively. Use formatting methods for display, integer arithmetic for calculations, specialized libraries for precision-critical work, and always use epsilon-based comparisons for equality checks."
-      },
-      {
-        "type": "paragraph",
-        "value": "With these best practices, you can write more reliable and precise numeric code in your TypeScript applications."
+        "value": "### Conclusion\nTypeScript utility types like Partial, Readonly, Pick, and Omit are essential for writing clear and maintainable code. By leveraging these utilities, you reduce duplication and make your codebase easier to work with, especially as projects grow in size. Practice using these in your own projects to get more comfortable and write cleaner TypeScript!"
       }
     ]
   },
   {
-    "slug": "mastering-typescripts-advanced-type-guards-for-elegant-error-handling",
-    "title": "Mastering TypeScript’s Advanced Type Guards for Elegant Error Handling",
+    "slug": "handling-complex-nullish-values-in-typescript-edge-cases",
+    "title": "Handling Complex Nullish Values in TypeScript Edge Cases",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript’s advanced type guards to handle errors more effectively and write cleaner, safer code.",
-    "videoUrl": "",
+    "description": "Learn how to handle complex nullish values in TypeScript and avoid common pitfalls with edge cases in your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=Bllh21sG4k8",
     "content": [
       {
         "type": "paragraph",
-        "value": "Handling errors gracefully is key to building robust applications. TypeScript provides powerful tools known as type guards that help you distinguish between different types at runtime, making error handling more precise and elegant. In this article, we'll explore how to master advanced type guards to improve your error handling approach."
+        "value": "When working with TypeScript, handling null and undefined values correctly is crucial to avoid runtime errors. The nullish coalescing operator (??) is a helpful tool, but complex data structures or edge cases can lead to unexpected issues. In this article, we'll explore how to handle complex nullish values safely and effectively."
       },
       {
         "type": "paragraph",
-        "value": "Type guards are functions or expressions that perform runtime checks to narrow down the type of a variable within a conditional block. By using type guards, you can safely differentiate between error types or custom objects and handle them appropriately without losing TypeScript's type safety."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example. Suppose you have a function that can throw different kinds of errors, and you want to handle them differently based on their type."
+        "value": "The nullish coalescing operator (??) returns the right-hand side operand when the left-hand side operand is either null or undefined. Unlike the logical OR operator (||), it does not treat false, 0, or empty strings as nullish. Here's an example:"
       },
       {
         "type": "code",
-        "value": "class NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NetworkError';\n  }\n}\n\nclass ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction isNetworkError(error: unknown): error is NetworkError {\n  return error instanceof NetworkError;\n}\n\nfunction isValidationError(error: unknown): error is ValidationError {\n  return error instanceof ValidationError;\n}\n\nfunction handleError(error: unknown) {\n  if (isNetworkError(error)) {\n    console.log('Network error occurred:', error.message);\n  } else if (isValidationError(error)) {\n    console.log('Validation failed:', error.message);\n  } else if (error instanceof Error) {\n    console.log('General error:', error.message);\n  } else {\n    console.log('Unknown error:', error);\n  }\n}"
+        "value": "const value = null ?? 'default';\nconsole.log(value); // Output: 'default'\n\nconst value2 = 0 ?? 42;\nconsole.log(value2); // Output: 0 (because 0 is NOT nullish)"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, we define two custom error classes: `NetworkError` and `ValidationError`. We then create two type guard functions, `isNetworkError` and `isValidationError`, which narrow down the `error` variable to the specific error types using the `instanceof` operator."
-      },
-      {
-        "type": "paragraph",
-        "value": "Calling these type guard functions within the `handleError` function allows TypeScript to understand the exact error type inside each conditional branch, enabling safer and more readable error handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "Advanced type guards aren't limited to checking instances — you can also guard objects based on their shape or properties. Here's an example of how you might distinguish between error objects with different structures."
+        "value": "While ?? works well with simple values, handling nested or complex objects with possible nullish properties can be tricky. Consider the following example where we have a deeply nested object that might have undefined or null properties:"
       },
       {
         "type": "code",
-        "value": "interface ApiError {\n  errorCode: number;\n  message: string;\n}\n\ninterface DatabaseError {\n  dbCode: string;\n  description: string;\n}\n\nfunction isApiError(error: any): error is ApiError {\n  return typeof error.errorCode === 'number' && typeof error.message === 'string';\n}\n\nfunction isDatabaseError(error: any): error is DatabaseError {\n  return typeof error.dbCode === 'string' && typeof error.description === 'string';\n}\n\nfunction logError(error: unknown) {\n  if (isApiError(error)) {\n    console.error(`API Error (${error.errorCode}): ${error.message}`);\n  } else if (isDatabaseError(error)) {\n    console.error(`DB Error (${error.dbCode}): ${error.description}`);\n  } else {\n    console.error('Unknown error', error);\n  }\n}"
+        "value": "interface UserProfile {\n  name: string | null;\n  settings?: {\n    theme: string | null;\n    notifications?: boolean | null;\n  } | null;\n}\n\nconst user: UserProfile = {\n  name: null,\n  settings: {\n    theme: null,\n    notifications: undefined\n  }\n};"
       },
       {
         "type": "paragraph",
-        "value": "This pattern works well when errors don't have a shared class hierarchy but can be differentiated by their properties. Using these guards, you can elegantly handle diverse error shapes."
+        "value": "Trying to assign default values using ?? might not cover all cases because sometimes you might want to provide a default for nested properties that could be undefined or null. Here's how you can safely handle this:"
+      },
+      {
+        "type": "code",
+        "value": "const userName = user.name ?? 'Anonymous';\nconst userTheme = user.settings?.theme ?? 'light';\nconst userNotifications = user.settings?.notifications ?? true;\n\nconsole.log({ userName, userTheme, userNotifications });\n// Output: { userName: 'Anonymous', userTheme: 'light', userNotifications: true }"
       },
       {
         "type": "paragraph",
-        "value": "In summary, mastering advanced type guards allows you to write cleaner, more maintainable error handling logic in TypeScript. You get all the benefits of static type checking combined with flexible runtime checks — leading to fewer bugs and better developer experience."
+        "value": "Notice the use of optional chaining (?.) before the nullish coalescing operator (??). This safely prevents errors if properties like settings are null or undefined. Another common edge case is when the property exists but is intentionally set to null or false. The nullish coalescing operator correctly distinguishes these cases."
       },
       {
         "type": "paragraph",
-        "value": "Start incorporating these patterns in your projects today to handle errors gracefully and with confidence!"
+        "value": "Here is a practical tip: avoid combining ?? and || in the same expression to prevent confusing results. For example:"
+      },
+      {
+        "type": "code",
+        "value": "const num = 0;\nconst result = num ?? 42 || 100;\nconsole.log(result); // Output: 0, because '??' has lower precedence than '||', which can cause confusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, use parentheses to clarify precedence or avoid mixing these operators:"
+      },
+      {
+        "type": "code",
+        "value": "const resultCorrect = (num ?? 42) || 100;\nconsole.log(resultCorrect); // Output: 100 because num is 0, so 0 ?? 42 === 0, then 0 || 100 === 100"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, when handling complex nullish values in TypeScript:\n- Use ?? instead of || to treat false, 0, and '' as valid values.\n- Use optional chaining (?.) before ?? for nested properties.\n- Avoid mixing ?? and || without parentheses.\n- Explicitly handle null or undefined in your types for clarity.\nHandling these edge cases properly makes your code safer, cleaner, and easier to maintain."
       }
     ]
   },
   {
-    "slug": "building-python-web-scraper-to-monitor-ecommerce-price-trends",
-    "title": "Building a Python Web Scraper to Monitor and Analyze E-commerce Price Trends",
+    "slug": "mastering-python-context-managers-cleaner-resource-management",
+    "title": "Mastering Python Context Managers for Cleaner Resource Management",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to create a beginner-friendly Python web scraper to track and analyze price changes on e-commerce websites, helping you make smarter buying decisions.",
-    "videoUrl": "https://www.youtube.com/watch?v=8i4byohvlNA",
+    "description": "Learn how Python context managers help you handle resources like files and connections more cleanly and efficiently with easy-to-understand examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
     "content": [
       {
         "type": "paragraph",
-        "value": "Web scraping is a useful technique to extract data from websites, and an excellent project for beginners is building a price monitoring tool for e-commerce platforms. In this tutorial, we'll create a Python web scraper to track product prices, store the data, and do simple trend analysis. This helps you monitor when prices drop and make informed purchase decisions."
+        "value": "When working with resources such as files, network connections, or database cursors, it’s important to ensure they are properly opened and closed to avoid resource leaks. Python provides a powerful tool for this called \"context managers\". In this tutorial, we will explore what context managers are, why they matter, and how to use them effectively in your Python code."
       },
       {
         "type": "paragraph",
-        "value": "We'll use common Python libraries like requests to fetch web pages, BeautifulSoup to parse HTML content, and pandas to analyze data. This project keeps things beginner-friendly while demonstrating real-world applications of web scraping."
+        "value": "### What Is a Context Manager?\nA context manager in Python is an object that defines the runtime context to be established when executing a block of code. It handles the setup and cleanup actions automatically. The most common example is opening a file: you want to make sure the file closes properly even if an error occurs."
       },
       {
         "type": "paragraph",
-        "value": "Let's get started by installing the libraries. Run this command in your terminal:"
+        "value": "### Using the with Statement\nPython uses the `with` statement to work with context managers. This syntax simplifies resource management by automatically calling setup and cleanup methods behind the scenes."
       },
       {
         "type": "code",
-        "value": "pip install requests beautifulsoup4 pandas"
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, context managers!')\n\n# No need to call file.close() explicitly. It is done automatically."
       },
       {
         "type": "paragraph",
-        "value": "Next, we'll write a simple function to scrape the price and name of a product from a sample e-commerce page. Note that different websites have different HTML structures, so you can inspect page elements in your browser to find the correct tags and classes."
+        "value": "In the code above, `open` returns a context manager that handles opening and closing the file. The `with` statement calls `file.__enter__()` when the block starts and `file.__exit__()` when it finishes, even if exceptions occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Custom Context Manager Using a Class\nYou can create your own context managers by defining a class with two special methods: `__enter__()` and `__exit__()`."
       },
       {
         "type": "code",
-        "value": "import requests\nfrom bs4 import BeautifulSoup\n\nurl = 'https://example.com/product-page'\n\nheaders = {'User-Agent': 'Mozilla/5.0'}  # To mimic a browser\n\nresponse = requests.get(url, headers=headers)\n\n# Check request success\nif response.status_code == 200:\n    soup = BeautifulSoup(response.text, 'html.parser')\n\n    # Example selectors - change based on the actual website\n    product_name = soup.find('h1', class_='product-title').text.strip()\n    price = soup.find('span', class_='price').text.strip()\n\n    print(f'Product: {product_name}')\n    print(f'Price: {price}')\nelse:\n    print('Failed to retrieve the page')"
+        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the block')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the block')\n        if exc_type:\n            print(f'An exception occurred: {exc_value}')\n        return True  # suppress exception\n\nwith MyContextManager() as manager:\n    print('Inside the block')\n    # raise ValueError('Oops!')  # Uncomment to test exception handling"
       },
       {
         "type": "paragraph",
-        "value": "Once you have successfully extracted name and price, you want to store this information with the date to monitor changes over time. Pandas is great for this purpose."
+        "value": "In this example, `__enter__` runs at the start of the `with` block, and `__exit__` runs at the end. If an exception occurs inside the block, `__exit__` receives info about it and can handle or suppress the exception if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using contextlib for Simpler Context Managers\nThe `contextlib` module provides a decorator called `@contextmanager` that lets you create context managers from generator functions, making code simpler."
       },
       {
         "type": "code",
-        "value": "import pandas as pd\nfrom datetime import datetime\n\n# Example data (replace with scraped data)\ndata = {\n    'date': [datetime.now()],\n    'product_name': [product_name],\n    'price': [price]\n}\n\ndf = pd.DataFrame(data)\n\n# Save or append to CSV file\ncsv_file = 'price_data.csv'\n\ntry:\n    existing_df = pd.read_csv(csv_file)\n    df = pd.concat([existing_df, df])\n    df.drop_duplicates(inplace=True)\nexcept FileNotFoundError:\n    pass\n\ndf.to_csv(csv_file, index=False)\nprint(f'Data saved to {csv_file}')"
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef open_file(file_name, mode):\n    print('Opening file')\n    f = open(file_name, mode)\n    try:\n        yield f\n    finally:\n        print('Closing file')\n        f.close()\n\nwith open_file('example.txt', 'w') as f:\n    f.write('Using contextlib to manage files')"
       },
       {
         "type": "paragraph",
-        "value": "Note that price values are often strings with currency symbols, so you'll want to clean and convert them to floats for analysis."
-      },
-      {
-        "type": "code",
-        "value": "def clean_price(price_str):\n    # Remove currency symbols and commas, convert to float\n    return float(price_str.replace('$', '').replace(',', '').strip())\n\n# Usage example\nprice_float = clean_price(price)\nprint(f'Cleaned price: {price_float}')"
+        "value": "Here, the code before `yield` runs when entering the context, and the code after `yield` runs on exit, allowing for clean setup and teardown logic in a very readable way."
       },
       {
         "type": "paragraph",
-        "value": "After collecting price data over days or weeks, you can plot the trend using pandas and matplotlib."
-      },
-      {
-        "type": "code",
-        "value": "import matplotlib.pyplot as plt\n\n# Load saved data\nprices_df = pd.read_csv(csv_file)\n\n# Convert date column to datetime\nprices_df['date'] = pd.to_datetime(prices_df['date'])\n# Clean the price column\nprices_df['price'] = prices_df['price'].apply(clean_price)\n\n# Plot price over time\nplt.figure(figsize=(10,5))\nplt.plot(prices_df['date'], prices_df['price'], marker='o')\nplt.title(f\"Price Trend for {product_name}\")\nplt.xlabel('Date')\nplt.ylabel('Price (USD)')\nplt.grid(True)\nplt.show()"
+        "value": "### Why Use Context Managers?\n- Ensure resources are released properly, preventing leaks.\n- Make your code cleaner by reducing explicit open/close or acquire/release calls.\n- Improve safety by handling exceptions gracefully.\n- Promote readable and maintainable code."
       },
       {
         "type": "paragraph",
-        "value": "To automate this scraping daily, you can run the script on your computer using Task Scheduler, cron jobs, or cloud services. Always check the website's terms of service and robots.txt to comply with their scraping policies."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, this beginner-friendly project demonstrates how Python helps you scrape, store, and analyze price trends on e-commerce websites. With some practice, you can extend this to multiple products or websites and build more complex alert systems."
+        "value": "### Summary\nMastering context managers helps you write cleaner, safer Python code, especially when dealing with resource management. Use built-in context managers like `open()`, create custom ones for specific needs, or leverage `contextlib` for simpler syntax. They are essential tools for any Python programmer."
       }
     ]
   },
   {
-    "slug": "handling-api-rate-limit-errors-gracefully-in-python-projects",
-    "title": "Handling API Rate Limit Errors Gracefully in Python Projects",
+    "slug": "understanding-type-errors-in-python-data-models",
+    "title": "Understanding Type Errors in Python Data Models: Best Practices and Solutions",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to handle API rate limit errors in Python projects by using simple techniques like error catching and retry with delays to ensure your app remains stable and user-friendly.",
-    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
+    "description": "Learn how to identify, understand, and fix type errors in Python data models with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=4-xNQQIgz50",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with APIs in your Python projects, you might encounter rate limit errors. These occur when you send too many requests in a short period, exceeding the API provider's limits. Handling these errors gracefully is important to avoid your app crashing and to provide a better user experience."
+        "value": "Type errors are common when working with data models in Python, especially for beginners. These errors occur when a value of an unexpected type is passed or assigned, causing the program to fail or behave unexpectedly. Understanding how Python handles data types and using best practices to avoid and fix type errors will help you write more robust and maintainable code."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explore how to detect rate limit errors, pause execution, and retry requests after waiting. This approach helps your program respect API limits and stay stable even under restrictions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Most APIs return a specific HTTP status code like 429 for rate limiting. We'll use Python's requests library to make API calls and handle these errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s a simple example to demonstrate handling rate limit errors with retries and exponential backoff:"
+        "value": "Python is a dynamically typed language, which means you don't need to declare the type of a variable explicitly. However, this flexibility sometimes leads to type errors if you use values incorrectly. For example, trying to add a string to a number will raise a TypeError."
       },
       {
         "type": "code",
-        "value": "import time\nimport requests\n\nAPI_URL = \"https://api.example.com/data\"\nMAX_RETRIES = 5\n\n\ndef fetch_data():\n    retries = 0\n    backoff_time = 1  # Start with 1 second\n\n    while retries < MAX_RETRIES:\n        response = requests.get(API_URL)\n\n        if response.status_code == 200:\n            return response.json()\n\n        elif response.status_code == 429:\n            print(f\"Rate limit hit. Retrying in {backoff_time} seconds...\")\n            time.sleep(backoff_time)\n            backoff_time *= 2  # Exponential backoff\n            retries += 1\n\n        else:\n            # Handle other HTTP errors\n            response.raise_for_status()\n\n    raise Exception(\"Max retries exceeded due to rate limiting.\")\n\n\nif __name__ == \"__main__\":\n    try:\n        data = fetch_data()\n        print(\"Data fetched successfully:\", data)\n    except Exception as e:\n        print(\"Failed to fetch data:\", e)"
+        "value": "x = 10\nname = \"Alice\"\n\n# This will cause a TypeError because you cannot add int and str\n# result = x + name  # Uncommenting this line will raise an error\n\n# Correct way: Convert int to str before concatenation\nresult = str(x) + name\nprint(result)  # Output: 10Alice"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the script tries to fetch data from an API. If it receives a 429 (rate limit) error, it waits before trying again. The wait time doubles after each attempt to reduce request frequency gradually. If requests keep failing, it stops after a set number of retries."
+        "value": "When building data models, such as classes representing entities, it's important to ensure the attributes have the expected types. Python 3.5+ introduced type hints to help you specify the expected types for variables and function arguments. While Python does not enforce these types at runtime, tools like mypy can check them for you."
+      },
+      {
+        "type": "code",
+        "value": "from typing import Optional\n\nclass User:\n    def __init__(self, name: str, age: Optional[int] = None):\n        self.name: str = name\n        self.age: Optional[int] = age\n\n    def greet(self) -> str:\n        age_info = f\" who is {self.age} years old\" if self.age else \"\"\n        return f\"Hello, {self.name}{age_info}!\"\n\nuser = User(\"Alice\", 30)\nprint(user.greet())  # Hello, Alice who is 30 years old!"
       },
       {
         "type": "paragraph",
-        "value": "You can adjust MAX_RETRIES or the backoff strategy depending on the specific API's guidelines. Some APIs also return a header telling you how long to wait — you can read this header and use its value instead of a manual backoff."
+        "value": "If you accidentally provide wrong types when creating instances or calling methods, this may cause unexpected behavior or type errors later in the program. You can add runtime type checks inside your methods if you want to catch errors earlier."
+      },
+      {
+        "type": "code",
+        "value": "class UserWithCheck:\n    def __init__(self, name: str, age: Optional[int] = None):\n        if not isinstance(name, str):\n            raise TypeError(f\"Expected 'name' to be str, got {type(name).__name__}\")\n        if age is not None and not isinstance(age, int):\n            raise TypeError(f\"Expected 'age' to be int or None, got {type(age).__name__}\")\n        self.name = name\n        self.age = age\n\nuser = UserWithCheck(\"Bob\", \"thirty\")  # This will raise a TypeError"
       },
       {
         "type": "paragraph",
-        "value": "This technique helps your Python applications interact with APIs more reliably, improving overall robustness and user experience when facing rate limits."
+        "value": "Another best practice is to use data validation libraries like Pydantic or Marshmallow, which provide built-in validation and clear error messages for type mismatches. These libraries make it easier to define data models with strict type checks and data parsing."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to handle type errors effectively in Python data models:\n- Use type hints to document expected types.\n- Consider using static type checkers like mypy.\n- Add explicit runtime checks if needed for early error detection.\n- Use data validation libraries for robust and scalable models.\n- Always test your code with different input types to catch errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these practices, you’ll write Python code that is easier to debug and less prone to common type-related bugs."
       }
     ]
   },
   {
-    "slug": "sql-window-functions-vs-aggregate-functions",
-    "title": "SQL Window Functions vs Aggregate Functions: When and How to Use Each",
+    "slug": "optimizing-complex-joins-with-window-functions",
+    "title": "Optimizing Complex Joins with Window Functions for Faster SQL Queries",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn the difference between SQL window functions and aggregate functions with beginner-friendly examples. Understand when to use each for effective data analysis.",
+    "description": "Learn how to use SQL window functions to optimize complex joins and improve query performance with this beginner-friendly tutorial.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "In SQL, both window functions and aggregate functions let you summarize and analyze data, but they work in different ways. Aggregate functions group rows together and give a single summary value per group, while window functions calculate values across a set of rows related to the current row without collapsing the results. This tutorial helps beginners understand when and how to use each."
+        "value": "When working with complex SQL queries, joins can sometimes slow down performance, especially if you are joining multiple tables with large datasets. One effective technique to optimize complex joins is by leveraging window functions. Window functions allow you to perform calculations across rows related to the current row without reducing the result set, which can simplify queries and reduce redundant data processing."
       },
       {
         "type": "paragraph",
-        "value": "Aggregate functions are used with the GROUP BY clause. They return one result per group of rows. Common aggregate functions include SUM(), AVG(), COUNT(), MIN(), and MAX(). For example, to find the total sales per department, you'd use:"
+        "value": "In this tutorial, we'll explore how to use window functions like ROW_NUMBER(), RANK(), and PARTITION BY to optimize complex joins, improve readability, and potentially speed up your SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a scenario where you have two tables: `orders` and `order_items`. You want to join these tables but only select the first item for each order based on the item's price — a task that can involve complex subqueries or multiple joins."
       },
       {
         "type": "code",
-        "value": "SELECT department_id, SUM(sales) AS total_sales\nFROM sales_data\nGROUP BY department_id;"
+        "value": "SELECT \n  o.order_id, \n  o.customer_id, \n  oi.item_id, \n  oi.price\nFROM orders o\nJOIN order_items oi ON o.order_id = oi.order_id\nWHERE oi.price = (\n  SELECT MIN(price) FROM order_items WHERE order_id = o.order_id\n);"
       },
       {
         "type": "paragraph",
-        "value": "This query groups data by department_id and calculates the total sales for each group. Notice that the result set has one row per department."
-      },
-      {
-        "type": "paragraph",
-        "value": "Window functions, on the other hand, do not reduce the number of rows returned. Instead, they perform calculations across a 'window' of rows related to the current row according to your specification. They are often used with the OVER() clause."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, to calculate the total sales per department but still show each individual sale row, you can use:"
+        "value": "While the above query works, it can be inefficient on large datasets because it uses a subquery for each row. Instead, we can use the ROW_NUMBER() window function to rank items by price within each order and then select only the first-ranked item."
       },
       {
         "type": "code",
-        "value": "SELECT\n  department_id,\n  sales,\n  SUM(sales) OVER (PARTITION BY department_id) AS total_sales_per_dept\nFROM sales_data;"
+        "value": "WITH RankedItems AS (\n  SELECT \n    order_id, \n    item_id, \n    price,\n    ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY price ASC) AS rn\n  FROM order_items\n)\nSELECT \n  o.order_id, \n  o.customer_id, \n  ri.item_id, \n  ri.price\nFROM orders o\nJOIN RankedItems ri ON o.order_id = ri.order_id\nWHERE ri.rn = 1;"
       },
       {
         "type": "paragraph",
-        "value": "Here, SUM(sales) OVER (PARTITION BY department_id) calculates the total sales per department but keeps all rows. This means each row shows the individual sale plus the total sales for its department."
+        "value": "Explanation:\n- The `ROW_NUMBER()` function assigns a rank to each item in `order_items` partitioned by `order_id` and ordered by price.\n- The CTE (Common Table Expression) `RankedItems` acts like a temporary result set.\n- We then join the orders with `RankedItems`, but filter to keep only rows where `rn = 1` (the lowest priced item per order)."
       },
       {
         "type": "paragraph",
-        "value": "When to use each?"
+        "value": "This approach reduces the number of subqueries and helps databases optimize execution. It is generally easier to read and maintain, especially for complex joins involving ranking or filtering grouped data."
       },
       {
         "type": "paragraph",
-        "value": "Use aggregate functions when you want to reduce data by grouping rows and getting a single summary value per group."
+        "value": "Window functions are supported in popular SQL databases like PostgreSQL, MySQL 8.0+, SQL Server, and Oracle. Experimenting with these functions can greatly enhance your SQL query performance and clarity."
       },
       {
         "type": "paragraph",
-        "value": "Use window functions when you want to calculate aggregates without losing the detail of individual rows. This is helpful for running totals, ranking, moving averages, and comparing each row to a group."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another example: Suppose you want to rank employees by their salary within each department:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  employee_id,\n  department_id,\n  salary,\n  RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query uses the window function RANK() to assign a rank based on salary within each department. You get the ranking without losing any employee data."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, aggregate functions simplify data by grouping and summarizing. Window functions keep row details while adding your desired calculations. Both are essential tools in SQL for data analysis."
+        "value": "In summary, using window functions in place of complex joins or subqueries can lead to faster and cleaner SQL queries. Start incorporating ROW_NUMBER(), RANK(), and other window functions in your queries today to optimize performance."
       }
     ]
   },
   {
-    "slug": "optimizing-query-performance-by-analyzing-execution-plans-in-sql",
-    "title": "Optimizing Query Performance by Analyzing Execution Plans in SQL",
+    "slug": "mastering-sql-window-functions-advanced-error-handling-techniques",
+    "title": "Mastering SQL Window Functions: Advanced Error Handling Techniques",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to improve your SQL query performance by understanding and analyzing execution plans. This beginner-friendly guide explains key concepts and provides practical tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how to effectively handle errors and unexpected results when using SQL window functions to write safer and more reliable queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=HhvdQhERlH4",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you write SQL queries, the database engine decides how to execute them. This decision happens through an \"execution plan.\" Understanding and analyzing these plans is crucial for optimizing query performance, especially if your queries start running slowly."
+        "value": "SQL window functions are powerful for performing calculations across sets of rows related to the current row. However, when working with large datasets or complex queries, errors like division by zero, NULL values, or unexpected partitioning can cause your window function queries to fail or return inaccurate results. This article covers advanced, yet beginner-friendly, techniques to handle these errors gracefully."
       },
       {
         "type": "paragraph",
-        "value": "An execution plan is a roadmap showing how the database will retrieve or update data. It includes details like which indexes it uses, join types, and the order of operations. Analyzing execution plans helps you spot inefficient parts and improve your query."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple way to get the execution plan for a query in SQL Server:"
+        "value": "A common error when using window functions is division by zero. For example, if you calculate a ratio using window sums, some partitions might have zero values leading to errors. Using conditional logic like CASE or NULLIF inside window functions can prevent this."
       },
       {
         "type": "code",
-        "value": "SET SHOWPLAN_TEXT ON;\nGO\nSELECT * FROM Orders WHERE CustomerID = 'ALFKI';\nGO\nSET SHOWPLAN_TEXT OFF;\nGO"
+        "value": "SELECT\n  user_id,\n  SUM(sales) AS total_sales,\n  SUM(orders) AS total_orders,\n  -- Prevent division by zero using NULLIF\n  SUM(sales) / NULLIF(SUM(orders), 0) AS avg_sale_per_order\nFROM sales_data\nGROUP BY user_id;"
       },
       {
         "type": "paragraph",
-        "value": "This command doesn't run the query but returns the estimated execution plan in text format. You can see indexes used, scans, seeks, and joins. Look for costly operations like table scans—these suggest the query is reading the entire table, which is slow."
+        "value": "In this example, NULLIF(SUM(orders), 0) returns NULL if SUM(orders) is zero, avoiding a division by zero error and returning NULL safely instead."
       },
       {
         "type": "paragraph",
-        "value": "In other popular databases like MySQL, you can use the EXPLAIN keyword:"
+        "value": "Another frequent issue is handling NULL values within window functions like ROW_NUMBER(), RANK(), or aggregates. If NULLs are not handled properly, they might cause unexpected results or misinterpretations."
       },
       {
         "type": "code",
-        "value": "EXPLAIN SELECT * FROM Orders WHERE CustomerID = 'ALFKI';"
+        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  -- Use COALESCE to replace NULL salaries with 0\n  AVG(COALESCE(salary, 0)) OVER (PARTITION BY department) AS avg_salary_by_dept\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "The output will show columns like 'type' (which tells you the join or scan type), 'possible_keys' (suggested indexes), and 'rows' (estimated rows scanned). Aim for 'type' values like 'ref' or 'const' which are efficient, and avoid 'ALL' which means a full table scan."
+        "value": "The COALESCE function helps by replacing NULL salaries with 0 before calculating the average, ensuring the window function doesn’t return NULL due to missing values."
       },
       {
         "type": "paragraph",
-        "value": "Common tips to improve your queries based on execution plan findings include:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Adding indexes on columns used in JOINs and WHERE clauses.\n2. Avoiding SELECT * and instead selecting only needed columns.\n3. Simplifying complex joins or breaking queries into smaller parts.\n4. Updating statistics which help the query optimizer choose better plans."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is an example of creating an index to optimize the previous query:"
+        "value": "Partitioning your data incorrectly can lead to wrong window function results or performance issues. Always verify your PARTITION BY clause matches the logical grouping intended for your analysis."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_customerid ON Orders (CustomerID);"
+        "value": "SELECT\n  sales_region,\n  sales_person,\n  sales_amount,\n  -- Correct partitioning by sales_region to rank top performers\n  RANK() OVER (PARTITION BY sales_region ORDER BY sales_amount DESC) AS regional_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "After adding the index, rerun the EXPLAIN or execution plan to see if the database is using an index seek instead of a full scan. This typically results in faster query performance."
+        "value": "Incorrect or omitted partitions might give global ranking instead of region-wise ranking, which could mislead your report users."
       },
       {
         "type": "paragraph",
-        "value": "In summary, execution plans are essential tools for understanding and fixing slow SQL queries. By learning how to read these plans and applying optimizations like indexing and query rewriting, you can significantly improve your database performance even as a beginner."
+        "value": "Lastly, use TRY_CAST or equivalent functions in your SQL dialect to catch data conversion errors within window functions. This is especially helpful when you work with inconsistent input data types."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  customer_id,\n  purchase_date,\n  TRY_CAST(purchase_amount AS DECIMAL(10,2)) AS amount,\n  SUM(TRY_CAST(purchase_amount AS DECIMAL(10,2))) OVER (PARTITION BY customer_id ORDER BY purchase_date) AS running_total\nFROM purchases;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using TRY_CAST ensures that invalid numbers do not break your window sum calculation, instead they will return NULL safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to master advanced error handling with SQL window functions: use NULLIF and CASE to prevent division errors, COALESCE for NULL values, carefully define PARTITION BY clauses, and leverage safe casting functions. These techniques make your SQL queries robust, maintainable, and reliable."
       }
     ]
   }

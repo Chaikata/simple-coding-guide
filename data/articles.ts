@@ -32354,5 +32354,287 @@ export const articles = [
         "value": "In summary, aggregate functions simplify data by grouping and summarizing. Window functions keep row details while adding your desired calculations. Both are essential tools in SQL for data analysis."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-javascript-optimization-techniques-for-faster-web-apps",
+    "title": "Mastering Asynchronous JavaScript: Optimization Techniques for Faster Web Apps",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn beginner-friendly asynchronous JavaScript optimization techniques to build faster, more efficient web applications using promises, async/await, and concurrency controls.",
+    "videoUrl": "https://www.youtube.com/watch?v=Mus_vwhTCq0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous JavaScript allows your web applications to perform tasks without freezing the user interface. This results in smoother, faster experiences. In this tutorial, you'll learn beginner-friendly optimization techniques including the use of Promises, async/await, and concurrency control to make your web apps more efficient."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's explore how asynchronous code works using Promises. Promises let you handle asynchronous operations like data fetching without blocking the main thread."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData(url) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      resolve(`Data from ${url}`);\n    }, 1000);\n  });\n}\n\nfetchData('https://api.example.com').then(data => {\n  console.log(data);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "While Promises are powerful, async/await syntax makes writing and reading asynchronous code more straightforward, behaving like synchronous code but non-blocking underneath."
+      },
+      {
+        "type": "code",
+        "value": "async function getData() {\n  try {\n    const data = await fetchData('https://api.example.com');\n    console.log(data);\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "One common optimization is running multiple asynchronous tasks concurrently instead of sequentially. Using Promise.all will run the promises in parallel and wait for all to complete."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchMultiple() {\n  const urls = ['url1', 'url2', 'url3'];\n  const promises = urls.map(url => fetchData(url));\n  const results = await Promise.all(promises);\n  console.log(results);\n}\n\nfetchMultiple();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, handling too many concurrent tasks can overwhelm your resources or server. To optimize, control concurrency by limiting how many promises run at once using libraries like p-limit, or by writing simple concurrency control yourself."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example controlling concurrency with async/await by processing URLs in batches."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithConcurrencyLimit(urls, limit) {\n  let i = 0;\n  const results = [];\n  async function worker() {\n    while(i < urls.length) {\n      const current = i++;\n      results[current] = await fetchData(urls[current]);\n    }\n  }\n\n  const workers = Array(limit).fill(worker).map(w => w());\n  await Promise.all(workers);\n  return results;\n}\n\nfetchWithConcurrencyLimit(['url1', 'url2', 'url3', 'url4'], 2).then(console.log);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, mastering asynchronous JavaScript helps you build faster, more responsive web apps by:\n- Using Promises and async/await for readable async code\n- Running multiple operations in parallel with Promise.all\n- Controlling concurrency to optimize resource use\nImplement these basic techniques to optimize your projects and improve user experience."
+      }
+    ]
+  },
+  {
+    "slug": "handling-complex-nullish-values-in-typescript-edge-cases",
+    "title": "Handling Complex Nullish Values in TypeScript Edge Cases",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to handle complex nullish values in TypeScript and avoid common pitfalls with edge cases in your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=Bllh21sG4k8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with TypeScript, handling null and undefined values correctly is crucial to avoid runtime errors. The nullish coalescing operator (??) is a helpful tool, but complex data structures or edge cases can lead to unexpected issues. In this article, we'll explore how to handle complex nullish values safely and effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "The nullish coalescing operator (??) returns the right-hand side operand when the left-hand side operand is either null or undefined. Unlike the logical OR operator (||), it does not treat false, 0, or empty strings as nullish. Here's an example:"
+      },
+      {
+        "type": "code",
+        "value": "const value = null ?? 'default';\nconsole.log(value); // Output: 'default'\n\nconst value2 = 0 ?? 42;\nconsole.log(value2); // Output: 0 (because 0 is NOT nullish)"
+      },
+      {
+        "type": "paragraph",
+        "value": "While ?? works well with simple values, handling nested or complex objects with possible nullish properties can be tricky. Consider the following example where we have a deeply nested object that might have undefined or null properties:"
+      },
+      {
+        "type": "code",
+        "value": "interface UserProfile {\n  name: string | null;\n  settings?: {\n    theme: string | null;\n    notifications?: boolean | null;\n  } | null;\n}\n\nconst user: UserProfile = {\n  name: null,\n  settings: {\n    theme: null,\n    notifications: undefined\n  }\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Trying to assign default values using ?? might not cover all cases because sometimes you might want to provide a default for nested properties that could be undefined or null. Here's how you can safely handle this:"
+      },
+      {
+        "type": "code",
+        "value": "const userName = user.name ?? 'Anonymous';\nconst userTheme = user.settings?.theme ?? 'light';\nconst userNotifications = user.settings?.notifications ?? true;\n\nconsole.log({ userName, userTheme, userNotifications });\n// Output: { userName: 'Anonymous', userTheme: 'light', userNotifications: true }"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice the use of optional chaining (?.) before the nullish coalescing operator (??). This safely prevents errors if properties like settings are null or undefined. Another common edge case is when the property exists but is intentionally set to null or false. The nullish coalescing operator correctly distinguishes these cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a practical tip: avoid combining ?? and || in the same expression to prevent confusing results. For example:"
+      },
+      {
+        "type": "code",
+        "value": "const num = 0;\nconst result = num ?? 42 || 100;\nconsole.log(result); // Output: 0, because '??' has lower precedence than '||', which can cause confusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, use parentheses to clarify precedence or avoid mixing these operators:"
+      },
+      {
+        "type": "code",
+        "value": "const resultCorrect = (num ?? 42) || 100;\nconsole.log(resultCorrect); // Output: 100 because num is 0, so 0 ?? 42 === 0, then 0 || 100 === 100"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, when handling complex nullish values in TypeScript:\n- Use ?? instead of || to treat false, 0, and '' as valid values.\n- Use optional chaining (?.) before ?? for nested properties.\n- Avoid mixing ?? and || without parentheses.\n- Explicitly handle null or undefined in your types for clarity.\nHandling these edge cases properly makes your code safer, cleaner, and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-type-errors-in-python-data-models",
+    "title": "Understanding Type Errors in Python Data Models: Best Practices and Solutions",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to identify, understand, and fix type errors in Python data models with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=4-xNQQIgz50",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Type errors are common when working with data models in Python, especially for beginners. These errors occur when a value of an unexpected type is passed or assigned, causing the program to fail or behave unexpectedly. Understanding how Python handles data types and using best practices to avoid and fix type errors will help you write more robust and maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python is a dynamically typed language, which means you don't need to declare the type of a variable explicitly. However, this flexibility sometimes leads to type errors if you use values incorrectly. For example, trying to add a string to a number will raise a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "x = 10\nname = \"Alice\"\n\n# This will cause a TypeError because you cannot add int and str\n# result = x + name  # Uncommenting this line will raise an error\n\n# Correct way: Convert int to str before concatenation\nresult = str(x) + name\nprint(result)  # Output: 10Alice"
+      },
+      {
+        "type": "paragraph",
+        "value": "When building data models, such as classes representing entities, it's important to ensure the attributes have the expected types. Python 3.5+ introduced type hints to help you specify the expected types for variables and function arguments. While Python does not enforce these types at runtime, tools like mypy can check them for you."
+      },
+      {
+        "type": "code",
+        "value": "from typing import Optional\n\nclass User:\n    def __init__(self, name: str, age: Optional[int] = None):\n        self.name: str = name\n        self.age: Optional[int] = age\n\n    def greet(self) -> str:\n        age_info = f\" who is {self.age} years old\" if self.age else \"\"\n        return f\"Hello, {self.name}{age_info}!\"\n\nuser = User(\"Alice\", 30)\nprint(user.greet())  # Hello, Alice who is 30 years old!"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you accidentally provide wrong types when creating instances or calling methods, this may cause unexpected behavior or type errors later in the program. You can add runtime type checks inside your methods if you want to catch errors earlier."
+      },
+      {
+        "type": "code",
+        "value": "class UserWithCheck:\n    def __init__(self, name: str, age: Optional[int] = None):\n        if not isinstance(name, str):\n            raise TypeError(f\"Expected 'name' to be str, got {type(name).__name__}\")\n        if age is not None and not isinstance(age, int):\n            raise TypeError(f\"Expected 'age' to be int or None, got {type(age).__name__}\")\n        self.name = name\n        self.age = age\n\nuser = UserWithCheck(\"Bob\", \"thirty\")  # This will raise a TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another best practice is to use data validation libraries like Pydantic or Marshmallow, which provide built-in validation and clear error messages for type mismatches. These libraries make it easier to define data models with strict type checks and data parsing."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to handle type errors effectively in Python data models:\n- Use type hints to document expected types.\n- Consider using static type checkers like mypy.\n- Add explicit runtime checks if needed for early error detection.\n- Use data validation libraries for robust and scalable models.\n- Always test your code with different input types to catch errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these practices, you’ll write Python code that is easier to debug and less prone to common type-related bugs."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-complex-joins-with-window-functions",
+    "title": "Optimizing Complex Joins with Window Functions for Faster SQL Queries",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to optimize complex joins and improve query performance with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with complex SQL queries, joins can sometimes slow down performance, especially if you are joining multiple tables with large datasets. One effective technique to optimize complex joins is by leveraging window functions. Window functions allow you to perform calculations across rows related to the current row without reducing the result set, which can simplify queries and reduce redundant data processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore how to use window functions like ROW_NUMBER(), RANK(), and PARTITION BY to optimize complex joins, improve readability, and potentially speed up your SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a scenario where you have two tables: `orders` and `order_items`. You want to join these tables but only select the first item for each order based on the item's price — a task that can involve complex subqueries or multiple joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  o.order_id, \n  o.customer_id, \n  oi.item_id, \n  oi.price\nFROM orders o\nJOIN order_items oi ON o.order_id = oi.order_id\nWHERE oi.price = (\n  SELECT MIN(price) FROM order_items WHERE order_id = o.order_id\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "While the above query works, it can be inefficient on large datasets because it uses a subquery for each row. Instead, we can use the ROW_NUMBER() window function to rank items by price within each order and then select only the first-ranked item."
+      },
+      {
+        "type": "code",
+        "value": "WITH RankedItems AS (\n  SELECT \n    order_id, \n    item_id, \n    price,\n    ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY price ASC) AS rn\n  FROM order_items\n)\nSELECT \n  o.order_id, \n  o.customer_id, \n  ri.item_id, \n  ri.price\nFROM orders o\nJOIN RankedItems ri ON o.order_id = ri.order_id\nWHERE ri.rn = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Explanation:\n- The `ROW_NUMBER()` function assigns a rank to each item in `order_items` partitioned by `order_id` and ordered by price.\n- The CTE (Common Table Expression) `RankedItems` acts like a temporary result set.\n- We then join the orders with `RankedItems`, but filter to keep only rows where `rn = 1` (the lowest priced item per order)."
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach reduces the number of subqueries and helps databases optimize execution. It is generally easier to read and maintain, especially for complex joins involving ranking or filtering grouped data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions are supported in popular SQL databases like PostgreSQL, MySQL 8.0+, SQL Server, and Oracle. Experimenting with these functions can greatly enhance your SQL query performance and clarity."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using window functions in place of complex joins or subqueries can lead to faster and cleaner SQL queries. Start incorporating ROW_NUMBER(), RANK(), and other window functions in your queries today to optimize performance."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-advanced-error-handling-techniques",
+    "title": "Mastering SQL Window Functions: Advanced Error Handling Techniques",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors and unexpected results when using SQL window functions to write safer and more reliable queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=HhvdQhERlH4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful for performing calculations across sets of rows related to the current row. However, when working with large datasets or complex queries, errors like division by zero, NULL values, or unexpected partitioning can cause your window function queries to fail or return inaccurate results. This article covers advanced, yet beginner-friendly, techniques to handle these errors gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common error when using window functions is division by zero. For example, if you calculate a ratio using window sums, some partitions might have zero values leading to errors. Using conditional logic like CASE or NULLIF inside window functions can prevent this."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  user_id,\n  SUM(sales) AS total_sales,\n  SUM(orders) AS total_orders,\n  -- Prevent division by zero using NULLIF\n  SUM(sales) / NULLIF(SUM(orders), 0) AS avg_sale_per_order\nFROM sales_data\nGROUP BY user_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, NULLIF(SUM(orders), 0) returns NULL if SUM(orders) is zero, avoiding a division by zero error and returning NULL safely instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another frequent issue is handling NULL values within window functions like ROW_NUMBER(), RANK(), or aggregates. If NULLs are not handled properly, they might cause unexpected results or misinterpretations."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  -- Use COALESCE to replace NULL salaries with 0\n  AVG(COALESCE(salary, 0)) OVER (PARTITION BY department) AS avg_salary_by_dept\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The COALESCE function helps by replacing NULL salaries with 0 before calculating the average, ensuring the window function doesn’t return NULL due to missing values."
+      },
+      {
+        "type": "paragraph",
+        "value": "Partitioning your data incorrectly can lead to wrong window function results or performance issues. Always verify your PARTITION BY clause matches the logical grouping intended for your analysis."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sales_region,\n  sales_person,\n  sales_amount,\n  -- Correct partitioning by sales_region to rank top performers\n  RANK() OVER (PARTITION BY sales_region ORDER BY sales_amount DESC) AS regional_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Incorrect or omitted partitions might give global ranking instead of region-wise ranking, which could mislead your report users."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, use TRY_CAST or equivalent functions in your SQL dialect to catch data conversion errors within window functions. This is especially helpful when you work with inconsistent input data types."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  customer_id,\n  purchase_date,\n  TRY_CAST(purchase_amount AS DECIMAL(10,2)) AS amount,\n  SUM(TRY_CAST(purchase_amount AS DECIMAL(10,2))) OVER (PARTITION BY customer_id ORDER BY purchase_date) AS running_total\nFROM purchases;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using TRY_CAST ensures that invalid numbers do not break your window sum calculation, instead they will return NULL safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to master advanced error handling with SQL window functions: use NULLIF and CASE to prevent division errors, COALESCE for NULL values, carefully define PARTITION BY clauses, and leverage safe casting functions. These techniques make your SQL queries robust, maintainable, and reliable."
+      }
+    ]
   }
 ];
