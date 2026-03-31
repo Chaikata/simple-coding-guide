@@ -3407,5 +3407,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "c-student-grade-management-system",
+    "title": "C++ Student Grade Management System",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Build a mini-project that manages student grades by storing names and scores, calculating averages, and allowing queries for top students.",
+    "prompt": "Create a C++ program that implements a simple Student Grade Management System. Your program should allow adding multiple students with their names and a list of their scores in different subjects. Implement functionality to calculate each student's average score and find the top student(s) with the highest average score. The program should support the following operations: 1) Add a student with scores, 2) Calculate and display the average score for each student, 3) Display the student(s) with the highest average score. Use appropriate data structures to store student data efficiently.",
+    "guidance": [
+      "Use a struct or class to represent a student with a name and a vector of scores.",
+      "Keep all student records in a vector or map for easy iteration and lookup.",
+      "Write separate functions for adding students, calculating averages, and finding top scorers."
+    ],
+    "hints": [
+      "Consider using std::vector to store multiple scores per student.",
+      "To find the top student(s), keep track of the highest average while iterating through all students.",
+      "Use float or double for average scores to maintain precision."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n#include <limits>\n\nstruct Student {\n    std::string name;\n    std::vector<int> scores;\n};\n\nclass GradeManager {\n    std::vector<Student> students;\npublic:\n    void addStudent(const std::string& name, const std::vector<int>& scores) {\n        // TODO: Add student to the records\n    }\n\n    void printAverages() {\n        // TODO: Calculate and print average scores\n    }\n\n    void printTopStudents() {\n        // TODO: Find and print the student(s) with the highest average\n    }\n};\n\nint main() {\n    GradeManager gm;\n    // Example usage:\n    gm.addStudent(\"Alice\", {85, 90, 78});\n    gm.addStudent(\"Bob\", {92, 88, 95});\n    gm.addStudent(\"Charlie\", {70, 80, 65});\n    gm.printAverages();\n    gm.printTopStudents();\n    return 0;\n}",
+    "expectedOutput": "Alice: Average score = 84.33\nBob: Average score = 91.67\nCharlie: Average score = 71.67\nTop student(s):\nBob with average score = 91.67",
+    "concepts": [
+      "Classes and Structs",
+      "Vectors",
+      "Basic Algorithms (averaging, max finding)"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "design-and-optimize-a-sales-database-schema-with-advanced-queries",
+    "title": "Design and Optimize a Sales Database Schema with Advanced Queries",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "data-modeling",
+    "description": "Create a normalized database schema for a retail sales system that handles customers, products, orders, and shipments. Then, write optimized SQL queries to retrieve key business insights including sales trends, customer segmentation, and shipment statuses.",
+    "prompt": "You are tasked with building a comprehensive sales database system for an e-commerce platform. Your mini project has two parts:\n\nPart 1: Design a normalized relational schema to manage customers, products, categories, orders, order items, and shipments. Ensure minimal redundancy and support for historical data tracking.\n\nPart 2: Using your schema, write the following optimized SQL queries:\n- Retrieve the top 5 customers by total purchase value in the last 12 months,\n- Identify products that have not been ordered in the last 6 months,\n- Generate a monthly summary report showing total revenue, number of orders, and shipment delays.\n\nDeliver the DDL statements for your schema and the SQL queries requested.",
+    "guidance": [
+      "Normalize tables to at least 3NF to reduce data redundancy and improve data integrity.",
+      "Include appropriate primary keys, foreign keys, and indexes to optimize query performance.",
+      "Use window functions and aggregation to efficiently calculate rankings and summary statistics."
+    ],
+    "hints": [
+      "Consider a separate table to represent order items since orders can contain multiple products.",
+      "Track shipment status and estimated delivery dates to analyze delays effectively.",
+      "Use DATE functions to filter data based on recent timeframes like last 6 or 12 months."
+    ],
+    "starterCode": "/* Sample table structure for customers and products */\nCREATE TABLE customers (\n  customer_id SERIAL PRIMARY KEY,\n  first_name VARCHAR(50),\n  last_name VARCHAR(50),\n  email VARCHAR(100) UNIQUE,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE products (\n  product_id SERIAL PRIMARY KEY,\n  name VARCHAR(100),\n  category_id INT,\n  price NUMERIC(10,2),\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n/* Add additional tables such as categories, orders, order_items, and shipments */",
+    "expectedOutput": "/* Expected results from queries might include: */\n-- Top 5 customers with total purchase amount ordered from highest to lowest\ncustomer_id | total_spent\n------------|------------\n23          | 12500.00\n7           | 9800.50\n...\n\n-- List of unused products in the last 6 months\nproduct_id | name\n-----------|------\n14         | Vintage Vase\n33         | Leather Bag\n...\n\n-- Monthly sales report\nmonth    | total_revenue | order_count | avg_shipment_delay\n---------|---------------|-------------|--------------------\n2023-01  | 150000.00     | 1200        | 2.3\n2023-02  | 175000.00     | 1350        | 1.9\n...",
+    "concepts": [
+      "Normalized schema design",
+      "Relational database modeling",
+      "SQL aggregation and window functions",
+      "Performance optimization with indexes"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-function-to-calculate-average-scores-with-better-readability-and-efficiency",
+    "title": "Refactor a Function to Calculate Average Scores with Better Readability and Efficiency",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve a messy JavaScript function that calculates average scores from an array of student objects, making the code cleaner, more efficient, and easier to understand without changing its behavior.",
+    "prompt": "You are given a function that calculates the average score of students from an array of student objects. The function works correctly but is hard to read, contains redundant operations, and could be optimized. Refactor the function to improve readability, remove unnecessary steps, and maintain the same output behavior. Do not change the function signature or the way it receives input.",
+    "guidance": [
+      "Focus on simplifying loops and conditionals.",
+      "Use built-in array methods where appropriate to improve clarity.",
+      "Ensure the function handles empty input arrays gracefully."
+    ],
+    "hints": [
+      "Consider using Array.prototype.reduce to aggregate total scores.",
+      "Avoid recalculating constants or repeatedly parsing the same data.",
+      "Use meaningful variable names and remove unused variables."
+    ],
+    "starterCode": "function calculateAverage(students) {\n  let total = 0;\n  let count = 0;\n\n  for (let i = 0; i < students.length; i++) {\n    if (students[i].score != null) {\n      total += Number(students[i].score);\n      count++;\n    }\n  }\n\n  if (count === 0) {\n    return 0;\n  }\n\n  let average = total / count;\n  return average.toFixed(2) * 1; // Convert string to number\n}",
+    "expectedOutput": "calculateAverage([{name: 'Alice', score: 85}, {name: 'Bob', score: 90}, {name: 'Carol', score: 95}]) // 90",
+    "concepts": [
+      "code refactoring",
+      "array methods",
+      "code readability",
+      "JavaScript basics"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-real-time-collaborative-text-editor-with-operational-transformation-in-javascript",
+    "title": "Build a Real-Time Collaborative Text Editor with Operational Transformation in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a real-time collaborative text editor that allows multiple users to edit a shared document simultaneously using Operational Transformation (OT) to handle concurrent changes and keep the document state consistent across clients.",
+    "prompt": "Build a JavaScript application that implements a real-time collaborative text editor supporting multiple users editing the same document concurrently. Use Operational Transformation (OT) to merge concurrent text changes without conflicts, ensuring all users see a consistent document state. Your code should manage insertion and deletion operations, apply transformations to concurrent operations, and broadcast updates to connected clients. The application should expose functions for applying local edits, receiving remote operations, and maintaining the current document state. Assume a simplified environment without UI rendering; focus on the core OT algorithm and state synchronization logic.",
+    "guidance": [
+      "Implement data structures to represent text operations (insert, delete) and define how to transform operations against each other.",
+      "Maintain a consistent document state and apply incoming remote operations after transforming them based on local changes.",
+      "Design functions for applying local edits and integrating remote edits to handle concurrent changes robustly."
+    ],
+    "hints": [
+      "Start by defining the operation format, e.g., {type: 'insert'|'delete', position: number, char?: string}.",
+      "Research simple Operational Transformation algorithms such as Jupiter OT for text documents.",
+      "Test your implementation by simulating sequences of local and remote operations with overlapping edits."
+    ],
+    "starterCode": "class TextEditorOT {\n  constructor() {\n    this.document = '';\n    this.history = [];\n  }\n\n  // Apply a local edit operation (insert/delete)\n  applyLocalOperation(op) {\n    // Your code here\n  }\n\n  // Receive and integrate a remote operation\n  applyRemoteOperation(op) {\n    // Your code here\n  }\n\n  // Transform an operation against another concurrent operation\n  transform(op1, op2) {\n    // Your code here\n  }\n\n  getDocument() {\n    return this.document;\n  }\n}",
+    "expectedOutput": "After applying the following operations:\n1) Local insert 'A' at position 0\n2) Remote insert 'B' at position 0 concurrently\nThe document should be consistent for all users as either 'AB' or 'BA' depending on transformation order, demonstrating conflict resolution.\nFinal document example: 'AB'",
+    "concepts": [
+      "Operational Transformation",
+      "Concurrency Control",
+      "Data Structures",
+      "Text Processing"
+    ],
+    "estimatedTime": "120 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-high-performance-memoized-recursive-function-for-multivariate-fibonacci-sequence",
+    "title": "Build a High-Performance Memoized Recursive Function for Multivariate Fibonacci Sequence",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a Python function that computes terms of a custom multivariate Fibonacci sequence with dynamic step parameters and optimized with memoization for high performance.",
+    "prompt": "Design and implement a Python function `multi_fib(n, k)` that returns the nth term of a generalized Fibonacci sequence where each term is the sum of the previous k terms. For example, if k=2, it's the classic Fibonacci sequence; if k=3, each term is the sum of the previous three terms, and so forth. The base cases for indices less than or equal to zero should be 0, and for indices 1 through k, the terms should each be 1. Ensure your function uses memoization to optimize performance for large n and k values.",
+    "guidance": [
+      "Implement base cases clearly to handle indices less than or equal to zero, and initial terms up to k.",
+      "Use memoization (caching) to avoid recomputing previously calculated terms and achieve optimal time complexity.",
+      "Ensure your function can handle large values of n and k efficiently without exceeding recursion limits."
+    ],
+    "hints": [
+      "Use a dictionary or functools.lru_cache for memoizing recursive calls.",
+      "Think carefully about the recursive relation: multi_fib(n, k) = sum of multi_fib(n-1, k) + multi_fib(n-2, k) + ... + multi_fib(n-k, k).",
+      "Consider iteration instead of pure recursion if recursion depth is a concern."
+    ],
+    "starterCode": "def multi_fib(n, k):\n    # Your implementation here\n    pass",
+    "expectedOutput": "multi_fib(6, 3) -> 13\nmulti_fib(10, 2) -> 55\nmulti_fib(5, 5) -> 16",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dynamic programming",
+      "mathematical sequences"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-to-remove-redundant-subquery",
+    "title": "Refactor SQL Query to Remove Redundant Subquery",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Optimize a basic SQL query by refactoring it to remove an unnecessary subquery, improving readability and performance without changing the output.",
+    "prompt": "You are given a SQL query that selects employees from the 'employees' table with a salary greater than 50000. However, the query uses a redundant subquery structure. Refactor the query to achieve the same results but without the unnecessary subquery, making it cleaner and more efficient.",
+    "guidance": [
+      "Analyze the query to identify where the subquery is not needed.",
+      "Rewrite the query using a straightforward WHERE clause.",
+      "Ensure the output remains the same before and after refactoring."
+    ],
+    "hints": [
+      "Is the subquery filtering data in a way that can be done directly in the WHERE clause?",
+      "Consider if flattening the query improves readability without changing results."
+    ],
+    "starterCode": "SELECT * FROM (SELECT * FROM employees) AS emp WHERE salary > 50000;",
+    "expectedOutput": "All rows from 'employees' where salary is greater than 50000, the same as the original query but retrieved using a simpler query structure.",
+    "concepts": [
+      "simple SELECT",
+      "WHERE clause",
+      "subqueries",
+      "query optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
