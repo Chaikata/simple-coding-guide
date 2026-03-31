@@ -32636,5 +32636,458 @@ export const articles = [
         "value": "In summary, to master advanced error handling with SQL window functions: use NULLIF and CASE to prevent division errors, COALESCE for NULL values, carefully define PARTITION BY clauses, and leverage safe casting functions. These techniques make your SQL queries robust, maintainable, and reliable."
       }
     ]
+  },
+  {
+    "slug": "building-a-real-time-collaborative-whiteboard-with-javascript-and-websockets",
+    "title": "Building a Real-Time Collaborative Whiteboard with JavaScript and WebSockets",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create a real-time collaborative whiteboard using JavaScript and WebSockets. This beginner-friendly tutorial covers setting up a server and client to draw and share sketches live.",
+    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, you will learn how to build a real-time collaborative whiteboard application using JavaScript. The goal is to allow multiple users to draw on the same canvas simultaneously and see each other's drawings live. We'll use WebSockets to establish a two-way communication channel between clients and the server."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll create a simple WebSocket server with Node.js using the popular `ws` library, and a client side application with HTML5 Canvas and JavaScript to handle drawing and sending coordinates in real-time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Set up the WebSocket server"
+      },
+      {
+        "type": "paragraph",
+        "value": "Create a new Node.js project and install the `ws` package:"
+      },
+      {
+        "type": "code",
+        "value": "npm init -y\nnpm install ws"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, create a file named `server.js` and add the following code to start a WebSocket server that broadcasts messages to all connected clients:"
+      },
+      {
+        "type": "code",
+        "value": "const WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', function connection(ws) {\n  ws.on('message', function incoming(message) {\n    // Broadcast incoming message to all clients except sender\n    wss.clients.forEach(function each(client) {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.send(JSON.stringify({ type: 'info', message: 'Welcome to the collaborative whiteboard!' }));\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+      },
+      {
+        "type": "paragraph",
+        "value": "This server listens for WebSocket connections on port 8080. When a client sends drawing data, it broadcasts that data to all other connected clients."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Create the HTML and client JavaScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "Create an `index.html` file with a canvas element and some simple styles to fill the screen:"
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Collaborative Whiteboard</title>\n  <style>\n    body, html {\n      margin: 0;\n      height: 100%;\n      overflow: hidden;\n    }\n    canvas {\n      display: block;\n      background: #fff;\n      touch-action: none; /* Prevent scrolling on touch devices while drawing */\n    }\n  </style>\n</head>\n<body>\n  <canvas id=\"board\"></canvas>\n\n  <script src=\"script.js\"></script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, add the drawing and WebSocket client logic in a `script.js` file:"
+      },
+      {
+        "type": "code",
+        "value": "const canvas = document.getElementById('board');\nconst ctx = canvas.getContext('2d');\n\n// Resize canvas to fill the window\nfunction resize() {\n  canvas.width = window.innerWidth;\n  canvas.height = window.innerHeight;\n}\nwindow.addEventListener('resize', resize);\nresize();\n\n// Set drawing parameters\nctx.lineWidth = 2;\nctx.lineCap = 'round';\nctx.strokeStyle = '#000';\n\nlet drawing = false;\nlet currentPos = { x: 0, y: 0 };\n\n// Setup WebSocket connection\nconst socket = new WebSocket('ws://localhost:8080');\n\nsocket.addEventListener('open', () => {\n  console.log('Connected to WebSocket server');\n});\n\nsocket.addEventListener('message', (event) => {\n  const data = JSON.parse(event.data);\n  if(data.type === 'draw') {\n    drawLine(data.from.x, data.from.y, data.to.x, data.to.y);\n  }\n});\n\ncanvas.addEventListener('pointerdown', (event) => {\n  drawing = true;\n  currentPos = { x: event.clientX, y: event.clientY };\n});\n\ncanvas.addEventListener('pointermove', (event) => {\n  if (!drawing) return;\n  const newPos = { x: event.clientX, y: event.clientY };\n\n  // Draw on local canvas\n  drawLine(currentPos.x, currentPos.y, newPos.x, newPos.y);\n\n  // Send drawing data to server\n  socket.send(JSON.stringify({\n    type: 'draw',\n    from: currentPos,\n    to: newPos\n  }));\n\n  currentPos = newPos;\n});\n\ncanvas.addEventListener('pointerup', () => {\n  drawing = false;\n});\n\ncanvas.addEventListener('pointerleave', () => {\n  drawing = false;\n});\n\nfunction drawLine(x1, y1, x2, y2) {\n  ctx.beginPath();\n  ctx.moveTo(x1, y1);\n  ctx.lineTo(x2, y2);\n  ctx.stroke();\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Run the server and open the client"
+      },
+      {
+        "type": "paragraph",
+        "value": "Start the WebSocket server by running:\n\nbash\nnode server.js\n\n\nThen open the `index.html` file in multiple browser tabs or windows. When you draw on one, the lines will appear in real-time on the others."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nYou just built a simple real-time collaborative whiteboard from scratch using JavaScript and WebSockets. This is a great foundation for adding features like user colors, chat, or persistent sessions. Try experimenting with additional functionality to make your whiteboard more powerful!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-memory-leaks-advanced-detection-and-prevention-techniques",
+    "title": "Understanding JavaScript Memory Leaks: Advanced Detection and Prevention Techniques",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to identify, understand, and prevent JavaScript memory leaks with advanced yet beginner-friendly detection techniques.",
+    "videoUrl": "https://www.youtube.com/watch?v=VnHwaku1FHo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in JavaScript happen when your code holds onto memory that it no longer needs, causing the application to use more and more memory over time. This can slow down the app or even cause it to crash. In this article, we will explore what causes memory leaks, how to detect them using advanced techniques, and best practices to prevent them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Causes Memory Leaks?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common causes include: forgotten timers or intervals, global variables accumulating data, closures holding onto large objects unintentionally, and DOM elements not being properly removed. Let's dive into each with examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Leaking with Timers"
+      },
+      {
+        "type": "code",
+        "value": "function start() {\n  setInterval(() => {\n    const bigData = new Array(1000000).fill('*');\n    console.log('Interval running');\n  }, 1000);\n}\n\nstart();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, every second we create a large array inside the interval callback. Since the interval isn't cleared, the callback keeps running, repeatedly creating new data and not releasing memory properly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Advanced Detection Technique: Using Chrome DevTools Memory Snapshots"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Open Chrome DevTools and go to the Memory tab.\n2. Take a heap snapshot before running the suspected code.\n3. Run your JavaScript code.\n4. Take another heap snapshot after some time.\n5. Compare snapshots to identify objects that continue increasing and never get cleaned up."
+      },
+      {
+        "type": "paragraph",
+        "value": "This process helps detect objects that are unintentionally kept in memory. Objects retained but no longer needed indicate a memory leak."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Preventing Memory Leaks: Best Practices"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Clear timers and intervals** when no longer needed:\n"
+      },
+      {
+        "type": "code",
+        "value": "const intervalId = setInterval(() => {\n  // do something\n}, 1000);\n\n// Later, when not needed:\nclearInterval(intervalId);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Avoid global variables** by using function scope or modules.\n3. **Remove event listeners** when elements are removed from the DOM.\n4. **Be careful with closures** holding large data; nullify them if the data is no longer needed.\n5. **Use WeakMap and WeakSet** when managing references that should not prevent garbage collection."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Removing Event Listeners"
+      },
+      {
+        "type": "code",
+        "value": "const button = document.getElementById('myButton');\n\nfunction onClick() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', onClick);\n\n// When removing the button:\nbutton.removeEventListener('click', onClick);\nbutton.remove();"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you forget to remove event listeners before removing DOM elements, the listener can still hold references and cause memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Detecting and preventing memory leaks is essential for optimized JavaScript applications. Using Chrome DevTools heap snapshots helps spot leaks, while good coding practices like clearing timers, removing event listeners, and managing closures carefully will keep your app memory-efficient."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-typescripts-advanced-type-guards-for-robust-error-handling",
+    "title": "Harnessing TypeScript's Advanced Type Guards for Robust Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's advanced type guards to create safer and more reliable error handling in your applications.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of developing robust applications. In TypeScript, one powerful way to handle errors effectively is by using advanced type guards. Type guards help you narrow down the type of a value at runtime, providing better safety and enabling smarter handling of different error types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Imagine you have a function that can throw different kinds of errors, and you want to handle them differently based on their type."
+      },
+      {
+        "type": "code",
+        "value": "class NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NetworkError';\n  }\n}\n\nclass ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction mightThrowError(shouldThrow: boolean) {\n  if (!shouldThrow) return 'Success!';\n  const errorType = Math.random() > 0.5 ? 'network' : 'validation';\n  if (errorType === 'network') {\n    throw new NetworkError('Failed to connect.');\n  } else {\n    throw new ValidationError('Invalid input.');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, in your error handling code, you want to differentiate between these errors. Using TypeScript’s `instanceof` operator, you can create a custom type guard."
+      },
+      {
+        "type": "code",
+        "value": "function isNetworkError(error: unknown): error is NetworkError {\n  return error instanceof NetworkError;\n}\n\nfunction isValidationError(error: unknown): error is ValidationError {\n  return error instanceof ValidationError;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "These type guard functions tell TypeScript exactly what type the error is during conditional checks. Let's see how to use these in a try-catch block:"
+      },
+      {
+        "type": "code",
+        "value": "try {\n  const result = mightThrowError(true);\n  console.log(result);\n} catch (error) {\n  if (isNetworkError(error)) {\n    console.error('Network error occurred:', error.message);\n  } else if (isValidationError(error)) {\n    console.error('Validation error occurred:', error.message);\n  } else {\n    console.error('An unknown error occurred:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this setup, TypeScript understands within each block what type the error has, so you get full type safety and autocompletion benefits. This makes your error handling code more robust and less prone to mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use more advanced techniques like checking for custom properties or discriminated unions if your error objects have specific distinguishing fields."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiError {\n  code: number;\n  message: string;\n  type: 'api';\n}\n\ninterface ClientError {\n  message: string;\n  type: 'client';\n}\n\nfunction isApiError(error: any): error is ApiError {\n  return error?.type === 'api' && typeof error?.code === 'number';\n}\n\nfunction isClientError(error: any): error is ClientError {\n  return error?.type === 'client';\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using these advanced type guards helps you handle various errors precisely and allows your application to react appropriately, improving user experience and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, by harnessing TypeScript’s advanced type guards, you can write safer, clearer, and more robust error handling code that helps catch issues early and handle them gracefully."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-microservices-architecture-python",
+    "title": "Designing Scalable Microservices Architecture in Python: A Step-by-Step Tutorial",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to design scalable microservices architecture in Python with this beginner-friendly step-by-step guide. Build simple services and connect them using REST APIs.",
+    "videoUrl": "https://www.youtube.com/watch?v=CIDNbzm9HhA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices architecture is a popular design pattern that breaks down large applications into smaller, manageable, and independently deployable services. This increases scalability and makes maintenance easier. In this tutorial, we will walk through creating a basic scalable microservices architecture in Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "We will create two simple microservices: a User Service that manages user data, and an Order Service that processes user orders. Both services will communicate over REST APIs using Flask, a lightweight Python web framework."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Set up the User Service"
+      },
+      {
+        "type": "paragraph",
+        "value": "First, install Flask if you haven't already:\n\nbash\npip install Flask\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Create a file called `user_service.py`. This service will store simple user data in memory (for production, replace with a database)."
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify, request\n\napp = Flask(__name__)\n\nusers = {\n    1: {'name': 'Alice'},\n    2: {'name': 'Bob'}\n}\n\n@app.route('/users/<int:user_id>', methods=['GET'])\ndef get_user(user_id):\n    user = users.get(user_id)\n    if user:\n        return jsonify({'id': user_id, 'name': user['name']})\n    return jsonify({'error': 'User not found'}), 404\n\nif __name__ == '__main__':\n    app.run(port=5000)"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can run this with:\n\nbash\npython user_service.py\n\n\nThe user service will run on port 5000."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Set up the Order Service"
+      },
+      {
+        "type": "paragraph",
+        "value": "Create another file named `order_service.py`. This service will allow creating orders linked to users. It needs to communicate with User Service to verify users."
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify, request\nimport requests\n\napp = Flask(__name__)\n\norders = {}\norder_id_counter = 1\n\nUSER_SERVICE_URL = 'http://localhost:5000/users/'\n\n@app.route('/orders', methods=['POST'])\ndef create_order():\n    global order_id_counter\n    data = request.json\n    user_id = data.get('user_id')\n    item = data.get('item')\n\n    # Verify if user exists by calling User Service\n    response = requests.get(USER_SERVICE_URL + str(user_id))\n\n    if response.status_code != 200:\n        return jsonify({'error': 'User does not exist'}), 400\n\n    order = {'id': order_id_counter, 'user_id': user_id, 'item': item}\n    orders[order_id_counter] = order\n    order_id_counter += 1\n\n    return jsonify(order), 201\n\nif __name__ == '__main__':\n    app.run(port=5001)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Run this service on port 5001:\n\nbash\npython order_service.py\n\n\nNow you have two microservices running independently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Test the microservices"
+      },
+      {
+        "type": "paragraph",
+        "value": "To test the user service, try fetching a user:\n\nbash\ncurl http://localhost:5000/users/1\n\n\nYou should see a response like:\n\n\n{\"id\": 1, \"name\": \"Alice\"}\n\n\nTo test the order service, create a new order for user 1:\n\nbash\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"user_id\":1, \"item\":\"Book\"}' http://localhost:5001/orders\n\n\nThis returns the created order:\n\n\n{\"id\": 1, \"user_id\": 1, \"item\": \"Book\"}\n\n\n### Step 4: Next steps to scale"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example is just a start. To scale:\n\n- Replace in-memory data stores with databases.\n- Use a service discovery mechanism or API gateway.\n- Add Docker containers for each service.\n- Implement asynchronous communication with message brokers like RabbitMQ or Kafka.\n- Add authentication and monitoring.\n\nMicroservices designed this way enable independent development, deployment, and scalability."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following this basic tutorial, you have taken your first step toward designing scalable microservices architecture in Python!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-hierarchies-for-cleaner-error-handling",
+    "title": "Mastering Python Exception Hierarchies for Cleaner Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's exception hierarchy to write cleaner and more efficient error handling code. A beginner-friendly guide with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you write Python programs, unexpected errors can happen during execution. To keep your programs running smoothly, Python uses exceptions, which you can catch and handle using try-except blocks. But did you know that Python exceptions follow a hierarchy? Understanding this hierarchy helps you manage errors more gracefully and write cleaner code."
+      },
+      {
+        "type": "paragraph",
+        "value": "At the top of Python's exception hierarchy is the `BaseException` class. Most built-in exceptions inherit from `Exception`, which is a subclass of `BaseException`. When you catch exceptions, you usually catch subclasses of `Exception` to avoid catching system-exiting exceptions like `SystemExit` or `KeyboardInterrupt`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example of catching a broad exception:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    num = int(input(\"Enter a number: \"))\n    result = 10 / num\nexcept Exception as e:\n    print(f\"Oops! An error happened: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Catching `Exception` handles many errors like `ValueError` or `ZeroDivisionError`, but it’s better to catch specific exceptions when possible. This improves code clarity and prevents accidentally swallowing unexpected errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Check out how catching specific errors looks:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    num = int(input(\"Enter a number: \"))\n    result = 10 / num\nexcept ValueError:\n    print(\"That’s not a valid number!\")\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Python’s built-in exceptions are organized into groups. For example, `ArithmeticError` is a parent of `ZeroDivisionError` and `OverflowError`. You can catch a group of related exceptions by using their parent class:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / int(input(\"Enter a number: \"))\nexcept ArithmeticError:\n    print(\"Arithmetic error occurred (like division by zero)!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create your own exceptions by inheriting from `Exception`. This allows customized error handling tailored to your application."
+      },
+      {
+        "type": "code",
+        "value": "class MyCustomError(Exception):\n    pass\n\ntry:\n    raise MyCustomError(\"Something went wrong!\")\nexcept MyCustomError as e:\n    print(e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Use the exception hierarchy to catch errors at the right level.\n- Avoid catching `BaseException` to prevent catching system-level exceptions.\n- Catch specific exceptions to write clearer error handling.\n- Use parent classes to catch groups of related errors.\n- Create custom exceptions by subclassing `Exception` for specialized error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding and using Python’s exception hierarchy effectively results in cleaner, more maintainable, and safer code. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-for-performance-optimization",
+    "title": "Mastering SQL Window Functions for Performance Optimization",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to write efficient and powerful queries that enhance your database performance. This beginner-friendly guide covers key concepts and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not group rows into a single result; instead, they retain individual rows while computing summary values. This makes them especially useful for analytics and performance optimization."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a common example: calculating a running total. Imagine a sales table with columns for sale_id, salesperson, and amount. We want to see the running total of sales per salesperson."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sale_id,\n  salesperson,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_id) AS running_total\nFROM sales;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, the window function SUM() runs over a partition for each salesperson, ordered by sale_id. Unlike a GROUP BY, this keeps each row but adds the running total next to it. This approach avoids subqueries or joins, improving readability and often performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions can also calculate row numbers, ranks, and lead or lag values within partitions – all useful for data analysis and eliminating complex self-joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sale_id,\n  salesperson,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_id) AS row_num,\n  RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS rank,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_id) AS previous_sale\nFROM sales;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, ROW_NUMBER() assigns a unique sequence per salesperson, RANK() handles ties based on amount, and LAG() gets the previous sale amount for comparison. These features enable advanced data insights without heavy processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize performance, ensure your partitions and ordering columns have proper indexes. Window functions operate on your sorted data efficiently, but if the database has to scan entire tables or perform costly sorts, this can impact speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering window functions can simplify complex queries, reduce computation time, and improve the performance of your SQL operations. They provide row-wise analytics that are both elegant and efficient compared to traditional joins or subqueries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with window functions on your datasets to uncover patterns and optimize your database workflows!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-for-complex-hierarchical-query-errors",
+    "title": "Mastering Recursive CTEs for Complex Hierarchical Query Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use Recursive Common Table Expressions (CTEs) effectively to solve hierarchical query errors in SQL, with practical tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=l-yF5DLNn4Q",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are a powerful feature in SQL used to query hierarchical or tree-structured data, such as organizational charts or folder structures. Beginners often face errors when writing recursive CTEs, especially if they misunderstand the recursion structure or termination conditions. This article will guide you through common errors when using recursive CTEs and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE has two parts: the anchor member and the recursive member. The anchor provides the starting point, and the recursive member references the CTE itself to iterate through hierarchical levels. The final result combines rows from all iterations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example of a recursive CTE to list employees and their managers:"
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeCTE AS (\n  -- Anchor member: Select top-level managers\n  SELECT EmployeeID, ManagerID, EmployeeName, 0 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n\n  UNION ALL\n\n  -- Recursive member: Select employees managed by previous level\n  SELECT e.EmployeeID, e.ManagerID, e.EmployeeName, c.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeCTE c ON e.ManagerID = c.EmployeeID\n)\nSELECT * FROM EmployeeCTE;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors beginners encounter when using recursive CTEs:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Missing Termination Condition**: The recursion keeps going indefinitely if there isn't a natural stopping point like a NULL manager or no children. This causes \"max recursion depth exceeded\" errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Incorrect Join Condition**: The recursive part must join the CTE to the main table properly to find the next level nodes. An incorrect join will result in no recursion or infinite loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Mismatched Columns**: The anchor and recursive parts must produce the same columns in the same order. Mismatches lead to syntax errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Not Using UNION ALL**: The query must use UNION ALL to combine anchor and recursive parts unless you want to eliminate duplicates intentionally."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Exceeding Default Recursion Limits**: Many SQL databases have recursion limits (e.g., 100 iterations). You may need to increase this limit or check for infinite loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "To debug recursive CTE errors, start with the anchor part alone to verify you are selecting the correct base rows. Then test the join condition separately. Add LIMIT or TOP clauses to avoid long runs while troubleshooting."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering recursive CTEs requires understanding these core principles: a clear base case, correct self-reference, and tidy termination conditions. With practice, they become an invaluable tool for querying hierarchical data efficiently."
+      }
+    ]
   }
 ];
