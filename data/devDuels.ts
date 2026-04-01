@@ -3747,5 +3747,175 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "create-a-sql-function-to-calculate-employee-tenure-in-years",
+    "title": "Create a SQL Function to Calculate Employee Tenure in Years",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "queries",
+    "description": "Write a SQL function that calculates the tenure of an employee in years based on their hire date and an optional end date. The function should return the number of full years the employee has worked.",
+    "prompt": "Create a SQL function named CalculateTenure that takes two parameters: hire_date (DATE) and end_date (DATE, nullable). The function should return the number of full years the employee has worked. If end_date is NULL, use the current date as the end date. Calculate the tenure as full years, ignoring partial years.",
+    "guidance": [
+      "Consider how to handle cases where end_date is NULL (use current date).",
+      "Make sure to correctly calculate full years between dates, not just the difference in days.",
+      "Use built-in date functions and conditionals in your SQL dialect to implement the logic."
+    ],
+    "hints": [
+      "You can use the DATEDIFF or equivalent function but be careful to only count full years.",
+      "Use CASE or IF statements to set the end date to current date when NULL.",
+      "Try extracting the year, month, and day parts to compare and adjust for partial years."
+    ],
+    "starterCode": "CREATE FUNCTION CalculateTenure(hire_date DATE, end_date DATE) RETURNS INT BEGIN\n  -- Your code here\nEND;",
+    "expectedOutput": "CalculateTenure('2015-06-15', '2020-06-14') returns 4\nCalculateTenure('2015-06-15', '2020-06-15') returns 5\nCalculateTenure('2015-06-15', NULL) returns tenure up to today",
+    "concepts": [
+      "SQL functions",
+      "Date calculations",
+      "Conditional logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "design-and-query-an-employee-hierarchy-data-model",
+    "title": "Design and Query an Employee Hierarchy Data Model",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "data-modeling",
+    "description": "Create a normalized data model to represent an employee hierarchy within a company, then write an advanced SQL query to retrieve hierarchical reports and aggregated information.",
+    "prompt": "Your company wants to maintain an employee organizational chart with multiple levels of management. Design a SQL data model that supports: employees, their managers (who are also employees), departments, and salaries. Each employee belongs to exactly one department and has a single manager except for the CEO, who has none. Then write an efficient SQL query that returns each employee's name, their manager's name, their department, and the total count of direct and indirect reports under them (i.e., total employees in their hierarchy tree). Make sure your design supports fast hierarchical queries and avoids data redundancy.",
+    "guidance": [
+      "Use a self-referencing table for employees to represent manager relationships.",
+      "Ensure proper normalization by separating departments into their own table.",
+      "Use recursive Common Table Expressions (CTEs) to calculate hierarchical counts efficiently.",
+      "Optimize indexes on manager foreign keys for recursive queries."
+    ],
+    "hints": [
+      "Use a 'manager_id' column in the employees table referencing the employee's own ID.",
+      "The CEO's 'manager_id' can be NULL to indicate no manager.",
+      "Leverage recursive CTEs with UNION ALL to traverse the entire report tree."
+    ],
+    "starterCode": "CREATE TABLE departments (\n  department_id INT PRIMARY KEY,\n  department_name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  employee_name VARCHAR(100) NOT NULL,\n  manager_id INT REFERENCES employees(employee_id),\n  department_id INT REFERENCES departments(department_id),\n  salary DECIMAL(10, 2) NOT NULL\n);",
+    "expectedOutput": "A result set with columns: employee_name, manager_name, department_name, total_reports_count - where total_reports_count indicates the number of all employees reporting directly or indirectly under that employee.",
+    "concepts": [
+      "recursive CTE",
+      "self-referencing foreign key",
+      "data normalization",
+      "hierarchical queries"
+    ],
+    "estimatedTime": "30 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "advanced-c-code-refactor-optimize-and-modernize-complex-class-implementation",
+    "title": "Advanced C++ Code Refactor: Optimize and Modernize Complex Class Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Given a legacy C++ class with complex logic, repetitive code, and poor maintainability, your task is to refactor it for readability, efficiency, and modern C++ best practices without altering its external behavior.",
+    "prompt": "You are provided with a complex C++ class that performs multiple operations with several duplicated code blocks, manual memory management, and non-idiomatic constructs. Refactor the class using modern C++ features such as smart pointers, STL algorithms, and remove code duplication. Improve the class design for readability and maintainability, but ensure the external interface and behavior remain unchanged. Provide only the refactored class implementation.",
+    "guidance": [
+      "Focus on eliminating duplicated code by introducing helper functions or templates where appropriate.",
+      "Replace raw pointers and manual memory management with smart pointers to ensure exception safety.",
+      "Leverage STL algorithms and range-based loops to simplify iterations and conditional logic.",
+      "Maintain the original class interface and ensure all unit tests (if any) still pass after your refactor."
+    ],
+    "hints": [
+      "Consider using std::unique_ptr or std::shared_ptr instead of raw pointers for resource management.",
+      "Use std::transform, std::accumulate, or std::any_of to replace manual loops where appropriate.",
+      "Look out for patterns of repeated code blocks that can be abstracted into smaller functions."
+    ],
+    "starterCode": "class DataProcessor {\n  int* data;\n  size_t size;\n\npublic:\n  DataProcessor(size_t n) : size(n) {\n    data = new int[size];\n    for (size_t i = 0; i < size; ++i) {\n      data[i] = i * 2;\n    }\n  }\n\n  ~DataProcessor() {\n    delete[] data;\n  }\n\n  void process() {\n    for (size_t i = 0; i < size; ++i) {\n      if (data[i] % 2 == 0) {\n        data[i] = data[i] / 2;\n      } else {\n        data[i] = data[i] * 3;\n      }\n    }\n  }\n\n  int sum() const {\n    int total = 0;\n    for (size_t i = 0; i < size; ++i) {\n      total += data[i];\n    }\n    return total;\n  }\n\n  bool contains(int val) const {\n    for (size_t i = 0; i < size; ++i) {\n      if (data[i] == val) {\n        return true;\n      }\n    }\n    return false;\n  }\n};",
+    "expectedOutput": "Class behavior remains unchanged: for example,\nDataProcessor dp(5);\ndp.process();\nstd::cout << dp.sum();  // Outputs 12\nstd::cout << dp.contains(3);  // Outputs 1 (true)\nstd::cout << dp.contains(10); // Outputs 0 (false)",
+    "concepts": [
+      "Modern C++",
+      "Smart pointers",
+      "STL algorithms",
+      "Code refactoring"
+    ],
+    "estimatedTime": "20 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-simple-grade-calculator-for-clarity",
+    "title": "Refactor a Simple Grade Calculator for Clarity",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and structure of a basic C++ grade calculation function without changing its behavior.",
+    "prompt": "You are given a function that calculates and returns a letter grade based on a numerical score. The current implementation works correctly but is hard to read and understand due to poor formatting and nested conditionals. Refactor the function to improve clarity and maintainability while keeping the same output for any input.",
+    "guidance": [
+      "Focus on simplifying nested conditionals where possible.",
+      "Use clear and consistent variable names and formatting.",
+      "Avoid redundant code and conditions."
+    ],
+    "hints": [
+      "Consider using else-if statements instead of multiple nested ifs.",
+      "Returning as soon as you determine the grade can reduce complexity."
+    ],
+    "starterCode": "char calculateGrade(int score) {\n    if(score >= 90) {\n        return 'A';\n    } else {\n        if(score >= 80) {\n            return 'B';\n        } else {\n            if(score >= 70) {\n                return 'C';\n            } else {\n                if(score >= 60) {\n                    return 'D';\n                } else {\n                    return 'F';\n                }\n            }\n        }\n    }\n}",
+    "expectedOutput": "Input: 85 -> Output: B\nInput: 72 -> Output: C\nInput: 59 -> Output: F",
+    "concepts": [
+      "conditional statements",
+      "code readability",
+      "refactoring",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-multi-dimensional-array-and-pointer-arithmetic-in-c",
+    "title": "Predict the Output: Multi-dimensional Array and Pointer Arithmetic in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the provided C++ code snippet involving multi-dimensional arrays and pointer arithmetic. Predict the output without running the code.",
+    "prompt": "Consider the following C++ code snippet:\n\nint main() {\n    int arr[2][3] = {{1, 2, 3}, {4, 5, 6}};\n    int *ptr = &arr[0][0];\n    \n    std::cout << *(ptr + 4) << \" \";\n    std::cout << *(*(arr + 1) + 1) << \" \";\n    std::cout << arr[1][2] << \" \";\n    std::cout << *(arr[0] + 2) << std::endl;\n    \n    return 0;\n}\n\nWhat will be the output of this code?",
+    "guidance": [
+      "Remember how multi-dimensional arrays are laid out contiguously in memory in row-major order.",
+      "Understand pointer arithmetic and how incrementing an int pointer moves it to the next integer element."
+    ],
+    "hints": [
+      "The expression *(ptr + 4) accesses the 5th element from the beginning of the array.",
+      "The expression *(*(arr + 1) + 1) accesses the element in the second row, second column."
+    ],
+    "starterCode": "int main() {\n    int arr[2][3] = {{1, 2, 3}, {4, 5, 6}};\n    int *ptr = &arr[0][0];\n    \n    std::cout << *(ptr + 4) << \" \";\n    std::cout << *(*(arr + 1) + 1) << \" \";\n    std::cout << arr[1][2] << \" \";\n    std::cout << *(arr[0] + 2) << std::endl;\n    \n    return 0;\n}",
+    "expectedOutput": "5 5 6 3",
+    "concepts": [
+      "pointer arithmetic",
+      "multi-dimensional arrays"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-complex-nested-callbacks-into-clean-async-await-flow",
+    "title": "Refactor Complex Nested Callbacks into Clean Async/Await Flow",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Refactor a nested callback-based event processing function into clean, modular, and maintainable async/await style JavaScript code without changing the behavior or output.",
+    "prompt": "You are provided with a function that processes a series of data events using nested callbacks. The current code is hard to read, difficult to maintain, and prone to errors due to callback nesting (callback hell). Refactor this function to use modern JavaScript async/await patterns while preserving its original asynchronous flow and output. Ensure the refactored code is easier to read, modular, and uses error handling effectively. Do not change the logic or the final result the function produces.",
+    "guidance": [
+      "Break down the nested callback logic into smaller, reusable async functions.",
+      "Use try/catch blocks to handle asynchronous errors gracefully within async functions.",
+      "Replace callbacks with Promises where needed to leverage async/await syntax."
+    ],
+    "hints": [
+      "Consider converting the original callback functions into Promise-returning functions to enable awaiting them.",
+      "Ensure that you properly await asynchronous operations to maintain execution order.",
+      "Check that error handling replicates the original behavior by propagating or catching exceptions appropriately."
+    ],
+    "starterCode": "function processEvents(events, onComplete) {\n  let results = [];\n  let index = 0;\n\n  function processNext() {\n    if (index >= events.length) {\n      onComplete(null, results);\n      return;\n    }\n\n    simulateAsyncEvent(events[index], (err, result) => {\n      if (err) {\n        onComplete(err);\n        return;\n      }\n      results.push(result);\n      index++;\n      processNext();\n    });\n  }\n\n  processNext();\n}\n\n// Simulates async event processing\nfunction simulateAsyncEvent(event, callback) {\n  setTimeout(() => {\n    if (event === 'error') {\n      callback(new Error('Event processing failed'));\n    } else {\n      callback(null, event.toUpperCase());\n    }\n  }, 100);\n}",
+    "expectedOutput": "Calling processEvents(['a', 'b', 'c'], callback) should result in callback(null, ['A', 'B', 'C'])\nCalling processEvents(['a', 'error', 'c'], callback) should result in callback(Error('Event processing failed'))",
+    "concepts": [
+      "async/await",
+      "callbacks",
+      "promises",
+      "error handling"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ];
