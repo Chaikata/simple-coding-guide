@@ -34125,5 +34125,525 @@ export const articles = [
         "value": "In summary, learning to read execution plans is an essential skill for any SQL developer. It allows you to spot bottlenecks and optimize your SQL queries to run faster and use fewer resources. Start by using `EXPLAIN` on your queries and practice interpreting the output."
       }
     ]
+  },
+  {
+    "slug": "javascript-async-await-vs-promises-practical-use-cases-performance",
+    "title": "JavaScript Async/Await vs Promises: Practical Use Cases and Performance Comparison",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between JavaScript Async/Await and Promises with practical examples and understand their performance to write better asynchronous code.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, but it handles asynchronous tasks smoothly with features like Promises and Async/Await. Understanding these two approaches is essential for writing clean, readable, and efficient code. In this tutorial, we'll explore what Promises and Async/Await are, practical use cases for each, and briefly compare their performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Promise?\nA Promise is an object that represents the eventual completion or failure of an asynchronous operation. It lets you attach callbacks to handle success (`then`) or failure (`catch`) once the operation finishes."
+      },
+      {
+        "type": "code",
+        "value": "// Example of a Promise\nfunction fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true; // simulate success or failure\n      if (success) {\n        resolve('Data fetched successfully!');\n      } else {\n        reject('Error fetching data');\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(data => console.log(data))\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Async/Await?\nAsync/Await is syntactic sugar built on top of Promises, introduced in ES2017. It allows writing asynchronous code in a way that looks synchronous, making it easier to read and maintain. An `async` function returns a Promise, and inside it, you can use the `await` keyword to pause execution until a Promise is resolved or rejected."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchDataAsync() {\n  try {\n    const data = await new Promise((resolve, reject) => {\n      setTimeout(() => resolve('Data fetched successfully!'), 1000);\n    });\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nfetchDataAsync();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Cases\n- **Promises** are great for chaining multiple asynchronous operations where each operation depends on the previous one.\n- **Async/Await** is better when your asynchronous code involves complex logic or when you want clearer syntax that looks like synchronous code.\n\nConsider this example where two asynchronous operations happen in sequence:"
+      },
+      {
+        "type": "code",
+        "value": "// Using Promises\nfunction firstOperation() {\n  return Promise.resolve('First operation done');\n}\n\nfunction secondOperation(msg) {\n  return Promise.resolve(`${msg}, then second operation done`);\n}\n\nfirstOperation()\n  .then(result => secondOperation(result))\n  .then(finalResult => console.log(finalResult))\n  .catch(err => console.error(err));\n\n// Using Async/Await\nasync function runOperations() {\n  try {\n    const first = await firstOperation();\n    const second = await secondOperation(first);\n    console.log(second);\n  } catch (err) {\n    console.error(err);\n  }\n}\n\nrunOperations();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Performance Comparison\nFrom a performance standpoint, Async/Await and Promises are very similar since Async/Await is basically built on Promises. There might be very slight overhead due to the syntactic constructs in Async/Await, but it’s usually negligible in real-world applications.\n\nWhat matters more is code readability, maintainability, and avoiding callback hell. Use Async/Await where it makes your code easier to understand and use Promises when you want to chain multiple asynchronous steps explicitly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Use **Promises** when you want to chain async operations clearly and handle success/failure.\n- Use **Async/Await** for cleaner, more readable async code that looks synchronous.\n- Both approaches are built for dealing with asynchronous operations and have virtually the same performance.\n\nMastering both will help you write robust JavaScript applications that handle async logic effortlessly."
+      }
+    ]
+  },
+  {
+    "slug": "handling-asynchronous-error-patterns-in-javascript-real-world-applications",
+    "title": "Handling Asynchronous Error Patterns in JavaScript Real-World Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors in asynchronous JavaScript code using promises, async/await, and practical error-handling strategies for real-world applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=0pNo1O42m6k",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous programming is a core part of modern JavaScript development, especially when dealing with APIs, file operations, or timers. However, handling errors in asynchronous code can be tricky for beginners. This article will guide you through common patterns and best practices to effectively catch and manage errors in real-world JavaScript apps."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Handle Errors in Asynchronous Code?"
+      },
+      {
+        "type": "paragraph",
+        "value": "In synchronous code, a `try/catch` block can catch errors immediately. But asynchronous operations like promises and async/await run independently, so errors don't always bubble up the same way. Without proper handling, uncaught errors can crash your app or cause unpredictable behavior."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Error-Handling Patterns"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some common approaches."
+      },
+      {
+        "type": "paragraph",
+        "value": "#### 1. Using `.catch()` with Promises"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you work with promises, you can attach a `.catch()` method at the end to handle any rejection."
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://jsonplaceholder.typicode.com/posts/1')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Post title:', data.title);\n  })\n  .catch(error => {\n    console.error('There was a problem with the fetch operation:', error.message);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "#### 2. Using `try/catch` with async/await"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/await syntax makes asynchronous code look more like synchronous code, so you can use `try/catch` blocks for error handling."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchPost() {\n  try {\n    const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log('Post title:', data.title);\n  } catch (error) {\n    console.error('Fetch failed:', error.message);\n  }\n}\n\nfetchPost();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Multiple Asynchronous Errors Together"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you might want to run multiple async operations in parallel and handle errors gracefully."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchMultiplePosts() {\n  const urls = [\n    'https://jsonplaceholder.typicode.com/posts/1',\n    'https://jsonplaceholder.typicode.com/posts/invalid', // invalid URL to test error\n    'https://jsonplaceholder.typicode.com/posts/3'\n  ];\n\n  try {\n    const results = await Promise.all(\n      urls.map(async url => {\n        const response = await fetch(url);\n        if (!response.ok) throw new Error(`Failed to fetch ${url}`);\n        return response.json();\n      })\n    );\n    console.log('All posts fetched:', results);\n  } catch (error) {\n    console.error('One or more fetch requests failed:', error.message);\n  }\n}\n\nfetchMultiplePosts();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Note that `Promise.all` rejects immediately when one promise rejects. If you want to handle all results (including errors) individually, use `Promise.allSettled`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using `Promise.allSettled` to Handle All Outcomes"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchAllPostsWithSettled() {\n  const urls = [\n    'https://jsonplaceholder.typicode.com/posts/1',\n    'https://jsonplaceholder.typicode.com/posts/invalid',\n    'https://jsonplaceholder.typicode.com/posts/3'\n  ];\n\n  const results = await Promise.allSettled(\n    urls.map(url => fetch(url).then(async response => {\n      if (!response.ok) throw new Error(`Failed: ${url}`);\n      return response.json();\n    }))\n  );\n\n  results.forEach((result, idx) => {\n    if (result.status === 'fulfilled') {\n      console.log(`Post ${idx + 1} title:`, result.value.title);\n    } else {\n      console.error(`Post ${idx + 1} error:`, result.reason.message);\n    }\n  });\n}\n\nfetchAllPostsWithSettled();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Asynchronous Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always handle errors when working with promises or async/await to avoid uncaught exceptions.\n- Validate responses before using them to avoid runtime errors.\n- Use specific error messages to make debugging easier.\n- Consider using global error handlers for unhandled promise rejections in production environments.\n- For multiple parallel requests, choose between `Promise.all` or `Promise.allSettled` depending on whether you want all-or-nothing or partial success handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these techniques, you’ll build more robust and user-friendly JavaScript applications that gracefully handle errors even in complex asynchronous workflows."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-for-beginners-building-your-first-to-do-list-app",
+    "title": "TypeScript for Beginners: Building Your First To-Do List App",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple to-do list app using TypeScript. This beginner-friendly tutorial walks you through the basics of setting up, typing, and manipulating tasks.",
+    "videoUrl": "https://www.youtube.com/watch?v=jBmrduvKl5w",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding types, making your code easier to understand and less error-prone. In this tutorial, we'll create a simple to-do list application to illustrate how TypeScript can improve your development experience. By the end, you'll have a clear idea of how to use interfaces, types, and functions in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by defining the structure of a task using a TypeScript interface. This helps us ensure each task has the right properties."
+      },
+      {
+        "type": "code",
+        "value": "interface Task {\n  id: number;\n  title: string;\n  completed: boolean;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we'll create an array to store our tasks. Using the interface for type safety, we tell TypeScript that this array will only hold objects that conform to the Task interface."
+      },
+      {
+        "type": "code",
+        "value": "let tasks: Task[] = [];"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's write a function to add a new task to our list. This function will take a task title as input, create a new Task object, and push it into our tasks array."
+      },
+      {
+        "type": "code",
+        "value": "function addTask(title: string): void {\n  const newTask: Task = {\n    id: tasks.length + 1,\n    title,\n    completed: false\n  };\n  tasks.push(newTask);\n  console.log(`Added task: \\\"${title}\\\"`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To mark a task as complete, we need a function that updates the completed status. This function finds the task by its id and sets completed to true."
+      },
+      {
+        "type": "code",
+        "value": "function completeTask(id: number): void {\n  const task = tasks.find(t => t.id === id);\n  if (task) {\n    task.completed = true;\n    console.log(`Completed task: \\\"${task.title}\\\"`);\n  } else {\n    console.log(`Task with id ${id} not found.`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, let's create a function to display all tasks and their completion status in a friendly format."
+      },
+      {
+        "type": "code",
+        "value": "function showTasks(): void {\n  console.log('To-Do List:');\n  tasks.forEach(task => {\n    const status = task.completed ? '[x]' : '[ ]';\n    console.log(`${status} ${task.id}: ${task.title}`);\n  });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how this works in practice by adding some tasks, completing one, and displaying the list:"
+      },
+      {
+        "type": "code",
+        "value": "addTask('Learn TypeScript basics');\naddTask('Build a to-do list app');\naddTask('Test the app');\ncompleteTask(2);\nshowTasks();"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, you should see output indicating the tasks you added, marking one as complete, and a final list showing the status of all tasks. This simple project demonstrates how TypeScript's typing and structure help you manage your data with clarity and confidence."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can expand this app by adding features like deleting tasks, editing titles, or saving the list to local storage. As you continue learning TypeScript, try experimenting with more advanced types and interfaces to strengthen your skills."
+      }
+    ]
+  },
+  {
+    "slug": "advanced-typescript-error-handling-custom-error-classes-discriminated-unions",
+    "title": "Advanced TypeScript Error Handling with Custom Error Classes and Discriminated Unions",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to improve your TypeScript error handling using custom error classes and discriminated unions for more precise and maintainable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=ovnyeq-Xxrc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is an essential aspect of any software application. TypeScript provides powerful features that can help developers manage errors more effectively, especially when you want precise type checking and clear error categories. In this article, we'll explore how to create custom error classes and use discriminated unions to handle diverse errors gracefully and with type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "Custom error classes let you define your own error types with unique properties. This makes errors easier to identify and handle differently based on their type. Discriminated unions allow you to combine multiple error types into one union type with a common discriminant property, enabling TypeScript to narrow down errors accurately during handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by defining two custom error classes: a `NetworkError` to represent network-related issues and a `ValidationError` to represent input validation problems."
+      },
+      {
+        "type": "code",
+        "value": "class NetworkError extends Error {\n  readonly code: number;\n\n  constructor(message: string, code: number) {\n    super(message);\n    this.code = code;\n    this.name = 'NetworkError';\n  }\n}\n\nclass ValidationError extends Error {\n  readonly field: string;\n\n  constructor(message: string, field: string) {\n    super(message);\n    this.field = field;\n    this.name = 'ValidationError';\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we create a discriminated union type that encompasses both error types. We'll add a `type` property as the discriminant to each error class."
+      },
+      {
+        "type": "code",
+        "value": "interface NetworkErrorType {\n  type: 'network';\n  error: NetworkError;\n}\n\ninterface ValidationErrorType {\n  type: 'validation';\n  error: ValidationError;\n}\n\ntype AppError = NetworkErrorType | ValidationErrorType;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To integrate this discriminant into our custom error classes, we can modify them to include a `type` property directly. Alternatively, we can create wrapper objects like above when throwing or catching errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's see how we can use these errors in a function that might fail. We'll simulate a function that either throws a validation error or a network error."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData(input: string): string {\n  if (input.length < 5) {\n    throw new ValidationError('Input too short', 'input');\n  }\n  if (input === 'network') {\n    throw new NetworkError('Network connection failed', 503);\n  }\n  return 'Data fetched successfully!';\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When calling this function, we can catch the errors and use TypeScript's type narrowing on our discriminated union to handle each error type appropriately."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  const result = fetchData('net');\n  console.log(result);\n} catch (err) {\n  if (err instanceof ValidationError) {\n    console.error(`Validation error on field: ${err.field}, message: ${err.message}`);\n  } else if (err instanceof NetworkError) {\n    console.error(`Network error code: ${err.code}, message: ${err.message}`);\n  } else {\n    console.error('Unknown error:', err);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "For better type safety, especially when processing many error variants, you can throw wrapped errors that fit the discriminated union and then narrow using the `type` property."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  const input = 'network';\n  if (input.length < 5) {\n    throw { type: 'validation', error: new ValidationError('Input too short', 'input') } as AppError;\n  }\n  if (input === 'network') {\n    throw { type: 'network', error: new NetworkError('Network connection failed', 503) } as AppError;\n  }\n} catch (err) {\n  const appError = err as AppError;\n  switch (appError.type) {\n    case 'validation':\n      console.error(`Validation error: ${appError.error.message} on field ${appError.error.field}`);\n      break;\n    case 'network':\n      console.error(`Network error code ${appError.error.code}: ${appError.error.message}`);\n      break;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using custom error classes combined with discriminated unions lets you write clear, maintainable, and type-safe error handling code. This approach improves readability and helps catch errors early during development."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try extending this pattern with your own error types and see how it can simplify managing complex error scenarios in your TypeScript projects!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-list-comprehensions-for-performance-gains",
+    "title": "Optimizing Python List Comprehensions for Performance Gains",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn simple techniques to make your Python list comprehensions faster and more efficient, perfect for beginners aiming to improve their code performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=zlmzrD8zq0o",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "List comprehensions are a popular and concise way to create lists in Python. They often replace for-loops and can make your code cleaner and easier to read. However, when working with large data, optimizing list comprehensions can lead to noticeable performance gains. In this tutorial, we'll explore beginner-friendly tips to optimize your list comprehensions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Use Local Variables Inside List Comprehensions\nWhen using functions or methods inside a list comprehension, assigning them to a local variable first can speed up execution by reducing repeated attribute lookups."
+      },
+      {
+        "type": "code",
+        "value": "items = ['apple', 'banana', 'cherry', 'date']\n\n# Slower version (calls len() for each item)\nlengths = [len(item) for item in items]\n\n# Slightly faster version using local variable\nlength_fn = len\nlengths_fast = [length_fn(item) for item in items]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Avoid Unnecessary Function Calls\nIf you can compute values once outside a loop instead of inside the list comprehension, do that to avoid extra work."
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3, 4, 5]\n\n# Inefficient: computes multiplier on every iteration\nmultiplier = 10\nresults = [number * multiplier for number in numbers]\n\n# Better: but here multiplier is a constant, so it's fine as is\n# However, if multiplier was a function call, store it first!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Use Conditional Filtering Instead of If-Else\nList comprehensions support filtering with an if clause, which is faster than using an if-else expression inside the comprehension."
+      },
+      {
+        "type": "code",
+        "value": "# Using if inside comprehension (filtering)\nnumbers = [1, 2, 3, 4, 5]\neven_numbers = [num for num in numbers if num % 2 == 0]\n\n# Avoid this inside the comprehension\nresults = [num if num % 2 == 0 else 0 for num in numbers]  # Slower"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Prefer List Comprehensions Over map() and filter() When Using Lambda\nAlthough map() and filter() can be convenient, list comprehensions are often faster and easier to read, especially when using lambda functions."
+      },
+      {
+        "type": "code",
+        "value": "# Using map and lambda\nnumbers = [1, 2, 3, 4, 5]\nsquared = list(map(lambda x: x**2, numbers))\n\n# List comprehension is usually faster and more readable\nsquared_comp = [x**2 for x in numbers]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Use Generator Expressions If You Don't Need a List\nIf you only need to iterate over the items once and don't need a list explicitly, use generator expressions with parentheses to save memory and sometimes improve speed."
+      },
+      {
+        "type": "code",
+        "value": "# List comprehension creates the whole list in memory\nsquares = [x*x for x in range(1000000)]\n\n# Generator expression computes on the fly, saving memory\nsquares_gen = (x*x for x in range(1000000))"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nOptimizing list comprehensions can be simple. Use local variables, avoid unnecessary function calls, prefer filtering with 'if', choose list comprehensions over map/lambda, and use generator expressions when appropriate. These small changes help your Python code run faster and more efficiently!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-performance-memory-management-errors",
+    "title": "Optimizing Python Code Performance by Understanding Memory Management Errors",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to improve your Python code performance by identifying and fixing common memory management errors. A beginner-friendly guide to managing memory efficiently.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a powerful and easy-to-learn programming language, but writing efficient code requires understanding how Python manages memory. Memory management errors can cause slowdowns, crashes, or unexpected behavior. In this article, we’ll explore common memory-related mistakes, how they affect your program, and practical tips to optimize your code’s performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common memory issue is unintentionally creating circular references, where two or more objects reference each other. This prevents Python's garbage collector from freeing memory, leading to memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of a circular reference:"
+      },
+      {
+        "type": "code",
+        "value": "class A:\n    def __init__(self):\n        self.b = None\n\nclass B:\n    def __init__(self):\n        self.a = None\n\n# Creating circular references\nobj_a = A()\nobj_b = B()\nobj_a.b = obj_b\nobj_b.a = obj_a"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even when you delete obj_a and obj_b, memory used by these objects might not be released immediately because of the circular reference. To fix this, you can break the circular reference manually or use weak references from the `weakref` module."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common mistake is holding onto large objects longer than necessary, like big lists or dictionaries. This keeps memory occupied and slows down your program."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, storing all results in a list without clearing or processing them incrementally can cause high memory usage:"
+      },
+      {
+        "type": "code",
+        "value": "results = []\nfor i in range(10**6):\n    results.append(i * 2)  # Storing a million items in memory"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, consider processing items on the go, using generators or writing intermediate results to files rather than keeping them all in memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, understand how Python's garbage collector works. It frees unused memory automatically, but sometimes you might want to invoke it manually using the `gc` module to clean up unreachable objects."
+      },
+      {
+        "type": "code",
+        "value": "import gc\n\n# Force a garbage collection\ncollected = gc.collect()\nprint(f\"Unreachable objects collected: {collected}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, here are simple tips to optimize Python memory performance:\n- Avoid circular references or break them using weak references.\n- Release large objects or use generators to handle data incrementally.\n- Use the `gc` module to manually manage garbage collection if needed.\n\nBy understanding these memory management errors, you can write faster and more efficient Python code, avoiding common pitfalls that degrade performance."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-performance-window-functions-vs-aggregate-functions-sql",
+    "title": "Comparing Performance: Window Functions vs. Aggregate Functions in SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the differences in performance between window functions and aggregate functions in SQL with simple examples. Understand when to use each for efficient database queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL offers powerful tools to analyze data: window functions and aggregate functions. Both are used to summarize or compute values over sets of rows, but they behave differently and have different performance characteristics. In this tutorial, we'll explore these two concepts, explain their differences, and compare their performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Aggregate Functions\nAggregate functions perform calculations on a group of rows and return a single result for the group. Common aggregate functions include `SUM()`, `COUNT()`, `AVG()`, `MIN()`, and `MAX()`. They are often used with `GROUP BY` to group rows based on column values."
+      },
+      {
+        "type": "code",
+        "value": "-- Using aggregate functions with GROUP BY\nSELECT department, COUNT(*) AS employee_count, AVG(salary) AS avg_salary\nFROM employees\nGROUP BY department;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query groups employees by their department and calculates how many employees work in each, along with the average salary."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Window Functions\nWindow functions perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not collapse rows; they return a value for each row based on a window (set of rows) defined with `OVER()`."
+      },
+      {
+        "type": "code",
+        "value": "-- Using window functions to compute average salary per department without grouping\nSELECT employee_id, department, salary, \n       AVG(salary) OVER (PARTITION BY department) AS avg_department_salary\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query calculates the average salary per department but still shows each employee's details without grouping them into one row per department."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Performance Comparison\nPerformance depends on the database system, data size, and query complexity, but here are some general points:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Aggregate Functions with GROUP BY** often run faster when you want summary results because the database can optimize grouping operations well."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Window Functions** can be heavier since they calculate values for each row considering a window which may overlap many rows, especially on large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. If you require precise group summaries (one row per group), use aggregates with GROUP BY for better performance and clarity."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Use window functions when you need row-level data combined with aggregate information."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Summarizing vs. Detailing\nAggregate function returning summary per department:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT department, COUNT(*) AS employee_count\nFROM employees\nGROUP BY department;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Window function returning employee count per department for each employee row:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, department, \n       COUNT(*) OVER (PARTITION BY department) AS employee_count\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nFor beginners, understanding when to use aggregate functions vs window functions helps optimize your SQL queries. Use aggregates when summarizing data and window functions when you need detailed rows with summary statistics. Always test performance on your data and database engine, as execution times can vary."
+      }
+    ]
+  },
+  {
+    "slug": "handling-time-zone-edge-cases-in-sql-queries-for-global-applications",
+    "title": "Handling Time Zone Edge Cases in SQL Queries for Global Applications",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to handle time zone edge cases in SQL queries to ensure your global applications manage date and time data correctly and avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=pwmynHnr704",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building global applications that work with dates and times, handling time zones correctly is essential. Time zones can create tricky edge cases, especially around daylight saving time changes, differences between server and user time zones, and inconsistent time zone data in your database. In this article, we will explore common time zone challenges in SQL queries and offer beginner-friendly tips to handle them smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is storing timestamps without any time zone information or converting all timestamps to a server's local time zone. This leads to confusion when users from different time zones query or interpret date values. Instead, it's best practice to store timestamps in UTC and convert them to the user's local time zone only when displaying dates."
+      },
+      {
+        "type": "paragraph",
+        "value": "Most modern SQL databases provide functions to work with time zones. For example, PostgreSQL supports the TIMESTAMP WITH TIME ZONE type and functions like AT TIME ZONE to convert timestamps between time zones."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of storing and querying timestamps in UTC, then converting to a specific time zone (e.g., 'America/New_York') for display:"
+      },
+      {
+        "type": "code",
+        "value": "-- Store current UTC timestamp\nINSERT INTO events (event_time_utc) VALUES (CURRENT_TIMESTAMP AT TIME ZONE 'UTC');\n\n-- Query and convert UTC timestamp to user time zone\nSELECT event_time_utc,\n       event_time_utc AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS event_time_est\nFROM events;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice the double usage of AT TIME ZONE: first, it treats the field as UTC timestamp, then converts it to the desired time zone. This avoids errors where the timestamp is assumed to be in a different zone."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case arises during daylight saving time transitions. For example, some local times may be ambiguous or skipped. SQL functions that handle time zones internally account for these changes, but if you manually apply offsets, you risk errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid these issues, rely on your database's time zone functionality and store all timestamps in UTC. Always convert time zone-aware timestamps when presenting data to users rather than in your queries' filtering logic, to prevent unexpected discrepancies."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, ensure your application and database servers are synchronized to UTC and have accurate time zone data to prevent inconsistencies."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these best practices, you can avoid common time zone errors and make your global SQL applications more robust and user-friendly."
+      }
+    ]
   }
 ];
