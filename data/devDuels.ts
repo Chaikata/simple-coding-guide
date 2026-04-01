@@ -3579,5 +3579,173 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-list-squaring-function-with-incorrect-loop",
+    "title": "Fix Bug in List Squaring Function with Incorrect Loop",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "This debugging challenge requires identifying and fixing a bug in a Python function that squares each element of a list but returns incorrect results due to loop errors.",
+    "prompt": "The provided function `square_elements` is intended to take a list of integers and return a new list where each element is squared. However, the current implementation returns an incorrect list or throws an error. Diagnose the bug, fix the code, and ensure the function works as expected for any input list of integers.",
+    "guidance": [
+      "Review how the loop iterates through the list indices or elements.",
+      "Check if the function returns the new list at the appropriate time.",
+      "Make sure to avoid modifying the original list if not intended."
+    ],
+    "hints": [
+      "Consider whether the for-loop is iterating over the correct variable and range.",
+      "Check if the return statement is inside the loop, potentially causing premature returns."
+    ],
+    "starterCode": "def square_elements(numbers):\n    result = []\n    for i in range(len(numbers)):\n        result.append(numbers[i] * numbers[i])\n        return result",
+    "expectedOutput": "[1, 4, 9, 16]",
+    "concepts": [
+      "loops",
+      "lists",
+      "function return values"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "design-and-query-a-multi-level-employee-management-hierarchy",
+    "title": "Design and Query a Multi-Level Employee Management Hierarchy",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "data-modeling",
+    "description": "Create a relational data model to represent an organization's employee hierarchy with multiple reporting levels and implement complex SQL queries to retrieve hierarchical reports and aggregate statistics.",
+    "prompt": "You are tasked with designing a database schema to represent employees in a company, where each employee may report to one manager, and managers can themselves report to higher-level managers, forming a multi-level hierarchy. Build the necessary tables and write SQL queries to achieve the following:\n\n1. Create a table named `Employees` with columns `employee_id` (primary key), `name`, `position`, `manager_id` (foreign key referencing `employee_id`, nullable).\n\n2. Insert sample data representing at least 10 employees spanning at least 3 hierarchical levels.\n\n3. Write a recursive SQL query (using Common Table Expressions) to fetch the full hierarchy tree starting from the top-level manager (CEO) down to all subordinates, showing their levels in the hierarchy.\n\n4. Write a query to calculate the total number of direct and indirect reports for each manager.\n\nDeliverables:\n- The `CREATE TABLE` statement for `Employees`.\n- Sample `INSERT` statements for your data.\n- SQL query for fetching the full employee hierarchy with levels.\n- SQL query for counting total reports per manager.",
+    "guidance": [
+      "Use a self-referencing foreign key for `manager_id` to model the hierarchy in a single table.",
+      "Leverage recursive Common Table Expressions (CTEs) to traverse multiple levels of the hierarchy.",
+      "Aggregate results carefully to count all subordinates (direct and indirect) per manager."
+    ],
+    "hints": [
+      "Make sure the `manager_id` column allows NULLs to accommodate the top-level manager who has no manager.",
+      "In your recursive CTE, start from employees with NULL `manager_id` to get the root of the hierarchy.",
+      "Use `COUNT` combined with `GROUP BY` to calculate the number of subordinates per manager."
+    ],
+    "starterCode": "CREATE TABLE Employees (\n  employee_id INT PRIMARY KEY,\n  name VARCHAR(100),\n  position VARCHAR(100),\n  manager_id INT NULL,\n  FOREIGN KEY (manager_id) REFERENCES Employees(employee_id)\n);\n\n-- Insert sample data here\n",
+    "expectedOutput": "For the hierarchical query:\nemployee_id | name       | position       | level\n-------------------------------------------------\n1           | Alice      | CEO            | 1\n2           | Bob        | VP Engineering | 2\n3           | Carol      | VP Marketing   | 2\n4           | Dave       | Engineering Mgr| 3\n5           | Eve        | Marketing Mgr  | 3\n... (remaining employees)\n\nFor the reports count query:\nmanager_id | total_reports\n-------------------------\n1          | 9\n2          | 4\n3          | 2\n4          | 1\n5          | 0\n... (remaining managers)",
+    "concepts": [
+      "recursive Common Table Expressions",
+      "self-referencing foreign keys",
+      "hierarchical data modeling",
+      "SQL aggregation"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-function-to-calculate-the-sum-of-an-array",
+    "title": "Fix the Function to Calculate the Sum of an Array",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "There's a simple bug in the function that calculates the sum of numbers in an array. Your task is to identify and fix the issue so that the function returns the correct sum.",
+    "prompt": "The function sumArray is supposed to return the sum of all elements in the given array. However, the current implementation returns an incorrect result. Identify the problem in the code and fix it so it works correctly for any array of numbers.",
+    "guidance": [
+      "Check how the accumulator variable is initialized and updated inside the loop.",
+      "Make sure the loop iterates over all elements in the array correctly."
+    ],
+    "hints": [
+      "Remember that the accumulator should start at 0 when summing numbers.",
+      "Verify that the loop condition allows processing every element in the array."
+    ],
+    "starterCode": "function sumArray(arr) {\n  let sum = 1;\n  for (let i = 0; i <= arr.length; i++) {\n    sum += arr[i];\n  }\n  return sum;\n}",
+    "expectedOutput": "sumArray([1, 2, 3, 4]) // returns 10",
+    "concepts": [
+      "loops",
+      "variables",
+      "functions",
+      "array traversal"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-complex-c-matrix-multiplication-with-thread-safety-and-performance-in-mind",
+    "title": "Refactor a Complex C++ Matrix Multiplication with Thread Safety and Performance in Mind",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve a messy and inefficient C++ matrix multiplication code by refactoring it to enhance readability, performance, and thread safety while preserving its original functionality.",
+    "prompt": "You are provided with a C++ function that multiplies two matrices in a nested loop structure. The code is functional but suffers from poor readability, redundant computations, and lacks thread safety for concurrent matrix multiplication tasks. Refactor this function to improve its code quality by applying appropriate C++ best practices for readability, performance optimization (such as reducing unnecessary operations), and ensure that the multiplication can safely run in multithreaded contexts. Do not change the core logic or output of the function.\n\nYour refactoring should include:\n- Clear variable naming and organization\n- Avoid redundant computations or memory usage\n- Use const correctness as appropriate\n- Make the function safely callable in parallel from multiple threads\n\nYou can assume the input matrices are valid (non-empty and rectangular) and use standard containers or pointers as you prefer, but clarify your choice in comments.",
+    "guidance": [
+      "Identify and eliminate redundant variable assignments and computations inside loops.",
+      "Use const references or pointers for input parameters where mutation is not needed.",
+      "Avoid shared mutable state or use local variables only to enable thread safety.",
+      "Consider using standard library containers (like std::vector) with size information passed explicitly."
+    ],
+    "hints": [
+      "Check if any variable is unnecessarily being assigned inside inner loops multiple times.",
+      "Mark input matrices as const references to prevent accidental mutation.",
+      "Avoid static or global variables that could cause race conditions when used in concurrent environments."
+    ],
+    "starterCode": "void multiplyMatrices(const int* A, int rowsA, int colsA, const int* B, int rowsB, int colsB, int* result) {\n    for (int i = 0; i < rowsA; ++i) {\n        for (int j = 0; j < colsB; ++j) {\n            int sum = 0;\n            for (int k = 0; k < colsA; ++k) {\n                int a_val = A[i * colsA + k];\n                int b_val = B[k * colsB + j];\n                sum += a_val * b_val;\n            }\n            result[i * colsB + j] = sum;\n        }\n    }\n}",
+    "expectedOutput": "No change in matrix multiplication result for any valid inputs; the refactored function produces the same output as the original but with cleaner, safer, and more efficient code.",
+    "concepts": [
+      "C++ refactoring",
+      "performance optimization",
+      "thread safety",
+      "const correctness"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-sql-function-to-return-the-total-number-of-orders-for-a-customer",
+    "title": "Create a SQL Function to Return the Total Number of Orders for a Customer",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Write a simple SQL function that takes a customer ID as input and returns the total count of orders placed by that customer.",
+    "prompt": "You have a table named Orders with columns OrderID, CustomerID, and OrderDate. Write a SQL function named GetCustomerOrderCount that accepts a CustomerID as input and returns the total number of orders placed by that customer. Your function should return an integer representing this count.",
+    "guidance": [
+      "Use the COUNT aggregate function to count the number of orders for the given CustomerID.",
+      "Filter the Orders table by CustomerID inside your function.",
+      "Ensure your function returns an integer value."
+    ],
+    "hints": [
+      "Start by writing a SELECT COUNT(*) query filtered by CustomerID.",
+      "Remember to define the input parameter and return type for your function."
+    ],
+    "starterCode": "CREATE FUNCTION GetCustomerOrderCount(@CustomerID INT)\nRETURNS INT\nAS\nBEGIN\n    -- Your code here\nEND;",
+    "expectedOutput": "For example, calling GetCustomerOrderCount(5) returns 12 if customer with ID 5 has 12 orders.",
+    "concepts": [
+      "SQL functions",
+      "SELECT query",
+      "COUNT aggregate"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "design-and-query-a-movie-rental-database-schema",
+    "title": "Design and Query a Movie Rental Database Schema",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "data-modeling",
+    "description": "Build a normalized relational schema for a movie rental system including customers, movies, rentals, and payments, then write SQL queries to retrieve key business insights.",
+    "prompt": "You are tasked with designing a simple movie rental database schema that must include tables for Customers, Movies, Rentals, and Payments. Each customer can rent multiple movies, and each rental can have multiple payments (for instance, partial payments or late fees). After creating tables with appropriate keys and relationships, write SQL queries to:\n1. List all customers who have rented more than 3 movies.\n2. Find the total amount paid by each customer.\n3. Identify movies that have never been rented.\n\nYour solution should define the schema using CREATE TABLE statements with relevant constraints, then provide the SQL queries fulfilling the requirements.",
+    "guidance": [
+      "Use primary and foreign keys to enforce relationships between customers, movies, rentals, and payments tables.",
+      "Consider including columns for rental date, return date, and payment amount to enrich your data.",
+      "Use JOINs and GROUP BY clauses to aggregate data according to the queries."
+    ],
+    "hints": [
+      "Ensure the Rentals table includes foreign keys to the Customers and Movies tables to link data correctly.",
+      "Use LEFT JOIN when querying movies that have never been rented to include movies with no corresponding rental records.",
+      "Aggregate payments by customer using SUM and GROUP BY to find total payments."
+    ],
+    "starterCode": "CREATE TABLE Customers (\n  customer_id INT PRIMARY KEY,\n  name VARCHAR(100),\n  email VARCHAR(100)\n);\n\nCREATE TABLE Movies (\n  movie_id INT PRIMARY KEY,\n  title VARCHAR(200),\n  genre VARCHAR(50)\n);\n\n-- Define Rentals and Payments tables with appropriate keys and columns",
+    "expectedOutput": "Query1 Example Output:\n| customer_id | name       | rental_count |\n|-------------|------------|--------------|\n| 101         | Alice Lee  | 5            |\n| 103         | Bob Smith  | 4            |\n\nQuery2 Example Output:\n| customer_id | total_paid |\n|-------------|------------|\n| 101         | 150.00     |\n| 102         | 80.00      |\n\nQuery3 Example Output:\n| movie_id | title               |\n|----------|---------------------|\n| 12       | The Forgotten Movie |\n| 15       | Hidden Gems         |",
+    "concepts": [
+      "database schema design",
+      "primary and foreign keys",
+      "SQL JOINs and aggregation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
