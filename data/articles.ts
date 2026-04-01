@@ -35065,5 +35065,617 @@ export const articles = [
         "value": "By following these guidelines and understanding how your SQL database handles time zones, you can prevent errors caused by ambiguous times and ensure your date calculations are accurate and reliable."
       }
     ]
+  },
+  {
+    "slug": "mastering-lazy-loading-in-javascript-for-lightning-fast-web-apps",
+    "title": "Mastering Lazy Loading in JavaScript for Lightning Fast Web Apps",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to implement lazy loading in JavaScript to boost your web app's performance by loading only the necessary resources when needed.",
+    "videoUrl": "https://www.youtube.com/watch?v=4VkRNYiEdII",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Lazy loading is a powerful technique to improve the performance and speed of your web applications. Instead of loading all resources upfront, lazy loading delays the loading of non-critical resources until they are actually needed. This reduces the initial load time and saves bandwidth, resulting in a smoother experience for your users."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we will explore lazy loading images and JavaScript modules using simple and modern JavaScript techniques. Being a beginner-friendly guide, no complex setup is required, just plain JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Lazy Loading Images with Intersection Observer"
+      },
+      {
+        "type": "paragraph",
+        "value": "Traditionally, all images on a page load immediately, which can slow down your page. Lazy loading images means loading them only when they come into the viewport (i.e., visible on the user's screen). You can achieve this efficiently with the Intersection Observer API."
+      },
+      {
+        "type": "code",
+        "value": "const images = document.querySelectorAll('img[data-src]');\n\nconst loadImage = (image) => {\n  image.src = image.dataset.src;\n  image.removeAttribute('data-src');\n};\n\nconst observer = new IntersectionObserver((entries, observer) => {\n  entries.forEach(entry => {\n    if(entry.isIntersecting) {\n      loadImage(entry.target);\n      observer.unobserve(entry.target);\n    }\n  });\n});\n\nimages.forEach(img => {\n  observer.observe(img);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In your HTML, set your images like this: `<img data-src=\"image.jpg\" alt=\"Description\" />`. Initially, their `src` attribute should be empty to avoid loading them immediately. The JavaScript will load the image only when it appears on screen."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Lazy Loading JavaScript Modules"
+      },
+      {
+        "type": "paragraph",
+        "value": "Lazy loading can also apply to JavaScript code! Instead of loading all scripts upfront, you can dynamically import modules only when needed using `import()`."
+      },
+      {
+        "type": "code",
+        "value": "button.addEventListener('click', async () => {\n  const module = await import('./heavyModule.js');\n  module.heavyFunction();\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the module `heavyModule.js` will only be loaded when the user clicks a button, reducing the initial JavaScript bundle size and speeding up startup time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Lazy loading is an essential technique for creating faster web apps. Using Intersection Observer to lazy load images and dynamic imports for JavaScript modules can dramatically reduce load times and improve user experience. Start implementing these techniques in your projects today to build lightning-fast web apps!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-memory-leaks-in-javascript-closures-and-garbage-collection",
+    "title": "Mastering Memory Leaks in JavaScript: Deep Dive into Closures and Garbage Collection",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to identify and fix memory leaks in JavaScript by understanding closures and garbage collection. A beginner-friendly guide to keep your code efficient.",
+    "videoUrl": "https://www.youtube.com/watch?v=WqNqeMjd28I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in JavaScript can slow down your web applications and cause them to crash over time. Understanding how closures work with JavaScript’s garbage collector is essential to prevent these leaks. This article will guide you through the basics of closures, explain how garbage collection works, and show practical examples to help you avoid memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s start with a quick refresher on closures. A closure happens when a function retains access to variables from its outer scope even after that outer function has finished executing. This is a powerful feature in JavaScript, but it can also unintentionally keep variables in memory longer than needed."
+      },
+      {
+        "type": "code",
+        "value": "function outer() {\n  let bigData = new Array(1000).fill('important data');\n  return function inner() {\n    console.log(bigData[0]);\n  }\n}\n\nconst closureFn = outer();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, calling `outer()` returns `inner`, which remembers the `bigData` variable. Even though `outer()` has completed, `bigData` remains in memory because `inner` needs it. If you keep many such closures around, they can cause significant memory consumption."
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript’s garbage collection automatically frees memory that’s no longer in use. But things get tricky when closures hold references to variables, preventing the garbage collector from cleaning up. This leads to memory leaks, especially in long-running applications or single-page apps."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid memory leaks with closures, first be mindful about what your closures capture. Avoid unnecessarily large objects or data inside closures. Also, if a closure is no longer needed, set variables referencing it to `null` so garbage collection can do its job."
+      },
+      {
+        "type": "code",
+        "value": "let leakFunction = outer();\n// Work with leakFunction...\n// When done, clear it to release memory\nleakFunction = null;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common source of leaks is event listeners inside closures that are not removed. For example, if you add an event listener inside a closure but never remove it, references remain and memory usage grows over time."
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  let largeData = new Array(1000).fill('data');\n\n  function onClick() {\n    console.log(largeData[0]);\n  }\n\n  document.body.addEventListener('click', onClick);\n\n  // Later, if the event listener isn't removed, largeData stays in memory\n  // document.body.removeEventListener('click', onClick); // Use this to clean up\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering memory leaks in JavaScript comes down to understanding closures and how they interact with garbage collection. Always track your references, clean up event listeners, and avoid capturing unnecessary large objects in your closures. These simple practices will help your applications run smoother and faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to dig deeper, tools like Chrome DevTools Memory Profiler can help you detect and analyze leaks in your actual projects."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-for-high-performance-applications",
+    "title": "Mastering TypeScript Generics for High-Performance Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to write reusable, type-safe code that enhances performance and maintainability in your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are a powerful feature that allow you to create reusable components while maintaining strict type safety. For beginners, generics may seem complex at first, but mastering them can significantly improve the quality and performance of your applications by reducing code duplication and catching errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll walk through the basics of TypeScript generics, why they matter, and practical examples to help you understand how to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Generics?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics let you define a function, class, or interface with a placeholder for a type that you specify when using it. This provides flexibility while still keeping your code strongly typed."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, imagine a function that returns whatever you send it — it can be a number, a string, or any type. Before generics, you'd either use the `any` type, losing type safety, or create separate functions for each type."
+      },
+      {
+        "type": "code",
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\n// Usage examples:\nconst num = identity<number>(42);  // num is of type number\nconst str = identity<string>('hello'); // str is of type string"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `<T>` is a generic type parameter. The function `identity` accepts an argument of type `T` and returns the same type, whatever type is passed in."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Reusability:** Write code once and use with different types.\n- **Type Safety:** Catch errors at compile time instead of runtime.\n- **Performance:** Reduce the need for type assertions and redundant code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example: A Generic Function to Get the First Element"
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst numbers = [1, 2, 3];\nconst firstNumber = getFirstElement(numbers);  // firstNumber is number\n\nconst strings = ['a', 'b', 'c'];\nconst firstString = getFirstElement(strings);  // firstString is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "This `getFirstElement` function works with arrays of any type, returning the first item in a type-safe way."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Constraints"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to restrict the types that can be passed to a generic. You can do this using `extends` keyword."
+      },
+      {
+        "type": "code",
+        "value": "interface Lengthwise {\n  length: number;\n}\n\nfunction logLength<T extends Lengthwise>(item: T): T {\n  console.log(item.length);\n  return item;\n}\n\nlogLength('Hello'); // string has length\nlogLength([1, 2, 3]); // array has length\n// logLength(10); // Error: number does not have length"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `T` must have a `length` property. This prevents using types like `number` that do not have a length, improving runtime safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Classes for Reusable Data Structures"
+      },
+      {
+        "type": "code",
+        "value": "class GenericStack<T> {\n  private items: T[] = [];\n\n  push(item: T) {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n}\n\nconst numberStack = new GenericStack<number>();\nnumberStack.push(10);\nconsole.log(numberStack.pop());\n\nconst stringStack = new GenericStack<string>();\nstringStack.push('hello');\nconsole.log(stringStack.pop());"
+      },
+      {
+        "type": "paragraph",
+        "value": "With generic classes, you can implement flexible data structures that work for any type while keeping strong typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Wrapping Up"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering TypeScript generics unlocks the potential to write highly reusable, maintainable, and type-safe code for your projects. Practice by converting your existing code to use generics where appropriate and you’ll notice improvements in code quality and application performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep experimenting with generic functions, interfaces, and classes as you grow your TypeScript skills."
+      }
+    ]
+  },
+  {
+    "slug": "handling-unexpected-null-values-typescript",
+    "title": "Handling Unexpected Null Values in TypeScript: Best Practices for Edge Cases",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to handle unexpected null values in TypeScript with beginner-friendly tips and best practices to write safer and more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=KHzfZkL_1fY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with TypeScript, one common challenge developers face is handling unexpected null values. Although TypeScript's strict null checks help reduce bugs, null values can still appear due to runtime data or external APIs. In this article, we will explore practical ways to handle null values gracefully and avoid common pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it’s important to understand what null values are. In JavaScript and TypeScript, null represents an intentional absence of any object value. Unlike undefined, which means a variable has not been assigned a value, null is usually set deliberately."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use TypeScript's Union Types to Declare Nullable Variables"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can explicitly declare when a variable can be null by using union types. For example, if you have a user object that might be null, define its type as `User | null`."
+      },
+      {
+        "type": "code",
+        "value": "type User = {\n  name: string;\n  age: number;\n};\n\nlet currentUser: User | null = null;\n\n// Later in code\ncurrentUser = { name: \"Alice\", age: 30 };"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Conditional Checks Before Accessing Properties"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before accessing properties or methods on a potentially null object, always check if it is not null to avoid runtime errors."
+      },
+      {
+        "type": "code",
+        "value": "if (currentUser !== null) {\n  console.log(currentUser.name);\n} else {\n  console.log(\"User is not available\");\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Leverage Optional Chaining for Cleaner Code"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript's optional chaining operator (`?.`) lets you safely access nested properties even when an intermediate object might be null or undefined."
+      },
+      {
+        "type": "code",
+        "value": "console.log(currentUser?.name); // Prints 'Alice' or undefined if currentUser is null"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Nullish Coalescing to Provide Defaults"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you want to provide a fallback value if the variable is null or undefined. Use the nullish coalescing operator (`??`) to handle this correctly."
+      },
+      {
+        "type": "code",
+        "value": "const displayName = currentUser?.name ?? \"Guest\";\nconsole.log(displayName); // Prints 'Alice' or 'Guest'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handle Nulls in Function Parameters"
+      },
+      {
+        "type": "paragraph",
+        "value": "When a function parameter can be null, specify its type accordingly and guard your code against null inputs."
+      },
+      {
+        "type": "code",
+        "value": "function greetUser(user: User | null) {\n  if (user === null) {\n    console.log(\"Hello, Guest!\");\n  } else {\n    console.log(`Hello, ${user.name}!`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling unexpected null values in TypeScript becomes easier when you explicitly declare nullable types, use conditional checks, and leverage modern language features like optional chaining and nullish coalescing. By following these best practices, you can write more robust and error-resistant applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-asyncio-custom-event-loops-scheduling",
+    "title": "Mastering Python's Asyncio: Deep Dive into Custom Event Loops and Scheduling",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create custom event loops and effectively schedule tasks using Python's asyncio library with this beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's asyncio library is a powerful tool designed to write concurrent code using the async/await syntax. Underneath this, the event loop manages and schedules asynchronous tasks. In this tutorial, we'll explore how to create and use custom event loops and scheduling mechanisms, helping deepen your understanding while giving you fine-grained control over your async programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's recap the basics: an event loop is what runs asynchronous tasks and callbacks, handles IO operations, and schedules tasks to run in the future. Typically, asyncio provides a default event loop, but you can also create and control your own event loops if you want more customization."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating and Running a Custom Event Loop"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create a new event loop using `asyncio.new_event_loop()` and then set it as the current event loop with `asyncio.set_event_loop()`. This way, you can run tasks on this custom loop instead of the default one."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def greet(name):\n    print(f'Hello, {name}!')\n\n# Create a new event loop\ncustom_loop = asyncio.new_event_loop()\nasyncio.set_event_loop(custom_loop)\n\ntry:\n    # Run the coroutine on the custom loop\n    custom_loop.run_until_complete(greet('World'))\nfinally:\n    # Always close the loop when done\n    custom_loop.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we create a custom event loop, run a simple coroutine `greet`, and then close the loop. Using custom loops is useful if you want multiple independent loops or want to embed asyncio in applications that run their own loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scheduling Tasks in the Event Loop"
+      },
+      {
+        "type": "paragraph",
+        "value": "asyncio allows you to schedule functions to run soon or after a delay. The most common scheduling tools are `loop.call_soon()` and `loop.call_later()`. These are useful when you want fine control over task timing without awaiting."
+      },
+      {
+        "type": "code",
+        "value": "import time\n\ndef callback():\n    print(f'Callback called at {time.time()}')\n\nloop = asyncio.new_event_loop()\nasyncio.set_event_loop(loop)\n\nprint(f'Start time: {time.time()}')\n\n# Schedule callback to run immediately after this iteration ends\nloop.call_soon(callback)\n\n# Schedule callback to run after 2 seconds\nloop.call_later(2, callback)\n\n# Run the loop for 3 seconds to allow callbacks to execute\nloop.run_until_complete(asyncio.sleep(3))\nloop.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `call_soon()` method schedules the callback to run as soon as possible (after the current code completes). `call_later()` schedules it after a given delay, measured in seconds."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using `asyncio.create_task()` with Custom Event Loops"
+      },
+      {
+        "type": "paragraph",
+        "value": "In asynchronous code, the preferred way to schedule a coroutine is with `asyncio.create_task()`, which runs the coroutine concurrently within the active event loop. When dealing with custom event loops, ensure you set the event loop that the task should belong to."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def countdown(number):\n    while number > 0:\n        print(f'Countdown: {number}')\n        await asyncio.sleep(1)\n        number -= 1\n    print('Countdown finished!')\n\ncustom_loop = asyncio.new_event_loop()\nasyncio.set_event_loop(custom_loop)\n\n# Schedule the countdown task\ntask = custom_loop.create_task(countdown(3))\n\n# Run the event loop until the countdown is done\ncustom_loop.run_until_complete(task)\ncustom_loop.close()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, we create a countdown coroutine, create a task for it on the custom loop, and run it until completion. This pattern is common when managing multiple concurrent async jobs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Python's asyncio event loop is the heart of async programming. By creating custom loops, scheduling callbacks with precise timing, and managing tasks properly, you gain powerful control over your async applications. Try experimenting with these concepts to deepen your understanding and write responsive, efficient Python code!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-tracebacks-how-to-extract-and-analyze-error-details-like-a-pro",
+    "title": "Mastering Python Tracebacks: How to Extract and Analyze Error Details Like a Pro",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to understand and extract valuable information from Python tracebacks to debug your code efficiently, even if you're a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=Tzu4beEruvk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you write Python code, errors are bound to happen. Python provides detailed error messages called tracebacks that help you understand what went wrong. However, beginners often find tracebacks overwhelming. In this article, we'll break down tracebacks, teach you how to read them, and show you how to programmatically extract and analyze error details."
+      },
+      {
+        "type": "paragraph",
+        "value": "A traceback shows the sequence of function calls that led to an error, the exact line where the error occurred, and the error type and message. Let's look at a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running this code results in a ZeroDivisionError traceback:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"script.py\", line 4, in <module>\n    result = divide(10, 0)\n  File \"script.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+      },
+      {
+        "type": "paragraph",
+        "value": "This message tells us exactly what happened — dividing by zero is not allowed. Understanding which file, line, and function caused the error lets you quickly fix your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to capture and analyze tracebacks programmatically. For example, in bigger applications or when logging errors. Python's built-in `traceback` module lets you extract traceback details as strings."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can catch an exception and print its full traceback:"
+      },
+      {
+        "type": "code",
+        "value": "import traceback\n\ntry:\n    result = divide(10, 0)\nexcept Exception as e:\n    tb_str = traceback.format_exc()\n    print(\"Full traceback as string:\")\n    print(tb_str)"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `traceback.format_exc()` function returns the complete traceback in string form, which you can then log, analyze, or display."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to extract specific parts of the traceback, like the file name, line number, or function name where the error happened, you can use `traceback.extract_tb()`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example showing how to extract and print detailed entries from the traceback:"
+      },
+      {
+        "type": "code",
+        "value": "import sys\nimport traceback\n\ndef divide(a, b):\n    return a / b\n\ntry:\n    divide(5, 0)\nexcept Exception:\n    exc_type, exc_value, exc_tb = sys.exc_info()\n    tb_entries = traceback.extract_tb(exc_tb)\n    for entry in tb_entries:\n        print(f\"File: {entry.filename}, Line: {entry.lineno}, Function: {entry.name}, Code: {entry.line}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output might look like this:\nFile: script.py, Line: 4, Function: divide, Code: return a / b\n\nThis detailed info helps you pinpoint exactly where the problem occurred."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering tracebacks empowers you to:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Read error messages confidently\n- Quickly locate bugs in your code\n- Extract and log error details for larger applications\n- Improve debugging skills overall"
+      },
+      {
+        "type": "paragraph",
+        "value": "Start practicing by intentionally causing errors in small scripts and exploring their tracebacks. Use the `traceback` module to capture errors in your projects. Over time, you’ll debug like a pro!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-multi-tenant-databases-with-postgresql",
+    "title": "Designing Scalable Multi-Tenant Databases with PostgreSQL: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and efficient multi-tenant databases using PostgreSQL with simple techniques and practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenancy is a common architecture for SaaS applications, where a single database instance serves multiple customers (tenants). Designing a scalable multi-tenant database is crucial for performance, security, and maintainability. PostgreSQL is a powerful, open-source relational database that supports flexible multi-tenant designs. In this tutorial, we'll cover beginner-friendly strategies to design a scalable multi-tenant database using PostgreSQL."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are three main approaches for multi-tenancy in PostgreSQL:\n1. Shared Database, Shared Schema\n2. Shared Database, Separate Schemas\n3. Separate Databases per Tenant\n\nWe'll focus on the first approach — Shared Database, Shared Schema — as it is the most common for scalable SaaS apps and is beginner-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Use a Tenant Identifier\nIn the shared schema model, all tenants share the same tables. To differentiate tenant data, add a `tenant_id` column to each multi-tenant table. This column acts as a filter so each tenant only sees their own data."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE customers (\n  id SERIAL PRIMARY KEY,\n  tenant_id INT NOT NULL,\n  name VARCHAR(255) NOT NULL,\n  email VARCHAR(255) UNIQUE NOT NULL\n);\n\n-- Index tenant_id for better query performance\nCREATE INDEX idx_customers_tenant_id ON customers (tenant_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Secure Tenant Data with Row-Level Security\nPostgreSQL supports Row-Level Security (RLS) which restricts table rows visible to users. You can enforce that tenants only access their own rows by enabling RLS."
+      },
+      {
+        "type": "code",
+        "value": "ALTER TABLE customers ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY tenant_isolation_policy ON customers\n  FOR SELECT USING (tenant_id = current_setting('app.current_tenant')::int);\n\n-- Set current tenant ID before queries\nSET app.current_tenant = '1';"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Query Data for a Specific Tenant\nWhen querying data, ensure you filter by `tenant_id` or rely on RLS policies. Here's how to fetch customers for tenant 1:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, name, email\nFROM customers\nWHERE tenant_id = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Scaling Considerations\n- **Indexing:** Always index the `tenant_id` column for faster filtering.\n- **Partitioning:** If you expect millions of tenants or huge data, consider table partitioning by `tenant_id` for performance.\n- **Connection Pooling:** Use PostgreSQL connection pooling to manage many connections efficiently.\n- **Schema Design:** Avoid storing tenant-specific config in tables without tenant_id to prevent cross-tenant data leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBy adding a `tenant_id` column, using Row-Level Security, and properly indexing your tables, you can build a scalable multi-tenant database in PostgreSQL suitable for many SaaS applications. This design balances ease of management and performance, especially for beginners just starting with multi-tenancy."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-data-type-conflicts-and-how-to-handle-them-effectively",
+    "title": "Understanding SQL Data Type Conflicts and How to Handle Them Effectively",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and resolve SQL data type conflicts with simple examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=HhvdQhERlH4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, one of the common issues beginners encounter is data type conflicts. These conflicts happen when the data types of columns, variables, or literals don't match in SQL operations such as comparisons, insertions, or joins. Understanding these conflicts and knowing how to handle them can save you from frustrating errors and ensure your queries run smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL data types define the kind of values a column can hold. For example, INTEGER for whole numbers, VARCHAR for text, and DATE for dates. If you try to mix these incompatible types in queries without proper handling, SQL will throw errors or behave unexpectedly. Let's look at some common causes and how to resolve them."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Comparing different data types"
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you have a table with a column `age` of type INTEGER, and you try to compare it to a string value:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE age = '25';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though the number 25 is written as a string, most SQL engines implicitly convert the string '25' to an integer and run the query successfully. However, this implicit conversion can cause problems if the string cannot be converted (e.g., 'twenty-five'). It's better to match data types explicitly:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE age = 25;"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Inserting wrong data types"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to insert incompatible values into a table, you'll get an error. For example, inserting text into an integer column:"
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO orders (order_id, quantity) VALUES (101, 'ten'); -- Error if quantity expects INTEGER"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, ensure the inserted value matches the column’s data type:"
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO orders (order_id, quantity) VALUES (101, 10);"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Joining on mismatched data types"
+      },
+      {
+        "type": "paragraph",
+        "value": "If two tables are joined on columns with different data types, SQL may throw an error or produce unexpected results. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees e\nJOIN departments d ON e.department_id = d.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If `e.department_id` is VARCHAR and `d.department_id` is INTEGER, this join can fail or yield no matches."
+      },
+      {
+        "type": "paragraph",
+        "value": "To resolve this, convert one side explicitly using CAST or CONVERT functions:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees e\nJOIN departments d ON CAST(e.department_id AS INTEGER) = d.department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Using CONVERT or CAST"
+      },
+      {
+        "type": "paragraph",
+        "value": "Whenever you suspect a type mismatch, explicitly convert data using CAST (ANSI SQL) or CONVERT (SQL Server, some others). For example, converting a string to a date:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM events WHERE event_date = CAST('2024-06-01' AS DATE);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Or converting a number to a string:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE user_code = CAST(12345 AS VARCHAR);"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Best practices to avoid data type conflicts"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always check the data types of columns before writing queries.\n- Use explicit type casting when mixing data types.\n- Avoid storing numbers as strings if you'll need numeric operations.\n- Keep your schema consistent across joined tables.\n- Validate inputs before inserting data."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding the data types involved and using type casting properly, you can avoid most SQL data type conflicts and write reliable, error-free queries."
+      }
+    ]
   }
 ];
