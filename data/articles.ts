@@ -37032,5 +37032,361 @@ export const articles = [
         "value": "By following these beginner tips, you can write efficient SQL queries using window functions, even on large datasets, and avoid common errors related to memory usage and slow performance."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-es2024-new-features-and-how-to-use-them-today",
+    "title": "Mastering JavaScript ES2024: New Features and How to Use Them Today",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Discover the exciting new features in JavaScript ES2024 and learn how to use them with beginner-friendly examples and practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=Dmdd3y3oQ-w",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript ES2024 introduces several powerful features that make coding more expressive and efficient. In this tutorial, we'll explore some of the most useful additions and show you how to implement them in your code today. Whether you're new to JavaScript or looking to stay up-to-date, these examples will help you understand and apply ES2024 features easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Hashbang Grammar for scripts\nES2024 allows you to add a hashbang (#!) at the top of your JavaScript files to specify the interpreter, making scripts run directly on environments like Node.js without extra configuration."
+      },
+      {
+        "type": "code",
+        "value": "#!/usr/bin/env node\n\nconsole.log('Running script with hashbang!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Place this line at the very top of your JavaScript file, then make the file executable (e.g., with `chmod +x file.js` on Unix systems). This is particularly useful for scripting and command-line tools."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Improved `findLast` and `findLastIndex` methods\nES2024 standardizes and improves these methods for arrays to find elements starting from the end."
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [5, 12, 8, 130, 44];\n\n// Find last element greater than 10\nconst lastLargeNumber = numbers.findLast(num => num > 10);\nconsole.log(lastLargeNumber);  // Output: 44\n\n// Find last index of element greater than 10\nconst lastLargeIndex = numbers.findLastIndex(num => num > 10);\nconsole.log(lastLargeIndex);  // Output: 4"
+      },
+      {
+        "type": "paragraph",
+        "value": "These methods help when you want to search from the end without reversing the array or writing custom loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. `toSorted()` method for arrays\nInstead of sorting an array in-place, ES2024 adds a `toSorted()` method that returns a new sorted array, preserving immutability."
+      },
+      {
+        "type": "code",
+        "value": "const letters = ['b', 'a', 'c'];\nconst sortedLetters = letters.toSorted();\n\nconsole.log(sortedLetters); // Output: ['a', 'b', 'c']\nconsole.log(letters);       // Output: ['b', 'a', 'c'] (unchanged)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method avoids side-effects, making your code safer and easier to debug."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Hashbangs in Modular JavaScript\nYou can now also include hashbangs in modules, meaning ES modules intended for scripting can start with a hashbang line."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nThese ES2024 updates focus on better developer ergonomics, immutability, and scripting support. To use these today, ensure your runtime environment (like Node.js or modern browsers) supports them or use transpilers like Babel."
+      },
+      {
+        "type": "paragraph",
+        "value": "By adopting ES2024 features, you can write cleaner, more maintainable JavaScript code. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-javascript-error-boundaries-for-cleaner-ui-handling",
+    "title": "Mastering JavaScript Error Boundaries for Cleaner UI Handling",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use JavaScript error boundaries to catch UI errors gracefully, improving user experience and making your app more robust.",
+    "videoUrl": "https://www.youtube.com/watch?v=_FuDMEgIy7I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web applications, errors in your user interface (UI) can sometimes break the entire app or cause unexpected behavior. Error boundaries help catch these errors in a specific part of the UI, preventing your whole app from crashing and allowing you to display a fallback UI instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript frameworks like React, error boundaries are components that catch JavaScript errors anywhere in their child component tree. While JavaScript itself doesn't have native error boundary APIs for UI, React’s error boundaries demonstrate an effective pattern for handling errors in UI rendering."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example of creating an error boundary in React by extending a class component. This is the core idea: catching errors during rendering, in lifecycle methods, and in constructors of the whole tree below them."
+      },
+      {
+        "type": "code",
+        "value": "import React from 'react';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  static getDerivedStateFromError(error) {\n    // Update state so the next render will show the fallback UI\n    return { hasError: true };\n  }\n\n  componentDidCatch(error, errorInfo) {\n    // You can also log error details to an error reporting service\n    console.error('Error caught by ErrorBoundary:', error, errorInfo);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // Render fallback UI\n      return <h1>Something went wrong.</h1>;\n    }\n\n    return this.props.children;\n  }\n}\n\nexport default ErrorBoundary;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To use the ErrorBoundary component, you wrap it around any components that might throw errors during rendering:"
+      },
+      {
+        "type": "code",
+        "value": "import ErrorBoundary from './ErrorBoundary';\nimport BuggyComponent from './BuggyComponent';\n\nfunction App() {\n  return (\n    <ErrorBoundary>\n      <BuggyComponent />\n    </ErrorBoundary>\n  );\n}\n\nexport default App;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If BuggyComponent throws an error, the ErrorBoundary will catch it and display the fallback UI instead of breaking the entire app. This improves user experience by allowing you to gracefully handle problems."
+      },
+      {
+        "type": "paragraph",
+        "value": "Error boundaries only catch errors in the components below them in the tree. They do not catch errors in event handlers, asynchronous code, or errors thrown in the error boundary itself."
+      },
+      {
+        "type": "paragraph",
+        "value": "In native JavaScript apps without frameworks, you can mimic this pattern by using try-catch blocks around risky UI rendering or event handling code to prevent your app from crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering error boundaries helps you build more stable and user-friendly applications by catching and handling UI errors gracefully. If you’re using React or similar frameworks, error boundaries offer a practical and powerful tool to keep your UI clean and your users happy."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-mapped-types-for-cleaner-code",
+    "title": "Mastering TypeScript Mapped Types for Cleaner Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript mapped types to write cleaner, more flexible, and reusable code with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=uxpiJouwE4Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that enhances JavaScript with static typing. One of its most useful features is mapped types, which help you transform types efficiently and keep your code DRY (Don't Repeat Yourself). If you're new to mapped types, this article will guide you through the basics with clear examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mapped types allow you to create new types by taking existing ones and applying transformations to their properties. This is especially helpful when you want to create variations of a type, like making all properties optional or readonly, without rewriting the entire type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example. Suppose you have a type representing a user:"
+      },
+      {
+        "type": "code",
+        "value": "type User = {\n  id: number;\n  name: string;\n  age: number;\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, imagine you want a version of this type where all properties are optional, for example, when updating a user. Instead of manually setting all properties as optional, you can use the built-in mapped type `Partial`:"
+      },
+      {
+        "type": "code",
+        "value": "type PartialUser = Partial<User>;\n\n// Equivalent to:\n// type PartialUser = {\n//   id?: number;\n//   name?: string;\n//   age?: number;\n// };"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `Partial` mapped type takes every property from `User` and makes it optional by adding a `?`. This is a concise way to create flexible types."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create your own mapped types! Here's how to make all properties readonly, meaning you cannot modify them after initialization:"
+      },
+      {
+        "type": "code",
+        "value": "type ReadonlyType<T> = {\n  readonly [P in keyof T]: T[P];\n};\n\n// Usage:\ntype ReadonlyUser = ReadonlyType<User>;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down this syntax:\n- `<T>` means our mapped type works with any type `T`.\n- `keyof T` generates a union of all keys in `T` (like `\"id\" | \"name\" | \"age\"`).\n- `[P in keyof T]` loops over each key `P`.\n- `readonly` adds the readonly modifier to each key.\n- `T[P]` specifies the type of each property."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mapped types can be combined with utility types or your own to adapt to many coding needs, making your TypeScript code more maintainable and expressive."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, here are some useful built-in mapped types in TypeScript:\n- `Partial<T>` makes all properties optional.\n- `Readonly<T>` makes all properties readonly.\n- `Required<T>` makes all optional properties required.\n- `Record<K, T>` constructs a type with keys of type `K` and values of type `T`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Experiment with mapped types to make your code cleaner and safer. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescript-conditional-types-for-advanced-error-handling",
+    "title": "Understanding TypeScript Conditional Types for Advanced Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to leverage TypeScript conditional types to improve error handling in your applications with clear, beginner-friendly explanations and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=JyUwtRuMKUk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a critical part of building robust applications. TypeScript's static type system can help you catch many mistakes during development. One powerful feature in TypeScript is conditional types, which allow you to express complex type relationships. In this article, we'll explore how conditional types can be used for advanced error handling to make your code safer and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Conditional types let you create types that depend on other types, similar to how the ternary operator works with values. This is especially useful when defining error types that depend on whether an operation was successful or not."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Imagine a function that can return either a successful result or an error. We want TypeScript to distinguish between the two cases at the type level."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T> = {\n  success: true;\n  data: T;\n} | {\n  success: false;\n  error: string;\n};\n\nfunction fetchData(shouldFail: boolean): Result<string> {\n  if (shouldFail) {\n    return { success: false, error: 'Failed to fetch data' };\n  } else {\n    return { success: true, data: 'Data retrieved successfully!' };\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle these results correctly, you can use conditional types to extract the type of data or error depending on the `success` flag. Here’s how conditional types help:"
+      },
+      {
+        "type": "code",
+        "value": "type ExtractData<T> = T extends { success: true; data: infer D } ? D : never;\n\ntype ExtractError<T> = T extends { success: false; error: infer E } ? E : never;\n\n// Usage:\ntype DataType = ExtractData<Result<string>>; // string\ntype ErrorType = ExtractError<Result<string>>; // string"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `ExtractData` type checks if `T` matches the shape of a successful result and extracts the type of `data`. Otherwise, it returns `never`. Similarly, `ExtractError` extracts the error string if the result indicates failure."
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern improves type-safety because you can now create functions that specifically handle success or error cases with guaranteed correct types."
+      },
+      {
+        "type": "code",
+        "value": "function handleResult<T>(result: Result<T>) {\n  if (result.success) {\n    // TypeScript knows this is the success case\n    const data: ExtractData<typeof result> = result.data;\n    console.log('Success:', data);\n  } else {\n    // Here, it's the error case\n    const error: ExtractError<typeof result> = result.error;\n    console.error('Error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create more advanced conditional types to handle different shapes of errors or success results for more complex applications. For example, extract different error message formats, or extend the success case with metadata."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript conditional types are a powerful tool for enhancing error handling by making your function results very explicit and type-safe. This helps reduce bugs and improve developer experience by providing clear compile-time checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "With practice, you'll find conditional types invaluable for managing complex data flows and error states in your TypeScript applications!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-metaclasses-for-dynamic-class-creation",
+    "title": "Mastering Python Metaclasses for Dynamic Class Creation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of Python metaclasses and how to use them for dynamic class creation in this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=z2VUkHS2aVw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a flexible and powerful programming language that allows for dynamic behavior, including creating classes dynamically. One of the advanced but fascinating features for doing this is metaclasses. In this tutorial, we will explore what metaclasses are, why they matter, and how you can master them to create dynamic classes in Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Metaclass?\n\nIn Python, everything is an object, including classes themselves. A metaclass is essentially the \"class of a class\" — it defines how a class behaves. Just as an instance is created from a class, a class is created from a metaclass. By default, Python uses the built-in `type` metaclass to create all classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Metaclasses?\n\nMetaclasses allow you to customize class creation. This can be useful for:\n- Automatically adding methods or attributes to classes\n- Enforcing coding patterns or constraints\n- Registering classes for plugins or frameworks\n- Modifying or tracking class creation dynamically"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Basic Metaclass\n\nLet's start by creating a simple metaclass that prints a message every time a new class is created."
+      },
+      {
+        "type": "code",
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\nobj = MyClass()"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, you will see \"Creating class MyClass\" printed. The `__new__` method in `MyMeta` is called when the class `MyClass` is created."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Adding Dynamic Attributes to Classes\n\nUsing a metaclass, you can add attributes automatically to any class that uses it. Here's an example where we add a `greet` method to all classes created with our metaclass."
+      },
+      {
+        "type": "code",
+        "value": "def greet(self):\n    return f\"Hello from {self.__class__.__name__}!\"\n\nclass AutoGreetMeta(type):\n    def __new__(cls, name, bases, dct):\n        dct['greet'] = greet\n        return super().__new__(cls, name, bases, dct)\n\nclass Person(metaclass=AutoGreetMeta):\n    pass\n\np = Person()\nprint(p.greet())  # Output: Hello from Person!"
+      },
+      {
+        "type": "paragraph",
+        "value": "This demonstrates how metaclasses can add functionality automatically to your classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Enforcing Coding Rules with Metaclasses\n\nSuppose you want to make sure that all classes using a certain metaclass define a particular method. You can do this by checking the class dictionary during creation."
+      },
+      {
+        "type": "code",
+        "value": "class MustHaveSpeakMeta(type):\n    def __new__(cls, name, bases, dct):\n        if 'speak' not in dct:\n            raise TypeError(f\"Class {name} must define a 'speak' method\")\n        return super().__new__(cls, name, bases, dct)\n\nclass Dog(metaclass=MustHaveSpeakMeta):\n    def speak(self):\n        return \"Woof!\"\n\n# The following will raise an error:\n# class Cat(metaclass=MustHaveSpeakMeta):\n#     pass"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to create a class `Cat` without a `speak` method, Python will raise a `TypeError`, helping you catch mistakes early."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nMetaclasses unlock the power of Python's class system, allowing you to dynamically control class creation and behavior. Though metaclasses might seem complex at first, they can simplify and strengthen your code when used thoughtfully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start experimenting with metaclasses to add automatic behaviors, enforce rules, or build frameworks. Remember: most Python code doesn’t require metaclasses, but mastering them is useful for advanced use cases."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-complex-window-functions-for-real-time-analytics-in-sql",
+    "title": "Optimizing Complex Window Functions for Real-Time Analytics in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to effectively optimize complex window functions in SQL to improve performance and avoid common errors in real-time analytics scenarios.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions are powerful SQL tools for performing calculations across sets of rows related to the current row. They are commonly used in real-time analytics, such as running totals, rankings, and moving averages. However, complex window functions can cause performance issues and subtle errors when not optimized properly. This article guides beginners through practical optimization techniques and common error fixes."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake is to use overly broad PARTITION BY or ORDER BY clauses, which forces SQL engines to scan large datasets multiple times. Always carefully limit the window function's scope by partitioning on the smallest necessary subset of data and ordering only when required."
+      },
+      {
+        "type": "code",
+        "value": "-- Poorly optimized window function with large partition:\nSELECT\n  user_id,\n  event_date,\n  SUM(purchase_amount) OVER (PARTITION BY user_id ORDER BY event_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM user_purchases;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you do not need ordering for aggregation, consider removing ORDER BY and specifying RANGE or ROWS frames explicitly. This reduces the amount of sorting and memory usage during query execution."
+      },
+      {
+        "type": "code",
+        "value": "-- Optimized window function without unnecessary ORDER BY:\nSELECT\n  user_id,\n  event_date,\n  SUM(purchase_amount) OVER (PARTITION BY user_id) AS total_purchase\nFROM user_purchases;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful optimization is to pre-aggregate data in a Common Table Expression (CTE) or subquery before applying window functions. This helps reduce the dataset size and complexity for the window computation."
+      },
+      {
+        "type": "code",
+        "value": "-- Pre-aggregation before window function:\nWITH daily_totals AS (\n  SELECT user_id, event_date, SUM(purchase_amount) AS daily_purchase\n  FROM user_purchases\n  GROUP BY user_id, event_date\n)\nSELECT\n  user_id,\n  event_date,\n  SUM(daily_purchase) OVER (PARTITION BY user_id ORDER BY event_date) AS running_total\nFROM daily_totals;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Errors often occur when mixing window functions and aggregations incorrectly. For example, attempting to nest window functions inside aggregate functions or vice versa will lead to syntax errors or unexpected results. Always separate aggregation and window logic into different query layers."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect nesting causing errors:\nSELECT\n  user_id,\n  SUM(ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY event_date))\nFROM user_purchases\nGROUP BY user_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix the above, compute the window function in a subquery or CTE first, then aggregate on its results in an outer query."
+      },
+      {
+        "type": "code",
+        "value": "-- Correct approach avoiding nesting errors:\nWITH ranked_events AS (\n  SELECT user_id, event_date,\n    ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY event_date) AS event_rank\n  FROM user_purchases\n)\nSELECT user_id, SUM(event_rank)\nFROM ranked_events\nGROUP BY user_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to optimize complex window functions for real-time analytics: limit partition scopes, avoid unnecessary ordering, pre-aggregate data, and carefully separate window and aggregation steps. By following these tips, you will reduce errors and improve query responsiveness."
+      }
+    ]
   }
 ];
