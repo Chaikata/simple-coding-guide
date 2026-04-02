@@ -1,613 +1,505 @@
 [
   {
-    "slug": "mastering-lazy-loading-in-javascript-for-lightning-fast-web-apps",
-    "title": "Mastering Lazy Loading in JavaScript for Lightning Fast Web Apps",
+    "slug": "mastering-async-iterators-in-javascript-practical-use-cases-and-tricks",
+    "title": "Mastering Async Iterators in JavaScript: Practical Use Cases and Tricks",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to implement lazy loading in JavaScript to boost your web app's performance by loading only the necessary resources when needed.",
-    "videoUrl": "https://www.youtube.com/watch?v=4VkRNYiEdII",
+    "description": "Learn how to use async iterators in JavaScript to handle asynchronous data streams effectively with practical examples and beginner-friendly tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=IJ6EgdiI_wU",
     "content": [
       {
         "type": "paragraph",
-        "value": "Lazy loading is a powerful technique to improve the performance and speed of your web applications. Instead of loading all resources upfront, lazy loading delays the loading of non-critical resources until they are actually needed. This reduces the initial load time and saves bandwidth, resulting in a smoother experience for your users."
+        "value": "JavaScript's async iterators are a powerful feature that lets you handle streams of asynchronous data with ease. If you're familiar with regular iterators and loops, async iterators extend these concepts to work with promises, making it easier to process data arriving over time, such as API responses, file reads, or user inputs."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we will explore lazy loading images and JavaScript modules using simple and modern JavaScript techniques. Being a beginner-friendly guide, no complex setup is required, just plain JavaScript."
+        "value": "In this tutorial, we'll explore what async iterators are, how to create and use them, and look at practical examples that demonstrate their usefulness in real-world applications."
       },
       {
         "type": "paragraph",
-        "value": "### Lazy Loading Images with Intersection Observer"
+        "value": "### What is an Async Iterator?"
       },
       {
         "type": "paragraph",
-        "value": "Traditionally, all images on a page load immediately, which can slow down your page. Lazy loading images means loading them only when they come into the viewport (i.e., visible on the user's screen). You can achieve this efficiently with the Intersection Observer API."
+        "value": "An async iterator is an object that defines a method `Symbol.asyncIterator()`, which returns an object with a `next()` method that returns a promise resolving to the next item. This allows you to iterate over asynchronous data using the `for await...of` syntax."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of how you might consume an async iterator:"
       },
       {
         "type": "code",
-        "value": "const images = document.querySelectorAll('img[data-src]');\n\nconst loadImage = (image) => {\n  image.src = image.dataset.src;\n  image.removeAttribute('data-src');\n};\n\nconst observer = new IntersectionObserver((entries, observer) => {\n  entries.forEach(entry => {\n    if(entry.isIntersecting) {\n      loadImage(entry.target);\n      observer.unobserve(entry.target);\n    }\n  });\n});\n\nimages.forEach(img => {\n  observer.observe(img);\n});"
+        "value": "async function* asyncGenerator() {\n  const data = ['a', 'b', 'c'];\n  for (const item of data) {\n    // simulate async delay\n    await new Promise(resolve => setTimeout(resolve, 100));\n    yield item;\n  }\n}\n\nasync function printItems() {\n  for await (const letter of asyncGenerator()) {\n    console.log(letter);\n  }\n}\n\nprintItems();"
       },
       {
         "type": "paragraph",
-        "value": "In your HTML, set your images like this: `<img data-src=\"image.jpg\" alt=\"Description\" />`. Initially, their `src` attribute should be empty to avoid loading them immediately. The JavaScript will load the image only when it appears on screen."
+        "value": "This code defines an async generator function `asyncGenerator` that yields items with a delay, mimicking asynchronous data fetching. The `printItems` function then uses `for await...of` to log each item as it becomes available."
       },
       {
         "type": "paragraph",
-        "value": "### Lazy Loading JavaScript Modules"
+        "value": "### Practical Use Case 1: Fetching API Data in Chunks"
       },
       {
         "type": "paragraph",
-        "value": "Lazy loading can also apply to JavaScript code! Instead of loading all scripts upfront, you can dynamically import modules only when needed using `import()`."
+        "value": "When dealing with APIs that return large datasets, it's often better to process data in chunks rather than waiting for the entire response. Async iterators let you handle each chunk as soon as it's available."
       },
       {
         "type": "code",
-        "value": "button.addEventListener('click', async () => {\n  const module = await import('./heavyModule.js');\n  module.heavyFunction();\n});"
+        "value": "async function* fetchPaginatedData(url) {\n  let nextUrl = url;\n  while (nextUrl) {\n    const response = await fetch(nextUrl);\n    const data = await response.json();\n    for (const item of data.results) {\n      yield item;\n    }\n    nextUrl = data.next; // assume API provides a next page URL or null\n  }\n}\n\n(async () => {\n  for await (const user of fetchPaginatedData('https://api.example.com/users')) {\n    console.log(user.name);\n  }\n})();"
       },
       {
         "type": "paragraph",
-        "value": "Here, the module `heavyModule.js` will only be loaded when the user clicks a button, reducing the initial JavaScript bundle size and speeding up startup time."
+        "value": "Here, the async iterator `fetchPaginatedData` fetches data page by page from an API. It yields individual items as they are received, allowing you to process each user immediately without waiting for all pages."
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "### Practical Use Case 2: Reading Files Line by Line asynchronously"
       },
       {
         "type": "paragraph",
-        "value": "Lazy loading is an essential technique for creating faster web apps. Using Intersection Observer to lazy load images and dynamic imports for JavaScript modules can dramatically reduce load times and improve user experience. Start implementing these techniques in your projects today to build lightning-fast web apps!"
+        "value": "In Node.js, async iterators can help process large files line by line without loading everything into memory."
+      },
+      {
+        "type": "code",
+        "value": "import fs from 'fs';\nimport readline from 'readline';\n\nasync function* readLines(filePath) {\n  const fileStream = fs.createReadStream(filePath);\n  const rl = readline.createInterface({ input: fileStream });\n\n  for await (const line of rl) {\n    yield line;\n  }\n}\n\n(async () => {\n  for await (const line of readLines('bigfile.txt')) {\n    console.log(`Line: ${line}`);\n  }\n})();"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example uses Node.js streams along with `readline` to read a file one line at a time asynchronously. This approach is memory-friendly and perfect for large files or logs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tricks to Make the Most of Async Iterators"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use `for await...of` loops to easily consume async iterators without manually handling promises.\n- Implement async generators (`async function*`) to create your own async iterators neatly.\n- Combine async iterators with other async functions to build efficient data pipelines.\n- Use `return` and `throw` in async generators to control iteration flow and handle errors carefully.\n- Remember that errors can be caught with try/catch inside the `for await...of` loops for better stability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async iterators are a great tool for managing asynchronous data streams in a clean and efficient way in JavaScript. Whether you're consuming paginated API results, reading files, or processing real-time events, learning async iterators will improve your handling of asynchronous workflows. Practice creating your own async generators and start harnessing the power of `for await...of` loops today!"
       }
     ]
   },
   {
-    "slug": "mastering-memory-leaks-in-javascript-closures-and-garbage-collection",
-    "title": "Mastering Memory Leaks in JavaScript: Deep Dive into Closures and Garbage Collection",
+    "slug": "mastering-javascript-performance-profiling-tools-and-techniques-for-efficient-debugging",
+    "title": "Mastering JavaScript Performance Profiling: Tools and Techniques for Efficient Debugging",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to identify and fix memory leaks in JavaScript by understanding closures and garbage collection. A beginner-friendly guide to keep your code efficient.",
-    "videoUrl": "https://www.youtube.com/watch?v=WqNqeMjd28I",
+    "description": "Learn how to use JavaScript performance profiling tools and techniques to identify and fix common performance issues, making your code faster and more efficient.",
+    "videoUrl": "https://www.youtube.com/watch?v=IZlM4duZOPc",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks in JavaScript can slow down your web applications and cause them to crash over time. Understanding how closures work with JavaScript’s garbage collector is essential to prevent these leaks. This article will guide you through the basics of closures, explain how garbage collection works, and show practical examples to help you avoid memory leaks."
+        "value": "JavaScript performance issues can slow down your web applications and frustrate users. Understanding how to profile and debug your code is essential to optimize performance. In this beginner-friendly article, we'll explore common performance problems, tools available in popular browsers, and practical techniques to identify and fix errors effectively."
       },
       {
         "type": "paragraph",
-        "value": "Let’s start with a quick refresher on closures. A closure happens when a function retains access to variables from its outer scope even after that outer function has finished executing. This is a powerful feature in JavaScript, but it can also unintentionally keep variables in memory longer than needed."
+        "value": "### Why Profile JavaScript Performance?\n\nProfiling helps you find bottlenecks in your code—sections that use more CPU or memory than necessary. Instead of guessing, profiling gives you data about where your program spends its time or resources.\n\nCommon symptoms needing profiling include slow page loads, unresponsive buttons, laggy animations, or high CPU usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Chrome DevTools Performance Profiler\n\nGoogle Chrome offers a powerful Performance tab to record and analyze your app’s runtime behavior:\n1. Open Chrome and press `F12` to access DevTools.\n2. Navigate to the `Performance` tab.\n3. Click the record button (●), then interact with your page to reproduce the issue.\n4. Stop recording by clicking the button again.\n\nThe profiler will generate a detailed flame chart and timeline showing where time is spent in your JavaScript functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Detecting a Slow Loop\n\nImagine the following code that updates DOM elements in a slow loop:"
       },
       {
         "type": "code",
-        "value": "function outer() {\n  let bigData = new Array(1000).fill('important data');\n  return function inner() {\n    console.log(bigData[0]);\n  }\n}\n\nconst closureFn = outer();"
+        "value": "function updateItems(items) {\n  items.forEach(item => {\n    const element = document.getElementById(item.id);\n    element.textContent = item.value;\n  });\n}\n\n// Calling with many items\nupdateItems(largeArray);"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, calling `outer()` returns `inner`, which remembers the `bigData` variable. Even though `outer()` has completed, `bigData` remains in memory because `inner` needs it. If you keep many such closures around, they can cause significant memory consumption."
+        "value": "Using the Performance profiler, you might notice a long task in the timeline. This often happens because the browser must repaint after each DOM update inside the loop, slowing your code."
       },
       {
         "type": "paragraph",
-        "value": "JavaScript’s garbage collection automatically frees memory that’s no longer in use. But things get tricky when closures hold references to variables, preventing the garbage collector from cleaning up. This leads to memory leaks, especially in long-running applications or single-page apps."
-      },
-      {
-        "type": "paragraph",
-        "value": "To avoid memory leaks with closures, first be mindful about what your closures capture. Avoid unnecessarily large objects or data inside closures. Also, if a closure is no longer needed, set variables referencing it to `null` so garbage collection can do its job."
+        "value": "### Fixing Performance Issues\n\nOne easy fix is to batch DOM updates. For example, using `DocumentFragment` to minimize reflows:"
       },
       {
         "type": "code",
-        "value": "let leakFunction = outer();\n// Work with leakFunction...\n// When done, clear it to release memory\nleakFunction = null;"
+        "value": "function updateItemsOptimized(items) {\n  const fragment = document.createDocumentFragment();\n  items.forEach(item => {\n    const element = document.createElement('div');\n    element.id = item.id;\n    element.textContent = item.value;\n    fragment.appendChild(element);\n  });\n  const container = document.getElementById('container');\n  container.innerHTML = '';\n  container.appendChild(fragment);\n}\n\nupdateItemsOptimized(largeArray);"
       },
       {
         "type": "paragraph",
-        "value": "Another common source of leaks is event listeners inside closures that are not removed. For example, if you add an event listener inside a closure but never remove it, references remain and memory usage grows over time."
-      },
-      {
-        "type": "code",
-        "value": "function setup() {\n  let largeData = new Array(1000).fill('data');\n\n  function onClick() {\n    console.log(largeData[0]);\n  }\n\n  document.body.addEventListener('click', onClick);\n\n  // Later, if the event listener isn't removed, largeData stays in memory\n  // document.body.removeEventListener('click', onClick); // Use this to clean up\n}"
+        "value": "This reduces the number of times the DOM updates on screen, improving performance. Profiling again after this change confirms the improvement."
       },
       {
         "type": "paragraph",
-        "value": "In summary, mastering memory leaks in JavaScript comes down to understanding closures and how they interact with garbage collection. Always track your references, clean up event listeners, and avoid capturing unnecessary large objects in your closures. These simple practices will help your applications run smoother and faster."
+        "value": "### Additional Tips for Effective Profiling\n- Use `console.time()` and `console.timeEnd()` to measure specific code blocks.\n- Look for long tasks over 50ms that block user interaction.\n- Check memory usage in the `Memory` tab to detect leaks.\n- Use Lighthouse (built-in in Chrome DevTools) for automated performance audits.\n- Test in production-similar environments for realistic results."
       },
       {
         "type": "paragraph",
-        "value": "If you want to dig deeper, tools like Chrome DevTools Memory Profiler can help you detect and analyze leaks in your actual projects."
+        "value": "### Summary\n\nMastering JavaScript performance profiling lets you identify and resolve hidden bottlenecks. With browser tools like Chrome DevTools’ Performance tab, simple techniques like batching DOM updates, and smart measurement practices, you can write faster, smoother applications that users love."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-generics-for-high-performance-applications",
-    "title": "Mastering TypeScript Generics for High-Performance Applications",
+    "slug": "mastering-typescript-mapped-types-for-dynamic-object-transformations",
+    "title": "Mastering TypeScript Mapped Types for Dynamic Object Transformations",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript generics to write reusable, type-safe code that enhances performance and maintainability in your applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "description": "Learn how to use TypeScript mapped types to create flexible and dynamic object transformations, ideal for enhancing type safety and code reusability in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=dfrmvzFktSk",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript generics are a powerful feature that allow you to create reusable components while maintaining strict type safety. For beginners, generics may seem complex at first, but mastering them can significantly improve the quality and performance of your applications by reducing code duplication and catching errors early."
+        "value": "If you're new to TypeScript and want to learn how to work with object types dynamically, mapped types are a fantastic feature to master. Mapped types allow you to create new types by transforming the properties of existing types. This tutorial will guide you through the basics of mapped types and help you understand how to apply them for practical object transformations."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll walk through the basics of TypeScript generics, why they matter, and practical examples to help you understand how to use them effectively."
+        "value": "### What are Mapped Types?\nMapped types use TypeScript’s ability to iterate over keys of an existing type to create a new type with transformations applied to those keys. They are very useful when you want similar operations on multiple properties of an object without rewriting code."
       },
       {
         "type": "paragraph",
-        "value": "### What are Generics?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Generics let you define a function, class, or interface with a placeholder for a type that you specify when using it. This provides flexibility while still keeping your code strongly typed."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, imagine a function that returns whatever you send it — it can be a number, a string, or any type. Before generics, you'd either use the `any` type, losing type safety, or create separate functions for each type."
+        "value": "Let's start with a simple example. Imagine you have an interface describing a user:"
       },
       {
         "type": "code",
-        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\n// Usage examples:\nconst num = identity<number>(42);  // num is of type number\nconst str = identity<string>('hello'); // str is of type string"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, `<T>` is a generic type parameter. The function `identity` accepts an argument of type `T` and returns the same type, whatever type is passed in."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Benefits of Using Generics"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Reusability:** Write code once and use with different types.\n- **Type Safety:** Catch errors at compile time instead of runtime.\n- **Performance:** Reduce the need for type assertions and redundant code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Example: A Generic Function to Get the First Element"
+        "value": "If you want to create a new type where all `User` properties are optional, you could use a mapped type like this:"
       },
       {
         "type": "code",
-        "value": "function getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst numbers = [1, 2, 3];\nconst firstNumber = getFirstElement(numbers);  // firstNumber is number\n\nconst strings = ['a', 'b', 'c'];\nconst firstString = getFirstElement(strings);  // firstString is string"
+        "value": "type PartialUser = {\n  [K in keyof User]?: User[K];\n};"
       },
       {
         "type": "paragraph",
-        "value": "This `getFirstElement` function works with arrays of any type, returning the first item in a type-safe way."
+        "value": "The syntax `[K in keyof User]` means \"for each key `K` in the keys of `User`\". The `?` makes each property optional, and `User[K]` keeps the original property type."
       },
       {
         "type": "paragraph",
-        "value": "### Generic Constraints"
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes you want to restrict the types that can be passed to a generic. You can do this using `extends` keyword."
+        "value": "You can now use `PartialUser` to create objects that may have any subset of the `User` properties."
       },
       {
         "type": "code",
-        "value": "interface Lengthwise {\n  length: number;\n}\n\nfunction logLength<T extends Lengthwise>(item: T): T {\n  console.log(item.length);\n  return item;\n}\n\nlogLength('Hello'); // string has length\nlogLength([1, 2, 3]); // array has length\n// logLength(10); // Error: number does not have length"
+        "value": "const partialUser: PartialUser = {\n  name: \"Alice\"\n};"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `T` must have a `length` property. This prevents using types like `number` that do not have a length, improving runtime safety."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Generic Classes for Reusable Data Structures"
+        "value": "### More Practical Example: Readonly and Nullable Transformations\nMapped types are also great for creating utility types like `Readonly<T>` or `Nullable<T>` that modify properties in common ways."
       },
       {
         "type": "code",
-        "value": "class GenericStack<T> {\n  private items: T[] = [];\n\n  push(item: T) {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n}\n\nconst numberStack = new GenericStack<number>();\nnumberStack.push(10);\nconsole.log(numberStack.pop());\n\nconst stringStack = new GenericStack<string>();\nstringStack.push('hello');\nconsole.log(stringStack.pop());"
+        "value": "type ReadonlyUser = {\n  readonly [K in keyof User]: User[K];\n};\n\nconst readonlyUser: ReadonlyUser = {\n  id: 1,\n  name: \"Bob\",\n  email: \"bob@example.com\"\n};\n\n// readonlyUser.id = 2; // Error: Cannot assign to 'id' because it is a read-only property."
+      },
+      {
+        "type": "code",
+        "value": "type NullableUser = {\n  [K in keyof User]: User[K] | null;\n};\n\nconst nullableUser: NullableUser = {\n  id: null,\n  name: \"Carol\",\n  email: null\n};"
       },
       {
         "type": "paragraph",
-        "value": "With generic classes, you can implement flexible data structures that work for any type while keeping strong typing."
+        "value": "### Adding Modifiers Dynamically\nYou can combine mapped types with conditional types and modifiers to add even more dynamic transformations. For example, make all properties readonly except methods:"
+      },
+      {
+        "type": "code",
+        "value": "interface UserWithMethod {\n  id: number;\n  name: string;\n  getEmail: () => string;\n}\n\ntype ReadonlyExceptMethods<T> = {\n  readonly [K in keyof T]: T[K] extends Function ? T[K] : Readonly<T[K]>;\n};\n\nconst user: ReadonlyExceptMethods<UserWithMethod> = {\n  id: 5,\n  name: \"Dan\",\n  getEmail: () => \"dan@example.com\"\n};\n\n// user.id = 6; // Error: Cannot assign to 'id' because it is a read-only property.\nuser.getEmail = () => \"new@example.com\"; // Allowed: methods are not readonly"
       },
       {
         "type": "paragraph",
-        "value": "### Wrapping Up"
+        "value": "### Conclusion\nMapped types in TypeScript provide a flexible and powerful way to transform existing types into new versions, allowing you to write more expressive and reusable type-safe code. By mastering mapped types, you gain greater control over your types and can handle complex scenarios with ease."
       },
       {
         "type": "paragraph",
-        "value": "Mastering TypeScript generics unlocks the potential to write highly reusable, maintainable, and type-safe code for your projects. Practice by converting your existing code to use generics where appropriate and you’ll notice improvements in code quality and application performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "Keep experimenting with generic functions, interfaces, and classes as you grow your TypeScript skills."
+        "value": "Try experimenting with your own object types and transformations using mapped types to see how they can simplify your TypeScript development."
       }
     ]
   },
   {
-    "slug": "handling-unexpected-null-values-typescript",
-    "title": "Handling Unexpected Null Values in TypeScript: Best Practices for Edge Cases",
+    "slug": "understanding-typescripts-type-narrowing-a-beginners-guide",
+    "title": "Understanding TypeScript's Type Narrowing: A Beginner's Guide",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to handle unexpected null values in TypeScript with beginner-friendly tips and best practices to write safer and more reliable code.",
-    "videoUrl": "https://www.youtube.com/watch?v=KHzfZkL_1fY",
+    "description": "Learn how TypeScript's type narrowing helps you write safer code by refining types and preventing common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=w74CNzY4zT0",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with TypeScript, one common challenge developers face is handling unexpected null values. Although TypeScript's strict null checks help reduce bugs, null values can still appear due to runtime data or external APIs. In this article, we will explore practical ways to handle null values gracefully and avoid common pitfalls."
+        "value": "TypeScript is a powerful language that adds type safety to JavaScript. One key feature that helps avoid common programming errors is called \"type narrowing.\" Type narrowing allows TypeScript to refine a variable's type based on specific checks you perform in your code. This means you can write safer, more predictable code without losing flexibility."
       },
       {
         "type": "paragraph",
-        "value": "First, it’s important to understand what null values are. In JavaScript and TypeScript, null represents an intentional absence of any object value. Unlike undefined, which means a variable has not been assigned a value, null is usually set deliberately."
+        "value": "Imagine you have a variable that can contain multiple types, like a string or a number. Type narrowing helps TypeScript understand exactly which type the variable currently holds, so you can use it confidently."
       },
       {
         "type": "paragraph",
-        "value": "### Use TypeScript's Union Types to Declare Nullable Variables"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can explicitly declare when a variable can be null by using union types. For example, if you have a user object that might be null, define its type as `User | null`."
+        "value": "Let's look at some examples to see how type narrowing works in practice."
       },
       {
         "type": "code",
-        "value": "type User = {\n  name: string;\n  age: number;\n};\n\nlet currentUser: User | null = null;\n\n// Later in code\ncurrentUser = { name: \"Alice\", age: 30 };"
+        "value": "function printId(id: number | string) {\n  if (typeof id === 'string') {\n    // Inside this block, TypeScript knows 'id' is a string\n    console.log(id.toUpperCase());\n  } else {\n    // Here, 'id' must be a number\n    console.log(id.toFixed(2));\n  }\n}\n\nprintId('abc'); // Output: ABC\nprintId(123);   // Output: 123.00"
       },
       {
         "type": "paragraph",
-        "value": "### Use Conditional Checks Before Accessing Properties"
+        "value": "In the example above, the parameter `id` can be a string or a number. Using the `typeof` check, TypeScript narrows down `id` to either a string or number inside each branch of the `if` statement. This allows you to safely call string or number methods without errors."
       },
       {
         "type": "paragraph",
-        "value": "Before accessing properties or methods on a potentially null object, always check if it is not null to avoid runtime errors."
+        "value": "Another common case is working with nullable types — values that can be `null` or `undefined`. Type narrowing helps avoid runtime errors by ensuring you only access properties when the value exists."
       },
       {
         "type": "code",
-        "value": "if (currentUser !== null) {\n  console.log(currentUser.name);\n} else {\n  console.log(\"User is not available\");\n}"
+        "value": "function greet(name: string | null) {\n  if (name) {\n    // TypeScript now knows 'name' is definitely a string\n    console.log(`Hello, ${name.toUpperCase()}!`);\n  } else {\n    console.log('Hello, guest!');\n  }\n}\n\ngreet('Alice');  // Output: Hello, ALICE!\ngreet(null);     // Output: Hello, guest!"
       },
       {
         "type": "paragraph",
-        "value": "### Leverage Optional Chaining for Cleaner Code"
+        "value": "Here, the `if (name)` check narrows the type from `string | null` to just `string`, allowing safe use of string methods. This is called \"truthiness narrowing.\""
       },
       {
         "type": "paragraph",
-        "value": "TypeScript's optional chaining operator (`?.`) lets you safely access nested properties even when an intermediate object might be null or undefined."
+        "value": "TypeScript also supports narrowing with custom type guards, which let you define your own checks to refine types."
       },
       {
         "type": "code",
-        "value": "console.log(currentUser?.name); // Prints 'Alice' or undefined if currentUser is null"
+        "value": "interface Fish {\n  swim: () => void;\n}\n\ninterface Bird {\n  fly: () => void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim(); // Safe to call swim\n  } else {\n    pet.fly();  // Safe to call fly\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Use Nullish Coalescing to Provide Defaults"
+        "value": "In this example, the `isFish` function tells TypeScript whether the object is a `Fish`. Inside the `if` block, TypeScript narrows the type accordingly, allowing you to access the proper methods safely."
       },
       {
         "type": "paragraph",
-        "value": "Sometimes, you want to provide a fallback value if the variable is null or undefined. Use the nullish coalescing operator (`??`) to handle this correctly."
-      },
-      {
-        "type": "code",
-        "value": "const displayName = currentUser?.name ?? \"Guest\";\nconsole.log(displayName); // Prints 'Alice' or 'Guest'"
+        "value": "To summarize, type narrowing in TypeScript lets you write safer code by helping the compiler understand exactly what type your variables have at different points in your code. This reduces bugs and improves developer confidence."
       },
       {
         "type": "paragraph",
-        "value": "### Handle Nulls in Function Parameters"
-      },
-      {
-        "type": "paragraph",
-        "value": "When a function parameter can be null, specify its type accordingly and guard your code against null inputs."
-      },
-      {
-        "type": "code",
-        "value": "function greetUser(user: User | null) {\n  if (user === null) {\n    console.log(\"Hello, Guest!\");\n  } else {\n    console.log(`Hello, ${user.name}!`);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Handling unexpected null values in TypeScript becomes easier when you explicitly declare nullable types, use conditional checks, and leverage modern language features like optional chaining and nullish coalescing. By following these best practices, you can write more robust and error-resistant applications."
+        "value": "Try practicing with conditional checks, `typeof`, `instanceof`, and custom type guards to get comfortable using TypeScript's type narrowing in your projects."
       }
     ]
   },
   {
-    "slug": "mastering-python-asyncio-custom-event-loops-scheduling",
-    "title": "Mastering Python's Asyncio: Deep Dive into Custom Event Loops and Scheduling",
+    "slug": "building-a-flask-powered-rest-api-for-smart-home-automation",
+    "title": "Building a Flask-Powered REST API for a Smart Home Automation System",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to create custom event loops and effectively schedule tasks using Python's asyncio library with this beginner-friendly guide.",
-    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "description": "Learn how to create a simple REST API using Flask to control smart home devices like lights and thermostats. Perfect for beginners interested in home automation and Python web development.",
+    "videoUrl": "https://www.youtube.com/watch?v=EbOvR3jF9Co",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python's asyncio library is a powerful tool designed to write concurrent code using the async/await syntax. Underneath this, the event loop manages and schedules asynchronous tasks. In this tutorial, we'll explore how to create and use custom event loops and scheduling mechanisms, helping deepen your understanding while giving you fine-grained control over your async programs."
+        "value": "Smart home automation is becoming increasingly popular, allowing you to control home devices such as lights, thermostats, and security systems remotely. In this tutorial, we'll build a basic REST API using Python's Flask framework. This API will allow you to turn devices on and off, and read their status. Don't worry if you're new to Flask or APIs; this guide is beginner-friendly and practical."
       },
       {
         "type": "paragraph",
-        "value": "First, let's recap the basics: an event loop is what runs asynchronous tasks and callbacks, handles IO operations, and schedules tasks to run in the future. Typically, asyncio provides a default event loop, but you can also create and control your own event loops if you want more customization."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Creating and Running a Custom Event Loop"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can create a new event loop using `asyncio.new_event_loop()` and then set it as the current event loop with `asyncio.set_event_loop()`. This way, you can run tasks on this custom loop instead of the default one."
+        "value": "First, let's make sure you have Flask installed. You can install it using pip if you don't already have it:"
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def greet(name):\n    print(f'Hello, {name}!')\n\n# Create a new event loop\ncustom_loop = asyncio.new_event_loop()\nasyncio.set_event_loop(custom_loop)\n\ntry:\n    # Run the coroutine on the custom loop\n    custom_loop.run_until_complete(greet('World'))\nfinally:\n    # Always close the loop when done\n    custom_loop.close()"
+        "value": "pip install Flask"
       },
       {
         "type": "paragraph",
-        "value": "In this example, we create a custom event loop, run a simple coroutine `greet`, and then close the loop. Using custom loops is useful if you want multiple independent loops or want to embed asyncio in applications that run their own loops."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Scheduling Tasks in the Event Loop"
-      },
-      {
-        "type": "paragraph",
-        "value": "asyncio allows you to schedule functions to run soon or after a delay. The most common scheduling tools are `loop.call_soon()` and `loop.call_later()`. These are useful when you want fine control over task timing without awaiting."
+        "value": "Next, we will create a Python script named `app.py`. This script will contain our Flask application with endpoints to control a smart light and a thermostat."
       },
       {
         "type": "code",
-        "value": "import time\n\ndef callback():\n    print(f'Callback called at {time.time()}')\n\nloop = asyncio.new_event_loop()\nasyncio.set_event_loop(loop)\n\nprint(f'Start time: {time.time()}')\n\n# Schedule callback to run immediately after this iteration ends\nloop.call_soon(callback)\n\n# Schedule callback to run after 2 seconds\nloop.call_later(2, callback)\n\n# Run the loop for 3 seconds to allow callbacks to execute\nloop.run_until_complete(asyncio.sleep(3))\nloop.close()"
+        "value": "from flask import Flask, jsonify, request\n\napp = Flask(__name__)\n\n# Simulated device states\nsmart_home_devices = {\n    'light': {'status': 'off'},\n    'thermostat': {'temperature': 22}  # temperature in Celsius\n}\n\n@app.route('/light', methods=['GET'])\ndef get_light_status():\n    \"\"\"Get the current status of the light.\"\"\"\n    status = smart_home_devices['light']['status']\n    return jsonify({'light_status': status})\n\n@app.route('/light', methods=['POST'])\ndef set_light_status():\n    \"\"\"Turn the light on or off.\"\"\"\n    data = request.get_json()\n    if not data or 'status' not in data:\n        return jsonify({'error': 'Missing light status'}), 400\n    status = data['status'].lower()\n    if status not in ['on', 'off']:\n        return jsonify({'error': 'Invalid status. Use \"on\" or \"off\".'}), 400\n    smart_home_devices['light']['status'] = status\n    return jsonify({'message': f'Light turned {status}'}), 200\n\n@app.route('/thermostat', methods=['GET'])\ndef get_thermostat_temperature():\n    \"\"\"Get the current thermostat temperature.\"\"\"\n    temperature = smart_home_devices['thermostat']['temperature']\n    return jsonify({'temperature': temperature})\n\n@app.route('/thermostat', methods=['POST'])\ndef set_thermostat_temperature():\n    \"\"\"Set the thermostat temperature.\"\"\"\n    data = request.get_json()\n    if not data or 'temperature' not in data:\n        return jsonify({'error': 'Missing temperature value'}), 400\n    try:\n        temperature = float(data['temperature'])\n    except ValueError:\n        return jsonify({'error': 'Temperature must be a number'}), 400\n    if temperature < 10 or temperature > 30:\n        return jsonify({'error': 'Temperature must be between 10 and 30 degrees Celsius'}), 400\n    smart_home_devices['thermostat']['temperature'] = temperature\n    return jsonify({'message': f'Thermostat set to {temperature}°C'}), 200\n\nif __name__ == '__main__':\n    app.run(debug=True)"
       },
       {
         "type": "paragraph",
-        "value": "The `call_soon()` method schedules the callback to run as soon as possible (after the current code completes). `call_later()` schedules it after a given delay, measured in seconds."
+        "value": "Let's break down what this code does:"
       },
       {
         "type": "paragraph",
-        "value": "### Using `asyncio.create_task()` with Custom Event Loops"
+        "value": "- We import Flask and the necessary modules to handle JSON and HTTP requests.\n- We simulate device states with a Python dictionary `smart_home_devices`.\n- We create four routes:\n  1. `GET /light`: Returns the current status of the light (on/off).\n  2. `POST /light`: Accepts a JSON payload to turn the light on or off.\n  3. `GET /thermostat`: Returns the current thermostat temperature.\n  4. `POST /thermostat`: Accepts a JSON payload to set the thermostat temperature (between 10 and 30 degrees Celsius).\n- We provide error checking to ensure valid inputs.\n- The Flask app runs in debug mode for easy testing."
       },
       {
         "type": "paragraph",
-        "value": "In asynchronous code, the preferred way to schedule a coroutine is with `asyncio.create_task()`, which runs the coroutine concurrently within the active event loop. When dealing with custom event loops, ensure you set the event loop that the task should belong to."
+        "value": "To test your API, you can use tools like `curl` or Postman. Here are some example commands using `curl`:"
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def countdown(number):\n    while number > 0:\n        print(f'Countdown: {number}')\n        await asyncio.sleep(1)\n        number -= 1\n    print('Countdown finished!')\n\ncustom_loop = asyncio.new_event_loop()\nasyncio.set_event_loop(custom_loop)\n\n# Schedule the countdown task\ntask = custom_loop.create_task(countdown(3))\n\n# Run the event loop until the countdown is done\ncustom_loop.run_until_complete(task)\ncustom_loop.close()"
+        "value": "# Check current light status\ncurl http://127.0.0.1:5000/light\n\n# Turn the light on\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"status\":\"on\"}' http://127.0.0.1:5000/light\n\n# Check thermostat temperature\ncurl http://127.0.0.1:5000/thermostat\n\n# Set thermostat temperature to 25°C\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"temperature\":25}' http://127.0.0.1:5000/thermostat"
       },
       {
         "type": "paragraph",
-        "value": "Here, we create a countdown coroutine, create a task for it on the custom loop, and run it until completion. This pattern is common when managing multiple concurrent async jobs."
+        "value": "This basic API can be expanded with authentication, more devices, scheduling, or integration with real smart home hardware. For now, you have a foundation to build upon and experiment with REST APIs using Flask!"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Python's asyncio event loop is the heart of async programming. By creating custom loops, scheduling callbacks with precise timing, and managing tasks properly, you gain powerful control over your async applications. Try experimenting with these concepts to deepen your understanding and write responsive, efficient Python code!"
+        "value": "Happy coding and enjoy automating your smart home!"
       }
     ]
   },
   {
-    "slug": "mastering-python-tracebacks-how-to-extract-and-analyze-error-details-like-a-pro",
-    "title": "Mastering Python Tracebacks: How to Extract and Analyze Error Details Like a Pro",
+    "slug": "debugging-memory-leaks-in-large-scale-python-applications",
+    "title": "Debugging Memory Leaks in Large-Scale Python Applications: A Hands-On Guide",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to understand and extract valuable information from Python tracebacks to debug your code efficiently, even if you're a beginner.",
-    "videoUrl": "https://www.youtube.com/watch?v=Tzu4beEruvk",
+    "description": "Learn how to identify and fix memory leaks in large-scale Python applications with practical debugging techniques and code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=D9q5wnX2_DY",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you write Python code, errors are bound to happen. Python provides detailed error messages called tracebacks that help you understand what went wrong. However, beginners often find tracebacks overwhelming. In this article, we'll break down tracebacks, teach you how to read them, and show you how to programmatically extract and analyze error details."
+        "value": "Memory leaks occur when a program holds on to memory that is no longer needed, causing the application's memory usage to grow unnecessarily over time. In large-scale Python applications, this can lead to poor performance or even crashes. This guide will walk you through the basics of debugging memory leaks in Python, using beginner-friendly tools and techniques."
       },
       {
         "type": "paragraph",
-        "value": "A traceback shows the sequence of function calls that led to an error, the exact line where the error occurred, and the error type and message. Let's look at a simple example:"
+        "value": "First, let's understand what a memory leak looks like. Imagine a Python program that creates objects but never releases them, causing memory to fill up gradually. To spot this, you need to monitor your application's memory usage over time. One simple way is to use the `psutil` library to track the process’s memory consumption."
       },
       {
         "type": "code",
-        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)"
+        "value": "import psutil\nimport time\n\nprocess = psutil.Process()\n\nfor _ in range(10):\n    print(f'Memory usage: {process.memory_info().rss / 1024 ** 2:.2f} MB')\n    time.sleep(1)"
       },
       {
         "type": "paragraph",
-        "value": "Running this code results in a ZeroDivisionError traceback:"
+        "value": "If you notice memory usage increasing continuously without going down, you likely have a memory leak. To dig deeper, Python provides a module called `tracemalloc` which tracks memory allocations. Let's see how we can use it to locate leaks."
       },
       {
         "type": "code",
-        "value": "Traceback (most recent call last):\n  File \"script.py\", line 4, in <module>\n    result = divide(10, 0)\n  File \"script.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code that might leak memory\nsome_list = []\nfor i in range(10000):\n    some_list.append(str(i) * 1000)\n\nsnapshot = tracemalloc.take_snapshot()\ntop_stats = snapshot.statistics('lineno')\n\nprint(\"Top 10 lines by memory allocation:\")\nfor stat in top_stats[:10]:\n    print(stat)"
       },
       {
         "type": "paragraph",
-        "value": "This message tells us exactly what happened — dividing by zero is not allowed. Understanding which file, line, and function caused the error lets you quickly fix your code."
+        "value": "This code snippet starts tracking all memory allocations, runs a block of code, then captures and reports where most memory was allocated. By looking at the top statistics, you can identify which parts of your program consume the most memory."
       },
       {
         "type": "paragraph",
-        "value": "Sometimes you want to capture and analyze tracebacks programmatically. For example, in bigger applications or when logging errors. Python's built-in `traceback` module lets you extract traceback details as strings."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's how you can catch an exception and print its full traceback:"
+        "value": "Another useful tool for debugging memory leaks is `objgraph`, which helps you visualize Python object references to find unwanted retained objects. Install it with `pip install objgraph`."
       },
       {
         "type": "code",
-        "value": "import traceback\n\ntry:\n    result = divide(10, 0)\nexcept Exception as e:\n    tb_str = traceback.format_exc()\n    print(\"Full traceback as string:\")\n    print(tb_str)"
+        "value": "import objgraph\n\n# Suppose you suspect 'MyClass' instances are leaking\nobjgraph.show_growth(limit=5)  # Shows top 5 growing object types\nobjgraph.show_refs([some_leaky_object], filename='refs.png')"
       },
       {
         "type": "paragraph",
-        "value": "The `traceback.format_exc()` function returns the complete traceback in string form, which you can then log, analyze, or display."
+        "value": "`show_growth()` will display which object types are increasing in number, which often indicates a leak. `show_refs()` generates a graph of references around a specific object, helping you find what keeps it alive."
       },
       {
         "type": "paragraph",
-        "value": "If you want to extract specific parts of the traceback, like the file name, line number, or function name where the error happened, you can use `traceback.extract_tb()`."
+        "value": "Finally, common causes of memory leaks in Python include lingering references in global variables, caches, or circular references in classes that define `__del__`. Always try to explicitly break references or use weak references with the `weakref` module."
       },
       {
         "type": "paragraph",
-        "value": "Here's an example showing how to extract and print detailed entries from the traceback:"
-      },
-      {
-        "type": "code",
-        "value": "import sys\nimport traceback\n\ndef divide(a, b):\n    return a / b\n\ntry:\n    divide(5, 0)\nexcept Exception:\n    exc_type, exc_value, exc_tb = sys.exc_info()\n    tb_entries = traceback.extract_tb(exc_tb)\n    for entry in tb_entries:\n        print(f\"File: {entry.filename}, Line: {entry.lineno}, Function: {entry.name}, Code: {entry.line}\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "Output might look like this:\nFile: script.py, Line: 4, Function: divide, Code: return a / b\n\nThis detailed info helps you pinpoint exactly where the problem occurred."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize, mastering tracebacks empowers you to:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Read error messages confidently\n- Quickly locate bugs in your code\n- Extract and log error details for larger applications\n- Improve debugging skills overall"
-      },
-      {
-        "type": "paragraph",
-        "value": "Start practicing by intentionally causing errors in small scripts and exploring their tracebacks. Use the `traceback` module to capture errors in your projects. Over time, you’ll debug like a pro!"
+        "value": "By combining memory monitoring, `tracemalloc` snapshots, and object graphs, you can effectively locate and fix memory leaks in your large Python projects. Start small, track your memory usage regularly, and use these tools to keep your application's memory footprint healthy."
       }
     ]
   },
   {
-    "slug": "designing-scalable-multi-tenant-databases-with-postgresql",
-    "title": "Designing Scalable Multi-Tenant Databases with PostgreSQL: A Beginner's Guide",
+    "slug": "building-scalable-inventory-management-system-sql-stored-procedures",
+    "title": "Building a Scalable Inventory Management System Using SQL and Stored Procedures",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to design scalable and efficient multi-tenant databases using PostgreSQL with simple techniques and practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "description": "Learn how to create a scalable inventory management system using SQL and stored procedures, designed for beginners to efficiently handle product stock and transactions.",
+    "videoUrl": "https://www.youtube.com/watch?v=9GVqKuTVANE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Multi-tenancy is a common architecture for SaaS applications, where a single database instance serves multiple customers (tenants). Designing a scalable multi-tenant database is crucial for performance, security, and maintainability. PostgreSQL is a powerful, open-source relational database that supports flexible multi-tenant designs. In this tutorial, we'll cover beginner-friendly strategies to design a scalable multi-tenant database using PostgreSQL."
+        "value": "Managing inventory effectively is essential for many businesses, especially as they grow. Using SQL along with stored procedures can help you build a scalable inventory system that is easy to maintain, efficient, and reduces errors. In this tutorial, we will cover the basics of setting up tables and creating stored procedures to handle common inventory operations like adding stock, reducing stock, and viewing current inventory."
       },
       {
         "type": "paragraph",
-        "value": "There are three main approaches for multi-tenancy in PostgreSQL:\n1. Shared Database, Shared Schema\n2. Shared Database, Separate Schemas\n3. Separate Databases per Tenant\n\nWe'll focus on the first approach — Shared Database, Shared Schema — as it is the most common for scalable SaaS apps and is beginner-friendly."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 1: Use a Tenant Identifier\nIn the shared schema model, all tenants share the same tables. To differentiate tenant data, add a `tenant_id` column to each multi-tenant table. This column acts as a filter so each tenant only sees their own data."
+        "value": "First, let's create the basic table structure to keep track of products and their quantities."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE customers (\n  id SERIAL PRIMARY KEY,\n  tenant_id INT NOT NULL,\n  name VARCHAR(255) NOT NULL,\n  email VARCHAR(255) UNIQUE NOT NULL\n);\n\n-- Index tenant_id for better query performance\nCREATE INDEX idx_customers_tenant_id ON customers (tenant_id);"
+        "value": "CREATE TABLE Products (\n  ProductID INT PRIMARY KEY IDENTITY(1,1),\n  ProductName VARCHAR(100) NOT NULL,\n  Quantity INT NOT NULL DEFAULT 0\n);"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Secure Tenant Data with Row-Level Security\nPostgreSQL supports Row-Level Security (RLS) which restricts table rows visible to users. You can enforce that tenants only access their own rows by enabling RLS."
+        "value": "With this table, each product has a unique ID, a name, and the current quantity in stock. Now, we will create a stored procedure to add new products into the inventory."
       },
       {
         "type": "code",
-        "value": "ALTER TABLE customers ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY tenant_isolation_policy ON customers\n  FOR SELECT USING (tenant_id = current_setting('app.current_tenant')::int);\n\n-- Set current tenant ID before queries\nSET app.current_tenant = '1';"
+        "value": "CREATE PROCEDURE AddProduct\n  @ProductName VARCHAR(100),\n  @InitialQuantity INT\nAS\nBEGIN\n  INSERT INTO Products (ProductName, Quantity)\n  VALUES (@ProductName, @InitialQuantity);\nEND;"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Query Data for a Specific Tenant\nWhen querying data, ensure you filter by `tenant_id` or rely on RLS policies. Here's how to fetch customers for tenant 1:"
+        "value": "Next, let's create a procedure to increase the quantity of an existing product when new stock arrives."
       },
       {
         "type": "code",
-        "value": "SELECT id, name, email\nFROM customers\nWHERE tenant_id = 1;"
+        "value": "CREATE PROCEDURE IncreaseStock\n  @ProductID INT,\n  @Amount INT\nAS\nBEGIN\n  UPDATE Products\n  SET Quantity = Quantity + @Amount\n  WHERE ProductID = @ProductID;\nEND;"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Scaling Considerations\n- **Indexing:** Always index the `tenant_id` column for faster filtering.\n- **Partitioning:** If you expect millions of tenants or huge data, consider table partitioning by `tenant_id` for performance.\n- **Connection Pooling:** Use PostgreSQL connection pooling to manage many connections efficiently.\n- **Schema Design:** Avoid storing tenant-specific config in tables without tenant_id to prevent cross-tenant data leaks."
+        "value": "We also need a stored procedure to reduce stock, for example when items are sold or removed from inventory. It's important to check that enough stock exists before subtracting."
+      },
+      {
+        "type": "code",
+        "value": "CREATE PROCEDURE DecreaseStock\n  @ProductID INT,\n  @Amount INT\nAS\nBEGIN\n  IF EXISTS (SELECT 1 FROM Products WHERE ProductID = @ProductID AND Quantity >= @Amount)\n  BEGIN\n    UPDATE Products\n    SET Quantity = Quantity - @Amount\n    WHERE ProductID = @ProductID;\n  END\n  ELSE\n  BEGIN\n    RAISERROR('Not enough stock to complete this operation.', 16, 1);\n  END\nEND;"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nBy adding a `tenant_id` column, using Row-Level Security, and properly indexing your tables, you can build a scalable multi-tenant database in PostgreSQL suitable for many SaaS applications. This design balances ease of management and performance, especially for beginners just starting with multi-tenancy."
+        "value": "Finally, you might want to see a current snapshot of all products and their stock levels."
+      },
+      {
+        "type": "code",
+        "value": "CREATE PROCEDURE GetInventory\nAS\nBEGIN\n  SELECT ProductID, ProductName, Quantity FROM Products;\nEND;"
+      },
+      {
+        "type": "paragraph",
+        "value": "With these stored procedures, your inventory management system supports scalable operations with clear, reusable code blocks. You can expand it by adding features such as transaction logging, user access control, or automated alerts when stock runs low."
+      },
+      {
+        "type": "paragraph",
+        "value": "To use a stored procedure, simply call it with the appropriate parameters. For example, to add 100 units of a new product \"USB Cable\":"
+      },
+      {
+        "type": "code",
+        "value": "EXEC AddProduct @ProductName = 'USB Cable', @InitialQuantity = 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This beginner-friendly approach allows you to leverage SQL's power and build a maintainable system that grows with your business needs."
       }
     ]
   },
   {
-    "slug": "understanding-sql-data-type-conflicts-and-how-to-handle-them-effectively",
-    "title": "Understanding SQL Data Type Conflicts and How to Handle Them Effectively",
+    "slug": "optimizing-sql-query-performance-by-understanding-execution-plans",
+    "title": "Optimizing SQL Query Performance by Understanding Execution Plans in Large-Scale Systems",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to identify and resolve SQL data type conflicts with simple examples and best practices for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=HhvdQhERlH4",
+    "description": "Learn how to improve SQL query efficiency by reading and interpreting execution plans, a vital skill for managing large-scale database systems.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, one of the common issues beginners encounter is data type conflicts. These conflicts happen when the data types of columns, variables, or literals don't match in SQL operations such as comparisons, insertions, or joins. Understanding these conflicts and knowing how to handle them can save you from frustrating errors and ensure your queries run smoothly."
+        "value": "When working with large-scale database systems, SQL query performance can significantly impact application speed and user experience. Execution plans are powerful tools that reveal how the database engine processes your SQL queries. By learning how to read them, you can identify bottlenecks and optimize your queries for faster results."
       },
       {
         "type": "paragraph",
-        "value": "SQL data types define the kind of values a column can hold. For example, INTEGER for whole numbers, VARCHAR for text, and DATE for dates. If you try to mix these incompatible types in queries without proper handling, SQL will throw errors or behave unexpectedly. Let's look at some common causes and how to resolve them."
+        "value": "An execution plan outlines the steps the database takes to run your query. It shows how tables are scanned, how joins are performed, and what indexes are used. These details help you understand if your query is efficient or if it requires tuning."
       },
       {
         "type": "paragraph",
-        "value": "1. Comparing different data types"
-      },
-      {
-        "type": "paragraph",
-        "value": "Suppose you have a table with a column `age` of type INTEGER, and you try to compare it to a string value:"
+        "value": "To generate an execution plan in SQL Server, you can use the `EXPLAIN` keyword or, more commonly, the `SET SHOWPLAN_TEXT ON` statement before running your query. This doesn't execute the query but shows the plan SQL Server would use."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM users WHERE age = '25';"
+        "value": "SET SHOWPLAN_TEXT ON;\nGO\nSELECT * FROM Orders WHERE CustomerID = 'ALFKI';\nGO\nSET SHOWPLAN_TEXT OFF;\nGO"
       },
       {
         "type": "paragraph",
-        "value": "Even though the number 25 is written as a string, most SQL engines implicitly convert the string '25' to an integer and run the query successfully. However, this implicit conversion can cause problems if the string cannot be converted (e.g., 'twenty-five'). It's better to match data types explicitly:"
+        "value": "In this example, the plan might show you whether SQL Server uses an index seek on the `CustomerID` column or a full table scan. An index seek is faster, indicating the database efficiently filters the rows. A full table scan can be slower, especially on large tables."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common reasons for poor performance include missing indexes, inefficient joins, or complex filters that force the database to scan whole tables. For example, using a function on a column in the WHERE clause can prevent index usage."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM users WHERE age = 25;"
+        "value": "SELECT * FROM Orders WHERE YEAR(OrderDate) = 2023; -- Inefficient for index usage\n\n-- Better:\nSELECT * FROM Orders WHERE OrderDate >= '2023-01-01' AND OrderDate < '2024-01-01';"
       },
       {
         "type": "paragraph",
-        "value": "2. Inserting wrong data types"
+        "value": "The first query applies a function to a column, which often disables indexes. The second uses a range condition that SQL Server can optimize with indexes."
       },
       {
         "type": "paragraph",
-        "value": "If you try to insert incompatible values into a table, you'll get an error. For example, inserting text into an integer column:"
-      },
-      {
-        "type": "code",
-        "value": "INSERT INTO orders (order_id, quantity) VALUES (101, 'ten'); -- Error if quantity expects INTEGER"
+        "value": "In summary, to optimize SQL queries in large-scale systems:\n1. Always check the execution plan to see how the query runs.\n2. Look for scans where seeks are expected.\n3. Avoid functions on indexed columns in filters.\n4. Add or update indexes based on query patterns.\n5. Simplify joins and reduce unnecessary data retrieval."
       },
       {
         "type": "paragraph",
-        "value": "To fix this, ensure the inserted value matches the column’s data type:"
-      },
-      {
-        "type": "code",
-        "value": "INSERT INTO orders (order_id, quantity) VALUES (101, 10);"
-      },
-      {
-        "type": "paragraph",
-        "value": "3. Joining on mismatched data types"
-      },
-      {
-        "type": "paragraph",
-        "value": "If two tables are joined on columns with different data types, SQL may throw an error or produce unexpected results. For example:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT *\nFROM employees e\nJOIN departments d ON e.department_id = d.department_id;"
-      },
-      {
-        "type": "paragraph",
-        "value": "If `e.department_id` is VARCHAR and `d.department_id` is INTEGER, this join can fail or yield no matches."
-      },
-      {
-        "type": "paragraph",
-        "value": "To resolve this, convert one side explicitly using CAST or CONVERT functions:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT *\nFROM employees e\nJOIN departments d ON CAST(e.department_id AS INTEGER) = d.department_id;"
-      },
-      {
-        "type": "paragraph",
-        "value": "4. Using CONVERT or CAST"
-      },
-      {
-        "type": "paragraph",
-        "value": "Whenever you suspect a type mismatch, explicitly convert data using CAST (ANSI SQL) or CONVERT (SQL Server, some others). For example, converting a string to a date:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM events WHERE event_date = CAST('2024-06-01' AS DATE);"
-      },
-      {
-        "type": "paragraph",
-        "value": "Or converting a number to a string:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM users WHERE user_code = CAST(12345 AS VARCHAR);"
-      },
-      {
-        "type": "paragraph",
-        "value": "5. Best practices to avoid data type conflicts"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Always check the data types of columns before writing queries.\n- Use explicit type casting when mixing data types.\n- Avoid storing numbers as strings if you'll need numeric operations.\n- Keep your schema consistent across joined tables.\n- Validate inputs before inserting data."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding the data types involved and using type casting properly, you can avoid most SQL data type conflicts and write reliable, error-free queries."
+        "value": "By regularly analyzing execution plans, you can make data-driven decisions that enhance your SQL queries, resulting in faster, more reliable applications."
       }
     ]
   }

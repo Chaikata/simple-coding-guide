@@ -35677,5 +35677,373 @@ export const articles = [
         "value": "By understanding the data types involved and using type casting properly, you can avoid most SQL data type conflicts and write reliable, error-free queries."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-performance-profiling-tools-and-techniques-for-efficient-debugging",
+    "title": "Mastering JavaScript Performance Profiling: Tools and Techniques for Efficient Debugging",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use JavaScript performance profiling tools and techniques to identify and fix common performance issues, making your code faster and more efficient.",
+    "videoUrl": "https://www.youtube.com/watch?v=IZlM4duZOPc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript performance issues can slow down your web applications and frustrate users. Understanding how to profile and debug your code is essential to optimize performance. In this beginner-friendly article, we'll explore common performance problems, tools available in popular browsers, and practical techniques to identify and fix errors effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Profile JavaScript Performance?\n\nProfiling helps you find bottlenecks in your code—sections that use more CPU or memory than necessary. Instead of guessing, profiling gives you data about where your program spends its time or resources.\n\nCommon symptoms needing profiling include slow page loads, unresponsive buttons, laggy animations, or high CPU usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Chrome DevTools Performance Profiler\n\nGoogle Chrome offers a powerful Performance tab to record and analyze your app’s runtime behavior:\n1. Open Chrome and press `F12` to access DevTools.\n2. Navigate to the `Performance` tab.\n3. Click the record button (●), then interact with your page to reproduce the issue.\n4. Stop recording by clicking the button again.\n\nThe profiler will generate a detailed flame chart and timeline showing where time is spent in your JavaScript functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Detecting a Slow Loop\n\nImagine the following code that updates DOM elements in a slow loop:"
+      },
+      {
+        "type": "code",
+        "value": "function updateItems(items) {\n  items.forEach(item => {\n    const element = document.getElementById(item.id);\n    element.textContent = item.value;\n  });\n}\n\n// Calling with many items\nupdateItems(largeArray);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the Performance profiler, you might notice a long task in the timeline. This often happens because the browser must repaint after each DOM update inside the loop, slowing your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Fixing Performance Issues\n\nOne easy fix is to batch DOM updates. For example, using `DocumentFragment` to minimize reflows:"
+      },
+      {
+        "type": "code",
+        "value": "function updateItemsOptimized(items) {\n  const fragment = document.createDocumentFragment();\n  items.forEach(item => {\n    const element = document.createElement('div');\n    element.id = item.id;\n    element.textContent = item.value;\n    fragment.appendChild(element);\n  });\n  const container = document.getElementById('container');\n  container.innerHTML = '';\n  container.appendChild(fragment);\n}\n\nupdateItemsOptimized(largeArray);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This reduces the number of times the DOM updates on screen, improving performance. Profiling again after this change confirms the improvement."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Additional Tips for Effective Profiling\n- Use `console.time()` and `console.timeEnd()` to measure specific code blocks.\n- Look for long tasks over 50ms that block user interaction.\n- Check memory usage in the `Memory` tab to detect leaks.\n- Use Lighthouse (built-in in Chrome DevTools) for automated performance audits.\n- Test in production-similar environments for realistic results."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nMastering JavaScript performance profiling lets you identify and resolve hidden bottlenecks. With browser tools like Chrome DevTools’ Performance tab, simple techniques like batching DOM updates, and smart measurement practices, you can write faster, smoother applications that users love."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-mapped-types-for-dynamic-object-transformations",
+    "title": "Mastering TypeScript Mapped Types for Dynamic Object Transformations",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript mapped types to create flexible and dynamic object transformations, ideal for enhancing type safety and code reusability in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=dfrmvzFktSk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to TypeScript and want to learn how to work with object types dynamically, mapped types are a fantastic feature to master. Mapped types allow you to create new types by transforming the properties of existing types. This tutorial will guide you through the basics of mapped types and help you understand how to apply them for practical object transformations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Mapped Types?\nMapped types use TypeScript’s ability to iterate over keys of an existing type to create a new type with transformations applied to those keys. They are very useful when you want similar operations on multiple properties of an object without rewriting code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Imagine you have an interface describing a user:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to create a new type where all `User` properties are optional, you could use a mapped type like this:"
+      },
+      {
+        "type": "code",
+        "value": "type PartialUser = {\n  [K in keyof User]?: User[K];\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "The syntax `[K in keyof User]` means \"for each key `K` in the keys of `User`\". The `?` makes each property optional, and `User[K]` keeps the original property type."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can now use `PartialUser` to create objects that may have any subset of the `User` properties."
+      },
+      {
+        "type": "code",
+        "value": "const partialUser: PartialUser = {\n  name: \"Alice\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### More Practical Example: Readonly and Nullable Transformations\nMapped types are also great for creating utility types like `Readonly<T>` or `Nullable<T>` that modify properties in common ways."
+      },
+      {
+        "type": "code",
+        "value": "type ReadonlyUser = {\n  readonly [K in keyof User]: User[K];\n};\n\nconst readonlyUser: ReadonlyUser = {\n  id: 1,\n  name: \"Bob\",\n  email: \"bob@example.com\"\n};\n\n// readonlyUser.id = 2; // Error: Cannot assign to 'id' because it is a read-only property."
+      },
+      {
+        "type": "code",
+        "value": "type NullableUser = {\n  [K in keyof User]: User[K] | null;\n};\n\nconst nullableUser: NullableUser = {\n  id: null,\n  name: \"Carol\",\n  email: null\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Adding Modifiers Dynamically\nYou can combine mapped types with conditional types and modifiers to add even more dynamic transformations. For example, make all properties readonly except methods:"
+      },
+      {
+        "type": "code",
+        "value": "interface UserWithMethod {\n  id: number;\n  name: string;\n  getEmail: () => string;\n}\n\ntype ReadonlyExceptMethods<T> = {\n  readonly [K in keyof T]: T[K] extends Function ? T[K] : Readonly<T[K]>;\n};\n\nconst user: ReadonlyExceptMethods<UserWithMethod> = {\n  id: 5,\n  name: \"Dan\",\n  getEmail: () => \"dan@example.com\"\n};\n\n// user.id = 6; // Error: Cannot assign to 'id' because it is a read-only property.\nuser.getEmail = () => \"new@example.com\"; // Allowed: methods are not readonly"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nMapped types in TypeScript provide a flexible and powerful way to transform existing types into new versions, allowing you to write more expressive and reusable type-safe code. By mastering mapped types, you gain greater control over your types and can handle complex scenarios with ease."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with your own object types and transformations using mapped types to see how they can simplify your TypeScript development."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-type-narrowing-a-beginners-guide",
+    "title": "Understanding TypeScript's Type Narrowing: A Beginner's Guide",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's type narrowing helps you write safer code by refining types and preventing common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=w74CNzY4zT0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that adds type safety to JavaScript. One key feature that helps avoid common programming errors is called \"type narrowing.\" Type narrowing allows TypeScript to refine a variable's type based on specific checks you perform in your code. This means you can write safer, more predictable code without losing flexibility."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have a variable that can contain multiple types, like a string or a number. Type narrowing helps TypeScript understand exactly which type the variable currently holds, so you can use it confidently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at some examples to see how type narrowing works in practice."
+      },
+      {
+        "type": "code",
+        "value": "function printId(id: number | string) {\n  if (typeof id === 'string') {\n    // Inside this block, TypeScript knows 'id' is a string\n    console.log(id.toUpperCase());\n  } else {\n    // Here, 'id' must be a number\n    console.log(id.toFixed(2));\n  }\n}\n\nprintId('abc'); // Output: ABC\nprintId(123);   // Output: 123.00"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the parameter `id` can be a string or a number. Using the `typeof` check, TypeScript narrows down `id` to either a string or number inside each branch of the `if` statement. This allows you to safely call string or number methods without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common case is working with nullable types — values that can be `null` or `undefined`. Type narrowing helps avoid runtime errors by ensuring you only access properties when the value exists."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string | null) {\n  if (name) {\n    // TypeScript now knows 'name' is definitely a string\n    console.log(`Hello, ${name.toUpperCase()}!`);\n  } else {\n    console.log('Hello, guest!');\n  }\n}\n\ngreet('Alice');  // Output: Hello, ALICE!\ngreet(null);     // Output: Hello, guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `if (name)` check narrows the type from `string | null` to just `string`, allowing safe use of string methods. This is called \"truthiness narrowing.\""
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript also supports narrowing with custom type guards, which let you define your own checks to refine types."
+      },
+      {
+        "type": "code",
+        "value": "interface Fish {\n  swim: () => void;\n}\n\ninterface Bird {\n  fly: () => void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim(); // Safe to call swim\n  } else {\n    pet.fly();  // Safe to call fly\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `isFish` function tells TypeScript whether the object is a `Fish`. Inside the `if` block, TypeScript narrows the type accordingly, allowing you to access the proper methods safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, type narrowing in TypeScript lets you write safer code by helping the compiler understand exactly what type your variables have at different points in your code. This reduces bugs and improves developer confidence."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try practicing with conditional checks, `typeof`, `instanceof`, and custom type guards to get comfortable using TypeScript's type narrowing in your projects."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-flask-powered-rest-api-for-smart-home-automation",
+    "title": "Building a Flask-Powered REST API for a Smart Home Automation System",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a simple REST API using Flask to control smart home devices like lights and thermostats. Perfect for beginners interested in home automation and Python web development.",
+    "videoUrl": "https://www.youtube.com/watch?v=EbOvR3jF9Co",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Smart home automation is becoming increasingly popular, allowing you to control home devices such as lights, thermostats, and security systems remotely. In this tutorial, we'll build a basic REST API using Python's Flask framework. This API will allow you to turn devices on and off, and read their status. Don't worry if you're new to Flask or APIs; this guide is beginner-friendly and practical."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's make sure you have Flask installed. You can install it using pip if you don't already have it:"
+      },
+      {
+        "type": "code",
+        "value": "pip install Flask"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we will create a Python script named `app.py`. This script will contain our Flask application with endpoints to control a smart light and a thermostat."
+      },
+      {
+        "type": "code",
+        "value": "from flask import Flask, jsonify, request\n\napp = Flask(__name__)\n\n# Simulated device states\nsmart_home_devices = {\n    'light': {'status': 'off'},\n    'thermostat': {'temperature': 22}  # temperature in Celsius\n}\n\n@app.route('/light', methods=['GET'])\ndef get_light_status():\n    \"\"\"Get the current status of the light.\"\"\"\n    status = smart_home_devices['light']['status']\n    return jsonify({'light_status': status})\n\n@app.route('/light', methods=['POST'])\ndef set_light_status():\n    \"\"\"Turn the light on or off.\"\"\"\n    data = request.get_json()\n    if not data or 'status' not in data:\n        return jsonify({'error': 'Missing light status'}), 400\n    status = data['status'].lower()\n    if status not in ['on', 'off']:\n        return jsonify({'error': 'Invalid status. Use \"on\" or \"off\".'}), 400\n    smart_home_devices['light']['status'] = status\n    return jsonify({'message': f'Light turned {status}'}), 200\n\n@app.route('/thermostat', methods=['GET'])\ndef get_thermostat_temperature():\n    \"\"\"Get the current thermostat temperature.\"\"\"\n    temperature = smart_home_devices['thermostat']['temperature']\n    return jsonify({'temperature': temperature})\n\n@app.route('/thermostat', methods=['POST'])\ndef set_thermostat_temperature():\n    \"\"\"Set the thermostat temperature.\"\"\"\n    data = request.get_json()\n    if not data or 'temperature' not in data:\n        return jsonify({'error': 'Missing temperature value'}), 400\n    try:\n        temperature = float(data['temperature'])\n    except ValueError:\n        return jsonify({'error': 'Temperature must be a number'}), 400\n    if temperature < 10 or temperature > 30:\n        return jsonify({'error': 'Temperature must be between 10 and 30 degrees Celsius'}), 400\n    smart_home_devices['thermostat']['temperature'] = temperature\n    return jsonify({'message': f'Thermostat set to {temperature}°C'}), 200\n\nif __name__ == '__main__':\n    app.run(debug=True)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down what this code does:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- We import Flask and the necessary modules to handle JSON and HTTP requests.\n- We simulate device states with a Python dictionary `smart_home_devices`.\n- We create four routes:\n  1. `GET /light`: Returns the current status of the light (on/off).\n  2. `POST /light`: Accepts a JSON payload to turn the light on or off.\n  3. `GET /thermostat`: Returns the current thermostat temperature.\n  4. `POST /thermostat`: Accepts a JSON payload to set the thermostat temperature (between 10 and 30 degrees Celsius).\n- We provide error checking to ensure valid inputs.\n- The Flask app runs in debug mode for easy testing."
+      },
+      {
+        "type": "paragraph",
+        "value": "To test your API, you can use tools like `curl` or Postman. Here are some example commands using `curl`:"
+      },
+      {
+        "type": "code",
+        "value": "# Check current light status\ncurl http://127.0.0.1:5000/light\n\n# Turn the light on\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"status\":\"on\"}' http://127.0.0.1:5000/light\n\n# Check thermostat temperature\ncurl http://127.0.0.1:5000/thermostat\n\n# Set thermostat temperature to 25°C\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"temperature\":25}' http://127.0.0.1:5000/thermostat"
+      },
+      {
+        "type": "paragraph",
+        "value": "This basic API can be expanded with authentication, more devices, scheduling, or integration with real smart home hardware. For now, you have a foundation to build upon and experiment with REST APIs using Flask!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding and enjoy automating your smart home!"
+      }
+    ]
+  },
+  {
+    "slug": "debugging-memory-leaks-in-large-scale-python-applications",
+    "title": "Debugging Memory Leaks in Large-Scale Python Applications: A Hands-On Guide",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to identify and fix memory leaks in large-scale Python applications with practical debugging techniques and code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=D9q5wnX2_DY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks occur when a program holds on to memory that is no longer needed, causing the application's memory usage to grow unnecessarily over time. In large-scale Python applications, this can lead to poor performance or even crashes. This guide will walk you through the basics of debugging memory leaks in Python, using beginner-friendly tools and techniques."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand what a memory leak looks like. Imagine a Python program that creates objects but never releases them, causing memory to fill up gradually. To spot this, you need to monitor your application's memory usage over time. One simple way is to use the `psutil` library to track the process’s memory consumption."
+      },
+      {
+        "type": "code",
+        "value": "import psutil\nimport time\n\nprocess = psutil.Process()\n\nfor _ in range(10):\n    print(f'Memory usage: {process.memory_info().rss / 1024 ** 2:.2f} MB')\n    time.sleep(1)"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you notice memory usage increasing continuously without going down, you likely have a memory leak. To dig deeper, Python provides a module called `tracemalloc` which tracks memory allocations. Let's see how we can use it to locate leaks."
+      },
+      {
+        "type": "code",
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code that might leak memory\nsome_list = []\nfor i in range(10000):\n    some_list.append(str(i) * 1000)\n\nsnapshot = tracemalloc.take_snapshot()\ntop_stats = snapshot.statistics('lineno')\n\nprint(\"Top 10 lines by memory allocation:\")\nfor stat in top_stats[:10]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code snippet starts tracking all memory allocations, runs a block of code, then captures and reports where most memory was allocated. By looking at the top statistics, you can identify which parts of your program consume the most memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful tool for debugging memory leaks is `objgraph`, which helps you visualize Python object references to find unwanted retained objects. Install it with `pip install objgraph`."
+      },
+      {
+        "type": "code",
+        "value": "import objgraph\n\n# Suppose you suspect 'MyClass' instances are leaking\nobjgraph.show_growth(limit=5)  # Shows top 5 growing object types\nobjgraph.show_refs([some_leaky_object], filename='refs.png')"
+      },
+      {
+        "type": "paragraph",
+        "value": "`show_growth()` will display which object types are increasing in number, which often indicates a leak. `show_refs()` generates a graph of references around a specific object, helping you find what keeps it alive."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, common causes of memory leaks in Python include lingering references in global variables, caches, or circular references in classes that define `__del__`. Always try to explicitly break references or use weak references with the `weakref` module."
+      },
+      {
+        "type": "paragraph",
+        "value": "By combining memory monitoring, `tracemalloc` snapshots, and object graphs, you can effectively locate and fix memory leaks in your large Python projects. Start small, track your memory usage regularly, and use these tools to keep your application's memory footprint healthy."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-inventory-management-system-sql-stored-procedures",
+    "title": "Building a Scalable Inventory Management System Using SQL and Stored Procedures",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create a scalable inventory management system using SQL and stored procedures, designed for beginners to efficiently handle product stock and transactions.",
+    "videoUrl": "https://www.youtube.com/watch?v=9GVqKuTVANE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Managing inventory effectively is essential for many businesses, especially as they grow. Using SQL along with stored procedures can help you build a scalable inventory system that is easy to maintain, efficient, and reduces errors. In this tutorial, we will cover the basics of setting up tables and creating stored procedures to handle common inventory operations like adding stock, reducing stock, and viewing current inventory."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's create the basic table structure to keep track of products and their quantities."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Products (\n  ProductID INT PRIMARY KEY IDENTITY(1,1),\n  ProductName VARCHAR(100) NOT NULL,\n  Quantity INT NOT NULL DEFAULT 0\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "With this table, each product has a unique ID, a name, and the current quantity in stock. Now, we will create a stored procedure to add new products into the inventory."
+      },
+      {
+        "type": "code",
+        "value": "CREATE PROCEDURE AddProduct\n  @ProductName VARCHAR(100),\n  @InitialQuantity INT\nAS\nBEGIN\n  INSERT INTO Products (ProductName, Quantity)\n  VALUES (@ProductName, @InitialQuantity);\nEND;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's create a procedure to increase the quantity of an existing product when new stock arrives."
+      },
+      {
+        "type": "code",
+        "value": "CREATE PROCEDURE IncreaseStock\n  @ProductID INT,\n  @Amount INT\nAS\nBEGIN\n  UPDATE Products\n  SET Quantity = Quantity + @Amount\n  WHERE ProductID = @ProductID;\nEND;"
+      },
+      {
+        "type": "paragraph",
+        "value": "We also need a stored procedure to reduce stock, for example when items are sold or removed from inventory. It's important to check that enough stock exists before subtracting."
+      },
+      {
+        "type": "code",
+        "value": "CREATE PROCEDURE DecreaseStock\n  @ProductID INT,\n  @Amount INT\nAS\nBEGIN\n  IF EXISTS (SELECT 1 FROM Products WHERE ProductID = @ProductID AND Quantity >= @Amount)\n  BEGIN\n    UPDATE Products\n    SET Quantity = Quantity - @Amount\n    WHERE ProductID = @ProductID;\n  END\n  ELSE\n  BEGIN\n    RAISERROR('Not enough stock to complete this operation.', 16, 1);\n  END\nEND;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, you might want to see a current snapshot of all products and their stock levels."
+      },
+      {
+        "type": "code",
+        "value": "CREATE PROCEDURE GetInventory\nAS\nBEGIN\n  SELECT ProductID, ProductName, Quantity FROM Products;\nEND;"
+      },
+      {
+        "type": "paragraph",
+        "value": "With these stored procedures, your inventory management system supports scalable operations with clear, reusable code blocks. You can expand it by adding features such as transaction logging, user access control, or automated alerts when stock runs low."
+      },
+      {
+        "type": "paragraph",
+        "value": "To use a stored procedure, simply call it with the appropriate parameters. For example, to add 100 units of a new product \"USB Cable\":"
+      },
+      {
+        "type": "code",
+        "value": "EXEC AddProduct @ProductName = 'USB Cable', @InitialQuantity = 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This beginner-friendly approach allows you to leverage SQL's power and build a maintainable system that grows with your business needs."
+      }
+    ]
   }
 ];
