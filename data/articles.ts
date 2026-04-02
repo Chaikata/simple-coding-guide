@@ -36045,5 +36045,408 @@ export const articles = [
         "value": "This beginner-friendly approach allows you to leverage SQL's power and build a maintainable system that grows with your business needs."
       }
     ]
+  },
+  {
+    "slug": "mastering-array-methods-in-javascript-map-filter-reduce",
+    "title": "Mastering Array Methods in JavaScript: A Beginner's Guide to Map, Filter, and Reduce",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript's essential array methods—map, filter, and reduce—with simple examples to boost your coding skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=PojpwEbOQJg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript arrays are powerful data structures that come with many built-in methods to manipulate data efficiently. Among these, map, filter, and reduce are three essential methods every JavaScript beginner should master. They help transform, select, and accumulate data in a clean and readable way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding each method with simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "**1. map() — Transforming Arrays**\n\nThe map() method creates a new array by applying a function to each element of the original array. It is perfect when you want to create a new array with modified values."
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [1, 2, 3, 4];\nconst doubled = numbers.map(num => num * 2);\nconsole.log(doubled); // Output: [2, 4, 6, 8]"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, map() takes each number and multiplies it by 2, producing a new array with doubled values."
+      },
+      {
+        "type": "paragraph",
+        "value": "**2. filter() — Selecting Arrays**\n\nThe filter() method creates a new array containing only the elements that pass a test defined by a function. Use filter() when you want to keep certain items based on conditions."
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [5, 10, 15, 20];\nconst largeNumbers = numbers.filter(num => num > 10);\nconsole.log(largeNumbers); // Output: [15, 20]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, filter() returns a new array containing only numbers greater than 10."
+      },
+      {
+        "type": "paragraph",
+        "value": "**3. reduce() — Combining Arrays**\n\nThe reduce() method reduces an array to a single value by executing a reducer function on each element, accumulating the result."
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [1, 2, 3, 4];\nconst sum = numbers.reduce((accumulator, current) => accumulator + current, 0);\nconsole.log(sum); // Output: 10"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, reduce() adds up all the numbers starting with an initial accumulator value of 0."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Putting It All Together\n\nLet's say you have an array of objects representing users, and you want to get the total age of users over 18."
+      },
+      {
+        "type": "code",
+        "value": "const users = [\n  { name: 'Alice', age: 17 },\n  { name: 'Bob', age: 20 },\n  { name: 'Charlie', age: 22 },\n  { name: 'David', age: 15 },\n];\n\nconst totalAge = users\n  .filter(user => user.age > 18)              // Keep users over 18\n  .map(user => user.age)                       // Extract their ages into an array\n  .reduce((sum, age) => sum + age, 0);        // Sum all ages\n\nconsole.log(totalAge); // Output: 42"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, filter() selects users older than 18, map() creates an array of their ages, and reduce() adds the ages together."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering these three methods will significantly improve your JavaScript programming by making your code cleaner, more expressive, and easier to maintain. Practice using map, filter, and reduce on different data sets to become comfortable with functional array processing!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-fault-tolerant-javascript-systems-for-scalable-web-applications",
+    "title": "Designing Fault-Tolerant JavaScript Systems for Scalable Web Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to design fault-tolerant JavaScript systems to build scalable and reliable web applications. This beginner-friendly guide covers essential error handling techniques and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=wVWqSIUXdrw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Building scalable web applications requires designing systems that remain reliable even when unexpected errors occur. Fault tolerance means your JavaScript code can handle errors gracefully, preventing crashes and improving user experience. In this article, you'll learn simple techniques to create fault-tolerant JavaScript applications that are easier to maintain and scale."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understand Common JavaScript Errors\nBefore making your application fault-tolerant, it's important to know common JavaScript errors such as runtime errors, network failures, and unexpected null values. These errors can happen anywhere: API calls might fail, user inputs can be incorrect, or data might be missing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Try-Catch Blocks for Error Handling\nOne of the simplest ways to handle errors in JavaScript is using try-catch blocks. This allows the program to continue running even if an error occurs within the try block."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  // Code that might throw an error\n  let result = riskyFunction();\n  console.log('Result:', result);\n} catch (error) {\n  console.error('An error occurred:', error.message);\n  // Handle error gracefully or provide fallback\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handle Asynchronous Errors with Promises and Async/Await\nWeb applications often deal with API calls or database access which are asynchronous. It's crucial to handle errors in promises and async functions properly."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    let response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    let data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Fetching data failed:', error.message);\n    // Provide fallback or notify user\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Validate User Inputs\nAlways validate user inputs before processing to avoid unexpected errors. This improves fault tolerance by catching invalid data early."
+      },
+      {
+        "type": "code",
+        "value": "function validateUserInput(input) {\n  if (typeof input !== 'string' || input.trim() === '') {\n    throw new Error('Invalid input: must be a non-empty string');\n  }\n  return input.trim();\n}\n\ntry {\n  let userInput = validateUserInput(' some input ');\n  console.log('Valid input:', userInput);\n} catch (error) {\n  console.error(error.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Default Values and Fallbacks\nWhen working with dynamic data, use default values to avoid undefined or null errors that crash your app."
+      },
+      {
+        "type": "code",
+        "value": "function greetUser(name) {\n  const safeName = name || 'Guest';\n  console.log(`Hello, ${safeName}!`);\n}\n\ngreetUser('Alice');\ngreetUser();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Implement Logging and Monitoring\nTo maintain scalable systems, track errors in production with logging. This helps identify and fix issues before they impact many users."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nFault-tolerant JavaScript systems handle errors gracefully, allowing scalable web applications to run smoothly under stress or failure conditions. Use try-catch blocks, handle asynchronous errors, validate inputs, and provide fallback values. With these practical steps, you can create resilient JavaScript apps ready for real-world use."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-conditional-types-for-smarter-error-handling",
+    "title": "Mastering TypeScript Conditional Types for Smarter Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript conditional types to create smarter, type-safe error handling mechanisms for your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=y193EGxpX0E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of building robust applications. TypeScript's type system offers powerful features to make error handling more predictable and safer. One such feature is conditional types, which allow you to create types that change based on conditions. In this article, we'll explore how to use conditional types to build smarter error handling solutions that can help catch mistakes during compile time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Conditional types in TypeScript work like a ternary operator for types: they choose different types depending on a condition. The syntax looks like this:"
+      },
+      {
+        "type": "code",
+        "value": "type Example<T> = T extends string ? \"It's a string\" : \"It's something else\";"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, if the generic type `T` is a `string`, the type resolves to \"It's a string\"; otherwise, it resolves to \"It's something else\". This flexibility becomes especially useful when handling different error conditions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a practical example. Imagine you have a function `fetchData` that either returns data or throws an error. We want to type the function so that the error type depends on the kind of data expected."
+      },
+      {
+        "type": "code",
+        "value": "type FetchError<T> = T extends { id: number } ? { code: number; message: string } : { message: string };\n\nfunction fetchData<T>(shouldFail: boolean): T | FetchError<T> {\n  if (shouldFail) {\n    if (({} as T).hasOwnProperty && ({} as T).hasOwnProperty('id')) {\n      return { code: 404, message: 'Not Found' } as FetchError<T>;\n    } else {\n      return { message: 'Error occurred' } as FetchError<T>;\n    }\n  }\n\n  // Assuming data fetched successfully\n  return {} as T;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `FetchError` uses a conditional type: if `T` has an `id` property (like an object with an `id` number), the error includes a `code` and `message`; otherwise, it just has a `message`. This makes error handling more specific to the expected data."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use conditional types to create utility types that extract or transform error information. For example, let's create a type that picks only the `message` from any error type:"
+      },
+      {
+        "type": "code",
+        "value": "type ErrorMessage<T> = T extends { message: infer M } ? M : never;\n\n// Usage example\n\ntype MyError = { code: number; message: string };\ntype Msg = ErrorMessage<MyError>; // Msg is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "This helps write error handling code that can safely access error messages without worrying about the full error structure."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, conditional types help you create flexible and precise error types that adapt to your data structures. This leads to better error checking and improved reliability in your TypeScript applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "To master error handling with conditional types, start incorporating conditions into your error type definitions, and leverage TypeScript's powerful inference capabilities to tailor your error types effectively."
+      }
+    ]
+  },
+  {
+    "slug": "in-depth-guide-to-python-metaclasses-harnessing-dynamic-class-creation",
+    "title": "In-Depth Guide to Python Metaclasses: Harnessing Dynamic Class Creation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Explore Python metaclasses with this beginner-friendly guide. Learn what metaclasses are and how to use them for dynamic and powerful class creation.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In Python, everything is an object — including classes themselves. Metaclasses are the 'classes of classes' and allow you to control how classes are created. This guide will help you understand the basics of metaclasses and how to use them in practical situations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Metaclass?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A metaclass is a class that defines how other classes behave. Normally, classes are created by the type metaclass. But by defining your own metaclass, you can customize class creation including modifying or adding attributes and methods dynamically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Example: Using type() to Create Classes Dynamically"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before diving into metaclasses, let's see how Python's built-in metaclass, `type()`, works:"
+      },
+      {
+        "type": "code",
+        "value": "MyClass = type('MyClass', (object,), {'x': 5, 'hello': lambda self: 'Hello!'})\n\nobj = MyClass()\nprint(obj.x)         # Output: 5\nprint(obj.hello())   # Output: Hello!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `type` creates a class named `MyClass` directly by specifying its name, base classes, and attributes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Defining a Custom Metaclass"
+      },
+      {
+        "type": "paragraph",
+        "value": "To define a custom metaclass, inherit from `type` and override its `__new__` or `__init__` method. These control class creation and initialization."
+      },
+      {
+        "type": "code",
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f'Creating class {name}')\n        dct['greet'] = lambda self: f'Hi from {name}'\n        return super().__new__(cls, name, bases, dct)\n\nclass Person(metaclass=MyMeta):\n    pass\n\np = Person()\nprint(p.greet())  # Output: Hi from Person"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the metaclass adds a `greet` method to the new class dynamically. Each time you create a class with `MyMeta` as its metaclass, you get this added method without explicitly defining it."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Metaclasses?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses are useful for advanced use cases like:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Enforcing coding standards (e.g., ensuring certain methods exist)\n- Automatic registration of classes (e.g., plugins)\n- Modifying or wrapping methods automatically\n- Creating singleton classes\n\nFor most everyday programming, metaclasses aren't necessary, but knowing them gives you powerful tools."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Enforce Method Implementation"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a metaclass that requires all subclasses to implement a specific method:"
+      },
+      {
+        "type": "code",
+        "value": "class RequireMethodMeta(type):\n    def __new__(cls, name, bases, dct):\n        if 'my_method' not in dct:\n            raise TypeError(f\"Class {name} must define 'my_method'\")\n        return super().__new__(cls, name, bases, dct)\n\nclass Base(metaclass=RequireMethodMeta):\n    pass\n\n# This will raise an error\n# class BrokenClass(Base):\n#     pass\n\n# This works fine\nclass GoodClass(Base):\n    def my_method(self):\n        print('Implemented!')\n\nobj = GoodClass()\nobj.my_method()  # Output: Implemented!"
+      },
+      {
+        "type": "paragraph",
+        "value": "If `BrokenClass` is defined without `my_method`, Python raises a `TypeError` at class creation time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses allow you to customize class creation in Python by modifying or adding attributes and enforcing rules. While they are a more advanced feature, using them wisely can lead to clean and powerful abstractions. Start experimenting by defining simple metaclasses that print class names or add methods automatically, then gradually move to more complex use cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing, and you'll unlock the full power of Python’s dynamic nature!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-window-functions-vs-aggregate-functions-in-sql",
+    "title": "Comparing Window Functions vs. Aggregate Functions in SQL: When to Use Each",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the key differences between window functions and aggregate functions in SQL, with easy examples to understand when to use each for your data queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL offers powerful ways to summarize and analyze data, two of which are window functions and aggregate functions. Both can be used to perform calculations over rows of data, but they work differently and serve different purposes. This tutorial explains the differences in simple terms and shows when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "Aggregate functions perform calculations on a set of rows and return a single result per group or entire table. Examples include SUM(), AVG(), COUNT(), MAX(), and MIN(). They collapse multiple rows into one result row."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions, on the other hand, perform calculations across a set of table rows that are related to the current row. They do not collapse rows but instead add result columns for each row based on the window calculation. Common window functions include ROW_NUMBER(), RANK(), SUM() OVER(), AVG() OVER(), etc."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example using a sales table with columns: salesperson, region, and sales_amount."
+      },
+      {
+        "type": "code",
+        "value": "-- Aggregate function example: get total sales per region\nSELECT region, SUM(sales_amount) AS total_sales\nFROM sales\nGROUP BY region;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query groups rows by region and returns one row per region with total sales summed up for that region."
+      },
+      {
+        "type": "code",
+        "value": "-- Window function example: show each sale with the total sales in that sale's region\nSELECT salesperson, region, sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY region) AS total_sales_by_region\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns all individual sales rows but adds a new column showing the total sales for that row's region. The window function SUM() OVER(PARTITION BY region) calculates the sum without collapsing rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "When to use aggregate functions:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- You want to return summary rows rather than individual rows.\n- You want to group data by one or more columns.\n- You do not need to keep detailed individual row data."
+      },
+      {
+        "type": "paragraph",
+        "value": "When to use window functions:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- You want to calculate running totals or rankings.\n- You want to add summary info to detailed rows.\n- You want to perform complex analytics while keeping individual row data visible."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, aggregate functions reduce multiple rows to one result per group, useful in summary reports. Window functions keep all original rows and add useful analytics per row, perfect for detailed reports with additional computations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding these differences helps you write more efficient and clear SQL queries to get exactly the data insights you need."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-window-functions-for-complex-analytical-queries",
+    "title": "Understanding SQL Window Functions for Complex Analytical Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how SQL window functions work to simplify complex analytical queries and avoid common errors as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions provide a powerful way to perform calculations across sets of rows related to the current query row without collapsing the result set. Unlike aggregate functions, window functions allow you to keep row-level detail while performing calculations like running totals, ranking, or moving averages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common window functions include ROW_NUMBER(), RANK(), DENSE_RANK(), SUM(), AVG(), and more. They require an OVER() clause to define the window or partition over which they operate."
+      },
+      {
+        "type": "paragraph",
+        "value": "A typical beginner mistake is to forget the OVER() clause, which causes syntax errors. Let’s look at a simple example of ROW_NUMBER() and how errors may arise."
+      },
+      {
+        "type": "code",
+        "value": "-- Correct usage of ROW_NUMBER with OVER clause\nSELECT\n  employee_id,\n  department_id,\n  ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY hire_date) AS row_num\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you omit the OVER() clause like this, you will get an error:\n\nSELECT employee_id, ROW_NUMBER() FROM employees;"
+      },
+      {
+        "type": "code",
+        "value": "-- This will throw an error because OVER() is missing\nSELECT employee_id, ROW_NUMBER() FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common source of confusion is mixing window functions with GROUP BY clauses improperly. Window functions are applied after grouping, so if you use GROUP BY, remember window functions will run on aggregated results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example combining GROUP BY with a window function correctly:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  department_id,\n  AVG(salary) AS avg_salary,\n  RANK() OVER (ORDER BY AVG(salary) DESC) AS rank\nFROM employees\nGROUP BY department_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we first group employees by department to calculate the average salary, then we rank the departments based on that average."
+      },
+      {
+        "type": "paragraph",
+        "value": "When writing analytical queries, always remember:\n- Window functions require OVER() clause.\n- You can PARTITION BY to restart calculations per group.\n- Use ORDER BY inside OVER() to order rows within the window.\n- Avoid mixing window functions inside WHERE or HAVING clauses since they are evaluated after those."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these basics, you can harness SQL window functions to write elegant, efficient analytics without errors."
+      }
+    ]
   }
 ];

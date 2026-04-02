@@ -1,505 +1,497 @@
 [
   {
-    "slug": "mastering-async-iterators-in-javascript-practical-use-cases-and-tricks",
-    "title": "Mastering Async Iterators in JavaScript: Practical Use Cases and Tricks",
+    "slug": "mastering-array-methods-in-javascript-map-filter-reduce",
+    "title": "Mastering Array Methods in JavaScript: A Beginner's Guide to Map, Filter, and Reduce",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to use async iterators in JavaScript to handle asynchronous data streams effectively with practical examples and beginner-friendly tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=IJ6EgdiI_wU",
+    "description": "Learn how to use JavaScript's essential array methods—map, filter, and reduce—with simple examples to boost your coding skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=PojpwEbOQJg",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript's async iterators are a powerful feature that lets you handle streams of asynchronous data with ease. If you're familiar with regular iterators and loops, async iterators extend these concepts to work with promises, making it easier to process data arriving over time, such as API responses, file reads, or user inputs."
+        "value": "JavaScript arrays are powerful data structures that come with many built-in methods to manipulate data efficiently. Among these, map, filter, and reduce are three essential methods every JavaScript beginner should master. They help transform, select, and accumulate data in a clean and readable way."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore what async iterators are, how to create and use them, and look at practical examples that demonstrate their usefulness in real-world applications."
+        "value": "Let's start by understanding each method with simple examples."
       },
       {
         "type": "paragraph",
-        "value": "### What is an Async Iterator?"
-      },
-      {
-        "type": "paragraph",
-        "value": "An async iterator is an object that defines a method `Symbol.asyncIterator()`, which returns an object with a `next()` method that returns a promise resolving to the next item. This allows you to iterate over asynchronous data using the `for await...of` syntax."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple example of how you might consume an async iterator:"
+        "value": "**1. map() — Transforming Arrays**\n\nThe map() method creates a new array by applying a function to each element of the original array. It is perfect when you want to create a new array with modified values."
       },
       {
         "type": "code",
-        "value": "async function* asyncGenerator() {\n  const data = ['a', 'b', 'c'];\n  for (const item of data) {\n    // simulate async delay\n    await new Promise(resolve => setTimeout(resolve, 100));\n    yield item;\n  }\n}\n\nasync function printItems() {\n  for await (const letter of asyncGenerator()) {\n    console.log(letter);\n  }\n}\n\nprintItems();"
+        "value": "const numbers = [1, 2, 3, 4];\nconst doubled = numbers.map(num => num * 2);\nconsole.log(doubled); // Output: [2, 4, 6, 8]"
       },
       {
         "type": "paragraph",
-        "value": "This code defines an async generator function `asyncGenerator` that yields items with a delay, mimicking asynchronous data fetching. The `printItems` function then uses `for await...of` to log each item as it becomes available."
+        "value": "In the example above, map() takes each number and multiplies it by 2, producing a new array with doubled values."
       },
       {
         "type": "paragraph",
-        "value": "### Practical Use Case 1: Fetching API Data in Chunks"
-      },
-      {
-        "type": "paragraph",
-        "value": "When dealing with APIs that return large datasets, it's often better to process data in chunks rather than waiting for the entire response. Async iterators let you handle each chunk as soon as it's available."
+        "value": "**2. filter() — Selecting Arrays**\n\nThe filter() method creates a new array containing only the elements that pass a test defined by a function. Use filter() when you want to keep certain items based on conditions."
       },
       {
         "type": "code",
-        "value": "async function* fetchPaginatedData(url) {\n  let nextUrl = url;\n  while (nextUrl) {\n    const response = await fetch(nextUrl);\n    const data = await response.json();\n    for (const item of data.results) {\n      yield item;\n    }\n    nextUrl = data.next; // assume API provides a next page URL or null\n  }\n}\n\n(async () => {\n  for await (const user of fetchPaginatedData('https://api.example.com/users')) {\n    console.log(user.name);\n  }\n})();"
+        "value": "const numbers = [5, 10, 15, 20];\nconst largeNumbers = numbers.filter(num => num > 10);\nconsole.log(largeNumbers); // Output: [15, 20]"
       },
       {
         "type": "paragraph",
-        "value": "Here, the async iterator `fetchPaginatedData` fetches data page by page from an API. It yields individual items as they are received, allowing you to process each user immediately without waiting for all pages."
+        "value": "Here, filter() returns a new array containing only numbers greater than 10."
       },
       {
         "type": "paragraph",
-        "value": "### Practical Use Case 2: Reading Files Line by Line asynchronously"
-      },
-      {
-        "type": "paragraph",
-        "value": "In Node.js, async iterators can help process large files line by line without loading everything into memory."
+        "value": "**3. reduce() — Combining Arrays**\n\nThe reduce() method reduces an array to a single value by executing a reducer function on each element, accumulating the result."
       },
       {
         "type": "code",
-        "value": "import fs from 'fs';\nimport readline from 'readline';\n\nasync function* readLines(filePath) {\n  const fileStream = fs.createReadStream(filePath);\n  const rl = readline.createInterface({ input: fileStream });\n\n  for await (const line of rl) {\n    yield line;\n  }\n}\n\n(async () => {\n  for await (const line of readLines('bigfile.txt')) {\n    console.log(`Line: ${line}`);\n  }\n})();"
+        "value": "const numbers = [1, 2, 3, 4];\nconst sum = numbers.reduce((accumulator, current) => accumulator + current, 0);\nconsole.log(sum); // Output: 10"
       },
       {
         "type": "paragraph",
-        "value": "This example uses Node.js streams along with `readline` to read a file one line at a time asynchronously. This approach is memory-friendly and perfect for large files or logs."
+        "value": "In this example, reduce() adds up all the numbers starting with an initial accumulator value of 0."
       },
       {
         "type": "paragraph",
-        "value": "### Tricks to Make the Most of Async Iterators"
+        "value": "### Putting It All Together\n\nLet's say you have an array of objects representing users, and you want to get the total age of users over 18."
+      },
+      {
+        "type": "code",
+        "value": "const users = [\n  { name: 'Alice', age: 17 },\n  { name: 'Bob', age: 20 },\n  { name: 'Charlie', age: 22 },\n  { name: 'David', age: 15 },\n];\n\nconst totalAge = users\n  .filter(user => user.age > 18)              // Keep users over 18\n  .map(user => user.age)                       // Extract their ages into an array\n  .reduce((sum, age) => sum + age, 0);        // Sum all ages\n\nconsole.log(totalAge); // Output: 42"
       },
       {
         "type": "paragraph",
-        "value": "- Use `for await...of` loops to easily consume async iterators without manually handling promises.\n- Implement async generators (`async function*`) to create your own async iterators neatly.\n- Combine async iterators with other async functions to build efficient data pipelines.\n- Use `return` and `throw` in async generators to control iteration flow and handle errors carefully.\n- Remember that errors can be caught with try/catch inside the `for await...of` loops for better stability."
+        "value": "Here, filter() selects users older than 18, map() creates an array of their ages, and reduce() adds the ages together."
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Async iterators are a great tool for managing asynchronous data streams in a clean and efficient way in JavaScript. Whether you're consuming paginated API results, reading files, or processing real-time events, learning async iterators will improve your handling of asynchronous workflows. Practice creating your own async generators and start harnessing the power of `for await...of` loops today!"
+        "value": "Mastering these three methods will significantly improve your JavaScript programming by making your code cleaner, more expressive, and easier to maintain. Practice using map, filter, and reduce on different data sets to become comfortable with functional array processing!"
       }
     ]
   },
   {
-    "slug": "mastering-javascript-performance-profiling-tools-and-techniques-for-efficient-debugging",
-    "title": "Mastering JavaScript Performance Profiling: Tools and Techniques for Efficient Debugging",
+    "slug": "designing-fault-tolerant-javascript-systems-for-scalable-web-applications",
+    "title": "Designing Fault-Tolerant JavaScript Systems for Scalable Web Applications",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to use JavaScript performance profiling tools and techniques to identify and fix common performance issues, making your code faster and more efficient.",
-    "videoUrl": "https://www.youtube.com/watch?v=IZlM4duZOPc",
+    "description": "Learn how to design fault-tolerant JavaScript systems to build scalable and reliable web applications. This beginner-friendly guide covers essential error handling techniques and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=wVWqSIUXdrw",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript performance issues can slow down your web applications and frustrate users. Understanding how to profile and debug your code is essential to optimize performance. In this beginner-friendly article, we'll explore common performance problems, tools available in popular browsers, and practical techniques to identify and fix errors effectively."
+        "value": "Building scalable web applications requires designing systems that remain reliable even when unexpected errors occur. Fault tolerance means your JavaScript code can handle errors gracefully, preventing crashes and improving user experience. In this article, you'll learn simple techniques to create fault-tolerant JavaScript applications that are easier to maintain and scale."
       },
       {
         "type": "paragraph",
-        "value": "### Why Profile JavaScript Performance?\n\nProfiling helps you find bottlenecks in your code—sections that use more CPU or memory than necessary. Instead of guessing, profiling gives you data about where your program spends its time or resources.\n\nCommon symptoms needing profiling include slow page loads, unresponsive buttons, laggy animations, or high CPU usage."
+        "value": "### Understand Common JavaScript Errors\nBefore making your application fault-tolerant, it's important to know common JavaScript errors such as runtime errors, network failures, and unexpected null values. These errors can happen anywhere: API calls might fail, user inputs can be incorrect, or data might be missing."
       },
       {
         "type": "paragraph",
-        "value": "### Using Chrome DevTools Performance Profiler\n\nGoogle Chrome offers a powerful Performance tab to record and analyze your app’s runtime behavior:\n1. Open Chrome and press `F12` to access DevTools.\n2. Navigate to the `Performance` tab.\n3. Click the record button (●), then interact with your page to reproduce the issue.\n4. Stop recording by clicking the button again.\n\nThe profiler will generate a detailed flame chart and timeline showing where time is spent in your JavaScript functions."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Detecting a Slow Loop\n\nImagine the following code that updates DOM elements in a slow loop:"
+        "value": "### Use Try-Catch Blocks for Error Handling\nOne of the simplest ways to handle errors in JavaScript is using try-catch blocks. This allows the program to continue running even if an error occurs within the try block."
       },
       {
         "type": "code",
-        "value": "function updateItems(items) {\n  items.forEach(item => {\n    const element = document.getElementById(item.id);\n    element.textContent = item.value;\n  });\n}\n\n// Calling with many items\nupdateItems(largeArray);"
+        "value": "try {\n  // Code that might throw an error\n  let result = riskyFunction();\n  console.log('Result:', result);\n} catch (error) {\n  console.error('An error occurred:', error.message);\n  // Handle error gracefully or provide fallback\n}"
       },
       {
         "type": "paragraph",
-        "value": "Using the Performance profiler, you might notice a long task in the timeline. This often happens because the browser must repaint after each DOM update inside the loop, slowing your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Fixing Performance Issues\n\nOne easy fix is to batch DOM updates. For example, using `DocumentFragment` to minimize reflows:"
+        "value": "### Handle Asynchronous Errors with Promises and Async/Await\nWeb applications often deal with API calls or database access which are asynchronous. It's crucial to handle errors in promises and async functions properly."
       },
       {
         "type": "code",
-        "value": "function updateItemsOptimized(items) {\n  const fragment = document.createDocumentFragment();\n  items.forEach(item => {\n    const element = document.createElement('div');\n    element.id = item.id;\n    element.textContent = item.value;\n    fragment.appendChild(element);\n  });\n  const container = document.getElementById('container');\n  container.innerHTML = '';\n  container.appendChild(fragment);\n}\n\nupdateItemsOptimized(largeArray);"
+        "value": "async function fetchData() {\n  try {\n    let response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    let data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Fetching data failed:', error.message);\n    // Provide fallback or notify user\n  }\n}\n\nfetchData();"
       },
       {
         "type": "paragraph",
-        "value": "This reduces the number of times the DOM updates on screen, improving performance. Profiling again after this change confirms the improvement."
+        "value": "### Validate User Inputs\nAlways validate user inputs before processing to avoid unexpected errors. This improves fault tolerance by catching invalid data early."
+      },
+      {
+        "type": "code",
+        "value": "function validateUserInput(input) {\n  if (typeof input !== 'string' || input.trim() === '') {\n    throw new Error('Invalid input: must be a non-empty string');\n  }\n  return input.trim();\n}\n\ntry {\n  let userInput = validateUserInput(' some input ');\n  console.log('Valid input:', userInput);\n} catch (error) {\n  console.error(error.message);\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Additional Tips for Effective Profiling\n- Use `console.time()` and `console.timeEnd()` to measure specific code blocks.\n- Look for long tasks over 50ms that block user interaction.\n- Check memory usage in the `Memory` tab to detect leaks.\n- Use Lighthouse (built-in in Chrome DevTools) for automated performance audits.\n- Test in production-similar environments for realistic results."
+        "value": "### Use Default Values and Fallbacks\nWhen working with dynamic data, use default values to avoid undefined or null errors that crash your app."
+      },
+      {
+        "type": "code",
+        "value": "function greetUser(name) {\n  const safeName = name || 'Guest';\n  console.log(`Hello, ${safeName}!`);\n}\n\ngreetUser('Alice');\ngreetUser();"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\n\nMastering JavaScript performance profiling lets you identify and resolve hidden bottlenecks. With browser tools like Chrome DevTools’ Performance tab, simple techniques like batching DOM updates, and smart measurement practices, you can write faster, smoother applications that users love."
+        "value": "### Implement Logging and Monitoring\nTo maintain scalable systems, track errors in production with logging. This helps identify and fix issues before they impact many users."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nFault-tolerant JavaScript systems handle errors gracefully, allowing scalable web applications to run smoothly under stress or failure conditions. Use try-catch blocks, handle asynchronous errors, validate inputs, and provide fallback values. With these practical steps, you can create resilient JavaScript apps ready for real-world use."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-mapped-types-for-dynamic-object-transformations",
-    "title": "Mastering TypeScript Mapped Types for Dynamic Object Transformations",
+    "slug": "building-scalable-event-driven-architectures-with-typescript-and-kafka",
+    "title": "Building Scalable Event-Driven Architectures with TypeScript and Kafka",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript mapped types to create flexible and dynamic object transformations, ideal for enhancing type safety and code reusability in your projects.",
-    "videoUrl": "https://www.youtube.com/watch?v=dfrmvzFktSk",
+    "description": "Learn how to build scalable event-driven architectures using TypeScript and Apache Kafka. This beginner-friendly tutorial covers setting up Kafka, producing and consuming messages, and designing loosely coupled systems.",
+    "videoUrl": "https://www.youtube.com/watch?v=QkdkLdMBuL0",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to TypeScript and want to learn how to work with object types dynamically, mapped types are a fantastic feature to master. Mapped types allow you to create new types by transforming the properties of existing types. This tutorial will guide you through the basics of mapped types and help you understand how to apply them for practical object transformations."
+        "value": "Event-driven architectures are a powerful way to build scalable and loosely coupled systems. By using events as a form of communication between services, you can make your application more resilient and easier to maintain. Apache Kafka is a popular platform to implement event-driven systems because of its high throughput and scalability. In this tutorial, we’ll explore how to build a simple event-driven system using TypeScript and Kafka."
       },
       {
         "type": "paragraph",
-        "value": "### What are Mapped Types?\nMapped types use TypeScript’s ability to iterate over keys of an existing type to create a new type with transformations applied to those keys. They are very useful when you want similar operations on multiple properties of an object without rewriting code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example. Imagine you have an interface describing a user:"
+        "value": "### What You Need Before You Start\n- Node.js installed\n- A running Kafka broker (you can use Confluent Cloud or run Kafka locally using Docker)\n- Basic knowledge of TypeScript\n\nLet's start by creating a new Node.js project and installing the Kafka client for Node.js named `kafkajs`."
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}"
+        "value": "npm init -y\nnpm install kafkajs"
       },
       {
         "type": "paragraph",
-        "value": "If you want to create a new type where all `User` properties are optional, you could use a mapped type like this:"
+        "value": "### Setting Up Kafka Producer in TypeScript\nA producer sends data (events) to Kafka topics. Here's a simple example of a Kafka producer in TypeScript."
       },
       {
         "type": "code",
-        "value": "type PartialUser = {\n  [K in keyof User]?: User[K];\n};"
+        "value": "import { Kafka } from 'kafkajs';\n\nasync function runProducer() {\n  const kafka = new Kafka({\n    clientId: 'my-producer',\n    brokers: ['localhost:9092'], // Change if needed\n  });\n\n  const producer = kafka.producer();\n  await producer.connect();\n\n  // Send a message to the 'test-topic' topic\n  await producer.send({\n    topic: 'test-topic',\n    messages: [\n      { value: JSON.stringify({ event: 'user_signed_up', userId: 1234 }) },\n    ],\n  });\n\n  console.log('Message sent!');\n\n  await producer.disconnect();\n}\n\nrunProducer().catch(console.error);"
       },
       {
         "type": "paragraph",
-        "value": "The syntax `[K in keyof User]` means \"for each key `K` in the keys of `User`\". The `?` makes each property optional, and `User[K]` keeps the original property type."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can now use `PartialUser` to create objects that may have any subset of the `User` properties."
+        "value": "### Setting Up Kafka Consumer in TypeScript\nConsumers listen to Kafka topics and react to the incoming events. Here's how to create a simple consumer using kafkajs."
       },
       {
         "type": "code",
-        "value": "const partialUser: PartialUser = {\n  name: \"Alice\"\n};"
+        "value": "import { Kafka } from 'kafkajs';\n\nasync function runConsumer() {\n  const kafka = new Kafka({\n    clientId: 'my-consumer',\n    brokers: ['localhost:9092'], // Change if needed\n  });\n\n  const consumer = kafka.consumer({ groupId: 'group1' });\n  await consumer.connect();\n  await consumer.subscribe({ topic: 'test-topic', fromBeginning: true });\n\n  await consumer.run({\n    eachMessage: async ({ topic, partition, message }) => {\n      const eventData = message.value?.toString();\n      console.log(`Received message: ${eventData}`);\n      // Here you can add logic to process the event\n    },\n  });\n}\n\nrunConsumer().catch(console.error);"
       },
       {
         "type": "paragraph",
-        "value": "### More Practical Example: Readonly and Nullable Transformations\nMapped types are also great for creating utility types like `Readonly<T>` or `Nullable<T>` that modify properties in common ways."
-      },
-      {
-        "type": "code",
-        "value": "type ReadonlyUser = {\n  readonly [K in keyof User]: User[K];\n};\n\nconst readonlyUser: ReadonlyUser = {\n  id: 1,\n  name: \"Bob\",\n  email: \"bob@example.com\"\n};\n\n// readonlyUser.id = 2; // Error: Cannot assign to 'id' because it is a read-only property."
-      },
-      {
-        "type": "code",
-        "value": "type NullableUser = {\n  [K in keyof User]: User[K] | null;\n};\n\nconst nullableUser: NullableUser = {\n  id: null,\n  name: \"Carol\",\n  email: null\n};"
+        "value": "### Designing a Scalable Event-Driven Architecture\nWhen building larger systems, keep in mind the following:\n\n- Use distinct Kafka topics for different event types to keep things organized.\n- Design your events to be self-contained and immutable.\n- Use consumer groups to parallelize processing and scale horizontally.\n- Handle errors and retries gracefully in your consumers to avoid data loss.\n\n### Next Steps\nTry extending the example by implementing multiple producers and consumers working with various event types. Experiment with Kafka partitions to increase throughput and fault tolerance."
       },
       {
         "type": "paragraph",
-        "value": "### Adding Modifiers Dynamically\nYou can combine mapped types with conditional types and modifiers to add even more dynamic transformations. For example, make all properties readonly except methods:"
-      },
-      {
-        "type": "code",
-        "value": "interface UserWithMethod {\n  id: number;\n  name: string;\n  getEmail: () => string;\n}\n\ntype ReadonlyExceptMethods<T> = {\n  readonly [K in keyof T]: T[K] extends Function ? T[K] : Readonly<T[K]>;\n};\n\nconst user: ReadonlyExceptMethods<UserWithMethod> = {\n  id: 5,\n  name: \"Dan\",\n  getEmail: () => \"dan@example.com\"\n};\n\n// user.id = 6; // Error: Cannot assign to 'id' because it is a read-only property.\nuser.getEmail = () => \"new@example.com\"; // Allowed: methods are not readonly"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nMapped types in TypeScript provide a flexible and powerful way to transform existing types into new versions, allowing you to write more expressive and reusable type-safe code. By mastering mapped types, you gain greater control over your types and can handle complex scenarios with ease."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try experimenting with your own object types and transformations using mapped types to see how they can simplify your TypeScript development."
+        "value": "By combining TypeScript with Kafka’s scalable event streaming capabilities, you can build robust and flexible event-driven systems ideal for microservices, real-time processing, and much more."
       }
     ]
   },
   {
-    "slug": "understanding-typescripts-type-narrowing-a-beginners-guide",
-    "title": "Understanding TypeScript's Type Narrowing: A Beginner's Guide",
+    "slug": "mastering-typescript-conditional-types-for-smarter-error-handling",
+    "title": "Mastering TypeScript Conditional Types for Smarter Error Handling",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how TypeScript's type narrowing helps you write safer code by refining types and preventing common errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=w74CNzY4zT0",
+    "description": "Learn how to use TypeScript conditional types to create smarter, type-safe error handling mechanisms for your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=y193EGxpX0E",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful language that adds type safety to JavaScript. One key feature that helps avoid common programming errors is called \"type narrowing.\" Type narrowing allows TypeScript to refine a variable's type based on specific checks you perform in your code. This means you can write safer, more predictable code without losing flexibility."
+        "value": "Error handling is a crucial part of building robust applications. TypeScript's type system offers powerful features to make error handling more predictable and safer. One such feature is conditional types, which allow you to create types that change based on conditions. In this article, we'll explore how to use conditional types to build smarter error handling solutions that can help catch mistakes during compile time."
       },
       {
         "type": "paragraph",
-        "value": "Imagine you have a variable that can contain multiple types, like a string or a number. Type narrowing helps TypeScript understand exactly which type the variable currently holds, so you can use it confidently."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at some examples to see how type narrowing works in practice."
+        "value": "Conditional types in TypeScript work like a ternary operator for types: they choose different types depending on a condition. The syntax looks like this:"
       },
       {
         "type": "code",
-        "value": "function printId(id: number | string) {\n  if (typeof id === 'string') {\n    // Inside this block, TypeScript knows 'id' is a string\n    console.log(id.toUpperCase());\n  } else {\n    // Here, 'id' must be a number\n    console.log(id.toFixed(2));\n  }\n}\n\nprintId('abc'); // Output: ABC\nprintId(123);   // Output: 123.00"
+        "value": "type Example<T> = T extends string ? \"It's a string\" : \"It's something else\";"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, the parameter `id` can be a string or a number. Using the `typeof` check, TypeScript narrows down `id` to either a string or number inside each branch of the `if` statement. This allows you to safely call string or number methods without errors."
+        "value": "Here, if the generic type `T` is a `string`, the type resolves to \"It's a string\"; otherwise, it resolves to \"It's something else\". This flexibility becomes especially useful when handling different error conditions."
       },
       {
         "type": "paragraph",
-        "value": "Another common case is working with nullable types — values that can be `null` or `undefined`. Type narrowing helps avoid runtime errors by ensuring you only access properties when the value exists."
+        "value": "Let's create a practical example. Imagine you have a function `fetchData` that either returns data or throws an error. We want to type the function so that the error type depends on the kind of data expected."
       },
       {
         "type": "code",
-        "value": "function greet(name: string | null) {\n  if (name) {\n    // TypeScript now knows 'name' is definitely a string\n    console.log(`Hello, ${name.toUpperCase()}!`);\n  } else {\n    console.log('Hello, guest!');\n  }\n}\n\ngreet('Alice');  // Output: Hello, ALICE!\ngreet(null);     // Output: Hello, guest!"
+        "value": "type FetchError<T> = T extends { id: number } ? { code: number; message: string } : { message: string };\n\nfunction fetchData<T>(shouldFail: boolean): T | FetchError<T> {\n  if (shouldFail) {\n    if (({} as T).hasOwnProperty && ({} as T).hasOwnProperty('id')) {\n      return { code: 404, message: 'Not Found' } as FetchError<T>;\n    } else {\n      return { message: 'Error occurred' } as FetchError<T>;\n    }\n  }\n\n  // Assuming data fetched successfully\n  return {} as T;\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, the `if (name)` check narrows the type from `string | null` to just `string`, allowing safe use of string methods. This is called \"truthiness narrowing.\""
+        "value": "In this example, `FetchError` uses a conditional type: if `T` has an `id` property (like an object with an `id` number), the error includes a `code` and `message`; otherwise, it just has a `message`. This makes error handling more specific to the expected data."
       },
       {
         "type": "paragraph",
-        "value": "TypeScript also supports narrowing with custom type guards, which let you define your own checks to refine types."
+        "value": "You can also use conditional types to create utility types that extract or transform error information. For example, let's create a type that picks only the `message` from any error type:"
       },
       {
         "type": "code",
-        "value": "interface Fish {\n  swim: () => void;\n}\n\ninterface Bird {\n  fly: () => void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim(); // Safe to call swim\n  } else {\n    pet.fly();  // Safe to call fly\n  }\n}"
+        "value": "type ErrorMessage<T> = T extends { message: infer M } ? M : never;\n\n// Usage example\n\ntype MyError = { code: number; message: string };\ntype Msg = ErrorMessage<MyError>; // Msg is string"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the `isFish` function tells TypeScript whether the object is a `Fish`. Inside the `if` block, TypeScript narrows the type accordingly, allowing you to access the proper methods safely."
+        "value": "This helps write error handling code that can safely access error messages without worrying about the full error structure."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, type narrowing in TypeScript lets you write safer code by helping the compiler understand exactly what type your variables have at different points in your code. This reduces bugs and improves developer confidence."
+        "value": "In summary, conditional types help you create flexible and precise error types that adapt to your data structures. This leads to better error checking and improved reliability in your TypeScript applications."
       },
       {
         "type": "paragraph",
-        "value": "Try practicing with conditional checks, `typeof`, `instanceof`, and custom type guards to get comfortable using TypeScript's type narrowing in your projects."
+        "value": "To master error handling with conditional types, start incorporating conditions into your error type definitions, and leverage TypeScript's powerful inference capabilities to tailor your error types effectively."
       }
     ]
   },
   {
-    "slug": "building-a-flask-powered-rest-api-for-smart-home-automation",
-    "title": "Building a Flask-Powered REST API for a Smart Home Automation System",
+    "slug": "in-depth-guide-to-python-metaclasses-harnessing-dynamic-class-creation",
+    "title": "In-Depth Guide to Python Metaclasses: Harnessing Dynamic Class Creation",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to create a simple REST API using Flask to control smart home devices like lights and thermostats. Perfect for beginners interested in home automation and Python web development.",
-    "videoUrl": "https://www.youtube.com/watch?v=EbOvR3jF9Co",
+    "description": "Explore Python metaclasses with this beginner-friendly guide. Learn what metaclasses are and how to use them for dynamic and powerful class creation.",
+    "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "Smart home automation is becoming increasingly popular, allowing you to control home devices such as lights, thermostats, and security systems remotely. In this tutorial, we'll build a basic REST API using Python's Flask framework. This API will allow you to turn devices on and off, and read their status. Don't worry if you're new to Flask or APIs; this guide is beginner-friendly and practical."
+        "value": "In Python, everything is an object — including classes themselves. Metaclasses are the 'classes of classes' and allow you to control how classes are created. This guide will help you understand the basics of metaclasses and how to use them in practical situations."
       },
       {
         "type": "paragraph",
-        "value": "First, let's make sure you have Flask installed. You can install it using pip if you don't already have it:"
+        "value": "### What is a Metaclass?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A metaclass is a class that defines how other classes behave. Normally, classes are created by the type metaclass. But by defining your own metaclass, you can customize class creation including modifying or adding attributes and methods dynamically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Example: Using type() to Create Classes Dynamically"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before diving into metaclasses, let's see how Python's built-in metaclass, `type()`, works:"
       },
       {
         "type": "code",
-        "value": "pip install Flask"
+        "value": "MyClass = type('MyClass', (object,), {'x': 5, 'hello': lambda self: 'Hello!'})\n\nobj = MyClass()\nprint(obj.x)         # Output: 5\nprint(obj.hello())   # Output: Hello!"
       },
       {
         "type": "paragraph",
-        "value": "Next, we will create a Python script named `app.py`. This script will contain our Flask application with endpoints to control a smart light and a thermostat."
+        "value": "Here, `type` creates a class named `MyClass` directly by specifying its name, base classes, and attributes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Defining a Custom Metaclass"
+      },
+      {
+        "type": "paragraph",
+        "value": "To define a custom metaclass, inherit from `type` and override its `__new__` or `__init__` method. These control class creation and initialization."
       },
       {
         "type": "code",
-        "value": "from flask import Flask, jsonify, request\n\napp = Flask(__name__)\n\n# Simulated device states\nsmart_home_devices = {\n    'light': {'status': 'off'},\n    'thermostat': {'temperature': 22}  # temperature in Celsius\n}\n\n@app.route('/light', methods=['GET'])\ndef get_light_status():\n    \"\"\"Get the current status of the light.\"\"\"\n    status = smart_home_devices['light']['status']\n    return jsonify({'light_status': status})\n\n@app.route('/light', methods=['POST'])\ndef set_light_status():\n    \"\"\"Turn the light on or off.\"\"\"\n    data = request.get_json()\n    if not data or 'status' not in data:\n        return jsonify({'error': 'Missing light status'}), 400\n    status = data['status'].lower()\n    if status not in ['on', 'off']:\n        return jsonify({'error': 'Invalid status. Use \"on\" or \"off\".'}), 400\n    smart_home_devices['light']['status'] = status\n    return jsonify({'message': f'Light turned {status}'}), 200\n\n@app.route('/thermostat', methods=['GET'])\ndef get_thermostat_temperature():\n    \"\"\"Get the current thermostat temperature.\"\"\"\n    temperature = smart_home_devices['thermostat']['temperature']\n    return jsonify({'temperature': temperature})\n\n@app.route('/thermostat', methods=['POST'])\ndef set_thermostat_temperature():\n    \"\"\"Set the thermostat temperature.\"\"\"\n    data = request.get_json()\n    if not data or 'temperature' not in data:\n        return jsonify({'error': 'Missing temperature value'}), 400\n    try:\n        temperature = float(data['temperature'])\n    except ValueError:\n        return jsonify({'error': 'Temperature must be a number'}), 400\n    if temperature < 10 or temperature > 30:\n        return jsonify({'error': 'Temperature must be between 10 and 30 degrees Celsius'}), 400\n    smart_home_devices['thermostat']['temperature'] = temperature\n    return jsonify({'message': f'Thermostat set to {temperature}°C'}), 200\n\nif __name__ == '__main__':\n    app.run(debug=True)"
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f'Creating class {name}')\n        dct['greet'] = lambda self: f'Hi from {name}'\n        return super().__new__(cls, name, bases, dct)\n\nclass Person(metaclass=MyMeta):\n    pass\n\np = Person()\nprint(p.greet())  # Output: Hi from Person"
       },
       {
         "type": "paragraph",
-        "value": "Let's break down what this code does:"
+        "value": "In this example, the metaclass adds a `greet` method to the new class dynamically. Each time you create a class with `MyMeta` as its metaclass, you get this added method without explicitly defining it."
       },
       {
         "type": "paragraph",
-        "value": "- We import Flask and the necessary modules to handle JSON and HTTP requests.\n- We simulate device states with a Python dictionary `smart_home_devices`.\n- We create four routes:\n  1. `GET /light`: Returns the current status of the light (on/off).\n  2. `POST /light`: Accepts a JSON payload to turn the light on or off.\n  3. `GET /thermostat`: Returns the current thermostat temperature.\n  4. `POST /thermostat`: Accepts a JSON payload to set the thermostat temperature (between 10 and 30 degrees Celsius).\n- We provide error checking to ensure valid inputs.\n- The Flask app runs in debug mode for easy testing."
+        "value": "### Why Use Metaclasses?"
       },
       {
         "type": "paragraph",
-        "value": "To test your API, you can use tools like `curl` or Postman. Here are some example commands using `curl`:"
+        "value": "Metaclasses are useful for advanced use cases like:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Enforcing coding standards (e.g., ensuring certain methods exist)\n- Automatic registration of classes (e.g., plugins)\n- Modifying or wrapping methods automatically\n- Creating singleton classes\n\nFor most everyday programming, metaclasses aren't necessary, but knowing them gives you powerful tools."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Enforce Method Implementation"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a metaclass that requires all subclasses to implement a specific method:"
       },
       {
         "type": "code",
-        "value": "# Check current light status\ncurl http://127.0.0.1:5000/light\n\n# Turn the light on\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"status\":\"on\"}' http://127.0.0.1:5000/light\n\n# Check thermostat temperature\ncurl http://127.0.0.1:5000/thermostat\n\n# Set thermostat temperature to 25°C\ncurl -X POST -H \"Content-Type: application/json\" -d '{\"temperature\":25}' http://127.0.0.1:5000/thermostat"
+        "value": "class RequireMethodMeta(type):\n    def __new__(cls, name, bases, dct):\n        if 'my_method' not in dct:\n            raise TypeError(f\"Class {name} must define 'my_method'\")\n        return super().__new__(cls, name, bases, dct)\n\nclass Base(metaclass=RequireMethodMeta):\n    pass\n\n# This will raise an error\n# class BrokenClass(Base):\n#     pass\n\n# This works fine\nclass GoodClass(Base):\n    def my_method(self):\n        print('Implemented!')\n\nobj = GoodClass()\nobj.my_method()  # Output: Implemented!"
       },
       {
         "type": "paragraph",
-        "value": "This basic API can be expanded with authentication, more devices, scheduling, or integration with real smart home hardware. For now, you have a foundation to build upon and experiment with REST APIs using Flask!"
+        "value": "If `BrokenClass` is defined without `my_method`, Python raises a `TypeError` at class creation time."
       },
       {
         "type": "paragraph",
-        "value": "Happy coding and enjoy automating your smart home!"
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses allow you to customize class creation in Python by modifying or adding attributes and enforcing rules. While they are a more advanced feature, using them wisely can lead to clean and powerful abstractions. Start experimenting by defining simple metaclasses that print class names or add methods automatically, then gradually move to more complex use cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing, and you'll unlock the full power of Python’s dynamic nature!"
       }
     ]
   },
   {
-    "slug": "debugging-memory-leaks-in-large-scale-python-applications",
-    "title": "Debugging Memory Leaks in Large-Scale Python Applications: A Hands-On Guide",
+    "slug": "handling-api-rate-limit-errors-gracefully-python",
+    "title": "Handling API Rate Limit Errors Gracefully in Python Projects",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to identify and fix memory leaks in large-scale Python applications with practical debugging techniques and code examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=D9q5wnX2_DY",
+    "description": "Learn how to handle API rate limit errors in Python projects with simple techniques to retry requests and avoid breaking your application.",
+    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks occur when a program holds on to memory that is no longer needed, causing the application's memory usage to grow unnecessarily over time. In large-scale Python applications, this can lead to poor performance or even crashes. This guide will walk you through the basics of debugging memory leaks in Python, using beginner-friendly tools and techniques."
+        "value": "When working with APIs, you might encounter rate limits. These limits restrict how many requests you can send within a certain time frame. If you exceed the limit, the API often responds with an error, like HTTP status code 429 (Too Many Requests). Handling these errors properly is important to avoid your program crashing and to ensure smooth user experience."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand what a memory leak looks like. Imagine a Python program that creates objects but never releases them, causing memory to fill up gradually. To spot this, you need to monitor your application's memory usage over time. One simple way is to use the `psutil` library to track the process’s memory consumption."
+        "value": "In this article, we'll learn how to detect API rate limit errors in Python and handle them gracefully by waiting and retrying the request after some time. This approach is beginner-friendly and will help your project work reliably with APIs."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's look at a simple example using the requests library to make an API call. We will check the response status code and handle the rate limit error."
       },
       {
         "type": "code",
-        "value": "import psutil\nimport time\n\nprocess = psutil.Process()\n\nfor _ in range(10):\n    print(f'Memory usage: {process.memory_info().rss / 1024 ** 2:.2f} MB')\n    time.sleep(1)"
+        "value": "import time\nimport requests\n\nurl = \"https://api.example.com/data\"\n\ntry:\n    response = requests.get(url)\n    if response.status_code == 429:\n        print(\"Rate limit exceeded. Please try again later.\")\n    else:\n        data = response.json()\n        print(data)\nexcept requests.exceptions.RequestException as e:\n    print(f\"An error occurred: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "If you notice memory usage increasing continuously without going down, you likely have a memory leak. To dig deeper, Python provides a module called `tracemalloc` which tracks memory allocations. Let's see how we can use it to locate leaks."
+        "value": "This code prints a message when the rate limit is exceeded, but it doesn't retry automatically. To improve it, we can add a retry mechanism that waits for some seconds before trying again."
+      },
+      {
+        "type": "paragraph",
+        "value": "Most APIs provide a header like `Retry-After` that tells you how many seconds to wait before retrying. We'll use this header if available; otherwise, we'll wait a default time."
       },
       {
         "type": "code",
-        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code that might leak memory\nsome_list = []\nfor i in range(10000):\n    some_list.append(str(i) * 1000)\n\nsnapshot = tracemalloc.take_snapshot()\ntop_stats = snapshot.statistics('lineno')\n\nprint(\"Top 10 lines by memory allocation:\")\nfor stat in top_stats[:10]:\n    print(stat)"
+        "value": "import time\nimport requests\n\nurl = \"https://api.example.com/data\"\nmax_retries = 3\nretry_count = 0\n\nwhile retry_count < max_retries:\n    response = requests.get(url)\n    if response.status_code == 429:\n        retry_after = response.headers.get(\"Retry-After\")\n        wait_time = int(retry_after) if retry_after else 5  # default 5 seconds\n        print(f\"Rate limit hit. Retrying after {wait_time} seconds...\")\n        time.sleep(wait_time)\n        retry_count += 1\n    else:\n        data = response.json()\n        print(data)\n        break\nelse:\n    print(\"Exceeded maximum retries. Please try again later.\")"
       },
       {
         "type": "paragraph",
-        "value": "This code snippet starts tracking all memory allocations, runs a block of code, then captures and reports where most memory was allocated. By looking at the top statistics, you can identify which parts of your program consume the most memory."
+        "value": "In this improved code, the program waits and retries the request a few times before giving up. This way, your script handles rate limit errors gracefully without stopping abruptly."
       },
       {
         "type": "paragraph",
-        "value": "Another useful tool for debugging memory leaks is `objgraph`, which helps you visualize Python object references to find unwanted retained objects. Install it with `pip install objgraph`."
-      },
-      {
-        "type": "code",
-        "value": "import objgraph\n\n# Suppose you suspect 'MyClass' instances are leaking\nobjgraph.show_growth(limit=5)  # Shows top 5 growing object types\nobjgraph.show_refs([some_leaky_object], filename='refs.png')"
-      },
-      {
-        "type": "paragraph",
-        "value": "`show_growth()` will display which object types are increasing in number, which often indicates a leak. `show_refs()` generates a graph of references around a specific object, helping you find what keeps it alive."
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, common causes of memory leaks in Python include lingering references in global variables, caches, or circular references in classes that define `__del__`. Always try to explicitly break references or use weak references with the `weakref` module."
-      },
-      {
-        "type": "paragraph",
-        "value": "By combining memory monitoring, `tracemalloc` snapshots, and object graphs, you can effectively locate and fix memory leaks in your large Python projects. Start small, track your memory usage regularly, and use these tools to keep your application's memory footprint healthy."
+        "value": "To summarize, handling API rate limits in Python projects involves checking for error status codes, reading retry headers if available, and implementing retry logic with delays. These simple steps ensure your app remains robust and user-friendly when dealing with APIs."
       }
     ]
   },
   {
-    "slug": "building-scalable-inventory-management-system-sql-stored-procedures",
-    "title": "Building a Scalable Inventory Management System Using SQL and Stored Procedures",
+    "slug": "comparing-window-functions-vs-aggregate-functions-in-sql",
+    "title": "Comparing Window Functions vs. Aggregate Functions in SQL: When to Use Each",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to create a scalable inventory management system using SQL and stored procedures, designed for beginners to efficiently handle product stock and transactions.",
-    "videoUrl": "https://www.youtube.com/watch?v=9GVqKuTVANE",
+    "description": "Learn the key differences between window functions and aggregate functions in SQL, with easy examples to understand when to use each for your data queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Managing inventory effectively is essential for many businesses, especially as they grow. Using SQL along with stored procedures can help you build a scalable inventory system that is easy to maintain, efficient, and reduces errors. In this tutorial, we will cover the basics of setting up tables and creating stored procedures to handle common inventory operations like adding stock, reducing stock, and viewing current inventory."
+        "value": "SQL offers powerful ways to summarize and analyze data, two of which are window functions and aggregate functions. Both can be used to perform calculations over rows of data, but they work differently and serve different purposes. This tutorial explains the differences in simple terms and shows when to use each."
       },
       {
         "type": "paragraph",
-        "value": "First, let's create the basic table structure to keep track of products and their quantities."
+        "value": "Aggregate functions perform calculations on a set of rows and return a single result per group or entire table. Examples include SUM(), AVG(), COUNT(), MAX(), and MIN(). They collapse multiple rows into one result row."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions, on the other hand, perform calculations across a set of table rows that are related to the current row. They do not collapse rows but instead add result columns for each row based on the window calculation. Common window functions include ROW_NUMBER(), RANK(), SUM() OVER(), AVG() OVER(), etc."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example using a sales table with columns: salesperson, region, and sales_amount."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Products (\n  ProductID INT PRIMARY KEY IDENTITY(1,1),\n  ProductName VARCHAR(100) NOT NULL,\n  Quantity INT NOT NULL DEFAULT 0\n);"
+        "value": "-- Aggregate function example: get total sales per region\nSELECT region, SUM(sales_amount) AS total_sales\nFROM sales\nGROUP BY region;"
       },
       {
         "type": "paragraph",
-        "value": "With this table, each product has a unique ID, a name, and the current quantity in stock. Now, we will create a stored procedure to add new products into the inventory."
+        "value": "This query groups rows by region and returns one row per region with total sales summed up for that region."
       },
       {
         "type": "code",
-        "value": "CREATE PROCEDURE AddProduct\n  @ProductName VARCHAR(100),\n  @InitialQuantity INT\nAS\nBEGIN\n  INSERT INTO Products (ProductName, Quantity)\n  VALUES (@ProductName, @InitialQuantity);\nEND;"
+        "value": "-- Window function example: show each sale with the total sales in that sale's region\nSELECT salesperson, region, sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY region) AS total_sales_by_region\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "Next, let's create a procedure to increase the quantity of an existing product when new stock arrives."
-      },
-      {
-        "type": "code",
-        "value": "CREATE PROCEDURE IncreaseStock\n  @ProductID INT,\n  @Amount INT\nAS\nBEGIN\n  UPDATE Products\n  SET Quantity = Quantity + @Amount\n  WHERE ProductID = @ProductID;\nEND;"
+        "value": "This query returns all individual sales rows but adds a new column showing the total sales for that row's region. The window function SUM() OVER(PARTITION BY region) calculates the sum without collapsing rows."
       },
       {
         "type": "paragraph",
-        "value": "We also need a stored procedure to reduce stock, for example when items are sold or removed from inventory. It's important to check that enough stock exists before subtracting."
-      },
-      {
-        "type": "code",
-        "value": "CREATE PROCEDURE DecreaseStock\n  @ProductID INT,\n  @Amount INT\nAS\nBEGIN\n  IF EXISTS (SELECT 1 FROM Products WHERE ProductID = @ProductID AND Quantity >= @Amount)\n  BEGIN\n    UPDATE Products\n    SET Quantity = Quantity - @Amount\n    WHERE ProductID = @ProductID;\n  END\n  ELSE\n  BEGIN\n    RAISERROR('Not enough stock to complete this operation.', 16, 1);\n  END\nEND;"
+        "value": "When to use aggregate functions:"
       },
       {
         "type": "paragraph",
-        "value": "Finally, you might want to see a current snapshot of all products and their stock levels."
-      },
-      {
-        "type": "code",
-        "value": "CREATE PROCEDURE GetInventory\nAS\nBEGIN\n  SELECT ProductID, ProductName, Quantity FROM Products;\nEND;"
+        "value": "- You want to return summary rows rather than individual rows.\n- You want to group data by one or more columns.\n- You do not need to keep detailed individual row data."
       },
       {
         "type": "paragraph",
-        "value": "With these stored procedures, your inventory management system supports scalable operations with clear, reusable code blocks. You can expand it by adding features such as transaction logging, user access control, or automated alerts when stock runs low."
+        "value": "When to use window functions:"
       },
       {
         "type": "paragraph",
-        "value": "To use a stored procedure, simply call it with the appropriate parameters. For example, to add 100 units of a new product \"USB Cable\":"
-      },
-      {
-        "type": "code",
-        "value": "EXEC AddProduct @ProductName = 'USB Cable', @InitialQuantity = 100;"
+        "value": "- You want to calculate running totals or rankings.\n- You want to add summary info to detailed rows.\n- You want to perform complex analytics while keeping individual row data visible."
       },
       {
         "type": "paragraph",
-        "value": "This beginner-friendly approach allows you to leverage SQL's power and build a maintainable system that grows with your business needs."
+        "value": "In summary, aggregate functions reduce multiple rows to one result per group, useful in summary reports. Window functions keep all original rows and add useful analytics per row, perfect for detailed reports with additional computations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding these differences helps you write more efficient and clear SQL queries to get exactly the data insights you need."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-query-performance-by-understanding-execution-plans",
-    "title": "Optimizing SQL Query Performance by Understanding Execution Plans in Large-Scale Systems",
+    "slug": "understanding-sql-window-functions-for-complex-analytical-queries",
+    "title": "Understanding SQL Window Functions for Complex Analytical Queries",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to improve SQL query efficiency by reading and interpreting execution plans, a vital skill for managing large-scale database systems.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how SQL window functions work to simplify complex analytical queries and avoid common errors as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with large-scale database systems, SQL query performance can significantly impact application speed and user experience. Execution plans are powerful tools that reveal how the database engine processes your SQL queries. By learning how to read them, you can identify bottlenecks and optimize your queries for faster results."
+        "value": "SQL window functions provide a powerful way to perform calculations across sets of rows related to the current query row without collapsing the result set. Unlike aggregate functions, window functions allow you to keep row-level detail while performing calculations like running totals, ranking, or moving averages."
       },
       {
         "type": "paragraph",
-        "value": "An execution plan outlines the steps the database takes to run your query. It shows how tables are scanned, how joins are performed, and what indexes are used. These details help you understand if your query is efficient or if it requires tuning."
+        "value": "Common window functions include ROW_NUMBER(), RANK(), DENSE_RANK(), SUM(), AVG(), and more. They require an OVER() clause to define the window or partition over which they operate."
       },
       {
         "type": "paragraph",
-        "value": "To generate an execution plan in SQL Server, you can use the `EXPLAIN` keyword or, more commonly, the `SET SHOWPLAN_TEXT ON` statement before running your query. This doesn't execute the query but shows the plan SQL Server would use."
+        "value": "A typical beginner mistake is to forget the OVER() clause, which causes syntax errors. Let’s look at a simple example of ROW_NUMBER() and how errors may arise."
       },
       {
         "type": "code",
-        "value": "SET SHOWPLAN_TEXT ON;\nGO\nSELECT * FROM Orders WHERE CustomerID = 'ALFKI';\nGO\nSET SHOWPLAN_TEXT OFF;\nGO"
+        "value": "-- Correct usage of ROW_NUMBER with OVER clause\nSELECT\n  employee_id,\n  department_id,\n  ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY hire_date) AS row_num\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the plan might show you whether SQL Server uses an index seek on the `CustomerID` column or a full table scan. An index seek is faster, indicating the database efficiently filters the rows. A full table scan can be slower, especially on large tables."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common reasons for poor performance include missing indexes, inefficient joins, or complex filters that force the database to scan whole tables. For example, using a function on a column in the WHERE clause can prevent index usage."
+        "value": "If you omit the OVER() clause like this, you will get an error:\n\nSELECT employee_id, ROW_NUMBER() FROM employees;"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM Orders WHERE YEAR(OrderDate) = 2023; -- Inefficient for index usage\n\n-- Better:\nSELECT * FROM Orders WHERE OrderDate >= '2023-01-01' AND OrderDate < '2024-01-01';"
+        "value": "-- This will throw an error because OVER() is missing\nSELECT employee_id, ROW_NUMBER() FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "The first query applies a function to a column, which often disables indexes. The second uses a range condition that SQL Server can optimize with indexes."
+        "value": "Another common source of confusion is mixing window functions with GROUP BY clauses improperly. Window functions are applied after grouping, so if you use GROUP BY, remember window functions will run on aggregated results."
       },
       {
         "type": "paragraph",
-        "value": "In summary, to optimize SQL queries in large-scale systems:\n1. Always check the execution plan to see how the query runs.\n2. Look for scans where seeks are expected.\n3. Avoid functions on indexed columns in filters.\n4. Add or update indexes based on query patterns.\n5. Simplify joins and reduce unnecessary data retrieval."
+        "value": "Here’s an example combining GROUP BY with a window function correctly:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  department_id,\n  AVG(salary) AS avg_salary,\n  RANK() OVER (ORDER BY AVG(salary) DESC) AS rank\nFROM employees\nGROUP BY department_id;"
       },
       {
         "type": "paragraph",
-        "value": "By regularly analyzing execution plans, you can make data-driven decisions that enhance your SQL queries, resulting in faster, more reliable applications."
+        "value": "In this example, we first group employees by department to calculate the average salary, then we rank the departments based on that average."
+      },
+      {
+        "type": "paragraph",
+        "value": "When writing analytical queries, always remember:\n- Window functions require OVER() clause.\n- You can PARTITION BY to restart calculations per group.\n- Use ORDER BY inside OVER() to order rows within the window.\n- Avoid mixing window functions inside WHERE or HAVING clauses since they are evaluated after those."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these basics, you can harness SQL window functions to write elegant, efficient analytics without errors."
       }
     ]
   }
