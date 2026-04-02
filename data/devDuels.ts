@@ -4091,5 +4091,175 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-a-simple-function-that-adds-two-numbers",
+    "title": "Fix the Bug in a Simple Function That Adds Two Numbers",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a JavaScript function designed to add two numbers and return the result. This challenge tests understanding of basic function syntax and return statements.",
+    "prompt": "The following function is intended to take two numbers as input parameters, add them together, and return the sum. However, it currently does not work correctly. Find and fix the bug so the function behaves as expected.",
+    "guidance": [
+      "Check the syntax of the function, especially the return statement.",
+      "Verify if the function parameters are used correctly within the function body."
+    ],
+    "hints": [
+      "Is there a missing keyword or syntax error in the function?",
+      "Make sure the function actually returns the result of the addition."
+    ],
+    "starterCode": "function addNumbers(a, b) {\n  let sum = a + b;\n  sum;\n}",
+    "expectedOutput": "addNumbers(3, 4) should return 7",
+    "concepts": [
+      "function syntax",
+      "return statement"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-task-manager-cli-application-in-python",
+    "title": "Build a Task Manager CLI Application in Python",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a command-line task manager in Python that allows users to add, complete, delete, and list tasks with due dates and priorities.",
+    "prompt": "Write a Python program that manages a list of tasks. Each task should have a description, a due date (YYYY-MM-DD format), a priority level (low, medium, high), and a completion status. Implement functionality to:\n\n1. Add a new task.\n2. Mark a task as completed.\n3. Delete a task.\n4. List all tasks sorted by due date and then by priority (high to low).\n\nThe program should interact with the user through simple text input commands and print the updated task list after each operation.",
+    "guidance": [
+      "Use a list of dictionaries or custom objects to store tasks.",
+      "Parse date strings into Python date objects for accurate sorting.",
+      "Define functions for each command (add, complete, delete, list) to keep the code organized."
+    ],
+    "hints": [
+      "Use the datetime module to handle and compare due dates.",
+      "Map priority levels to numeric values (e.g., high=3, medium=2, low=1) to facilitate sorting.",
+      "Keep track of task indices so users can reference them when completing or deleting."
+    ],
+    "starterCode": "from datetime import datetime\n\ntasks = []\n\ndef add_task(description, due_date_str, priority):\n    due_date = datetime.strptime(due_date_str, '%Y-%m-%d')\n    priorities = {'low': 1, 'medium': 2, 'high': 3}\n    task = {\n        'description': description,\n        'due_date': due_date,\n        'priority': priorities.get(priority.lower(), 1),\n        'completed': False\n    }\n    tasks.append(task)\n\ndef list_tasks():\n    sorted_tasks = sorted(tasks, key=lambda x: (x['due_date'], -x['priority']))\n    for i, task in enumerate(sorted_tasks):\n        status = 'Done' if task['completed'] else 'Pending'\n        print(f'{i}. {task[\"description\"]} - Due: {task[\"due_date\"].date()} - Priority: {task[\"priority\"]} - Status: {status}')\n\n# Implement functions complete_task(index) and delete_task(index) and input loop here\n\n# Example usage:\n# add_task('Complete Dev Duel challenge', '2024-07-15', 'High')\n# list_tasks()",
+    "expectedOutput": "0. Complete Dev Duel challenge - Due: 2024-07-15 - Priority: 3 - Status: Pending",
+    "concepts": [
+      "datetime handling",
+      "list sorting",
+      "dictionary usage",
+      "command-line interaction"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-an-optimized-memoized-deep-nested-object-flattener",
+    "title": "Build an Optimized Memoized Deep Nested Object Flattener",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a highly efficient JavaScript function that flattens deeply nested objects into a single-level object with dot-separated keys. Implement memoization to cache and reuse results for previously processed inputs to optimize performance for repeated calls with identical objects.",
+    "prompt": "Write a function `flattenObject(obj)` that takes an arbitrarily deep nested JavaScript object and returns a new object with all nested keys flattened into a single level, where nested keys are joined by dots ('.'). For example: `flattenObject({a: {b: 2}})` should return `{ 'a.b': 2 }`. Implement memoization in the function so that if it is called multiple times with the exact same input object reference, it instantly returns the cached flattened result without recomputation. Your solution should handle objects containing nested arrays as values by treating array indices as keys in the flattening process (e.g., `{a: [1, 2]}` becomes `{ 'a.0': 1, 'a.1': 2 }`).",
+    "guidance": [
+      "Recursively traverse the object to access all nested properties and build dot-separated keys.",
+      "Use a WeakMap to memoize results keyed by the input object reference to avoid memory leaks.",
+      "Handle arrays by using their indices as keys when flattening."
+    ],
+    "hints": [
+      "To memoize based on object references, a WeakMap is ideal since it prevents retaining objects unnecessarily.",
+      "Check the data type of each value to determine whether to recurse (for objects and arrays) or set the key-value pair.",
+      "Remember that non-object values (including null) should not be traversed and are terminal values in the flattening."
+    ],
+    "starterCode": "function flattenObject(obj) {\n  // Your implementation here\n}",
+    "expectedOutput": "flattenObject({ a: { b: 1, c: [2, 3] }, d: 4 }) // { 'a.b': 1, 'a.c.0': 2, 'a.c.1': 3, d: 4 }",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "object traversal",
+      "JavaScript WeakMap"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-budget-tracker",
+    "title": "Simple Budget Tracker",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a basic C++ program that helps track expenses and calculate the remaining budget. Users will input their total budget and then enter expenses one by one. The program will output the remaining budget after each expense and a summary at the end.",
+    "prompt": "Write a C++ program that allows the user to:\n1. Enter their total budget.\n2. Enter multiple expenses one by one. After each expense, the program should display the remaining budget.\n3. When the user types 0 as the expense amount, stop taking inputs and display the total expenses and the final remaining budget.\n\nMake sure to handle cases where the expense might exceed the remaining budget by displaying a warning message and not subtracting that expense.",
+    "guidance": [
+      "Use a loop to repeatedly take expense inputs until the user enters 0.",
+      "Keep track of expenses using a variable and update the remaining budget after each valid expense.",
+      "Use conditionals to ensure expenses that exceed the remaining budget are rejected with a warning."
+    ],
+    "hints": [
+      "Remember to initialize your variables such as total budget and total expenses.",
+      "Use a while loop or a do-while loop to keep asking for expenses.",
+      "Check if the expense entered is greater than the remaining budget before subtracting."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double totalBudget, expense, totalExpenses = 0;\n    cout << \"Enter your total budget: \";\n    cin >> totalBudget;\n\n    // Your code to input expenses and calculate remaining budget goes here\n\n    return 0;\n}",
+    "expectedOutput": "Enter your total budget: 500\nEnter an expense (0 to finish): 100\nRemaining budget: 400\nEnter an expense (0 to finish): 200\nRemaining budget: 200\nEnter an expense (0 to finish): 250\nExpense exceeds remaining budget. Try a smaller amount.\nEnter an expense (0 to finish): 150\nRemaining budget: 50\nEnter an expense (0 to finish): 0\nTotal expenses: 450\nFinal remaining budget: 50",
+    "concepts": [
+      "variables",
+      "loops",
+      "conditionals",
+      "input/output"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "create-a-deep-object-merge-function",
+    "title": "Create a Deep Object Merge Function",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Build a JavaScript function that takes two objects and merges them deeply, combining nested objects instead of overwriting them.",
+    "prompt": "Write a function called `deepMerge` that takes two objects as arguments and returns a new object that is a deep merge of the two. If both objects share the same key and their values are objects themselves, merge those objects recursively. For other types of values, the value from the second object should overwrite the first. Your function should not mutate the original input objects.",
+    "guidance": [
+      "Check if a value is an object before recursively merging.",
+      "Use a helper function or recursion to process nested objects.",
+      "Avoid mutating the original objects; always create new objects during merging."
+    ],
+    "hints": [
+      "Use `typeof` and `Array.isArray` checks to distinguish objects from other types and arrays.",
+      "Remember that arrays should be overwritten, not deeply merged.",
+      "Spread syntax (`{...obj}`) can help create shallow copies for immutability."
+    ],
+    "starterCode": "function deepMerge(obj1, obj2) {\n  // Your code here\n}",
+    "expectedOutput": "deepMerge({a: 1, b: {x: 2}}, {b: {y: 3}, c: 4}) // returns {a: 1, b: {x: 2, y: 3}, c: 4}",
+    "concepts": [
+      "recursion",
+      "object manipulation",
+      "immutability"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-complex-closure-and-async-workflows-in-javascript",
+    "title": "Predict the Output of Complex Closure and Async Workflows in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a JavaScript code snippet combining closures, async/await, Promises, and loops, then predict the exact order and content of its console output.",
+    "prompt": "Examine the following JavaScript code that uses nested functions, closures, async/await, and Promise-based delays. Predict exactly what strings will be logged to the console and in which order, after the function runSequence() is invoked.",
+    "guidance": [
+      "Focus on understanding how closures capture variables in loops.",
+      "Consider the effects of async/await with Promise delays within loops.",
+      "Remember the event loop behavior and microtask queue processing order."
+    ],
+    "hints": [
+      "Variables declared with var inside loops can cause unexpected captures due to function scoping.",
+      "The await keyword pauses execution within async functions but does not block the main thread.",
+      "Promises resolved inside loops execute their .then() callbacks as microtasks after the current call stack completes."
+    ],
+    "starterCode": "function delay(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function runSequence() {\n  for (var i = 0; i < 3; i++) {\n    delay(10).then(() => console.log('Then', i));\n    (async function(j) {\n      await delay(5);\n      console.log('Await', j);\n    })(i);\n  }\n  console.log('Loop done');\n}\n\nrunSequence();",
+    "expectedOutput": "Loop done\nAwait 0\nAwait 1\nAwait 2\nThen 3\nThen 3\nThen 3",
+    "concepts": [
+      "closures",
+      "async/await",
+      "Promise",
+      "event loop",
+      "variable scoping"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];

@@ -1,176 +1,172 @@
 [
   {
-    "slug": "build-a-simple-to-do-list-application-in-c",
-    "title": "Build a Simple To-Do List Application in C++",
-    "language": "cpp",
+    "slug": "fix-the-bug-in-a-simple-function-that-adds-two-numbers",
+    "title": "Fix the Bug in a Simple Function That Adds Two Numbers",
+    "language": "javascript",
     "difficulty": "beginner",
-    "category": "mini-projects",
-    "description": "Create a beginner-friendly console-based to-do list app where users can add, view, and remove tasks.",
-    "prompt": "Write a C++ program that allows a user to manage a simple to-do list. The program should repeatedly prompt the user to choose an action: add a new task, list all tasks, remove a task by number, or exit the program. Tasks should be stored in a dynamic structure, and the user can perform multiple actions until they choose to exit.",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a JavaScript function designed to add two numbers and return the result. This challenge tests understanding of basic function syntax and return statements.",
+    "prompt": "The following function is intended to take two numbers as input parameters, add them together, and return the sum. However, it currently does not work correctly. Find and fix the bug so the function behaves as expected.",
     "guidance": [
-      "Use a vector to store the list of tasks dynamically.",
-      "Implement a loop to continuously ask for user input until they want to exit.",
-      "Use functions to separate adding, listing, and removing tasks."
+      "Check the syntax of the function, especially the return statement.",
+      "Verify if the function parameters are used correctly within the function body."
     ],
     "hints": [
-      "Consider using std::getline() to read the full task string from the user.",
-      "When removing a task, make sure to validate the user's input to avoid out-of-range errors.",
-      "Use a simple menu system with numbered options to interact with the user."
+      "Is there a missing keyword or syntax error in the function?",
+      "Make sure the function actually returns the result of the addition."
     ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nint main() {\n    std::vector<std::string> tasks;\n    int choice;\n    while (true) {\n        std::cout << \"\\nTo-Do List Menu:\\n1. Add Task\\n2. List Tasks\\n3. Remove Task\\n4. Exit\\nChoose an option: \";\n        std::cin >> choice;\n        std::cin.ignore(); // Clear newline from input buffer\n\n        if (choice == 1) {\n            // Add task\n        } else if (choice == 2) {\n            // List tasks\n        } else if (choice == 3) {\n            // Remove task\n        } else if (choice == 4) {\n            std::cout << \"Exiting program.\\n\";\n            break;\n        } else {\n            std::cout << \"Invalid option. Please try again.\\n\";\n        }\n    }\n    return 0;\n}",
-    "expectedOutput": "User selects 1, adds \"Buy groceries\".\nUser selects 2, sees:\n1. Buy groceries\nUser selects 1, adds \"Finish homework\".\nUser selects 2, sees:\n1. Buy groceries\n2. Finish homework\nUser selects 3, enters 1.\nUser selects 2, sees:\n1. Finish homework\nUser selects 4, program exits.",
+    "starterCode": "function addNumbers(a, b) {\n  let sum = a + b;\n  sum;\n}",
+    "expectedOutput": "addNumbers(3, 4) should return 7",
     "concepts": [
-      "vectors",
-      "loops",
-      "input/output",
-      "functions"
+      "function syntax",
+      "return statement"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-a-task-management-cli-mini-project",
-    "title": "Build a Task Management CLI Mini Project",
-    "language": "javascript",
+    "slug": "build-a-task-manager-cli-application-in-python",
+    "title": "Build a Task Manager CLI Application in Python",
+    "language": "python",
     "difficulty": "intermediate",
     "category": "mini-projects",
-    "description": "Create a simple command-line task manager in JavaScript that allows users to add, remove, list, and mark tasks as complete. This mini-project will help you practice array manipulation, object handling, and implementing multi-step logic.",
-    "prompt": "Write a JavaScript function 'taskManager' that returns an object with methods to manage a list of tasks. The task manager should support the following methods: addTask(description), removeTask(index), markComplete(index), and listTasks(). Tasks should be stored as objects with properties: id, description, and completed (boolean). The listTasks method should output all tasks showing their id, description, and status (Completed or Pending). Ensure the task ids increment automatically starting from 1.",
+    "description": "Create a command-line task manager in Python that allows users to add, complete, delete, and list tasks with due dates and priorities.",
+    "prompt": "Write a Python program that manages a list of tasks. Each task should have a description, a due date (YYYY-MM-DD format), a priority level (low, medium, high), and a completion status. Implement functionality to:\n\n1. Add a new task.\n2. Mark a task as completed.\n3. Delete a task.\n4. List all tasks sorted by due date and then by priority (high to low).\n\nThe program should interact with the user through simple text input commands and print the updated task list after each operation.",
     "guidance": [
-      "Use an array to store the tasks inside your task manager object.",
-      "Each task should be an object with id, description, and completed properties.",
-      "Increment task ids automatically as new tasks are added.",
-      "Update the completed property when marking a task as complete."
+      "Use a list of dictionaries or custom objects to store tasks.",
+      "Parse date strings into Python date objects for accurate sorting.",
+      "Define functions for each command (add, complete, delete, list) to keep the code organized."
     ],
     "hints": [
-      "Use closures to keep the task list private within the taskManager function.",
-      "Remember array methods like push(), splice(), and map() for managing tasks.",
-      "Format the output of listTasks for clear readability."
+      "Use the datetime module to handle and compare due dates.",
+      "Map priority levels to numeric values (e.g., high=3, medium=2, low=1) to facilitate sorting.",
+      "Keep track of task indices so users can reference them when completing or deleting."
     ],
-    "starterCode": "function taskManager() {\n  // Your code here\n}\n\nconst manager = taskManager();\nmanager.addTask('Finish homework');\nmanager.addTask('Clean room');\nmanager.listTasks();",
-    "expectedOutput": "1. Finish homework - Pending\n2. Clean room - Pending",
+    "starterCode": "from datetime import datetime\n\ntasks = []\n\ndef add_task(description, due_date_str, priority):\n    due_date = datetime.strptime(due_date_str, '%Y-%m-%d')\n    priorities = {'low': 1, 'medium': 2, 'high': 3}\n    task = {\n        'description': description,\n        'due_date': due_date,\n        'priority': priorities.get(priority.lower(), 1),\n        'completed': False\n    }\n    tasks.append(task)\n\ndef list_tasks():\n    sorted_tasks = sorted(tasks, key=lambda x: (x['due_date'], -x['priority']))\n    for i, task in enumerate(sorted_tasks):\n        status = 'Done' if task['completed'] else 'Pending'\n        print(f'{i}. {task[\"description\"]} - Due: {task[\"due_date\"].date()} - Priority: {task[\"priority\"]} - Status: {status}')\n\n# Implement functions complete_task(index) and delete_task(index) and input loop here\n\n# Example usage:\n# add_task('Complete Dev Duel challenge', '2024-07-15', 'High')\n# list_tasks()",
+    "expectedOutput": "0. Complete Dev Duel challenge - Due: 2024-07-15 - Priority: 3 - Status: Pending",
+    "concepts": [
+      "datetime handling",
+      "list sorting",
+      "dictionary usage",
+      "command-line interaction"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-an-optimized-memoized-deep-nested-object-flattener",
+    "title": "Build an Optimized Memoized Deep Nested Object Flattener",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a highly efficient JavaScript function that flattens deeply nested objects into a single-level object with dot-separated keys. Implement memoization to cache and reuse results for previously processed inputs to optimize performance for repeated calls with identical objects.",
+    "prompt": "Write a function `flattenObject(obj)` that takes an arbitrarily deep nested JavaScript object and returns a new object with all nested keys flattened into a single level, where nested keys are joined by dots ('.'). For example: `flattenObject({a: {b: 2}})` should return `{ 'a.b': 2 }`. Implement memoization in the function so that if it is called multiple times with the exact same input object reference, it instantly returns the cached flattened result without recomputation. Your solution should handle objects containing nested arrays as values by treating array indices as keys in the flattening process (e.g., `{a: [1, 2]}` becomes `{ 'a.0': 1, 'a.1': 2 }`).",
+    "guidance": [
+      "Recursively traverse the object to access all nested properties and build dot-separated keys.",
+      "Use a WeakMap to memoize results keyed by the input object reference to avoid memory leaks.",
+      "Handle arrays by using their indices as keys when flattening."
+    ],
+    "hints": [
+      "To memoize based on object references, a WeakMap is ideal since it prevents retaining objects unnecessarily.",
+      "Check the data type of each value to determine whether to recurse (for objects and arrays) or set the key-value pair.",
+      "Remember that non-object values (including null) should not be traversed and are terminal values in the flattening."
+    ],
+    "starterCode": "function flattenObject(obj) {\n  // Your implementation here\n}",
+    "expectedOutput": "flattenObject({ a: { b: 1, c: [2, 3] }, d: 4 }) // { 'a.b': 1, 'a.c.0': 2, 'a.c.1': 3, d: 4 }",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "object traversal",
+      "JavaScript WeakMap"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-budget-tracker",
+    "title": "Simple Budget Tracker",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a basic C++ program that helps track expenses and calculate the remaining budget. Users will input their total budget and then enter expenses one by one. The program will output the remaining budget after each expense and a summary at the end.",
+    "prompt": "Write a C++ program that allows the user to:\n1. Enter their total budget.\n2. Enter multiple expenses one by one. After each expense, the program should display the remaining budget.\n3. When the user types 0 as the expense amount, stop taking inputs and display the total expenses and the final remaining budget.\n\nMake sure to handle cases where the expense might exceed the remaining budget by displaying a warning message and not subtracting that expense.",
+    "guidance": [
+      "Use a loop to repeatedly take expense inputs until the user enters 0.",
+      "Keep track of expenses using a variable and update the remaining budget after each valid expense.",
+      "Use conditionals to ensure expenses that exceed the remaining budget are rejected with a warning."
+    ],
+    "hints": [
+      "Remember to initialize your variables such as total budget and total expenses.",
+      "Use a while loop or a do-while loop to keep asking for expenses.",
+      "Check if the expense entered is greater than the remaining budget before subtracting."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double totalBudget, expense, totalExpenses = 0;\n    cout << \"Enter your total budget: \";\n    cin >> totalBudget;\n\n    // Your code to input expenses and calculate remaining budget goes here\n\n    return 0;\n}",
+    "expectedOutput": "Enter your total budget: 500\nEnter an expense (0 to finish): 100\nRemaining budget: 400\nEnter an expense (0 to finish): 200\nRemaining budget: 200\nEnter an expense (0 to finish): 250\nExpense exceeds remaining budget. Try a smaller amount.\nEnter an expense (0 to finish): 150\nRemaining budget: 50\nEnter an expense (0 to finish): 0\nTotal expenses: 450\nFinal remaining budget: 50",
+    "concepts": [
+      "variables",
+      "loops",
+      "conditionals",
+      "input/output"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "create-a-deep-object-merge-function",
+    "title": "Create a Deep Object Merge Function",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Build a JavaScript function that takes two objects and merges them deeply, combining nested objects instead of overwriting them.",
+    "prompt": "Write a function called `deepMerge` that takes two objects as arguments and returns a new object that is a deep merge of the two. If both objects share the same key and their values are objects themselves, merge those objects recursively. For other types of values, the value from the second object should overwrite the first. Your function should not mutate the original input objects.",
+    "guidance": [
+      "Check if a value is an object before recursively merging.",
+      "Use a helper function or recursion to process nested objects.",
+      "Avoid mutating the original objects; always create new objects during merging."
+    ],
+    "hints": [
+      "Use `typeof` and `Array.isArray` checks to distinguish objects from other types and arrays.",
+      "Remember that arrays should be overwritten, not deeply merged.",
+      "Spread syntax (`{...obj}`) can help create shallow copies for immutability."
+    ],
+    "starterCode": "function deepMerge(obj1, obj2) {\n  // Your code here\n}",
+    "expectedOutput": "deepMerge({a: 1, b: {x: 2}}, {b: {y: 3}, c: 4}) // returns {a: 1, b: {x: 2, y: 3}, c: 4}",
+    "concepts": [
+      "recursion",
+      "object manipulation",
+      "immutability"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-complex-closure-and-async-workflows-in-javascript",
+    "title": "Predict the Output of Complex Closure and Async Workflows in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a JavaScript code snippet combining closures, async/await, Promises, and loops, then predict the exact order and content of its console output.",
+    "prompt": "Examine the following JavaScript code that uses nested functions, closures, async/await, and Promise-based delays. Predict exactly what strings will be logged to the console and in which order, after the function runSequence() is invoked.",
+    "guidance": [
+      "Focus on understanding how closures capture variables in loops.",
+      "Consider the effects of async/await with Promise delays within loops.",
+      "Remember the event loop behavior and microtask queue processing order."
+    ],
+    "hints": [
+      "Variables declared with var inside loops can cause unexpected captures due to function scoping.",
+      "The await keyword pauses execution within async functions but does not block the main thread.",
+      "Promises resolved inside loops execute their .then() callbacks as microtasks after the current call stack completes."
+    ],
+    "starterCode": "function delay(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function runSequence() {\n  for (var i = 0; i < 3; i++) {\n    delay(10).then(() => console.log('Then', i));\n    (async function(j) {\n      await delay(5);\n      console.log('Await', j);\n    })(i);\n  }\n  console.log('Loop done');\n}\n\nrunSequence();",
+    "expectedOutput": "Loop done\nAwait 0\nAwait 1\nAwait 2\nThen 3\nThen 3\nThen 3",
     "concepts": [
       "closures",
-      "arrays",
-      "objects",
-      "methods"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "advanced-c-mini-project-multi-threaded-task-scheduler-with-prioritization",
-    "title": "Advanced C++ Mini-Project: Multi-Threaded Task Scheduler with Prioritization",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build an advanced multi-threaded task scheduler in C++ that accepts tasks with different priorities, efficiently manages a thread pool, and executes tasks in priority order. The scheduler should support adding, cancelling, and monitoring tasks in real-time.",
-    "prompt": "Create a multi-threaded task scheduler class in C++ with the following requirements: \n\n1. The scheduler manages a fixed-size thread pool created at initialization.\n2. Users can submit tasks (as std::function<void()>) with an integer priority (higher number = higher priority).\n3. The scheduler maintains a priority queue of pending tasks and ensures higher priority tasks are executed first.\n4. Provide methods to add new tasks, cancel pending tasks by ID, and query the status of submitted tasks.\n5. The scheduler should handle concurrent submissions and safe shutdown.\n\nImplement the scheduler ensuring thread safety, proper synchronization, and efficient execution without busy waiting.",
-    "guidance": [
-      "Use a thread-safe priority queue structure to manage tasks based on priority.",
-      "Synchronize access to shared resources using mutexes and condition variables.",
-      "Design task IDs and status tracking for cancellation and monitoring.",
-      "Gracefully handle shutdown to join all worker threads without losing tasks."
-    ],
-    "hints": [
-      "Consider std::priority_queue for managing tasks sorted by priority alongside a custom comparator.",
-      "Use std::mutex and std::condition_variable to control access and coordinate worker threads waiting for tasks.",
-      "Assign unique IDs to tasks upon submission using atomic counters for easy tracking and cancellation."
-    ],
-    "starterCode": "#include <iostream>\n#include <queue>\n#include <vector>\n#include <thread>\n#include <mutex>\n#include <condition_variable>\n#include <functional>\n#include <atomic>\n#include <unordered_map>\n\nclass TaskScheduler {\npublic:\n    TaskScheduler(size_t numThreads);\n    ~TaskScheduler();\n\n    int submitTask(std::function<void()> task, int priority);\n    bool cancelTask(int taskId);\n    bool isTaskRunning(int taskId);\n    void shutdown();\n\nprivate:\n    struct Task {\n        int id;\n        int priority;\n        std::function<void()> func;\n        bool operator<(const Task& other) const {\n            // For priority queue: higher priority should come first\n            return priority < other.priority;\n        }\n    };\n\n    void workerThread();\n\n    std::priority_queue<Task> taskQueue;\n    std::unordered_map<int, bool> runningTasks;\n    std::mutex mtx;\n    std::condition_variable cv;\n    std::vector<std::thread> workers;\n    std::atomic<int> nextTaskId;\n    bool shuttingDown;\n};\n\n// Implementations of methods to be done by the user",
-    "expectedOutput": "The program will successfully schedule and execute tasks with correct prioritization, outputting task execution order that matches descending priority, and demonstrate task cancellation and monitoring features.",
-    "concepts": [
-      "multithreading",
-      "thread synchronization",
-      "priority queue",
-      "task scheduling",
-      "concurrent programming"
-    ],
-    "estimatedTime": "90 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "create-a-simple-employee-department-summary-query",
-    "title": "Create a Simple Employee Department Summary Query",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "data-modeling",
-    "description": "Build a SQL query to summarize employee data by department with basic aggregation and grouping techniques.",
-    "prompt": "You are given two tables: Employees and Departments.\n\n- Employees(employee_id, name, department_id, salary)\n- Departments(department_id, department_name)\n\nWrite a SQL query to display each department's name alongside the number of employees working there and the average salary of these employees. Include all departments even if they have no employees (show zero count and NULL for average salary in that case). Order the results by department name alphabetically.",
-    "guidance": [
-      "Use a LEFT JOIN to ensure all departments appear even if no employees are assigned.",
-      "Group rows by department_id and department_name for aggregation.",
-      "Use COUNT() to get the total employees and AVG() for the average salary."
-    ],
-    "hints": [
-      "Remember to use COALESCE to convert NULL counts to zero if needed.",
-      "Use GROUP BY clause to aggregate data per department."
-    ],
-    "starterCode": "SELECT d.department_name,\n       COUNT(e.employee_id) AS employee_count,\n       AVG(e.salary) AS average_salary\nFROM Departments d\nLEFT JOIN Employees e ON d.department_id = e.department_id\nGROUP BY d.department_id, d.department_name\nORDER BY d.department_name;",
-    "expectedOutput": "A table with columns: department_name, employee_count, average_salary\nExample:\n\n| department_name | employee_count | average_salary |\n|-----------------|----------------|----------------|\n| Accounting      | 3              | 55000          |\n| HR              | 2              | 47000          |\n| IT              | 0              | NULL           |",
-    "concepts": [
-      "SQL JOIN",
-      "GROUP BY",
-      "Aggregation functions"
+      "async/await",
+      "Promise",
+      "event loop",
+      "variable scoping"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
-  },
-  {
-    "slug": "create-a-sql-function-to-calculate-customer-lifetime-value-clv",
-    "title": "Create a SQL Function to Calculate Customer Lifetime Value (CLV)",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "queries",
-    "description": "Write a SQL function that calculates the Customer Lifetime Value (CLV) based on customer transactions, applying discounting over time and accounting for customer churn rate.",
-    "prompt": "You have a table named transactions with the following schema:\n\ntransactions(\n  customer_id INT,\n  transaction_date DATE,\n  amount DECIMAL(10,2)\n)\n\nWrite a SQL function named calculate_clv that calculates the discounted Customer Lifetime Value (CLV) for a given customer_id. The function should take these parameters:\n- customer_id (INT): the ID of the customer\n- churn_rate (DECIMAL): the monthly churn rate as a decimal (e.g., 0.05 for 5%)\n- discount_rate (DECIMAL): the monthly discount rate as a decimal (e.g., 0.01 for 1%)\n\nThe CLV formula to apply to each transaction is:\n  discounted_value = amount / POWER(1 + discount_rate, months_since_first_purchase)\n\nThe function must:\n1. Identify the first transaction date for the specified customer.\n2. Compute the months elapsed since that first purchase for each transaction.\n3. Calculate the discounted transaction amounts.\n4. Sum the discounted amounts.\n5. Apply the churn rate to estimate the expected future value beyond observed transactions, assuming a geometric series continuation with churn_rate.\n\nReturn the final CLV as a DECIMAL.\n\nExample call:\nSELECT calculate_clv(123, 0.05, 0.01);",
-    "guidance": [
-      "Use DATE_DIFF or equivalent to calculate months between transaction_date and first purchase.",
-      "Apply the discount factor POWER(1 + discount_rate, months_elapsed) to each transaction amount.",
-      "Incorporate the churn rate to extend CLV beyond observed transactions as a geometric series."
-    ],
-    "hints": [
-      "Calculate the months_since_first_purchase as an integer count from first transaction date.",
-      "The infinite sum for future values after observed transactions can be approximated as discounted_sum / (churn_rate + discount_rate).",
-      "Test your function with different churn and discount rates to validate calculations."
-    ],
-    "starterCode": "CREATE FUNCTION calculate_clv(\n  input_customer_id INT,\n  churn_rate DECIMAL(5,4),\n  discount_rate DECIMAL(5,4)\n) RETURNS DECIMAL(18,2) AS $$\nDECLARE\n  first_purchase DATE;\n  clv DECIMAL(18,2) := 0;\nBEGIN\n  -- Your implementation here\n  RETURN clv;\nEND;\n$$ LANGUAGE plpgsql;",
-    "expectedOutput": "A decimal value representing the calculated Customer Lifetime Value (CLV) for the given customer, e.g., 1250.75",
-    "concepts": [
-      "window functions",
-      "date/time calculation",
-      "discounted cash flow",
-      "user-defined functions",
-      "geometric series"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "fix-the-bug-in-array-filtering-and-object-mapping-function",
-    "title": "Fix the Bug in Array Filtering and Object Mapping Function",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "Identify and fix the bug in a JavaScript function designed to filter an array of user objects and map them to a list of their names based on age criteria.",
-    "prompt": "The provided JavaScript function filterAndExtractNames is intended to take an array of user objects and return an array of names of users whose age is 18 or older. However, the function currently returns incorrect or unexpected output. Your task is to debug and fix the code so it behaves as specified.",
-    "guidance": [
-      "Check how the array is filtered by age and ensure the condition is correct.",
-      "Verify the method used to extract names after filtering is properly applied on the filtered array."
-    ],
-    "hints": [
-      "Verify the filtering condition uses the correct comparison operator (>=).",
-      "Ensure the map function is used on the filtered result rather than the original array."
-    ],
-    "starterCode": "function filterAndExtractNames(users) {\n  return users.map(user => user.name).filter(user => user.age >= 18);\n}\n\n// Example input\nconst users = [\n  { name: 'Alice', age: 17 },\n  { name: 'Bob', age: 22 },\n  { name: 'Charlie', age: 18 },\n  { name: 'David', age: 15 }\n];\n\nconsole.log(filterAndExtractNames(users));",
-    "expectedOutput": "[ 'Bob', 'Charlie' ]",
-    "concepts": [
-      "array filtering",
-      "array mapping",
-      "callback functions",
-      "conditional logic"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
   }
 ]
