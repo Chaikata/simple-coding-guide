@@ -3917,5 +3917,179 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "build-a-simple-to-do-list-application-in-c",
+    "title": "Build a Simple To-Do List Application in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a beginner-friendly console-based to-do list app where users can add, view, and remove tasks.",
+    "prompt": "Write a C++ program that allows a user to manage a simple to-do list. The program should repeatedly prompt the user to choose an action: add a new task, list all tasks, remove a task by number, or exit the program. Tasks should be stored in a dynamic structure, and the user can perform multiple actions until they choose to exit.",
+    "guidance": [
+      "Use a vector to store the list of tasks dynamically.",
+      "Implement a loop to continuously ask for user input until they want to exit.",
+      "Use functions to separate adding, listing, and removing tasks."
+    ],
+    "hints": [
+      "Consider using std::getline() to read the full task string from the user.",
+      "When removing a task, make sure to validate the user's input to avoid out-of-range errors.",
+      "Use a simple menu system with numbered options to interact with the user."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nint main() {\n    std::vector<std::string> tasks;\n    int choice;\n    while (true) {\n        std::cout << \"\\nTo-Do List Menu:\\n1. Add Task\\n2. List Tasks\\n3. Remove Task\\n4. Exit\\nChoose an option: \";\n        std::cin >> choice;\n        std::cin.ignore(); // Clear newline from input buffer\n\n        if (choice == 1) {\n            // Add task\n        } else if (choice == 2) {\n            // List tasks\n        } else if (choice == 3) {\n            // Remove task\n        } else if (choice == 4) {\n            std::cout << \"Exiting program.\\n\";\n            break;\n        } else {\n            std::cout << \"Invalid option. Please try again.\\n\";\n        }\n    }\n    return 0;\n}",
+    "expectedOutput": "User selects 1, adds \"Buy groceries\".\nUser selects 2, sees:\n1. Buy groceries\nUser selects 1, adds \"Finish homework\".\nUser selects 2, sees:\n1. Buy groceries\n2. Finish homework\nUser selects 3, enters 1.\nUser selects 2, sees:\n1. Finish homework\nUser selects 4, program exits.",
+    "concepts": [
+      "vectors",
+      "loops",
+      "input/output",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-task-management-cli-mini-project",
+    "title": "Build a Task Management CLI Mini Project",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a simple command-line task manager in JavaScript that allows users to add, remove, list, and mark tasks as complete. This mini-project will help you practice array manipulation, object handling, and implementing multi-step logic.",
+    "prompt": "Write a JavaScript function 'taskManager' that returns an object with methods to manage a list of tasks. The task manager should support the following methods: addTask(description), removeTask(index), markComplete(index), and listTasks(). Tasks should be stored as objects with properties: id, description, and completed (boolean). The listTasks method should output all tasks showing their id, description, and status (Completed or Pending). Ensure the task ids increment automatically starting from 1.",
+    "guidance": [
+      "Use an array to store the tasks inside your task manager object.",
+      "Each task should be an object with id, description, and completed properties.",
+      "Increment task ids automatically as new tasks are added.",
+      "Update the completed property when marking a task as complete."
+    ],
+    "hints": [
+      "Use closures to keep the task list private within the taskManager function.",
+      "Remember array methods like push(), splice(), and map() for managing tasks.",
+      "Format the output of listTasks for clear readability."
+    ],
+    "starterCode": "function taskManager() {\n  // Your code here\n}\n\nconst manager = taskManager();\nmanager.addTask('Finish homework');\nmanager.addTask('Clean room');\nmanager.listTasks();",
+    "expectedOutput": "1. Finish homework - Pending\n2. Clean room - Pending",
+    "concepts": [
+      "closures",
+      "arrays",
+      "objects",
+      "methods"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-c-mini-project-multi-threaded-task-scheduler-with-prioritization",
+    "title": "Advanced C++ Mini-Project: Multi-Threaded Task Scheduler with Prioritization",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build an advanced multi-threaded task scheduler in C++ that accepts tasks with different priorities, efficiently manages a thread pool, and executes tasks in priority order. The scheduler should support adding, cancelling, and monitoring tasks in real-time.",
+    "prompt": "Create a multi-threaded task scheduler class in C++ with the following requirements: \n\n1. The scheduler manages a fixed-size thread pool created at initialization.\n2. Users can submit tasks (as std::function<void()>) with an integer priority (higher number = higher priority).\n3. The scheduler maintains a priority queue of pending tasks and ensures higher priority tasks are executed first.\n4. Provide methods to add new tasks, cancel pending tasks by ID, and query the status of submitted tasks.\n5. The scheduler should handle concurrent submissions and safe shutdown.\n\nImplement the scheduler ensuring thread safety, proper synchronization, and efficient execution without busy waiting.",
+    "guidance": [
+      "Use a thread-safe priority queue structure to manage tasks based on priority.",
+      "Synchronize access to shared resources using mutexes and condition variables.",
+      "Design task IDs and status tracking for cancellation and monitoring.",
+      "Gracefully handle shutdown to join all worker threads without losing tasks."
+    ],
+    "hints": [
+      "Consider std::priority_queue for managing tasks sorted by priority alongside a custom comparator.",
+      "Use std::mutex and std::condition_variable to control access and coordinate worker threads waiting for tasks.",
+      "Assign unique IDs to tasks upon submission using atomic counters for easy tracking and cancellation."
+    ],
+    "starterCode": "#include <iostream>\n#include <queue>\n#include <vector>\n#include <thread>\n#include <mutex>\n#include <condition_variable>\n#include <functional>\n#include <atomic>\n#include <unordered_map>\n\nclass TaskScheduler {\npublic:\n    TaskScheduler(size_t numThreads);\n    ~TaskScheduler();\n\n    int submitTask(std::function<void()> task, int priority);\n    bool cancelTask(int taskId);\n    bool isTaskRunning(int taskId);\n    void shutdown();\n\nprivate:\n    struct Task {\n        int id;\n        int priority;\n        std::function<void()> func;\n        bool operator<(const Task& other) const {\n            // For priority queue: higher priority should come first\n            return priority < other.priority;\n        }\n    };\n\n    void workerThread();\n\n    std::priority_queue<Task> taskQueue;\n    std::unordered_map<int, bool> runningTasks;\n    std::mutex mtx;\n    std::condition_variable cv;\n    std::vector<std::thread> workers;\n    std::atomic<int> nextTaskId;\n    bool shuttingDown;\n};\n\n// Implementations of methods to be done by the user",
+    "expectedOutput": "The program will successfully schedule and execute tasks with correct prioritization, outputting task execution order that matches descending priority, and demonstrate task cancellation and monitoring features.",
+    "concepts": [
+      "multithreading",
+      "thread synchronization",
+      "priority queue",
+      "task scheduling",
+      "concurrent programming"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-simple-employee-department-summary-query",
+    "title": "Create a Simple Employee Department Summary Query",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a SQL query to summarize employee data by department with basic aggregation and grouping techniques.",
+    "prompt": "You are given two tables: Employees and Departments.\n\n- Employees(employee_id, name, department_id, salary)\n- Departments(department_id, department_name)\n\nWrite a SQL query to display each department's name alongside the number of employees working there and the average salary of these employees. Include all departments even if they have no employees (show zero count and NULL for average salary in that case). Order the results by department name alphabetically.",
+    "guidance": [
+      "Use a LEFT JOIN to ensure all departments appear even if no employees are assigned.",
+      "Group rows by department_id and department_name for aggregation.",
+      "Use COUNT() to get the total employees and AVG() for the average salary."
+    ],
+    "hints": [
+      "Remember to use COALESCE to convert NULL counts to zero if needed.",
+      "Use GROUP BY clause to aggregate data per department."
+    ],
+    "starterCode": "SELECT d.department_name,\n       COUNT(e.employee_id) AS employee_count,\n       AVG(e.salary) AS average_salary\nFROM Departments d\nLEFT JOIN Employees e ON d.department_id = e.department_id\nGROUP BY d.department_id, d.department_name\nORDER BY d.department_name;",
+    "expectedOutput": "A table with columns: department_name, employee_count, average_salary\nExample:\n\n| department_name | employee_count | average_salary |\n|-----------------|----------------|----------------|\n| Accounting      | 3              | 55000          |\n| HR              | 2              | 47000          |\n| IT              | 0              | NULL           |",
+    "concepts": [
+      "SQL JOIN",
+      "GROUP BY",
+      "Aggregation functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-sql-function-to-calculate-customer-lifetime-value-clv",
+    "title": "Create a SQL Function to Calculate Customer Lifetime Value (CLV)",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "queries",
+    "description": "Write a SQL function that calculates the Customer Lifetime Value (CLV) based on customer transactions, applying discounting over time and accounting for customer churn rate.",
+    "prompt": "You have a table named transactions with the following schema:\n\ntransactions(\n  customer_id INT,\n  transaction_date DATE,\n  amount DECIMAL(10,2)\n)\n\nWrite a SQL function named calculate_clv that calculates the discounted Customer Lifetime Value (CLV) for a given customer_id. The function should take these parameters:\n- customer_id (INT): the ID of the customer\n- churn_rate (DECIMAL): the monthly churn rate as a decimal (e.g., 0.05 for 5%)\n- discount_rate (DECIMAL): the monthly discount rate as a decimal (e.g., 0.01 for 1%)\n\nThe CLV formula to apply to each transaction is:\n  discounted_value = amount / POWER(1 + discount_rate, months_since_first_purchase)\n\nThe function must:\n1. Identify the first transaction date for the specified customer.\n2. Compute the months elapsed since that first purchase for each transaction.\n3. Calculate the discounted transaction amounts.\n4. Sum the discounted amounts.\n5. Apply the churn rate to estimate the expected future value beyond observed transactions, assuming a geometric series continuation with churn_rate.\n\nReturn the final CLV as a DECIMAL.\n\nExample call:\nSELECT calculate_clv(123, 0.05, 0.01);",
+    "guidance": [
+      "Use DATE_DIFF or equivalent to calculate months between transaction_date and first purchase.",
+      "Apply the discount factor POWER(1 + discount_rate, months_elapsed) to each transaction amount.",
+      "Incorporate the churn rate to extend CLV beyond observed transactions as a geometric series."
+    ],
+    "hints": [
+      "Calculate the months_since_first_purchase as an integer count from first transaction date.",
+      "The infinite sum for future values after observed transactions can be approximated as discounted_sum / (churn_rate + discount_rate).",
+      "Test your function with different churn and discount rates to validate calculations."
+    ],
+    "starterCode": "CREATE FUNCTION calculate_clv(\n  input_customer_id INT,\n  churn_rate DECIMAL(5,4),\n  discount_rate DECIMAL(5,4)\n) RETURNS DECIMAL(18,2) AS $$\nDECLARE\n  first_purchase DATE;\n  clv DECIMAL(18,2) := 0;\nBEGIN\n  -- Your implementation here\n  RETURN clv;\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "A decimal value representing the calculated Customer Lifetime Value (CLV) for the given customer, e.g., 1250.75",
+    "concepts": [
+      "window functions",
+      "date/time calculation",
+      "discounted cash flow",
+      "user-defined functions",
+      "geometric series"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-array-filtering-and-object-mapping-function",
+    "title": "Fix the Bug in Array Filtering and Object Mapping Function",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a JavaScript function designed to filter an array of user objects and map them to a list of their names based on age criteria.",
+    "prompt": "The provided JavaScript function filterAndExtractNames is intended to take an array of user objects and return an array of names of users whose age is 18 or older. However, the function currently returns incorrect or unexpected output. Your task is to debug and fix the code so it behaves as specified.",
+    "guidance": [
+      "Check how the array is filtered by age and ensure the condition is correct.",
+      "Verify the method used to extract names after filtering is properly applied on the filtered array."
+    ],
+    "hints": [
+      "Verify the filtering condition uses the correct comparison operator (>=).",
+      "Ensure the map function is used on the filtered result rather than the original array."
+    ],
+    "starterCode": "function filterAndExtractNames(users) {\n  return users.map(user => user.name).filter(user => user.age >= 18);\n}\n\n// Example input\nconst users = [\n  { name: 'Alice', age: 17 },\n  { name: 'Bob', age: 22 },\n  { name: 'Charlie', age: 18 },\n  { name: 'David', age: 15 }\n];\n\nconsole.log(filterAndExtractNames(users));",
+    "expectedOutput": "[ 'Bob', 'Charlie' ]",
+    "concepts": [
+      "array filtering",
+      "array mapping",
+      "callback functions",
+      "conditional logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
