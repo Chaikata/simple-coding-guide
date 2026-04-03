@@ -4433,5 +4433,183 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "build-a-function-to-perform-multi-level-memoized-matrix-chain-multiplication",
+    "title": "Build a Function to Perform Multi-level Memoized Matrix Chain Multiplication",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Implement an optimized function to compute the minimum number of scalar multiplications needed to multiply a given chain of matrices using memoization to achieve efficient performance.",
+    "prompt": "Given an array 'dims' of length n+1 representing the dimensions of n matrices (the i-th matrix has dimensions dims[i-1] x dims[i]), implement a function 'matrixChainOrder' in C++ that returns the minimum scalar multiplication cost to multiply the chain of matrices from 1 to n. Use dynamic programming with memoization to optimize the recursive solution. Your function signature should be: int matrixChainOrder(const std::vector<int>& dims);.",
+    "guidance": [
+      "Use a helper recursive function with memoization that calculates the minimum cost for multiplying matrices from index i to j.",
+      "Store and reuse previously computed results in a 2D memo table to avoid redundant calculations.",
+      "Carefully handle base cases where the chain length is 1 (no multiplication needed)."
+    ],
+    "hints": [
+      "Think about the optimal substructure: the cost for matrices from i to j depends on the optimal split point k where i <= k < j.",
+      "Your memo table should be a 2D vector initialized with a sentinel value (e.g., -1) to denote uncomputed states.",
+      "Iterate through all possible splits k and select the one minimizing the cost of multiplying left and right subchains plus multiplication cost."
+    ],
+    "starterCode": "#include <vector>\n#include <iostream>\n#include <climits>\n\nint matrixChainOrder(const std::vector<int>& dims) {\n    // Implement your memoized solution here\n}\n\nint main() {\n    std::vector<int> dims = {40, 20, 30, 10, 30};\n    std::cout << matrixChainOrder(dims) << std::endl; // Expected output: 26000\n    return 0;\n}",
+    "expectedOutput": "26000",
+    "concepts": [
+      "dynamic programming",
+      "memoization",
+      "recursion",
+      "optimization",
+      "matrix chain multiplication"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-calculate-the-running-median-of-an-integer-stream",
+    "title": "Build a Function to Calculate the Running Median of an Integer Stream",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a function in C++ that processes a stream of integers and returns the median after each new number is added. The function should efficiently handle the insertion and calculation steps to provide medians dynamically.",
+    "prompt": "Create a function named getRunningMedians that accepts a vector of integers representing a stream of incoming data. The function should return a vector of doubles representing the median of all the numbers seen so far after each insertion. Consider how to efficiently add new numbers and calculate medians when the data set is growing.",
+    "guidance": [
+      "Use two heaps (a max heap and a min heap) to balance the lower and upper halves of the stream for efficient median calculation.",
+      "Balance the heaps after each insertion to ensure their sizes differ by at most one.",
+      "Calculate the median based on the root elements of the heaps once balanced."
+    ],
+    "hints": [
+      "Keep the max heap storing the smaller half of numbers and the min heap storing the larger half.",
+      "If the heaps have equal size, the median is the average of the two root elements; otherwise, it's the root of the heap with more elements.",
+      "Push new numbers first into the max heap, then move the largest from max heap to min heap if needed to maintain order."
+    ],
+    "starterCode": "#include <vector>\n#include <queue>\nusing namespace std;\n\nvector<double> getRunningMedians(const vector<int>& nums) {\n    // Implement your function here\n}",
+    "expectedOutput": "[2, 1.5, 2, 2.5, 3]",
+    "concepts": [
+      "heaps",
+      "priority_queue",
+      "vector",
+      "median calculation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-dynamic-to-do-list-manager-in-javascript",
+    "title": "Build a Dynamic To-Do List Manager in JavaScript",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a small interactive to-do list manager that allows users to add, remove, edit, and toggle completion of tasks. This project will strengthen your skills with arrays, objects, DOM manipulation, and event handling in JavaScript.",
+    "prompt": "Build a JavaScript function called todoManager that takes an array of task objects and a command object to update the list. Each task object has properties: id (unique number), text (string), and completed (boolean). The command object can be one of four types: add (with a text), remove (with task id), edit (with id and new text), or toggle (with id to mark as completed/uncompleted). Implement the logic to process the command and return the updated tasks array. Ensure task ids are unique and preserved. Your function should not modify the original array but return a new updated array.",
+    "guidance": [
+      "Use array methods like map, filter, and some to handle task updates immutably.",
+      "Generate unique IDs for new tasks by finding the max existing id and adding 1.",
+      "Carefully handle each command type distinctly and return a new updated array without mutating the original."
+    ],
+    "hints": [
+      "For 'add', append a new task object with a unique id and completed set to false.",
+      "For 'remove', filter out the task with the given id.",
+      "For 'toggle' and 'edit', use map to update matching tasks without altering others."
+    ],
+    "starterCode": "function todoManager(tasks, command) {\n  // tasks: Array of {id, text, completed}\n  // command: {type, ...args}\n  // Implement your logic here\n}",
+    "expectedOutput": "Example:\nconst tasks = [\n  {id: 1, text: 'Buy milk', completed: false},\n  {id: 2, text: 'Walk dog', completed: false}\n];\ntodoManager(tasks, {type: 'toggle', id: 2});\n// returns:\n// [\n//  {id: 1, text: 'Buy milk', completed: false},\n//  {id: 2, text: 'Walk dog', completed: true}\n// ]",
+    "concepts": [
+      "arrays",
+      "objects",
+      "immutability",
+      "array methods",
+      "JavaScript functions"
+    ],
+    "estimatedTime": "20 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-complex-c-banking-system-for-maintainability-and-performance",
+    "title": "Refactor Complex C++ Banking System for Maintainability and Performance",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Refactor the provided C++ code of a banking system that handles multiple account types, transactions, and interest calculations. The goal is to improve code quality, maintainability, and performance without changing the system's behavior.",
+    "prompt": "You are given a legacy C++ banking system that supports multiple account types (Savings, Checking) and processes deposits, withdrawals, and monthly interest calculations. The current code is monolithic, has duplicated logic, and lacks clear abstractions. Refactor the code to improve modularity, use appropriate object-oriented design patterns, remove code duplication, and optimize performance while preserving the behavior. Ensure your refactored code compiles and produces the same output as the original. Provide clear class and method structures and improve naming conventions for better readability.",
+    "guidance": [
+      "Identify duplicated code and consolidate it into reusable methods or base classes.",
+      "Use inheritance and polymorphism to separate account-specific behaviors.",
+      "Aim for clear separation of concerns: transaction handling, interest calculation, and account management.",
+      "Ensure your refactoring maintains the same output and performance characteristics."
+    ],
+    "hints": [
+      "Consider creating a base Account class and deriving SavingsAccount and CheckingAccount classes.",
+      "Use virtual functions for interest calculation and transaction operations.",
+      "Encapsulate transaction logic in a separate method to reduce code repetition."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nclass BankingSystem {\npublic:\n    struct Account {\n        int id;\n        double balance;\n        string type; // \"checking\" or \"savings\"\n    };\n\n    vector<Account> accounts;\n\n    void deposit(int id, double amount) {\n        for (auto &acc : accounts) {\n            if (acc.id == id) {\n                if (acc.type == \"checking\") {\n                    acc.balance += amount;\n                } else if (acc.type == \"savings\") {\n                    acc.balance += amount;\n                }\n            }\n        }\n    }\n\n    void withdraw(int id, double amount) {\n        for (auto &acc : accounts) {\n            if (acc.id == id) {\n                if (acc.type == \"checking\") {\n                    if (acc.balance >= amount) {\n                        acc.balance -= amount;\n                    }\n                } else if (acc.type == \"savings\") {\n                    if (acc.balance >= amount) {\n                        acc.balance -= amount;\n                    }\n                }\n            }\n        }\n    }\n\n    void applyMonthlyInterest() {\n        for (auto &acc : accounts) {\n            if (acc.type == \"savings\") {\n                acc.balance *= 1.01; // 1% interest\n            } else if (acc.type == \"checking\") {\n                acc.balance *= 1.001; // 0.1% interest\n            }\n        }\n    }\n\n    void printBalances() {\n        for (const auto &acc : accounts) {\n            cout << \"Account \" << acc.id << \" (\" << acc.type << \"): $\" << acc.balance << endl;\n        }\n    }\n};\n\nint main() {\n    BankingSystem system;\n    system.accounts.push_back({1, 1000.0, \"checking\"});\n    system.accounts.push_back({2, 2000.0, \"savings\"});\n\n    system.deposit(1, 500);\n    system.withdraw(2, 100);\n    system.applyMonthlyInterest();\n    system.printBalances();\n\n    return 0;\n}",
+    "expectedOutput": "Account 1 (checking): $1501.5\nAccount 2 (savings): $1919",
+    "concepts": [
+      "inheritance",
+      "polymorphism",
+      "code refactoring",
+      "object-oriented design"
+    ],
+    "estimatedTime": "20 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-basic-for-loop-with-condition",
+    "title": "Predict the Output of a Basic For Loop with Condition",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "logic",
+    "description": "Analyze the given JavaScript code snippet involving a for loop and conditional statements, then determine the output printed to the console.",
+    "prompt": "Consider the following JavaScript code:\n\nfunction printNumbers() {\n  let result = '';\n  for (let i = 1; i <= 5; i++) {\n    if (i % 2 === 0) {\n      result += i + '-even ';\n    } else {\n      result += i + '-odd ';\n    }\n  }\n  console.log(result.trim());\n}\n\nWhat will be printed when printNumbers() is called?",
+    "guidance": [
+      "Pay attention to how the loop iterates from 1 to 5.",
+      "Understand the condition checking if the number is even or odd.",
+      "Note how the result string is built during each iteration."
+    ],
+    "hints": [
+      "Remember the modulus operator (%) returns the remainder after division.",
+      "Even numbers have a remainder of 0 when divided by 2.",
+      "The trim() method removes trailing spaces from the result string."
+    ],
+    "starterCode": "function printNumbers() {\n  let result = '';\n  for (let i = 1; i <= 5; i++) {\n    if (i % 2 === 0) {\n      result += i + '-even ';\n    } else {\n      result += i + '-odd ';\n    }\n  }\n  console.log(result.trim());\n}\n\nprintNumbers();",
+    "expectedOutput": "1-odd 2-even 3-odd 4-even 5-odd",
+    "concepts": [
+      "for loop",
+      "conditionals",
+      "string concatenation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-real-time-collaborative-todo-list-with-conflict-resolution",
+    "title": "Build a Real-Time Collaborative Todo List with Conflict Resolution",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create an advanced real-time collaborative todo list application backend function that merges concurrent updates from multiple users while resolving conflicts using operational transformation or CRDT principles in JavaScript.",
+    "prompt": "You are tasked with creating a JavaScript function that takes multiple concurrent change logs from different users editing the same todo list and merges them into a consistent, conflict-free document state. Each change log contains additions, deletions, and updates to todo items, identified by unique IDs. Your function must apply operational transformations (OT) or Conflict-free Replicated Data Types (CRDTs) principles to ensure all changes are integrated without overwriting others improperly, maintaining the final todo list consistency regardless of merge order.\n\nInput is an array of change log objects. Your function should return the merged todo list array reflecting all users' changes correctly integrated. Design your solution to handle:\n\n- Insertions of new todo items with unique IDs\n- Updates to todo item content or completion status\n- Deletions of todo items\n- Resolution of simultaneous conflicting updates on the same todo item\n\nProvide the implementation of the mergeTodos(changeLogs) function that returns the final todo list array.",
+    "guidance": [
+      "Represent each todo item with a unique ID and track timestamps or version counters to resolve conflicting updates.",
+      "Implement a method to merge inserts, updates, and deletes that can occur concurrently, ensuring operation commutativity.",
+      "Consider using simple CRDT data structures like a Last-Write-Wins (LWW) element set or similar operational transformation logic.",
+      "Ensure your solution scales with multiple users and preserves all non-conflicting changes."
+    ],
+    "hints": [
+      "Use timestamps or logical clocks to compare conflicting operations applying the latest one.",
+      "Model deletions explicitly as tombstones or versioned flags rather than removing immediately to avoid losing updates.",
+      "Focus on designing idempotent and commutative merge steps so the final state is consistent regardless of merge order."
+    ],
+    "starterCode": "function mergeTodos(changeLogs) {\n  // changeLogs is an array where each element is an array of todo item operations\n  // Each operation can be: { id, content, completed, opType: 'add'|'update'|'delete', timestamp }\n  // Implement your OT or CRDT logic here to merge all logs into one consistent todo list\n\n  // Example return format: [{ id, content, completed }]\n  return [];\n}",
+    "expectedOutput": "[\n  { id: '1', content: 'Buy groceries', completed: false },\n  { id: '2', content: 'Fix bug in app', completed: true }\n]",
+    "concepts": [
+      "Operational Transformation",
+      "CRDT",
+      "Conflict Resolution",
+      "Distributed Systems",
+      "JavaScript Data Structures"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
   }
 ];
