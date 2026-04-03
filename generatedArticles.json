@@ -1,503 +1,535 @@
 [
   {
-    "slug": "building-scalable-microservices-architecture-with-nodejs-and-kafka",
-    "title": "Building Scalable Microservices Architecture with Node.js and Kafka",
+    "slug": "building-a-real-time-collaborative-whiteboard-with-javascript-and-websockets",
+    "title": "Building a Real-Time Collaborative Whiteboard with JavaScript and WebSockets",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build a scalable microservices architecture using Node.js and Apache Kafka. This beginner-friendly tutorial covers core concepts, setup, and example code to get you started.",
-    "videoUrl": "https://www.youtube.com/watch?v=217EO1KZfH4",
+    "description": "Learn how to build a simple real-time collaborative whiteboard using JavaScript and WebSockets. This tutorial guides beginners through creating a shared drawing canvas where multiple users can draw together live.",
+    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Microservices are an architectural style that structures an application as a collection of small services, each running in its own process and communicating with lightweight mechanisms. Node.js, with its asynchronous and event-driven nature, is a perfect fit for building microservices. When combined with Apache Kafka, a distributed event streaming platform, you can build scalable and resilient microservices that can handle high throughput and real-time communication."
+        "value": "Real-time collaborative applications have become very popular, allowing multiple users to interact simultaneously. One fun and practical example is a collaborative whiteboard where users can draw together live on the same canvas. In this tutorial, we will build a simple real-time whiteboard using JavaScript and WebSockets, which provide a fast and efficient way to send messages between clients and a server."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, you will learn how to set up a simple Node.js microservices application using Kafka to communicate between services. We will build two microservices: a Producer service that sends messages and a Consumer service that receives and processes them."
+        "value": "We'll start by creating a basic web page with an HTML5 canvas. Then we'll set up a WebSocket server using Node.js and the popular `ws` package. Finally, we'll write client-side JavaScript to capture user drawing and broadcast drawing data to other connected users."
       },
       {
         "type": "paragraph",
-        "value": "### Prerequisites\n- Node.js installed (LTS version recommended)\n- Kafka installed and running locally (you can use services like Confluent Cloud or Docker to run Kafka)\n- Basic knowledge of JavaScript and Node.js"
+        "value": "### Step 1: Setup the HTML Canvas"
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setup Kafka\nIf you don't have Kafka running yet, one of the easiest ways is using Docker:\n"
+        "value": "Create an `index.html` file with the following content. This creates a full-screen canvas where users can draw."
       },
       {
         "type": "code",
-        "value": "docker run -d --name zookeeper -p 2181:2181 confluentinc/cp-zookeeper:latest\n\ndocker run -d --name kafka -p 9092:9092 --link zookeeper:zookeeper \\\n  -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 \\\n  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 \\\n  -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \\\n  confluentinc/cp-kafka:latest"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Collaborative Whiteboard</title>\n  <style>\n    html, body {\n      margin: 0;\n      height: 100%;\n      overflow: hidden;\n    }\n    canvas {\n      display: block;\n      width: 100vw;\n      height: 100vh;\n      background: #fff;\n      cursor: crosshair;\n    }\n  </style>\n</head>\n<body>\n  <canvas id=\"board\"></canvas>\n  <script src=\"client.js\"></script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Initialize Node.js Projects\nCreate two folders: `producer-service` and `consumer-service`. Inside each folder, initialize a new Node.js project:\n"
+        "value": "### Step 2: Create the WebSocket Server"
+      },
+      {
+        "type": "paragraph",
+        "value": "We will use Node.js and the `ws` library to create our WebSocket server. This server will receive drawing data from clients and broadcast it to all other connected clients."
       },
       {
         "type": "code",
-        "value": "mkdir producer-service && cd producer-service\nnpm init -y\n\nmkdir ../consumer-service && cd ../consumer-service\nnpm init -y"
+        "value": "// server.js\nconst WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', ws => {\n  console.log('Client connected');\n\n  ws.on('message', message => {\n    // Broadcast received message to all clients except sender\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Install Kafka Client\nWe will use the popular `kafkajs` library to interact with Kafka."
+        "value": "Save this as `server.js`. To run it, make sure you have Node.js installed, and then run:\n\nbash\nnpm install ws\nnode server.js\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Implement Client-Side Drawing Logic"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's write the client-side JavaScript saved in `client.js`. This code will:\n- Connect to the WebSocket server\n- Track mouse movements to draw on the canvas\n- Send drawing coordinates to the server\n- Draw incoming data from other users"
       },
       {
         "type": "code",
-        "value": "cd producer-service\nnpm install kafkajs\n\ncd ../consumer-service\nnpm install kafkajs"
+        "value": "// client.js\nconst canvas = document.getElementById('board');\nconst ctx = canvas.getContext('2d');\n\n// Resize canvas to fill the window\nfunction resize() {\n  canvas.width = window.innerWidth;\n  canvas.height = window.innerHeight;\n}\nwindow.addEventListener('resize', resize);\nresize();\n\n// Setup WebSocket connection\nconst socket = new WebSocket('ws://localhost:8080');\n\n// Store drawing state\nlet drawing = false;\nlet lastX = 0;\nlet lastY = 0;\n\n// Draw line on our canvas\nfunction drawLine(fromX, fromY, toX, toY, color = 'black', lineWidth = 2) {\n  ctx.strokeStyle = color;\n  ctx.lineWidth = lineWidth;\n  ctx.lineCap = 'round';\n  ctx.beginPath();\n  ctx.moveTo(fromX, fromY);\n  ctx.lineTo(toX, toY);\n  ctx.stroke();\n  ctx.closePath();\n}\n\n// Mouse events for drawing\ncanvas.addEventListener('mousedown', e => {\n  drawing = true;\n  lastX = e.clientX;\n  lastY = e.clientY;\n});\n\ncanvas.addEventListener('mouseup', e => {\n  drawing = false;\n});\n\ncanvas.addEventListener('mousemove', e => {\n  if (!drawing) return;\n  const currentX = e.clientX;\n  const currentY = e.clientY;\n\n  // Draw locally\n  drawLine(lastX, lastY, currentX, currentY);\n\n  // Send the line data to server\n  const message = JSON.stringify({ fromX: lastX, fromY: lastY, toX: currentX, toY: currentY });\n  socket.send(message);\n\n  lastX = currentX;\n  lastY = currentY;\n});\n\n// Listen for messages from server\nsocket.addEventListener('message', event => {\n  const data = JSON.parse(event.data);\n  // Draw lines from other users\n  drawLine(data.fromX, data.fromY, data.toX, data.toY, 'blue');\n});"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Create Producer Service\nCreate a file named `producer.js` in `producer-service` folder with the following content:"
-      },
-      {
-        "type": "code",
-        "value": "const { Kafka } = require('kafkajs');\n\nconst kafka = new Kafka({\n  clientId: 'producer-service',\n  brokers: ['localhost:9092'],\n});\n\nconst producer = kafka.producer();\n\nconst run = async () => {\n  await producer.connect();\n  console.log('Producer connected');\n\n  // Sending a message every 5 seconds\n  setInterval(async () => {\n    const message = { value: `Hello Kafka! Time: ${new Date().toISOString()}` };\n    try {\n      await producer.send({\n        topic: 'test-topic',\n        messages: [message],\n      });\n      console.log('Sent message:', message.value);\n    } catch (error) {\n      console.error('Failed to send message', error);\n    }\n  }, 5000);\n};\n\nrun().catch(console.error);"
+        "value": "### Step 4: Testing Your Collaborative Whiteboard"
       },
       {
         "type": "paragraph",
-        "value": "### Step 5: Create Consumer Service\nCreate a file named `consumer.js` in `consumer-service` folder with this code:"
-      },
-      {
-        "type": "code",
-        "value": "const { Kafka } = require('kafkajs');\n\nconst kafka = new Kafka({\n  clientId: 'consumer-service',\n  brokers: ['localhost:9092'],\n});\n\nconst consumer = kafka.consumer({ groupId: 'test-group' });\n\nconst run = async () => {\n  await consumer.connect();\n  console.log('Consumer connected');\n\n  await consumer.subscribe({ topic: 'test-topic', fromBeginning: true });\n\n  await consumer.run({\n    eachMessage: async ({ topic, partition, message }) => {\n      console.log(`Received message: ${message.value.toString()}`);\n    },\n  });\n};\n\nrun().catch(console.error);"
+        "value": "1. Run your server with `node server.js`.\n2. Open `index.html` in your browser.\n3. Open additional tabs or different browsers with the same page.\n4. Draw on one canvas and watch the drawing appear on the others in real time.\n\nThe black lines are your local drawing, while blue lines represent drawing received from others."
       },
       {
         "type": "paragraph",
-        "value": "### Step 6: Running the Services\nMake sure your Kafka server is running.\n\nOpen two terminal windows or tabs:\n\n- In the first one, start the consumer service:\n\nbash\nnode consumer.js\n\n\n- In the second, start the producer service:\n\nbash\nnode producer.js\n\n\nYou should see the producer sending messages every 5 seconds and the consumer receiving them in real time."
+        "value": "### Conclusion"
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion\nIn this tutorial, we built a basic scalable microservices architecture with Node.js and Kafka by creating two services communicating asynchronously via Kafka topics. As your application grows, you can add more microservices interacting through Kafka, benefiting from Kafka's robustness and scalability. This architecture decouples services and lets them scale independently, a key principle for modern applications."
+        "value": "You now have a simple real-time collaborative whiteboard! This project introduces key concepts used in many collaborative apps: websockets for bi-directional communication, canvas for drawing, and client-server message broadcasting. You can build on this by adding features like color palettes, user cursors, and more."
       },
       {
         "type": "paragraph",
-        "value": "For production use, consider adding error handling, monitoring, and deploy Kafka on a cluster instead of a single instance. You can also explore schemas for Kafka messages with tools like Avro."
+        "value": "This beginner-friendly example gives you a solid foundation for real-time interaction with JavaScript."
       }
     ]
   },
   {
-    "slug": "mastering-javascript-data-models-designing-error-resilient-structures",
-    "title": "Mastering JavaScript Data Models: Designing Error-Resilient Structures",
+    "slug": "understanding-javascript-hoisting-beginner-guide",
+    "title": "Understanding JavaScript Hoisting: A Beginner's Guide to Avoid Common Pitfalls",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to create error-resilient JavaScript data models that handle mistakes gracefully and keep your applications running smoothly.",
-    "videoUrl": "https://www.youtube.com/watch?v=rOpEN1JDaD0",
+    "description": "Learn what JavaScript hoisting is, how it affects your variables and functions, and how to avoid common errors caused by it. A clear, beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=KJo0o4DnqdI",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building applications, managing data correctly is crucial. However, errors and unexpected data often happen. Designing error-resilient data models helps keep your JavaScript code safe, easier to debug, and more predictable. In this article, we'll cover practical ways to create such models for beginners."
+        "value": "If you're new to JavaScript, you might have encountered errors or unexpected behavior related to variables or functions declared later in the code but used earlier. This is often due to a concept called \"hoisting.\" Understanding hoisting will help you write better code and avoid common pitfalls."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Data Model in JavaScript?\nA data model is essentially how you organize and structure your data inside an app. It can be as simple as an object or a class that holds the properties and methods representing your domain entities."
+        "value": "In simple terms, hoisting is JavaScript's behavior of moving variable and function declarations to the top of their scope before execution. This means the JavaScript engine processes declarations before running the code line-by-line."
       },
       {
         "type": "paragraph",
-        "value": "### Why Focus on Error-Resilience?\nData coming from users, APIs, or external services can often be malformed, missing, or incorrect. Without error handling, your app may crash or behave unpredictably. Error-resilient data models validate, sanitize, and provide safe defaults."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 1: Define a Clear Structure and Use Defaults\nStart by defining what fields your data should have and provide defaults. This way, even if some data is missing, your model still works without errors."
+        "value": "Let's look at an example with variables:"
       },
       {
         "type": "code",
-        "value": "class User {\n  constructor({ name = 'Unknown', age = 0, email = '' } = {}) {\n    this.name = name;\n    this.age = age;\n    this.email = email;\n  }\n}\n\nconst user1 = new User({ name: 'Alice', age: 25 });\nconsole.log(user1); // User { name: 'Alice', age: 25, email: '' }\n\nconst user2 = new User();\nconsole.log(user2); // User { name: 'Unknown', age: 0, email: '' }"
+        "value": "console.log(myVar); // Output: undefined\nvar myVar = 10;\nconsole.log(myVar); // Output: 10"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Validate Incoming Data\nAdd simple validation logic in your model to catch bad data early. For example, check types or required fields and throw an error or use fallback values."
+        "value": "Even though `myVar` is declared after the first `console.log`, no error occurs. This happens because JavaScript hoists the declaration of `myVar` (but not the assignment). So internally, the code behaves like:"
       },
       {
         "type": "code",
-        "value": "class User {\n  constructor(data = {}) {\n    if (typeof data.name !== 'string' || data.name.trim() === '') {\n      throw new Error('Invalid name');\n    }\n    if (typeof data.age !== 'number' || data.age < 0) {\n      data.age = 0; // fallback default\n    }\n    this.name = data.name;\n    this.age = data.age;\n    this.email = data.email || '';\n  }\n}\n\ntry {\n  const user = new User({ name: '', age: 30 });\n} catch (e) {\n  console.error(e.message); // Invalid name\n}"
+        "value": "var myVar;\nconsole.log(myVar); // undefined\nmyVar = 10;\nconsole.log(myVar); // 10"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Use Helper Functions for Cleanliness\nExtract repetitive validation or sanitization logic into helper functions. This keeps your models clean and easier to maintain."
+        "value": "Notice how the declaration `var myVar;` is moved up, but the value assignment happens where it’s written."
+      },
+      {
+        "type": "paragraph",
+        "value": "Hoisting also happens with functions, but there is an important difference between function declarations and function expressions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Function declarations are fully hoisted, so you can call them before they are defined in the code:"
       },
       {
         "type": "code",
-        "value": "function validateString(value, fallback = '') {\n  return typeof value === 'string' && value.trim() !== '' ? value : fallback;\n}\n\nclass User {\n  constructor(data = {}) {\n    this.name = validateString(data.name, 'Unnamed');\n    this.age = typeof data.age === 'number' && data.age >= 0 ? data.age : 0;\n    this.email = validateString(data.email);\n  }\n}\n\nconst user = new User({ age: 45 });\nconsole.log(user); // User { name: 'Unnamed', age: 45, email: '' }"
+        "value": "sayHello(); // Output: Hello!\n\nfunction sayHello() {\n  console.log('Hello!');\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Graceful Error Handling\nInstead of throwing errors immediately, some models use fallback values or error flags, which allows your app to still operate and give meaningful feedback."
+        "value": "But function expressions (when a function is assigned to a variable) are only hoisted like variables: their declaration is hoisted but not the assignment."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example:"
       },
       {
         "type": "code",
-        "value": "class User {\n  constructor(data = {}) {\n    this.errors = [];\n\n    if (!data.name || typeof data.name !== 'string') {\n      this.errors.push('Name is required and must be a string.');\n      this.name = 'Unknown';\n    } else {\n      this.name = data.name;\n    }\n\n    this.age = typeof data.age === 'number' && data.age >= 0 ? data.age : 0;\n    this.email = typeof data.email === 'string' ? data.email : '';\n  }\n}\n\nconst user = new User({ age: -5 });\nconsole.log(user.errors); // [ 'Name is required and must be a string.' ]"
+        "value": "sayHello(); // Error: sayHello is not a function\n\nvar sayHello = function() {\n  console.log('Hello!');\n};"
       },
       {
         "type": "paragraph",
-        "value": "### Final Thoughts\nDesigning error-resilient JavaScript data models means anticipating what might go wrong and coding defensively. By using defaults, validation, helper functions, and graceful error handling, you make your code more robust and easier to maintain. Start simple, and improve your model as your app grows!"
+        "value": "Here, `sayHello` is hoisted as a variable, but it is initialized as `undefined` before the assignment. So calling it as a function before the assignment leads to a runtime error."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid hoisting-related errors:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always declare variables at the top of their scope or before using them.\n- Use `let` and `const` instead of `var` to get block-scoped variables that aren't hoisted in the same way.\n- Declare functions before calling them, or use function declarations instead of expressions if you want to call them early."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example with `let`:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(myLet); // ReferenceError: Cannot access 'myLet' before initialization\nlet myLet = 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "With `let` and `const`, variables are hoisted but remain in a \"temporal dead zone\" until initialized, so trying to use them early throws an error instead of returning `undefined`. This helps catch mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding hoisting helps you write cleaner, error-free JavaScript code. Remember: declarations are hoisted, but assignments are not. Always initialize and declare your variables and functions before use!"
       }
     ]
   },
   {
-    "slug": "getting-started-with-typescript-setting-up-your-first-project",
-    "title": "Getting Started with TypeScript: Setting Up Your First Project",
+    "slug": "building-a-real-time-chat-application-with-typescript-and-websockets",
+    "title": "Building a Real-Time Chat Application with TypeScript and WebSockets",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to set up your first TypeScript project with easy-to-follow steps for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
+    "description": "Learn how to create a real-time chat application using TypeScript and WebSockets. This beginner-friendly tutorial walks you through setting up a WebSocket server and client for instant messaging.",
+    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a popular programming language that builds on JavaScript by adding static types, making your code easier to understand and less error-prone. If you're new to TypeScript and want to set up your first project, this tutorial will guide you step-by-step."
+        "value": "Real-time chat applications have become essential for online communication. In this tutorial, we'll build a simple chat app using TypeScript and WebSockets. WebSockets provide a way to open an interactive communication session between the user's browser and a server. This means messages can be sent and received instantly without refreshing the page."
       },
       {
         "type": "paragraph",
-        "value": "First, you need to have Node.js installed on your computer because TypeScript runs on Node and uses npm (Node Package Manager) to manage packages. You can download Node.js from its official website."
+        "value": "We'll create two main parts: a WebSocket server using Node.js and a client that connects to this server. For simplicity, the client will be a basic HTML page running TypeScript in the browser."
       },
       {
         "type": "paragraph",
-        "value": "Once Node.js is installed, open your terminal or command prompt and follow these steps:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Create a new folder for your project and navigate into it:"
+        "value": "First, let's set up our WebSocket server. We'll use the popular `ws` library to handle WebSocket connections."
       },
       {
         "type": "code",
-        "value": "mkdir my-typescript-project\ncd my-typescript-project"
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst port = 8080;\nconst wss = new WebSocketServer({ port });\n\n// Store all connected clients\nconst clients = new Set<WebSocket>();\n\nwss.on('connection', (ws: WebSocket) => {\n  clients.add(ws);\n  console.log('New client connected');\n\n  ws.on('message', (message: string) => {\n    console.log(`Received: ${message}`);\n    // Broadcast received message to all other clients\n    clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    clients.delete(ws);\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log(`WebSocket server is running on ws://localhost:${port}`);"
       },
       {
         "type": "paragraph",
-        "value": "2. Initialize a new Node.js project (this will create a package.json file):"
+        "value": "This code creates a WebSocket server on port 8080. When a client connects, it adds the client connection to the `clients` set. When the server receives a message from one client, it broadcasts that message to all other connected clients."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's build the client side. We'll create a simple HTML page along with TypeScript to connect to the WebSocket server and send/receive messages."
       },
       {
         "type": "code",
-        "value": "npm init -y"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n  <style>\n    #chat {\n      width: 300px;\n      height: 300px;\n      border: 1px solid #ccc;\n      overflow-y: scroll;\n      padding: 5px;\n      margin-bottom: 10px;\n    }\n  </style>\n</head>\n<body>\n  <div id=\"chat\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type your message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script type=\"module\">\n    const chatDiv = document.getElementById('chat') as HTMLDivElement;\n    const messageInput = document.getElementById('messageInput') as HTMLInputElement;\n    const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;\n\n    // Replace with your WebSocket server address\n    const ws = new WebSocket('ws://localhost:8080');\n\n    ws.onopen = () => {\n      appendMessage('Connected to the chat server.');\n    };\n\n    ws.onmessage = (event) => {\n      appendMessage(`Friend: ${event.data}`);\n    };\n\n    ws.onclose = () => {\n      appendMessage('Disconnected from the server.');\n    };\n\n    sendBtn.onclick = () => {\n      sendMessage();\n    };\n\n    messageInput.addEventListener('keypress', (event) => {\n      if (event.key === 'Enter') {\n        sendMessage();\n      }\n    });\n\n    function sendMessage() {\n      const message = messageInput.value.trim();\n      if (message && ws.readyState === WebSocket.OPEN) {\n        ws.send(message);\n        appendMessage(`You: ${message}`);\n        messageInput.value = '';\n      }\n    }\n\n    function appendMessage(message: string) {\n      const messageElem = document.createElement('div');\n      messageElem.textContent = message;\n      chatDiv.appendChild(messageElem);\n      chatDiv.scrollTop = chatDiv.scrollHeight;\n    }\n  </script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "3. Install TypeScript as a development dependency:"
-      },
-      {
-        "type": "code",
-        "value": "npm install typescript --save-dev"
+        "value": "This client connects to the server, listens for incoming messages, and sends messages typed into the input box. Messages from the user appear prefixed with \"You:\", and messages from other clients appear as \"Friend:\". The chat scrolls automatically as new messages arrive."
       },
       {
         "type": "paragraph",
-        "value": "4. Initialize a TypeScript configuration file (tsconfig.json). This file helps you configure TypeScript compiler options:"
-      },
-      {
-        "type": "code",
-        "value": "npx tsc --init"
+        "value": "To run this app, ensure you have Node.js installed. Save the server code in a file, for example, `server.ts`, install dependencies with `npm install ws @types/ws`, compile with `tsc`, then run with `node server.js`. Then, open the HTML file in two different browser windows or tabs to test sending messages between them."
       },
       {
         "type": "paragraph",
-        "value": "The created tsconfig.json file contains default settings. You can leave them as is for now."
-      },
-      {
-        "type": "paragraph",
-        "value": "5. Now, create your first TypeScript file. Let's create a simple program that prints a message to the console."
-      },
-      {
-        "type": "code",
-        "value": "touch index.ts"
-      },
-      {
-        "type": "paragraph",
-        "value": "6. Open index.ts and add the following code:"
-      },
-      {
-        "type": "code",
-        "value": "const greet = (name: string): string => {\n  return `Hello, ${name}! Welcome to TypeScript.`;\n};\n\nconsole.log(greet('World'));"
-      },
-      {
-        "type": "paragraph",
-        "value": "7. To compile your TypeScript code into JavaScript, run:"
-      },
-      {
-        "type": "code",
-        "value": "npx tsc"
-      },
-      {
-        "type": "paragraph",
-        "value": "This will generate an index.js file with the compiled JavaScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "8. Finally, run the JavaScript file using Node.js:"
-      },
-      {
-        "type": "code",
-        "value": "node index.js"
-      },
-      {
-        "type": "paragraph",
-        "value": "You should see the message: Hello, World! Welcome to TypeScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "Congratulations! You've set up your first TypeScript project and written a simple program. As you continue learning, you can explore other TypeScript features such as interfaces, enums, and advanced type annotations."
+        "value": "Congratulations! You've built a real-time chat application using TypeScript and WebSockets. This foundation can be expanded with features like user authentication, message history, or more advanced UI frameworks."
       }
     ]
   },
   {
-    "slug": "handling-complex-api-response-errors-gracefully-in-typescript-projects",
-    "title": "Handling Complex API Response Errors Gracefully in TypeScript Projects",
+    "slug": "mastering-typescripts-strict-null-checks-best-practices-for-safer-code",
+    "title": "Mastering TypeScript's Strict Null Checks: Best Practices for Safer Code",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to handle complex API response errors gracefully in TypeScript with practical examples and best practices for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=AdmGHwvgaVs",
+    "description": "Learn how to use TypeScript's strict null checks feature to write safer, more reliable code by avoiding common null and undefined errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=4Te7YR6Gsi4",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with APIs in TypeScript projects, errors in responses can often be complex and nested. Handling these errors gracefully is essential for improving user experience and debugging. This article will guide you through a beginner-friendly approach to managing complex API response errors using TypeScript's type safety features."
+        "value": "TypeScript is a powerful language that enhances JavaScript with static typing. One of its most valuable features is the ability to catch null and undefined errors at compile time using the strict null checks option. Enabling this feature helps you write more robust code by preventing runtime errors related to accessing or using null or undefined values."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by defining a typical structure of an API response that might include nested error information. For example, an API might return errors like this:"
+        "value": "By default, TypeScript allows variables to be null or undefined unless you explicitly disallow them. With strict null checks enabled, variables must be explicitly marked if they can hold null or undefined, reducing unexpected bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore how to enable strict null checks and some best practices to handle null and undefined values safely in your TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Enabling Strict Null Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "To enable strict null checks, update your `tsconfig.json` file by setting the `strictNullChecks` option to `true`. This is often part of enabling the full `strict` mode."
       },
       {
         "type": "code",
-        "value": "interface ApiError {\n  code: string;\n  message: string;\n  details?: ApiError[];\n}\n\ninterface ApiResponse {\n  success: boolean;\n  data?: any;\n  error?: ApiError;\n}"
+        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true,\n    // or simply enable all strict checks:\n    // \"strict\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, the ApiError type can contain a list of details which are themselves ApiErrors. This recursive structure allows for handling multiple layers of errors."
+        "value": "### Understanding Nullable Types"
       },
       {
         "type": "paragraph",
-        "value": "Next, we'll create a utility function to extract meaningful messages from this error structure. The goal is to traverse all nested errors and collect their messages."
+        "value": "With strict null checks enabled, `null` and `undefined` are only assignable to variables explicitly declared to accept them. For example:"
       },
       {
         "type": "code",
-        "value": "function extractErrorMessages(error: ApiError): string[] {\n  const messages = [error.message];\n  if (error.details) {\n    for (const detail of error.details) {\n      messages.push(...extractErrorMessages(detail));\n    }\n  }\n  return messages;\n}"
+        "value": "let name: string = \"Alice\";\n// name = null; // Error: Type 'null' is not assignable to type 'string'.\n\nlet nullableName: string | null = \"Bob\";\nnullableName = null; // OK"
       },
       {
         "type": "paragraph",
-        "value": "This function uses recursion to navigate through all levels of error details and collect all error messages into a flat array."
+        "value": "### Best Practices for Safer Code"
       },
       {
         "type": "paragraph",
-        "value": "Let's see how to use this function when handling a response from an API call. Suppose you made a fetch request and received a parsed response object:"
-      },
-      {
-        "type": "code",
-        "value": "async function handleApiResponse(response: ApiResponse) {\n  if (!response.success && response.error) {\n    const messages = extractErrorMessages(response.error);\n    console.error(\"API Errors:\", messages.join(\", \"));\n    // Show friendly error messages to users or take action based on error codes\n  } else {\n    console.log(\"Data received:\", response.data);\n  }\n}"
+        "value": "1. **Use union types to explicitly declare nullable variables.** When a value can be null or undefined, declare it clearly using `| null` or `| undefined`. This makes your code intention clear."
       },
       {
         "type": "paragraph",
-        "value": "This function checks if the API response is unsuccessful and if an error object exists. It then extracts all error messages and logs them. In real usage, you could display these messages to users or implement logic based on specific error codes."
+        "value": "typescript\nfunction greet(name: string | null) {\n  if (name === null) {\n    console.log(\"Hello, guest!\");\n  } else {\n    console.log(`Hello, ${name}!`);\n  }\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "For added type safety, and especially in larger projects, you can define specific error codes as a TypeScript union type and create helper functions to handle different error types accordingly. For example:"
-      },
-      {
-        "type": "code",
-        "value": "type ErrorCode = \"INVALID_INPUT\" | \"NOT_FOUND\" | \"SERVER_ERROR\";\n\nfunction handleSpecificErrors(error: ApiError) {\n  switch (error.code as ErrorCode) {\n    case \"INVALID_INPUT\":\n      console.warn(\"Invalid input provided.\");\n      break;\n    case \"NOT_FOUND\":\n      console.warn(\"Requested resource not found.\");\n      break;\n    case \"SERVER_ERROR\":\n      console.error(\"Server encountered an error.\");\n      break;\n    default:\n      console.error(\"Unknown error:\", error.message);\n  }\n  if (error.details) {\n    error.details.forEach(handleSpecificErrors);\n  }\n}"
+        "value": "2. **Use type guards to check for null or undefined before using variables.** This ensures safe access and prevents runtime errors."
       },
       {
         "type": "paragraph",
-        "value": "This helper recursively acts on each error based on its code, allowing you to customize behavior for different error types."
+        "value": "typescript\nfunction printLength(str: string | undefined) {\n  if (str !== undefined) {\n    console.log(str.length);\n  } else {\n    console.log(\"String is undefined\");\n  }\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "In summary:"
+        "value": "3. **Leverage the non-null assertion operator (`!`) only when you are sure a value is not null or undefined.** Use sparingly, as it tells TypeScript to ignore null checks and can introduce bugs if used improperly."
       },
       {
         "type": "paragraph",
-        "value": "• Define TypeScript interfaces to represent the API response and error structure.\n• Use a recursive function to extract and flatten error messages from complex nested structures.\n• Handle errors thoughtfully in your UI or application logic.\n• Use TypeScript's type system to create safer, clearer error-handling code."
+        "value": "typescript\nlet input: HTMLInputElement | null = document.querySelector('input');\n// We assert input is not null because we are sure input exists.\nconsole.log(input!.value);\n"
       },
       {
         "type": "paragraph",
-        "value": "By following these steps, you can gracefully handle even complex API response errors in your TypeScript projects, improving both developer experience and user satisfaction."
+        "value": "4. **Provide default values using the nullish coalescing operator (`??`).** This is helpful to handle null or undefined values gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "typescript\nfunction getUsername(name: string | null | undefined) {\n  // Use 'Guest' if name is null or undefined\n  const displayName = name ?? \"Guest\";\n  console.log(`Welcome, ${displayName}`);\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using TypeScript's strict null checks helps you catch potential null or undefined errors during development, saving time debugging runtime issues. By explicitly declaring nullable types, using type guards, and safely handling values, you can write more predictable and safer TypeScript code."
       }
     ]
   },
   {
-    "slug": "mastering-python-context-managers-for-cleaner-resource-management",
-    "title": "Mastering Python Context Managers for Cleaner Resource Management",
+    "slug": "handling-floating-point-precision-edge-cases-python",
+    "title": "Handling Floating Point Precision Edge Cases in Python: Best Practices and Pitfalls",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python context managers to handle resources efficiently and write cleaner, safer code with practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
+    "description": "Learn how to manage floating point precision issues in Python with simple techniques and practical examples, ensuring accurate and reliable calculations.",
+    "videoUrl": "https://www.youtube.com/watch?v=tcVHG-NXMjk",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing Python programs, managing resources like files, network connections, or database sessions properly is crucial. Failure to release these resources can cause bugs, memory leaks, or locked files. This is where context managers come in — they help automate resource management to ensure resources are properly acquired and released."
+        "value": "When working with decimal numbers in Python, you might sometimes notice unexpected results due to floating point precision errors. This happens because computers represent floating point numbers in binary, which cannot always precisely store decimal values. Understanding these edge cases and learning best practices can help you write more accurate and reliable code."
       },
       {
         "type": "paragraph",
-        "value": "The most common example you’ve likely used is the `with` statement. It ensures that a resource is cleaned up after use, even if errors occur during processing. Let's start by seeing how this works with files."
+        "value": "For example, try this simple calculation:"
       },
       {
         "type": "code",
-        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, Context Managers!')\n# The file is automatically closed here"
+        "value": "print(0.1 + 0.2 == 0.3)  # Output will be False!"
       },
       {
         "type": "paragraph",
-        "value": "Without the `with` statement, you would have to manually open and close the file, which can lead to errors if the file is not closed properly. Context managers automatically handle this cleanup for you."
+        "value": "You might expect `0.1 + 0.2` to equal `0.3`, but due to floating point precision limitations, it doesn't. This is because the actual stored value of `0.1 + 0.2` is a tiny bit off from `0.3`."
       },
       {
         "type": "paragraph",
-        "value": "So how do context managers work under the hood? They use special methods called `__enter__` and `__exit__`. When you enter the `with` block, Python calls `__enter__`, and when you leave, it calls `__exit__`, even if an error happens."
+        "value": "### Why does this happen?\n\nFloating point numbers are stored in binary using a format defined by IEEE 754. Many decimals can't be represented exactly in binary form, leading to small rounding errors."
       },
       {
         "type": "paragraph",
-        "value": "You can create your own context managers by defining a class with these two methods. Here's a simple example that manages printing messages before and after a block of code."
+        "value": "### Best Practice #1: Use `round()` for comparisons\n\nA practical way to compare floating point numbers is to round them to a fixed number of decimal places."
       },
       {
         "type": "code",
-        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the block')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the block')\n\nwith MyContextManager():\n    print('Inside the block')"
+        "value": "a = 0.1 + 0.2\nb = 0.3\nprint(round(a, 10) == round(b, 10))  # Output: True"
       },
       {
         "type": "paragraph",
-        "value": "In this example, when the block starts, 'Entering the block' is printed, then the code inside the block runs, and finally, 'Exiting the block' prints after the block finishes."
+        "value": "Rounding helps because it ignores tiny differences beyond the specified decimal places."
       },
       {
         "type": "paragraph",
-        "value": "Python also provides a built-in helper from the `contextlib` module called `contextmanager` that lets you create context managers with generator functions. This is often simpler for basic resource management tasks."
+        "value": "### Best Practice #2: Use `math.isclose()` for tolerance-based comparison\n\nPython 3.5+ offers the `math.isclose()` function which checks if two numbers are close within a relative or absolute tolerance."
       },
       {
         "type": "code",
-        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_manager():\n    print('Setup code')\n    yield\n    print('Cleanup code')\n\nwith my_manager():\n    print('Inside the block')"
+        "value": "import math\n\nprint(math.isclose(0.1 + 0.2, 0.3))  # Output: True"
       },
       {
         "type": "paragraph",
-        "value": "This function runs everything before `yield` when entering the block, and everything after `yield` when exiting. This makes it very easy to manage setup and cleanup steps cleanly."
+        "value": "`math.isclose()` is more flexible since you can adjust tolerance levels if needed."
       },
       {
         "type": "paragraph",
-        "value": "In summary, context managers help you write safer and more readable Python code by automating resource cleanup. Whether you work with files, network connections, or custom resources, mastering context managers is an important part of writing professional Python code."
+        "value": "### Best Practice #3: Use the `decimal` module for financial or high-precision calculations\n\nIf you need more control over decimal precision, Python's built-in `decimal` module is perfect. It stores numbers as decimal values, reducing floating point errors."
+      },
+      {
+        "type": "code",
+        "value": "from decimal import Decimal\n\na = Decimal('0.1') + Decimal('0.2')\nb = Decimal('0.3')\nprint(a == b)  # Output: True"
       },
       {
         "type": "paragraph",
-        "value": "Try creating your own context managers, and use the `with` statement whenever you deal with resources. Your future self will thank you!"
+        "value": "Using strings to create `Decimal` objects preserves decimal precision exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Pitfall: Avoid direct equality checks with floats\n\nAvoid using `==` to compare floats directly as it may lead to unexpected results due to tiny precision errors. Use the methods above instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\n- Floating point numbers are approximations, not exact values.\n- Use `round()` or `math.isclose()` for comparing floats.\n- For precise decimal arithmetic, use the `decimal` module.\n- Avoid direct equality comparisons between floats.\n\nBy following these best practices, you can write more robust Python code that handles floating point edge cases gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding!"
       }
     ]
   },
   {
-    "slug": "debugging-memory-leaks-python-web-applications",
-    "title": "Debugging Memory Leaks in Python Web Applications: Techniques and Tools",
+    "slug": "mastering-python-floating-point-edge-cases",
+    "title": "Mastering Python's Floating Point Edge Cases: Precision Challenges and Solutions",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to identify and fix memory leaks in Python web applications using beginner-friendly techniques and tools.",
-    "videoUrl": "https://www.youtube.com/watch?v=fMKilBkCJX0",
+    "description": "Learn about common floating point precision challenges in Python and how to handle these edge cases effectively with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Tr4C5NYN2rE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks occur when a program holds on to memory that it no longer needs, causing performance issues or crashes. In Python web applications, memory leaks can degrade user experience and make your server unstable. This article guides you through common causes of memory leaks in Python web apps and introduces simple tools to detect and debug them."
+        "value": "When working with decimal numbers in Python, you might notice some unexpected results due to how floating point numbers are represented internally. These precision issues can cause small errors, especially when doing arithmetic or comparisons. This article will help you understand why these problems happen and show practical ways to handle them."
       },
       {
         "type": "paragraph",
-        "value": "First, let’s understand common sources of memory leaks in Python web applications. These include lingering references to objects (like global variables, cached data, or session data), circular references that aren’t cleaned up, and heavy usage of objects that are never released."
-      },
-      {
-        "type": "paragraph",
-        "value": "One quick way to monitor memory is to use the built-in `tracemalloc` module, which tracks memory allocations over time. You can use it to find where your application consumes most memory."
+        "value": "Python uses the IEEE 754 double-precision floating point format to represent decimal numbers. This means some numbers, like 0.1, cannot be represented exactly in binary form. Let's see an example:"
       },
       {
         "type": "code",
-        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Run your web application code here\n\nsnapshot = tracemalloc.take_snapshot()\nfor stat in snapshot.statistics('lineno')[:10]:\n    print(stat)"
+        "value": "print(0.1 + 0.2 == 0.3)  # Outputs: False"
       },
       {
         "type": "paragraph",
-        "value": "The above snippet starts tracking memory, and then prints the top 10 lines where the most memory is allocated. This helps you identify hotspots that need further inspection."
+        "value": "At first glance, 0.1 + 0.2 should equal 0.3, but this returns False due to floating point precision errors. The actual sum is a tiny bit off from 0.3."
       },
       {
         "type": "paragraph",
-        "value": "For more detailed debugging, the `objgraph` module helps visualize object retention and detect leaks caused by unexpected references. You can install it via `pip install objgraph`."
+        "value": "To check floating point values safely, you should avoid direct equality tests. Instead, use a tolerance value to judge if two numbers are \"close enough.\" Python's math module provides a helpful function for this:"
       },
       {
         "type": "code",
-        "value": "import objgraph\n\n# Before a particular operation\nobjgraph.show_most_common_types()\n\n# After the operation\nobjgraph.show_most_common_types()\n\n# To find objects that keep something alive\nobjgraph.show_backrefs([your_object], max_depth=3)"
+        "value": "import math\n\nresult = (0.1 + 0.2)\nprint(math.isclose(result, 0.3))  # Outputs: True"
       },
       {
         "type": "paragraph",
-        "value": "This tool lets you compare how object counts change after an operation and trace back what is holding an object in memory."
+        "value": "The function math.isclose() allows you to compare floating point numbers within a small relative or absolute tolerance, making your comparisons more reliable."
       },
       {
         "type": "paragraph",
-        "value": "Another useful approach in web frameworks like Flask or Django is to carefully manage resources like database connections and caches. Always close connections properly and clear caches when they grow too large."
+        "value": "If you need exact decimal arithmetic, especially for financial calculations, you can use the decimal module. It represents numbers as decimal objects with full precision:"
+      },
+      {
+        "type": "code",
+        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result == Decimal('0.3'))  # Outputs: True"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, debugging memory leaks involves monitoring memory use with tools like `tracemalloc`, inspecting object references with `objgraph`, and writing clean code that handles resources carefully. Regularly profiling and testing your web app will help keep memory issues at bay."
+        "value": "Using the decimal module helps eliminate floating point surprises by performing arithmetic as humans normally expect."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, always be aware of floating point precision edge cases in Python. Use math.isclose() for safe comparisons and the decimal module for precision-critical calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering these techniques will improve the reliability of your programs and prevent subtle bugs caused by floating point arithmetic."
       }
     ]
   },
   {
-    "slug": "mastering-sql-window-functions-beginners-tutorial",
-    "title": "Mastering SQL Window Functions: A Beginner's Tutorial",
+    "slug": "mastering-sql-window-functions-beginners-guide",
+    "title": "Mastering SQL Window Functions: A Beginner’s Guide to Advanced Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn the basics of SQL window functions with clear examples and practical use cases. Boost your SQL skills by understanding how to perform advanced calculations across table rows without losing row-level detail.",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis like ranking, running totals, and moving averages, with easy-to-follow examples for beginners.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are powerful tools that allow you to perform calculations across a set of table rows related to the current row, while still returning individual rows. Unlike regular aggregate functions, window functions don't collapse rows into a single result, which means you can gain insights like running totals, rankings, and moving averages while keeping all the original data intact."
+        "value": "SQL window functions are powerful tools that allow you to perform advanced calculations across rows related to the current row, without collapsing your result set. Unlike aggregate functions, which group rows together, window functions preserve the detail of each row while adding insightful calculations."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we’ll cover the basics of window functions using practical examples. This will help you understand how to improve your SQL queries for tasks such as calculating rankings, cumulative sums, and more."
+        "value": "In this tutorial, you’ll learn the basics of SQL window functions, how they work, and some common use cases such as ranking records, calculating running totals, and computing moving averages."
       },
       {
         "type": "paragraph",
-        "value": "Let's use a sample table named `sales` with the following structure:"
+        "value": "### Understanding the OVER() Clause"
+      },
+      {
+        "type": "paragraph",
+        "value": "All window functions require the `OVER()` clause, which defines the window or set of rows used for each calculation. You can specify partitions (subgroups) and the order of rows inside the window."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is the general syntax: "
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n    id INT PRIMARY KEY,\n    salesperson VARCHAR(50),\n    region VARCHAR(50),\n    amount INT,\n    sale_date DATE\n);"
+        "value": "window_function() OVER (PARTITION BY column1 ORDER BY column2)"
       },
       {
         "type": "paragraph",
-        "value": "And sample data:"
+        "value": "Let's see some practical examples using a sample sales table:"
       },
       {
         "type": "code",
-        "value": "INSERT INTO sales (id, salesperson, region, amount, sale_date) VALUES\n(1, 'Alice', 'North', 500, '2024-01-01'),\n(2, 'Bob', 'South', 300, '2024-01-01'),\n(3, 'Alice', 'North', 700, '2024-01-02'),\n(4, 'Charlie', 'East', 200, '2024-01-03'),\n(5, 'Bob', 'South', 450, '2024-01-04');"
+        "value": "CREATE TABLE sales (\n  id INT,\n  region VARCHAR(50),\n  sales_rep VARCHAR(50),\n  sale_date DATE,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'East', 'Alice', '2024-01-01', 500),\n(2, 'East', 'Bob', '2024-01-02', 300),\n(3, 'West', 'Charlie', '2024-01-01', 700),\n(4, 'East', 'Alice', '2024-01-03', 200),\n(5, 'West', 'Charlie', '2024-01-04', 400);"
       },
       {
         "type": "paragraph",
-        "value": "### 1. Using ROW_NUMBER() to Assign Unique Rankings"
+        "value": "### 1. Ranking Sales Representatives by Region"
       },
       {
         "type": "paragraph",
-        "value": "The `ROW_NUMBER()` function assigns a unique sequential integer to rows within a partition of your result set. Here, let's rank sales by amount for each region."
+        "value": "Use the `RANK()` function to assign ranks to sales reps based on total sales within each region."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  region,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY region ORDER BY amount DESC) AS rank_in_region\nFROM sales;"
+        "value": "SELECT\n  region,\n  sales_rep,\n  SUM(amount) AS total_sales,\n  RANK() OVER (PARTITION BY region ORDER BY SUM(amount) DESC) AS sales_rank\nFROM sales\nGROUP BY region, sales_rep\nORDER BY region, sales_rank;"
       },
       {
         "type": "paragraph",
-        "value": "This query partitions the data by `region` and orders sales in descending order to assign a rank starting at 1 for the highest amount in each region."
+        "value": "This query groups sales by region and sales_rep, sums the amounts, and then ranks the sales reps by their total sales within each region."
       },
       {
         "type": "paragraph",
-        "value": "### 2. Calculating Running Totals with SUM() as a Window Function"
+        "value": "### 2. Calculating Running Totals"
       },
       {
         "type": "paragraph",
-        "value": "You can calculate a running total of sales amounts over time for each salesperson using `SUM()` as a window function."
+        "value": "Calculate a running total of sales amount over time within each region using `SUM()` as a window function."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY salesperson, sale_date;"
+        "value": "SELECT\n  region,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY region ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY region, sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "Here, the `SUM()` function sums the amounts for each salesperson ordered by their sale date, giving a cumulative total at each row."
+        "value": "Here, `SUM(amount) OVER()` adds each sale to the sum of all previous sales in the same region ordered by date."
       },
       {
         "type": "paragraph",
-        "value": "### 3. Calculating Moving Averages"
+        "value": "### 3. Computing Moving Averages"
       },
       {
         "type": "paragraph",
-        "value": "Window functions can also help calculate moving averages. For example, a 2-day moving average of sales amounts by date:"
+        "value": "Calculate a 2-day moving average of sales amounts to smooth out fluctuations."
       },
       {
         "type": "code",
-        "value": "SELECT\n  sale_date,\n  AVG(amount) OVER (ORDER BY sale_date ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) AS two_day_avg\nFROM sales\nORDER BY sale_date;"
+        "value": "SELECT\n  region,\n  sale_date,\n  amount,\n  AVG(amount) OVER (\n    PARTITION BY region\n    ORDER BY sale_date\n    ROWS BETWEEN 1 PRECEDING AND CURRENT ROW\n  ) AS moving_avg\nFROM sales\nORDER BY region, sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "This calculates the average of the current and previous row amounts, which gives a 2-day moving average."
+        "value": "This query uses `ROWS BETWEEN 1 PRECEDING AND CURRENT ROW` to average the current row and the previous row."
       },
       {
         "type": "paragraph",
@@ -505,65 +537,93 @@
       },
       {
         "type": "paragraph",
-        "value": "Window functions unlock advanced analysis capabilities while maintaining row-level detail. Functions like `ROW_NUMBER()`, `RANK()`, `SUM()`, and `AVG()` when used with `OVER()` clauses enable your queries to answer complex business questions with ease."
+        "value": "SQL window functions are extremely useful for complex data analysis without losing row-level detail. By mastering `OVER()`, partitions, and ordering, you can create dynamic rankings, cumulative sums, moving averages, and more, enabling you to extract richer insights from your data."
       },
       {
         "type": "paragraph",
-        "value": "Experiment with these examples by adapting the partitioning and ordering clauses to your data. Mastering window functions will greatly improve your ability to write efficient and insightful SQL queries."
+        "value": "Start practicing these functions with your datasets and watch your SQL skills grow to the next level!"
       }
     ]
   },
   {
-    "slug": "optimizing-sql-queries-to-handle-unexpected-null-values-in-large-datasets",
-    "title": "Optimizing SQL Queries to Handle Unexpected NULL Values in Large Datasets",
+    "slug": "understanding-data-type-mismatches-in-sql-comparisons",
+    "title": "Understanding Data Type Mismatches in SQL Comparisons: Best Practices and Solutions",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to optimize SQL queries to efficiently handle unexpected NULL values in large datasets, preventing errors and improving performance.",
-    "videoUrl": "https://www.youtube.com/watch?v=qCBX5v9OCxM",
+    "description": "Learn how to identify and fix data type mismatches in SQL comparisons with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=nROJQpz4fGo",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with large datasets in SQL, unexpected NULL values can cause errors, slow down queries, or produce inaccurate results. Handling these NULL values effectively helps you write robust, optimized queries that perform well and return correct data."
+        "value": "When writing SQL queries, one of the common errors beginners face is data type mismatches in comparisons. This happens when you compare values of different data types, such as numbers with strings or dates with integers. Understanding why this occurs and how to avoid it can save you time debugging and improve your query performance."
       },
       {
         "type": "paragraph",
-        "value": "NULL represents missing or unknown data, which is common in real-world datasets. However, if you don’t account for NULL values explicitly, operations like comparisons or aggregations may fail or behave unexpectedly. This guide will help beginners understand best practices for handling NULLs in SQL queries."
+        "value": "Data type mismatches often lead to errors or unexpected results because SQL engines cannot correctly interpret or convert incompatible types. For example, comparing a VARCHAR column that stores numbers as text to an INT column directly can cause problems."
       },
       {
         "type": "paragraph",
-        "value": "1. Use IS NULL and IS NOT NULL to check for NULLs\nAlways check for NULL values using `IS NULL` or `IS NOT NULL` rather than equality operators (`= NULL` or `!= NULL`), because NULL is not equal to anything, even itself."
+        "value": "Here’s a simple example where comparing different data types causes an error:"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM orders WHERE customer_id IS NULL;"
+        "value": "SELECT *\nFROM orders\nWHERE order_id = '123';  -- order_id is INT, '123' is a string"
       },
       {
         "type": "paragraph",
-        "value": "2. Use COALESCE to replace NULLs with default values\nThe `COALESCE` function returns the first non-NULL value from its arguments. This is useful to avoid NULL results during calculations or display a default when data is missing."
+        "value": "Although many SQL engines perform implicit type conversion, relying on this can produce errors, especially if the string cannot be converted into the expected type."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common causes of data type mismatches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Comparing numeric columns to string literals without explicit conversion\n- Using functions that return different data types than expected\n- Comparing date/datetime fields to strings without proper formatting"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices to Avoid Data Type Mismatches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use explicit type casting:** Convert values to the correct data type using CAST() or CONVERT(), which helps avoid ambiguity."
       },
       {
         "type": "code",
-        "value": "SELECT order_id, COALESCE(total_amount, 0) AS total_amount FROM orders;"
+        "value": "SELECT *\nFROM orders\nWHERE order_id = CAST('123' AS INT);"
       },
       {
         "type": "paragraph",
-        "value": "3. Avoid functions on columns with NULL values without null checks\nFunctions like SUM, AVG, or string functions can behave differently with NULLs. When aggregating, NULL values are ignored by default but can affect result interpretation. Use WHERE clauses or COALESCE to handle them explicitly."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. Optimize JOINs to handle NULLs\nWhen joining tables, NULLs can affect whether rows are matched. Use LEFT JOIN, RIGHT JOIN, or FULL OUTER JOIN depending on whether you want to preserve rows with NULL matches."
+        "value": "2. **Match data types in comparisons:** Ensure both sides of the comparison are the same type. For example, if one column is DATE, compare it to a DATE literal."
       },
       {
         "type": "code",
-        "value": "SELECT o.order_id, c.customer_name\nFROM orders o\nLEFT JOIN customers c ON o.customer_id = c.customer_id;"
+        "value": "SELECT *\nFROM employees\nWHERE hire_date = '2023-06-01';  -- Use proper date format"
       },
       {
         "type": "paragraph",
-        "value": "5. Use indexes wisely with NULLable columns\nSome databases treat NULLs in indexes differently. Check your database documentation and consider adding filtered indexes to improve query speed on NULL conditions."
+        "value": "3. **Avoid implicit conversions:** These can lead to slower queries or runtime errors, especially if the conversion is invalid."
       },
       {
         "type": "paragraph",
-        "value": "By following these tips, your SQL queries will be more resilient to unexpected NULL values, reducing errors and improving query performance over large datasets."
+        "value": "4. **Check your schema:** Always know the data types of your columns before writing queries. Use `DESCRIBE table_name;` or your database's schema inspection tool."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Use parameterized queries in applications:** This reduces string concatenation mistakes and ensures correct data types are sent to the database."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling errors caused by data type mismatches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you get an error like \"Operand data type VARCHAR is invalid for equals operator,\" immediately check your query for comparisons between incompatible types. Add explicit casts as needed and ensure literals match column types."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these best practices, you'll write more reliable and efficient SQL queries. Data type mismatches are easy to avoid once you understand the core concept: always keep types compatible in your comparisons."
       }
     ]
   }

@@ -37812,5 +37812,403 @@ export const articles = [
         "value": "By following these tips, your SQL queries will be more resilient to unexpected NULL values, reducing errors and improving query performance over large datasets."
       }
     ]
+  },
+  {
+    "slug": "understanding-javascript-hoisting-beginner-guide",
+    "title": "Understanding JavaScript Hoisting: A Beginner's Guide to Avoid Common Pitfalls",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what JavaScript hoisting is, how it affects your variables and functions, and how to avoid common errors caused by it. A clear, beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=KJo0o4DnqdI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're new to JavaScript, you might have encountered errors or unexpected behavior related to variables or functions declared later in the code but used earlier. This is often due to a concept called \"hoisting.\" Understanding hoisting will help you write better code and avoid common pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "In simple terms, hoisting is JavaScript's behavior of moving variable and function declarations to the top of their scope before execution. This means the JavaScript engine processes declarations before running the code line-by-line."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example with variables:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(myVar); // Output: undefined\nvar myVar = 10;\nconsole.log(myVar); // Output: 10"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though `myVar` is declared after the first `console.log`, no error occurs. This happens because JavaScript hoists the declaration of `myVar` (but not the assignment). So internally, the code behaves like:"
+      },
+      {
+        "type": "code",
+        "value": "var myVar;\nconsole.log(myVar); // undefined\nmyVar = 10;\nconsole.log(myVar); // 10"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how the declaration `var myVar;` is moved up, but the value assignment happens where it’s written."
+      },
+      {
+        "type": "paragraph",
+        "value": "Hoisting also happens with functions, but there is an important difference between function declarations and function expressions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Function declarations are fully hoisted, so you can call them before they are defined in the code:"
+      },
+      {
+        "type": "code",
+        "value": "sayHello(); // Output: Hello!\n\nfunction sayHello() {\n  console.log('Hello!');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "But function expressions (when a function is assigned to a variable) are only hoisted like variables: their declaration is hoisted but not the assignment."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example:"
+      },
+      {
+        "type": "code",
+        "value": "sayHello(); // Error: sayHello is not a function\n\nvar sayHello = function() {\n  console.log('Hello!');\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `sayHello` is hoisted as a variable, but it is initialized as `undefined` before the assignment. So calling it as a function before the assignment leads to a runtime error."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid hoisting-related errors:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always declare variables at the top of their scope or before using them.\n- Use `let` and `const` instead of `var` to get block-scoped variables that aren't hoisted in the same way.\n- Declare functions before calling them, or use function declarations instead of expressions if you want to call them early."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example with `let`:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(myLet); // ReferenceError: Cannot access 'myLet' before initialization\nlet myLet = 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "With `let` and `const`, variables are hoisted but remain in a \"temporal dead zone\" until initialized, so trying to use them early throws an error instead of returning `undefined`. This helps catch mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding hoisting helps you write cleaner, error-free JavaScript code. Remember: declarations are hoisted, but assignments are not. Always initialize and declare your variables and functions before use!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-strict-null-checks-best-practices-for-safer-code",
+    "title": "Mastering TypeScript's Strict Null Checks: Best Practices for Safer Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's strict null checks feature to write safer, more reliable code by avoiding common null and undefined errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=4Te7YR6Gsi4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that enhances JavaScript with static typing. One of its most valuable features is the ability to catch null and undefined errors at compile time using the strict null checks option. Enabling this feature helps you write more robust code by preventing runtime errors related to accessing or using null or undefined values."
+      },
+      {
+        "type": "paragraph",
+        "value": "By default, TypeScript allows variables to be null or undefined unless you explicitly disallow them. With strict null checks enabled, variables must be explicitly marked if they can hold null or undefined, reducing unexpected bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore how to enable strict null checks and some best practices to handle null and undefined values safely in your TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Enabling Strict Null Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "To enable strict null checks, update your `tsconfig.json` file by setting the `strictNullChecks` option to `true`. This is often part of enabling the full `strict` mode."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true,\n    // or simply enable all strict checks:\n    // \"strict\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Nullable Types"
+      },
+      {
+        "type": "paragraph",
+        "value": "With strict null checks enabled, `null` and `undefined` are only assignable to variables explicitly declared to accept them. For example:"
+      },
+      {
+        "type": "code",
+        "value": "let name: string = \"Alice\";\n// name = null; // Error: Type 'null' is not assignable to type 'string'.\n\nlet nullableName: string | null = \"Bob\";\nnullableName = null; // OK"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Safer Code"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use union types to explicitly declare nullable variables.** When a value can be null or undefined, declare it clearly using `| null` or `| undefined`. This makes your code intention clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "typescript\nfunction greet(name: string | null) {\n  if (name === null) {\n    console.log(\"Hello, guest!\");\n  } else {\n    console.log(`Hello, ${name}!`);\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use type guards to check for null or undefined before using variables.** This ensures safe access and prevents runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "typescript\nfunction printLength(str: string | undefined) {\n  if (str !== undefined) {\n    console.log(str.length);\n  } else {\n    console.log(\"String is undefined\");\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Leverage the non-null assertion operator (`!`) only when you are sure a value is not null or undefined.** Use sparingly, as it tells TypeScript to ignore null checks and can introduce bugs if used improperly."
+      },
+      {
+        "type": "paragraph",
+        "value": "typescript\nlet input: HTMLInputElement | null = document.querySelector('input');\n// We assert input is not null because we are sure input exists.\nconsole.log(input!.value);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Provide default values using the nullish coalescing operator (`??`).** This is helpful to handle null or undefined values gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "typescript\nfunction getUsername(name: string | null | undefined) {\n  // Use 'Guest' if name is null or undefined\n  const displayName = name ?? \"Guest\";\n  console.log(`Welcome, ${displayName}`);\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using TypeScript's strict null checks helps you catch potential null or undefined errors during development, saving time debugging runtime issues. By explicitly declaring nullable types, using type guards, and safely handling values, you can write more predictable and safer TypeScript code."
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-edge-cases-python",
+    "title": "Handling Floating Point Precision Edge Cases in Python: Best Practices and Pitfalls",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to manage floating point precision issues in Python with simple techniques and practical examples, ensuring accurate and reliable calculations.",
+    "videoUrl": "https://www.youtube.com/watch?v=tcVHG-NXMjk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with decimal numbers in Python, you might sometimes notice unexpected results due to floating point precision errors. This happens because computers represent floating point numbers in binary, which cannot always precisely store decimal values. Understanding these edge cases and learning best practices can help you write more accurate and reliable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, try this simple calculation:"
+      },
+      {
+        "type": "code",
+        "value": "print(0.1 + 0.2 == 0.3)  # Output will be False!"
+      },
+      {
+        "type": "paragraph",
+        "value": "You might expect `0.1 + 0.2` to equal `0.3`, but due to floating point precision limitations, it doesn't. This is because the actual stored value of `0.1 + 0.2` is a tiny bit off from `0.3`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why does this happen?\n\nFloating point numbers are stored in binary using a format defined by IEEE 754. Many decimals can't be represented exactly in binary form, leading to small rounding errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice #1: Use `round()` for comparisons\n\nA practical way to compare floating point numbers is to round them to a fixed number of decimal places."
+      },
+      {
+        "type": "code",
+        "value": "a = 0.1 + 0.2\nb = 0.3\nprint(round(a, 10) == round(b, 10))  # Output: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "Rounding helps because it ignores tiny differences beyond the specified decimal places."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice #2: Use `math.isclose()` for tolerance-based comparison\n\nPython 3.5+ offers the `math.isclose()` function which checks if two numbers are close within a relative or absolute tolerance."
+      },
+      {
+        "type": "code",
+        "value": "import math\n\nprint(math.isclose(0.1 + 0.2, 0.3))  # Output: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "`math.isclose()` is more flexible since you can adjust tolerance levels if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice #3: Use the `decimal` module for financial or high-precision calculations\n\nIf you need more control over decimal precision, Python's built-in `decimal` module is perfect. It stores numbers as decimal values, reducing floating point errors."
+      },
+      {
+        "type": "code",
+        "value": "from decimal import Decimal\n\na = Decimal('0.1') + Decimal('0.2')\nb = Decimal('0.3')\nprint(a == b)  # Output: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using strings to create `Decimal` objects preserves decimal precision exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Pitfall: Avoid direct equality checks with floats\n\nAvoid using `==` to compare floats directly as it may lead to unexpected results due to tiny precision errors. Use the methods above instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\n- Floating point numbers are approximations, not exact values.\n- Use `round()` or `math.isclose()` for comparing floats.\n- For precise decimal arithmetic, use the `decimal` module.\n- Avoid direct equality comparisons between floats.\n\nBy following these best practices, you can write more robust Python code that handles floating point edge cases gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-floating-point-edge-cases",
+    "title": "Mastering Python's Floating Point Edge Cases: Precision Challenges and Solutions",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn about common floating point precision challenges in Python and how to handle these edge cases effectively with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Tr4C5NYN2rE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with decimal numbers in Python, you might notice some unexpected results due to how floating point numbers are represented internally. These precision issues can cause small errors, especially when doing arithmetic or comparisons. This article will help you understand why these problems happen and show practical ways to handle them."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python uses the IEEE 754 double-precision floating point format to represent decimal numbers. This means some numbers, like 0.1, cannot be represented exactly in binary form. Let's see an example:"
+      },
+      {
+        "type": "code",
+        "value": "print(0.1 + 0.2 == 0.3)  # Outputs: False"
+      },
+      {
+        "type": "paragraph",
+        "value": "At first glance, 0.1 + 0.2 should equal 0.3, but this returns False due to floating point precision errors. The actual sum is a tiny bit off from 0.3."
+      },
+      {
+        "type": "paragraph",
+        "value": "To check floating point values safely, you should avoid direct equality tests. Instead, use a tolerance value to judge if two numbers are \"close enough.\" Python's math module provides a helpful function for this:"
+      },
+      {
+        "type": "code",
+        "value": "import math\n\nresult = (0.1 + 0.2)\nprint(math.isclose(result, 0.3))  # Outputs: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "The function math.isclose() allows you to compare floating point numbers within a small relative or absolute tolerance, making your comparisons more reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you need exact decimal arithmetic, especially for financial calculations, you can use the decimal module. It represents numbers as decimal objects with full precision:"
+      },
+      {
+        "type": "code",
+        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result == Decimal('0.3'))  # Outputs: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the decimal module helps eliminate floating point surprises by performing arithmetic as humans normally expect."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, always be aware of floating point precision edge cases in Python. Use math.isclose() for safe comparisons and the decimal module for precision-critical calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering these techniques will improve the reliability of your programs and prevent subtle bugs caused by floating point arithmetic."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-data-type-mismatches-in-sql-comparisons",
+    "title": "Understanding Data Type Mismatches in SQL Comparisons: Best Practices and Solutions",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix data type mismatches in SQL comparisons with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=nROJQpz4fGo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing SQL queries, one of the common errors beginners face is data type mismatches in comparisons. This happens when you compare values of different data types, such as numbers with strings or dates with integers. Understanding why this occurs and how to avoid it can save you time debugging and improve your query performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Data type mismatches often lead to errors or unexpected results because SQL engines cannot correctly interpret or convert incompatible types. For example, comparing a VARCHAR column that stores numbers as text to an INT column directly can cause problems."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example where comparing different data types causes an error:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM orders\nWHERE order_id = '123';  -- order_id is INT, '123' is a string"
+      },
+      {
+        "type": "paragraph",
+        "value": "Although many SQL engines perform implicit type conversion, relying on this can produce errors, especially if the string cannot be converted into the expected type."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common causes of data type mismatches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Comparing numeric columns to string literals without explicit conversion\n- Using functions that return different data types than expected\n- Comparing date/datetime fields to strings without proper formatting"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices to Avoid Data Type Mismatches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use explicit type casting:** Convert values to the correct data type using CAST() or CONVERT(), which helps avoid ambiguity."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM orders\nWHERE order_id = CAST('123' AS INT);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Match data types in comparisons:** Ensure both sides of the comparison are the same type. For example, if one column is DATE, compare it to a DATE literal."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees\nWHERE hire_date = '2023-06-01';  -- Use proper date format"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Avoid implicit conversions:** These can lead to slower queries or runtime errors, especially if the conversion is invalid."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Check your schema:** Always know the data types of your columns before writing queries. Use `DESCRIBE table_name;` or your database's schema inspection tool."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Use parameterized queries in applications:** This reduces string concatenation mistakes and ensures correct data types are sent to the database."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling errors caused by data type mismatches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you get an error like \"Operand data type VARCHAR is invalid for equals operator,\" immediately check your query for comparisons between incompatible types. Add explicit casts as needed and ensure literals match column types."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these best practices, you'll write more reliable and efficient SQL queries. Data type mismatches are easy to avoid once you understand the core concept: always keep types compatible in your comparisons."
+      }
+    ]
   }
 ];
