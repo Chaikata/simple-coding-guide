@@ -1,535 +1,157 @@
 [
   {
-    "slug": "building-a-real-time-collaborative-whiteboard-with-javascript-and-websockets",
-    "title": "Building a Real-Time Collaborative Whiteboard with JavaScript and WebSockets",
+    "slug": "comparing-javascript-frameworks-react-vs-vue-vs-svelte",
+    "title": "Comparing JavaScript Frameworks: React vs Vue vs Svelte for Modern Web Apps",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build a simple real-time collaborative whiteboard using JavaScript and WebSockets. This tutorial guides beginners through creating a shared drawing canvas where multiple users can draw together live.",
-    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
+    "description": "A beginner-friendly guide to comparing React, Vue, and Svelte JavaScript frameworks to help you choose the best for your modern web app projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=MnpuK0MK4yo",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time collaborative applications have become very popular, allowing multiple users to interact simultaneously. One fun and practical example is a collaborative whiteboard where users can draw together live on the same canvas. In this tutorial, we will build a simple real-time whiteboard using JavaScript and WebSockets, which provide a fast and efficient way to send messages between clients and a server."
+        "value": "When building modern web applications, choosing the right JavaScript framework can be overwhelming. React, Vue, and Svelte are three popular options, each with unique strengths and design philosophies. This article will help beginners understand the key differences and decide which framework suits their needs."
       },
       {
         "type": "paragraph",
-        "value": "We'll start by creating a basic web page with an HTML5 canvas. Then we'll set up a WebSocket server using Node.js and the popular `ws` package. Finally, we'll write client-side JavaScript to capture user drawing and broadcast drawing data to other connected users."
+        "value": "React is a widely-used library developed by Facebook. It focuses on building reusable UI components and uses a virtual DOM to efficiently update the view. React uses JSX, a syntax that allows you to write HTML directly within JavaScript, making component structure intuitive after some practice."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setup the HTML Canvas"
+        "value": "Vue is a progressive framework that is easy to integrate and learn. It combines the best concepts from React and Angular and uses a template syntax to separate HTML, CSS, and JavaScript. Vue offers reactive data binding and component-based architecture with less boilerplate code than React."
       },
       {
         "type": "paragraph",
-        "value": "Create an `index.html` file with the following content. This creates a full-screen canvas where users can draw."
+        "value": "Svelte is a newer framework that shifts work from the browser to the build step, compiling your components into highly optimized JavaScript. Unlike React and Vue, Svelte does not use a virtual DOM. This can result in faster apps and smaller bundle sizes with simpler syntax."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple counter example implemented in all three frameworks to compare code style and complexity."
+      },
+      {
+        "type": "paragraph",
+        "value": "### React"
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Collaborative Whiteboard</title>\n  <style>\n    html, body {\n      margin: 0;\n      height: 100%;\n      overflow: hidden;\n    }\n    canvas {\n      display: block;\n      width: 100vw;\n      height: 100vh;\n      background: #fff;\n      cursor: crosshair;\n    }\n  </style>\n</head>\n<body>\n  <canvas id=\"board\"></canvas>\n  <script src=\"client.js\"></script>\n</body>\n</html>"
+        "value": "import React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}\n\nexport default Counter;"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Create the WebSocket Server"
+        "value": "In React, you use the useState hook to create reactive state. The JSX syntax closely resembles HTML, making it approachable once you're familiar with JavaScript syntax extensions."
       },
       {
         "type": "paragraph",
-        "value": "We will use Node.js and the `ws` library to create our WebSocket server. This server will receive drawing data from clients and broadcast it to all other connected clients."
+        "value": "### Vue"
       },
       {
         "type": "code",
-        "value": "// server.js\nconst WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', ws => {\n  console.log('Client connected');\n\n  ws.on('message', message => {\n    // Broadcast received message to all clients except sender\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+        "value": "<template>\n  <div>\n    <p>You clicked {{ count }} times</p>\n    <button @click=\"count++\">Click me</button>\n  </div>\n</template>\n\n<script>\nexport default {\n  data() {\n    return { count: 0 };\n  }\n};\n</script>"
       },
       {
         "type": "paragraph",
-        "value": "Save this as `server.js`. To run it, make sure you have Node.js installed, and then run:\n\nbash\nnpm install ws\nnode server.js\n"
+        "value": "Vue uses a template syntax combined with reactive data properties. It feels very similar to writing regular HTML with Alpine.js style reactivity, making it very beginner-friendly."
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Implement Client-Side Drawing Logic"
-      },
-      {
-        "type": "paragraph",
-        "value": "Now let's write the client-side JavaScript saved in `client.js`. This code will:\n- Connect to the WebSocket server\n- Track mouse movements to draw on the canvas\n- Send drawing coordinates to the server\n- Draw incoming data from other users"
+        "value": "### Svelte"
       },
       {
         "type": "code",
-        "value": "// client.js\nconst canvas = document.getElementById('board');\nconst ctx = canvas.getContext('2d');\n\n// Resize canvas to fill the window\nfunction resize() {\n  canvas.width = window.innerWidth;\n  canvas.height = window.innerHeight;\n}\nwindow.addEventListener('resize', resize);\nresize();\n\n// Setup WebSocket connection\nconst socket = new WebSocket('ws://localhost:8080');\n\n// Store drawing state\nlet drawing = false;\nlet lastX = 0;\nlet lastY = 0;\n\n// Draw line on our canvas\nfunction drawLine(fromX, fromY, toX, toY, color = 'black', lineWidth = 2) {\n  ctx.strokeStyle = color;\n  ctx.lineWidth = lineWidth;\n  ctx.lineCap = 'round';\n  ctx.beginPath();\n  ctx.moveTo(fromX, fromY);\n  ctx.lineTo(toX, toY);\n  ctx.stroke();\n  ctx.closePath();\n}\n\n// Mouse events for drawing\ncanvas.addEventListener('mousedown', e => {\n  drawing = true;\n  lastX = e.clientX;\n  lastY = e.clientY;\n});\n\ncanvas.addEventListener('mouseup', e => {\n  drawing = false;\n});\n\ncanvas.addEventListener('mousemove', e => {\n  if (!drawing) return;\n  const currentX = e.clientX;\n  const currentY = e.clientY;\n\n  // Draw locally\n  drawLine(lastX, lastY, currentX, currentY);\n\n  // Send the line data to server\n  const message = JSON.stringify({ fromX: lastX, fromY: lastY, toX: currentX, toY: currentY });\n  socket.send(message);\n\n  lastX = currentX;\n  lastY = currentY;\n});\n\n// Listen for messages from server\nsocket.addEventListener('message', event => {\n  const data = JSON.parse(event.data);\n  // Draw lines from other users\n  drawLine(data.fromX, data.fromY, data.toX, data.toY, 'blue');\n});"
+        "value": "<script>\n  let count = 0;\n</script>\n\n<button on:click={() => count++}>\n  Clicked {count} {count === 1 ? 'time' : 'times'}\n</button>"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Testing Your Collaborative Whiteboard"
+        "value": "Svelte's syntax is the most concise. It allows you to declare reactive variables directly in the script section and update the UI without extra boilerplate. This can lower the entry barrier for beginners."
       },
       {
         "type": "paragraph",
-        "value": "1. Run your server with `node server.js`.\n2. Open `index.html` in your browser.\n3. Open additional tabs or different browsers with the same page.\n4. Draw on one canvas and watch the drawing appear on the others in real time.\n\nThe black lines are your local drawing, while blue lines represent drawing received from others."
+        "value": "### Which One Should You Choose?"
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
+        "value": "If you want a mature ecosystem, widespread community support, and flexibility, React is a solid choice. For ease of learning and elegant structure, Vue offers a gentle learning curve. If performance and simplicity matter most, and you enjoy writing less code, Svelte is worth trying."
       },
       {
         "type": "paragraph",
-        "value": "You now have a simple real-time collaborative whiteboard! This project introduces key concepts used in many collaborative apps: websockets for bi-directional communication, canvas for drawing, and client-server message broadcasting. You can build on this by adding features like color palettes, user cursors, and more."
-      },
-      {
-        "type": "paragraph",
-        "value": "This beginner-friendly example gives you a solid foundation for real-time interaction with JavaScript."
+        "value": "No matter which framework you pick, the core concepts of components, state, and events remain similar. Experimenting with small projects using each will help you find the best fit for your style and project needs."
       }
     ]
   },
   {
-    "slug": "understanding-javascript-hoisting-beginner-guide",
-    "title": "Understanding JavaScript Hoisting: A Beginner's Guide to Avoid Common Pitfalls",
+    "slug": "mastering-javascript-error-boundaries-for-resilient-web-apps",
+    "title": "Mastering JavaScript Error Boundaries for Resilient Web Apps",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn what JavaScript hoisting is, how it affects your variables and functions, and how to avoid common errors caused by it. A clear, beginner-friendly guide.",
-    "videoUrl": "https://www.youtube.com/watch?v=KJo0o4DnqdI",
+    "description": "Learn how JavaScript error boundaries help you build more resilient web applications by catching and handling errors gracefully.",
+    "videoUrl": "https://www.youtube.com/watch?v=jSMSjINzbYY",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're new to JavaScript, you might have encountered errors or unexpected behavior related to variables or functions declared later in the code but used earlier. This is often due to a concept called \"hoisting.\" Understanding hoisting will help you write better code and avoid common pitfalls."
+        "value": "When building web applications with JavaScript, errors can happen at any time—whether due to unexpected user input, API failures, or bugs in your code. To create a smooth user experience, it's important to handle errors gracefully so that your app doesn't crash or display a broken interface."
       },
       {
         "type": "paragraph",
-        "value": "In simple terms, hoisting is JavaScript's behavior of moving variable and function declarations to the top of their scope before execution. This means the JavaScript engine processes declarations before running the code line-by-line."
+        "value": "One powerful technique to manage errors in JavaScript apps is the use of 'error boundaries.' While the concept is built into frameworks like React, understanding how to implement error boundaries helps you trap errors and show fallback UI or meaningful messages without disrupting the user experience."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at an example with variables:"
-      },
-      {
-        "type": "code",
-        "value": "console.log(myVar); // Output: undefined\nvar myVar = 10;\nconsole.log(myVar); // Output: 10"
+        "value": "In this article, we'll explore how error boundaries work in JavaScript, especially in React, and show you a simple example of how to use them. Even if you're not using React, the principles of catching errors and presenting friendly feedback can be applied broadly."
       },
       {
         "type": "paragraph",
-        "value": "Even though `myVar` is declared after the first `console.log`, no error occurs. This happens because JavaScript hoists the declaration of `myVar` (but not the assignment). So internally, the code behaves like:"
-      },
-      {
-        "type": "code",
-        "value": "var myVar;\nconsole.log(myVar); // undefined\nmyVar = 10;\nconsole.log(myVar); // 10"
+        "value": "### What are Error Boundaries?"
       },
       {
         "type": "paragraph",
-        "value": "Notice how the declaration `var myVar;` is moved up, but the value assignment happens where it’s written."
+        "value": "Error boundaries are components in React that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. This prevents the entire app from crashing and allows users to continue interacting with other parts of the app."
       },
       {
         "type": "paragraph",
-        "value": "Hoisting also happens with functions, but there is an important difference between function declarations and function expressions."
+        "value": "Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them."
       },
       {
         "type": "paragraph",
-        "value": "Function declarations are fully hoisted, so you can call them before they are defined in the code:"
+        "value": "### Creating a Simple Error Boundary in React"
+      },
+      {
+        "type": "paragraph",
+        "value": "To create an error boundary component, you define a class component with two special methods: `static getDerivedStateFromError()` and `componentDidCatch()`."
       },
       {
         "type": "code",
-        "value": "sayHello(); // Output: Hello!\n\nfunction sayHello() {\n  console.log('Hello!');\n}"
+        "value": "import React from 'react';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  static getDerivedStateFromError(error) {\n    // Update state so the next render shows fallback UI\n    return { hasError: true };\n  }\n\n  componentDidCatch(error, errorInfo) {\n    // You can log error messages to an error reporting service here\n    console.error('Error caught by Error Boundary:', error, errorInfo);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // Fallback UI\n      return <h2>Something went wrong.</h2>;\n    }\n\n    return this.props.children;\n  }\n}\n\nexport default ErrorBoundary;"
       },
       {
         "type": "paragraph",
-        "value": "But function expressions (when a function is assigned to a variable) are only hoisted like variables: their declaration is hoisted but not the assignment."
+        "value": "### Using the Error Boundary"
       },
       {
         "type": "paragraph",
-        "value": "Example:"
-      },
-      {
-        "type": "code",
-        "value": "sayHello(); // Error: sayHello is not a function\n\nvar sayHello = function() {\n  console.log('Hello!');\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, `sayHello` is hoisted as a variable, but it is initialized as `undefined` before the assignment. So calling it as a function before the assignment leads to a runtime error."
-      },
-      {
-        "type": "paragraph",
-        "value": "To avoid hoisting-related errors:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Always declare variables at the top of their scope or before using them.\n- Use `let` and `const` instead of `var` to get block-scoped variables that aren't hoisted in the same way.\n- Declare functions before calling them, or use function declarations instead of expressions if you want to call them early."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example with `let`:"
+        "value": "Wrap any component that might throw an error with the `ErrorBoundary` component. If an error occurs inside the wrapped component, the error boundary will catch it and show the fallback UI."
       },
       {
         "type": "code",
-        "value": "console.log(myLet); // ReferenceError: Cannot access 'myLet' before initialization\nlet myLet = 5;"
+        "value": "import React from 'react';\nimport ErrorBoundary from './ErrorBoundary';\nimport BuggyComponent from './BuggyComponent';\n\nfunction App() {\n  return (\n    <ErrorBoundary>\n      <BuggyComponent />\n    </ErrorBoundary>\n  );\n}\n\nexport default App;"
       },
       {
         "type": "paragraph",
-        "value": "With `let` and `const`, variables are hoisted but remain in a \"temporal dead zone\" until initialized, so trying to use them early throws an error instead of returning `undefined`. This helps catch mistakes."
+        "value": "### Why Use Error Boundaries?"
       },
       {
         "type": "paragraph",
-        "value": "Understanding hoisting helps you write cleaner, error-free JavaScript code. Remember: declarations are hoisted, but assignments are not. Always initialize and declare your variables and functions before use!"
-      }
-    ]
-  },
-  {
-    "slug": "building-a-real-time-chat-application-with-typescript-and-websockets",
-    "title": "Building a Real-Time Chat Application with TypeScript and WebSockets",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to create a real-time chat application using TypeScript and WebSockets. This beginner-friendly tutorial walks you through setting up a WebSocket server and client for instant messaging.",
-    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Real-time chat applications have become essential for online communication. In this tutorial, we'll build a simple chat app using TypeScript and WebSockets. WebSockets provide a way to open an interactive communication session between the user's browser and a server. This means messages can be sent and received instantly without refreshing the page."
+        "value": "Error boundaries help avoid the entire React component tree from unmounting when an error occurs. Instead, your app can display fallbacks while logging errors for debugging. This technique improves the reliability and user experience of your web apps."
       },
       {
         "type": "paragraph",
-        "value": "We'll create two main parts: a WebSocket server using Node.js and a client that connects to this server. For simplicity, the client will be a basic HTML page running TypeScript in the browser."
+        "value": "### Error Handling Outside React"
       },
       {
         "type": "paragraph",
-        "value": "First, let's set up our WebSocket server. We'll use the popular `ws` library to handle WebSocket connections."
+        "value": "If you're working with plain JavaScript or other frameworks, the concept is similar: you want to catch errors using try-catch blocks, promises' catch handlers, or global listeners. For example, you can use `window.onerror` or `window.addEventListener('error', ...)` to catch uncaught errors globally and respond accordingly."
       },
       {
         "type": "code",
-        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst port = 8080;\nconst wss = new WebSocketServer({ port });\n\n// Store all connected clients\nconst clients = new Set<WebSocket>();\n\nwss.on('connection', (ws: WebSocket) => {\n  clients.add(ws);\n  console.log('New client connected');\n\n  ws.on('message', (message: string) => {\n    console.log(`Received: ${message}`);\n    // Broadcast received message to all other clients\n    clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    clients.delete(ws);\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log(`WebSocket server is running on ws://localhost:${port}`);"
-      },
-      {
-        "type": "paragraph",
-        "value": "This code creates a WebSocket server on port 8080. When a client connects, it adds the client connection to the `clients` set. When the server receives a message from one client, it broadcasts that message to all other connected clients."
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, let's build the client side. We'll create a simple HTML page along with TypeScript to connect to the WebSocket server and send/receive messages."
-      },
-      {
-        "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n  <style>\n    #chat {\n      width: 300px;\n      height: 300px;\n      border: 1px solid #ccc;\n      overflow-y: scroll;\n      padding: 5px;\n      margin-bottom: 10px;\n    }\n  </style>\n</head>\n<body>\n  <div id=\"chat\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type your message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script type=\"module\">\n    const chatDiv = document.getElementById('chat') as HTMLDivElement;\n    const messageInput = document.getElementById('messageInput') as HTMLInputElement;\n    const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;\n\n    // Replace with your WebSocket server address\n    const ws = new WebSocket('ws://localhost:8080');\n\n    ws.onopen = () => {\n      appendMessage('Connected to the chat server.');\n    };\n\n    ws.onmessage = (event) => {\n      appendMessage(`Friend: ${event.data}`);\n    };\n\n    ws.onclose = () => {\n      appendMessage('Disconnected from the server.');\n    };\n\n    sendBtn.onclick = () => {\n      sendMessage();\n    };\n\n    messageInput.addEventListener('keypress', (event) => {\n      if (event.key === 'Enter') {\n        sendMessage();\n      }\n    });\n\n    function sendMessage() {\n      const message = messageInput.value.trim();\n      if (message && ws.readyState === WebSocket.OPEN) {\n        ws.send(message);\n        appendMessage(`You: ${message}`);\n        messageInput.value = '';\n      }\n    }\n\n    function appendMessage(message: string) {\n      const messageElem = document.createElement('div');\n      messageElem.textContent = message;\n      chatDiv.appendChild(messageElem);\n      chatDiv.scrollTop = chatDiv.scrollHeight;\n    }\n  </script>\n</body>\n</html>"
-      },
-      {
-        "type": "paragraph",
-        "value": "This client connects to the server, listens for incoming messages, and sends messages typed into the input box. Messages from the user appear prefixed with \"You:\", and messages from other clients appear as \"Friend:\". The chat scrolls automatically as new messages arrive."
-      },
-      {
-        "type": "paragraph",
-        "value": "To run this app, ensure you have Node.js installed. Save the server code in a file, for example, `server.ts`, install dependencies with `npm install ws @types/ws`, compile with `tsc`, then run with `node server.js`. Then, open the HTML file in two different browser windows or tabs to test sending messages between them."
-      },
-      {
-        "type": "paragraph",
-        "value": "Congratulations! You've built a real-time chat application using TypeScript and WebSockets. This foundation can be expanded with features like user authentication, message history, or more advanced UI frameworks."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-typescripts-strict-null-checks-best-practices-for-safer-code",
-    "title": "Mastering TypeScript's Strict Null Checks: Best Practices for Safer Code",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to use TypeScript's strict null checks feature to write safer, more reliable code by avoiding common null and undefined errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=4Te7YR6Gsi4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful language that enhances JavaScript with static typing. One of its most valuable features is the ability to catch null and undefined errors at compile time using the strict null checks option. Enabling this feature helps you write more robust code by preventing runtime errors related to accessing or using null or undefined values."
-      },
-      {
-        "type": "paragraph",
-        "value": "By default, TypeScript allows variables to be null or undefined unless you explicitly disallow them. With strict null checks enabled, variables must be explicitly marked if they can hold null or undefined, reducing unexpected bugs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's explore how to enable strict null checks and some best practices to handle null and undefined values safely in your TypeScript code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Enabling Strict Null Checks"
-      },
-      {
-        "type": "paragraph",
-        "value": "To enable strict null checks, update your `tsconfig.json` file by setting the `strictNullChecks` option to `true`. This is often part of enabling the full `strict` mode."
-      },
-      {
-        "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true,\n    // or simply enable all strict checks:\n    // \"strict\": true\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Understanding Nullable Types"
-      },
-      {
-        "type": "paragraph",
-        "value": "With strict null checks enabled, `null` and `undefined` are only assignable to variables explicitly declared to accept them. For example:"
-      },
-      {
-        "type": "code",
-        "value": "let name: string = \"Alice\";\n// name = null; // Error: Type 'null' is not assignable to type 'string'.\n\nlet nullableName: string | null = \"Bob\";\nnullableName = null; // OK"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices for Safer Code"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use union types to explicitly declare nullable variables.** When a value can be null or undefined, declare it clearly using `| null` or `| undefined`. This makes your code intention clear."
-      },
-      {
-        "type": "paragraph",
-        "value": "typescript\nfunction greet(name: string | null) {\n  if (name === null) {\n    console.log(\"Hello, guest!\");\n  } else {\n    console.log(`Hello, ${name}!`);\n  }\n}\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Use type guards to check for null or undefined before using variables.** This ensures safe access and prevents runtime errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "typescript\nfunction printLength(str: string | undefined) {\n  if (str !== undefined) {\n    console.log(str.length);\n  } else {\n    console.log(\"String is undefined\");\n  }\n}\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Leverage the non-null assertion operator (`!`) only when you are sure a value is not null or undefined.** Use sparingly, as it tells TypeScript to ignore null checks and can introduce bugs if used improperly."
-      },
-      {
-        "type": "paragraph",
-        "value": "typescript\nlet input: HTMLInputElement | null = document.querySelector('input');\n// We assert input is not null because we are sure input exists.\nconsole.log(input!.value);\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Provide default values using the nullish coalescing operator (`??`).** This is helpful to handle null or undefined values gracefully."
-      },
-      {
-        "type": "paragraph",
-        "value": "typescript\nfunction getUsername(name: string | null | undefined) {\n  // Use 'Guest' if name is null or undefined\n  const displayName = name ?? \"Guest\";\n  console.log(`Welcome, ${displayName}`);\n}\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using TypeScript's strict null checks helps you catch potential null or undefined errors during development, saving time debugging runtime issues. By explicitly declaring nullable types, using type guards, and safely handling values, you can write more predictable and safer TypeScript code."
-      }
-    ]
-  },
-  {
-    "slug": "handling-floating-point-precision-edge-cases-python",
-    "title": "Handling Floating Point Precision Edge Cases in Python: Best Practices and Pitfalls",
-    "language": "python",
-    "type": "tutorials",
-    "description": "Learn how to manage floating point precision issues in Python with simple techniques and practical examples, ensuring accurate and reliable calculations.",
-    "videoUrl": "https://www.youtube.com/watch?v=tcVHG-NXMjk",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When working with decimal numbers in Python, you might sometimes notice unexpected results due to floating point precision errors. This happens because computers represent floating point numbers in binary, which cannot always precisely store decimal values. Understanding these edge cases and learning best practices can help you write more accurate and reliable code."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, try this simple calculation:"
-      },
-      {
-        "type": "code",
-        "value": "print(0.1 + 0.2 == 0.3)  # Output will be False!"
-      },
-      {
-        "type": "paragraph",
-        "value": "You might expect `0.1 + 0.2` to equal `0.3`, but due to floating point precision limitations, it doesn't. This is because the actual stored value of `0.1 + 0.2` is a tiny bit off from `0.3`."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why does this happen?\n\nFloating point numbers are stored in binary using a format defined by IEEE 754. Many decimals can't be represented exactly in binary form, leading to small rounding errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice #1: Use `round()` for comparisons\n\nA practical way to compare floating point numbers is to round them to a fixed number of decimal places."
-      },
-      {
-        "type": "code",
-        "value": "a = 0.1 + 0.2\nb = 0.3\nprint(round(a, 10) == round(b, 10))  # Output: True"
-      },
-      {
-        "type": "paragraph",
-        "value": "Rounding helps because it ignores tiny differences beyond the specified decimal places."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice #2: Use `math.isclose()` for tolerance-based comparison\n\nPython 3.5+ offers the `math.isclose()` function which checks if two numbers are close within a relative or absolute tolerance."
-      },
-      {
-        "type": "code",
-        "value": "import math\n\nprint(math.isclose(0.1 + 0.2, 0.3))  # Output: True"
-      },
-      {
-        "type": "paragraph",
-        "value": "`math.isclose()` is more flexible since you can adjust tolerance levels if needed."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice #3: Use the `decimal` module for financial or high-precision calculations\n\nIf you need more control over decimal precision, Python's built-in `decimal` module is perfect. It stores numbers as decimal values, reducing floating point errors."
-      },
-      {
-        "type": "code",
-        "value": "from decimal import Decimal\n\na = Decimal('0.1') + Decimal('0.2')\nb = Decimal('0.3')\nprint(a == b)  # Output: True"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using strings to create `Decimal` objects preserves decimal precision exactly."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Pitfall: Avoid direct equality checks with floats\n\nAvoid using `==` to compare floats directly as it may lead to unexpected results due to tiny precision errors. Use the methods above instead."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\n\n- Floating point numbers are approximations, not exact values.\n- Use `round()` or `math.isclose()` for comparing floats.\n- For precise decimal arithmetic, use the `decimal` module.\n- Avoid direct equality comparisons between floats.\n\nBy following these best practices, you can write more robust Python code that handles floating point edge cases gracefully."
-      },
-      {
-        "type": "paragraph",
-        "value": "Happy coding!"
-      }
-    ]
-  },
-  {
-    "slug": "mastering-python-floating-point-edge-cases",
-    "title": "Mastering Python's Floating Point Edge Cases: Precision Challenges and Solutions",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn about common floating point precision challenges in Python and how to handle these edge cases effectively with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=Tr4C5NYN2rE",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When working with decimal numbers in Python, you might notice some unexpected results due to how floating point numbers are represented internally. These precision issues can cause small errors, especially when doing arithmetic or comparisons. This article will help you understand why these problems happen and show practical ways to handle them."
-      },
-      {
-        "type": "paragraph",
-        "value": "Python uses the IEEE 754 double-precision floating point format to represent decimal numbers. This means some numbers, like 0.1, cannot be represented exactly in binary form. Let's see an example:"
-      },
-      {
-        "type": "code",
-        "value": "print(0.1 + 0.2 == 0.3)  # Outputs: False"
-      },
-      {
-        "type": "paragraph",
-        "value": "At first glance, 0.1 + 0.2 should equal 0.3, but this returns False due to floating point precision errors. The actual sum is a tiny bit off from 0.3."
-      },
-      {
-        "type": "paragraph",
-        "value": "To check floating point values safely, you should avoid direct equality tests. Instead, use a tolerance value to judge if two numbers are \"close enough.\" Python's math module provides a helpful function for this:"
-      },
-      {
-        "type": "code",
-        "value": "import math\n\nresult = (0.1 + 0.2)\nprint(math.isclose(result, 0.3))  # Outputs: True"
-      },
-      {
-        "type": "paragraph",
-        "value": "The function math.isclose() allows you to compare floating point numbers within a small relative or absolute tolerance, making your comparisons more reliable."
-      },
-      {
-        "type": "paragraph",
-        "value": "If you need exact decimal arithmetic, especially for financial calculations, you can use the decimal module. It represents numbers as decimal objects with full precision:"
-      },
-      {
-        "type": "code",
-        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result == Decimal('0.3'))  # Outputs: True"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using the decimal module helps eliminate floating point surprises by performing arithmetic as humans normally expect."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, always be aware of floating point precision edge cases in Python. Use math.isclose() for safe comparisons and the decimal module for precision-critical calculations."
-      },
-      {
-        "type": "paragraph",
-        "value": "Mastering these techniques will improve the reliability of your programs and prevent subtle bugs caused by floating point arithmetic."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-sql-window-functions-beginners-guide",
-    "title": "Mastering SQL Window Functions: A Beginner’s Guide to Advanced Data Analysis",
-    "language": "sql",
-    "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform advanced data analysis like ranking, running totals, and moving averages, with easy-to-follow examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "SQL window functions are powerful tools that allow you to perform advanced calculations across rows related to the current row, without collapsing your result set. Unlike aggregate functions, which group rows together, window functions preserve the detail of each row while adding insightful calculations."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this tutorial, you’ll learn the basics of SQL window functions, how they work, and some common use cases such as ranking records, calculating running totals, and computing moving averages."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Understanding the OVER() Clause"
-      },
-      {
-        "type": "paragraph",
-        "value": "All window functions require the `OVER()` clause, which defines the window or set of rows used for each calculation. You can specify partitions (subgroups) and the order of rows inside the window."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is the general syntax: "
-      },
-      {
-        "type": "code",
-        "value": "window_function() OVER (PARTITION BY column1 ORDER BY column2)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's see some practical examples using a sample sales table:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE TABLE sales (\n  id INT,\n  region VARCHAR(50),\n  sales_rep VARCHAR(50),\n  sale_date DATE,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'East', 'Alice', '2024-01-01', 500),\n(2, 'East', 'Bob', '2024-01-02', 300),\n(3, 'West', 'Charlie', '2024-01-01', 700),\n(4, 'East', 'Alice', '2024-01-03', 200),\n(5, 'West', 'Charlie', '2024-01-04', 400);"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Ranking Sales Representatives by Region"
-      },
-      {
-        "type": "paragraph",
-        "value": "Use the `RANK()` function to assign ranks to sales reps based on total sales within each region."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  region,\n  sales_rep,\n  SUM(amount) AS total_sales,\n  RANK() OVER (PARTITION BY region ORDER BY SUM(amount) DESC) AS sales_rank\nFROM sales\nGROUP BY region, sales_rep\nORDER BY region, sales_rank;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query groups sales by region and sales_rep, sums the amounts, and then ranks the sales reps by their total sales within each region."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. Calculating Running Totals"
-      },
-      {
-        "type": "paragraph",
-        "value": "Calculate a running total of sales amount over time within each region using `SUM()` as a window function."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  region,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY region ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY region, sale_date;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, `SUM(amount) OVER()` adds each sale to the sum of all previous sales in the same region ordered by date."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Computing Moving Averages"
-      },
-      {
-        "type": "paragraph",
-        "value": "Calculate a 2-day moving average of sales amounts to smooth out fluctuations."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  region,\n  sale_date,\n  amount,\n  AVG(amount) OVER (\n    PARTITION BY region\n    ORDER BY sale_date\n    ROWS BETWEEN 1 PRECEDING AND CURRENT ROW\n  ) AS moving_avg\nFROM sales\nORDER BY region, sale_date;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query uses `ROWS BETWEEN 1 PRECEDING AND CURRENT ROW` to average the current row and the previous row."
+        "value": "window.onerror = function(message, source, lineno, colno, error) {\n  console.log('Global error caught:', message);\n  // Show user-friendly message or send error log\n  return true; // prevent default error handling\n};"
       },
       {
         "type": "paragraph",
@@ -537,93 +159,431 @@
       },
       {
         "type": "paragraph",
-        "value": "SQL window functions are extremely useful for complex data analysis without losing row-level detail. By mastering `OVER()`, partitions, and ordering, you can create dynamic rankings, cumulative sums, moving averages, and more, enabling you to extract richer insights from your data."
+        "value": "Mastering error boundaries in JavaScript applications helps you build more robust and user-friendly web apps. If you use React, use class components with lifecycle methods to catch and handle errors gracefully. In other environments, use try-catch and global error handlers based on your needs."
       },
       {
         "type": "paragraph",
-        "value": "Start practicing these functions with your datasets and watch your SQL skills grow to the next level!"
+        "value": "By planning for errors, you make sure your apps don’t break unexpectedly and users get helpful feedback — an essential step for professional web development."
       }
     ]
   },
   {
-    "slug": "understanding-data-type-mismatches-in-sql-comparisons",
-    "title": "Understanding Data Type Mismatches in SQL Comparisons: Best Practices and Solutions",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn how to identify and fix data type mismatches in SQL comparisons with practical examples and best practices for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=nROJQpz4fGo",
+    "slug": "typescript-for-beginners-building-your-first-to-do-list-app",
+    "title": "TypeScript for Beginners: Building Your First To-Do List App",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple To-Do List app using TypeScript in this beginner-friendly tutorial. Understand TypeScript basics and build a practical project step-by-step.",
+    "videoUrl": "https://www.youtube.com/watch?v=jBmrduvKl5w",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing SQL queries, one of the common errors beginners face is data type mismatches in comparisons. This happens when you compare values of different data types, such as numbers with strings or dates with integers. Understanding why this occurs and how to avoid it can save you time debugging and improve your query performance."
+        "value": "TypeScript is a powerful, typed superset of JavaScript that helps you write safer and more manageable code. If you're new to TypeScript, building a small project can be a great way to learn. In this tutorial, we'll create a simple To-Do List app that allows you to add and remove tasks. No prior TypeScript experience is needed."
       },
       {
         "type": "paragraph",
-        "value": "Data type mismatches often lead to errors or unexpected results because SQL engines cannot correctly interpret or convert incompatible types. For example, comparing a VARCHAR column that stores numbers as text to an INT column directly can cause problems."
+        "value": "We'll use basic TypeScript features like types, interfaces, and functions to build the app. The code will be easy to follow and can run in any environment that supports TypeScript and DOM manipulations, like your browser."
       },
       {
         "type": "paragraph",
-        "value": "Here’s a simple example where comparing different data types causes an error:"
+        "value": "Let's start by defining the structure of our To-Do items with an interface."
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM orders\nWHERE order_id = '123';  -- order_id is INT, '123' is a string"
+        "value": "interface Todo {\n  id: number;\n  task: string;\n  completed: boolean;\n}"
       },
       {
         "type": "paragraph",
-        "value": "Although many SQL engines perform implicit type conversion, relying on this can produce errors, especially if the string cannot be converted into the expected type."
+        "value": "The `Todo` interface specifies that each to-do item will have a unique `id`, a text `task`, and a boolean `completed` status."
       },
       {
         "type": "paragraph",
-        "value": "### Common causes of data type mismatches:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Comparing numeric columns to string literals without explicit conversion\n- Using functions that return different data types than expected\n- Comparing date/datetime fields to strings without proper formatting"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices to Avoid Data Type Mismatches:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use explicit type casting:** Convert values to the correct data type using CAST() or CONVERT(), which helps avoid ambiguity."
+        "value": "Next, we'll create an array to store our to-do items and a function to add new tasks."
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM orders\nWHERE order_id = CAST('123' AS INT);"
+        "value": "let todos: Todo[] = [];\n\nfunction addTodo(task: string): void {\n  const newTodo: Todo = {\n    id: Date.now(),\n    task,\n    completed: false\n  };\n  todos.push(newTodo);\n  renderTodos();\n}"
       },
       {
         "type": "paragraph",
-        "value": "2. **Match data types in comparisons:** Ensure both sides of the comparison are the same type. For example, if one column is DATE, compare it to a DATE literal."
+        "value": "We use `Date.now()` to generate a simple unique ID, and then push the new to-do onto our array. After adding, we want to update the display by calling `renderTodos`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's create the `renderTodos` function to show the to-dos on the page. We'll assume an HTML structure where we have an unordered list with the id `todo-list`."
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM employees\nWHERE hire_date = '2023-06-01';  -- Use proper date format"
+        "value": "function renderTodos(): void {\n  const list = document.getElementById('todo-list');\n  if (!list) return;\n\n  list.innerHTML = '';\n\n  todos.forEach(todo => {\n    const item = document.createElement('li');\n    item.textContent = todo.task;\n    if (todo.completed) {\n      item.style.textDecoration = 'line-through';\n    }\n\n    // Add a button to toggle completion\n    const toggleBtn = document.createElement('button');\n    toggleBtn.textContent = todo.completed ? 'Undo' : 'Complete';\n    toggleBtn.onclick = () => toggleComplete(todo.id);\n\n    // Add a button to remove the todo\n    const deleteBtn = document.createElement('button');\n    deleteBtn.textContent = 'Delete';\n    deleteBtn.onclick = () => deleteTodo(todo.id);\n\n    item.appendChild(toggleBtn);\n    item.appendChild(deleteBtn);\n\n    list.appendChild(item);\n  });\n}"
       },
       {
         "type": "paragraph",
-        "value": "3. **Avoid implicit conversions:** These can lead to slower queries or runtime errors, especially if the conversion is invalid."
+        "value": "This function clears the current list then adds each to-do as a list item with buttons to complete or delete the item."
       },
       {
         "type": "paragraph",
-        "value": "4. **Check your schema:** Always know the data types of your columns before writing queries. Use `DESCRIBE table_name;` or your database's schema inspection tool."
+        "value": "Let's add the `toggleComplete` and `deleteTodo` functions now."
+      },
+      {
+        "type": "code",
+        "value": "function toggleComplete(id: number): void {\n  todos = todos.map(todo => \n    todo.id === id ? { ...todo, completed: !todo.completed } : todo\n  );\n  renderTodos();\n}\n\nfunction deleteTodo(id: number): void {\n  todos = todos.filter(todo => todo.id !== id);\n  renderTodos();\n}"
       },
       {
         "type": "paragraph",
-        "value": "5. **Use parameterized queries in applications:** This reduces string concatenation mistakes and ensures correct data types are sent to the database."
+        "value": "The `toggleComplete` function flips the completion status of the clicked to-do, while `deleteTodo` removes the to-do from the array. Both update the UI right after."
       },
       {
         "type": "paragraph",
-        "value": "### Handling errors caused by data type mismatches:"
+        "value": "Finally, we add a simple HTML form to input new to-dos and connect it with our TypeScript functions."
+      },
+      {
+        "type": "code",
+        "value": "<form id=\"todo-form\">\n  <input type=\"text\" id=\"todo-input\" placeholder=\"Enter a new task\" required />\n  <button type=\"submit\">Add</button>\n</form>\n<ul id=\"todo-list\"></ul>\n\n<script>\n  const form = document.getElementById('todo-form') as HTMLFormElement;\n  const input = document.getElementById('todo-input') as HTMLInputElement;\n\n  form.addEventListener('submit', (event) => {\n    event.preventDefault();\n    if (input.value.trim()) {\n      addTodo(input.value.trim());\n      input.value = '';\n    }\n  });\n\n  renderTodos();\n</script>"
       },
       {
         "type": "paragraph",
-        "value": "If you get an error like \"Operand data type VARCHAR is invalid for equals operator,\" immediately check your query for comparisons between incompatible types. Add explicit casts as needed and ensure literals match column types."
+        "value": "This completes our simple To-Do List app! You now have a fully functioning TypeScript app that lets users add tasks, mark them complete, and delete as needed. You can expand this further by saving the list in local storage or adding more features."
       },
       {
         "type": "paragraph",
-        "value": "By following these best practices, you'll write more reliable and efficient SQL queries. Data type mismatches are easy to avoid once you understand the core concept: always keep types compatible in your comparisons."
+        "value": "Happy coding with TypeScript!"
+      }
+    ]
+  },
+  {
+    "slug": "advanced-typescript-data-modeling-techniques-to-prevent-runtime-errors",
+    "title": "Advanced TypeScript Data Modeling Techniques to Prevent Runtime Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how advanced TypeScript data modeling techniques can help prevent runtime errors by catching bugs early during development.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript offers powerful tools to model your data precisely, which helps catch many potential issues before your code even runs. By using advanced data modeling techniques like discriminated unions, utility types, and type guards, you can prevent runtime errors and build more reliable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some practical techniques in TypeScript to improve your data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use Discriminated Unions for Clear Data Variants**\n\nWhen you have different types of related data sharing some fields, discriminated unions provide a way to differentiate between these types using a common literal property."
+      },
+      {
+        "type": "code",
+        "value": "type Shape =\n  | { kind: 'circle'; radius: number }\n  | { kind: 'square'; sideLength: number };\n\nfunction getArea(shape: Shape): number {\n  switch (shape.kind) {\n    case 'circle':\n      return Math.PI * shape.radius ** 2;\n    case 'square':\n      return shape.sideLength ** 2;\n    default:\n      // Using exhaustiveness check to catch unhandled cases\n      const _exhaustiveCheck: never = shape;\n      return _exhaustiveCheck;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This ensures that if you add a new shape type, TypeScript will remind you to update the function accordingly, avoiding runtime errors from unhandled cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Leverage Utility Types for Readonly and Partial Data**\n\nTypeScript provides utility types like `Readonly<T>` and `Partial<T>`, which help enforce immutability or optional properties."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst user: Readonly<User> = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com'\n};\n\n// user.id = 2; // Error: Cannot assign to 'id' because it is a read-only property.\n\nfunction updateUser(user: User, values: Partial<User>): User {\n  return { ...user, ...values };\n}\n\nconst updatedUser = updateUser(user, { email: 'newemail@example.com' });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using these utilities prevents accidental data mutation or missing fields, reducing runtime bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Create Custom Type Guards for Runtime Validation**\n\nSometimes, data comes from uncertain sources like APIs or user input. Custom type guards help assert the type at runtime, protecting your application from unexpected values."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: number;\n  name: string;\n  price: number;\n}\n\nfunction isProduct(obj: any): obj is Product {\n  return (\n    typeof obj === 'object' &&\n    obj !== null &&\n    typeof obj.id === 'number' &&\n    typeof obj.name === 'string' &&\n    typeof obj.price === 'number'\n  );\n}\n\nconst data: unknown = fetchDataFromAPI();\n\nif (isProduct(data)) {\n  console.log(`Product name is: ${data.name}`);\n} else {\n  console.error('Invalid product data received');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards make your code safer by verifying data shape before usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use `as const` for Immutable Literal Types**\n\nBy using `as const` with arrays or objects, TypeScript infers literal types instead of general types, which can help prevent unintended changes or values."
+      },
+      {
+        "type": "code",
+        "value": "const statuses = ['pending', 'approved', 'rejected'] as const;\n\ntype Status = typeof statuses[number];\n\nfunction updateStatus(status: Status) {\n  console.log(`Status updated to: ${status}`);\n}\n\nupdateStatus('approved');\n// updateStatus('invalid'); // Error: Argument of type '\"invalid\"' is not assignable to parameter of type 'Status'."
+      },
+      {
+        "type": "paragraph",
+        "value": "This prevents passing invalid string values to functions and reduces bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\n\nBy applying these advanced TypeScript data modeling techniques, beginners can write safer and more predictable code that catches many potential runtime errors during development. These practices will help you build more maintainable and robust applications."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-asyncio-and-threading-in-python-when-to-use-which",
+    "title": "Comparing Asyncio and Threading in Python: When to Use Which?",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the differences between asyncio and threading in Python and understand when to use each for efficient concurrent programming.",
+    "videoUrl": "https://www.youtube.com/watch?v=QlkXji08lno",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In Python, concurrency can be achieved using multiple approaches, with asyncio and threading being two popular options. Understanding the difference between asyncio (asynchronous programming) and threading (multi-threading) helps you decide which one is best suited for your task."
+      },
+      {
+        "type": "paragraph",
+        "value": "Threading allows your program to run multiple threads at the same time, potentially using multiple CPU cores. On the other hand, asyncio is built around an event loop and is designed to handle many tasks concurrently without creating multiple OS threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore the two approaches with simple examples and discuss when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Threading Example"
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport time\n\ndef task(name, duration):\n    print(f\"Task {name} started\")\n    time.sleep(duration)\n    print(f\"Task {name} completed\")\n\n# Create threads\nthread1 = threading.Thread(target=task, args=('A', 2))\nthread2 = threading.Thread(target=task, args=('B', 3))\n\nthread1.start()\nthread2.start()\n\nthread1.join()\nthread2.join()\n\nprint(\"All threads completed\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, two tasks run in parallel on separate threads, sleeping for 2 and 3 seconds respectively. Threading works well for I/O-bound tasks like file operations, network requests, or waiting."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Asyncio Example"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def task(name, duration):\n    print(f\"Task {name} started\")\n    await asyncio.sleep(duration)\n    print(f\"Task {name} completed\")\n\nasync def main():\n    # Schedule tasks concurrently\n    await asyncio.gather(\n        task('A', 2),\n        task('B', 3),\n    )\n\nasyncio.run(main())\nprint(\"All asyncio tasks completed\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, asyncio uses coroutines to run tasks concurrently inside a single thread, by yielding control when waiting (e.g., with `await asyncio.sleep`). Asyncio works very well for many simultaneous I/O-bound operations without the overhead of threading."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Threading?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use threading when your program needs true parallelism for I/O-bound operations or when dealing with blocking calls that don’t natively support async. Threading can also be helpful when working with libraries that don’t support asyncio."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Asyncio?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Asyncio is ideal for high-level structured network code, multiple simultaneous I/O tasks, and programs that need lightweight concurrency without the complexity and overhead of managing threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Things to Keep in Mind"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Asyncio runs on a single thread by default, which means CPU-bound tasks can block the event loop.\n- Threading can lead to complex issues with shared state and requires synchronization primitives like locks.\n- You can combine both approaches creatively (e.g., run CPU-heavy tasks in threads or processes alongside an async app)."
+      },
+      {
+        "type": "paragraph",
+        "value": "By selecting the right concurrency approach, your Python programs become more efficient, responsive, and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-python-logging-module-for-advanced-system-error-diagnostics",
+    "title": "Leveraging Python's Logging Module for Advanced System Error Diagnostics",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's built-in logging module to effectively capture, diagnose, and understand system errors in your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=BuxezLdrt9Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When developing applications, especially in production environments, understanding why errors occur is crucial. Python's built-in logging module provides a robust and flexible way to capture error information and system diagnostics, making troubleshooting much easier for developers of all skill levels."
+      },
+      {
+        "type": "paragraph",
+        "value": "The logging module lets you record messages with different severity levels, such as DEBUG, INFO, WARNING, ERROR, and CRITICAL. You can customize where and how these logs are saved—whether it's to the console, a file, or even remote servers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example that demonstrates how to log an error, including the traceback, which is incredibly helpful for diagnosing what went wrong."
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\n# Configure logging to output to a file with a specific format\nlogging.basicConfig(filename='app.log',\n                    level=logging.ERROR,\n                    format='%(asctime)s - %(levelname)s - %(message)s')\n\ntry:\n    # Intentionally cause a ZeroDivisionError\n    result = 10 / 0\nexcept ZeroDivisionError as e:\n    # Log the error with traceback\n    logging.error('An error occurred: %s', e, exc_info=True)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the logging is set to capture ERROR level messages and above. When the division by zero occurs, the exception is caught, and an error message along with the traceback is logged to a file named \"app.log\". The `exc_info=True` parameter includes the traceback details, giving you a full picture of the error."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more advanced diagnostics, you can add extra context to your log messages by using the `extra` parameter or by configuring different handlers. Here's an example that sends ERROR logs to a file and WARNING logs to the console."
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\n# Create a custom logger\nlogger = logging.getLogger('my_app')\nlogger.setLevel(logging.DEBUG)\n\n# File handler for ERROR logs\nfile_handler = logging.FileHandler('error.log')\nfile_handler.setLevel(logging.ERROR)\nfile_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')\nfile_handler.setFormatter(file_format)\n\n# Console handler for WARNING and above\nconsole_handler = logging.StreamHandler()\nconsole_handler.setLevel(logging.WARNING)\nconsole_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')\nconsole_handler.setFormatter(console_format)\n\n# Add handlers to the logger\nlogger.addHandler(file_handler)\nlogger.addHandler(console_handler)\n\ntry:\n    data = {'a': 1}\n    # This will cause a KeyError\n    print(data['b'])\nexcept KeyError as e:\n    logger.error('Key not found in dictionary: %s', e, exc_info=True)\n\nlogger.warning('This is just a warning message.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code sets up a logger named \"my_app\" with two handlers: one logs errors to a file called \"error.log\", and the other prints warnings and above to the console. This setup helps you separate critical error logging from less severe warnings, making system diagnostics cleaner and easier to manage."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using Python's logging module not only helps capture errors but also provides the flexibility to fine-tune your logging strategy as your application grows. Start by including logging in your projects today to improve your system error diagnostics and reduce troubleshooting time!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-joins-beginners-guide",
+    "title": "Mastering SQL Joins: A Beginner's Guide to Combining Tables Efficiently",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of SQL joins in this beginner-friendly guide. Understand how to combine multiple tables efficiently using INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=G3lJAxg1cy8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, you'll often find that data is spread across multiple tables. To analyze and work with this data effectively, you need to combine these tables in meaningful ways. SQL joins allow you to do exactly that by linking rows from two or more tables based on related columns."
+      },
+      {
+        "type": "paragraph",
+        "value": "This guide covers the four most common types of joins: INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN. Each join type serves a different purpose depending on the data you want to retrieve."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider the following two tables, `Employees` and `Departments`:"
+      },
+      {
+        "type": "code",
+        "value": "Employees\n+----+----------+-------------+\n| ID | Name     | DepartmentID|\n+----+----------+-------------+\n| 1  | Alice    | 10          |\n| 2  | Bob      | 20          |\n| 3  | Charlie  | NULL        |\n+----+----------+-------------+\n\nDepartments\n+-------------+------------+\n| DepartmentID| Department |\n+-------------+------------+\n| 10          | Sales      |\n| 20          | HR         |\n| 30          | Marketing  |\n+-------------+------------+"
+      },
+      {
+        "type": "paragraph",
+        "value": "### INNER JOIN\nAn INNER JOIN returns only the rows where there is a match in both tables."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nINNER JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n\nNote: Charlie is not included because their DepartmentID is NULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "### LEFT JOIN\nA LEFT JOIN returns all rows from the left table (Employees), and the matching rows from the right table (Departments). If there is no match, the result is NULL on the right side."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nLEFT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n- Charlie (NULL) — since Charlie has no DepartmentID."
+      },
+      {
+        "type": "paragraph",
+        "value": "### RIGHT JOIN\nA RIGHT JOIN returns all rows from the right table (Departments), and the matching rows from the left table (Employees). If there is no match, the result is NULL on the left side."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nRIGHT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n- NULL (Marketing) — since no employee belongs to the Marketing department."
+      },
+      {
+        "type": "paragraph",
+        "value": "### FULL JOIN\nA FULL JOIN returns all rows when there is a match in one of the tables. This means it combines the results of both LEFT and RIGHT joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nFULL JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n- Charlie (NULL)\n- NULL (Marketing)\n\nNote: Not all SQL databases support FULL JOIN. In some cases, you can simulate it using UNION of LEFT and RIGHT joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- **INNER JOIN**: Only matching rows.\n- **LEFT JOIN**: All rows from the left table, matching rows from right.\n- **RIGHT JOIN**: All rows from the right table, matching rows from left.\n- **FULL JOIN**: All rows from both tables, matching rows combined."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these basic joins, you can efficiently combine data from multiple tables and perform more powerful data analysis. Practice these joins with your own tables to get comfortable using them."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-handling-complex-hierarchical-data-without-performance-pitfalls",
+    "title": "Mastering Recursive CTEs: Handling Complex Hierarchical Data Without Performance Pitfalls",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) in SQL to efficiently query hierarchical data while avoiding common performance and syntax errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=ByG2Q8jpOG0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are a powerful feature in SQL that allow you to query hierarchical data such as organizational charts, folder trees, or bill of materials. However, beginners often encounter errors or performance issues when writing recursive queries. In this article, we will explore how recursive CTEs work and highlight common mistakes to avoid for smooth, efficient querying."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE has two parts: the anchor member, which provides the base data, and the recursive member, which refers back to the CTE itself for iterative processing. Here’s a simple example to query an employee hierarchy, where each employee has a manager."
+      },
+      {
+        "type": "code",
+        "value": "WITH EmployeeHierarchy AS (\n  -- Anchor member: start with top-level managers\n  SELECT EmployeeID, ManagerID, Name, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n\n  UNION ALL\n\n  -- Recursive member: add employees reporting to managers found above\n  SELECT e.EmployeeID, e.ManagerID, e.Name, eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query starts with employees who have no manager (top-level) and recursively joins the Employees table to include all subordinates, incrementing the level each time. However, recursion can easily lead to infinite loops if there are circular references in your data (e.g., an employee listed as their own manager). SQL Server and other DBMSs usually limit recursion depth by default (e.g., 100) to prevent infinite loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors and pitfalls to watch for include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Infinite Recursion:** If your data has cycles, you may encounter errors or unexpected results. To avoid this, be sure your data is clean and consider adding safeguards like a maximum recursion depth using `OPTION (MAXRECURSION n)`."
+      },
+      {
+        "type": "code",
+        "value": "OPTION (MAXRECURSION 50); -- Limits recursion to 50 levels"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Missing UNION ALL:** Recursive CTEs must use `UNION ALL`, not `UNION`, because `UNION` removes duplicates and can break recursion."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Incorrect Join Conditions:** Make sure the recursive member correctly joins the CTE to the underlying table to build the hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Performance Issues:** Recursive CTEs without proper filters or indexes can be slow on large datasets. Ensure relevant indexes on the join keys (e.g., ManagerID) and filter rows early when possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a practical tip: add a cycle detection column to guard against circular references by tracking visited nodes:"
+      },
+      {
+        "type": "code",
+        "value": "WITH EmployeeHierarchy AS (\n  SELECT EmployeeID, ManagerID, Name, CAST(EmployeeID AS VARCHAR(MAX)) AS Path, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n\n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Name, eh.Path + '->' + CAST(e.EmployeeID AS VARCHAR(MAX)), eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n  WHERE CHARINDEX(CAST(e.EmployeeID AS VARCHAR(MAX)), eh.Path) = 0\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach builds a path string showing the hierarchy chain. The `WHERE CHARINDEX(...) = 0` condition ensures the recursive step only proceeds if the next employee is not already in the path, preventing cycles."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering recursive CTEs requires careful attention to your data’s structure and cautious query construction. Avoid infinite loops, use `UNION ALL`, verify correct joins, and add cycle detection as needed. With these tips, you can efficiently handle complex hierarchical data without falling into common pitfalls."
       }
     ]
   }

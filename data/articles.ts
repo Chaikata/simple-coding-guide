@@ -38210,5 +38210,511 @@ export const articles = [
         "value": "By following these best practices, you'll write more reliable and efficient SQL queries. Data type mismatches are easy to avoid once you understand the core concept: always keep types compatible in your comparisons."
       }
     ]
+  },
+  {
+    "slug": "comparing-javascript-frameworks-react-vs-vue-vs-svelte",
+    "title": "Comparing JavaScript Frameworks: React vs Vue vs Svelte for Modern Web Apps",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to comparing React, Vue, and Svelte JavaScript frameworks to help you choose the best for your modern web app projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=MnpuK0MK4yo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building modern web applications, choosing the right JavaScript framework can be overwhelming. React, Vue, and Svelte are three popular options, each with unique strengths and design philosophies. This article will help beginners understand the key differences and decide which framework suits their needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "React is a widely-used library developed by Facebook. It focuses on building reusable UI components and uses a virtual DOM to efficiently update the view. React uses JSX, a syntax that allows you to write HTML directly within JavaScript, making component structure intuitive after some practice."
+      },
+      {
+        "type": "paragraph",
+        "value": "Vue is a progressive framework that is easy to integrate and learn. It combines the best concepts from React and Angular and uses a template syntax to separate HTML, CSS, and JavaScript. Vue offers reactive data binding and component-based architecture with less boilerplate code than React."
+      },
+      {
+        "type": "paragraph",
+        "value": "Svelte is a newer framework that shifts work from the browser to the build step, compiling your components into highly optimized JavaScript. Unlike React and Vue, Svelte does not use a virtual DOM. This can result in faster apps and smaller bundle sizes with simpler syntax."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple counter example implemented in all three frameworks to compare code style and complexity."
+      },
+      {
+        "type": "paragraph",
+        "value": "### React"
+      },
+      {
+        "type": "code",
+        "value": "import React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}\n\nexport default Counter;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In React, you use the useState hook to create reactive state. The JSX syntax closely resembles HTML, making it approachable once you're familiar with JavaScript syntax extensions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Vue"
+      },
+      {
+        "type": "code",
+        "value": "<template>\n  <div>\n    <p>You clicked {{ count }} times</p>\n    <button @click=\"count++\">Click me</button>\n  </div>\n</template>\n\n<script>\nexport default {\n  data() {\n    return { count: 0 };\n  }\n};\n</script>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Vue uses a template syntax combined with reactive data properties. It feels very similar to writing regular HTML with Alpine.js style reactivity, making it very beginner-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Svelte"
+      },
+      {
+        "type": "code",
+        "value": "<script>\n  let count = 0;\n</script>\n\n<button on:click={() => count++}>\n  Clicked {count} {count === 1 ? 'time' : 'times'}\n</button>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Svelte's syntax is the most concise. It allows you to declare reactive variables directly in the script section and update the UI without extra boilerplate. This can lower the entry barrier for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Which One Should You Choose?"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want a mature ecosystem, widespread community support, and flexibility, React is a solid choice. For ease of learning and elegant structure, Vue offers a gentle learning curve. If performance and simplicity matter most, and you enjoy writing less code, Svelte is worth trying."
+      },
+      {
+        "type": "paragraph",
+        "value": "No matter which framework you pick, the core concepts of components, state, and events remain similar. Experimenting with small projects using each will help you find the best fit for your style and project needs."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-javascript-error-boundaries-for-resilient-web-apps",
+    "title": "Mastering JavaScript Error Boundaries for Resilient Web Apps",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript error boundaries help you build more resilient web applications by catching and handling errors gracefully.",
+    "videoUrl": "https://www.youtube.com/watch?v=jSMSjINzbYY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web applications with JavaScript, errors can happen at any time—whether due to unexpected user input, API failures, or bugs in your code. To create a smooth user experience, it's important to handle errors gracefully so that your app doesn't crash or display a broken interface."
+      },
+      {
+        "type": "paragraph",
+        "value": "One powerful technique to manage errors in JavaScript apps is the use of 'error boundaries.' While the concept is built into frameworks like React, understanding how to implement error boundaries helps you trap errors and show fallback UI or meaningful messages without disrupting the user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore how error boundaries work in JavaScript, especially in React, and show you a simple example of how to use them. Even if you're not using React, the principles of catching errors and presenting friendly feedback can be applied broadly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Error Boundaries?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Error boundaries are components in React that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. This prevents the entire app from crashing and allows users to continue interacting with other parts of the app."
+      },
+      {
+        "type": "paragraph",
+        "value": "Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Error Boundary in React"
+      },
+      {
+        "type": "paragraph",
+        "value": "To create an error boundary component, you define a class component with two special methods: `static getDerivedStateFromError()` and `componentDidCatch()`."
+      },
+      {
+        "type": "code",
+        "value": "import React from 'react';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  static getDerivedStateFromError(error) {\n    // Update state so the next render shows fallback UI\n    return { hasError: true };\n  }\n\n  componentDidCatch(error, errorInfo) {\n    // You can log error messages to an error reporting service here\n    console.error('Error caught by Error Boundary:', error, errorInfo);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // Fallback UI\n      return <h2>Something went wrong.</h2>;\n    }\n\n    return this.props.children;\n  }\n}\n\nexport default ErrorBoundary;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using the Error Boundary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Wrap any component that might throw an error with the `ErrorBoundary` component. If an error occurs inside the wrapped component, the error boundary will catch it and show the fallback UI."
+      },
+      {
+        "type": "code",
+        "value": "import React from 'react';\nimport ErrorBoundary from './ErrorBoundary';\nimport BuggyComponent from './BuggyComponent';\n\nfunction App() {\n  return (\n    <ErrorBoundary>\n      <BuggyComponent />\n    </ErrorBoundary>\n  );\n}\n\nexport default App;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Error Boundaries?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Error boundaries help avoid the entire React component tree from unmounting when an error occurs. Instead, your app can display fallbacks while logging errors for debugging. This technique improves the reliability and user experience of your web apps."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Error Handling Outside React"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you're working with plain JavaScript or other frameworks, the concept is similar: you want to catch errors using try-catch blocks, promises' catch handlers, or global listeners. For example, you can use `window.onerror` or `window.addEventListener('error', ...)` to catch uncaught errors globally and respond accordingly."
+      },
+      {
+        "type": "code",
+        "value": "window.onerror = function(message, source, lineno, colno, error) {\n  console.log('Global error caught:', message);\n  // Show user-friendly message or send error log\n  return true; // prevent default error handling\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering error boundaries in JavaScript applications helps you build more robust and user-friendly web apps. If you use React, use class components with lifecycle methods to catch and handle errors gracefully. In other environments, use try-catch and global error handlers based on your needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "By planning for errors, you make sure your apps don’t break unexpectedly and users get helpful feedback — an essential step for professional web development."
+      }
+    ]
+  },
+  {
+    "slug": "advanced-typescript-data-modeling-techniques-to-prevent-runtime-errors",
+    "title": "Advanced TypeScript Data Modeling Techniques to Prevent Runtime Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how advanced TypeScript data modeling techniques can help prevent runtime errors by catching bugs early during development.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript offers powerful tools to model your data precisely, which helps catch many potential issues before your code even runs. By using advanced data modeling techniques like discriminated unions, utility types, and type guards, you can prevent runtime errors and build more reliable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some practical techniques in TypeScript to improve your data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use Discriminated Unions for Clear Data Variants**\n\nWhen you have different types of related data sharing some fields, discriminated unions provide a way to differentiate between these types using a common literal property."
+      },
+      {
+        "type": "code",
+        "value": "type Shape =\n  | { kind: 'circle'; radius: number }\n  | { kind: 'square'; sideLength: number };\n\nfunction getArea(shape: Shape): number {\n  switch (shape.kind) {\n    case 'circle':\n      return Math.PI * shape.radius ** 2;\n    case 'square':\n      return shape.sideLength ** 2;\n    default:\n      // Using exhaustiveness check to catch unhandled cases\n      const _exhaustiveCheck: never = shape;\n      return _exhaustiveCheck;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This ensures that if you add a new shape type, TypeScript will remind you to update the function accordingly, avoiding runtime errors from unhandled cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Leverage Utility Types for Readonly and Partial Data**\n\nTypeScript provides utility types like `Readonly<T>` and `Partial<T>`, which help enforce immutability or optional properties."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst user: Readonly<User> = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com'\n};\n\n// user.id = 2; // Error: Cannot assign to 'id' because it is a read-only property.\n\nfunction updateUser(user: User, values: Partial<User>): User {\n  return { ...user, ...values };\n}\n\nconst updatedUser = updateUser(user, { email: 'newemail@example.com' });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using these utilities prevents accidental data mutation or missing fields, reducing runtime bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Create Custom Type Guards for Runtime Validation**\n\nSometimes, data comes from uncertain sources like APIs or user input. Custom type guards help assert the type at runtime, protecting your application from unexpected values."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: number;\n  name: string;\n  price: number;\n}\n\nfunction isProduct(obj: any): obj is Product {\n  return (\n    typeof obj === 'object' &&\n    obj !== null &&\n    typeof obj.id === 'number' &&\n    typeof obj.name === 'string' &&\n    typeof obj.price === 'number'\n  );\n}\n\nconst data: unknown = fetchDataFromAPI();\n\nif (isProduct(data)) {\n  console.log(`Product name is: ${data.name}`);\n} else {\n  console.error('Invalid product data received');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards make your code safer by verifying data shape before usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use `as const` for Immutable Literal Types**\n\nBy using `as const` with arrays or objects, TypeScript infers literal types instead of general types, which can help prevent unintended changes or values."
+      },
+      {
+        "type": "code",
+        "value": "const statuses = ['pending', 'approved', 'rejected'] as const;\n\ntype Status = typeof statuses[number];\n\nfunction updateStatus(status: Status) {\n  console.log(`Status updated to: ${status}`);\n}\n\nupdateStatus('approved');\n// updateStatus('invalid'); // Error: Argument of type '\"invalid\"' is not assignable to parameter of type 'Status'."
+      },
+      {
+        "type": "paragraph",
+        "value": "This prevents passing invalid string values to functions and reduces bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\n\nBy applying these advanced TypeScript data modeling techniques, beginners can write safer and more predictable code that catches many potential runtime errors during development. These practices will help you build more maintainable and robust applications."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-asyncio-and-threading-in-python-when-to-use-which",
+    "title": "Comparing Asyncio and Threading in Python: When to Use Which?",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the differences between asyncio and threading in Python and understand when to use each for efficient concurrent programming.",
+    "videoUrl": "https://www.youtube.com/watch?v=QlkXji08lno",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In Python, concurrency can be achieved using multiple approaches, with asyncio and threading being two popular options. Understanding the difference between asyncio (asynchronous programming) and threading (multi-threading) helps you decide which one is best suited for your task."
+      },
+      {
+        "type": "paragraph",
+        "value": "Threading allows your program to run multiple threads at the same time, potentially using multiple CPU cores. On the other hand, asyncio is built around an event loop and is designed to handle many tasks concurrently without creating multiple OS threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore the two approaches with simple examples and discuss when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Threading Example"
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport time\n\ndef task(name, duration):\n    print(f\"Task {name} started\")\n    time.sleep(duration)\n    print(f\"Task {name} completed\")\n\n# Create threads\nthread1 = threading.Thread(target=task, args=('A', 2))\nthread2 = threading.Thread(target=task, args=('B', 3))\n\nthread1.start()\nthread2.start()\n\nthread1.join()\nthread2.join()\n\nprint(\"All threads completed\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, two tasks run in parallel on separate threads, sleeping for 2 and 3 seconds respectively. Threading works well for I/O-bound tasks like file operations, network requests, or waiting."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Asyncio Example"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def task(name, duration):\n    print(f\"Task {name} started\")\n    await asyncio.sleep(duration)\n    print(f\"Task {name} completed\")\n\nasync def main():\n    # Schedule tasks concurrently\n    await asyncio.gather(\n        task('A', 2),\n        task('B', 3),\n    )\n\nasyncio.run(main())\nprint(\"All asyncio tasks completed\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, asyncio uses coroutines to run tasks concurrently inside a single thread, by yielding control when waiting (e.g., with `await asyncio.sleep`). Asyncio works very well for many simultaneous I/O-bound operations without the overhead of threading."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Threading?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use threading when your program needs true parallelism for I/O-bound operations or when dealing with blocking calls that don’t natively support async. Threading can also be helpful when working with libraries that don’t support asyncio."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Asyncio?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Asyncio is ideal for high-level structured network code, multiple simultaneous I/O tasks, and programs that need lightweight concurrency without the complexity and overhead of managing threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Things to Keep in Mind"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Asyncio runs on a single thread by default, which means CPU-bound tasks can block the event loop.\n- Threading can lead to complex issues with shared state and requires synchronization primitives like locks.\n- You can combine both approaches creatively (e.g., run CPU-heavy tasks in threads or processes alongside an async app)."
+      },
+      {
+        "type": "paragraph",
+        "value": "By selecting the right concurrency approach, your Python programs become more efficient, responsive, and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-python-logging-module-for-advanced-system-error-diagnostics",
+    "title": "Leveraging Python's Logging Module for Advanced System Error Diagnostics",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's built-in logging module to effectively capture, diagnose, and understand system errors in your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=BuxezLdrt9Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When developing applications, especially in production environments, understanding why errors occur is crucial. Python's built-in logging module provides a robust and flexible way to capture error information and system diagnostics, making troubleshooting much easier for developers of all skill levels."
+      },
+      {
+        "type": "paragraph",
+        "value": "The logging module lets you record messages with different severity levels, such as DEBUG, INFO, WARNING, ERROR, and CRITICAL. You can customize where and how these logs are saved—whether it's to the console, a file, or even remote servers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example that demonstrates how to log an error, including the traceback, which is incredibly helpful for diagnosing what went wrong."
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\n# Configure logging to output to a file with a specific format\nlogging.basicConfig(filename='app.log',\n                    level=logging.ERROR,\n                    format='%(asctime)s - %(levelname)s - %(message)s')\n\ntry:\n    # Intentionally cause a ZeroDivisionError\n    result = 10 / 0\nexcept ZeroDivisionError as e:\n    # Log the error with traceback\n    logging.error('An error occurred: %s', e, exc_info=True)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the logging is set to capture ERROR level messages and above. When the division by zero occurs, the exception is caught, and an error message along with the traceback is logged to a file named \"app.log\". The `exc_info=True` parameter includes the traceback details, giving you a full picture of the error."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more advanced diagnostics, you can add extra context to your log messages by using the `extra` parameter or by configuring different handlers. Here's an example that sends ERROR logs to a file and WARNING logs to the console."
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\n# Create a custom logger\nlogger = logging.getLogger('my_app')\nlogger.setLevel(logging.DEBUG)\n\n# File handler for ERROR logs\nfile_handler = logging.FileHandler('error.log')\nfile_handler.setLevel(logging.ERROR)\nfile_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')\nfile_handler.setFormatter(file_format)\n\n# Console handler for WARNING and above\nconsole_handler = logging.StreamHandler()\nconsole_handler.setLevel(logging.WARNING)\nconsole_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')\nconsole_handler.setFormatter(console_format)\n\n# Add handlers to the logger\nlogger.addHandler(file_handler)\nlogger.addHandler(console_handler)\n\ntry:\n    data = {'a': 1}\n    # This will cause a KeyError\n    print(data['b'])\nexcept KeyError as e:\n    logger.error('Key not found in dictionary: %s', e, exc_info=True)\n\nlogger.warning('This is just a warning message.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code sets up a logger named \"my_app\" with two handlers: one logs errors to a file called \"error.log\", and the other prints warnings and above to the console. This setup helps you separate critical error logging from less severe warnings, making system diagnostics cleaner and easier to manage."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using Python's logging module not only helps capture errors but also provides the flexibility to fine-tune your logging strategy as your application grows. Start by including logging in your projects today to improve your system error diagnostics and reduce troubleshooting time!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-joins-beginners-guide",
+    "title": "Mastering SQL Joins: A Beginner's Guide to Combining Tables Efficiently",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of SQL joins in this beginner-friendly guide. Understand how to combine multiple tables efficiently using INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=G3lJAxg1cy8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, you'll often find that data is spread across multiple tables. To analyze and work with this data effectively, you need to combine these tables in meaningful ways. SQL joins allow you to do exactly that by linking rows from two or more tables based on related columns."
+      },
+      {
+        "type": "paragraph",
+        "value": "This guide covers the four most common types of joins: INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN. Each join type serves a different purpose depending on the data you want to retrieve."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider the following two tables, `Employees` and `Departments`:"
+      },
+      {
+        "type": "code",
+        "value": "Employees\n+----+----------+-------------+\n| ID | Name     | DepartmentID|\n+----+----------+-------------+\n| 1  | Alice    | 10          |\n| 2  | Bob      | 20          |\n| 3  | Charlie  | NULL        |\n+----+----------+-------------+\n\nDepartments\n+-------------+------------+\n| DepartmentID| Department |\n+-------------+------------+\n| 10          | Sales      |\n| 20          | HR         |\n| 30          | Marketing  |\n+-------------+------------+"
+      },
+      {
+        "type": "paragraph",
+        "value": "### INNER JOIN\nAn INNER JOIN returns only the rows where there is a match in both tables."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nINNER JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n\nNote: Charlie is not included because their DepartmentID is NULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "### LEFT JOIN\nA LEFT JOIN returns all rows from the left table (Employees), and the matching rows from the right table (Departments). If there is no match, the result is NULL on the right side."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nLEFT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n- Charlie (NULL) — since Charlie has no DepartmentID."
+      },
+      {
+        "type": "paragraph",
+        "value": "### RIGHT JOIN\nA RIGHT JOIN returns all rows from the right table (Departments), and the matching rows from the left table (Employees). If there is no match, the result is NULL on the left side."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nRIGHT JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n- NULL (Marketing) — since no employee belongs to the Marketing department."
+      },
+      {
+        "type": "paragraph",
+        "value": "### FULL JOIN\nA FULL JOIN returns all rows when there is a match in one of the tables. This means it combines the results of both LEFT and RIGHT joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT Employees.Name, Departments.Department\nFROM Employees\nFULL JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns:\n- Alice (Sales)\n- Bob (HR)\n- Charlie (NULL)\n- NULL (Marketing)\n\nNote: Not all SQL databases support FULL JOIN. In some cases, you can simulate it using UNION of LEFT and RIGHT joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- **INNER JOIN**: Only matching rows.\n- **LEFT JOIN**: All rows from the left table, matching rows from right.\n- **RIGHT JOIN**: All rows from the right table, matching rows from left.\n- **FULL JOIN**: All rows from both tables, matching rows combined."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these basic joins, you can efficiently combine data from multiple tables and perform more powerful data analysis. Practice these joins with your own tables to get comfortable using them."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-handling-complex-hierarchical-data-without-performance-pitfalls",
+    "title": "Mastering Recursive CTEs: Handling Complex Hierarchical Data Without Performance Pitfalls",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) in SQL to efficiently query hierarchical data while avoiding common performance and syntax errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=ByG2Q8jpOG0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are a powerful feature in SQL that allow you to query hierarchical data such as organizational charts, folder trees, or bill of materials. However, beginners often encounter errors or performance issues when writing recursive queries. In this article, we will explore how recursive CTEs work and highlight common mistakes to avoid for smooth, efficient querying."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE has two parts: the anchor member, which provides the base data, and the recursive member, which refers back to the CTE itself for iterative processing. Here’s a simple example to query an employee hierarchy, where each employee has a manager."
+      },
+      {
+        "type": "code",
+        "value": "WITH EmployeeHierarchy AS (\n  -- Anchor member: start with top-level managers\n  SELECT EmployeeID, ManagerID, Name, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n\n  UNION ALL\n\n  -- Recursive member: add employees reporting to managers found above\n  SELECT e.EmployeeID, e.ManagerID, e.Name, eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query starts with employees who have no manager (top-level) and recursively joins the Employees table to include all subordinates, incrementing the level each time. However, recursion can easily lead to infinite loops if there are circular references in your data (e.g., an employee listed as their own manager). SQL Server and other DBMSs usually limit recursion depth by default (e.g., 100) to prevent infinite loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors and pitfalls to watch for include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Infinite Recursion:** If your data has cycles, you may encounter errors or unexpected results. To avoid this, be sure your data is clean and consider adding safeguards like a maximum recursion depth using `OPTION (MAXRECURSION n)`."
+      },
+      {
+        "type": "code",
+        "value": "OPTION (MAXRECURSION 50); -- Limits recursion to 50 levels"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Missing UNION ALL:** Recursive CTEs must use `UNION ALL`, not `UNION`, because `UNION` removes duplicates and can break recursion."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Incorrect Join Conditions:** Make sure the recursive member correctly joins the CTE to the underlying table to build the hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Performance Issues:** Recursive CTEs without proper filters or indexes can be slow on large datasets. Ensure relevant indexes on the join keys (e.g., ManagerID) and filter rows early when possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a practical tip: add a cycle detection column to guard against circular references by tracking visited nodes:"
+      },
+      {
+        "type": "code",
+        "value": "WITH EmployeeHierarchy AS (\n  SELECT EmployeeID, ManagerID, Name, CAST(EmployeeID AS VARCHAR(MAX)) AS Path, 1 AS Level\n  FROM Employees\n  WHERE ManagerID IS NULL\n\n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Name, eh.Path + '->' + CAST(e.EmployeeID AS VARCHAR(MAX)), eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n  WHERE CHARINDEX(CAST(e.EmployeeID AS VARCHAR(MAX)), eh.Path) = 0\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach builds a path string showing the hierarchy chain. The `WHERE CHARINDEX(...) = 0` condition ensures the recursive step only proceeds if the next employee is not already in the path, preventing cycles."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering recursive CTEs requires careful attention to your data’s structure and cautious query construction. Avoid infinite loops, use `UNION ALL`, verify correct joins, and add cycle detection as needed. With these tips, you can efficiently handle complex hierarchical data without falling into common pitfalls."
+      }
+    ]
   }
 ];
