@@ -4261,5 +4261,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "create-a-simple-student-grades-table-and-query",
+    "title": "Create a Simple Student Grades Table and Query",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a beginner-level SQL project to create a basic data model for student grades. Define a table, insert sample data, and write a query to retrieve student names with their corresponding grades.",
+    "prompt": "You are tasked with creating a simple data model to store student grades in a class. First, create a table named `StudentGrades` with the following columns: `StudentID` (integer, primary key), `StudentName` (text), and `Grade` (integer). Then, insert at least 5 students with their grades. Finally, write a query to select all students who scored 80 or above, showing their names and grades in ascending order by grade.",
+    "guidance": [
+      "Focus on defining the table with appropriate data types and a primary key.",
+      "Insert sample data for at least 5 students.",
+      "Write a SELECT query with a WHERE condition to filter grades >= 80 and ORDER BY grade ascending."
+    ],
+    "hints": [
+      "Use CREATE TABLE syntax with column definitions including INT and VARCHAR or TEXT.",
+      "INSERT INTO can be used multiple times to add student records.",
+      "Use SELECT with WHERE and ORDER BY clauses to retrieve filtered and sorted results."
+    ],
+    "starterCode": "CREATE TABLE StudentGrades (\n  StudentID INT PRIMARY KEY,\n  StudentName TEXT,\n  Grade INT\n);\n\n-- Insert sample data here\n\n-- Write your SELECT query below",
+    "expectedOutput": "StudentName | Grade\n------------|-------\nAlice       | 80\nBob         | 85\nEve         | 90",
+    "concepts": [
+      "CREATE TABLE",
+      "INSERT INTO",
+      "SELECT",
+      "WHERE clause",
+      "ORDER BY clause"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-for-optimized-employee-sales-report",
+    "title": "Refactor SQL Query for Optimized Employee Sales Report",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Improve the given SQL query for generating a monthly sales report by employee to increase readability and performance without changing the output.",
+    "prompt": "You are provided with a SQL query that generates a monthly sales summary report showing each employee's total sales amount, the number of sales, and average sale value. The query works correctly but includes redundant JOINs and repetitive subqueries making it inefficient and harder to maintain. Refactor this query to optimize performance and improve readability while keeping the exact output identical.",
+    "guidance": [
+      "Identify and eliminate redundant JOINs or repeated calculations.",
+      "Use more efficient aggregate functions and grouping.",
+      "Consider using Common Table Expressions (CTEs) if it improves clarity."
+    ],
+    "hints": [
+      "Check if any tables are joined multiple times unnecessarily.",
+      "Avoid recalculating aggregates inside SELECT when possible."
+    ],
+    "starterCode": "SELECT e.employee_id, e.employee_name, COUNT(s.sale_id) AS total_sales, SUM(s.amount) AS total_amount, AVG(s.amount) AS average_sale\nFROM employees e\nJOIN sales s ON e.employee_id = s.employee_id\nJOIN departments d ON d.department_id = e.department_id\nJOIN sales s2 ON s2.employee_id = e.employee_id\nWHERE EXTRACT(MONTH FROM s.sale_date) = 3\nGROUP BY e.employee_id, e.employee_name, d.department_name\nORDER BY total_amount DESC;",
+    "expectedOutput": "A table with columns employee_id, employee_name, total_sales, total_amount, and average_sale displaying monthly sales summary for March, sorted by total sales amount descending.",
+    "concepts": [
+      "SQL joins",
+      "Aggregate functions",
+      "Query optimization",
+      "Query refactoring"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-complex-pointer-and-reference-manipulations-in-c",
+    "title": "Predict the Output of Complex Pointer and Reference Manipulations in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze the given C++ code involving multiple levels of pointers, references, and pre/post-increment operators. Predict the exact output after all manipulations, demonstrating deep understanding of pointer arithmetic, reference binding, and operator precedence.",
+    "prompt": "Given the code below, predict the exact output printed to the console without running the program. Pay close attention to the order of operations and how pointers and references are manipulated throughout the code.",
+    "guidance": [
+      "Carefully track the values of variables, pointers, and references after each operation.",
+      "Recall the difference between pre-increment (++i) and post-increment (i++) when used in complex expressions.",
+      "Understand how references to pointers behave and how modifying one affects the other."
+    ],
+    "hints": [
+      "Draw a timeline or table showing the value changes step-by-step.",
+      "Remember that the expression *++ptr increments the pointer before dereferencing, while (*ptr)++ increments the pointed value after accessing it."
+    ],
+    "starterCode": "#include <iostream>\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int* ptr = arr;\n    int*& refPtr = ptr;\n\n    std::cout << *ptr << \" \";      // 1\n    std::cout << *ptr++ << \" \";    // 1\n    std::cout << *ptr << \" \";      // 2\n\n    std::cout << *++ptr << \" \";    // 3\n    std::cout << (*ptr)++ << \" \";  // 3\n    std::cout << *ptr << \" \";      // 4 (what about the increment?)\n\n    refPtr++;\n    std::cout << *refPtr << \" \";  // ?\n    \n    return 0;\n}",
+    "expectedOutput": "1 1 2 3 3 4 5",
+    "concepts": [
+      "pointer arithmetic",
+      "reference to pointer",
+      "pre-increment vs post-increment",
+      "operator precedence"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-recursive-sales-totals-query-for-hierarchical-employees",
+    "title": "Fix the Recursive Sales Totals Query for Hierarchical Employees",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are given a broken SQL query intended to calculate total sales made by each employee and their subordinates in a hierarchical company structure. The query uses a recursive CTE but produces incorrect or incomplete totals. Your task is to identify and fix the bugs so that the query accurately computes cumulative sales totals including all levels of subordinates.",
+    "prompt": "The database contains two tables: Employees and Sales. Employees has columns (EmployeeID, ManagerID) representing a hierarchy where each employee may have a manager. Sales has columns (SaleID, EmployeeID, Amount). The goal is to compute, for each employee, the total sales made by that employee and all their direct and indirect subordinates.\n\nA recursive CTE is written but returns incorrect totals or misses some employees. Fix the query so it returns correct cumulative sales amounts per employee.\n\nTables example:\nEmployees:\nEmployeeID | ManagerID\n1          | NULL\n2          | 1\n3          | 1\n4          | 2\n5          | 2\n\nSales:\nSaleID | EmployeeID | Amount\n100    | 1          | 1000\n101    | 2          | 500\n102    | 3          | 700\n103    | 4          | 300\n104    | 5          | 200\n\nYour output should calculate totals like:\nEmployeeID | TotalSales\n1          | 2700 (1000 + 500 + 700 + 300 + 200)\n2          | 1000 (500 + 300 + 200)\n3          | 700\n4          | 300\n5          | 200\n\nFix the SQL query so it computes such totals correctly.",
+    "guidance": [
+      "Carefully check how the recursive CTE joins Employees to its subordinates each iteration.",
+      "Make sure sales amounts are aggregated correctly after establishing the full hierarchy.",
+      "Verify that the base and recursive parts of the CTE generate the correct set of rows with proper columns."
+    ],
+    "hints": [
+      "Check whether the recursive CTE includes both the employee and their subordinates at each recursion level.",
+      "Confirm that joining Sales is done after constructing the entire hierarchy, not during it.",
+      "Make sure GROUP BY clauses are consistent with selected columns."
+    ],
+    "starterCode": "WITH RECURSIVE EmpHierarchy AS (\n  SELECT EmployeeID, ManagerID\n  FROM Employees\n  WHERE ManagerID IS NULL\n  UNION ALL\n  SELECT e.EmployeeID, e.ManagerID\n  FROM Employees e\n  JOIN EmpHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT eh.EmployeeID, SUM(s.Amount) AS TotalSales\nFROM EmpHierarchy eh\nJOIN Sales s ON s.EmployeeID = eh.EmployeeID\nGROUP BY eh.EmployeeID;",
+    "expectedOutput": "EmployeeID | TotalSales\n1          | 2700\n2          | 1000\n3          | 700\n4          | 300\n5          | 200",
+    "concepts": [
+      "recursive CTE",
+      "hierarchical queries",
+      "aggregation",
+      "debugging recursion"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "create-a-function-to-convert-celsius-to-fahrenheit",
+    "title": "Create a Function to Convert Celsius to Fahrenheit",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "functions",
+    "description": "Write a JavaScript function that converts a temperature from Celsius to Fahrenheit.",
+    "prompt": "Build a function named `celsiusToFahrenheit` that accepts one parameter: a number representing a temperature in degrees Celsius. Return the temperature converted to degrees Fahrenheit using the formula F = C * 9/5 + 32.",
+    "guidance": [
+      "Recall that the function should take exactly one input parameter representing Celsius temperature.",
+      "Use the formula F = C * 9/5 + 32 to convert Celsius to Fahrenheit.",
+      "Ensure the function returns the converted temperature."
+    ],
+    "hints": [
+      "Remember to multiply the Celsius value by 9/5 before adding 32.",
+      "Make sure to return the result from the function instead of just printing it.",
+      "Test your function with known values like 0°C should return 32°F."
+    ],
+    "starterCode": "function celsiusToFahrenheit(celsius) {\n  // Your code here\n}",
+    "expectedOutput": "celsiusToFahrenheit(0) // 32\ncelsiusToFahrenheit(100) // 212\ncelsiusToFahrenheit(-40) // -40",
+    "concepts": [
+      "functions",
+      "arithmetic operators",
+      "return statement"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "design-and-query-an-employee-project-assignment-schema",
+    "title": "Design and Query an Employee-Project Assignment Schema",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "data-modeling",
+    "description": "Create a normalized database schema to manage employees, projects, and their assignments. Write SQL queries to retrieve project involvement and employee workloads.",
+    "prompt": "You are tasked with designing a simple relational schema to represent employees, projects, and the assignments of employees to projects. Your mini project consists of two parts:\n\n1. Design a normalized schema with three tables: Employees, Projects, and Assignments. The Employees table should store employee ID and name. The Projects table should store project ID and project name. The Assignments table should link employees to projects and include the number of hours an employee is assigned to that project.\n\n2. Write a SQL query to list all employees along with the total number of hours assigned across all their projects. Include employees with zero assignments.\n\n3. Write a SQL query to show each project and the count of employees assigned to it.\n\nAssume employee_id and project_id are integers and primary keys for their respective tables.",
+    "guidance": [
+      "Create tables with appropriate primary and foreign keys to maintain data integrity.",
+      "Use aggregate functions with proper GROUP BY clauses to calculate total hours and count employees.",
+      "Use LEFT JOIN where necessary to include employees or projects without assignments."
+    ],
+    "hints": [
+      "The Assignments table needs foreign keys referencing Employees and Projects.",
+      "To include employees with no assignments, consider using LEFT JOIN from Employees to Assignments.",
+      "Use COALESCE to replace NULLs in total hours with zero."
+    ],
+    "starterCode": "CREATE TABLE Employees (\n  employee_id INT PRIMARY KEY,\n  employee_name VARCHAR(100)\n);\n\nCREATE TABLE Projects (\n  project_id INT PRIMARY KEY,\n  project_name VARCHAR(100)\n);\n\nCREATE TABLE Assignments (\n  assignment_id INT PRIMARY KEY,\n  employee_id INT,\n  project_id INT,\n  hours_assigned INT,\n  FOREIGN KEY (employee_id) REFERENCES Employees(employee_id),\n  FOREIGN KEY (project_id) REFERENCES Projects(project_id)\n);\n\n-- Query 1: Total hours per employee\n-- Query 2: Employee count per project\n",
+    "expectedOutput": "Query 1 result example:\nemployee_id | employee_name | total_hours\n1           | Alice         | 35\n2           | Bob           | 0\n3           | Charlie       | 20\n\nQuery 2 result example:\nproject_id | project_name | employee_count\n101        | Project X    | 2\n102        | Project Y    | 1\n103        | Project Z    | 0",
+    "concepts": [
+      "database normalization",
+      "joins (LEFT JOIN)",
+      "aggregate functions (SUM, COUNT)",
+      "foreign keys"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ];
