@@ -37388,5 +37388,429 @@ export const articles = [
         "value": "In summary, to optimize complex window functions for real-time analytics: limit partition scopes, avoid unnecessary ordering, pre-aggregate data, and carefully separate window and aggregation steps. By following these tips, you will reduce errors and improve query responsiveness."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-microservices-architecture-with-nodejs-and-kafka",
+    "title": "Building Scalable Microservices Architecture with Node.js and Kafka",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build a scalable microservices architecture using Node.js and Apache Kafka. This beginner-friendly tutorial covers core concepts, setup, and example code to get you started.",
+    "videoUrl": "https://www.youtube.com/watch?v=217EO1KZfH4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices are an architectural style that structures an application as a collection of small services, each running in its own process and communicating with lightweight mechanisms. Node.js, with its asynchronous and event-driven nature, is a perfect fit for building microservices. When combined with Apache Kafka, a distributed event streaming platform, you can build scalable and resilient microservices that can handle high throughput and real-time communication."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, you will learn how to set up a simple Node.js microservices application using Kafka to communicate between services. We will build two microservices: a Producer service that sends messages and a Consumer service that receives and processes them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Prerequisites\n- Node.js installed (LTS version recommended)\n- Kafka installed and running locally (you can use services like Confluent Cloud or Docker to run Kafka)\n- Basic knowledge of JavaScript and Node.js"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Setup Kafka\nIf you don't have Kafka running yet, one of the easiest ways is using Docker:\n"
+      },
+      {
+        "type": "code",
+        "value": "docker run -d --name zookeeper -p 2181:2181 confluentinc/cp-zookeeper:latest\n\ndocker run -d --name kafka -p 9092:9092 --link zookeeper:zookeeper \\\n  -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 \\\n  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 \\\n  -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \\\n  confluentinc/cp-kafka:latest"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Initialize Node.js Projects\nCreate two folders: `producer-service` and `consumer-service`. Inside each folder, initialize a new Node.js project:\n"
+      },
+      {
+        "type": "code",
+        "value": "mkdir producer-service && cd producer-service\nnpm init -y\n\nmkdir ../consumer-service && cd ../consumer-service\nnpm init -y"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Install Kafka Client\nWe will use the popular `kafkajs` library to interact with Kafka."
+      },
+      {
+        "type": "code",
+        "value": "cd producer-service\nnpm install kafkajs\n\ncd ../consumer-service\nnpm install kafkajs"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Create Producer Service\nCreate a file named `producer.js` in `producer-service` folder with the following content:"
+      },
+      {
+        "type": "code",
+        "value": "const { Kafka } = require('kafkajs');\n\nconst kafka = new Kafka({\n  clientId: 'producer-service',\n  brokers: ['localhost:9092'],\n});\n\nconst producer = kafka.producer();\n\nconst run = async () => {\n  await producer.connect();\n  console.log('Producer connected');\n\n  // Sending a message every 5 seconds\n  setInterval(async () => {\n    const message = { value: `Hello Kafka! Time: ${new Date().toISOString()}` };\n    try {\n      await producer.send({\n        topic: 'test-topic',\n        messages: [message],\n      });\n      console.log('Sent message:', message.value);\n    } catch (error) {\n      console.error('Failed to send message', error);\n    }\n  }, 5000);\n};\n\nrun().catch(console.error);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Create Consumer Service\nCreate a file named `consumer.js` in `consumer-service` folder with this code:"
+      },
+      {
+        "type": "code",
+        "value": "const { Kafka } = require('kafkajs');\n\nconst kafka = new Kafka({\n  clientId: 'consumer-service',\n  brokers: ['localhost:9092'],\n});\n\nconst consumer = kafka.consumer({ groupId: 'test-group' });\n\nconst run = async () => {\n  await consumer.connect();\n  console.log('Consumer connected');\n\n  await consumer.subscribe({ topic: 'test-topic', fromBeginning: true });\n\n  await consumer.run({\n    eachMessage: async ({ topic, partition, message }) => {\n      console.log(`Received message: ${message.value.toString()}`);\n    },\n  });\n};\n\nrun().catch(console.error);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Running the Services\nMake sure your Kafka server is running.\n\nOpen two terminal windows or tabs:\n\n- In the first one, start the consumer service:\n\nbash\nnode consumer.js\n\n\n- In the second, start the producer service:\n\nbash\nnode producer.js\n\n\nYou should see the producer sending messages every 5 seconds and the consumer receiving them in real time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nIn this tutorial, we built a basic scalable microservices architecture with Node.js and Kafka by creating two services communicating asynchronously via Kafka topics. As your application grows, you can add more microservices interacting through Kafka, benefiting from Kafka's robustness and scalability. This architecture decouples services and lets them scale independently, a key principle for modern applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "For production use, consider adding error handling, monitoring, and deploy Kafka on a cluster instead of a single instance. You can also explore schemas for Kafka messages with tools like Avro."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-javascript-data-models-designing-error-resilient-structures",
+    "title": "Mastering JavaScript Data Models: Designing Error-Resilient Structures",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to create error-resilient JavaScript data models that handle mistakes gracefully and keep your applications running smoothly.",
+    "videoUrl": "https://www.youtube.com/watch?v=rOpEN1JDaD0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications, managing data correctly is crucial. However, errors and unexpected data often happen. Designing error-resilient data models helps keep your JavaScript code safe, easier to debug, and more predictable. In this article, we'll cover practical ways to create such models for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Data Model in JavaScript?\nA data model is essentially how you organize and structure your data inside an app. It can be as simple as an object or a class that holds the properties and methods representing your domain entities."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Focus on Error-Resilience?\nData coming from users, APIs, or external services can often be malformed, missing, or incorrect. Without error handling, your app may crash or behave unpredictably. Error-resilient data models validate, sanitize, and provide safe defaults."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Define a Clear Structure and Use Defaults\nStart by defining what fields your data should have and provide defaults. This way, even if some data is missing, your model still works without errors."
+      },
+      {
+        "type": "code",
+        "value": "class User {\n  constructor({ name = 'Unknown', age = 0, email = '' } = {}) {\n    this.name = name;\n    this.age = age;\n    this.email = email;\n  }\n}\n\nconst user1 = new User({ name: 'Alice', age: 25 });\nconsole.log(user1); // User { name: 'Alice', age: 25, email: '' }\n\nconst user2 = new User();\nconsole.log(user2); // User { name: 'Unknown', age: 0, email: '' }"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Validate Incoming Data\nAdd simple validation logic in your model to catch bad data early. For example, check types or required fields and throw an error or use fallback values."
+      },
+      {
+        "type": "code",
+        "value": "class User {\n  constructor(data = {}) {\n    if (typeof data.name !== 'string' || data.name.trim() === '') {\n      throw new Error('Invalid name');\n    }\n    if (typeof data.age !== 'number' || data.age < 0) {\n      data.age = 0; // fallback default\n    }\n    this.name = data.name;\n    this.age = data.age;\n    this.email = data.email || '';\n  }\n}\n\ntry {\n  const user = new User({ name: '', age: 30 });\n} catch (e) {\n  console.error(e.message); // Invalid name\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Use Helper Functions for Cleanliness\nExtract repetitive validation or sanitization logic into helper functions. This keeps your models clean and easier to maintain."
+      },
+      {
+        "type": "code",
+        "value": "function validateString(value, fallback = '') {\n  return typeof value === 'string' && value.trim() !== '' ? value : fallback;\n}\n\nclass User {\n  constructor(data = {}) {\n    this.name = validateString(data.name, 'Unnamed');\n    this.age = typeof data.age === 'number' && data.age >= 0 ? data.age : 0;\n    this.email = validateString(data.email);\n  }\n}\n\nconst user = new User({ age: 45 });\nconsole.log(user); // User { name: 'Unnamed', age: 45, email: '' }"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Graceful Error Handling\nInstead of throwing errors immediately, some models use fallback values or error flags, which allows your app to still operate and give meaningful feedback."
+      },
+      {
+        "type": "code",
+        "value": "class User {\n  constructor(data = {}) {\n    this.errors = [];\n\n    if (!data.name || typeof data.name !== 'string') {\n      this.errors.push('Name is required and must be a string.');\n      this.name = 'Unknown';\n    } else {\n      this.name = data.name;\n    }\n\n    this.age = typeof data.age === 'number' && data.age >= 0 ? data.age : 0;\n    this.email = typeof data.email === 'string' ? data.email : '';\n  }\n}\n\nconst user = new User({ age: -5 });\nconsole.log(user.errors); // [ 'Name is required and must be a string.' ]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Thoughts\nDesigning error-resilient JavaScript data models means anticipating what might go wrong and coding defensively. By using defaults, validation, helper functions, and graceful error handling, you make your code more robust and easier to maintain. Start simple, and improve your model as your app grows!"
+      }
+    ]
+  },
+  {
+    "slug": "getting-started-with-typescript-setting-up-your-first-project",
+    "title": "Getting Started with TypeScript: Setting Up Your First Project",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to set up your first TypeScript project with easy-to-follow steps for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a popular programming language that builds on JavaScript by adding static types, making your code easier to understand and less error-prone. If you're new to TypeScript and want to set up your first project, this tutorial will guide you step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you need to have Node.js installed on your computer because TypeScript runs on Node and uses npm (Node Package Manager) to manage packages. You can download Node.js from its official website."
+      },
+      {
+        "type": "paragraph",
+        "value": "Once Node.js is installed, open your terminal or command prompt and follow these steps:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Create a new folder for your project and navigate into it:"
+      },
+      {
+        "type": "code",
+        "value": "mkdir my-typescript-project\ncd my-typescript-project"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Initialize a new Node.js project (this will create a package.json file):"
+      },
+      {
+        "type": "code",
+        "value": "npm init -y"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Install TypeScript as a development dependency:"
+      },
+      {
+        "type": "code",
+        "value": "npm install typescript --save-dev"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Initialize a TypeScript configuration file (tsconfig.json). This file helps you configure TypeScript compiler options:"
+      },
+      {
+        "type": "code",
+        "value": "npx tsc --init"
+      },
+      {
+        "type": "paragraph",
+        "value": "The created tsconfig.json file contains default settings. You can leave them as is for now."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Now, create your first TypeScript file. Let's create a simple program that prints a message to the console."
+      },
+      {
+        "type": "code",
+        "value": "touch index.ts"
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Open index.ts and add the following code:"
+      },
+      {
+        "type": "code",
+        "value": "const greet = (name: string): string => {\n  return `Hello, ${name}! Welcome to TypeScript.`;\n};\n\nconsole.log(greet('World'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "7. To compile your TypeScript code into JavaScript, run:"
+      },
+      {
+        "type": "code",
+        "value": "npx tsc"
+      },
+      {
+        "type": "paragraph",
+        "value": "This will generate an index.js file with the compiled JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "8. Finally, run the JavaScript file using Node.js:"
+      },
+      {
+        "type": "code",
+        "value": "node index.js"
+      },
+      {
+        "type": "paragraph",
+        "value": "You should see the message: Hello, World! Welcome to TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Congratulations! You've set up your first TypeScript project and written a simple program. As you continue learning, you can explore other TypeScript features such as interfaces, enums, and advanced type annotations."
+      }
+    ]
+  },
+  {
+    "slug": "handling-complex-api-response-errors-gracefully-in-typescript-projects",
+    "title": "Handling Complex API Response Errors Gracefully in TypeScript Projects",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to handle complex API response errors gracefully in TypeScript with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=AdmGHwvgaVs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with APIs in TypeScript projects, errors in responses can often be complex and nested. Handling these errors gracefully is essential for improving user experience and debugging. This article will guide you through a beginner-friendly approach to managing complex API response errors using TypeScript's type safety features."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by defining a typical structure of an API response that might include nested error information. For example, an API might return errors like this:"
+      },
+      {
+        "type": "code",
+        "value": "interface ApiError {\n  code: string;\n  message: string;\n  details?: ApiError[];\n}\n\ninterface ApiResponse {\n  success: boolean;\n  data?: any;\n  error?: ApiError;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the ApiError type can contain a list of details which are themselves ApiErrors. This recursive structure allows for handling multiple layers of errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we'll create a utility function to extract meaningful messages from this error structure. The goal is to traverse all nested errors and collect their messages."
+      },
+      {
+        "type": "code",
+        "value": "function extractErrorMessages(error: ApiError): string[] {\n  const messages = [error.message];\n  if (error.details) {\n    for (const detail of error.details) {\n      messages.push(...extractErrorMessages(detail));\n    }\n  }\n  return messages;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function uses recursion to navigate through all levels of error details and collect all error messages into a flat array."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how to use this function when handling a response from an API call. Suppose you made a fetch request and received a parsed response object:"
+      },
+      {
+        "type": "code",
+        "value": "async function handleApiResponse(response: ApiResponse) {\n  if (!response.success && response.error) {\n    const messages = extractErrorMessages(response.error);\n    console.error(\"API Errors:\", messages.join(\", \"));\n    // Show friendly error messages to users or take action based on error codes\n  } else {\n    console.log(\"Data received:\", response.data);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function checks if the API response is unsuccessful and if an error object exists. It then extracts all error messages and logs them. In real usage, you could display these messages to users or implement logic based on specific error codes."
+      },
+      {
+        "type": "paragraph",
+        "value": "For added type safety, and especially in larger projects, you can define specific error codes as a TypeScript union type and create helper functions to handle different error types accordingly. For example:"
+      },
+      {
+        "type": "code",
+        "value": "type ErrorCode = \"INVALID_INPUT\" | \"NOT_FOUND\" | \"SERVER_ERROR\";\n\nfunction handleSpecificErrors(error: ApiError) {\n  switch (error.code as ErrorCode) {\n    case \"INVALID_INPUT\":\n      console.warn(\"Invalid input provided.\");\n      break;\n    case \"NOT_FOUND\":\n      console.warn(\"Requested resource not found.\");\n      break;\n    case \"SERVER_ERROR\":\n      console.error(\"Server encountered an error.\");\n      break;\n    default:\n      console.error(\"Unknown error:\", error.message);\n  }\n  if (error.details) {\n    error.details.forEach(handleSpecificErrors);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This helper recursively acts on each error based on its code, allowing you to customize behavior for different error types."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary:"
+      },
+      {
+        "type": "paragraph",
+        "value": "• Define TypeScript interfaces to represent the API response and error structure.\n• Use a recursive function to extract and flatten error messages from complex nested structures.\n• Handle errors thoughtfully in your UI or application logic.\n• Use TypeScript's type system to create safer, clearer error-handling code."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these steps, you can gracefully handle even complex API response errors in your TypeScript projects, improving both developer experience and user satisfaction."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-for-cleaner-resource-management",
+    "title": "Mastering Python Context Managers for Cleaner Resource Management",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python context managers to handle resources efficiently and write cleaner, safer code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, managing resources like files, network connections, or database sessions properly is crucial. Failure to release these resources can cause bugs, memory leaks, or locked files. This is where context managers come in — they help automate resource management to ensure resources are properly acquired and released."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common example you’ve likely used is the `with` statement. It ensures that a resource is cleaned up after use, even if errors occur during processing. Let's start by seeing how this works with files."
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, Context Managers!')\n# The file is automatically closed here"
+      },
+      {
+        "type": "paragraph",
+        "value": "Without the `with` statement, you would have to manually open and close the file, which can lead to errors if the file is not closed properly. Context managers automatically handle this cleanup for you."
+      },
+      {
+        "type": "paragraph",
+        "value": "So how do context managers work under the hood? They use special methods called `__enter__` and `__exit__`. When you enter the `with` block, Python calls `__enter__`, and when you leave, it calls `__exit__`, even if an error happens."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create your own context managers by defining a class with these two methods. Here's a simple example that manages printing messages before and after a block of code."
+      },
+      {
+        "type": "code",
+        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the block')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the block')\n\nwith MyContextManager():\n    print('Inside the block')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, when the block starts, 'Entering the block' is printed, then the code inside the block runs, and finally, 'Exiting the block' prints after the block finishes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python also provides a built-in helper from the `contextlib` module called `contextmanager` that lets you create context managers with generator functions. This is often simpler for basic resource management tasks."
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_manager():\n    print('Setup code')\n    yield\n    print('Cleanup code')\n\nwith my_manager():\n    print('Inside the block')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function runs everything before `yield` when entering the block, and everything after `yield` when exiting. This makes it very easy to manage setup and cleanup steps cleanly."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, context managers help you write safer and more readable Python code by automating resource cleanup. Whether you work with files, network connections, or custom resources, mastering context managers is an important part of writing professional Python code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try creating your own context managers, and use the `with` statement whenever you deal with resources. Your future self will thank you!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-to-handle-unexpected-null-values-in-large-datasets",
+    "title": "Optimizing SQL Queries to Handle Unexpected NULL Values in Large Datasets",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize SQL queries to efficiently handle unexpected NULL values in large datasets, preventing errors and improving performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=qCBX5v9OCxM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large datasets in SQL, unexpected NULL values can cause errors, slow down queries, or produce inaccurate results. Handling these NULL values effectively helps you write robust, optimized queries that perform well and return correct data."
+      },
+      {
+        "type": "paragraph",
+        "value": "NULL represents missing or unknown data, which is common in real-world datasets. However, if you don’t account for NULL values explicitly, operations like comparisons or aggregations may fail or behave unexpectedly. This guide will help beginners understand best practices for handling NULLs in SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use IS NULL and IS NOT NULL to check for NULLs\nAlways check for NULL values using `IS NULL` or `IS NOT NULL` rather than equality operators (`= NULL` or `!= NULL`), because NULL is not equal to anything, even itself."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE customer_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use COALESCE to replace NULLs with default values\nThe `COALESCE` function returns the first non-NULL value from its arguments. This is useful to avoid NULL results during calculations or display a default when data is missing."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, COALESCE(total_amount, 0) AS total_amount FROM orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Avoid functions on columns with NULL values without null checks\nFunctions like SUM, AVG, or string functions can behave differently with NULLs. When aggregating, NULL values are ignored by default but can affect result interpretation. Use WHERE clauses or COALESCE to handle them explicitly."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Optimize JOINs to handle NULLs\nWhen joining tables, NULLs can affect whether rows are matched. Use LEFT JOIN, RIGHT JOIN, or FULL OUTER JOIN depending on whether you want to preserve rows with NULL matches."
+      },
+      {
+        "type": "code",
+        "value": "SELECT o.order_id, c.customer_name\nFROM orders o\nLEFT JOIN customers c ON o.customer_id = c.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Use indexes wisely with NULLable columns\nSome databases treat NULLs in indexes differently. Check your database documentation and consider adding filtered indexes to improve query speed on NULL conditions."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, your SQL queries will be more resilient to unexpected NULL values, reducing errors and improving query performance over large datasets."
+      }
+    ]
   }
 ];
