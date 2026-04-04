@@ -4611,5 +4611,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "45 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-group-and-summarize-sales-data-by-category",
+    "title": "Build a Function to Group and Summarize Sales Data by Category",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a Python function that takes a list of sales records and returns a summary dictionary grouping total sales by product category.",
+    "prompt": "Write a function named 'summarize_sales_by_category' that accepts a list of dictionaries. Each dictionary represents a sale with keys 'product', 'category', and 'amount'. The function should return a dictionary where each key is a category and the value is the sum of amounts for that category.",
+    "guidance": [
+      "Iterate over each sale record in the input list.",
+      "Use a dictionary to accumulate the sum of amounts keyed by category.",
+      "Ensure the function works efficiently for any number of sales records."
+    ],
+    "hints": [
+      "Use the dict.get method to provide a default value when adding amounts.",
+      "Remember to initialize the category sum to zero the first time you encounter it."
+    ],
+    "starterCode": "def summarize_sales_by_category(sales):\n    # Your code here\n    pass",
+    "expectedOutput": "{'Electronics': 450, 'Clothing': 300, 'Books': 150}",
+    "concepts": [
+      "dictionary",
+      "loops",
+      "aggregation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-memory-leak-and-logic-bug-in-custom-linked-list-implementation",
+    "title": "Fix Memory Leak and Logic Bug in Custom Linked List Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the memory management and logic bugs in a custom singly linked list class implemented in C++. The list supports insertion and search operations but has subtle issues causing memory leaks and incorrect behavior.",
+    "prompt": "You are given a partial implementation of a singly linked list class in C++, which manages integer values. The class supports insertion at the head and a method to check whether a value exists in the list. However, the current implementation contains memory leaks and logical errors that prevent it from working correctly under some conditions. Your task is to identify and fix all such bugs, including but not limited to memory management, pointer handling, and method logic, to make the class robust and leak-free.",
+    "guidance": [
+      "Check the destructor and methods that allocate or deallocate memory to ensure no leaks occur.",
+      "Verify that the search method correctly traverses the entire list and returns the expected result.",
+      "Ensure all edge cases (e.g., empty list, single-node insertions) are handled properly."
+    ],
+    "hints": [
+      "Remember to delete all nodes in the destructor to prevent memory leaks.",
+      "Watch for missing return statements or infinite loops in your traversal method.",
+      "Check if the inserted nodes correctly update the head pointer without losing access to existing nodes."
+    ],
+    "starterCode": "class LinkedList {\n    struct Node {\n        int data;\n        Node* next;\n        Node(int val) : data(val), next(nullptr) {}\n    };\n    Node* head;\npublic:\n    LinkedList() : head(nullptr) {}\n    ~LinkedList() {\n        // Intended to free all nodes\n        while (head != nullptr) {\n            head = head->next; // BUG: leaks memory!\n        }\n    }\n    void insert(int val) {\n        Node* n = new Node(val);\n        n->next = head;\n        head = n;\n    }\n    bool contains(int val) {\n        Node* current = head;\n        while (current != nullptr) {\n            if (current->data = val) {\n                return true;\n            }\n            current = current->next;\n        }\n        return false;\n    }\n};",
+    "expectedOutput": "After fixing, inserting values and searching should produce correct results without memory leaks. For example:\nLinkedList list;\nlist.insert(10);\nlist.insert(20);\nlist.insert(30);\n\nsearching for 20 returns true\nsearching for 40 returns false\nOn destruction, no memory is leaked.",
+    "concepts": [
+      "Memory management",
+      "Pointers and dynamic allocation",
+      "Linked list traversal",
+      "Destructor implementation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-complex-sales-report-query-for-performance-optimization",
+    "title": "Refactor Complex Sales Report Query for Performance Optimization",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Improve a verbose and inefficient SQL query that generates a monthly sales report by refactoring it into a cleaner, optimized form while maintaining its original behavior.",
+    "prompt": "You are given a SQL query that produces a monthly sales report including total sales, number of orders, and average order value per customer. The current query uses multiple nested subqueries and repetitive calculations, making it hard to maintain and slow to execute. Your task is to refactor this query into a more readable and efficient form, using appropriate JOINs, common table expressions (CTEs), and aggregation techniques, without changing the output results.",
+    "guidance": [
+      "Identify and eliminate redundant calculations or repeated subqueries by consolidating them.",
+      "Consider using CTEs to break down the query into logical parts for clarity and reusability."
+    ],
+    "hints": [
+      "Look for opportunities to replace subqueries in SELECT statements with JOINs or window functions.",
+      "Check if aggregations can be computed in a single pass rather than multiple separate steps."
+    ],
+    "starterCode": "SELECT\n  customer_id,\n  (SELECT COUNT(*) FROM orders WHERE customer_id = c.customer_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', CURRENT_DATE)) AS total_orders,\n  (SELECT SUM(amount) FROM orders WHERE customer_id = c.customer_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', CURRENT_DATE)) AS total_sales,\n  (SELECT AVG(amount) FROM orders WHERE customer_id = c.customer_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', CURRENT_DATE)) AS avg_order_value\nFROM customers c\nWHERE EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id AND DATE_TRUNC('month', o.order_date) = DATE_TRUNC('month', CURRENT_DATE))\nORDER BY total_sales DESC;",
+    "expectedOutput": "A result set with columns: customer_id, total_orders, total_sales, avg_order_value for all customers who placed orders in the current month, sorted by total_sales descending.",
+    "concepts": [
+      "SQL optimization",
+      "Common Table Expressions (CTEs)",
+      "Joins and aggregation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-output-complex-recursive-function-with-memoization-and-side-effects",
+    "title": "Predict Output: Complex Recursive Function with Memoization and Side Effects",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze the given JavaScript code involving recursion, memoization, and side effects, and predict what the output will be when it is executed.",
+    "prompt": "Examine the provided JavaScript function which computes a value recursively and uses memoization alongside side effects that mutate an external array. Determine exactly what will be printed to the console when the function is called with the argument 5.",
+    "guidance": [
+      "Trace the recursive calls carefully to understand the order in which results are computed.",
+      "Consider how the memoization cache is updated and accessed during calls.",
+      "Analyze the side effects on the external array and how they affect the final output."
+    ],
+    "hints": [
+      "Pay close attention to when elements are pushed into the external array and how that corresponds to the recursive unwind.",
+      "Remember that the function modifies state outside its local scope during execution, affecting console output.",
+      "Think about the behavior of short-circuit evaluation with logical operators in JavaScript."
+    ],
+    "starterCode": "const cache = {};\nconst sideEffectArray = [];\n\nfunction complexFunc(n) {\n  if (cache[n] !== undefined) return cache[n];\n  if (n <= 1) {\n    sideEffectArray.push(n);\n    return n;\n  }\n  const result = complexFunc(n - 1) + complexFunc(n - 2);\n  sideEffectArray.push(result);\n  cache[n] = result;\n  return result;\n}\n\nconsole.log(complexFunc(5));\nconsole.log(sideEffectArray);",
+    "expectedOutput": "5\n[1, 0, 1, 2, 3, 5]",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "side effects",
+      "JavaScript evaluation order"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-messy-code-to-calculate-the-sum-of-even-numbers",
+    "title": "Refactor Messy Code to Calculate the Sum of Even Numbers",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and quality of a Python function that calculates the sum of even numbers from a list, while keeping the output correct.",
+    "prompt": "You are given a Python function that accepts a list of integers and returns the sum of all even numbers in the list. The code works correctly but is messy, hard to read, and uses unnecessary steps. Refactor this function to make it clearer, more readable, and more Pythonic while maintaining exactly the same behavior and output.",
+    "guidance": [
+      "Focus on improving variable names, simplifying loops or conditionals.",
+      "Remove any redundant or unnecessary code.",
+      "Use built-in Python features or idioms where appropriate.",
+      "Make sure the function output remains exactly the same for all inputs."
+    ],
+    "hints": [
+      "Consider using list comprehensions or generator expressions.",
+      "Think about using built-in functions like sum() to reduce code lines.",
+      "Avoid unnecessary temporary variables that don't add clarity."
+    ],
+    "starterCode": "def sum_even_numbers(numbers):\n    total = 0\n    for i in range(len(numbers)):\n        if numbers[i] % 2 == 0:\n            total = total + numbers[i]\n    return total\n\n# Example usage:\nprint(sum_even_numbers([1, 2, 3, 4, 5, 6]))",
+    "expectedOutput": "12",
+    "concepts": [
+      "loops",
+      "conditionals",
+      "functions",
+      "code readability",
+      "list comprehensions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "employee-performance-tracker",
+    "title": "Employee Performance Tracker",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Build a C++ program to manage and analyze employee performance data by storing, updating, and calculating key statistics from the data.",
+    "prompt": "Create a C++ program that enables storing performance scores of multiple employees over several months. Your program should allow the user to input employee names, their monthly performance scores, and then calculate and display the average performance for each employee. Additionally, identify the employee with the highest average score.",
+    "guidance": [
+      "Use structs or classes to represent an employee with fields for name and a vector/array of performance scores.",
+      "Provide functions to input employee data, calculate average scores, and find the top performer.",
+      "Handle dynamic input sizes, meaning the number of employees and the number of months can vary based on user input."
+    ],
+    "hints": [
+      "Consider using std::vector for flexibility in storing monthly scores.",
+      "A loop can be used to sum up the scores before dividing by the number of months for the average.",
+      "Keep track of the highest average score and corresponding employee as you calculate averages."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Employee {\n    std::string name;\n    std::vector<int> monthlyScores;\n};\n\n// Function prototypes\nvoid inputEmployees(std::vector<Employee>& employees, int employeeCount, int months);\ndouble calculateAverage(const Employee& emp);\nint findTopPerformer(const std::vector<Employee>& employees);\n\nint main() {\n    int employeeCount, months;\n    std::cout << \"Enter number of employees: \";\n    std::cin >> employeeCount;\n    std::cout << \"Enter number of months: \";\n    std::cin >> months;\n\n    std::vector<Employee> employees(employeeCount);\n    inputEmployees(employees, employeeCount, months);\n\n    for (const auto& emp : employees) {\n        std::cout << emp.name << \"'s average score: \" << calculateAverage(emp) << \"\\n\";\n    }\n\n    int topIndex = findTopPerformer(employees);\n    std::cout << \"Top performer: \" << employees[topIndex].name << \" with average score \" << calculateAverage(employees[topIndex]) << \"\\n\";\n\n    return 0;\n}",
+    "expectedOutput": "Enter number of employees: 2\nEnter number of months: 3\nEnter name for employee 1: Alice\nEnter 3 monthly scores for Alice: 80 85 90\nEnter name for employee 2: Bob\nEnter 3 monthly scores for Bob: 90 88 91\nAlice's average score: 85\nBob's average score: 89.6667\nTop performer: Bob with average score 89.6667",
+    "concepts": [
+      "structs",
+      "vectors",
+      "loops",
+      "functions",
+      "basic input/output"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
