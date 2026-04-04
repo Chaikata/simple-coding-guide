@@ -4783,5 +4783,181 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-logic-bug-in-the-array-frequency-counter",
+    "title": "Fix the Logic Bug in the Array Frequency Counter",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "The given C++ function is intended to count the frequency of each integer in an input vector and return the result as a map. However, the current implementation produces incorrect frequency counts due to a logic bug. Your task is to identify and fix the bug so that the function returns accurate counts.",
+    "prompt": "Given the broken C++ function that counts the frequency of integers in a vector, identify and fix the logic bug so the function works correctly. The function should take a vector<int> as input and return a map<int, int> where each key is a unique integer from the vector and its value is the frequency of that integer in the vector.",
+    "guidance": [
+      "Review how the frequency map is updated within the loop.",
+      "Check whether the existing counts are being correctly incremented for repeated elements."
+    ],
+    "hints": [
+      "Look at how the map is accessed and updated inside the loop; there might be an incorrect assignment instead of increment.",
+      "Consider what happens when the element is already present in the map and the current implementation overwrites rather than increments the count."
+    ],
+    "starterCode": "#include <vector>\n#include <map>\n\nstd::map<int, int> countFrequencies(const std::vector<int>& nums) {\n    std::map<int, int> freq;\n    for (int num : nums) {\n        if (freq.find(num) != freq.end()) {\n            freq[num] = 1; // Bug here: resets count instead of incrementing\n        } else {\n            freq[num] = 1;\n        }\n    }\n    return freq;\n}",
+    "expectedOutput": "For input vector {4, 2, 4, 3, 2, 4}, the function should return a map with counts: {4:3, 2:2, 3:1}",
+    "concepts": [
+      "map usage",
+      "loops",
+      "conditional logic",
+      "frequency counting"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-complex-data-aggregation-and-filtering-in-javascript",
+    "title": "Refactor Complex Data Aggregation and Filtering in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve the quality and maintainability of a long, nested JavaScript function that processes and aggregates data from a complex array of objects while preserving its original behavior and performance.",
+    "prompt": "You are given a function `processUserData` that takes an array of user activity objects and returns a summary report. The existing function works correctly but is difficult to read, deeply nested, and inefficient in places. Your challenge is to refactor this function to improve readability, maintainability, and efficiency without changing its output.\n\nRequirements:\n- Break down complex logic into smaller reusable functions.\n- Remove unnecessary nested loops and if statements.\n- Use modern ES6+ features where appropriate.\n- Ensure that the behavior and output remain exactly the same.\n\nAnalyze the provided code, refactor it, then test to verify the result matches the original output.",
+    "guidance": [
+      "Identify repeated patterns and extract helper functions for clarity.",
+      "Use array methods like map, filter, reduce to simplify iteration and aggregation.",
+      "Replace nested conditional statements with early returns or guard clauses.",
+      "Consider using destructuring, default parameters, and meaningful variable names."
+    ],
+    "hints": [
+      "Look for opportunities to use reduce instead of manual accumulators.",
+      "Avoid mutating the input data for purity and side-effect prevention.",
+      "Split one big function into multiple smaller functions with clear responsibilities."
+    ],
+    "starterCode": "function processUserData(users) {\n  const result = {};\n  for (let i = 0; i < users.length; i++) {\n    const user = users[i];\n    if (user && user.activities && user.activities.length > 0) {\n      for (let j = 0; j < user.activities.length; j++) {\n        const activity = user.activities[j];\n        if (activity.type) {\n          if (!result[activity.type]) {\n            result[activity.type] = { count: 0, users: new Set() };\n          }\n          result[activity.type].count++;\n          result[activity.type].users.add(user.id);\n        }\n      }\n    }\n  }\n  // Convert sets to counts\n  const summary = {};\n  for (const type in result) {\n    if (Object.prototype.hasOwnProperty.call(result, type)) {\n      summary[type] = {\n        totalActivities: result[type].count,\n        uniqueUsers: result[type].users.size\n      };\n    }\n  }\n  return summary;\n}",
+    "expectedOutput": "{\"login\":{\"totalActivities\":7,\"uniqueUsers\":3},\"purchase\":{\"totalActivities\":3,\"uniqueUsers\":2},\"logout\":{\"totalActivities\":5,\"uniqueUsers\":3}}",
+    "concepts": [
+      "code refactoring",
+      "ES6 array methods",
+      "code readability",
+      "functional programming"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-concurrent-task-scheduler-with-priority-queues",
+    "title": "Build a Concurrent Task Scheduler with Priority Queues",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a Python mini-project that simulates a concurrent task scheduler managing tasks with different priorities. The scheduler should execute tasks in priority order and support concurrent execution with a fixed number of worker threads.",
+    "prompt": "Design and implement a task scheduler in Python that handles multiple tasks assigned with different priority levels. The scheduler must execute tasks in order of highest priority first and support concurrent execution using a fixed pool of worker threads. Tasks are represented as functions with variable execution times. Your scheduler should allow adding new tasks dynamically and should output the start and finish times of each task. Ensure thread-safe access to the internal data and proper shutdown of workers once all tasks finish.",
+    "guidance": [
+      "Use Python's 'queue.PriorityQueue' to manage tasks based on priority.",
+      "Utilize the 'threading' module to create a pool of worker threads.",
+      "Ensure thread-safe operations when adding and removing tasks from the queue.",
+      "Implement graceful shutdown for worker threads once all tasks are completed."
+    ],
+    "hints": [
+      "Represent tasks as tuples (priority, task_id, task_function) to ensure reliable priority sorting.",
+      "Use threading.Event or a sentinel value to signal workers to exit after processing all tasks.",
+      "Consider using thread-safe print or logging to output start and finish times in real-time."
+    ],
+    "starterCode": "import threading\nimport queue\nimport time\n\ndef example_task(duration, task_name):\n    print(f\"Starting {task_name}\")\n    time.sleep(duration)\n    print(f\"Finished {task_name}\")\n\nclass TaskScheduler:\n    def __init__(self, num_workers):\n        self.task_queue = queue.PriorityQueue()\n        self.workers = []\n        self.num_workers = num_workers\n\n    def add_task(self, priority, task_id, task_func):\n        # Add a task to the priority queue\n        pass\n\n    def worker(self):\n        while True:\n            # Get the next task and execute\n            pass\n\n    def run(self):\n        # Start worker threads\n        pass\n\n    def wait_completion(self):\n        # Wait for all tasks to complete and shutdown workers\n        pass\n\n# Example usage:\nscheduler = TaskScheduler(num_workers=3)\nscheduler.add_task(2, 'task1', lambda: example_task(2, 'task1'))\nscheduler.add_task(1, 'task2', lambda: example_task(1, 'task2'))\nscheduler.add_task(3, 'task3', lambda: example_task(3, 'task3'))\nscheduler.run()\nscheduler.wait_completion()",
+    "expectedOutput": "Starting task2\nFinished task2\nStarting task1\nFinished task1\nStarting task3\nFinished task3",
+    "concepts": [
+      "threading",
+      "priority queue",
+      "concurrency",
+      "thread-safe programming"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-simple-employee-and-department-tables-with-basic-queries",
+    "title": "Create a Simple Employee and Department Tables with Basic Queries",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build and query basic employee and department tables to practice simple SQL data modeling and retrieval.",
+    "prompt": "You are tasked with creating two tables, Employees and Departments, for a small company database. The Employees table should store employee_id, name, and department_id. The Departments table should store department_id and department_name. After creating the tables and inserting sample data, write a query to list all employees along with the name of the department they belong to.",
+    "guidance": [
+      "Start by creating the Departments table with department_id as the primary key.",
+      "Create the Employees table with a foreign key reference to Departments.",
+      "Insert at least 3 departments and 5 employees distributed across these departments.",
+      "Write a SELECT query using a JOIN to combine employee names with their department names."
+    ],
+    "hints": [
+      "Use CREATE TABLE statements with appropriate data types (e.g., INT, VARCHAR).",
+      "Remember to use INNER JOIN to combine Employees and Departments based on department_id.",
+      "Use aliasing for readability, e.g., SELECT e.name, d.department_name FROM Employees e JOIN Departments d ON e.department_id = d.department_id."
+    ],
+    "starterCode": "CREATE TABLE Departments (department_id INT PRIMARY KEY, department_name VARCHAR(50));\n\nCREATE TABLE Employees (employee_id INT PRIMARY KEY, name VARCHAR(50), department_id INT);\n\n-- Insert sample data here\n\n-- Write your SELECT query here",
+    "expectedOutput": "name     | department_name\n---------|----------------\nAlice    | Sales\nBob      | Marketing\nCharlie  | IT\nDiana    | IT\nEve      | Sales",
+    "concepts": [
+      "CREATE TABLE",
+      "INSERT INTO",
+      "INNER JOIN",
+      "SELECT"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "expense-tracker-cli-application",
+    "title": "Expense Tracker CLI Application",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Build a command-line expense tracker application in Python that allows users to add, view, and categorize their expenses. The program should support adding multiple expenses, filtering expenses by category, and displaying the total amount spent.",
+    "prompt": "Create a Python program that functions as an expense tracker. Your application should allow users to:\n\n1. Add expenses including amount, description, and category.\n2. View all added expenses in a readable format.\n3. Filter expenses by category to see only expenses related to that category.\n4. Calculate and show the total amount spent across all expenses.\n\nYour program should continue to accept commands until the user decides to exit.\n\nImplement this functionality using functions and a list to store expense data as dictionaries.",
+    "guidance": [
+      "Create a function to add an expense capturing amount, description, and category.",
+      "Use a list to store all expense entries as dictionaries.",
+      "Create functions to filter expenses by category and calculate the total amount spent.",
+      "Implement a simple user interface loop to accept user commands until they choose to exit."
+    ],
+    "hints": [
+      "Use dictionaries with keys like 'amount', 'description', and 'category' to represent each expense.",
+      "Consider using a while loop with a menu system to prompt the user for actions.",
+      "When filtering expenses, loop through the stored list and only print entries matching the category."
+    ],
+    "starterCode": "def add_expense(expenses):\n    # Implement adding an expense\n    pass\n\ndef view_expenses(expenses):\n    # Implement viewing all expenses\n    pass\n\ndef filter_expenses(expenses, category):\n    # Implement filtering expenses by category\n    pass\n\ndef total_expenses(expenses):\n    # Implement calculation of total amount spent\n    pass\n\ndef main():\n    expenses = []\n    while True:\n        print(\"\\n1. Add expense\\n2. View expenses\\n3. Filter expenses by category\\n4. Show total spent\\n5. Exit\")\n        choice = input(\"Choose an option: \")\n        if choice == '1':\n            add_expense(expenses)\n        elif choice == '2':\n            view_expenses(expenses)\n        elif choice == '3':\n            category = input(\"Enter category to filter: \")\n            filter_expenses(expenses, category)\n        elif choice == '4':\n            total = total_expenses(expenses)\n            print(f\"Total spent: ${total:.2f}\")\n        elif choice == '5':\n            print(\"Goodbye!\")\n            break\n        else:\n            print(\"Invalid choice, please try again.\")\n\nif __name__ == '__main__':\n    main()",
+    "expectedOutput": "Example run (user inputs are shown after prompts):\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 1\nEnter amount: 25.5\nEnter description: Lunch\nEnter category: Food\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 2\nExpenses:\n- $25.50 | Lunch | Food\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 4\nTotal spent: $25.50\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 5\nGoodbye!",
+    "concepts": [
+      "functions",
+      "lists",
+      "dictionaries",
+      "loops"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-nested-generator-and-coroutine-logic-in-python",
+    "title": "Predict the Output of Nested Generator and Coroutine Logic in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a complex Python function that uses nested generators, coroutines, and yield expressions to predict its output. This challenge tests your understanding of Python's generator mechanics and flow control.",
+    "prompt": "Consider the following Python code snippet involving nested generators and the send() method on coroutines. Predict the exact sequence of printed output when the code is executed. Do not run the code; rely on logic and deep understanding of generator flow control and interaction. Explain your reasoning in comments.",
+    "guidance": [
+      "Focus on how send() affects the yield expressions and how values are passed between generators.",
+      "Pay attention to the order of generator activation and suspension points.",
+      "Remember that a generator's yield expression both outputs a value and receives a value via send()."
+    ],
+    "hints": [
+      "Trace the code line-by-line, simulating the generator states manually.",
+      "Keep track of what each yield expression returns and what values are sent back to them.",
+      "Note when the control switches between gen1 and gen2 and how their outputs interleave."
+    ],
+    "starterCode": "def gen2():\n    val = yield 'Start gen2'\n    val2 = yield val + 5\n    yield val2 * 2\n\ndef gen1():\n    g = gen2()\n    x = yield next(g)\n    y = yield g.send(x + 1)\n    yield g.send(y + 2)\n\n\nrunner = gen1()\nprint(next(runner))       # prime gen1\nprint(runner.send(3))    # send 3 into gen1\nprint(runner.send(4))    # send 4 into gen1\nprint(next(runner))      # final output",
+    "expectedOutput": "'Start gen2'\n9\n12\n12",
+    "concepts": [
+      "generators",
+      "coroutines",
+      "yield and send",
+      "flow control"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];

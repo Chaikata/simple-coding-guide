@@ -1,174 +1,178 @@
 [
   {
-    "slug": "build-a-function-to-group-and-summarize-sales-data-by-category",
-    "title": "Build a Function to Group and Summarize Sales Data by Category",
-    "language": "python",
+    "slug": "fix-the-logic-bug-in-the-array-frequency-counter",
+    "title": "Fix the Logic Bug in the Array Frequency Counter",
+    "language": "cpp",
     "difficulty": "intermediate",
-    "category": "functions",
-    "description": "Create a Python function that takes a list of sales records and returns a summary dictionary grouping total sales by product category.",
-    "prompt": "Write a function named 'summarize_sales_by_category' that accepts a list of dictionaries. Each dictionary represents a sale with keys 'product', 'category', and 'amount'. The function should return a dictionary where each key is a category and the value is the sum of amounts for that category.",
+    "category": "debugging",
+    "description": "The given C++ function is intended to count the frequency of each integer in an input vector and return the result as a map. However, the current implementation produces incorrect frequency counts due to a logic bug. Your task is to identify and fix the bug so that the function returns accurate counts.",
+    "prompt": "Given the broken C++ function that counts the frequency of integers in a vector, identify and fix the logic bug so the function works correctly. The function should take a vector<int> as input and return a map<int, int> where each key is a unique integer from the vector and its value is the frequency of that integer in the vector.",
     "guidance": [
-      "Iterate over each sale record in the input list.",
-      "Use a dictionary to accumulate the sum of amounts keyed by category.",
-      "Ensure the function works efficiently for any number of sales records."
+      "Review how the frequency map is updated within the loop.",
+      "Check whether the existing counts are being correctly incremented for repeated elements."
     ],
     "hints": [
-      "Use the dict.get method to provide a default value when adding amounts.",
-      "Remember to initialize the category sum to zero the first time you encounter it."
+      "Look at how the map is accessed and updated inside the loop; there might be an incorrect assignment instead of increment.",
+      "Consider what happens when the element is already present in the map and the current implementation overwrites rather than increments the count."
     ],
-    "starterCode": "def summarize_sales_by_category(sales):\n    # Your code here\n    pass",
-    "expectedOutput": "{'Electronics': 450, 'Clothing': 300, 'Books': 150}",
+    "starterCode": "#include <vector>\n#include <map>\n\nstd::map<int, int> countFrequencies(const std::vector<int>& nums) {\n    std::map<int, int> freq;\n    for (int num : nums) {\n        if (freq.find(num) != freq.end()) {\n            freq[num] = 1; // Bug here: resets count instead of incrementing\n        } else {\n            freq[num] = 1;\n        }\n    }\n    return freq;\n}",
+    "expectedOutput": "For input vector {4, 2, 4, 3, 2, 4}, the function should return a map with counts: {4:3, 2:2, 3:1}",
     "concepts": [
-      "dictionary",
+      "map usage",
       "loops",
-      "aggregation"
+      "conditional logic",
+      "frequency counting"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-memory-leak-and-logic-bug-in-custom-linked-list-implementation",
-    "title": "Fix Memory Leak and Logic Bug in Custom Linked List Implementation",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Identify and fix the memory management and logic bugs in a custom singly linked list class implemented in C++. The list supports insertion and search operations but has subtle issues causing memory leaks and incorrect behavior.",
-    "prompt": "You are given a partial implementation of a singly linked list class in C++, which manages integer values. The class supports insertion at the head and a method to check whether a value exists in the list. However, the current implementation contains memory leaks and logical errors that prevent it from working correctly under some conditions. Your task is to identify and fix all such bugs, including but not limited to memory management, pointer handling, and method logic, to make the class robust and leak-free.",
-    "guidance": [
-      "Check the destructor and methods that allocate or deallocate memory to ensure no leaks occur.",
-      "Verify that the search method correctly traverses the entire list and returns the expected result.",
-      "Ensure all edge cases (e.g., empty list, single-node insertions) are handled properly."
-    ],
-    "hints": [
-      "Remember to delete all nodes in the destructor to prevent memory leaks.",
-      "Watch for missing return statements or infinite loops in your traversal method.",
-      "Check if the inserted nodes correctly update the head pointer without losing access to existing nodes."
-    ],
-    "starterCode": "class LinkedList {\n    struct Node {\n        int data;\n        Node* next;\n        Node(int val) : data(val), next(nullptr) {}\n    };\n    Node* head;\npublic:\n    LinkedList() : head(nullptr) {}\n    ~LinkedList() {\n        // Intended to free all nodes\n        while (head != nullptr) {\n            head = head->next; // BUG: leaks memory!\n        }\n    }\n    void insert(int val) {\n        Node* n = new Node(val);\n        n->next = head;\n        head = n;\n    }\n    bool contains(int val) {\n        Node* current = head;\n        while (current != nullptr) {\n            if (current->data = val) {\n                return true;\n            }\n            current = current->next;\n        }\n        return false;\n    }\n};",
-    "expectedOutput": "After fixing, inserting values and searching should produce correct results without memory leaks. For example:\nLinkedList list;\nlist.insert(10);\nlist.insert(20);\nlist.insert(30);\n\nsearching for 20 returns true\nsearching for 40 returns false\nOn destruction, no memory is leaked.",
-    "concepts": [
-      "Memory management",
-      "Pointers and dynamic allocation",
-      "Linked list traversal",
-      "Destructor implementation"
-    ],
-    "estimatedTime": "15 minutes",
     "isFeatured": true
   },
   {
-    "slug": "refactor-complex-sales-report-query-for-performance-optimization",
-    "title": "Refactor Complex Sales Report Query for Performance Optimization",
-    "language": "sql",
-    "difficulty": "intermediate",
-    "category": "optimization",
-    "description": "Improve a verbose and inefficient SQL query that generates a monthly sales report by refactoring it into a cleaner, optimized form while maintaining its original behavior.",
-    "prompt": "You are given a SQL query that produces a monthly sales report including total sales, number of orders, and average order value per customer. The current query uses multiple nested subqueries and repetitive calculations, making it hard to maintain and slow to execute. Your task is to refactor this query into a more readable and efficient form, using appropriate JOINs, common table expressions (CTEs), and aggregation techniques, without changing the output results.",
-    "guidance": [
-      "Identify and eliminate redundant calculations or repeated subqueries by consolidating them.",
-      "Consider using CTEs to break down the query into logical parts for clarity and reusability."
-    ],
-    "hints": [
-      "Look for opportunities to replace subqueries in SELECT statements with JOINs or window functions.",
-      "Check if aggregations can be computed in a single pass rather than multiple separate steps."
-    ],
-    "starterCode": "SELECT\n  customer_id,\n  (SELECT COUNT(*) FROM orders WHERE customer_id = c.customer_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', CURRENT_DATE)) AS total_orders,\n  (SELECT SUM(amount) FROM orders WHERE customer_id = c.customer_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', CURRENT_DATE)) AS total_sales,\n  (SELECT AVG(amount) FROM orders WHERE customer_id = c.customer_id AND DATE_TRUNC('month', order_date) = DATE_TRUNC('month', CURRENT_DATE)) AS avg_order_value\nFROM customers c\nWHERE EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id AND DATE_TRUNC('month', o.order_date) = DATE_TRUNC('month', CURRENT_DATE))\nORDER BY total_sales DESC;",
-    "expectedOutput": "A result set with columns: customer_id, total_orders, total_sales, avg_order_value for all customers who placed orders in the current month, sorted by total_sales descending.",
-    "concepts": [
-      "SQL optimization",
-      "Common Table Expressions (CTEs)",
-      "Joins and aggregation"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "predict-output-complex-recursive-function-with-memoization-and-side-effects",
-    "title": "Predict Output: Complex Recursive Function with Memoization and Side Effects",
+    "slug": "refactor-complex-data-aggregation-and-filtering-in-javascript",
+    "title": "Refactor Complex Data Aggregation and Filtering in JavaScript",
     "language": "javascript",
     "difficulty": "advanced",
-    "category": "logic",
-    "description": "Analyze the given JavaScript code involving recursion, memoization, and side effects, and predict what the output will be when it is executed.",
-    "prompt": "Examine the provided JavaScript function which computes a value recursively and uses memoization alongside side effects that mutate an external array. Determine exactly what will be printed to the console when the function is called with the argument 5.",
+    "category": "code-quality",
+    "description": "Improve the quality and maintainability of a long, nested JavaScript function that processes and aggregates data from a complex array of objects while preserving its original behavior and performance.",
+    "prompt": "You are given a function `processUserData` that takes an array of user activity objects and returns a summary report. The existing function works correctly but is difficult to read, deeply nested, and inefficient in places. Your challenge is to refactor this function to improve readability, maintainability, and efficiency without changing its output.\n\nRequirements:\n- Break down complex logic into smaller reusable functions.\n- Remove unnecessary nested loops and if statements.\n- Use modern ES6+ features where appropriate.\n- Ensure that the behavior and output remain exactly the same.\n\nAnalyze the provided code, refactor it, then test to verify the result matches the original output.",
     "guidance": [
-      "Trace the recursive calls carefully to understand the order in which results are computed.",
-      "Consider how the memoization cache is updated and accessed during calls.",
-      "Analyze the side effects on the external array and how they affect the final output."
+      "Identify repeated patterns and extract helper functions for clarity.",
+      "Use array methods like map, filter, reduce to simplify iteration and aggregation.",
+      "Replace nested conditional statements with early returns or guard clauses.",
+      "Consider using destructuring, default parameters, and meaningful variable names."
     ],
     "hints": [
-      "Pay close attention to when elements are pushed into the external array and how that corresponds to the recursive unwind.",
-      "Remember that the function modifies state outside its local scope during execution, affecting console output.",
-      "Think about the behavior of short-circuit evaluation with logical operators in JavaScript."
+      "Look for opportunities to use reduce instead of manual accumulators.",
+      "Avoid mutating the input data for purity and side-effect prevention.",
+      "Split one big function into multiple smaller functions with clear responsibilities."
     ],
-    "starterCode": "const cache = {};\nconst sideEffectArray = [];\n\nfunction complexFunc(n) {\n  if (cache[n] !== undefined) return cache[n];\n  if (n <= 1) {\n    sideEffectArray.push(n);\n    return n;\n  }\n  const result = complexFunc(n - 1) + complexFunc(n - 2);\n  sideEffectArray.push(result);\n  cache[n] = result;\n  return result;\n}\n\nconsole.log(complexFunc(5));\nconsole.log(sideEffectArray);",
-    "expectedOutput": "5\n[1, 0, 1, 2, 3, 5]",
+    "starterCode": "function processUserData(users) {\n  const result = {};\n  for (let i = 0; i < users.length; i++) {\n    const user = users[i];\n    if (user && user.activities && user.activities.length > 0) {\n      for (let j = 0; j < user.activities.length; j++) {\n        const activity = user.activities[j];\n        if (activity.type) {\n          if (!result[activity.type]) {\n            result[activity.type] = { count: 0, users: new Set() };\n          }\n          result[activity.type].count++;\n          result[activity.type].users.add(user.id);\n        }\n      }\n    }\n  }\n  // Convert sets to counts\n  const summary = {};\n  for (const type in result) {\n    if (Object.prototype.hasOwnProperty.call(result, type)) {\n      summary[type] = {\n        totalActivities: result[type].count,\n        uniqueUsers: result[type].users.size\n      };\n    }\n  }\n  return summary;\n}",
+    "expectedOutput": "{\"login\":{\"totalActivities\":7,\"uniqueUsers\":3},\"purchase\":{\"totalActivities\":3,\"uniqueUsers\":2},\"logout\":{\"totalActivities\":5,\"uniqueUsers\":3}}",
     "concepts": [
-      "recursion",
-      "memoization",
-      "side effects",
-      "JavaScript evaluation order"
+      "code refactoring",
+      "ES6 array methods",
+      "code readability",
+      "functional programming"
     ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "refactor-messy-code-to-calculate-the-sum-of-even-numbers",
-    "title": "Refactor Messy Code to Calculate the Sum of Even Numbers",
+    "slug": "build-a-concurrent-task-scheduler-with-priority-queues",
+    "title": "Build a Concurrent Task Scheduler with Priority Queues",
     "language": "python",
-    "difficulty": "beginner",
-    "category": "code-quality",
-    "description": "Improve the readability and quality of a Python function that calculates the sum of even numbers from a list, while keeping the output correct.",
-    "prompt": "You are given a Python function that accepts a list of integers and returns the sum of all even numbers in the list. The code works correctly but is messy, hard to read, and uses unnecessary steps. Refactor this function to make it clearer, more readable, and more Pythonic while maintaining exactly the same behavior and output.",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a Python mini-project that simulates a concurrent task scheduler managing tasks with different priorities. The scheduler should execute tasks in priority order and support concurrent execution with a fixed number of worker threads.",
+    "prompt": "Design and implement a task scheduler in Python that handles multiple tasks assigned with different priority levels. The scheduler must execute tasks in order of highest priority first and support concurrent execution using a fixed pool of worker threads. Tasks are represented as functions with variable execution times. Your scheduler should allow adding new tasks dynamically and should output the start and finish times of each task. Ensure thread-safe access to the internal data and proper shutdown of workers once all tasks finish.",
     "guidance": [
-      "Focus on improving variable names, simplifying loops or conditionals.",
-      "Remove any redundant or unnecessary code.",
-      "Use built-in Python features or idioms where appropriate.",
-      "Make sure the function output remains exactly the same for all inputs."
+      "Use Python's 'queue.PriorityQueue' to manage tasks based on priority.",
+      "Utilize the 'threading' module to create a pool of worker threads.",
+      "Ensure thread-safe operations when adding and removing tasks from the queue.",
+      "Implement graceful shutdown for worker threads once all tasks are completed."
     ],
     "hints": [
-      "Consider using list comprehensions or generator expressions.",
-      "Think about using built-in functions like sum() to reduce code lines.",
-      "Avoid unnecessary temporary variables that don't add clarity."
+      "Represent tasks as tuples (priority, task_id, task_function) to ensure reliable priority sorting.",
+      "Use threading.Event or a sentinel value to signal workers to exit after processing all tasks.",
+      "Consider using thread-safe print or logging to output start and finish times in real-time."
     ],
-    "starterCode": "def sum_even_numbers(numbers):\n    total = 0\n    for i in range(len(numbers)):\n        if numbers[i] % 2 == 0:\n            total = total + numbers[i]\n    return total\n\n# Example usage:\nprint(sum_even_numbers([1, 2, 3, 4, 5, 6]))",
-    "expectedOutput": "12",
+    "starterCode": "import threading\nimport queue\nimport time\n\ndef example_task(duration, task_name):\n    print(f\"Starting {task_name}\")\n    time.sleep(duration)\n    print(f\"Finished {task_name}\")\n\nclass TaskScheduler:\n    def __init__(self, num_workers):\n        self.task_queue = queue.PriorityQueue()\n        self.workers = []\n        self.num_workers = num_workers\n\n    def add_task(self, priority, task_id, task_func):\n        # Add a task to the priority queue\n        pass\n\n    def worker(self):\n        while True:\n            # Get the next task and execute\n            pass\n\n    def run(self):\n        # Start worker threads\n        pass\n\n    def wait_completion(self):\n        # Wait for all tasks to complete and shutdown workers\n        pass\n\n# Example usage:\nscheduler = TaskScheduler(num_workers=3)\nscheduler.add_task(2, 'task1', lambda: example_task(2, 'task1'))\nscheduler.add_task(1, 'task2', lambda: example_task(1, 'task2'))\nscheduler.add_task(3, 'task3', lambda: example_task(3, 'task3'))\nscheduler.run()\nscheduler.wait_completion()",
+    "expectedOutput": "Starting task2\nFinished task2\nStarting task1\nFinished task1\nStarting task3\nFinished task3",
     "concepts": [
-      "loops",
-      "conditionals",
-      "functions",
-      "code readability",
-      "list comprehensions"
+      "threading",
+      "priority queue",
+      "concurrency",
+      "thread-safe programming"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-simple-employee-and-department-tables-with-basic-queries",
+    "title": "Create a Simple Employee and Department Tables with Basic Queries",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build and query basic employee and department tables to practice simple SQL data modeling and retrieval.",
+    "prompt": "You are tasked with creating two tables, Employees and Departments, for a small company database. The Employees table should store employee_id, name, and department_id. The Departments table should store department_id and department_name. After creating the tables and inserting sample data, write a query to list all employees along with the name of the department they belong to.",
+    "guidance": [
+      "Start by creating the Departments table with department_id as the primary key.",
+      "Create the Employees table with a foreign key reference to Departments.",
+      "Insert at least 3 departments and 5 employees distributed across these departments.",
+      "Write a SELECT query using a JOIN to combine employee names with their department names."
+    ],
+    "hints": [
+      "Use CREATE TABLE statements with appropriate data types (e.g., INT, VARCHAR).",
+      "Remember to use INNER JOIN to combine Employees and Departments based on department_id.",
+      "Use aliasing for readability, e.g., SELECT e.name, d.department_name FROM Employees e JOIN Departments d ON e.department_id = d.department_id."
+    ],
+    "starterCode": "CREATE TABLE Departments (department_id INT PRIMARY KEY, department_name VARCHAR(50));\n\nCREATE TABLE Employees (employee_id INT PRIMARY KEY, name VARCHAR(50), department_id INT);\n\n-- Insert sample data here\n\n-- Write your SELECT query here",
+    "expectedOutput": "name     | department_name\n---------|----------------\nAlice    | Sales\nBob      | Marketing\nCharlie  | IT\nDiana    | IT\nEve      | Sales",
+    "concepts": [
+      "CREATE TABLE",
+      "INSERT INTO",
+      "INNER JOIN",
+      "SELECT"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
   },
   {
-    "slug": "employee-performance-tracker",
-    "title": "Employee Performance Tracker",
-    "language": "cpp",
+    "slug": "expense-tracker-cli-application",
+    "title": "Expense Tracker CLI Application",
+    "language": "python",
     "difficulty": "intermediate",
     "category": "mini-projects",
-    "description": "Build a C++ program to manage and analyze employee performance data by storing, updating, and calculating key statistics from the data.",
-    "prompt": "Create a C++ program that enables storing performance scores of multiple employees over several months. Your program should allow the user to input employee names, their monthly performance scores, and then calculate and display the average performance for each employee. Additionally, identify the employee with the highest average score.",
+    "description": "Build a command-line expense tracker application in Python that allows users to add, view, and categorize their expenses. The program should support adding multiple expenses, filtering expenses by category, and displaying the total amount spent.",
+    "prompt": "Create a Python program that functions as an expense tracker. Your application should allow users to:\n\n1. Add expenses including amount, description, and category.\n2. View all added expenses in a readable format.\n3. Filter expenses by category to see only expenses related to that category.\n4. Calculate and show the total amount spent across all expenses.\n\nYour program should continue to accept commands until the user decides to exit.\n\nImplement this functionality using functions and a list to store expense data as dictionaries.",
     "guidance": [
-      "Use structs or classes to represent an employee with fields for name and a vector/array of performance scores.",
-      "Provide functions to input employee data, calculate average scores, and find the top performer.",
-      "Handle dynamic input sizes, meaning the number of employees and the number of months can vary based on user input."
+      "Create a function to add an expense capturing amount, description, and category.",
+      "Use a list to store all expense entries as dictionaries.",
+      "Create functions to filter expenses by category and calculate the total amount spent.",
+      "Implement a simple user interface loop to accept user commands until they choose to exit."
     ],
     "hints": [
-      "Consider using std::vector for flexibility in storing monthly scores.",
-      "A loop can be used to sum up the scores before dividing by the number of months for the average.",
-      "Keep track of the highest average score and corresponding employee as you calculate averages."
+      "Use dictionaries with keys like 'amount', 'description', and 'category' to represent each expense.",
+      "Consider using a while loop with a menu system to prompt the user for actions.",
+      "When filtering expenses, loop through the stored list and only print entries matching the category."
     ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Employee {\n    std::string name;\n    std::vector<int> monthlyScores;\n};\n\n// Function prototypes\nvoid inputEmployees(std::vector<Employee>& employees, int employeeCount, int months);\ndouble calculateAverage(const Employee& emp);\nint findTopPerformer(const std::vector<Employee>& employees);\n\nint main() {\n    int employeeCount, months;\n    std::cout << \"Enter number of employees: \";\n    std::cin >> employeeCount;\n    std::cout << \"Enter number of months: \";\n    std::cin >> months;\n\n    std::vector<Employee> employees(employeeCount);\n    inputEmployees(employees, employeeCount, months);\n\n    for (const auto& emp : employees) {\n        std::cout << emp.name << \"'s average score: \" << calculateAverage(emp) << \"\\n\";\n    }\n\n    int topIndex = findTopPerformer(employees);\n    std::cout << \"Top performer: \" << employees[topIndex].name << \" with average score \" << calculateAverage(employees[topIndex]) << \"\\n\";\n\n    return 0;\n}",
-    "expectedOutput": "Enter number of employees: 2\nEnter number of months: 3\nEnter name for employee 1: Alice\nEnter 3 monthly scores for Alice: 80 85 90\nEnter name for employee 2: Bob\nEnter 3 monthly scores for Bob: 90 88 91\nAlice's average score: 85\nBob's average score: 89.6667\nTop performer: Bob with average score 89.6667",
+    "starterCode": "def add_expense(expenses):\n    # Implement adding an expense\n    pass\n\ndef view_expenses(expenses):\n    # Implement viewing all expenses\n    pass\n\ndef filter_expenses(expenses, category):\n    # Implement filtering expenses by category\n    pass\n\ndef total_expenses(expenses):\n    # Implement calculation of total amount spent\n    pass\n\ndef main():\n    expenses = []\n    while True:\n        print(\"\\n1. Add expense\\n2. View expenses\\n3. Filter expenses by category\\n4. Show total spent\\n5. Exit\")\n        choice = input(\"Choose an option: \")\n        if choice == '1':\n            add_expense(expenses)\n        elif choice == '2':\n            view_expenses(expenses)\n        elif choice == '3':\n            category = input(\"Enter category to filter: \")\n            filter_expenses(expenses, category)\n        elif choice == '4':\n            total = total_expenses(expenses)\n            print(f\"Total spent: ${total:.2f}\")\n        elif choice == '5':\n            print(\"Goodbye!\")\n            break\n        else:\n            print(\"Invalid choice, please try again.\")\n\nif __name__ == '__main__':\n    main()",
+    "expectedOutput": "Example run (user inputs are shown after prompts):\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 1\nEnter amount: 25.5\nEnter description: Lunch\nEnter category: Food\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 2\nExpenses:\n- $25.50 | Lunch | Food\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 4\nTotal spent: $25.50\n\n1. Add expense\n2. View expenses\n3. Filter expenses by category\n4. Show total spent\n5. Exit\nChoose an option: 5\nGoodbye!",
     "concepts": [
-      "structs",
-      "vectors",
-      "loops",
       "functions",
-      "basic input/output"
+      "lists",
+      "dictionaries",
+      "loops"
     ],
     "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-nested-generator-and-coroutine-logic-in-python",
+    "title": "Predict the Output of Nested Generator and Coroutine Logic in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a complex Python function that uses nested generators, coroutines, and yield expressions to predict its output. This challenge tests your understanding of Python's generator mechanics and flow control.",
+    "prompt": "Consider the following Python code snippet involving nested generators and the send() method on coroutines. Predict the exact sequence of printed output when the code is executed. Do not run the code; rely on logic and deep understanding of generator flow control and interaction. Explain your reasoning in comments.",
+    "guidance": [
+      "Focus on how send() affects the yield expressions and how values are passed between generators.",
+      "Pay attention to the order of generator activation and suspension points.",
+      "Remember that a generator's yield expression both outputs a value and receives a value via send()."
+    ],
+    "hints": [
+      "Trace the code line-by-line, simulating the generator states manually.",
+      "Keep track of what each yield expression returns and what values are sent back to them.",
+      "Note when the control switches between gen1 and gen2 and how their outputs interleave."
+    ],
+    "starterCode": "def gen2():\n    val = yield 'Start gen2'\n    val2 = yield val + 5\n    yield val2 * 2\n\ndef gen1():\n    g = gen2()\n    x = yield next(g)\n    y = yield g.send(x + 1)\n    yield g.send(y + 2)\n\n\nrunner = gen1()\nprint(next(runner))       # prime gen1\nprint(runner.send(3))    # send 3 into gen1\nprint(runner.send(4))    # send 4 into gen1\nprint(next(runner))      # final output",
+    "expectedOutput": "'Start gen2'\n9\n12\n12",
+    "concepts": [
+      "generators",
+      "coroutines",
+      "yield and send",
+      "flow control"
+    ],
+    "estimatedTime": "10 minutes",
     "isFeatured": false
   }
 ]
