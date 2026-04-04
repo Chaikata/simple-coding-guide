@@ -1,421 +1,87 @@
 [
   {
-    "slug": "building-scalable-microservices-architecture-nodejs-express",
-    "title": "Building Scalable Microservices Architecture with Node.js and Express",
+    "slug": "handling-timezone-edge-cases-in-javascript-date-manipulations",
+    "title": "Handling Timezone Edge Cases in JavaScript Date Manipulations",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build a scalable microservices architecture using Node.js and Express with practical steps and code examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=n_MDBaKLuG4",
+    "description": "Learn how to handle tricky timezone edge cases in JavaScript when working with dates. This beginner-friendly tutorial explains common pitfalls and practical solutions.",
+    "videoUrl": "https://www.youtube.com/watch?v=zwFlVPdtKvE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Microservices architecture is a popular design pattern that breaks down a large application into smaller, manageable services. Each microservice handles a specific business capability and communicates with others through APIs. This approach helps in scaling applications efficiently and makes maintenance easier. In this tutorial, we'll learn how to build scalable microservices using Node.js and Express, perfect for beginners looking to start with microservices."
+        "value": "Working with dates in JavaScript can sometimes be tricky, especially when dealing with different timezones and daylight saving time changes. This tutorial will help beginners understand common timezone edge cases and how to handle them correctly in JavaScript."
       },
       {
         "type": "paragraph",
-        "value": "### What You Will Learn\n- Basic microservices structure\n- Creating independent services with Express\n- Communication between services via HTTP\n- Running multiple services using different ports\n- Simple scaling concepts"
+        "value": "JavaScript's built-in Date object stores date and time internally in UTC, but when you display or manipulate dates, it usually converts them to your local timezone. This can cause some unexpected results, especially around daylight saving time transitions or when working with dates passed between different timezones."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setup Your Project\nFirst, create separate folders for each microservice. For example, we'll have `user-service` and `order-service`. Each will be a simple Express app that listens on different ports."
-      },
-      {
-        "type": "code",
-        "value": "mkdir user-service order-service\ncd user-service\nnpm init -y\nnpm install express\ncd ../order-service\nnpm init -y\nnpm install express"
+        "value": "Let’s explore some common edge cases and how to handle them."
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Create Your Microservices\nLet's create a basic Express server for each microservice.\n\n#### User Service (user-service/index.js)"
-      },
-      {
-        "type": "code",
-        "value": "const express = require('express');\nconst app = express();\n\nconst users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' },\n];\n\napp.get('/users', (req, res) => {\n  res.json(users);\n});\n\nconst PORT = 3001;\napp.listen(PORT, () => {\n  console.log(`User Service running on port ${PORT}`);\n});"
+        "value": "### 1. Creating Dates with Local Time vs UTC"
       },
       {
         "type": "paragraph",
-        "value": "#### Order Service (order-service/index.js)"
+        "value": "When you create a date string without a timezone, JavaScript assumes it’s in local time. But if you want to work consistently across timezones, you should use UTC methods."
       },
       {
         "type": "code",
-        "value": "const express = require('express');\nconst app = express();\n\nconst orders = [\n  { id: 1, userId: 1, item: 'Book' },\n  { id: 2, userId: 2, item: 'Pen' },\n];\n\napp.get('/orders', (req, res) => {\n  res.json(orders);\n});\n\nconst PORT = 3002;\napp.listen(PORT, () => {\n  console.log(`Order Service running on port ${PORT}`);\n});"
+        "value": "const localDate = new Date('2024-05-01T12:00:00');\nconsole.log('Local date:', localDate.toString()); // Interpreted as local time\n\nconst utcDate = new Date(Date.UTC(2024, 4, 1, 12, 0, 0));\nconsole.log('UTC date:', utcDate.toUTCString()); // Explicitly UTC\n"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Run Your Services\nStart each service in a separate terminal window using the command:\n\nbash\nnode index.js\n\n\nVisit http://localhost:3001/users to see user data.\nVisit http://localhost:3002/orders to see order data."
+        "value": "### 2. Daylight Saving Time (DST) Issues"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Communicate Between Microservices\nMicroservices often need to communicate. One common way is using HTTP requests. Let's update the order service to fetch user info from the user service."
+        "value": "Sometimes adding hours or days can skip or repeat hours during DST transitions. For example, adding 24 hours might not always mean \"same time tomorrow\" if a timezone has switched due to DST."
       },
       {
         "type": "code",
-        "value": "const express = require('express');\nconst axios = require('axios');\nconst app = express();\n\nconst orders = [\n  { id: 1, userId: 1, item: 'Book' },\n  { id: 2, userId: 2, item: 'Pen' },\n];\n\napp.get('/orders', async (req, res) => {\n  try {\n    // Fetch users from User Service\n    const userResponse = await axios.get('http://localhost:3001/users');\n    const users = userResponse.data;\n\n    // Combine order with user info\n    const ordersWithUser = orders.map(order => {\n      const user = users.find(u => u.id === order.userId);\n      return { ...order, user };\n    });\n\n    res.json(ordersWithUser);\n  } catch (error) {\n    res.status(500).json({ error: 'Failed to fetch users' });\n  }\n});\n\nconst PORT = 3002;\napp.listen(PORT, () => {\n  console.log(`Order Service running on port ${PORT}`);\n});"
+        "value": "const dateBeforeDST = new Date('2024-03-10T12:00:00');\n\n// Adding 24 hours in milliseconds\nconst datePlus24h = new Date(dateBeforeDST.getTime() + 24 * 60 * 60 * 1000);\n\nconsole.log('Before DST:', dateBeforeDST.toString());\nconsole.log('24 hours later:', datePlus24h.toString());"
       },
       {
         "type": "paragraph",
-        "value": "Run `npm install axios` in order-service folder to add Axios, a popular HTTP client for Node.js. Now, visiting http://localhost:3002/orders will show orders along with user details, demonstrating service-to-service communication."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 5: Scaling Your Microservices\nBecause each microservice runs independently, you can scale them separately depending on demand. For example, if user requests increase, you can deploy multiple instances of the user service without touching the order service."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nBuilding microservices with Node.js and Express involves creating small services dedicated to specific tasks. They run independently, communicate over HTTP, and can be scaled separately. While this example is simple, it introduces essential concepts to help you start creating scalable microservices architecture."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-data-validation-techniques-in-javascript-for-robust-data-models",
-    "title": "Mastering Data Validation Techniques in JavaScript for Robust Data Models",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn beginner-friendly data validation techniques in JavaScript that help you build robust and error-free data models for your applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=tAXUrZ6XTD0",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Data validation is a crucial step in building any application that manages user input or external data. Validating data ensures that your application handles expected and safe values, preventing bugs and security issues. In JavaScript, mastering basic validation techniques can significantly improve the robustness of your data models."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this article, we'll cover simple and effective ways to validate different types of data in JavaScript, including numbers, strings, and objects. We'll also discuss how to handle validation errors cleanly."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Validating Data Types"
-      },
-      {
-        "type": "paragraph",
-        "value": "JavaScript is a dynamically typed language, so checking data types explicitly is important to avoid unexpected behaviors."
+        "value": "To safely add days regardless of DST changes, use date-based methods:"
       },
       {
         "type": "code",
-        "value": "function validateType(value, type) {\n  return typeof value === type;\n}\n\nconsole.log(validateType(25, 'number')); // true\nconsole.log(validateType('hello', 'string')); // true\nconsole.log(validateType(true, 'boolean')); // true\nconsole.log(validateType({}, 'object')); // true\nconsole.log(validateType(null, 'object')); // true (special case in JS)"
+        "value": "const safeDate = new Date(dateBeforeDST);\nsafeDate.setDate(safeDate.getDate() + 1);\nconsole.log('1 day later (setDate):', safeDate.toString());"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Checking for Required Fields"
+        "value": "### 3. Parsing Dates Without Timezone Information"
       },
       {
         "type": "paragraph",
-        "value": "Ensure that mandatory fields are not null or undefined before processing."
+        "value": "If you get a date string like \"2024-12-31\", JavaScript treats it as midnight in the local timezone which can shift when converting to UTC, causing unexpected results."
       },
       {
         "type": "code",
-        "value": "function isRequired(value) {\n  return value !== undefined && value !== null && value !== '';\n}\n\nconsole.log(isRequired('')); // false\nconsole.log(isRequired(null)); // false\nconsole.log(isRequired('Valid input')); // true"
+        "value": "const dateString = '2024-12-31';\nconst parsedDate = new Date(dateString);\nconsole.log('Parsed date:', parsedDate.toString());"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Validating Numeric Ranges"
-      },
-      {
-        "type": "paragraph",
-        "value": "You often need to validate if a number falls within a certain range."
+        "value": "To avoid confusion, add a time or use ISO format with timezone, for example:"
       },
       {
         "type": "code",
-        "value": "function validateNumberRange(num, min, max) {\n  if (typeof num !== 'number') return false;\n  return num >= min && num <= max;\n}\n\nconsole.log(validateNumberRange(10, 1, 100)); // true\nconsole.log(validateNumberRange(0, 1, 100)); // false"
+        "value": "const dateStringUTC = '2024-12-31T00:00:00Z';\nconst utcParsedDate = new Date(dateStringUTC);\nconsole.log('UTC parsed date:', utcParsedDate.toUTCString());"
       },
       {
         "type": "paragraph",
-        "value": "### 4. Validating String Patterns with Regular Expressions"
+        "value": "### 4. Using Libraries for Complex Timezone Handling"
       },
       {
         "type": "paragraph",
-        "value": "Regular expressions (regex) are a powerful tool to validate strings like email addresses, phone numbers, or custom formats."
+        "value": "For serious timezone management, consider using popular libraries like `date-fns-tz` or `Luxon`. These libraries offer convenient APIs for timezone conversions and formatting."
       },
       {
         "type": "code",
-        "value": "function validateEmail(email) {\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  return emailRegex.test(email);\n}\n\nconsole.log(validateEmail('user@example.com')); // true\nconsole.log(validateEmail('invalid-email')); // false"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 5. Validating Objects with Multiple Fields"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can combine these checks to validate more complex data objects. Here’s an example of a simple user object validator."
-      },
-      {
-        "type": "code",
-        "value": "function validateUser(user) {\n  if (typeof user !== 'object' || user === null) return false;\n  if (!isRequired(user.name) || typeof user.name !== 'string') return false;\n  if (!validateNumberRange(user.age, 0, 120)) return false;\n  if (!validateEmail(user.email)) return false;\n  return true;\n}\n\nconst user1 = { name: 'Alice', age: 30, email: 'alice@example.com' };\nconst user2 = { name: '', age: 150, email: 'bademail' };\n\nconsole.log(validateUser(user1)); // true\nconsole.log(validateUser(user2)); // false"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 6. Handling Validation Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "It's good practice to provide meaningful error messages instead of just returning true or false. This helps with debugging and user feedback."
-      },
-      {
-        "type": "code",
-        "value": "function validateUserWithErrors(user) {\n  if (typeof user !== 'object' || user === null) {\n    return { valid: false, error: 'User data should be an object.' };\n  }\n  if (!isRequired(user.name) || typeof user.name !== 'string') {\n    return { valid: false, error: 'Name is required and should be a string.' };\n  }\n  if (!validateNumberRange(user.age, 0, 120)) {\n    return { valid: false, error: 'Age should be between 0 and 120.' };\n  }\n  if (!validateEmail(user.email)) {\n    return { valid: false, error: 'Email is invalid.' };\n  }\n  return { valid: true };\n}\n\nconst result = validateUserWithErrors({ name: '', age: 25, email: 'test@domain' });\nif (!result.valid) {\n  console.error('Validation error:', result.error);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Mastering data validation in JavaScript is essential for building secure and reliable applications. By combining type checks, required fields, range validations, and regex patterns, you can ensure your data models remain robust. Always handle errors with clear messages to improve the developer and user experience."
-      }
-    ]
-  },
-  {
-    "slug": "comparing-typescript-runtime-performance-native-js-vs-webassembly",
-    "title": "Comparing TypeScript Runtime Performance: Native JS vs. WebAssembly",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to compare runtime performance of TypeScript code executed as native JavaScript versus using WebAssembly, with simple examples and benchmarks.",
-    "videoUrl": "https://www.youtube.com/watch?v=cbB3QEwWMlA",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a popular language that compiles to JavaScript, allowing developers to write safer and more maintainable code. Typically, TypeScript code runs directly as JavaScript in browsers or Node.js environments. However, WebAssembly (Wasm) is another option for running code in web environments, designed for near-native performance. In this tutorial, we will compare the runtime performance of a simple algorithm implemented in TypeScript, running as native JavaScript, versus running as WebAssembly."
-      },
-      {
-        "type": "paragraph",
-        "value": "WebAssembly is a low-level bytecode that runs in modern browsers and enables faster execution for compute-heavy tasks. While it's commonly generated from languages like C, C++, or Rust, you can also compile TypeScript logic to WebAssembly indirectly through those languages or use WebAssembly modules alongside JavaScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example: calculating the nth Fibonacci number. We will write this algorithm in TypeScript, run it as native JS, then demonstrate how a WebAssembly version can be integrated for performance comparison."
-      },
-      {
-        "type": "code",
-        "value": "function fibonacci(n: number): number {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\n// Test the function\nconsole.log('Fibonacci(10):', fibonacci(10));"
-      },
-      {
-        "type": "paragraph",
-        "value": "This function calculates the nth Fibonacci number recursively. It works well for small inputs but can be slow for larger numbers because of exponential time complexity."
-      },
-      {
-        "type": "paragraph",
-        "value": "To measure native JavaScript performance, we use the `console.time` and `console.timeEnd` methods to benchmark the function:"
-      },
-      {
-        "type": "code",
-        "value": "const n = 35;\nconsole.time('Native JS Fibonacci');\nconst result = fibonacci(n);\nconsole.timeEnd('Native JS Fibonacci');\nconsole.log(`Result: ${result}`);"
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, let’s compare this with a simple WebAssembly module. Since WebAssembly is usually created from lower-level languages like C, we will assume you have a wasm file compiled from an equivalent C Fibonacci function. To keep this beginner-friendly, instead of writing the C code and compiling it here, we'll focus on how to load and call a WebAssembly module in TypeScript/JavaScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example of loading a WebAssembly module and calling a Fibonacci function exported from it:"
-      },
-      {
-        "type": "code",
-        "value": "async function loadWasmAndRun(n: number) {\n  const response = await fetch('fibonacci.wasm');\n  const buffer = await response.arrayBuffer();\n  const wasmModule = await WebAssembly.instantiate(buffer);\n\n  console.time('WebAssembly Fibonacci');\n  const result = wasmModule.instance.exports.fibonacci(n);\n  console.timeEnd('WebAssembly Fibonacci');\n  console.log(`WASM Result: ${result}`);\n}\n\nloadWasmAndRun(35);"
-      },
-      {
-        "type": "paragraph",
-        "value": "To create 'fibonacci.wasm', you would implement the Fibonacci function in C, compile it with `emcc` or another compiler to wasm, and serve the resulting .wasm file alongside your web app."
-      },
-      {
-        "type": "paragraph",
-        "value": "Once you run both the native JavaScript and WebAssembly benchmarks, you can compare the time they take. WebAssembly usually performs better for numeric computations and tight loops, especially when the logic is compiled from efficient languages like C or Rust."
-      },
-      {
-        "type": "paragraph",
-        "value": "Keep in mind, WebAssembly interop comes with some overhead for passing data between JS and Wasm. So, for small or simple tasks, native JavaScript might be just as fast or faster because it avoids this communication overhead."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, if you are working on performance-critical parts of your TypeScript app, consider integrating WebAssembly for compute-heavy functions. For general application logic, native JavaScript from TypeScript compilers usually offers sufficient performance and better developer ergonomics."
-      },
-      {
-        "type": "paragraph",
-        "value": "We hope this comparison helps you understand where each approach shines and how to practically blend native JS and WebAssembly to optimize your applications."
-      }
-    ]
-  },
-  {
-    "slug": "typescript-vs-javascript-error-handling-scalable-applications",
-    "title": "TypeScript vs JavaScript: Comparing Error Handling Strategies for Scalable Applications",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Discover how TypeScript and JavaScript handle errors differently and learn scalable error handling strategies to build robust applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When building scalable applications, handling errors effectively is crucial to maintain reliability and improve user experience. JavaScript and TypeScript, while closely related, offer different approaches to error handling that can influence how you write and maintain your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "JavaScript, being a dynamically typed language, uses traditional try-catch blocks for runtime error handling. However, because it lacks static typing, many errors only surface during execution, which can make large codebases harder to debug and maintain."
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript builds on JavaScript by adding static types. This means many errors can be caught at compile time before running the code. While TypeScript also uses try-catch blocks, its strong typing system enables safer error handling patterns and better tooling support."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's explore basic error handling in JavaScript first:"
-      },
-      {
-        "type": "code",
-        "value": "function divide(a, b) {\n  try {\n    if (b === 0) {\n      throw new Error('Division by zero is not allowed.');\n    }\n    return a / b;\n  } catch (error) {\n    console.error(error.message);\n    return null;\n  }\n}\n\nconsole.log(divide(10, 2)); // 5\nconsole.log(divide(10, 0)); // Logs error and returns null"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the above JavaScript example, runtime checks and manual error throwing are essential to handle unexpected conditions. However, with TypeScript, you can add type annotations which reduce some classes of errors upfront."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s how the same function looks using TypeScript:"
-      },
-      {
-        "type": "code",
-        "value": "function divideTS(a: number, b: number): number | null {\n  try {\n    if (b === 0) {\n      throw new Error('Division by zero is not allowed.');\n    }\n    return a / b;\n  } catch (error) {\n    if (error instanceof Error) {\n      console.error(error.message);\n    }\n    return null;\n  }\n}\n\nconsole.log(divideTS(10, 2)); // 5\nconsole.log(divideTS(10, 0)); // Logs error and returns null"
-      },
-      {
-        "type": "paragraph",
-        "value": "Notice the type annotations on parameters and return type. TypeScript also allows us to perform error instance checks (`error instanceof Error`) to handle specific error types more safely."
-      },
-      {
-        "type": "paragraph",
-        "value": "For scalable applications, relying purely on try-catch can make error handling repetitive and error-prone. One pattern TypeScript enables is using Result types, inspired by languages like Rust, which make error handling explicit and encourage developers to handle all cases."
-      },
-      {
-        "type": "code",
-        "value": "type Result<T> = { success: true; value: T } | { success: false; error: string };\n\nfunction safeDivide(a: number, b: number): Result<number> {\n  if (b === 0) {\n    return { success: false, error: 'Division by zero is not allowed.' };\n  }\n  return { success: true, value: a / b };\n}\n\nconst result = safeDivide(10, 0);\n\nif (result.success) {\n  console.log('Result:', result.value);\n} else {\n  console.error('Error:', result.error);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "This pattern avoids exceptions, making error handling mandatory and more explicit, which is excellent for large, team-based projects. JavaScript can also implement this pattern, but TypeScript’s type system helps ensure correct usage."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, here are key points to consider when handling errors in scalable applications:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. JavaScript relies on runtime checks and try-catch blocks but lacks static typing to catch errors early.\n2. TypeScript adds static typing, enabling compile-time error detection and safer, more explicit handling.\n3. Use try-catch for unexpected errors but consider explicit result types to manage expected failure cases clearly.\n4. Leveraging TypeScript’s type system leads to more maintainable and scalable error handling patterns."
-      },
-      {
-        "type": "paragraph",
-        "value": "By adopting TypeScript’s features and thoughtful error handling patterns, you can significantly improve the robustness and scalability of your applications."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-python-asyncio-advanced-patterns-for-high-performance-concurrency",
-    "title": "Mastering Python's Asyncio: Advanced Patterns for High-Performance Concurrency",
-    "language": "python",
-    "type": "tutorials",
-    "description": "Learn advanced patterns in Python's asyncio module to write efficient and high-performance concurrent programs with easy-to-understand examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Python's asyncio module has revolutionized how we handle concurrent programming by offering asynchronous capabilities that make I/O-bound tasks run efficiently. While beginners start with basic async/await syntax, mastering advanced asyncio patterns helps you unlock powerful designs for scalable and high-performance applications."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this tutorial, we'll explore practical advanced patterns such as managing multiple coroutines with asyncio.gather(), controlling concurrency with semaphores, and using asyncio queues for producer-consumer tasks. By the end, you'll have a strong foundation to build efficient async Python programs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with asyncio.gather(), a handy method to run multiple coroutines concurrently and wait for all of them to complete."
-      },
-      {
-        "type": "code",
-        "value": "import asyncio\n\nasync def fetch_data(id):\n    print(f\"Start fetching {id}\")\n    await asyncio.sleep(1)  # Simulate IO-bound work\n    print(f\"Done fetching {id}\")\n    return f\"Data-{id}\"\n\nasync def main():\n    tasks = [fetch_data(i) for i in range(5)]\n    results = await asyncio.gather(*tasks)\n    print(\"Results:\", results)\n\nasyncio.run(main())"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, fetch_data simulates an I/O task. Using asyncio.gather() runs all five fetch_data coroutines at once and waits until all are done. This concurrency model is much faster than running tasks sequentially."
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, managing concurrency levels is important when accessing limited resources, such as APIs with rate limits. asyncio.Semaphore helps you control how many coroutines run simultaneously."
-      },
-      {
-        "type": "code",
-        "value": "import asyncio\n\nsemaphore = asyncio.Semaphore(3)  # Max 3 concurrent tasks\n\nasync def limited_fetch(id):\n    async with semaphore:\n        print(f\"Fetching {id} with limited concurrency\")\n        await asyncio.sleep(1)\n        print(f\"Done {id}\")\n\nasync def main():\n    tasks = [limited_fetch(i) for i in range(10)]\n    await asyncio.gather(*tasks)\n\nasyncio.run(main())"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, only three fetch operations run at the same time thanks to the semaphore. This technique prevents overload and helps you respect resource limits."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another powerful pattern is the producer-consumer model, where one coroutine produces data items and others consume them concurrently. asyncio.Queue makes this easy."
-      },
-      {
-        "type": "code",
-        "value": "import asyncio\n\nasync def producer(queue):\n    for i in range(5):\n        await asyncio.sleep(0.5)  # Produce items at intervals\n        item = f\"item-{i}\"\n        await queue.put(item)\n        print(f\"Produced {item}\")\n    await queue.put(None)  # Sentinel to indicate completion\n\nasync def consumer(queue):\n    while True:\n        item = await queue.get()\n        if item is None:  # Check for sentinel\n            break\n        print(f\"Consuming {item}\")\n        await asyncio.sleep(1)  # Simulate processing time\n    print(\"Consumer done\")\n\nasync def main():\n    queue = asyncio.Queue()\n    prod_task = asyncio.create_task(producer(queue))\n    cons_task = asyncio.create_task(consumer(queue))\n    await asyncio.gather(prod_task, cons_task)\n\nasyncio.run(main())"
-      },
-      {
-        "type": "paragraph",
-        "value": "This example sets up one producer and one consumer coroutine sharing an asyncio.Queue. The producer inserts data, and the consumer waits for and processes it asynchronously. This pattern is common in real-world data pipelines and concurrent workflows."
-      },
-      {
-        "type": "paragraph",
-        "value": "By combining these advanced asyncio patterns, you can write highly concurrent Python programs that efficiently perform I/O operations, handle many tasks in parallel, and maintain control over resource usage."
-      },
-      {
-        "type": "paragraph",
-        "value": "Practice applying these techniques in your projects, and you'll soon see how asyncio elevates your application's responsiveness and throughput."
-      }
-    ]
-  },
-  {
-    "slug": "handling-floating-point-precision-edge-cases-python",
-    "title": "Handling Floating Point Precision Edge Cases in Python Numerical Computations",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn how to handle floating point precision issues in Python to avoid common errors in numerical computations.",
-    "videoUrl": "https://www.youtube.com/watch?v=3xW-7sU8cnI",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When working with numbers in Python, especially decimals, you might come across unexpected results due to how computers represent floating point numbers. This is because some decimal numbers cannot be represented exactly in binary form, leading to tiny precision errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, try adding 0.1 three times and comparing it to 0.3:"
-      },
-      {
-        "type": "code",
-        "value": "print(0.1 + 0.1 + 0.1 == 0.3)  # Output: False"
-      },
-      {
-        "type": "paragraph",
-        "value": "Even though mathematically they are equal, Python evaluates this as False because of tiny differences in the floating point representation."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How to handle these precision issues?"
-      },
-      {
-        "type": "paragraph",
-        "value": "One common approach is to use the `math.isclose()` function introduced in Python 3.5, which compares two floating point numbers within a specified tolerance."
-      },
-      {
-        "type": "code",
-        "value": "import math\n\n# Using isclose to compare floating point numbers\nresult = math.isclose(0.1 + 0.1 + 0.1, 0.3)\nprint(result)  # Output: True"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can customize the tolerance with `rel_tol` (relative tolerance) and `abs_tol` (absolute tolerance) parameters, but the defaults work well for most cases."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another method is to use the `decimal` module, which allows you to perform decimal arithmetic with exact precision."
-      },
-      {
-        "type": "code",
-        "value": "from decimal import Decimal\n\n# Using Decimal for precise decimal arithmetic\nresult = Decimal('0.1') + Decimal('0.1') + Decimal('0.1') == Decimal('0.3')\nprint(result)  # Output: True"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using `Decimal` is especially useful when working with financial or scientific calculations that require high precision."
+        "value": "// Example with Luxon\n// npm install luxon\n\nimport { DateTime } from 'luxon';\n\nconst dt = DateTime.fromISO('2024-11-01T12:00', { zone: 'America/New_York' });\nconsole.log('Date in New York:', dt.toString());\n\nconst dtInLondon = dt.setZone('Europe/London');\nconsole.log('Same instant in London:', dtInLondon.toString());"
       },
       {
         "type": "paragraph",
@@ -423,147 +89,453 @@
       },
       {
         "type": "paragraph",
-        "value": "In Python, small floating point errors can cause equality checks to fail unexpectedly. To handle these edge cases, prefer using `math.isclose()` for near-equality checks or use the `decimal` module for exact decimal arithmetic. This practice leads to more reliable and predictable numerical computations."
+        "value": "Handling timezone edge cases requires understanding how JavaScript's Date object works with local and UTC times. Use UTC methods when possible, be cautious about DST transitions, and consider libraries for advanced features. This will save you from many timezone-related bugs and confusion."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-window-functions-for-faster-analytical-queries",
-    "title": "Optimizing SQL Window Functions for Faster Analytical Queries",
+    "slug": "handling-asynchronous-errors-in-javascript-promises",
+    "title": "Handling Asynchronous Errors in JavaScript Promises for Real-World Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors in JavaScript promises to build robust and reliable real-world applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript promises are a powerful way to handle asynchronous operations, such as fetching data from an API or reading files. However, dealing with errors in asynchronous code can be confusing at first. This guide will help beginners understand how to catch and handle errors properly when working with promises, ensuring your applications are resilient and user-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "A promise represents an operation that hasn't completed yet but will in the future. It has three states: pending, fulfilled, or rejected. When a promise is rejected, it means an error or unexpected condition occurred. To handle this rejection and avoid unexpected crashes or silent failures, you need to use proper error handling techniques."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common way to handle errors with promises is by using the `.catch()` method. This method catches any errors that happen either during the asynchronous operation or inside a `.then()` callback."
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('There was a problem with the fetch operation:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above code, if the network response isn’t successful (e.g., a 404 or 500 status code), an error is thrown inside the first `.then()`. This error then skips the next `.then()` and is caught in the `.catch()` block where it can be logged or displayed to the user."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another modern and readable way to handle asynchronous code and errors is with `async`/`await` combined with `try...catch` blocks. This syntax makes the asynchronous code look and behave more like traditional synchronous code."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Fetch error:', error);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, any errors occurring in the `fetch` call or during the JSON parsing will be caught by the `catch` block. This structure makes it easy to handle multiple asynchronous actions with robust error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Key tips for handling asynchronous errors in real-world apps include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always attach a `.catch()` handler to your promises to prevent unhandled promise rejections.\n2. Validate the response before processing data to catch HTTP errors.\n3. Use descriptive error messages to help with debugging and logging.\n4. Consider showing user-friendly messages or fallback UI when errors occur.\n5. When using async/await, wrap your code in try/catch blocks for clean error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering asynchronous error handling in promises, you can make your JavaScript applications more stable, easier to debug, and better suited for real-world scenarios."
+      }
+    ]
+  },
+  {
+    "slug": "building-robust-data-models-typescript-scalable-web-applications",
+    "title": "Building Robust Data Models in TypeScript for Scalable Web Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create strong and scalable data models in TypeScript to improve the maintainability and scalability of your web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web applications, managing data with clear and reliable structures is important for scalability and maintainability. TypeScript helps by allowing you to define data models with types, ensuring your data is consistent throughout your app. This tutorial will guide you through building robust data models in TypeScript, focusing on interfaces, classes, and utility types."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand what a data model is. A data model represents the shape and structure of the data you're working with. For example, if you build a user management system, you want a User model defining what a user object looks like."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a User interface in TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  username: string;\n  email: string;\n  isActive: boolean;\n  createdAt: Date;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the User interface defines the structure and types for a user object. This lets TypeScript catch errors if code tries to assign incorrect types or if properties are missing."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use TypeScript classes to encapsulate behavior along with your data. Classes allow you to add methods and control how instances are created and used."
+      },
+      {
+        "type": "code",
+        "value": "class UserModel {\n  constructor(\n    public id: number,\n    public username: string,\n    public email: string,\n    public isActive: boolean,\n    public createdAt: Date\n  ) {}\n\n  deactivate() {\n    this.isActive = false;\n  }\n\n  activate() {\n    this.isActive = true;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this class, you can create new users and call methods to activate or deactivate them:"
+      },
+      {
+        "type": "code",
+        "value": "const user = new UserModel(1, 'jdoe', 'jdoe@example.com', true, new Date());\nuser.deactivate();\nconsole.log(user.isActive); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle updates or partial data, TypeScript's utility types are very helpful. For example, the Partial<T> type makes all properties optional, which is useful for update operations."
+      },
+      {
+        "type": "code",
+        "value": "function updateUser(user: User, updates: Partial<User>): User {\n  return { ...user, ...updates };\n}\n\nconst updatedUser = updateUser(user, { email: 'newemail@example.com' });\nconsole.log(updatedUser.email);"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use Readonly<T> to prevent objects from being changed after creation, adding an extra layer of safety."
+      },
+      {
+        "type": "code",
+        "value": "const readonlyUser: Readonly<User> = {\n  id: 2,\n  username: 'asmith',\n  email: 'asmith@example.com',\n  isActive: true,\n  createdAt: new Date(),\n};\n\n// readonlyUser.email = 'changed@example.com'; // Error: Cannot assign to 'email' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "By defining your data models clearly and leveraging TypeScript’s features, your web application becomes more robust and easier to maintain as it scales. You catch errors early during development rather than runtime, which saves time and resources."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, start your project by creating strong types/interfaces for your data models, consider using classes for behavior encapsulation, and utilize utility types like Partial and Readonly to handle real-world cases. This approach will help you build scalable and maintainable web applications efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-typescripts-advanced-type-inference-for-cleaner-error-handling",
+    "title": "Harnessing TypeScript’s Advanced Type Inference for Cleaner Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript’s advanced type inference to write safer and cleaner error handling code that’s easier to manage.",
+    "videoUrl": "https://www.youtube.com/watch?v=66_bET6sI20",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of programming, and TypeScript can make it much safer and cleaner with its advanced type inference features. By leveraging TypeScript’s ability to infer types, you can write error handling code that is both easy to read and less prone to mistakes. In this article, we’ll explore how to harness these features in a beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a common pattern in JavaScript where a function may return either a successful value or an error. Traditionally, developers rely on throwing errors or using simple return values, which can be hard to manage and unsafe. TypeScript allows us to define a discriminated union type for these results, helping us leverage type inference to make error handling more explicit and reliable."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T, E> =\n  | { success: true; value: T }\n  | { success: false; error: E };"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `Result` type is a union type with two variants: one representing success and the other failure. The `success` boolean acts as a discriminant, letting TypeScript automatically infer which variant we are dealing with. Now let’s see how we can use this pattern in a simple function that parses JSON."
+      },
+      {
+        "type": "code",
+        "value": "function parseJson(jsonString: string): Result<any, string> {\n  try {\n    const parsed = JSON.parse(jsonString);\n    return { success: true, value: parsed };\n  } catch (error) {\n    return { success: false, error: (error as Error).message };\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you call `parseJson`, the returned object clearly indicates whether the operation was successful. Using an if-statement TypeScript fully understands the type within each branch:"
+      },
+      {
+        "type": "code",
+        "value": "const result = parseJson('{\"name\":\"Alice\"}');\n\nif (result.success) {\n  // TypeScript knows 'result' is the success variant\n  console.log('Parsed object:', result.value);\n} else {\n  // Here, TypeScript knows it's the error variant\n  console.error('Parsing error:', result.error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach helps the compiler catch mistakes early. For example, if you try to access `result.value` inside the `else` block, TypeScript will warn you because this property doesn’t exist for errors. This leads to more robust and easier-to-maintain code."
+      },
+      {
+        "type": "paragraph",
+        "value": "To make this even more reusable, you can define a generic function to handle this pattern across your project. This way, all functions that can succeed or fail will have a consistent return type and benefit from TypeScript’s inference."
+      },
+      {
+        "type": "code",
+        "value": "function safeExecute<T>(fn: () => T): Result<T, string> {\n  try {\n    return { success: true, value: fn() };\n  } catch (error) {\n    return { success: false, error: (error as Error).message };\n  }\n}\n\nconst safeResult = safeExecute(() => {\n  // Your safe code here\n  return JSON.parse('{\"id\":1}');\n});\n\nif (safeResult.success) {\n  console.log(\"Success:\", safeResult.value);\n} else {\n  console.error(\"Error:\", safeResult.error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using TypeScript’s union types with discriminants lets you write clearer and safer error handling code. Type inference helps by narrowing down the type automatically based on runtime checks, reducing bugs and improving developer experience. Try implementing this pattern in your next project to see the benefits firsthand!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-timezone-edge-cases-python-datetime",
+    "title": "Handling Timezone Edge Cases in Python DateTime Operations",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to effectively handle timezone edge cases in Python's datetime operations with beginner-friendly examples and practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=9OkNEZKoPAo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in Python can be tricky, especially once timezones come into play. Timezone edge cases, such as Daylight Saving Time (DST) transitions, ambiguous times, and non-existent times, can easily cause bugs if not handled correctly. This tutorial will walk you through how to manage these timezone quirks using Python's standard libraries and the popular pytz library."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to understand that naive datetime objects in Python do not contain any timezone information. This means they are considered 'timezone unaware' and can lead to errors when working with different local times. To handle timezones properly, you should always use timezone-aware datetime objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a timezone-aware datetime using the pytz library, which provides comprehensive timezone definitions:"
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nimport pytz\n\n# Define a timezone\nny_tz = pytz.timezone('America/New_York')\n\n# Create a naive datetime\nnaive_dt = datetime(2024, 3, 10, 12, 0)\n\n# Localize the naive datetime to the timezone\naware_dt = ny_tz.localize(naive_dt)\nprint('Timezone-aware datetime:', aware_dt)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's discuss an important edge case: the Daylight Saving Time spring-forward transition. When the clocks move forward, some local times don't actually exist. For example, in New York on March 10, 2024, the clocks jump from 2:00 AM to 3:00 AM. Trying to create a datetime at 2:30 AM local time on this date will raise an error or be ambiguous."
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nimport pytz\n\nyear = 2024\n# DST transition day in New York\nmonth = 3\n# 2:30 AM local time (non-existent due to spring forward)\nday = 10\nhour = 2\nminute = 30\n\nny_tz = pytz.timezone('America/New_York')\n\ntry:\n    # This will raise an exception\n    dt = datetime(year, month, day, hour, minute)\n    aware_dt = ny_tz.localize(dt)\nexcept pytz.NonExistentTimeError as e:\n    print('Caught NonExistentTimeError:', e)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "As shown, pytz raises a NonExistentTimeError when you try to localize a non-existent time. You can handle this in two ways: either shift the time or use the `is_dst` argument to specify how to handle ambiguous or non-existent times."
+      },
+      {
+        "type": "code",
+        "value": "# Handling non-existent times with is_dst parameter\n# is_dst=None -> raise error\n# is_dst=True -> move time forward by 1 hour\n# is_dst=False -> move time backward by 1 hour\n\ndt = datetime(year, month, day, hour, minute)\naware_dt_forward = ny_tz.localize(dt, is_dst=True)\naware_dt_backward = ny_tz.localize(dt, is_dst=False)\n\nprint('Forward adjustment:', aware_dt_forward)\nprint('Backward adjustment:', aware_dt_backward)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case occurs during the fall-back DST transition, when the clock repeats one hour. This creates ambiguous times. For example, 1:30 AM happens twice. The `is_dst` argument in `localize` can help distinguish between the two ambiguous times."
+      },
+      {
+        "type": "code",
+        "value": "# Ambiguous time example during fall back\nambiguous_day = 2024\nambiguous_month = 11\nambiguous_day_num = 3\nambiguous_hour = 1\nambiguous_minute = 30\n\ndt_ambiguous = datetime(ambiguous_day, ambiguous_month, ambiguous_day_num, ambiguous_hour, ambiguous_minute)\n\naware_dt_dst = ny_tz.localize(dt_ambiguous, is_dst=True)   # DST time\naware_dt_std = ny_tz.localize(dt_ambiguous, is_dst=False)  # Standard time\n\nprint('DST time:', aware_dt_dst)\nprint('Standard time:', aware_dt_std)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary tips for handling timezone edge cases:\n\n- Always use timezone-aware datetime objects.\n- Use pytz’s `localize()` to attach timezones and handle DST correctly.\n- Use the `is_dst` parameter to resolve ambiguous or non-existent times.\n- Catch `NonExistentTimeError` and `AmbiguousTimeError` exceptions to handle errors gracefully.\n\nBy being aware of these edge cases and using the tools Python provides, you can confidently manage most timezone-related datetime challenges."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-tracebacks-beginners-guide",
+    "title": "Understanding Python Tracebacks: A Beginner's Guide to Reading Error Messages",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to read and understand Python tracebacks to quickly find and fix errors in your code. Perfect for beginners starting their Python journey.",
+    "videoUrl": "https://www.youtube.com/watch?v=JD8BrXXNtjA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're learning Python, encountering errors is a normal part of the process. Python helps you find out what's wrong by showing a traceback — a report of the error and where it happened in your code. This guide will help you understand how to read these tracebacks so you can fix your code faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "A traceback is printed to the console when an error occurs. It shows the sequence of calls that led to the error, along with the type of error and a message explaining what went wrong. Let's look at a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, you'll get a traceback like this:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 4, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to read it step-by-step:\n\n1. \"Traceback (most recent call last)\" shows the start of the error report.\n2. The lines starting with \"File\" tell you where the error happened. It shows the file name, line number, and the line of code.\n3. The last line tells you the type of error and the message—in this case, a `ZeroDivisionError` caused by \"division by zero.\""
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you should avoid dividing by zero. For example, you could add a check inside the function:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    return a / b\n\nresult = divide(10, 0)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, instead of getting an error, the function returns a friendly message.\n\nUnderstanding tracebacks will save you time and frustration as you learn to code. Whenever you see a traceback, read it carefully to find the file, line number, and error type to guide your debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing reading tracebacks, and soon it will become second nature!"
+      }
+    ]
+  },
+  {
+    "slug": "real-time-inventory-management-with-sql-and-triggers",
+    "title": "Building a Real-Time Inventory Management System with SQL and Triggers",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to optimize SQL window functions to improve the speed of your analytical queries with clear, beginner-friendly techniques.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn how to create a simple real-time inventory management system using SQL tables and triggers to automatically update stock levels.",
+    "videoUrl": "https://www.youtube.com/watch?v=NmizcdEaNqc",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are powerful tools for performing calculations across a set of table rows related to the current row. They are especially useful in analytical queries for ranking, running totals, moving averages, and more. However, if not optimized properly, these functions can slow down query performance. In this tutorial, we will explore beginner-friendly tips to optimize SQL window functions for faster analytical queries."
+        "value": "Managing inventory in real-time is crucial for businesses to keep track of stock levels and avoid shortages or overstock. In this tutorial, we'll build a beginner-friendly inventory management system using SQL and triggers. Triggers allow automatic reactions to changes like updates and inserts, making them perfect for maintaining accurate stock counts."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand a basic window function example. Imagine we have a sales table and want to calculate a running total of sales by salesperson ordered by sale date."
+        "value": "We'll start by creating two main tables: one for the products and their stock, and another to record inventory transactions like sales or restocking. Then, we'll use a trigger to update the product stock automatically when a new transaction is recorded."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into the SQL code!"
       },
       {
         "type": "code",
-        "value": "SELECT salesperson_id, sale_date, amount,\n       SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date) AS running_total\nFROM sales;"
+        "value": "-- Create a table to store products and their stock\nCREATE TABLE Products (\n  ProductID INT PRIMARY KEY,\n  ProductName VARCHAR(100),\n  Stock INT DEFAULT 0\n);\n\n-- Create a table to record inventory transactions\n-- Quantity is positive for stock added, negative for stock sold\nCREATE TABLE InventoryTransactions (\n  TransactionID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductID INT,\n  Quantity INT,\n  TransactionDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
       },
       {
         "type": "paragraph",
-        "value": "This query works well on small datasets but can be slow on larger tables. Here are practical tips to optimize such queries:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use proper indexing:** Creating indexes that match your PARTITION BY and ORDER BY columns can significantly speed up the window function. For the above query, an index on `(salesperson_id, sale_date)` is beneficial."
+        "value": "Now we have a `Products` table holding each product and their current `Stock`, and an `InventoryTransactions` table to log every stock movement. Next, we'll create a trigger that updates the `Stock` in the `Products` table whenever a new transaction is inserted."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_salesperson_date ON sales(salesperson_id, sale_date);"
+        "value": "-- Trigger to update product stock after inserting a transaction\nDELIMITER //\nCREATE TRIGGER update_stock_after_transaction\nAFTER INSERT ON InventoryTransactions\nFOR EACH ROW\nBEGIN\n  UPDATE Products\n  SET Stock = Stock + NEW.Quantity\n  WHERE ProductID = NEW.ProductID;\nEND;//\nDELIMITER ;"
       },
       {
         "type": "paragraph",
-        "value": "2. **Limit the dataset:** Apply filtering early to reduce the number of rows the window function processes. For example, if you only need sales from the last year, add a WHERE clause."
+        "value": "This trigger listens for new rows inserted into `InventoryTransactions`, then adjusts the corresponding product's stock by adding the new transaction's quantity. Positive quantities add stock (e.g., restocking), and negative quantities reduce stock (e.g., sales)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's add some sample products and transactions to see the system in action."
       },
       {
         "type": "code",
-        "value": "SELECT salesperson_id, sale_date, amount,\n       SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date) AS running_total\nFROM sales\nWHERE sale_date >= DATE '2023-01-01';"
+        "value": "-- Insert sample products\nINSERT INTO Products (ProductID, ProductName, Stock) VALUES\n(1, 'Keyboard', 50),\n(2, 'Mouse', 100);\n\n-- Add a transaction for selling 3 keyboards\nINSERT INTO InventoryTransactions (ProductID, Quantity) VALUES (1, -3);\n\n-- Add a transaction for restocking 20 mice\nINSERT INTO InventoryTransactions (ProductID, Quantity) VALUES (2, 20);\n\n-- Check updated stock levels\nSELECT * FROM Products;"
       },
       {
         "type": "paragraph",
-        "value": "3. **Avoid unnecessary columns:** Select only the columns you need to reduce I/O costs."
+        "value": "After running these commands, the stock for the Keyboard will decrease by 3, and the stock for the Mouse will increase by 20 automatically. This approach keeps your inventory data accurate in real-time without manual stock adjustments."
       },
       {
         "type": "paragraph",
-        "value": "4. **Consider materializing intermediate results:** For complex queries, use Common Table Expressions (CTEs) or temporary tables to pre-aggregate or filter data before applying window functions."
-      },
-      {
-        "type": "code",
-        "value": "WITH recent_sales AS (\n  SELECT salesperson_id, sale_date, amount\n  FROM sales\n  WHERE sale_date >= DATE '2023-01-01'\n)\nSELECT salesperson_id, sale_date, amount,\n       SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date) AS running_total\nFROM recent_sales;"
+        "value": "You can extend this solution by adding more features like tracking users who make transactions, handling different transaction types, or adding alerts when stock is low. But this basic system provides a solid foundation for real-time inventory management using SQL and triggers."
       },
       {
         "type": "paragraph",
-        "value": "5. **Use appropriate window frames:** By default, many window functions use a frame that includes all previous rows. For running totals, specifying the frame explicitly can help the query optimizer."
-      },
-      {
-        "type": "code",
-        "value": "SELECT salesperson_id, sale_date, amount,\n       SUM(amount) OVER (\n         PARTITION BY salesperson_id\n         ORDER BY sale_date\n         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n       ) AS running_total\nFROM sales;"
-      },
-      {
-        "type": "paragraph",
-        "value": "By explicitly defining the frame, some databases can execute the query more efficiently."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, optimizing SQL window functions involves indexing relevant columns, filtering data early, selecting only necessary fields, breaking down complex queries, and specifying window frames when appropriate. These practices will help you write faster and more efficient analytical SQL queries, even as your data grows."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try applying these tips to your SQL queries and see how performance improves!"
+        "value": "Happy coding and managing your inventory efficiently!"
       }
     ]
   },
   {
-    "slug": "understanding-collation-conflicts-in-sql",
-    "title": "Understanding Collation Conflicts in SQL: How to Compare and Resolve Character Set Mismatches",
+    "slug": "understanding-data-modeling-pitfalls-that-lead-to-null-relationship-errors-in-sql",
+    "title": "Understanding Data Modeling Pitfalls That Lead to Null Relationship Errors in SQL",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to identify and fix collation conflicts in SQL that occur due to character set mismatches when comparing or joining string columns.",
-    "videoUrl": "https://www.youtube.com/watch?v=PyLqvnuHvuo",
+    "description": "Learn common data modeling mistakes that cause null relationship errors in SQL and practical tips on how to fix and avoid them.",
+    "videoUrl": "https://www.youtube.com/watch?v=TtUzG3Mt8OQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, it’s common to encounter errors related to collation conflicts. Collation defines how string comparison is performed, including case sensitivity and accent sensitivity. Different database columns or tables may use different collations, and this can lead to errors when trying to compare or join textual data with mismatched collations."
+        "value": "When working with SQL databases, properly designing relationships between tables is crucial. One common challenge beginners face is encountering null relationship errors, which happen when expected foreign key values are missing or not correctly set up. This article explains typical data modeling pitfalls that lead to these errors and shows you how to avoid them."
       },
       {
         "type": "paragraph",
-        "value": "A typical error message looks like this:"
+        "value": "In SQL, relationships between tables are often represented with foreign keys. A foreign key in one table points to a primary key in another, establishing a connection. Null relationship errors usually occur when the foreign key contains NULL values but the database or query expects a valid reference."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s explore some common pitfalls with examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Missing Foreign Key Constraints"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you don't explicitly define foreign key constraints, the database will allow any value in the foreign key column including NULLs or invalid IDs, leading to inconsistency."
       },
       {
         "type": "code",
-        "value": "Cannot resolve collation conflict for column 1 in SELECT statement."
+        "value": "CREATE TABLE Orders (\n    OrderID INT PRIMARY KEY,\n    CustomerID INT -- No constraint here\n);\n\n-- This allows inserting orders with non-existent CustomerID or NULL values."
       },
       {
         "type": "paragraph",
-        "value": "This means SQL cannot compare two string values because their collations don't match. For beginners, this may be confusing, but it’s easy to solve once you understand how to check and manage collations."
-      },
-      {
-        "type": "paragraph",
-        "value": "To find the collation of a column, use the following query (example for SQL Server):"
+        "value": "Fix this by adding a foreign key constraint to ensure every CustomerID in Orders exists in the Customers table:"
       },
       {
         "type": "code",
-        "value": "SELECT COLUMN_NAME, COLLATION_NAME\nFROM INFORMATION_SCHEMA.COLUMNS\nWHERE TABLE_NAME = 'YourTableName' AND COLUMN_NAME = 'YourColumnName';"
+        "value": "CREATE TABLE Customers (\n    CustomerID INT PRIMARY KEY,\n    CustomerName VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Orders (\n    OrderID INT PRIMARY KEY,\n    CustomerID INT,\n    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\n);"
       },
       {
         "type": "paragraph",
-        "value": "Once you know the collation of each column, you can explicitly convert or specify collation during your query to avoid conflicts. For example, to compare columns from two different tables with different collations, you can use the COLLATE keyword:"
+        "value": "2. Nullable Foreign Keys Without Clear Intent"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes a foreign key is marked as nullable, allowing NULL values. If this is unintended, it causes queries that join tables on this column to fail or return unexpected NULLs."
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM Table1 t1\nJOIN Table2 t2 ON t1.Name COLLATE SQL_Latin1_General_CP1_CI_AS = t2.Name COLLATE SQL_Latin1_General_CP1_CI_AS;"
+        "value": "CREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    ManagerID INT NULL,\n    FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID)\n);\n\n-- NULL ManagerID means the employee has no manager (e.g., CEO)."
       },
       {
         "type": "paragraph",
-        "value": "In this example, both sides of the comparison are forced to use the same collation (SQL_Latin1_General_CP1_CI_AS). This ensures SQL can compare the values without conflict."
-      },
-      {
-        "type": "paragraph",
-        "value": "If you frequently encounter these errors, consider standardizing your database collation settings when creating tables and columns, so all textual data uses consistent collation. Altering the collation of existing columns is possible but should be done with caution to avoid data or index issues."
-      },
-      {
-        "type": "paragraph",
-        "value": "To change the collation of a column, you can use:"
+        "value": "In this case, the NULL is valid, but your queries should be written to handle NULLs properly:"
       },
       {
         "type": "code",
-        "value": "ALTER TABLE YourTableName\nALTER COLUMN YourColumnName VARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS;"
+        "value": "SELECT e.EmployeeID, m.EmployeeID AS ManagerID\nFROM Employees e\nLEFT JOIN Employees m ON e.ManagerID = m.EmployeeID;"
       },
       {
         "type": "paragraph",
-        "value": "Remember to back up your data before making schema changes and test in a development environment."
+        "value": "Use LEFT JOIN instead of INNER JOIN to avoid dropping employees who don't have managers."
       },
       {
         "type": "paragraph",
-        "value": "In summary, collation conflicts happen when different string columns use different character set rules. Use the COLLATE clause to resolve conflicts on-the-fly, or standardize your database schema to prevent these issues. This simple approach will make your SQL queries more robust and error-free."
+        "value": "3. Inconsistent Data Types Between Keys"
+      },
+      {
+        "type": "paragraph",
+        "value": "If the primary key and foreign key columns have mismatched data types, the database may not enforce relationships properly, allowing NULLs or invalid values."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Products (\n    ProductID VARCHAR(10) PRIMARY KEY\n);\n\nCREATE TABLE Sales (\n    SaleID INT PRIMARY KEY,\n    ProductID INT, -- data type mismatch here\n    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always make sure the foreign key column matches the primary key data type exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Missing Default Values for Foreign Keys"
+      },
+      {
+        "type": "paragraph",
+        "value": "If a foreign key column is nullable and no default value is set, inserting new rows without specifying that key will create NULLs unintentionally."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid this, either set NOT NULL constraints or provide a sensible default that refers to a valid row."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To minimize null relationship errors in SQL data modeling:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always define foreign key constraints.\n- Understand when foreign keys should be nullable and design queries accordingly.\n- Match data types exactly between keys.\n- Set NOT NULL or appropriate defaults for foreign keys.\n\nBy carefully designing your schema and handling NULL values in queries, you can avoid common pitfalls and build reliable SQL databases."
       }
     ]
   }

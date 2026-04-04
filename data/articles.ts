@@ -39618,5 +39618,545 @@ export const articles = [
         "value": "In summary, collation conflicts happen when different string columns use different character set rules. Use the COLLATE clause to resolve conflicts on-the-fly, or standardize your database schema to prevent these issues. This simple approach will make your SQL queries more robust and error-free."
       }
     ]
+  },
+  {
+    "slug": "handling-timezone-edge-cases-in-javascript-date-manipulations",
+    "title": "Handling Timezone Edge Cases in JavaScript Date Manipulations",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to handle tricky timezone edge cases in JavaScript when working with dates. This beginner-friendly tutorial explains common pitfalls and practical solutions.",
+    "videoUrl": "https://www.youtube.com/watch?v=zwFlVPdtKvE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates in JavaScript can sometimes be tricky, especially when dealing with different timezones and daylight saving time changes. This tutorial will help beginners understand common timezone edge cases and how to handle them correctly in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript's built-in Date object stores date and time internally in UTC, but when you display or manipulate dates, it usually converts them to your local timezone. This can cause some unexpected results, especially around daylight saving time transitions or when working with dates passed between different timezones."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s explore some common edge cases and how to handle them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Creating Dates with Local Time vs UTC"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you create a date string without a timezone, JavaScript assumes it’s in local time. But if you want to work consistently across timezones, you should use UTC methods."
+      },
+      {
+        "type": "code",
+        "value": "const localDate = new Date('2024-05-01T12:00:00');\nconsole.log('Local date:', localDate.toString()); // Interpreted as local time\n\nconst utcDate = new Date(Date.UTC(2024, 4, 1, 12, 0, 0));\nconsole.log('UTC date:', utcDate.toUTCString()); // Explicitly UTC\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Daylight Saving Time (DST) Issues"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes adding hours or days can skip or repeat hours during DST transitions. For example, adding 24 hours might not always mean \"same time tomorrow\" if a timezone has switched due to DST."
+      },
+      {
+        "type": "code",
+        "value": "const dateBeforeDST = new Date('2024-03-10T12:00:00');\n\n// Adding 24 hours in milliseconds\nconst datePlus24h = new Date(dateBeforeDST.getTime() + 24 * 60 * 60 * 1000);\n\nconsole.log('Before DST:', dateBeforeDST.toString());\nconsole.log('24 hours later:', datePlus24h.toString());"
+      },
+      {
+        "type": "paragraph",
+        "value": "To safely add days regardless of DST changes, use date-based methods:"
+      },
+      {
+        "type": "code",
+        "value": "const safeDate = new Date(dateBeforeDST);\nsafeDate.setDate(safeDate.getDate() + 1);\nconsole.log('1 day later (setDate):', safeDate.toString());"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Parsing Dates Without Timezone Information"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you get a date string like \"2024-12-31\", JavaScript treats it as midnight in the local timezone which can shift when converting to UTC, causing unexpected results."
+      },
+      {
+        "type": "code",
+        "value": "const dateString = '2024-12-31';\nconst parsedDate = new Date(dateString);\nconsole.log('Parsed date:', parsedDate.toString());"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid confusion, add a time or use ISO format with timezone, for example:"
+      },
+      {
+        "type": "code",
+        "value": "const dateStringUTC = '2024-12-31T00:00:00Z';\nconst utcParsedDate = new Date(dateStringUTC);\nconsole.log('UTC parsed date:', utcParsedDate.toUTCString());"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Using Libraries for Complex Timezone Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "For serious timezone management, consider using popular libraries like `date-fns-tz` or `Luxon`. These libraries offer convenient APIs for timezone conversions and formatting."
+      },
+      {
+        "type": "code",
+        "value": "// Example with Luxon\n// npm install luxon\n\nimport { DateTime } from 'luxon';\n\nconst dt = DateTime.fromISO('2024-11-01T12:00', { zone: 'America/New_York' });\nconsole.log('Date in New York:', dt.toString());\n\nconst dtInLondon = dt.setZone('Europe/London');\nconsole.log('Same instant in London:', dtInLondon.toString());"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling timezone edge cases requires understanding how JavaScript's Date object works with local and UTC times. Use UTC methods when possible, be cautious about DST transitions, and consider libraries for advanced features. This will save you from many timezone-related bugs and confusion."
+      }
+    ]
+  },
+  {
+    "slug": "handling-asynchronous-errors-in-javascript-promises",
+    "title": "Handling Asynchronous Errors in JavaScript Promises for Real-World Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors in JavaScript promises to build robust and reliable real-world applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript promises are a powerful way to handle asynchronous operations, such as fetching data from an API or reading files. However, dealing with errors in asynchronous code can be confusing at first. This guide will help beginners understand how to catch and handle errors properly when working with promises, ensuring your applications are resilient and user-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "A promise represents an operation that hasn't completed yet but will in the future. It has three states: pending, fulfilled, or rejected. When a promise is rejected, it means an error or unexpected condition occurred. To handle this rejection and avoid unexpected crashes or silent failures, you need to use proper error handling techniques."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common way to handle errors with promises is by using the `.catch()` method. This method catches any errors that happen either during the asynchronous operation or inside a `.then()` callback."
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('There was a problem with the fetch operation:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above code, if the network response isn’t successful (e.g., a 404 or 500 status code), an error is thrown inside the first `.then()`. This error then skips the next `.then()` and is caught in the `.catch()` block where it can be logged or displayed to the user."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another modern and readable way to handle asynchronous code and errors is with `async`/`await` combined with `try...catch` blocks. This syntax makes the asynchronous code look and behave more like traditional synchronous code."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Fetch error:', error);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, any errors occurring in the `fetch` call or during the JSON parsing will be caught by the `catch` block. This structure makes it easy to handle multiple asynchronous actions with robust error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Key tips for handling asynchronous errors in real-world apps include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always attach a `.catch()` handler to your promises to prevent unhandled promise rejections.\n2. Validate the response before processing data to catch HTTP errors.\n3. Use descriptive error messages to help with debugging and logging.\n4. Consider showing user-friendly messages or fallback UI when errors occur.\n5. When using async/await, wrap your code in try/catch blocks for clean error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering asynchronous error handling in promises, you can make your JavaScript applications more stable, easier to debug, and better suited for real-world scenarios."
+      }
+    ]
+  },
+  {
+    "slug": "building-robust-data-models-typescript-scalable-web-applications",
+    "title": "Building Robust Data Models in TypeScript for Scalable Web Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create strong and scalable data models in TypeScript to improve the maintainability and scalability of your web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web applications, managing data with clear and reliable structures is important for scalability and maintainability. TypeScript helps by allowing you to define data models with types, ensuring your data is consistent throughout your app. This tutorial will guide you through building robust data models in TypeScript, focusing on interfaces, classes, and utility types."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand what a data model is. A data model represents the shape and structure of the data you're working with. For example, if you build a user management system, you want a User model defining what a user object looks like."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a User interface in TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  username: string;\n  email: string;\n  isActive: boolean;\n  createdAt: Date;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the User interface defines the structure and types for a user object. This lets TypeScript catch errors if code tries to assign incorrect types or if properties are missing."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use TypeScript classes to encapsulate behavior along with your data. Classes allow you to add methods and control how instances are created and used."
+      },
+      {
+        "type": "code",
+        "value": "class UserModel {\n  constructor(\n    public id: number,\n    public username: string,\n    public email: string,\n    public isActive: boolean,\n    public createdAt: Date\n  ) {}\n\n  deactivate() {\n    this.isActive = false;\n  }\n\n  activate() {\n    this.isActive = true;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this class, you can create new users and call methods to activate or deactivate them:"
+      },
+      {
+        "type": "code",
+        "value": "const user = new UserModel(1, 'jdoe', 'jdoe@example.com', true, new Date());\nuser.deactivate();\nconsole.log(user.isActive); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle updates or partial data, TypeScript's utility types are very helpful. For example, the Partial<T> type makes all properties optional, which is useful for update operations."
+      },
+      {
+        "type": "code",
+        "value": "function updateUser(user: User, updates: Partial<User>): User {\n  return { ...user, ...updates };\n}\n\nconst updatedUser = updateUser(user, { email: 'newemail@example.com' });\nconsole.log(updatedUser.email);"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use Readonly<T> to prevent objects from being changed after creation, adding an extra layer of safety."
+      },
+      {
+        "type": "code",
+        "value": "const readonlyUser: Readonly<User> = {\n  id: 2,\n  username: 'asmith',\n  email: 'asmith@example.com',\n  isActive: true,\n  createdAt: new Date(),\n};\n\n// readonlyUser.email = 'changed@example.com'; // Error: Cannot assign to 'email' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "By defining your data models clearly and leveraging TypeScript’s features, your web application becomes more robust and easier to maintain as it scales. You catch errors early during development rather than runtime, which saves time and resources."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, start your project by creating strong types/interfaces for your data models, consider using classes for behavior encapsulation, and utilize utility types like Partial and Readonly to handle real-world cases. This approach will help you build scalable and maintainable web applications efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-typescripts-advanced-type-inference-for-cleaner-error-handling",
+    "title": "Harnessing TypeScript’s Advanced Type Inference for Cleaner Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript’s advanced type inference to write safer and cleaner error handling code that’s easier to manage.",
+    "videoUrl": "https://www.youtube.com/watch?v=66_bET6sI20",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of programming, and TypeScript can make it much safer and cleaner with its advanced type inference features. By leveraging TypeScript’s ability to infer types, you can write error handling code that is both easy to read and less prone to mistakes. In this article, we’ll explore how to harness these features in a beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a common pattern in JavaScript where a function may return either a successful value or an error. Traditionally, developers rely on throwing errors or using simple return values, which can be hard to manage and unsafe. TypeScript allows us to define a discriminated union type for these results, helping us leverage type inference to make error handling more explicit and reliable."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T, E> =\n  | { success: true; value: T }\n  | { success: false; error: E };"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `Result` type is a union type with two variants: one representing success and the other failure. The `success` boolean acts as a discriminant, letting TypeScript automatically infer which variant we are dealing with. Now let’s see how we can use this pattern in a simple function that parses JSON."
+      },
+      {
+        "type": "code",
+        "value": "function parseJson(jsonString: string): Result<any, string> {\n  try {\n    const parsed = JSON.parse(jsonString);\n    return { success: true, value: parsed };\n  } catch (error) {\n    return { success: false, error: (error as Error).message };\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you call `parseJson`, the returned object clearly indicates whether the operation was successful. Using an if-statement TypeScript fully understands the type within each branch:"
+      },
+      {
+        "type": "code",
+        "value": "const result = parseJson('{\"name\":\"Alice\"}');\n\nif (result.success) {\n  // TypeScript knows 'result' is the success variant\n  console.log('Parsed object:', result.value);\n} else {\n  // Here, TypeScript knows it's the error variant\n  console.error('Parsing error:', result.error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach helps the compiler catch mistakes early. For example, if you try to access `result.value` inside the `else` block, TypeScript will warn you because this property doesn’t exist for errors. This leads to more robust and easier-to-maintain code."
+      },
+      {
+        "type": "paragraph",
+        "value": "To make this even more reusable, you can define a generic function to handle this pattern across your project. This way, all functions that can succeed or fail will have a consistent return type and benefit from TypeScript’s inference."
+      },
+      {
+        "type": "code",
+        "value": "function safeExecute<T>(fn: () => T): Result<T, string> {\n  try {\n    return { success: true, value: fn() };\n  } catch (error) {\n    return { success: false, error: (error as Error).message };\n  }\n}\n\nconst safeResult = safeExecute(() => {\n  // Your safe code here\n  return JSON.parse('{\"id\":1}');\n});\n\nif (safeResult.success) {\n  console.log(\"Success:\", safeResult.value);\n} else {\n  console.error(\"Error:\", safeResult.error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, using TypeScript’s union types with discriminants lets you write clearer and safer error handling code. Type inference helps by narrowing down the type automatically based on runtime checks, reducing bugs and improving developer experience. Try implementing this pattern in your next project to see the benefits firsthand!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-timezone-edge-cases-python-datetime",
+    "title": "Handling Timezone Edge Cases in Python DateTime Operations",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to effectively handle timezone edge cases in Python's datetime operations with beginner-friendly examples and practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=9OkNEZKoPAo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in Python can be tricky, especially once timezones come into play. Timezone edge cases, such as Daylight Saving Time (DST) transitions, ambiguous times, and non-existent times, can easily cause bugs if not handled correctly. This tutorial will walk you through how to manage these timezone quirks using Python's standard libraries and the popular pytz library."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to understand that naive datetime objects in Python do not contain any timezone information. This means they are considered 'timezone unaware' and can lead to errors when working with different local times. To handle timezones properly, you should always use timezone-aware datetime objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a timezone-aware datetime using the pytz library, which provides comprehensive timezone definitions:"
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nimport pytz\n\n# Define a timezone\nny_tz = pytz.timezone('America/New_York')\n\n# Create a naive datetime\nnaive_dt = datetime(2024, 3, 10, 12, 0)\n\n# Localize the naive datetime to the timezone\naware_dt = ny_tz.localize(naive_dt)\nprint('Timezone-aware datetime:', aware_dt)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's discuss an important edge case: the Daylight Saving Time spring-forward transition. When the clocks move forward, some local times don't actually exist. For example, in New York on March 10, 2024, the clocks jump from 2:00 AM to 3:00 AM. Trying to create a datetime at 2:30 AM local time on this date will raise an error or be ambiguous."
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nimport pytz\n\nyear = 2024\n# DST transition day in New York\nmonth = 3\n# 2:30 AM local time (non-existent due to spring forward)\nday = 10\nhour = 2\nminute = 30\n\nny_tz = pytz.timezone('America/New_York')\n\ntry:\n    # This will raise an exception\n    dt = datetime(year, month, day, hour, minute)\n    aware_dt = ny_tz.localize(dt)\nexcept pytz.NonExistentTimeError as e:\n    print('Caught NonExistentTimeError:', e)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "As shown, pytz raises a NonExistentTimeError when you try to localize a non-existent time. You can handle this in two ways: either shift the time or use the `is_dst` argument to specify how to handle ambiguous or non-existent times."
+      },
+      {
+        "type": "code",
+        "value": "# Handling non-existent times with is_dst parameter\n# is_dst=None -> raise error\n# is_dst=True -> move time forward by 1 hour\n# is_dst=False -> move time backward by 1 hour\n\ndt = datetime(year, month, day, hour, minute)\naware_dt_forward = ny_tz.localize(dt, is_dst=True)\naware_dt_backward = ny_tz.localize(dt, is_dst=False)\n\nprint('Forward adjustment:', aware_dt_forward)\nprint('Backward adjustment:', aware_dt_backward)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case occurs during the fall-back DST transition, when the clock repeats one hour. This creates ambiguous times. For example, 1:30 AM happens twice. The `is_dst` argument in `localize` can help distinguish between the two ambiguous times."
+      },
+      {
+        "type": "code",
+        "value": "# Ambiguous time example during fall back\nambiguous_day = 2024\nambiguous_month = 11\nambiguous_day_num = 3\nambiguous_hour = 1\nambiguous_minute = 30\n\ndt_ambiguous = datetime(ambiguous_day, ambiguous_month, ambiguous_day_num, ambiguous_hour, ambiguous_minute)\n\naware_dt_dst = ny_tz.localize(dt_ambiguous, is_dst=True)   # DST time\naware_dt_std = ny_tz.localize(dt_ambiguous, is_dst=False)  # Standard time\n\nprint('DST time:', aware_dt_dst)\nprint('Standard time:', aware_dt_std)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary tips for handling timezone edge cases:\n\n- Always use timezone-aware datetime objects.\n- Use pytz’s `localize()` to attach timezones and handle DST correctly.\n- Use the `is_dst` parameter to resolve ambiguous or non-existent times.\n- Catch `NonExistentTimeError` and `AmbiguousTimeError` exceptions to handle errors gracefully.\n\nBy being aware of these edge cases and using the tools Python provides, you can confidently manage most timezone-related datetime challenges."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-tracebacks-beginners-guide",
+    "title": "Understanding Python Tracebacks: A Beginner's Guide to Reading Error Messages",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to read and understand Python tracebacks to quickly find and fix errors in your code. Perfect for beginners starting their Python journey.",
+    "videoUrl": "https://www.youtube.com/watch?v=JD8BrXXNtjA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're learning Python, encountering errors is a normal part of the process. Python helps you find out what's wrong by showing a traceback — a report of the error and where it happened in your code. This guide will help you understand how to read these tracebacks so you can fix your code faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "A traceback is printed to the console when an error occurs. It shows the sequence of calls that led to the error, along with the type of error and a message explaining what went wrong. Let's look at a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run this code, you'll get a traceback like this:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 4, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to read it step-by-step:\n\n1. \"Traceback (most recent call last)\" shows the start of the error report.\n2. The lines starting with \"File\" tell you where the error happened. It shows the file name, line number, and the line of code.\n3. The last line tells you the type of error and the message—in this case, a `ZeroDivisionError` caused by \"division by zero.\""
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this error, you should avoid dividing by zero. For example, you could add a check inside the function:"
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    return a / b\n\nresult = divide(10, 0)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, instead of getting an error, the function returns a friendly message.\n\nUnderstanding tracebacks will save you time and frustration as you learn to code. Whenever you see a traceback, read it carefully to find the file, line number, and error type to guide your debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing reading tracebacks, and soon it will become second nature!"
+      }
+    ]
+  },
+  {
+    "slug": "real-time-inventory-management-with-sql-and-triggers",
+    "title": "Building a Real-Time Inventory Management System with SQL and Triggers",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create a simple real-time inventory management system using SQL tables and triggers to automatically update stock levels.",
+    "videoUrl": "https://www.youtube.com/watch?v=NmizcdEaNqc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Managing inventory in real-time is crucial for businesses to keep track of stock levels and avoid shortages or overstock. In this tutorial, we'll build a beginner-friendly inventory management system using SQL and triggers. Triggers allow automatic reactions to changes like updates and inserts, making them perfect for maintaining accurate stock counts."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll start by creating two main tables: one for the products and their stock, and another to record inventory transactions like sales or restocking. Then, we'll use a trigger to update the product stock automatically when a new transaction is recorded."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into the SQL code!"
+      },
+      {
+        "type": "code",
+        "value": "-- Create a table to store products and their stock\nCREATE TABLE Products (\n  ProductID INT PRIMARY KEY,\n  ProductName VARCHAR(100),\n  Stock INT DEFAULT 0\n);\n\n-- Create a table to record inventory transactions\n-- Quantity is positive for stock added, negative for stock sold\nCREATE TABLE InventoryTransactions (\n  TransactionID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductID INT,\n  Quantity INT,\n  TransactionDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now we have a `Products` table holding each product and their current `Stock`, and an `InventoryTransactions` table to log every stock movement. Next, we'll create a trigger that updates the `Stock` in the `Products` table whenever a new transaction is inserted."
+      },
+      {
+        "type": "code",
+        "value": "-- Trigger to update product stock after inserting a transaction\nDELIMITER //\nCREATE TRIGGER update_stock_after_transaction\nAFTER INSERT ON InventoryTransactions\nFOR EACH ROW\nBEGIN\n  UPDATE Products\n  SET Stock = Stock + NEW.Quantity\n  WHERE ProductID = NEW.ProductID;\nEND;//\nDELIMITER ;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This trigger listens for new rows inserted into `InventoryTransactions`, then adjusts the corresponding product's stock by adding the new transaction's quantity. Positive quantities add stock (e.g., restocking), and negative quantities reduce stock (e.g., sales)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's add some sample products and transactions to see the system in action."
+      },
+      {
+        "type": "code",
+        "value": "-- Insert sample products\nINSERT INTO Products (ProductID, ProductName, Stock) VALUES\n(1, 'Keyboard', 50),\n(2, 'Mouse', 100);\n\n-- Add a transaction for selling 3 keyboards\nINSERT INTO InventoryTransactions (ProductID, Quantity) VALUES (1, -3);\n\n-- Add a transaction for restocking 20 mice\nINSERT INTO InventoryTransactions (ProductID, Quantity) VALUES (2, 20);\n\n-- Check updated stock levels\nSELECT * FROM Products;"
+      },
+      {
+        "type": "paragraph",
+        "value": "After running these commands, the stock for the Keyboard will decrease by 3, and the stock for the Mouse will increase by 20 automatically. This approach keeps your inventory data accurate in real-time without manual stock adjustments."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can extend this solution by adding more features like tracking users who make transactions, handling different transaction types, or adding alerts when stock is low. But this basic system provides a solid foundation for real-time inventory management using SQL and triggers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding and managing your inventory efficiently!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-data-modeling-pitfalls-that-lead-to-null-relationship-errors-in-sql",
+    "title": "Understanding Data Modeling Pitfalls That Lead to Null Relationship Errors in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn common data modeling mistakes that cause null relationship errors in SQL and practical tips on how to fix and avoid them.",
+    "videoUrl": "https://www.youtube.com/watch?v=TtUzG3Mt8OQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, properly designing relationships between tables is crucial. One common challenge beginners face is encountering null relationship errors, which happen when expected foreign key values are missing or not correctly set up. This article explains typical data modeling pitfalls that lead to these errors and shows you how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "In SQL, relationships between tables are often represented with foreign keys. A foreign key in one table points to a primary key in another, establishing a connection. Null relationship errors usually occur when the foreign key contains NULL values but the database or query expects a valid reference."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s explore some common pitfalls with examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Missing Foreign Key Constraints"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you don't explicitly define foreign key constraints, the database will allow any value in the foreign key column including NULLs or invalid IDs, leading to inconsistency."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Orders (\n    OrderID INT PRIMARY KEY,\n    CustomerID INT -- No constraint here\n);\n\n-- This allows inserting orders with non-existent CustomerID or NULL values."
+      },
+      {
+        "type": "paragraph",
+        "value": "Fix this by adding a foreign key constraint to ensure every CustomerID in Orders exists in the Customers table:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Customers (\n    CustomerID INT PRIMARY KEY,\n    CustomerName VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Orders (\n    OrderID INT PRIMARY KEY,\n    CustomerID INT,\n    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Nullable Foreign Keys Without Clear Intent"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes a foreign key is marked as nullable, allowing NULL values. If this is unintended, it causes queries that join tables on this column to fail or return unexpected NULLs."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    ManagerID INT NULL,\n    FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID)\n);\n\n-- NULL ManagerID means the employee has no manager (e.g., CEO)."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, the NULL is valid, but your queries should be written to handle NULLs properly:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT e.EmployeeID, m.EmployeeID AS ManagerID\nFROM Employees e\nLEFT JOIN Employees m ON e.ManagerID = m.EmployeeID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use LEFT JOIN instead of INNER JOIN to avoid dropping employees who don't have managers."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Inconsistent Data Types Between Keys"
+      },
+      {
+        "type": "paragraph",
+        "value": "If the primary key and foreign key columns have mismatched data types, the database may not enforce relationships properly, allowing NULLs or invalid values."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Products (\n    ProductID VARCHAR(10) PRIMARY KEY\n);\n\nCREATE TABLE Sales (\n    SaleID INT PRIMARY KEY,\n    ProductID INT, -- data type mismatch here\n    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always make sure the foreign key column matches the primary key data type exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Missing Default Values for Foreign Keys"
+      },
+      {
+        "type": "paragraph",
+        "value": "If a foreign key column is nullable and no default value is set, inserting new rows without specifying that key will create NULLs unintentionally."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid this, either set NOT NULL constraints or provide a sensible default that refers to a valid row."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To minimize null relationship errors in SQL data modeling:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always define foreign key constraints.\n- Understand when foreign keys should be nullable and design queries accordingly.\n- Match data types exactly between keys.\n- Set NOT NULL or appropriate defaults for foreign keys.\n\nBy carefully designing your schema and handling NULL values in queries, you can avoid common pitfalls and build reliable SQL databases."
+      }
+    ]
   }
 ];
