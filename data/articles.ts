@@ -40640,5 +40640,139 @@ export const articles = [
         "value": "In summary, indexing is a powerful way to optimize SQL queries. Start by adding indexes on columns frequently used in filters and joins, analyze your queries' execution plans, and avoid over-indexing. With these simple strategies, your SQL queries will run faster and more efficiently."
       }
     ]
+  },
+  {
+    "slug": "designing-robust-retry-mechanisms-in-javascript-for-network-resilience",
+    "title": "Designing Robust Retry Mechanisms in JavaScript for Network Resilience",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to build simple and effective retry mechanisms in JavaScript to handle network errors and improve the reliability of your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=aVyCa1RhZIc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Network requests can fail for many reasons, such as temporary server issues or intermittent connectivity problems. To create more resilient JavaScript applications, especially those interacting with remote APIs, you should implement retry mechanisms. These help your application automatically retry failed requests, improving reliability without user intervention."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we will walk through a beginner-friendly way to build a retry function in JavaScript that attempts to perform a network request multiple times before giving up. We will also add a delay between retries to avoid overwhelming the server."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple retry function that accepts three parameters: a callback function to run the request, the number of retry attempts, and the delay in milliseconds between retries."
+      },
+      {
+        "type": "code",
+        "value": "async function retryRequest(fn, retries = 3, delay = 1000) {\n  for (let attempt = 1; attempt <= retries; attempt++) {\n    try {\n      // Try to run the function\n      return await fn();\n    } catch (error) {\n      if (attempt === retries) {\n        // If this was the last attempt, throw the error\n        throw error;\n      }\n      // Otherwise, wait before retrying\n      await new Promise(resolve => setTimeout(resolve, delay));\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use this `retryRequest` function with a network call, like using the Fetch API to get data from a URL. Here is an example:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUserData() {\n  return fetch('https://jsonplaceholder.typicode.com/users/1').then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  });\n}\n\nretryRequest(fetchUserData, 5, 2000)\n  .then(data => console.log('User data:', data))\n  .catch(error => console.error('Failed to fetch user data:', error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `retryRequest` will try to fetch user data up to 5 times, waiting 2 seconds between each attempt. If all attempts fail, it will throw the error and you can handle it accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "This basic retry mechanism can be enhanced by introducing exponential backoff (increasing delay after each failure) or by adding conditions to retry only on certain types of errors (for example, network errors but not 4xx client errors)."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, adding a retry mechanism like this can help your JavaScript applications gracefully handle temporary network issues, thereby creating a smoother user experience and more resilient apps."
+      }
+    ]
+  },
+  {
+    "slug": "handling-api-response-errors-gracefully-in-typescript",
+    "title": "Handling API Response Errors Gracefully in TypeScript for Real-World Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to handle API response errors gracefully in TypeScript to build robust, reliable real-world applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=aeVtRB4xcOs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with APIs in TypeScript, handling errors gracefully is crucial to ensure a smooth user experience and maintainable code. This article will guide you through the basics of detecting, managing, and displaying API errors clearly using TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it’s important to understand the possible types of errors you might encounter. APIs can return HTTP error codes like 400, 404, or 500, or your code might encounter network issues like timeouts. Handling these errors separately helps you provide meaningful feedback to users."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of how to fetch data from an API and handle errors using TypeScript’s type system and modern JavaScript features like async/await and try/catch blocks."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiResponse<T> {\n  data: T | null;\n  error: string | null;\n}\n\nasync function fetchUser(userId: number): Promise<ApiResponse<{ id: number; name: string }>> {\n  try {\n    const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);\n\n    if (!response.ok) {\n      // Handle HTTP errors\n      return { data: null, error: `Request failed with status ${response.status}` };\n    }\n\n    const data = await response.json();\n    return { data, error: null };\n  } catch (error) {\n    // Handle network or unexpected errors\n    if (error instanceof Error) {\n      return { data: null, error: error.message };\n    }\n\n    return { data: null, error: 'An unknown error occurred' };\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we define a generic ApiResponse<T> interface to represent the response shape containing either data or an error message. The fetchUser function calls an API to fetch user data, checks if the HTTP response status is OK, and returns either the data or an error string."
+      },
+      {
+        "type": "paragraph",
+        "value": "When using this function, you can check if an error occurred and handle it accordingly, for example, by showing a message to the user or retrying the request."
+      },
+      {
+        "type": "code",
+        "value": "async function displayUser(userId: number) {\n  const response = await fetchUser(userId);\n\n  if (response.error) {\n    console.error('API Error:', response.error);\n    alert(`Error: ${response.error}`);\n    return;\n  }\n\n  console.log('User data:', response.data);\n  alert(`User found: ${response.data?.name}`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, handling API response errors gracefully in TypeScript involves:\n- Using try/catch blocks to catch network or unexpected errors\n- Checking the HTTP response status for server or client errors\n- Using TypeScript interfaces to clearly represent success or error states\n- Presenting meaningful messages to the user when an error occurs\n\nBy following these steps, your applications will be more reliable and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "handling-precision-loss-in-floating-point-comparisons-in-sql-queries",
+    "title": "Handling Precision Loss in Floating Point Comparisons in SQL Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to avoid common pitfalls when comparing floating point numbers in SQL due to precision loss, with beginner-friendly tips and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=aADY0-KQWSA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with floating point numbers in SQL, you might encounter unexpected results when comparing values directly. This happens because floating point numbers are stored with limited precision, leading to tiny differences that can cause equality comparisons to fail."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, if you try to compare two floating point numbers using the = operator, the comparison might fail even though the values look the same. This is due to how computers represent these numbers internally, often causing a precision loss."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle this problem, it's a good practice to use a tolerance or margin of error, commonly called epsilon, when comparing floating point numbers. Instead of checking if two numbers are exactly equal, you check if they are close enough within a small range."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example of how to compare two floating point columns in a SQL query using an epsilon value:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM your_table\nWHERE ABS(column1 - column2) < 0.00001;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, ABS(column1 - column2) calculates the absolute difference between the two numbers. We then check if this difference is smaller than a small threshold (0.00001 in this case). If it is, we consider the numbers equal for practical purposes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Choosing the right epsilon depends on the precision requirements of your application. For financial data, you might use a smaller epsilon like 0.000001, while for other uses a larger epsilon might be acceptable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another tip is to avoid storing floating point numbers when exact precision is needed, such as money values. Instead, consider using integer types or fixed-point decimals (like DECIMAL or NUMERIC data types in SQL) to ensure accuracy."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these guidelines, you can avoid common bugs related to floating point precision loss and write more reliable SQL queries."
+      }
+    ]
   }
 ];
