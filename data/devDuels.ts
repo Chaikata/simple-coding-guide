@@ -5130,5 +5130,176 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "write-a-sql-function-to-calculate-the-average-salary-from-employee-table",
+    "title": "Write a SQL Function to Calculate the Average Salary from Employee Table",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Create a SQL function that calculates the average salary of all employees in a given department using a simple SELECT and AVG aggregate function.",
+    "prompt": "Write a SQL function named `GetAverageSalary` that accepts a department ID as input and returns the average salary of all employees in that department. Assume you have an `Employees` table with columns `EmployeeID`, `DepartmentID`, and `Salary`. Your function should handle the case where there are no employees in the department by returning NULL.",
+    "guidance": [
+      "Use the AVG() aggregate function to calculate the average salary.",
+      "Filter rows by the given DepartmentID in the WHERE clause.",
+      "Return the result from within the function."
+    ],
+    "hints": [
+      "Recall that AVG function ignores NULL values automatically.",
+      "Make sure your function uses correct syntax for creating scalar functions in your SQL dialect."
+    ],
+    "starterCode": "CREATE FUNCTION GetAverageSalary(@DeptID INT)\nRETURNS FLOAT\nAS\nBEGIN\n    -- Write your query here\n    RETURN NULL\nEND",
+    "expectedOutput": "If Employees table has salaries (50000, 70000, 60000) in department 2, then GetAverageSalary(2) should return 60000.",
+    "concepts": [
+      "SQL functions",
+      "Aggregate functions",
+      "Filtering with WHERE clause"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-python-expense-tracker-with-categorization-and-summaries",
+    "title": "Build a Python Expense Tracker with Categorization and Summaries",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a Python mini-project to manage daily expenses, categorize them, and generate summary reports for monthly spending by category.",
+    "prompt": "You need to build a simple expense tracker program in Python. Your program will allow adding daily expenses with an amount, a category (like Food, Transport, Utilities), and a date. It should store the expenses in an appropriate data structure. The program should then be able to generate a summary report that totals spending by category for a given month and year. Implement the following functions:\n\n1. add_expense(amount, category, date) - Adds an expense to the tracker.\n2. monthly_summary(year, month) - Returns a dictionary with categories as keys and total spendings as values for the specified month.\n\nMake sure your program can handle multiple expenses in the same category and different categories per month.",
+    "guidance": [
+      "Use a list to store expense entries as dictionaries or named tuples with fields for amount, category, and date.",
+      "Parse and manipulate dates using the datetime module to filter expenses by month and year.",
+      "Aggregate expenses by category using a dictionary within the summary function."
+    ],
+    "hints": [
+      "To filter expenses by month and year, consider extracting year and month from the date object.",
+      "Initialize your summary dictionary with zero values for unseen categories or use defaultdict from collections.",
+      "Remember to convert input strings to appropriate types when adding expenses, if you extend the project."
+    ],
+    "starterCode": "from datetime import datetime\n\nexpenses = []\n\ndef add_expense(amount, category, date):\n    \"\"\"Add an expense: amount as float, category as string, date as datetime.date.\"\"\"\n    expenses.append({'amount': amount, 'category': category, 'date': date})\n\n\ndef monthly_summary(year, month):\n    \"\"\"Return a dict of total expenses by category for given year and month.\"\"\"\n    summary = {}\n    # Your code here\n    return summary",
+    "expectedOutput": "{'Food': 150.0, 'Transport': 75.5, 'Utilities': 100.0}",
+    "concepts": [
+      "lists",
+      "dictionaries",
+      "datetime handling",
+      "aggregation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-bug-in-parallel-fibonacci-computation-with-memoization",
+    "title": "Fix Bug in Parallel Fibonacci Computation with Memoization",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Debug and fix the given Python code that aims to compute Fibonacci numbers efficiently using recursion with memoization and parallel execution. The current implementation has subtle bugs causing incorrect results and inefficient execution.",
+    "prompt": "You are given a Python function designed to calculate a list of Fibonacci numbers for multiple input values concurrently using recursion, memoization, and multiprocessing. However, the code contains bugs that lead to wrong results and runtime errors. Your task is to identify and fix these bugs so that the function returns correct Fibonacci numbers for each input and utilizes multiprocessing properly without errors.",
+    "guidance": [
+      "Check the proper use and sharing of memoization cache among concurrent processes.",
+      "Ensure the multiprocessing part initializes and collects results correctly.",
+      "Review recursive Fibonacci logic for correctness under memoization."
+    ],
+    "hints": [
+      "Memoization dictionary should not be shared across processes by passing it as a function argument.",
+      "Python multiprocessing pools require careful handling of function arguments and return values.",
+      "Check base cases of the Fibonacci function and how recursion results are combined."
+    ],
+    "starterCode": "import multiprocessing\n\nmemo = {0: 0, 1: 1}\n\ndef fib(n, memo=memo):\n    if n in memo:\n        return memo[n]\n    memo[n] = fib(n-1, memo) + fib(n-2, memo)\n    return memo[n]\n\ndef parallel_fib(numbers):\n    with multiprocessing.Pool() as pool:\n        results = pool.map(fib, numbers)\n    return results\n\ninputs = [35, 36, 37]\nprint(parallel_fib(inputs))",
+    "expectedOutput": "[9227465, 14930352, 24157817]",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "multiprocessing",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-high-performance-memoized-fibonacci-function-using-c-templates",
+    "title": "Build a High-Performance Memoized Fibonacci Function Using C++ Templates",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an advanced C++ function that computes Fibonacci numbers efficiently using both memoization and template metaprogramming techniques to optimize compile-time and run-time performance.",
+    "prompt": "Write a function `constexpr unsigned long long memoizedFibonacci(unsigned int n)` that calculates the nth Fibonacci number. The function should use memoization to cache previously computed results for run-time calls and also utilize template metaprogramming to enable compile-time computation for constant expressions where possible. You must ensure the function is safe for large inputs (up to 93) without integer overflow in unsigned long long. Avoid redundant calculations and optimize both compile-time and run-time efficiency.",
+    "guidance": [
+      "Design a helper structure using templates to compute Fibonacci numbers at compile-time for constant values of n.",
+      "Implement memoization using a static cache or a suitable in-function mechanism to speed up run-time calls.",
+      "Ensure your solution handles both compile-time (`constexpr`) contexts and run-time calls seamlessly.",
+      "Consider using constexpr if and inline static variables for caching in C++17 and later."
+    ],
+    "hints": [
+      "Use template specialization to define base cases for Fibonacci (e.g., for 0 and 1).",
+      "Static arrays or maps can hold cached values for run-time memoization.",
+      "Leveraging constexpr functions with inline variables allows cache sharing across calls."
+    ],
+    "starterCode": "constexpr unsigned long long compileTimeFib(unsigned int n) {\n    if (n == 0) return 0;\n    if (n == 1) return 1;\n    return compileTimeFib(n - 1) + compileTimeFib(n - 2);\n}\n\nunsigned long long memoizedFibonacci(unsigned int n) {\n    // TODO: Implement memoized Fibonacci function\n    return 0;\n}",
+    "expectedOutput": "memoizedFibonacci(10) == 55\nmemoizedFibonacci(40) == 102334155\nconstexpr auto val = memoizedFibonacci(20); // val == 6765 (computed at compile-time if possible)",
+    "concepts": [
+      "memoization",
+      "template metaprogramming",
+      "constexpr functions",
+      "optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "advanced-expense-tracker-with-recurring-transactions-and-filters",
+    "title": "Advanced Expense Tracker with Recurring Transactions and Filters",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a robust expense tracking function that manages one-time and recurring transactions, supports dynamic filtering by categories and date ranges, and returns detailed summaries with optimized performance.",
+    "prompt": "Create a JavaScript function named `expenseTracker` that takes an array of transactions and an options object to generate a detailed expense summary. Transactions can be one-time or recurring. Each transaction object contains: `id` (string), `amount` (number), `date` (ISO string), `category` (string), and optional `recurrence` (object with `interval` in days and `endDate` as ISO string). Your function must: 1) Expand recurring transactions to all occurrences within their recurrence period. 2) Filter transactions by optional category array and date range (startDate, endDate) provided in the options. 3) Return an object with total spent, per-category spending, and filtered transaction list sorted by date ascending. 4) Handle large datasets efficiently, avoiding unnecessary computations. Ensure correct handling of edge cases such as overlapping filters and partial recurrence periods.",
+    "guidance": [
+      "Expand recurring transactions into individual occurrences up to the specified `endDate`, but only generate occurrences within the filter date range to optimize performance.",
+      "Apply filters strictly: if categories or date range filters are provided, include only matching transactions in the result and summary calculations.",
+      "Return results in the exact structure: { totalSpent: number, perCategory: object, transactions: array }, where `perCategory` maps category names to sums and `transactions` is sorted ascending by date."
+    ],
+    "hints": [
+      "Use a generator or lazy evaluation approach to handle recurring transactions efficiently, especially if the total occurrence count is large.",
+      "Convert date strings to Date objects once for comparisons to improve performance.",
+      "Be cautious with time boundaries in filtering; include transactions on the startDate and endDate dates."
+    ],
+    "starterCode": "function expenseTracker(transactions, options = {}) {\n  // options = { categories: array of strings, startDate: ISO string, endDate: ISO string }\n\n  // Your code here\n}",
+    "expectedOutput": "{\n  totalSpent: 350.50,\n  perCategory: {\n    food: 150.20,\n    utilities: 100.00,\n    entertainment: 100.30\n  },\n  transactions: [\n    /* expanded, filtered, and sorted transaction objects */\n  ]\n}",
+    "concepts": [
+      "recurring events expansion",
+      "filtering with multiple criteria",
+      "performance optimization",
+      "date manipulation",
+      "aggregation and sorting"
+    ],
+    "estimatedTime": "40 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-bug-in-celsius-to-fahrenheit-conversion-function",
+    "title": "Fix the Bug in Celsius to Fahrenheit Conversion Function",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple function to convert a temperature from Celsius to Fahrenheit contains a bug. Fix the function so it returns the correct Fahrenheit value.",
+    "prompt": "The function celsiusToFahrenheit is intended to convert a temperature from Celsius to Fahrenheit using the formula F = C * 9/5 + 32. However, it currently returns the wrong result. Identify and fix the bug so that the function correctly converts Celsius to Fahrenheit.",
+    "guidance": [
+      "Review the formula for Celsius to Fahrenheit conversion.",
+      "Check the order of operations and make sure to use floating point division if needed."
+    ],
+    "hints": [
+      "Integer division may be truncating your calculation result.",
+      "Try using 9.0/5.0 instead of 9/5."
+    ],
+    "starterCode": "double celsiusToFahrenheit(int celsius) {\n    return celsius * 9 / 5 + 32;\n}",
+    "expectedOutput": "celsiusToFahrenheit(0) => 32\ncelsiusToFahrenheit(100) => 212\ncelsiusToFahrenheit(-40) => -40",
+    "concepts": [
+      "basic arithmetic",
+      "order of operations",
+      "type conversion"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
