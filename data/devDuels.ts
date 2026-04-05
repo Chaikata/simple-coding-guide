@@ -4959,5 +4959,176 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-function-to-improve-array-filtering-and-mapping-logic",
+    "title": "Refactor a Function to Improve Array Filtering and Mapping Logic",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Refactor the provided JavaScript function to improve readability, reduce complexity, and maintain the same output when filtering and mapping an array of user objects.",
+    "prompt": "The function below filters an array of user objects to include only those users who are active and older than a certain age. It then maps the filtered users to a new array containing only the id and name properties. Refactor the code to make it cleaner and more readable while preserving the exact output behavior.",
+    "guidance": [
+      "Focus on improving the readability and maintainability of the code without changing its functionality.",
+      "Consider breaking down complex expressions or chaining for clarity.",
+      "Ensure the function returns the exact same output for the same input."
+    ],
+    "hints": [
+      "Use descriptive variable names for intermediate results if necessary.",
+      "Consider using array methods like filter and map separately rather than inline chaining.",
+      "Avoid redundant checks or unnecessary comments."
+    ],
+    "starterCode": "function getActiveUserSummaries(users, minAge) {\n  return users.filter(function(user) {\n    return user.active === true && user.age > minAge;\n  }).map(function(user) {\n    return {id: user.id, name: user.name};\n  });\n}",
+    "expectedOutput": "[\n  { id: 1, name: 'Alice' },\n  { id: 3, name: 'Charlie' }\n]",
+    "concepts": [
+      "array filtering",
+      "array mapping",
+      "code readability",
+      "function refactoring"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-social-network-graph-analyzer-in-python",
+    "title": "Advanced Social Network Graph Analyzer in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a Python mini-project that processes and analyzes a social network graph to extract insights such as influential users, community detection, and shortest connection paths.",
+    "prompt": "You are tasked to create a Python program that models a social network graph where users are nodes and friendships are edges. Your program should support the following functionalities: 1) Add users and friendships, 2) Detect communities using a clustering algorithm, 3) Identify the top 3 most influential users based on the number of connections and centrality, and 4) Find the shortest connection path between two given users. Implement efficient data structures and graph algorithms to handle these operations on potentially large datasets.",
+    "guidance": [
+      "Use adjacency lists or dictionaries to represent the graph for efficient relationship lookups.",
+      "Consider algorithms like BFS or Dijkstra for shortest path calculations.",
+      "Explore community detection algorithms such as Girvan-Newman or Louvain method for clustering.",
+      "Develop a centrality metric (degree centrality or betweenness centrality) to rank user influence."
+    ],
+    "hints": [
+      "Leverage collections like defaultdict for graph construction to simplify edge insertions.",
+      "Caching intermediate results like shortest paths or clustering outputs can improve performance.",
+      "Use Python libraries like networkx if allowed for prototyping; otherwise, implement core graph algorithms yourself."
+    ],
+    "starterCode": "class SocialNetworkGraph:\n    def __init__(self):\n        self.graph = {}\n\n    def add_user(self, user_id):\n        if user_id not in self.graph:\n            self.graph[user_id] = set()\n\n    def add_friendship(self, user1, user2):\n        self.add_user(user1)\n        self.add_user(user2)\n        self.graph[user1].add(user2)\n        self.graph[user2].add(user1)\n\n    def find_shortest_path(self, start_user, end_user):\n        # Implement BFS or other algorithm\n        pass\n\n    def detect_communities(self):\n        # Implement community detection algorithm\n        pass\n\n    def get_top_influential_users(self, top_n=3):\n        # Implement centrality measure and ranking\n        pass\n\n# Example usage:\n# sn = SocialNetworkGraph()\n# sn.add_friendship('Alice', 'Bob')\n# sn.add_friendship('Bob', 'Charlie')\n# print(sn.find_shortest_path('Alice', 'Charlie'))",
+    "expectedOutput": "For the sample graph where Alice is connected to Bob and Bob to Charlie, the shortest path from Alice to Charlie should output ['Alice', 'Bob', 'Charlie']. Community detection may yield one community containing all three users. The top influential user would be Bob with 2 connections.",
+    "concepts": [
+      "Graph Data Structures",
+      "Graph Algorithms",
+      "Community Detection",
+      "Centrality Measures"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-recursive-memoization-with-mutable-default-argument",
+    "title": "Predict the Output of a Recursive Memoization with Mutable Default Argument",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a Python function that uses recursion combined with mutable default arguments and memoization, then predict the exact printed output when the function is called.",
+    "prompt": "Consider the following Python function `complex_sequence`. It recursively computes values using memoization but also uses a list as a mutable default argument. Predict the exact printed output after the function call `complex_sequence(5)`.\n\nExplain the reasoning behind the output including the role of the mutable default argument and recursion steps.",
+    "guidance": [
+      "Examine how mutable default arguments behave in recursive function calls.",
+      "Understand the memoization dictionary and how it stores intermediate results.",
+      "Trace the recursion depth and values returned at each step carefully."
+    ],
+    "hints": [
+      "Mutable default arguments retain changes across all recursive calls within the same invocation.",
+      "Memoization dictionary keys correspond to specific input values for which results are cached.",
+      "Focus on how the `history` list is updated and printed during recursion."
+    ],
+    "starterCode": "def complex_sequence(n, memo={}, history=[]):\n    if n in memo:\n        history.append(memo[n])\n        print(f'Using cached value for {n}: {memo[n]}, history: {history}')\n        return memo[n]\n    if n <= 1:\n        memo[n] = n\n        history.append(n)\n        print(f'Base case for {n}, history: {history}')\n        return n\n    result = complex_sequence(n - 1, memo, history) + 2 * complex_sequence(n - 2, memo, history)\n    memo[n] = result\n    history.append(result)\n    print(f'Computed value for {n}: {result}, history: {history}')\n    return result\n\ncomplex_sequence(5)",
+    "expectedOutput": "Base case for 1, history: [1]\nBase case for 0, history: [1, 0]\nComputed value for 2: 1, history: [1, 0, 1]\nUsing cached value for 1: 1, history: [1, 0, 1, 1]\nComputed value for 3: 3, history: [1, 0, 1, 1, 3]\nUsing cached value for 2: 1, history: [1, 0, 1, 1, 3, 1]\nUsing cached value for 1: 1, history: [1, 0, 1, 1, 3, 1, 1]\nComputed value for 4: 5, history: [1, 0, 1, 1, 3, 1, 1, 5]\nUsing cached value for 3: 3, history: [1, 0, 1, 1, 3, 1, 1, 5, 3]\nComputed value for 5: 11, history: [1, 0, 1, 1, 3, 1, 1, 5, 3, 11]",
+    "concepts": [
+      "Recursion",
+      "Memoization",
+      "Mutable Default Arguments",
+      "Function Call Stack"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-messy-c-code-for-calculating-statistics-on-an-integer-array",
+    "title": "Refactor Messy C++ Code for Calculating Statistics on an Integer Array",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve and clean up a provided C++ function that calculates the minimum, maximum, and average of an integer array while maintaining the same behavior.",
+    "prompt": "Given the provided C++ function messyStats, refactor the code to improve readability, efficiency, and maintainability without changing its output or behavior. The function takes a vector of integers and returns a tuple containing the minimum value, maximum value, and average (as a double) of the integers in the vector.\n\nKeep the same function signature and behavior, but improve variable naming, reduce redundancies, and structure the logic more cleanly.",
+    "guidance": [
+      "Focus on improving variable names and removing unnecessary variables or repeated computations.",
+      "Consider early exits or handling edge cases more cleanly, such as empty input.",
+      "Consolidate loops if possible to improve efficiency."
+    ],
+    "hints": [
+      "Use descriptive variable names like minVal and maxVal instead of single letters.",
+      "Calculate sum, min, and max in a single pass instead of multiple loops.",
+      "Handle the empty vector case before processing to avoid undefined behavior."
+    ],
+    "starterCode": "#include <vector>\n#include <tuple>\n#include <limits>\n\nstd::tuple<int, int, double> messyStats(const std::vector<int>& nums) {\n    if (nums.size() == 0) {\n        return std::make_tuple(0, 0, 0.0);\n    }\n    int a = nums[0];\n    int b = nums[0];\n    int c = 0;\n    for (int i = 0; i < (int)nums.size(); i++) {\n        if (nums[i] > b) {\n            b = nums[i];\n        }\n    }\n    for (int i = 0; i < (int)nums.size(); i++) {\n        if (nums[i] < a) {\n            a = nums[i];\n        }\n    }\n    for (int j = 0; j < (int)nums.size(); j++) {\n        c += nums[j];\n    }\n    double d = (double)c / (double)nums.size();\n    return std::make_tuple(a, b, d);\n}\n",
+    "expectedOutput": "For input {4, 8, 6, 3, 9}: (3, 9, 6.0)\nFor empty input {}: (0, 0, 0.0)",
+    "concepts": [
+      "Code Refactoring",
+      "Loops",
+      "Variable Naming",
+      "Efficiency"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "create-a-function-to-get-employee-names-by-department",
+    "title": "Create a Function to Get Employee Names by Department",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Write a SQL function that returns a list of employee names for a given department from an employees table.",
+    "prompt": "Create a SQL function named get_employee_names_by_department that accepts a department name as an argument and returns all employee names working in that department. Assume there is a table named employees with columns id, name, and department.",
+    "guidance": [
+      "Use a SELECT statement within the function to filter employees by the department argument.",
+      "Return the employee names as a set of rows or a table depending on your SQL dialect."
+    ],
+    "hints": [
+      "Use the WHERE clause to filter rows based on the department column.",
+      "If your SQL dialect supports RETURN TABLE functions, use that to list all matching employees."
+    ],
+    "starterCode": "CREATE FUNCTION get_employee_names_by_department(dept_name VARCHAR)\nRETURNS TABLE(name VARCHAR) AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "Calling get_employee_names_by_department('Sales') returns a list of names of employees in the Sales department.",
+    "concepts": [
+      "basic SQL SELECT",
+      "functions",
+      "WHERE clause"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-sql-query-to-use-simple-aggregation-instead-of-subqueries",
+    "title": "Refactor a SQL Query to Use Simple Aggregation Instead of Subqueries",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve the readability and performance of a SQL query that calculates total sales per customer by refactoring it from using multiple subqueries to a clean aggregation using GROUP BY.",
+    "prompt": "You are given a query that calculates the total sales amount for each customer by using multiple correlated subqueries. Refactor this query to remove the subqueries and instead use a single GROUP BY clause with aggregation to achieve the same results more efficiently and clearly.",
+    "guidance": [
+      "Understand the current logic and identify the repeated subqueries.",
+      "Replace the subqueries with a simple JOIN and GROUP BY on the sales table.",
+      "Test the refactored query to ensure it produces the same output."
+    ],
+    "hints": [
+      "Think about how SUM() and GROUP BY can aggregate values per customer.",
+      "Joining the customers and sales tables first helps to aggregate sales per customer easily."
+    ],
+    "starterCode": "SELECT\n  c.customer_id,\n  c.customer_name,\n  (SELECT SUM(sale_amount) FROM sales s WHERE s.customer_id = c.customer_id) AS total_sales\nFROM customers c;",
+    "expectedOutput": "A list of customers with their respective total sales summed up, matching the original query's output but achieved without subqueries.",
+    "concepts": [
+      "SQL aggregation",
+      "GROUP BY clause",
+      "JOIN operations",
+      "query optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
