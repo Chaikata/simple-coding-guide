@@ -41294,5 +41294,313 @@ export const articles = [
         "value": "In summary, optimizing window functions involves filtering early, indexing relevant columns, and simplifying complex operations. By following these beginner-friendly tips, you'll improve SQL query performance and make your applications run more smoothly."
       }
     ]
+  },
+  {
+    "slug": "designing-typescript-error-handling-strategies-for-scalable-microservices",
+    "title": "Designing TypeScript Error Handling Strategies for Scalable Microservices",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to design practical and scalable error handling strategies in TypeScript for microservices, improving reliability and maintainability.",
+    "videoUrl": "https://www.youtube.com/watch?v=b4TpO9pYpqk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building microservices in TypeScript, handling errors effectively is crucial for creating scalable and maintainable applications. Unlike monolithic apps, microservices involve multiple independent services communicating over networks, making proper error handling and propagation more important than ever."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we’ll cover beginner-friendly strategies to design robust error handling in your TypeScript microservices, including custom error classes, centralized error handling, and meaningful error propagation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Use Custom Error Classes to Add Context"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript's built-in `Error` class is useful, but creating custom error classes can add more context, like error codes and service-specific details. This makes it easier for upstream services or clients to handle errors appropriately."
+      },
+      {
+        "type": "code",
+        "value": "class NotFoundError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = \"NotFoundError\";\n  }\n}\n\nclass ValidationError extends Error {\n  constructor(message: string, public errors: string[]) {\n    super(message);\n    this.name = \"ValidationError\";\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Centralize Error Handling in Your Service"
+      },
+      {
+        "type": "paragraph",
+        "value": "Centralizing error handling allows you to consistently map errors into proper HTTP responses or messages for communication between microservices. For example, an Express middleware can catch thrown errors and return formatted error responses."
+      },
+      {
+        "type": "code",
+        "value": "import { Request, Response, NextFunction } from 'express';\n\nfunction errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {\n  if (err instanceof NotFoundError) {\n    return res.status(404).json({ error: err.message });\n  }\n\n  if (err instanceof ValidationError) {\n    return res.status(400).json({ error: err.message, details: err.errors });\n  }\n\n  console.error(err);\n  res.status(500).json({ error: 'Internal server error' });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Propagate Meaningful Errors Between Services"
+      },
+      {
+        "type": "paragraph",
+        "value": "When microservices call each other, they should propagate errors with enough detail to enable proper handling without leaking sensitive information. Using error codes and sanitized messages helps achieve this."
+      },
+      {
+        "type": "code",
+        "value": "interface ServiceErrorPayload {\n  name: string;\n  message: string;\n  code?: string;\n}\n\n// Example: serializing error to send via HTTP or message queue\nfunction serializeError(err: Error): ServiceErrorPayload {\n  if (err instanceof NotFoundError) {\n    return { name: err.name, message: err.message, code: 'NOT_FOUND' };\n  }\n  if (err instanceof ValidationError) {\n    return { name: err.name, message: err.message, code: 'VALIDATION_ERROR' };\n  }\n\n  return { name: 'InternalError', message: 'An unexpected error occurred' };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use Try-Catch Blocks Wisely"
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid overusing try-catch blocks. Instead, throw meaningful errors inside your service logic, and use centralized handlers to process them. This approach keeps your code clean and separates business logic from error handling logic."
+      },
+      {
+        "type": "code",
+        "value": "async function getUser(id: string) {\n  const user = await database.findUserById(id);\n  if (!user) {\n    throw new NotFoundError(`User with id ${id} not found`);\n  }\n  return user;\n}\n\n// Higher-level function or controller layer\nasync function handleRequest(id: string) {\n  try {\n    const user = await getUser(id);\n    return user;\n  } catch (err) {\n    // Could log or transform here if needed\n    throw err;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "By designing your TypeScript microservices with custom error classes, centralized error handling, and clean error propagation, you build a scalable system that is easier to debug and maintain. Start simple, and gradually enhance your error strategies as your microservices grow."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-microservices-architecture-with-python-fastapi",
+    "title": "Building Scalable Microservices Architecture with Python FastAPI",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build scalable microservices using Python and FastAPI. This beginner-friendly tutorial covers the basics of microservices architecture and how to create efficient, maintainable services with FastAPI.",
+    "videoUrl": "https://www.youtube.com/watch?v=Af6Zr0tNNdE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices architecture is a modern approach to designing software systems as a collection of small, independent services that communicate over a network. This pattern provides advantages such as scalability, flexibility, and easier maintenance. Python's FastAPI framework is an excellent tool to build these services quickly and efficiently. In this tutorial, we'll guide you through the basics of building scalable microservices with FastAPI."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is FastAPI?\nFastAPI is a modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints. It is designed to be easy to use and learn, while providing features like automatic interactive API documentation, data validation, and asynchronous capabilities out of the box."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Setting up the Environment\nFirst, you need to install FastAPI and a server to run it, such as Uvicorn. You can do this using pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install fastapi uvicorn"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple FastAPI Microservice\nLet's start by creating a small microservice that manages a list of items. This will give you an idea of how easy it is to build and structure your API."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\nfrom typing import List\n\napp = FastAPI()\n\n# Data model\ntclass Item(BaseModel):\n    id: int\n    name: str\n    description: str = None\n\n# In-memory database (for demo purposes)\nitems = []\n\n@app.post(\"/items/\", response_model=Item)\ndef create_item(item: Item):\n    items.append(item)\n    return item\n\n@app.get(\"/items/\", response_model=List[Item])\ndef read_items():\n    return items\n\n@app.get(\"/items/{item_id}\", response_model=Item)\ndef read_item(item_id: int):\n    for item in items:\n        if item.id == item_id:\n            return item\n    raise HTTPException(status_code=404, detail=\"Item not found\")\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Running the Service\nSave the code in a file called `main.py`. Run the app with this command:"
+      },
+      {
+        "type": "code",
+        "value": "uvicorn main:app --reload"
+      },
+      {
+        "type": "paragraph",
+        "value": "Visit `http://127.0.0.1:8000/docs` in your browser. FastAPI automatically generates interactive API documentation using Swagger UI, where you can try your endpoints."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scaling the Microservices\nFor scalable architecture, you typically split features into different microservices. For instance, you might have separate services for user management, orders, and inventory. Each service would be its own FastAPI app running independently, communicating over HTTP or message brokers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some tips for scaling your microservices with FastAPI:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Keep services small and focused:** Each microservice should handle a specific business capability.\n- **Use async/await:** FastAPI supports asynchronous programming to handle large workloads efficiently.\n- **API Gateway:** Use an API Gateway to route requests to different services and handle security.\n- **Database per service:** Each microservice should manage its own database to avoid tight coupling.\n- **Containerization:** Use Docker to containerize your services for easy deployment.\n- **Monitoring and logging:** Implement centralized logging and monitoring to track service health."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Asynchronous Example\nHere's how to define an asynchronous endpoint that simulates a delay, illustrating FastAPI's async capabilities:"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/async-task\")\nasync def async_task():\n    await asyncio.sleep(2)  # Simulate a long operation\n    return {\"message\": \"This was an async task!\"}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nFastAPI makes it easy and enjoyable to build fast, scalable microservices in Python. By creating small, focused services that communicate properly and utilizing asynchronous capabilities, you can build a resilient microservices architecture. Start small, use containers, and grow your application as your needs expand."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-hierarchical-data-sql",
+    "title": "Mastering Recursive Common Table Expressions (CTEs) for Hierarchical Data in SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use recursive CTEs in SQL to efficiently query hierarchical data like organizational charts or folder structures, using simple and clear examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=K1WeoKxLZ5o",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Hierarchical data, such as organizational charts, family trees, or directory structures, is common in many applications. Retrieving this data efficiently from a SQL database can be challenging without the right tools. Recursive Common Table Expressions (CTEs) offer a powerful way to query hierarchical data in a readable and elegant manner."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll cover the basics of recursive CTEs, explain how they work, and demonstrate how to use them to traverse hierarchical data using a practical example."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Is a Recursive CTE?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Common Table Expression (CTE) is a temporary result set you can reference within a SQL statement. Recursive CTEs are special because they reference themselves to repeatedly execute and build a result set. This makes them perfect for traversing hierarchical or tree-structured data."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Scenario: Employee Hierarchy"
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have an `employees` table with the following columns:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE employees (\n  id INT PRIMARY KEY,\n  name VARCHAR(100),\n  manager_id INT NULL\n);\n\nINSERT INTO employees (id, name, manager_id) VALUES\n(1, 'Alice', NULL),\n(2, 'Bob', 1),\n(3, 'Charlie', 1),\n(4, 'Diana', 2),\n(5, 'Eve', 2);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this structure, `manager_id` points to the employee's manager, forming a hierarchy. Alice is the top-level manager (no manager_id), Bob and Charlie report to Alice, and Diana and Eve report to Bob."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Writing a Recursive CTE to Get the Full Hierarchy"
+      },
+      {
+        "type": "paragraph",
+        "value": "We want to build a query that shows each employee and their management chain, starting from Alice."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n  -- Anchor member: select top-level manager(s)\n  SELECT id, name, manager_id, 1 AS level\n  FROM employees\n  WHERE manager_id IS NULL\n\n  UNION ALL\n\n  -- Recursive member: get employees reporting to those in the previous level\n  SELECT e.id, e.name, e.manager_id, eh.level + 1\n  FROM employees e\n  INNER JOIN EmployeeHierarchy eh ON e.manager_id = eh.id\n)\nSELECT *\nFROM EmployeeHierarchy\nORDER BY level, manager_id, id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Explanation:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- The anchor member selects root nodes (employees with no manager). In this case, Alice.\n- The recursive member joins the employees table with the CTE itself to find employees reporting to the managers already found.\n- The recursion continues until all employees are listed.\n- We track a `level` column to indicate the depth in the hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Output:"
+      },
+      {
+        "type": "paragraph",
+        "value": "The output will look like this:\n\n| id | name    | manager_id | level |\n|----|---------|------------|-------|\n| 1  | Alice   | NULL       | 1     |\n| 2  | Bob     | 1          | 2     |\n| 3  | Charlie | 1          | 2     |\n| 4  | Diana   | 2          | 3     |\n| 5  | Eve     | 2          | 3     |"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Using Recursive CTEs"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always include an anchor member to start the recursion.\n- The recursive member should join back to the CTE to explore deeper levels.\n- Prevent infinite loops by ensuring the recursion eventually reaches a stopping point (e.g., no more matching rows).\n- Use `level` or similar tracking columns to keep track of depth or recursion levels.\n- Recursive CTEs are supported in many SQL databases such as PostgreSQL, SQL Server, MySQL 8.0+, and SQLite 3.8.3+."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Recursive CTEs are a powerful feature in SQL that simplify working with hierarchical data. Once you understand the anchor and recursive parts, you can adapt this approach for organizational structures, bill of materials, folder trees, and more. Try experimenting with the example above on your own data to master recursive queries!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-cte-mistakes-in-complex-sql-queries",
+    "title": "Mastering Recursive CTE Mistakes in Complex SQL Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to avoid common mistakes when using recursive Common Table Expressions (CTEs) in SQL to write efficient and error-free complex queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=7hZYh9qXxe4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are powerful tools for querying hierarchical or sequential data in SQL. However, many beginners encounter common mistakes that lead to infinite loops, performance issues, or incorrect results. This guide will walk you through the most frequent pitfalls and how to avoid them, helping you master recursive CTEs."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE has two main parts: the anchor member and the recursive member. The anchor member executes first and defines the base result set. The recursive member then references the CTE itself to repeatedly add rows until a termination condition is met."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example of a recursive CTE that generates numbers from 1 to 5:"
+      },
+      {
+        "type": "code",
+        "value": "WITH numbers AS (\n  SELECT 1 AS num  -- Anchor member\n  UNION ALL\n  SELECT num + 1   -- Recursive member\n  FROM numbers\n  WHERE num < 5    -- Termination condition\n)\nSELECT * FROM numbers;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's look at common mistakes and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Missing or Incorrect Termination Condition**: Without a proper termination condition in the recursive member's WHERE clause, the recursion runs indefinitely, causing errors or crashes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of a missing termination condition that causes an infinite loop:"
+      },
+      {
+        "type": "code",
+        "value": "WITH numbers AS (\n  SELECT 1 AS num\n  UNION ALL\n  SELECT num + 1\n  FROM numbers\n  -- Missing WHERE clause leads to infinite recursion\n)\nSELECT * FROM numbers;"
+      },
+      {
+        "type": "paragraph",
+        "value": "**Fix:** Always include a WHERE clause to stop recursion at the correct point."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Not Using UNION ALL for Performance**: Using `UNION` instead of `UNION ALL` forces SQL to remove duplicates on every iteration, which slows down the query drastically."
+      },
+      {
+        "type": "paragraph",
+        "value": "**Fix:** Use `UNION ALL` when you know duplicates won't be a problem or when you want to keep all rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Ignoring Max Recursion Limits**: Some SQL engines (like SQL Server) set a default maximum recursion depth (e.g., 100). Exceeding this will cause errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can specify `OPTION (MAXRECURSION n)` in SQL Server to increase or remove this limit."
+      },
+      {
+        "type": "code",
+        "value": "WITH numbers AS (\n  SELECT 1 AS num\n  UNION ALL\n  SELECT num + 1\n  FROM numbers\n  WHERE num < 1000\n)\nSELECT * FROM numbers\nOPTION (MAXRECURSION 1000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Incorrect Reference in Recursive Member**: The recursive member must reference the CTE name exactly. Typos or wrong references cause syntax errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Not Testing with Small Data Sets**: When working on complex queries, test your recursive CTE on smaller datasets with clear termination conditions. This helps you spot logic errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, recursive CTEs are easier to manage when you remember to:\n- Define a clear base case (anchor member)\n- Set a strict termination condition\n- Use UNION ALL to avoid unnecessary overhead\n- Be aware of recursion limits in your SQL engine\n- Carefully test your queries step-by-step\nWith practice and careful checks, you can master recursive CTEs and handle complex hierarchical queries effectively."
+      }
+    ]
   }
 ];
