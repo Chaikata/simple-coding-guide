@@ -40774,5 +40774,525 @@ export const articles = [
         "value": "By following these guidelines, you can avoid common bugs related to floating point precision loss and write more reliable SQL queries."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-javascript-best-practices-async-await",
+    "title": "Mastering Asynchronous JavaScript: Best Practices with Async/Await",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to effectively use async/await in JavaScript to write clean and maintainable asynchronous code – perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a powerful language that often deals with asynchronous operations like fetching data from an API or reading files. While callbacks and promises were traditionally used to handle async code, the introduction of async/await made it much easier to write readable and clean asynchronous code. In this article, we'll explore the basics of async/await along with best practices to help you master asynchronous JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are async and await?\n\n`async` is a keyword used to declare an asynchronous function. It always returns a promise. Within this function, you can use the `await` keyword to pause the function’s execution until a promise is resolved, making asynchronous code look more like synchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example using `fetch` to get user data from a placeholder API:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUser() {\n  try {\n    const response = await fetch('https://jsonplaceholder.typicode.com/users/1');\n    const user = await response.json();\n    console.log(user);\n  } catch (error) {\n    console.error('Error fetching user:', error);\n  }\n}\n\nfetchUser();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 1: Always handle errors with try/catch\n\nWhen using async/await, it’s important to handle errors properly. Use `try/catch` blocks inside async functions to catch and respond to any errors that might happen during the awaiting of promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 2: Avoid blocking the main thread\n\nWhile `await` pauses the async function, it doesn't block the main JavaScript thread. But be cautious not to await multiple independent promises sequentially if they can run in parallel."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, if you want to fetch data from two different sources, you can execute them in parallel using `Promise.all`:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchMultiple() {\n  try {\n    const [posts, comments] = await Promise.all([\n      fetch('https://jsonplaceholder.typicode.com/posts'),\n      fetch('https://jsonplaceholder.typicode.com/comments')\n    ]);\n    const postsData = await posts.json();\n    const commentsData = await comments.json();\n    console.log('Posts:', postsData);\n    console.log('Comments:', commentsData);\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}\n\nfetchMultiple();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 3: Keep async functions focused and concise\n\nTry to keep your async functions focused on one task. If your function becomes too lengthy, consider breaking it into smaller async helper functions for readability and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice 4: Do not use async in loops blindly\n\nAvoid using `await` directly inside loops like `forEach`. For example, this won't work as expected:"
+      },
+      {
+        "type": "code",
+        "value": "[1, 2, 3].forEach(async (num) => {\n  await someAsyncOperation(num);\n  console.log(num);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, use a `for...of` loop for awaiting each async call sequentially:"
+      },
+      {
+        "type": "code",
+        "value": "async function processNumbers(numbers) {\n  for (const num of numbers) {\n    await someAsyncOperation(num);\n    console.log(num);\n  }\n}\n\nprocessNumbers([1, 2, 3]);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nAsync/await makes asynchronous JavaScript easier to write and read. Always handle errors with try/catch, execute independent promises in parallel, avoid using async inside array iteration methods like `forEach`, and keep your async functions clean and focused. Practicing these best practices will help you write robust and maintainable asynchronous code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-asynchronous-error-handling-patterns-modern-javascript",
+    "title": "Mastering Asynchronous Error Handling Patterns in Modern JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle errors effectively in asynchronous JavaScript using promises, async/await, and other modern patterns to write robust, bug-free code.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous programming is essential in modern JavaScript, especially when working with network requests, file operations, or timers. However, handling errors in asynchronous code can be tricky for beginners. This article covers common patterns to manage errors properly using promises, async/await syntax, and some practical tips."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding why synchronous error handling (like try/catch) behaves differently with asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Errors with Promises"
+      },
+      {
+        "type": "paragraph",
+        "value": "When working with promises, errors are caught using the `.catch()` method. Here's a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => {\n    console.log('Data:', data);\n  })\n  .catch(error => {\n    console.error('Error fetching data:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "If any promise in the chain rejects (for example, due to a network error), the `.catch()` handler will catch the error."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using async/await with try/catch"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/await makes asynchronous code look more like synchronous code and allows us to use `try/catch` blocks to handle errors."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log('Data:', data);\n  } catch (error) {\n    console.error('Caught an error:', error);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, any error thrown inside the `try` block will be caught in the `catch` block. This includes network errors and manual errors (like when the response is not ok)."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Multiple Asynchronous Operations"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you need to run multiple asynchronous operations simultaneously and handle their errors properly. `Promise.all` helps run promises in parallel but it rejects immediately if any one promise rejects."
+      },
+      {
+        "type": "code",
+        "value": "const promise1 = fetch('https://api.example.com/data1');\nconst promise2 = fetch('https://api.example.com/data2');\n\nPromise.all([promise1, promise2])\n  .then(responses => Promise.all(responses.map(r => r.json())))\n  .then(datas => {\n    console.log('Both data:', datas);\n  })\n  .catch(error => {\n    console.error('Error in one of the promises:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to handle errors individually without failing all promises together, use `Promise.allSettled`."
+      },
+      {
+        "type": "code",
+        "value": "Promise.allSettled([promise1, promise2])\n  .then(results => {\n    results.forEach((result, index) => {\n      if (result.status === 'fulfilled') {\n        console.log(`Promise ${index + 1} succeeded with value:`, result.value);\n      } else {\n        console.warn(`Promise ${index + 1} failed with reason:`, result.reason);\n      }\n    });\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Asynchronous Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always handle promise rejections to avoid uncaught errors.\n- Use `try/catch` around `await` expressions.\n- Check for HTTP response status before processing data.\n- Use `Promise.allSettled` when you need to know the outcome of all promises individually.\n- Consider adding fallback or retry logic if appropriate."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering asynchronous error handling improves code reliability and helps you create better user experiences. Keep practicing these patterns, and you’ll find writing asynchronous JavaScript becomes much smoother!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-interfaces-for-scalable-data-models",
+    "title": "Mastering TypeScript Interfaces for Scalable Data Models",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript interfaces to build scalable and maintainable data models in your applications with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=ff62ijMbSLI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript interfaces are a powerful way to define the shape of data in your application. They help you enforce consistent structures and improve code readability, making it easier to scale your projects as they grow. This tutorial introduces interfaces with simple examples for beginners and shows how to use them to model complex data."
+      },
+      {
+        "type": "paragraph",
+        "value": "An interface in TypeScript acts like a blueprint for an object. It declares what properties and methods an object should have, including their types. This allows TypeScript to provide useful feedback and catch errors during development."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst user: User = {\n  id: 1,\n  name: \"Alice\",\n  email: \"alice@example.com\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the `User` interface defines three properties: `id`, `name`, and `email`. When we create the `user` object, TypeScript ensures it matches this shape. If you forget a property or assign the wrong type, TypeScript will show an error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Interfaces are especially helpful when your data models become more complex. You can also make properties optional using the `?` symbol, which is useful for fields that are not always required."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: number;\n  name: string;\n  description?: string; // optional\n  price: number;\n}\n\nconst product: Product = {\n  id: 101,\n  name: \"Laptop\",\n  price: 999.99\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "The optional `description` field means objects of type `Product` may or may not have that property. This flexibility lets you build richer data models without losing type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also extend interfaces to create more specific versions of data models. This technique helps you organize related interfaces and reuse common properties."
+      },
+      {
+        "type": "code",
+        "value": "interface Animal {\n  name: string;\n  age: number;\n}\n\ninterface Dog extends Animal {\n  breed: string;\n  bark(): void;\n}\n\nconst myDog: Dog = {\n  name: \"Buddy\",\n  age: 5,\n  breed: \"Golden Retriever\",\n  bark() {\n    console.log(\"Woof!\");\n  }\n};\n\nmyDog.bark();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `Dog` extends `Animal`, inheriting its common properties and adding its own. This approach scales well when working with complex systems and helps keep your code clean and maintainable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, interfaces work with function types, allowing you to define contracts for functions and callbacks. This increases type safety and makes your functions easier to understand."
+      },
+      {
+        "type": "code",
+        "value": "interface MathOperation {\n  (x: number, y: number): number;\n}\n\nconst add: MathOperation = (a, b) => a + b;\nconst multiply: MathOperation = (a, b) => a * b;\n\nconsole.log(add(5, 3));       // 8\nconsole.log(multiply(5, 3));  // 15"
+      },
+      {
+        "type": "paragraph",
+        "value": "To recap, mastering TypeScript interfaces helps you create scalable, robust data models by defining clear, reusable, and maintainable contracts for your objects and functions. Start using interfaces in your projects today to enjoy safer and more predictable code!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-type-guards-for-robust-error-handling",
+    "title": "Mastering TypeScript's Type Guards for Robust Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's type guards to improve error handling in your applications with clear, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=vRICq8wigI0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When programming in TypeScript, handling errors correctly is crucial for building reliable applications. TypeScript's type guards allow you to precisely check types at runtime, making your error handling more robust and preventing bugs caused by unexpected data."
+      },
+      {
+        "type": "paragraph",
+        "value": "A type guard is a function or an expression that performs a runtime check to guarantee the type of a variable within a conditional block. This is especially helpful when dealing with unknown errors, or responses that might have different shapes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s start with a simple example of checking if an error is an instance of the built-in Error class:"
+      },
+      {
+        "type": "code",
+        "value": "function isError(value: unknown): value is Error {\n  return value instanceof Error;\n}\n\nfunction handleError(e: unknown) {\n  if (isError(e)) {\n    console.log('Error message:', e.message);\n  } else {\n    console.log('Unknown error', e);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `isError` function acts as a type guard. When `handleError` calls it inside the if statement, TypeScript understands that inside the block, `e` is definitely an `Error`. This allows you to safely access properties like `message` without TypeScript errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, errors come from multiple sources or have custom structures. Using type guards to discriminate between these custom error types helps you write clearer and safer error handling logic."
+      },
+      {
+        "type": "code",
+        "value": "interface NetworkError {\n  code: number;\n  message: string;\n  retryable: boolean;\n}\n\ninterface ValidationError {\n  field: string;\n  message: string;\n}\n\nfunction isNetworkError(error: any): error is NetworkError {\n  return typeof error.code === 'number' && typeof error.retryable === 'boolean';\n}\n\nfunction isValidationError(error: any): error is ValidationError {\n  return typeof error.field === 'string';\n}\n\nfunction handleCustomError(err: unknown) {\n  if (isNetworkError(err)) {\n    console.log(`Network Error (code ${err.code}): ${err.message}`);\n  } else if (isValidationError(err)) {\n    console.log(`Validation Error in ${err.field}: ${err.message}`);\n  } else {\n    console.log('Unknown error:', err);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `isNetworkError` and `isValidationError` are type guards that check for specific properties unique to each error type. In `handleCustomError`, TypeScript narrows down the error's type depending on which guard passes, enabling access to type-specific fields without runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using type guards also helps when working with third-party libraries or APIs where error shapes might not be fully known upfront."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering TypeScript's type guards can drastically improve your error handling by providing:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Safe, type-checked access to error properties\n- Clear differentiation between multiple error types\n- Less reliance on `any` or unsafe type assertions\n\nStart integrating type guards in your error handling code today for more predictable and maintainable TypeScript projects!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-timezone-edge-cases-python",
+    "title": "Handling Timezone Edge Cases in Python Date and Time Manipulations",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to effectively handle timezone edge cases in Python date and time manipulations using the datetime and zoneinfo modules.",
+    "videoUrl": "https://www.youtube.com/watch?v=vObS_oDwymQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in Python can get tricky when dealing with timezones, daylight saving time (DST) changes, or ambiguous times. This tutorial will walk you through the basics of timezone-aware datetime manipulation and how to correctly handle common edge cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python's built-in `datetime` module along with the `zoneinfo` module (available from Python 3.9+) allows you to work with timezone-aware datetime objects. Let's start with creating timezone-aware datetime instances."
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nfrom zoneinfo import ZoneInfo\n\n# Create a timezone-aware datetime for New York timezone\ndt_ny = datetime(2023, 11, 5, 1, 30, tzinfo=ZoneInfo('America/New_York'))\nprint(dt_ny)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example creates a datetime for November 5, 2023, 1:30 AM in New York timezone. This date is interesting because it's the day when DST ends and clocks go back one hour. This means the time 1:30 AM occurs twice — it's an ambiguous time."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle ambiguous times properly, Python's `zoneinfo` handles this internally based on the existing DST rules, but if you need to disambiguate, you can use the `fold` attribute of datetime objects."
+      },
+      {
+        "type": "code",
+        "value": "# Using fold to disambiguate repeated times during DST changes\n\n# fold=0 means the first occurrence of 1:30 AM (daylight time)\ndt_first = datetime(2023, 11, 5, 1, 30, tzinfo=ZoneInfo('America/New_York'), fold=0)\n\n# fold=1 means the second occurrence of 1:30 AM (standard time)\ndt_second = datetime(2023, 11, 5, 1, 30, tzinfo=ZoneInfo('America/New_York'), fold=1)\n\nprint(\"First occurrence:\", dt_first, dt_first.utcoffset())\nprint(\"Second occurrence:\", dt_second, dt_second.utcoffset())"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `fold` attribute tells Python which occurrence of an ambiguous time you mean: 0 for the first and 1 for the second. This is especially useful when scheduling events or logging in fall-back hours."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common edge case is handling missing or invalid times, such as when clocks spring forward during the start of DST. In such cases, some local times do not exist."
+      },
+      {
+        "type": "code",
+        "value": "# Example of a non-existent time during DST start\ntry:\n    dt_invalid = datetime(2023, 3, 12, 2, 30, tzinfo=ZoneInfo('America/New_York'))\n    print(\"Datetime created:\", dt_invalid)\nexcept Exception as e:\n    print(\"Exception caught:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Unlike some libraries, Python’s `zoneinfo` module does not raise an exception when you create a non-existent time. Instead, it will fold the time forward or backward silently. You need to be cautious and validate times yourself if precision matters."
+      },
+      {
+        "type": "paragraph",
+        "value": "To convert between timezones safely and handle DST transitions, always use timezone-aware datetime objects. Here's how to convert New York time to UTC:"
+      },
+      {
+        "type": "code",
+        "value": "# Convert timezone-aware datetime to UTC\nny_time = datetime(2023, 11, 5, 1, 30, tzinfo=ZoneInfo('America/New_York'), fold=1)\nutc_time = ny_time.astimezone(ZoneInfo('UTC'))\nprint(\"NY time:\", ny_time)\nprint(\"UTC time:\", utc_time)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, dealing with timezones and daylight saving time edge cases requires: \n1. Using timezone-aware datetime objects.\n2. Leveraging the `fold` attribute for ambiguous times.\n3. Being aware of non-existent times during DST start.\n4. Always converting to a common timezone like UTC when possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding and applying these principles, you will avoid many common pitfalls in date and time programming in Python."
+      }
+    ]
+  },
+  {
+    "slug": "handling-memory-errors-gracefully-python",
+    "title": "Handling Memory Errors Gracefully in Large-Scale Python Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle memory errors in Python applications effectively to create more robust and stable software, even when dealing with large datasets or limited resources.",
+    "videoUrl": "https://www.youtube.com/watch?v=YwkEHtQKvig",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory errors can unexpectedly crash Python applications, especially those processing large datasets or running on systems with limited memory. Handling these errors gracefully ensures that your program can recover or shut down cleanly instead of failing abruptly. In this article, we will explore simple techniques to detect and manage memory errors in large-scale Python applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common memory-related error in Python is the MemoryError exception, which occurs when the interpreter runs out of memory while trying to allocate more. Catching this exception allows you to handle such situations explicitly, log useful information, free up resources, or notify users."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a practical example demonstrating how to catch a MemoryError and respond appropriately:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # Simulate large memory allocation\n    large_list = [0] * (10**10)  # This may raise MemoryError depending on your system\nexcept MemoryError:\n    print(\"MemoryError caught! Unable to allocate required memory.\")\n    # Handle cleanup or fallback here\n    large_list = None\nelse:\n    print(\"Memory allocation successful.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, we attempt to create a very large list. If the system doesn't have enough memory, Python raises MemoryError. By wrapping this operation in a try-except block, you can catch the error and take corrective action, such as freeing up previously used memory or informing the user."
+      },
+      {
+        "type": "paragraph",
+        "value": "Beyond catching MemoryError, here are additional best practices to handle memory consumption:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Optimize data structures:** Use memory-efficient libraries like NumPy or pandas, which store data in compact forms.\n- **Process data in chunks:** Instead of loading all data at once, process it piece by piece using generators or streaming.\n- **Monitor memory usage:** Use tools like `tracemalloc` or external libraries to detect and fix memory leaks early.\n- **Limit concurrency:** Running too many parallel tasks can exhaust memory quickly—balance workload size with available memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example showing chunked processing of a large file to avoid memory errors:"
+      },
+      {
+        "type": "code",
+        "value": "def process_large_file(file_path, chunk_size=1024):\n    try:\n        with open(file_path, 'r') as f:\n            while True:\n                data = f.read(chunk_size)\n                if not data:\n                    break\n                # Process the chunk\n                print(f\"Processing {len(data)} bytes\")\n    except MemoryError:\n        print(\"MemoryError caught during file processing.\")\n\n# Example usage\nprocess_large_file('large_data.txt')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, handling MemoryError in Python involves anticipating memory limitations, using try-except blocks to catch exceptions, and adopting memory-efficient programming patterns. These practices make large-scale Python applications more reliable and user-friendly."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-multi-tenant-database-architectures-with-sql",
+    "title": "Designing Scalable Multi-Tenant Database Architectures with SQL: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to build scalable multi-tenant databases using SQL, focusing on design patterns, schema strategies, and performance tips suitable for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant database architectures allow multiple customers (tenants) to share the same database resources, which improves cost efficiency and manageability. If you're new to SQL and want to design a multi-tenant system that scales well, this tutorial will guide you through key concepts, design patterns, and practical SQL examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are three common ways to design multi-tenant databases: separate databases per tenant, shared database with separate schemas, and shared schema (single database, single schema). We'll focus on the shared schema approach because it's the most cost-effective and scalable for many applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Create a Tenant Identifier"
+      },
+      {
+        "type": "paragraph",
+        "value": "To distinguish between multiple tenants' data in a shared schema, you use a tenant identifier column in each table. For instance, create a TENANT_ID column in tables that store tenant-specific data."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Customers (\n    CustomerID INT PRIMARY KEY,\n    TenantID INT NOT NULL,\n    CustomerName VARCHAR(100) NOT NULL\n);\n\nCREATE INDEX idx_tenant_customers ON Customers(TenantID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The index on TENANT_ID improves query performance when filtering data for a specific tenant."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Isolate Tenant Data in Queries"
+      },
+      {
+        "type": "paragraph",
+        "value": "When querying, always filter by the tenant identifier to ensure each tenant accesses only their own data. For example, select customers belonging to Tenant 101."
+      },
+      {
+        "type": "code",
+        "value": "SELECT CustomerID, CustomerName\nFROM Customers\nWHERE TenantID = 101;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Enforce Tenant Isolation with Security"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can enhance security by using Row-Level Security (if supported by your SQL database), which automatically filters data by tenant ID for each user."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, in PostgreSQL, enabling Row-Level Security on the Customers table:"
+      },
+      {
+        "type": "code",
+        "value": "ALTER TABLE Customers ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY tenant_isolation ON Customers\n    USING (TenantID = current_setting('app.current_tenant')::int);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before running queries, your application should set the `app.current_tenant` parameter to the current tenant's ID."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Optimize for Scalability"
+      },
+      {
+        "type": "paragraph",
+        "value": "As your tenant count grows, performance matters. Consider partitioning tables by TENANT_ID to speed up scans and improve maintenance."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Customers (\n    CustomerID INT,\n    TenantID INT,\n    CustomerName VARCHAR(100),\n    PRIMARY KEY (CustomerID, TenantID)\n) PARTITION BY LIST (TenantID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Note that support for partitioning varies by SQL database, so consult your database documentation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Designing a scalable multi-tenant database with SQL involves:\n- Incorporating a tenant identifier in every tenant-specific table\n- Filtering queries with tenant ID to isolate data\n- Using security features like Row-Level Security\n- Optimizing with indexes and partitions\n\nThis approach balances complexity and cost for many SaaS applications. As you gain experience, you can adapt your design depending on your scale and specific requirements."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-window-functions-for-faster-sql-query-performance",
+    "title": "Optimizing Window Functions for Faster SQL Query Performance",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize SQL window functions to improve query speed and avoid common performance pitfalls, especially for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions in SQL are powerful tools for performing calculations across sets of rows related to the current row. They are widely used for ranking, running totals, moving averages, and more. However, without proper optimization, queries using window functions can become slow, especially with large datasets. This article explains common mistakes and offers beginner-friendly tips to make your SQL window functions run faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common performance issue is applying window functions without proper indexing or partitioning, causing the database engine to process more data than necessary. Always try to reduce the dataset before applying window functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, consider this query that calculates the ranking of sales per region:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  region,\n  sales_person,\n  sales_amount,\n  RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If sales_data is large, this query might be slow. One optimization is to filter the data early using a WHERE clause if applicable, so fewer rows are processed."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  region, sales_person, sales_amount,\n  RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank\nFROM sales_data\nWHERE sales_date >= '2024-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another important optimization is to create indexes on columns used in the PARTITION BY and ORDER BY clauses of the window function. This helps the database quickly group and sort data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Also, avoid using too many complex window functions in a single query. Break down the problem into smaller queries or use Common Table Expressions (CTEs) to handle window calculations step-by-step."
+      },
+      {
+        "type": "code",
+        "value": "WITH ranked_sales AS (\n  SELECT \n    region, sales_person, sales_amount,\n    RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS sales_rank\n  FROM sales_data\n  WHERE sales_date >= '2024-01-01'\n)\nSELECT * FROM ranked_sales WHERE sales_rank <= 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing window functions involves filtering early, indexing relevant columns, and simplifying complex operations. By following these beginner-friendly tips, you'll improve SQL query performance and make your applications run more smoothly."
+      }
+    ]
   }
 ];
