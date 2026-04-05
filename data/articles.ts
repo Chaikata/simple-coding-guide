@@ -42048,5 +42048,365 @@ export const articles = [
         "value": "By following these beginner-friendly tips—selecting only necessary columns, indexing join columns, avoiding inefficient subqueries, not applying functions on indexed columns, and limiting row output—you can optimize your complex SQL queries and prevent common performance pitfalls."
       }
     ]
+  },
+  {
+    "slug": "handling-unexpected-types-in-javascript-edge-cases-in-type-coercion",
+    "title": "Handling Unexpected Types in JavaScript: Edge Cases in Type Coercion",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript handles unexpected types through type coercion and how to avoid common errors caused by these edge cases.",
+    "videoUrl": "https://www.youtube.com/watch?v=PNQpYsLP77Q",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that often converts values between types automatically. This automatic type conversion is called type coercion. Although it can make code shorter and sometimes easier, it can also cause unexpected behavior and errors especially when dealing with different or unexpected data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding these edge cases is important to write more predictable and bug-free code. Let’s look at common examples of type coercion in JavaScript and how to handle unexpected types safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Adding Numbers and Strings"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you use the `+` operator with a number and a string, JavaScript converts the number to a string and concatenates them instead of adding numerically."
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 + '5'); // Output: '55' (string concatenation)\nconsole.log(5 + Number('5')); // Output: 10 (numeric addition)"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid unexpected results, explicitly convert types using `Number()` or `String()` to make your intentions clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Comparing Values with `==` vs `===`"
+      },
+      {
+        "type": "paragraph",
+        "value": "The double equals operator `==` performs type coercion before comparison, which can lead to confusing results."
+      },
+      {
+        "type": "code",
+        "value": "console.log(0 == '0'); // true (string '0' coerced to number 0)\nconsole.log(0 === '0'); // false (strict comparison, no coercion)"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid errors, it’s best practice to use the strict equality operator `===` which compares both value and type."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Boolean Coercion with Falsy Values"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript treats certain values as \"falsy\" when converted to boolean. These include `0`, `''`, `null`, `undefined`, `NaN`, and `false`. Sometimes this behavior can cause bugs if not handled properly."
+      },
+      {
+        "type": "code",
+        "value": "if ('') {\n  console.log('This will not run because an empty string is falsy');\n} else {\n  console.log('Empty string is falsy');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Be careful when checking values in conditions. If you want to check specifically for `null` or `undefined`, do so explicitly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 4: Unexpected Results from Objects in Expressions"
+      },
+      {
+        "type": "paragraph",
+        "value": "Objects coerced to primitives can behave unexpectedly in expressions."
+      },
+      {
+        "type": "code",
+        "value": "console.log({} + []); // Output: '[object Object]'\nconsole.log([] + {}); // Output: '[object Object]'\n\n// Because both objects convert to strings by default"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use explicit conversions or methods like `.toString()` or `.valueOf()` to clarify your code's intent."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion is a powerful feature in JavaScript but can cause subtle bugs when unexpected types are involved. To handle these edge cases safely, always prefer strict comparisons, explicitly convert types, and be mindful of how JavaScript treats falsy values and object-to-primitive conversions."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these practices, your code will be clearer, safer, and easier to debug."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-for-high-performance-code-reuse",
+    "title": "Mastering TypeScript Generics for High-Performance Code Reuse",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to create reusable and type-safe code that boosts performance and maintainability in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=BKFPfzWM3CQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics allow you to write flexible, reusable functions and components that work with a variety of data types without sacrificing type safety. This tutorial will guide you through the basics of generics and show you how to apply them effectively for high-performance code reuse."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you want a function to return the first element of an array. You might write it like this using any:"
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement(arr: any[]): any {\n  return arr[0];\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this works, you lose type information. If you pass an array of strings, you don't get the benefit of TypeScript knowing the return type is a string. Instead, let's use generics to improve this:"
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, <T> is a generic type parameter that allows the function to work with any type. If you call `getFirstElement(['a', 'b', 'c'])`, TypeScript knows the return type is a string. For `getFirstElement([1, 2, 3])`, the return type is a number."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics also work well with interfaces. Suppose you have a function that returns an object with a value and a timestamp:"
+      },
+      {
+        "type": "code",
+        "value": "interface Timestamped<T> {\n  value: T;\n  timestamp: number;\n}\n\nfunction wrapInTimestamp<T>(value: T): Timestamped<T> {\n  return {\n    value,\n    timestamp: Date.now()\n  };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function takes any value and returns it wrapped with a timestamp. Using generics, you keep the original type information intact, improving both reusability and type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can also be constrained to certain types using the `extends` keyword. For example, if you only want to accept types that have a `length` property, you can do:"
+      },
+      {
+        "type": "code",
+        "value": "function logLength<T extends { length: number }>(item: T): T {\n  console.log(item.length);\n  return item;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This ensures `item` must have a `length` property (like strings or arrays), preventing misuse with types that don't support length."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, generics are widely used in TypeScript’s standard library and popular frameworks. Mastering them will help you write cleaner, more general, and performant code. Experiment by converting your current functions to generic versions and see how much more flexible your code becomes!"
+      }
+    ]
+  },
+  {
+    "slug": "implementing-robust-type-guards-for-reliable-type-narrowing-in-typescript",
+    "title": "Implementing Robust Type Guards for Reliable Type Narrowing in TypeScript",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to create effective and reliable type guards in TypeScript to safely narrow types and avoid common runtime errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=hMlRf3k5oMU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that helps catch errors at compile time by leveraging static types. However, sometimes you work with values that can be of multiple types (called union types), and you need to \"narrow\" these types safely before using them. This is where type guards come in."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards are functions or expressions that tell TypeScript more information about the type of a variable at runtime. By implementing robust type guards, you can avoid common mistakes and runtime errors caused by incorrect assumptions about the data type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of a union type and a basic type guard."
+      },
+      {
+        "type": "code",
+        "value": "type Shape = { kind: 'circle'; radius: number } | { kind: 'square'; sideLength: number };\n\nfunction isCircle(shape: Shape): shape is { kind: 'circle'; radius: number } {\n  return shape.kind === 'circle';\n}\n\nconst shape: Shape = { kind: 'circle', radius: 10 };\n\nif (isCircle(shape)) {\n  // Inside this block, TypeScript knows shape is a circle\n  console.log(shape.radius * 2);\n} else {\n  // In this block, shape is a square\n  console.log(shape.sideLength * 4);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the function `isCircle` acts as a type guard. It checks if the `kind` property is \"circle\" and tells TypeScript to narrow the type accordingly. This ensures safe access to type-specific properties."
+      },
+      {
+        "type": "paragraph",
+        "value": "However, type guards should be robust and handle edge cases properly. Consider objects that may or may not have specific properties or external data you can't fully trust. Let's improve our type guard to be more defensive."
+      },
+      {
+        "type": "code",
+        "value": "function isCircleSafe(shape: any): shape is { kind: 'circle'; radius: number } {\n  return (\n    typeof shape === 'object' &&\n    shape !== null &&\n    shape.kind === 'circle' &&\n    typeof shape.radius === 'number'\n  );\n}\n\nconst unknownShape: any = getShapeFromUnknownSource();\n\nif (isCircleSafe(unknownShape)) {\n  console.log(unknownShape.radius * 2);\n} else {\n  console.log('Not a circle');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how the `isCircleSafe` function checks the type of each property carefully, protecting your code from runtime errors if the `shape` object is malformed or unexpected. This approach is vital when dealing with data from external APIs, user inputs, or any untyped sources."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, here are some best practices for creating robust type guards in TypeScript:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always verify that the input is an object and is not null.\n- Check for the presence and type of all relevant properties.\n- Use `shape is Type` return type to inform TypeScript about the narrowed type.\n- Keep type guards simple and focused on checking just enough to guarantee safe usage.\n- Use type guards especially when handling data from unknown or external sources."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips and implementing robust type guards, your TypeScript applications will be more reliable, maintainable, and free from common runtime type errors."
+      }
+    ]
+  },
+  {
+    "slug": "step-by-step-guide-to-building-your-first-python-web-scraper",
+    "title": "Step-by-Step Guide to Building Your First Python Web Scraper",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create your first Python web scraper in a simple, step-by-step way. Perfect for beginners who want to extract data from websites using Python.",
+    "videoUrl": "https://www.youtube.com/watch?v=QhD015WUMxE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping is the process of automatically extracting information from websites. If you're new to programming or Python, don't worry! In this guide, we'll walk you through building your very first web scraper using simple Python tools."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started, you'll need two libraries: `requests` to download the web page and `BeautifulSoup` from `bs4` to parse the HTML. You can install them using pip if you haven’t already:"
+      },
+      {
+        "type": "code",
+        "value": "pip install requests beautifulsoup4"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now that you have the tools, let's write a simple script that scrapes the titles of articles from a website. For this example, we'll use the website 'example.com' as a placeholder, but you can replace it with any site you want to scrape (make sure to check the site’s terms of service before scraping)."
+      },
+      {
+        "type": "code",
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# Step 1: Download the web page\nurl = 'https://www.example.com'\nresponse = requests.get(url)\n\n# Step 2: Check if the request was successful\nif response.status_code == 200:\n    # Step 3: Parse the HTML content\n    soup = BeautifulSoup(response.text, 'html.parser')\n    \n    # Step 4: Find elements containing the data you want\n    # Here we assume article titles are in <h2> tags with class 'title'\n    titles = soup.find_all('h2', class_='title')\n    \n    # Step 5: Extract and print the text from these tags\n    for idx, title in enumerate(titles, 1):\n        print(f\"{idx}. {title.get_text(strip=True)}\")\nelse:\n    print(f\"Failed to retrieve the page. Status code: {response.status_code}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down what this code does:\n\n1. We import the necessary libraries.\n2. We specify the URL of the web page we want to scrape.\n3. We send an HTTP GET request to the URL.\n4. If the request is successful, we parse the page’s HTML content with BeautifulSoup.\n5. We search for all `<h2>` tags with the class `title` (this depends on the website’s HTML structure).\n6. We loop through the found elements and print their text content.\n\nMake sure to update the tag and class based on the actual website you want to scrape."
+      },
+      {
+        "type": "paragraph",
+        "value": "A few additional tips:\n\n- Always respect the website’s `robots.txt` file to know what is allowed to be scraped.\n- Be gentle with your requests; avoid sending too many requests too quickly to not overload the server.\n- For more complex scraping tasks, consider using libraries like `Scrapy` or tools like Selenium."
+      },
+      {
+        "type": "paragraph",
+        "value": "With this simple script, you’ve taken your first step into the world of web scraping with Python. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-pythons-logging-module-to-trace-runtime-exceptions-in-production",
+    "title": "Leveraging Python’s Logging Module to Trace Runtime Exceptions in Production",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python’s built-in logging module to effectively trace runtime exceptions in production environments for easier debugging and better error monitoring.",
+    "videoUrl": "https://www.youtube.com/watch?v=JVQNywo4AbU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When running Python applications in production, tracking down errors can be tricky without proper logging. The built-in logging module helps you record useful information about runtime exceptions, making it easier to understand what went wrong. This article will guide you through setting up Python’s logging module to capture and trace exceptions effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand why using print statements alone isn’t enough in a production environment. Print statements clutter your output and don’t provide flexibility such as log levels, timestamps, or writing logs to files. Python’s logging module solves these problems by offering a powerful and configurable way to capture logs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of how to configure the logging module to log exceptions to a file:"
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\n# Configure logging to write messages to a file named 'app.log'\nlogging.basicConfig(\n    filename='app.log',\n    level=logging.ERROR,  # Only log errors and above\n    format='%(asctime)s - %(levelname)s - %(message)s'\n)\n\ntry:\n    # Example code that may raise an exception\n    result = 10 / 0\nexcept Exception as e:\n    # Log the exception with stack trace\n    logging.exception('An error occurred during division')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, `logging.basicConfig` is used to define where and how to log messages. We set the level to `ERROR` so that only errors and critical issues are recorded. The `logging.exception` function is used inside the except block—it automatically includes the stack trace, which is invaluable for debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "The log file `app.log` will contain entries like this when an exception happens:"
+      },
+      {
+        "type": "paragraph",
+        "value": "\n2024-04-26 15:24:12,123 - ERROR - An error occurred during division\nTraceback (most recent call last):\n  File \"example.py\", line 10, in <module>\n    result = 10 / 0\nZeroDivisionError: division by zero\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This detailed logging helps you quickly locate the source and nature of exceptions in your application. You can also customize the logging to write to the console, include timestamps, log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL), and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "For larger applications, consider configuring more advanced logging handlers, such as rotating log files or sending logs to external monitoring services. However, the basic setup shown here is a great start for beginners to understand and utilize Python’s logging for exception tracing."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, by leveraging Python’s logging module with exception logging: \n\n- You can trace errors with stack traces.\n- Logs are timestamped and well-formatted.\n- You avoid cluttered output and gain control over log levels and destinations.\n\nStart adding logging to your code today to make debugging in production much more manageable!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-query-optimization-by-analyzing-execution-plan-anomalies",
+    "title": "Mastering SQL Query Optimization by Analyzing Execution Plan Anomalies",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve your SQL queries by identifying and resolving execution plan anomalies. This beginner-friendly guide covers practical steps to optimize queries effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=DXpsNQqSFQw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL query optimization is crucial for improving the performance of your database applications. One of the best ways to optimize SQL queries is by analyzing their execution plans. Execution plans show how the database engine processes your query, highlighting the steps taken and resources used. However, anomalies in execution plans can cause slowdowns or unexpected behaviors. In this article, we'll explore common execution plan anomalies, how to identify them, and practical approaches to resolve these issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand what an execution plan is. When you run an SQL query, the database engine creates a plan to fetch the result as efficiently as possible. This plan includes steps like table scans, index seeks, joins, and sorts. Viewing this plan helps you spot inefficiencies such as full table scans on large tables or missing indexes."
+      },
+      {
+        "type": "paragraph",
+        "value": "To analyze an execution plan, most databases provide a tool or command. For example, in SQL Server, you can use the following command to display the estimated execution plan:"
+      },
+      {
+        "type": "code",
+        "value": "SET SHOWPLAN_TEXT ON;\nGO\nSELECT * FROM Employees WHERE DepartmentID = 5;\nGO\nSET SHOWPLAN_TEXT OFF;\nGO"
+      },
+      {
+        "type": "paragraph",
+        "value": "A common anomaly is an unexpected Full Table Scan, where the database reads all rows in a table even if there is a filter condition. This usually happens if an appropriate index is missing or not used. Full table scans on big tables can cause slow queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another anomaly is inefficient joins. For example, nested loop joins are great for small data sets but may be inefficient for large tables. A hash join or merge join might perform better depending on your data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of a poorly optimized query:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT e.Name, d.Name AS Department\nFROM Employees e\nJOIN Departments d ON e.DepartmentID = d.DepartmentID\nWHERE e.HireDate > '2020-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "If the Employees table is large and lacks an index on HireDate, the query planner might perform a full scan and join, causing slow performance. To optimize, add an index on the HireDate column:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_hiredate ON Employees(HireDate);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After adding the index, check the execution plan again. You should see an index seek operation instead of a full scan, indicating improved efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering execution plan analysis involves:\n- Generating and reading execution plans\n- Identifying anomalies like full table scans and inefficient joins\n- Adding or adjusting indexes\n- Rewriting queries if necessary\n\nBy regularly reviewing execution plans, you can ensure your SQL queries perform optimally and scale well with your data growth."
+      }
+    ]
   }
 ];
