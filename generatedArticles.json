@@ -1,557 +1,485 @@
 [
   {
-    "slug": "designing-scalable-event-driven-architectures-in-javascript",
-    "title": "Designing Scalable Event-Driven Architectures in JavaScript: A Beginner's Guide",
+    "slug": "understanding-javascript-closures-a-beginners-step-by-step-guide",
+    "title": "Understanding JavaScript Closures: A Beginner's Step-by-Step Guide",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn the basics of building scalable event-driven architectures in JavaScript with practical examples and simple code snippets.",
-    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "description": "Learn what JavaScript closures are and how to use them with this easy step-by-step beginner's guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
     "content": [
       {
         "type": "paragraph",
-        "value": "Event-driven architecture (EDA) is a design pattern where the flow of the program is determined by events such as user actions, sensor outputs, or messages from other programs. This approach enables scalable, flexible, and loosely coupled applications, especially useful in modern JavaScript development."
+        "value": "JavaScript closures are a fundamental concept that every developer should understand. In simple terms, a closure is a function that remembers the variables from the place where it was created, even after that place has finished running. This allows for powerful patterns such as data privacy, partial application, and more."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore how to design a simple yet scalable event-driven system in JavaScript. We will create an event emitter, define events, and show how to handle asynchronous workflows efficiently."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, let's understand the core concept: an event emitter is an object that allows us to register event listeners (callbacks) and emit events to notify these listeners. This pattern promotes decoupling, as the event producers don't need to know about the consumers."
+        "value": "Let's start with a simple example to see a closure in action."
       },
       {
         "type": "code",
-        "value": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n\n  on(event, listener) {\n    if (!this.events[event]) {\n      this.events[event] = [];\n    }\n    this.events[event].push(listener);\n  }\n\n  emit(event, data) {\n    if (this.events[event]) {\n      this.events[event].forEach(listener => listener(data));\n    }\n  }\n}\n"
+        "value": "function greet(name) {\n  const greeting = 'Hello';\n  return function() {\n    console.log(greeting + ', ' + name + '!');\n  }\n}\n\nconst greetJohn = greet('John');\ngreetJohn(); // Output: Hello, John!"
       },
       {
         "type": "paragraph",
-        "value": "In the above code, the EventEmitter class manages event listeners: the `on` method registers listeners, and the `emit` method triggers all listeners for a particular event."
+        "value": "Here’s what’s happening: The `greet` function creates a variable `greeting` and returns a new function. This new function uses the `greeting` and `name` variables even after `greet` has finished executing. This is a closure because the inner function 'closes over' these variables."
       },
       {
         "type": "paragraph",
-        "value": "Let's create an example where a user logs in, and the system emits an event that other parts of the app can subscribe to. This allows the app to react to the login event without tight coupling."
+        "value": "Closures are especially useful when you want to create private variables, or when you want to remember some data without using global variables."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple counter example with closures to understand their practical use:"
       },
       {
         "type": "code",
-        "value": "const emitter = new EventEmitter();\n\n// Register a listener for the 'login' event\nemitter.on('login', (user) => {\n  console.log(`User logged in: ${user.name}`);\n  // Further actions like fetching user settings can be triggered here\n});\n\n// Simulate a login function\nfunction loginUser(name) {\n  const user = { name };\n  console.log('Logging in...');\n  emitter.emit('login', user);\n}\n\nloginUser('Alice');\n"
+        "value": "function createCounter() {\n  let count = 0;\n  return function() {\n    count++;\n    return count;\n  }\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3"
       },
       {
         "type": "paragraph",
-        "value": "Output:\nLogging in...\nUser logged in: Alice\n\nThis output shows how emitting 'login' triggered the listener. You can add multiple listeners to the same event to handle different aspects of the system."
+        "value": "In this example, the returned function has access to the variable `count` defined in the outer function `createCounter`. Each time we call `counter()`, it updates and remembers the count value. Without closures, this kind of behavior would be harder to write and maintain."
       },
       {
         "type": "paragraph",
-        "value": "To ensure scalability, especially for real-world applications, consider the following best practices:\n- Use asynchronous event handlers if processing is heavy, to avoid blocking the main thread.\n- Implement event queues or message brokers (like Redis, RabbitMQ) for distributed systems.\n- Maintain clear event naming conventions to avoid confusion.\n- Decouple event producers and consumers to facilitate independent development and deployment."
-      },
-      {
-        "type": "code",
-        "value": "// Example of asynchronous event handling\nemitter.on('data', async (payload) => {\n  console.log('Processing data asynchronously...');\n  await new Promise(resolve => setTimeout(resolve, 1000)); // simulate async operation\n  console.log('Data processed:', payload);\n});\n\nemitter.emit('data', { id: 123, content: 'Hello World' });"
+        "value": "To summarize, here are key points about closures:"
       },
       {
         "type": "paragraph",
-        "value": "In this asynchronous example, event listeners can perform async tasks using promises or async/await syntax, improving app responsiveness and scalability."
+        "value": "- A closure is created when a function is defined inside another function and accesses variables from the outer function.\n- The inner function remembers the variables even after the outer function has finished.\n- Closures allow you to create private data and functions."
       },
       {
         "type": "paragraph",
-        "value": "In summary, building scalable event-driven architectures in JavaScript starts with a simple event emitter pattern and grows by introducing asynchronous handling and distributed event management. This allows you to build flexible, maintainable, and scalable applications."
+        "value": "Once you start using closures, you'll find they are an extremely valuable and powerful tool in JavaScript programming."
       }
     ]
   },
   {
-    "slug": "mastering-javascript-async-error-handling-with-custom-retry-logic",
-    "title": "Mastering JavaScript Async Error Handling with Custom Retry Logic",
+    "slug": "optimize-javascript-memory-usage-for-faster-web-apps",
+    "title": "How to Optimize JavaScript Memory Usage for Faster Web Apps",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to handle asynchronous errors in JavaScript by building custom retry logic to make your apps more reliable and resilient.",
-    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "description": "Learn beginner-friendly tips to reduce JavaScript memory usage and prevent common memory-related errors to speed up your web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with asynchronous JavaScript, such as fetching data from an API, errors can occur due to various reasons like network issues or server problems. Handling these errors properly is crucial to building reliable applications. One effective way to improve error handling is by implementing custom retry logic that attempts the operation multiple times before failing."
+        "value": "When building web apps, managing JavaScript memory efficiently is key to delivering a faster, smoother experience. Poor memory usage can lead to slow performance and common errors like memory leaks, which eventually crash or freeze your app. This article will guide beginners through simple strategies to optimize memory, avoid common pitfalls, and improve app speed."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explore a simple yet powerful approach to retry failed async operations using JavaScript's async/await syntax. You’ll learn how to create a reusable function that retries requests and handles errors gracefully."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by creating a function that simulates an unreliable asynchronous task. This function will randomly fail or succeed to help us test our retry logic."
+        "value": "One frequent problem is memory leaks, which happen when unused variables or objects aren't freed by the JavaScript engine. To avoid leaks, always remove event listeners when they are no longer needed and nullify variables that store large data after use."
       },
       {
         "type": "code",
-        "value": "async function unreliableAsyncTask() {\n  return new Promise((resolve, reject) => {\n    // Simulate a 50% chance of failure\n    const succeed = Math.random() > 0.5;\n    setTimeout(() => {\n      if (succeed) {\n        resolve('Success!');\n      } else {\n        reject(new Error('Something went wrong'));\n      }\n    }, 500);\n  });\n}"
+        "value": "const button = document.querySelector('button');\n\nfunction handleClick() {\n  alert('Clicked!');\n}\n\nbutton.addEventListener('click', handleClick);\n\n// Later, when the button is removed or no longer needed:\nbutton.removeEventListener('click', handleClick);\n"
       },
       {
         "type": "paragraph",
-        "value": "Now, we’ll create our custom retry function. This function takes an async function as a parameter, along with the maximum number of retries and an optional delay between retries."
+        "value": "Another tip is to avoid creating unnecessary global variables. Global variables stay in memory as long as your page is open. Instead, use local variables inside functions or blocks to limit their lifespan."
       },
       {
         "type": "code",
-        "value": "async function retryAsync(fn, retries = 3, delay = 1000) {\n  for (let attempt = 1; attempt <= retries; attempt++) {\n    try {\n      // Attempt to execute the async function\n      const result = await fn();\n      return result;  // Return if successful\n    } catch (error) {\n      // If last attempt, throw the error\n      if (attempt === retries) {\n        throw error;\n      }\n      console.log(`Attempt ${attempt} failed. Retrying in ${delay}ms...`);\n      // Wait before retrying\n      await new Promise(res => setTimeout(res, delay));\n    }\n  }\n}"
+        "value": "function processData() {\n  let tempData = new Array(1000).fill('data');\n  // use tempData here\n  // tempData is freed once the function ends\n}\n\nprocessData();"
       },
       {
         "type": "paragraph",
-        "value": "Finally, let's use our retryAsync function with the unreliableAsyncTask. This will automatically retry the task up to three times before throwing an error."
+        "value": "Using appropriate data structures can also help. For example, use arrays or objects wisely, and delete unused object properties or clear arrays if the data is no longer required."
       },
       {
         "type": "code",
-        "value": "retryAsync(unreliableAsyncTask, 3, 1000)\n  .then(result => console.log('Final result:', result))\n  .catch(error => console.error('Failed after retries:', error.message));"
+        "value": "let userData = { name: 'Alice', age: 25, tempInfo: 'temporary' };\n\n// When tempInfo is not needed:\ndelete userData.tempInfo;"
       },
       {
         "type": "paragraph",
-        "value": "This pattern is incredibly useful when dealing with APIs or any async tasks prone to temporary failures. You can customize the number of retries and delay between attempts to suit your application’s needs."
+        "value": "If your web app processes large data, consider using techniques like lazy loading or pagination to avoid holding all data in memory at once. This keeps memory usage low and improves responsiveness."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, mastering async error handling with custom retry logic involves wrapping your async calls in a retry loop, catching errors, and optionally adding delays between retries. This makes your application more robust and resistant to transient errors."
+        "value": "Lastly, use browser developer tools to monitor memory usage. Most modern browsers have a Memory tab where you can take snapshots and find detached DOM nodes or memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing JavaScript memory usage involves cleaning up event listeners, limiting global variables, managing data structures carefully, and monitoring memory in dev tools. These beginner-friendly tips will help you avoid common errors and make your web apps faster and more reliable."
       }
     ]
   },
   {
-    "slug": "building-scalable-data-models-in-typescript-for-enterprise-applications",
-    "title": "Building Scalable Data Models in TypeScript for Enterprise Applications",
+    "slug": "mastering-typescript-generics-for-cleaner-and-more-reusable-code",
+    "title": "Mastering TypeScript Generics for Cleaner and More Reusable Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to design and build scalable data models in TypeScript to create maintainable and efficient enterprise applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=tj5VW2xJsqU",
+    "description": "Learn how TypeScript generics help you write cleaner, more reusable code with beginner-friendly explanations and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
     "content": [
       {
         "type": "paragraph",
-        "value": "In enterprise applications, managing complex data structures efficiently is crucial. TypeScript, with its strong typing system, enables developers to build scalable data models that are both clear and maintainable. In this tutorial, we will explore how to create scalable data models in TypeScript by organizing data, using interfaces and classes effectively, and applying best practices."
+        "value": "TypeScript generics are a powerful feature that allow you to write flexible, reusable code while still benefiting from type safety. If you're new to TypeScript or programming in general, understanding generics can seem challenging, but with this beginner-friendly guide, you'll master them in no time."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Understand Your Data Shape\nBefore coding, understand the data your application will handle. Break down the data into smaller logical entities. For example, in a user management system, you might have users, roles, and permissions as separate entities."
+        "value": "Generics let you create functions, classes, or interfaces that work with any data type, rather than a single one. This helps avoid duplicating similar code for different types and makes your code more maintainable."
       },
       {
         "type": "paragraph",
-        "value": "### 2. Use Interfaces for Data Contracts\nInterfaces in TypeScript describe the shape of data without implementation details. They help ensure consistency across your application."
+        "value": "Let's start with a simple example where generics shine: creating a function that returns the first element of an array."
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  roles: Role[];\n}\n\ninterface Role {\n  id: number;\n  name: string;\n  permissions: Permission[];\n}\n\ninterface Permission {\n  id: number;\n  action: string;\n  resource: string;\n}"
+        "value": "function getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst numbers = [1, 2, 3];\nconst firstNumber = getFirstElement(numbers); // firstNumber is number\n\nconst strings = ['a', 'b', 'c'];\nconst firstString = getFirstElement(strings); // firstString is string"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Use Classes for Behavior\nTo add behavior or methods related to your data models, use classes. For example, you can create a class that implements the User interface and add methods like checking user permissions."
+        "value": "In this example, <T> is a generic type parameter. By using <T>, the function can adapt to arrays of any type while maintaining type safety. If you pass an array of numbers, the return type is number; if you pass an array of strings, it returns string."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use generics in interfaces and classes. Here's a simple generic interface:"
       },
       {
         "type": "code",
-        "value": "class UserModel implements User {\n  id: number;\n  name: string;\n  email: string;\n  roles: Role[];\n\n  constructor(id: number, name: string, email: string, roles: Role[]) {\n    this.id = id;\n    this.name = name;\n    this.email = email;\n    this.roles = roles;\n  }\n\n  // Check if user has a specific permission\n  hasPermission(action: string, resource: string): boolean {\n    return this.roles.some(role => \n      role.permissions.some(p => p.action === action && p.resource === resource)\n    );\n  }\n}"
+        "value": "interface Box<T> {\n  contents: T;\n}\n\nconst numberBox: Box<number> = { contents: 123 };\nconst stringBox: Box<string> = { contents: 'hello' };"
       },
       {
         "type": "paragraph",
-        "value": "### 4. Leverage Generics for Reusability\nGenerics help create flexible and reusable data models. For example, creating a paginated response type to handle large datasets."
+        "value": "This interface allows you to create boxes holding any type of content. It's reusable and type-safe."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics become even more powerful when you use constraints. Sometimes you want to restrict generic types to those that match certain conditions. For example, let's create a function that prints the length property of any input that has it."
       },
       {
         "type": "code",
-        "value": "interface PaginatedResponse<T> {\n  items: T[];\n  totalItems: number;\n  currentPage: number;\n  totalPages: number;\n}\n\n// Example usage:\nconst userPage: PaginatedResponse<User> = {\n  items: [],\n  totalItems: 0,\n  currentPage: 1,\n  totalPages: 0\n};"
+        "value": "interface HasLength {\n  length: number;\n}\n\nfunction printLength<T extends HasLength>(input: T): void {\n  console.log(input.length);\n}\n\nprintLength('hello'); // 5\nprintLength([1, 2, 3]); // 3\n// printLength(42); // Error: number doesn't have length"
       },
       {
         "type": "paragraph",
-        "value": "### 5. Organize Models and Follow Naming Conventions\nKeep your models organized in dedicated folders like `models/` or `interfaces/`. Follow consistent naming conventions like PascalCase for types and classes. This improves maintainability as your application grows."
+        "value": "Here, <T extends HasLength> means T must be a type that has a \"length\" property. This lets TypeScript check your code for correctness."
       },
       {
         "type": "paragraph",
-        "value": "### 6. Validate Data Correctly\nWhile TypeScript provides compile-time validation, sometimes you need runtime validation especially when handling external data (APIs, user input). Consider using libraries like `zod` or `io-ts` for schema validation. This keeps your data safe and error-free."
+        "value": "To summarize, generics in TypeScript allow you to:"
       },
       {
         "type": "paragraph",
-        "value": "### Final Thoughts\nBuilding scalable data models in TypeScript requires careful planning and consistent coding practices. Use interfaces to define data shapes, classes for encapsulating behavior, and generics for flexibility. Organizing your models properly and validating data ensures a maintainable and scalable codebase suitable for enterprise applications."
+        "value": "- Write functions, interfaces, and classes that work with multiple types.\n- Improve code reusability without sacrificing type safety.\n- Use constraints to restrict generics to certain shapes or capabilities."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these concepts in hand, you can write cleaner and more flexible TypeScript code. Try introducing generics into your next project and see how they can simplify your codebase!"
       }
     ]
   },
   {
-    "slug": "designing-resilient-typescript-systems-handling-edge-cases-in-distributed-architectures",
-    "title": "Designing Resilient TypeScript Systems: Handling Edge Cases in Distributed Architectures",
+    "slug": "harnessing-typescript-utility-types-to-catch-subtle-errors-early",
+    "title": "Harnessing TypeScript Utility Types to Catch Subtle Errors Early",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to design resilient TypeScript applications by effectively handling edge cases and errors in distributed systems, ensuring your apps stay robust and reliable.",
-    "videoUrl": "https://www.youtube.com/watch?v=nZuWCo52wTg",
+    "description": "Learn how to use TypeScript's built-in utility types to spot and fix subtle coding errors before they cause problems.",
+    "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "Distributed architectures, such as microservices or serverless systems, offer scalability and flexibility but also introduce challenges like network failures, data inconsistencies, and race conditions. When building these types of systems with TypeScript, it’s crucial to anticipate and handle edge cases to create resilient applications."
+        "value": "TypeScript is a powerful language that helps us catch errors early by adding static types to JavaScript. One of its great features is the set of built-in utility types. These utility types allow you to manipulate types easily and can help you spot subtle bugs before your code runs."
       },
       {
         "type": "paragraph",
-        "value": "This article will introduce beginners to common edge cases in distributed systems and demonstrate practical TypeScript patterns and error-handling techniques to mitigate these risks."
+        "value": "In this article, we'll explore some of the most helpful utility types and see how they can prevent common errors in your code. Even if you're new to TypeScript, these tools are simple to use and can make your coding more robust."
       },
       {
         "type": "paragraph",
-        "value": "### Common Edge Cases in Distributed Systems"
+        "value": "### Partial<Type>"
       },
       {
         "type": "paragraph",
-        "value": "1. **Network Failures:** Requests can timeout or fail due to unreliable network connectivity."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Partial Failures:** Some services succeed, others fail, leading to inconsistent states."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Race Conditions:** Simultaneous operations result in unexpected data overwrites or corruption."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Duplicate Messages:** Retries or network issues can cause duplicated requests or events."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Error Handling in TypeScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "The following example demonstrates a simple retry mechanism with exponential backoff to handle network errors when calling an external service."
+        "value": "Imagine you have an object with several properties, but you want to create or update it incrementally. The `Partial` utility makes all properties in a type optional. This can help avoid errors when you don't need to provide all properties at once."
       },
       {
         "type": "code",
-        "value": "async function fetchWithRetry(url: string, retries = 3, delay = 500): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n    return await response.text();\n  } catch (error) {\n    if (retries > 0) {\n      console.warn(`Request failed. Retrying in ${delay}ms...`);\n      await new Promise(res => setTimeout(res, delay));\n      return fetchWithRetry(url, retries - 1, delay * 2);\n    } else {\n      throw error;\n    }\n  }\n}"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Partial<User> means all properties are optional\nfunction updateUser(id: number, newData: Partial<User>) {\n  // Update user logic\n}\n\n// This is allowed because 'name' and 'email' are optional here\nupdateUser(1, { name: \"Alice\" });"
       },
       {
         "type": "paragraph",
-        "value": "In this function, we recursively retry fetching data, doubling the wait time after each failure. This helps minimize overwhelming a struggling service."
+        "value": "Without `Partial`, you would need to provide all the fields every time you update, which can be redundant and error-prone."
       },
       {
         "type": "paragraph",
-        "value": "### Handling Partial Failures"
+        "value": "### Required<Type>"
       },
       {
         "type": "paragraph",
-        "value": "When performing multiple dependent operations across services, use try-catch blocks and compensating actions to maintain system consistency."
+        "value": "`Required` is the opposite of `Partial`. It makes all properties in a type required. This helps catch errors where a property might unintentionally be optional."
       },
       {
         "type": "code",
-        "value": "async function processOrder(orderId: string) {\n  try {\n    await reserveInventory(orderId);\n    await chargePayment(orderId);\n    await confirmOrder(orderId);\n  } catch (error) {\n    console.error('Error processing order:', error);\n    await cancelInventoryReservation(orderId); // Undo reserved inventory\n    throw error;\n  }\n}"
+        "value": "interface Config {\n  url?: string;\n  method?: string;\n}\n\n// Make all properties required\nconst fullConfig: Required<Config> = {\n  url: \"https://api.example.com\",\n  method: \"GET\"\n};"
       },
       {
         "type": "paragraph",
-        "value": "This example shows how to rollback inventory reservation if payment or confirmation fails, avoiding inconsistent order states."
+        "value": "If you forget a property, TypeScript will prompt an error, ensuring you don't miss required configuration values."
       },
       {
         "type": "paragraph",
-        "value": "### Preventing Race Conditions"
+        "value": "### Pick<Type, Keys> and Omit<Type, Keys>"
       },
       {
         "type": "paragraph",
-        "value": "Use concurrency-safe mechanisms like database transactions, optimistic locking, or distributed locks to avoid race conditions."
+        "value": "Sometimes you only need a few properties from a type, or want to exclude some. `Pick` lets you select specific keys, while `Omit` excludes keys. These utilities help reduce errors by focusing on exactly what you need."
       },
       {
         "type": "code",
-        "value": "async function updateUserProfile(userId: string, update: Partial<UserProfile>) {\n  const maxRetries = 3;\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    const user = await getUser(userId);\n    user.version = user.version || 0;\n    const updatedProfile = { ...user, ...update, version: user.version + 1 };\n\n    const success = await updateUserIfVersionMatches(userId, updatedProfile, user.version);\n    if (success) return updatedProfile;\n    // If not successful, another update happened concurrently, retry\n  }\n  throw new Error('Failed to update profile due to concurrent modifications');\n}"
+        "value": "interface Product {\n  id: number;\n  name: string;\n  price: number;\n  stock: number;\n}\n\n// We only need id and name for a simple display\nconst simpleProduct: Pick<Product, \"id\" | \"name\"> = {\n  id: 1,\n  name: \"Laptop\"\n};\n\n// Or exclude stock if it isn't needed\nconst productWithoutStock: Omit<Product, \"stock\"> = {\n  id: 2,\n  name: \"Phone\",\n  price: 499\n};"
       },
       {
         "type": "paragraph",
-        "value": "This optimistic locking approach retries updates if the data version has changed due to another process updating simultaneously."
+        "value": "This way, you avoid accidentally accessing or providing properties that shouldn't be there."
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "### Readonly<Type>"
       },
       {
         "type": "paragraph",
-        "value": "Distributed systems are prone to unique challenges. By anticipating edge cases and using robust error handling, retries, rollbacks, and concurrency controls, you can increase your TypeScript application's resilience and reliability. Start simple with try-catch blocks and gradually implement more advanced patterns as your system grows."
+        "value": "To prevent accidental modifications, `Readonly` makes all properties in an object immutable. This helps catch cases where data should not be changed, avoiding bugs related to unexpected state changes."
+      },
+      {
+        "type": "code",
+        "value": "interface Settings {\n  theme: string;\n  fontSize: number;\n}\n\nconst defaultSettings: Readonly<Settings> = {\n  theme: \"dark\",\n  fontSize: 14\n};\n\n// This will cause a TypeScript error:\n// defaultSettings.theme = \"light\";"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `Readonly` can make your intentions clear and your code safer."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript utility types like `Partial`, `Required`, `Pick`, `Omit`, and `Readonly` are simple but powerful tools. They help you write clearer, safer code and catch subtle errors before they happen. Experiment with these utilities in your projects to see how they improve your development experience."
       }
     ]
   },
   {
-    "slug": "building-a-python-web-scraper-to-monitor-ecommerce-price-changes",
-    "title": "Building a Python Web Scraper to Monitor E-commerce Price Changes",
+    "slug": "building-a-personal-finance-tracker-with-python-and-sqlite",
+    "title": "Building a Personal Finance Tracker with Python and SQLite",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to create a beginner-friendly Python web scraper to track price changes on e-commerce websites with simple code examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=nCuPv3tf2Hg",
+    "description": "Learn how to create a simple personal finance tracker using Python and SQLite to manage your income and expenses effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=mJLI-99RhbM",
     "content": [
       {
         "type": "paragraph",
-        "value": "Monitoring price changes on e-commerce websites can help you find the best deals and save money. In this tutorial, we'll create a simple Python web scraper that checks product prices periodically. We'll use Python libraries like requests to fetch web pages and BeautifulSoup to parse HTML content. This guide is beginner-friendly and will walk you through each step."
+        "value": "Managing your personal finances can feel overwhelming, but with a simple tool, you can track your income and expenses easily. In this tutorial, we'll build a beginner-friendly personal finance tracker using Python and SQLite. SQLite is a lightweight database that comes bundled with Python, making it perfect for simple applications."
       },
       {
         "type": "paragraph",
-        "value": "Before we start coding, make sure you have Python installed. You'll also need two libraries: requests and BeautifulSoup4. You can install them using pip:"
+        "value": "Let's start by setting up a database to store our transactions. Each transaction will have an ID, a description, an amount, a category (like 'income' or 'expense'), and a date."
       },
       {
         "type": "code",
-        "value": "pip install requests beautifulsoup4"
+        "value": "import sqlite3\n\n# Connect to the SQLite database (or create it)\nconn = sqlite3.connect('finance.db')\ncursor = conn.cursor()\n\n# Create a table to store transactions\ncursor.execute('''\nCREATE TABLE IF NOT EXISTS transactions (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    description TEXT NOT NULL,\n    amount REAL NOT NULL,\n    category TEXT NOT NULL CHECK(category IN ('income', 'expense')),\n    date TEXT NOT NULL\n)\n''')\n\nconn.commit()"
       },
       {
         "type": "paragraph",
-        "value": "Let's pick a product page from an e-commerce site to scrape. Be sure to check the website's terms of use before scraping, and avoid heavy requests that might overload the server. For this tutorial, we'll demonstrate using a sample HTML snippet, but the method applies to real product pages."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple script that fetches the product page and extracts the price."
+        "value": "Now that our database is ready, let's add a function to insert new transactions into the table."
       },
       {
         "type": "code",
-        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# URL of the product page (replace this with the actual URL)\nurl = 'https://example.com/product-page'\n\n# Function to get the product price\ndef get_price(url):\n    response = requests.get(url)\n    if response.status_code != 200:\n        print(f'Failed to retrieve page: {response.status_code}')\n        return None\n    \n    soup = BeautifulSoup(response.text, 'html.parser')\n\n    # Example: find a span with class 'price' (change based on the website)\n    price_tag = soup.find('span', class_='price')\n    if price_tag:\n        price = price_tag.text.strip()\n        return price\n    else:\n        print('Price tag not found on the page')\n        return None\n\n# Example usage\nprice = get_price(url)\nif price:\n    print(f'The current price is: {price}')"
+        "value": "def add_transaction(description, amount, category, date):\n    cursor.execute(\n        'INSERT INTO transactions (description, amount, category, date) VALUES (?, ?, ?, ?)',\n        (description, amount, category, date)\n    )\n    conn.commit()\n\n# Example usage:\nadd_transaction('Salary', 2500.00, 'income', '2024-06-01')\nadd_transaction('Groceries', 150.75, 'expense', '2024-06-02')"
       },
       {
         "type": "paragraph",
-        "value": "In this script, we define a function get_price that takes a product page URL, makes an HTTP GET request to fetch the page content, then uses BeautifulSoup to parse the HTML. We look for a span element with a class name 'price'. Different sites use different HTML structures, so you should use your browser's developer tools to inspect the price element on the product page you're interested in."
-      },
-      {
-        "type": "paragraph",
-        "value": "Once you can extract the current price, you might want to monitor it regularly and check if it changes. Here's a simple way to check the price repeatedly and notify you if it drops."
+        "value": "To review your finances, it's useful to see all transactions and calculate your current balance. Let's create functions to fetch all data and summarize it."
       },
       {
         "type": "code",
-        "value": "import time\n\n# Monitor the price every hour (3600 seconds)\ncheck_interval = 3600\n\n# Store the last recorded price\nlast_price = None\n\nwhile True:\n    current_price = get_price(url)\n    if current_price:\n        if current_price != last_price:\n            print(f'Price changed to {current_price}')\n            last_price = current_price\n        else:\n            print(f'Price remains the same: {current_price}')\n    else:\n        print('Could not fetch the price.')\n    \n    time.sleep(check_interval)"
+        "value": "def get_all_transactions():\n    cursor.execute('SELECT * FROM transactions ORDER BY date')\n    return cursor.fetchall()\n\n\ndef get_balance():\n    cursor.execute(\"SELECT SUM(amount) FROM transactions WHERE category='income'\")\n    total_income = cursor.fetchone()[0] or 0\n    cursor.execute(\"SELECT SUM(amount) FROM transactions WHERE category='expense'\")\n    total_expense = cursor.fetchone()[0] or 0\n    return total_income - total_expense\n\n# Example usage:\nprint('All Transactions:')\nfor row in get_all_transactions():\n    print(row)\n\nprint(f'Current Balance: ${get_balance():.2f}')"
       },
       {
         "type": "paragraph",
-        "value": "This loop checks the product price every hour. If the price has changed since the last check, it prints a notification. You could extend this example by sending email alerts or logging the data to a file or database."
+        "value": "Finally, don't forget to close the database connection after you're done with your operations to keep everything tidy."
+      },
+      {
+        "type": "code",
+        "value": "conn.close()"
       },
       {
         "type": "paragraph",
-        "value": "To sum up, building a Python web scraper involves sending HTTP requests to get web page content and then parsing the HTML to extract the information you want—in this case, price data. Remember to respect website policies and avoid sending too many requests in a short time."
+        "value": "With these basic components, you now have a functional personal finance tracker! You can expand it by adding features like monthly summaries, data visualization, or even a simple user interface. For now, this beginner program helps you keep a clear record of your finances using Python and SQLite."
       }
     ]
   },
   {
-    "slug": "understanding-data-model-validation-errors-in-python",
-    "title": "Understanding Data Model Validation Errors in Python: A Hands-On Guide",
+    "slug": "mastering-python-profiling-tools-to-identify-performance-bottlenecks",
+    "title": "Mastering Python Profiling Tools to Identify Performance Bottlenecks",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to handle and understand data model validation errors in Python with practical examples and beginner-friendly explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=XIdQ6gO3Anc",
+    "description": "Learn how to use Python profiling tools to find and fix performance bottlenecks in your code with easy-to-understand examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=BZl6x92Px8Y",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building applications in Python, especially with modern libraries like Pydantic or Django, you often define data models that represent your data structure. These data models come with validation rules to ensure the data is correct and in the expected format. When data doesn’t meet these rules, the system raises validation errors. Understanding these errors is crucial for debugging and writing robust programs."
+        "value": "When your Python program runs slowly, it can be hard to know where the problem is. Is it a slow loop? A heavy function? Python's profiling tools help you find the parts of your code that take the most time, so you can optimize them. This article introduces beginner-friendly ways to profile your Python code and interpret the results."
       },
       {
         "type": "paragraph",
-        "value": "In this guide, we will use Pydantic, a popular data validation library, to illustrate common data model validation errors and how to interpret them."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, let's install Pydantic if you haven't already:"
+        "value": "One simple and built-in tool is the `cProfile` module. It collects data about each function called during your program's execution, including time spent and how many times the function was called."
       },
       {
         "type": "code",
-        "value": "pip install pydantic"
+        "value": "import cProfile\n\ndef slow_function():\n    total = 0\n    for i in range(10**6):\n        total += i\n    return total\n\ndef main():\n    print('Starting...')\n    result = slow_function()\n    print('Result:', result)\n\n# Profile main function\ncProfile.run('main()')"
       },
       {
         "type": "paragraph",
-        "value": "Now, let's create a simple data model for a user that expects a name as a string and an age as an integer:"
+        "value": "This code profiles the `main()` function. Running it will display a table showing each function's call count and time spent. Pay attention to the functions with the highest total time to find bottlenecks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful tool is the `timeit` module, which is great for measuring the execution time of small bits of code. It runs the code multiple times and reports the average time, helping you compare different approaches."
       },
       {
         "type": "code",
-        "value": "from pydantic import BaseModel\n\nclass User(BaseModel):\n    name: str\n    age: int"
+        "value": "import timeit\n\ncode1 = '''\nresult = 0\nfor i in range(1000):\n    result += i\n'''\n\ncode2 = '''\nresult = sum(range(1000))\n'''\n\nprint('Loop timing:', timeit.timeit(code1, number=1000))\nprint('Sum timing:', timeit.timeit(code2, number=1000))"
       },
       {
         "type": "paragraph",
-        "value": "Let's try to create a user with correct data first:"
+        "value": "Here, `timeit` shows that using the built-in `sum()` is usually faster than a manual loop. Comparing snippets like this helps improve performance in small sections."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more detailed analysis, you can save profiling data to a file and use visualization tools like `snakeviz` to explore your program's performance interactively. First, install snakeviz with `pip install snakeviz`."
       },
       {
         "type": "code",
-        "value": "user = User(name=\"Alice\", age=30)\nprint(user)"
+        "value": "import cProfile\n\ncProfile.run('main()', 'output.prof')\n\n# Then run in terminal: snakeviz output.prof"
       },
       {
         "type": "paragraph",
-        "value": "This should work without any errors. But what happens if we pass wrong data types? For example, passing a string for age instead of an integer:"
-      },
-      {
-        "type": "code",
-        "value": "try:\n    user = User(name=\"Bob\", age=\"thirty\")\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Pydantic will raise a validation error telling you that age should be an integer, but it received a string. This error helps you catch wrong data early in your application."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another common error is missing required fields. For instance, if you forget to provide the age field:"
-      },
-      {
-        "type": "code",
-        "value": "try:\n    user = User(name=\"Charlie\")\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
-      },
-      {
-        "type": "paragraph",
-        "value": "The error message will indicate that age is a required field but was not provided."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also add custom data validation by using Pydantic validators, which allows you to enforce more complex rules and see detailed error messages."
-      },
-      {
-        "type": "code",
-        "value": "from pydantic import validator\n\nclass User(BaseModel):\n    name: str\n    age: int\n\n    @validator('age')\n    def age_must_be_positive(cls, v):\n        if v <= 0:\n            raise ValueError('Age must be a positive integer')\n        return v"
-      },
-      {
-        "type": "paragraph",
-        "value": "Now if you try to create a user with an invalid age:"
-      },
-      {
-        "type": "code",
-        "value": "try:\n    user = User(name=\"David\", age=-5)\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
-      },
-      {
-        "type": "paragraph",
-        "value": "The error message clearly informs that the age must be positive."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, data model validation errors in Python help ensure your data is correct and useful. When you use libraries like Pydantic, these errors become easy to detect and fix with clear, actionable messages. Practice catching and understanding these errors to improve your coding skills and application reliability."
+        "value": "Finally, remember: profiling tools help find problems, but you need to optimize wisely. Focus on slow parts that are called many times or take much time. Avoid premature optimization. Use profiling regularly for smoother and faster code!"
       }
     ]
   },
   {
-    "slug": "mastering-sql-window-functions-advanced-techniques-for-real-world-scenarios",
-    "title": "Mastering SQL Window Functions: Advanced Techniques for Real-World Scenarios",
+    "slug": "handling-recursive-queries-in-sql-beyond-basic-ctes",
+    "title": "Handling Recursive Queries in SQL: Beyond Basic CTEs",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how SQL window functions work and apply advanced techniques to solve real-world business problems using powerful, beginner-friendly examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=Ww71knvhQ-s",
+    "description": "Learn how to effectively write and optimize recursive queries in SQL using advanced techniques beyond basic Common Table Expressions (CTEs).",
+    "videoUrl": "https://www.youtube.com/watch?v=m6RKbrHYY_8",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of rows related to the current row without collapsing the result into a single output row. Unlike aggregate functions, window functions retain row-level detail, enabling you to solve complex problems like running totals, ranking, moving averages, and more."
+        "value": "Recursive queries in SQL are a powerful way to work with hierarchical or self-referential data. Many beginners start by learning basic recursive Common Table Expressions (CTEs) to handle simple parent-child relationships. However, real-world scenarios often require more than just basic recursion. This tutorial will guide you through advanced practices for handling recursive queries, making your SQL more efficient and easier to understand."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, you'll master the use of SQL window functions with practical examples that are commonly encountered in business scenarios. We'll cover ranking, cumulative sums, calculating differences between rows, and using partitions effectively, all explained in a beginner-friendly way."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a sample sales table called `sales_data` that contains these columns: `sale_id`, `salesperson`, `region`, `sale_date`, and `amount`."
+        "value": "Before diving deeper, let's revisit a basic recursive CTE example. Suppose we have an employee table where each employee reports to a manager. We want to find the full reporting hierarchy for a specific employee."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM sales_data;\n-- Example output:\n-- sale_id | salesperson | region | sale_date  | amount\n-- 1       | John        | East   | 2024-01-01 | 100\n-- 2       | Jane        | West   | 2024-01-01 | 200\n-- 3       | John        | East   | 2024-01-02 | 150\n-- 4       | Jane        | West   | 2024-01-02 | 300"
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n  SELECT EmployeeID, ManagerID, Name, 1 AS Level\n  FROM Employees\n  WHERE EmployeeID = 5  -- Starting employee\n  \n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Name, eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.EmployeeID = eh.ManagerID\n)\nSELECT * FROM EmployeeHierarchy;\n"
       },
       {
         "type": "paragraph",
-        "value": "### 1. Ranking Salespeople by Their Sales Amount"
+        "value": "This query starts with employee 5 and finds their managers up the hierarchy. Now let's explore ways to go beyond this basic example."
       },
       {
         "type": "paragraph",
-        "value": "The `RANK()` function allows you to assign rankings to rows within a window of rows, such as sales by each salesperson ordered by amount."
+        "value": "### 1. Limit Maximum Recursion Depth\nSometimes, recursive queries can run into infinite loops if the data has cycles or inconsistent references. Database platforms like SQL Server allow you to limit recursion depth to prevent runaway queries."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  RANK() OVER (PARTITION BY sale_date ORDER BY amount DESC) AS sales_rank\nFROM sales_data;\n\n-- This query ranks salespeople for each day by their sales amount."
+        "value": "OPTION (MAXRECURSION 10);\n-- Use this at the end of your recursive query to limit recursion to 10 levels\n"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Calculating a Running Total of Sales"
+        "value": "In PostgreSQL and MySQL, you may need to manually control recursion depth using a level counter in your CTE and filtering results."
       },
       {
         "type": "paragraph",
-        "value": "You can calculate the running total of sales for each salesperson over time using the `SUM()` window function."
+        "value": "### 2. Handling Cycles Safely\nIf your hierarchical data contains cycles, your recursive query might loop endlessly. To prevent this, keep track of visited nodes by accumulating their IDs in an array or string and check for repeats."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales_data;\n\n-- This shows cumulative sales amounts for each salesperson ordered by date."
+        "value": "WITH RECURSIVE SafeHierarchy AS (\n  SELECT EmployeeID, ManagerID, Name, ARRAY[EmployeeID] AS Path\n  FROM Employees\n  WHERE EmployeeID = 5\n\n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Name, Path || e.EmployeeID\n  FROM Employees e\n  JOIN SafeHierarchy sh ON e.EmployeeID = sh.ManagerID\n  WHERE NOT e.EmployeeID = ANY(sh.Path)\n)\nSELECT * FROM SafeHierarchy;\n"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Calculating Differences Between Current and Previous Row"
+        "value": "This PostgreSQL example uses an array to store the path of visited employee IDs and prevents revisiting the same node."
       },
       {
         "type": "paragraph",
-        "value": "Using the `LAG()` function, you can compare each sale amount with the previous day’s sale amount for the same salesperson."
+        "value": "### 3. Calculating Aggregates in Recursion\nYou can also compute aggregates such as total sales or cumulative values over a hierarchy during recursion."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_amount,\n  amount - LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS difference\nFROM sales_data;\n\n-- This shows how much the current sale amount increased or decreased compared to the previous day."
+        "value": "WITH RECURSIVE SalesHierarchy AS (\n  SELECT EmployeeID, ManagerID, Sales, Sales AS TotalSales\n  FROM Employees\n  WHERE ManagerID IS NULL  -- Top-level employees\n\n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Sales, sh.TotalSales + e.Sales\n  FROM Employees e\n  JOIN SalesHierarchy sh ON e.ManagerID = sh.EmployeeID\n)\nSELECT * FROM SalesHierarchy;\n"
       },
       {
         "type": "paragraph",
-        "value": "### 4. Using `ROW_NUMBER()` to Assign Unique Sequence Numbers"
+        "value": "This query sums up sales figures from managers down to individual employees."
       },
       {
         "type": "paragraph",
-        "value": "The `ROW_NUMBER()` function gives a unique sequential number to rows in the window. For example, number sales chronologically for each region."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  region,\n  sale_date,\n  salesperson,\n  ROW_NUMBER() OVER (PARTITION BY region ORDER BY sale_date) AS sale_sequence\nFROM sales_data;\n\n-- This numbers sales in each region from earliest to latest."
+        "value": "### 4. Use Recursive Queries with Indexes and Performance in Mind\nRecursive queries can become slow on large datasets. Ensure your tables have indexes on the columns used in joins (e.g., EmployeeID and ManagerID) to optimize performance."
       },
       {
         "type": "paragraph",
-        "value": "### 5. Combining Multiple Window Functions"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can combine window functions for deeper insights. For example, showing ranking, running total, and differences altogether can give a full picture of sales performance."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  RANK() OVER (PARTITION BY sale_date ORDER BY amount DESC) AS daily_rank,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_amount\nFROM sales_data;"
-      },
-      {
-        "type": "paragraph",
-        "value": "## Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "SQL window functions unlock advanced querying techniques without complicated joins or subqueries. They enable row-wise calculations, ranking, and cumulative analyses that fit many real-world business needs. By practicing functions like `RANK()`, `ROW_NUMBER()`, `SUM() OVER()`, and `LAG()`, you'll enhance your ability to generate insightful reports and meaningful data analysis."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start experimenting with these simple examples using your own data, and soon you will master window functions to address complex queries seamlessly."
+        "value": "### Summary\nHandling recursive queries effectively means using safety checks, limiting recursion depth, calculating aggregates smartly, and optimizing for performance. As you practice, you'll be able to handle more complex hierarchical SQL problems beyond basic CTE examples."
       }
     ]
   },
   {
-    "slug": "leveraging-sql-window-functions-to-simplify-complex-error-handling",
-    "title": "Leveraging SQL Window Functions to Simplify Complex Error Handling",
+    "slug": "optimizing-sql-query-performance-by-analyzing-execution-plans",
+    "title": "Optimizing SQL Query Performance by Analyzing Execution Plans",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how SQL window functions can simplify complex error handling by providing powerful tools for analyzing data over partitions and sequences, making debugging and error detection easier.",
-    "videoUrl": "https://www.youtube.com/watch?v=yJv7XFOcAwc",
+    "description": "Learn how to improve your SQL query performance by understanding and analyzing execution plans, even if you're a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with large datasets, error detection and handling can become quite complex. SQL window functions provide a powerful way to perform calculations across sets of rows related to the current row without collapsing the result into a single output. This ability helps simplify many error-handling scenarios."
+        "value": "When working with SQL databases, slow queries can be a major bottleneck in your application's performance. One of the best ways to optimize your SQL queries is by analyzing their execution plans. Execution plans provide a detailed breakdown of how the database engine processes your query, helping you identify inefficiencies like full table scans, missing indexes, or expensive joins."
       },
       {
         "type": "paragraph",
-        "value": "Window functions let you analyze and identify errors such as duplicates, missing data, or out-of-sequence values by partitioning data, ordering rows, and calculating running totals or ranks across those partitions. They offer more readable and maintainable queries compared to traditional GROUP BY or self-joins."
+        "value": "Let's start by understanding what an execution plan is. When you run a SQL query, the database engine creates a plan to fetch the requested data. This plan includes operations like scans, seeks, joins, and sorts. By examining this plan, you can detect which parts of your query are causing delays."
       },
       {
         "type": "paragraph",
-        "value": "Let's explore how to use some common window functions like ROW_NUMBER(), LAG(), and SUM() to detect errors in a sales transactions table."
+        "value": "Here’s a simple example of how to view an execution plan in SQL Server using the `EXPLAIN` statement or the graphical query plan in SQL Server Management Studio (SSMS):"
       },
       {
         "type": "code",
-        "value": "-- Sample sales data with potential issues\nCREATE TABLE sales (\n  transaction_id INT,\n  customer_id INT,\n  transaction_date DATE,\n  amount NUMERIC\n);\n\nINSERT INTO sales VALUES\n(1, 101, '2024-05-01', 100),\n(2, 101, '2024-05-01', 100),  -- duplicate transaction\n(3, 102, '2024-05-03', 50),\n(4, 103, '2024-05-05', NULL), -- missing amount error\n(5, 101, '2024-05-02', 75);\n"
+        "value": "-- To display the execution plan for a specific query (SQL Server)\nSET SHOWPLAN_ALL ON;\nGO\n\nSELECT * FROM Employees WHERE LastName = 'Smith';\nGO\nSET SHOWPLAN_ALL OFF;\nGO"
       },
       {
         "type": "paragraph",
-        "value": "### Detecting Duplicate Transactions\nWe use ROW_NUMBER() partitioned by customer and date to find duplicates. Rows with a row number greater than 1 indicate duplicate transactions for the same customer on the same day."
+        "value": "In MySQL, you can use the EXPLAIN keyword before your SELECT statement to get a query execution plan:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  transaction_id,\n  customer_id,\n  transaction_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY customer_id, transaction_date ORDER BY transaction_id) AS rn\nFROM sales\nWHERE rn > 1;"
+        "value": "EXPLAIN SELECT * FROM Employees WHERE LastName = 'Smith';"
       },
       {
         "type": "paragraph",
-        "value": "### Finding Missing Amounts\nWe simply check for rows where the amount is NULL, indicating missing or incomplete data that needs attention."
+        "value": "The output will show important details such as the type of join used, the number of rows examined, and whether indexes are being used. A common beginner mistake is to assume the output is too technical, but as you get familiar, it becomes easier to spot issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, if the type column shows 'ALL', it means the database is performing a full table scan, which is slow for large tables. To fix this, consider adding an index on the columns used in your WHERE clause:"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM sales WHERE amount IS NULL;"
+        "value": "CREATE INDEX idx_lastname ON Employees(LastName);"
       },
       {
         "type": "paragraph",
-        "value": "### Detecting Out-of-Sequence Transactions\nUsing LAG(), you can compare the date of the current transaction to the previous transaction for the same customer to identify if the sequence is incorrect or any transaction is out of order."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  transaction_id,\n  customer_id,\n  transaction_date,\n  LAG(transaction_date) OVER (PARTITION BY customer_id ORDER BY transaction_date) AS previous_date\nFROM sales\nWHERE transaction_date < COALESCE(\n    LAG(transaction_date) OVER (PARTITION BY customer_id ORDER BY transaction_date),\n    transaction_date\n  );"
+        "value": "After creating the index, run EXPLAIN again to check if the query is using the index (often shown as 'ref' or 'range' instead of 'ALL'). This simple change often results in faster query performance."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nBy leveraging window functions, you can easily build practical queries to surface data issues without complicated joins or subqueries. This approach simplifies error detection and helps in maintaining clean, reliable datasets for downstream processing."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start experimenting with window functions in your own error-handling workflows to discover how much simpler your SQL queries become!"
+        "value": "Remember, execution plans are a powerful tool to understand how your queries run under the hood. Regularly reviewing these plans helps you spot inefficiencies early and improves your database application's responsiveness."
       }
     ]
   }

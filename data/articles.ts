@@ -43698,5 +43698,384 @@ export const articles = [
         "value": "Start experimenting with window functions in your own error-handling workflows to discover how much simpler your SQL queries become!"
       }
     ]
+  },
+  {
+    "slug": "understanding-javascript-closures-a-beginners-step-by-step-guide",
+    "title": "Understanding JavaScript Closures: A Beginner's Step-by-Step Guide",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn what JavaScript closures are and how to use them with this easy step-by-step beginner's guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript closures are a fundamental concept that every developer should understand. In simple terms, a closure is a function that remembers the variables from the place where it was created, even after that place has finished running. This allows for powerful patterns such as data privacy, partial application, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example to see a closure in action."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  const greeting = 'Hello';\n  return function() {\n    console.log(greeting + ', ' + name + '!');\n  }\n}\n\nconst greetJohn = greet('John');\ngreetJohn(); // Output: Hello, John!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s what’s happening: The `greet` function creates a variable `greeting` and returns a new function. This new function uses the `greeting` and `name` variables even after `greet` has finished executing. This is a closure because the inner function 'closes over' these variables."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are especially useful when you want to create private variables, or when you want to remember some data without using global variables."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple counter example with closures to understand their practical use:"
+      },
+      {
+        "type": "code",
+        "value": "function createCounter() {\n  let count = 0;\n  return function() {\n    count++;\n    return count;\n  }\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the returned function has access to the variable `count` defined in the outer function `createCounter`. Each time we call `counter()`, it updates and remembers the count value. Without closures, this kind of behavior would be harder to write and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, here are key points about closures:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- A closure is created when a function is defined inside another function and accesses variables from the outer function.\n- The inner function remembers the variables even after the outer function has finished.\n- Closures allow you to create private data and functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Once you start using closures, you'll find they are an extremely valuable and powerful tool in JavaScript programming."
+      }
+    ]
+  },
+  {
+    "slug": "optimize-javascript-memory-usage-for-faster-web-apps",
+    "title": "How to Optimize JavaScript Memory Usage for Faster Web Apps",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips to reduce JavaScript memory usage and prevent common memory-related errors to speed up your web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building web apps, managing JavaScript memory efficiently is key to delivering a faster, smoother experience. Poor memory usage can lead to slow performance and common errors like memory leaks, which eventually crash or freeze your app. This article will guide beginners through simple strategies to optimize memory, avoid common pitfalls, and improve app speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "One frequent problem is memory leaks, which happen when unused variables or objects aren't freed by the JavaScript engine. To avoid leaks, always remove event listeners when they are no longer needed and nullify variables that store large data after use."
+      },
+      {
+        "type": "code",
+        "value": "const button = document.querySelector('button');\n\nfunction handleClick() {\n  alert('Clicked!');\n}\n\nbutton.addEventListener('click', handleClick);\n\n// Later, when the button is removed or no longer needed:\nbutton.removeEventListener('click', handleClick);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another tip is to avoid creating unnecessary global variables. Global variables stay in memory as long as your page is open. Instead, use local variables inside functions or blocks to limit their lifespan."
+      },
+      {
+        "type": "code",
+        "value": "function processData() {\n  let tempData = new Array(1000).fill('data');\n  // use tempData here\n  // tempData is freed once the function ends\n}\n\nprocessData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using appropriate data structures can also help. For example, use arrays or objects wisely, and delete unused object properties or clear arrays if the data is no longer required."
+      },
+      {
+        "type": "code",
+        "value": "let userData = { name: 'Alice', age: 25, tempInfo: 'temporary' };\n\n// When tempInfo is not needed:\ndelete userData.tempInfo;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If your web app processes large data, consider using techniques like lazy loading or pagination to avoid holding all data in memory at once. This keeps memory usage low and improves responsiveness."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, use browser developer tools to monitor memory usage. Most modern browsers have a Memory tab where you can take snapshots and find detached DOM nodes or memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing JavaScript memory usage involves cleaning up event listeners, limiting global variables, managing data structures carefully, and monitoring memory in dev tools. These beginner-friendly tips will help you avoid common errors and make your web apps faster and more reliable."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-for-cleaner-and-more-reusable-code",
+    "title": "Mastering TypeScript Generics for Cleaner and More Reusable Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how TypeScript generics help you write cleaner, more reusable code with beginner-friendly explanations and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are a powerful feature that allow you to write flexible, reusable code while still benefiting from type safety. If you're new to TypeScript or programming in general, understanding generics can seem challenging, but with this beginner-friendly guide, you'll master them in no time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics let you create functions, classes, or interfaces that work with any data type, rather than a single one. This helps avoid duplicating similar code for different types and makes your code more maintainable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example where generics shine: creating a function that returns the first element of an array."
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst numbers = [1, 2, 3];\nconst firstNumber = getFirstElement(numbers); // firstNumber is number\n\nconst strings = ['a', 'b', 'c'];\nconst firstString = getFirstElement(strings); // firstString is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, <T> is a generic type parameter. By using <T>, the function can adapt to arrays of any type while maintaining type safety. If you pass an array of numbers, the return type is number; if you pass an array of strings, it returns string."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use generics in interfaces and classes. Here's a simple generic interface:"
+      },
+      {
+        "type": "code",
+        "value": "interface Box<T> {\n  contents: T;\n}\n\nconst numberBox: Box<number> = { contents: 123 };\nconst stringBox: Box<string> = { contents: 'hello' };"
+      },
+      {
+        "type": "paragraph",
+        "value": "This interface allows you to create boxes holding any type of content. It's reusable and type-safe."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics become even more powerful when you use constraints. Sometimes you want to restrict generic types to those that match certain conditions. For example, let's create a function that prints the length property of any input that has it."
+      },
+      {
+        "type": "code",
+        "value": "interface HasLength {\n  length: number;\n}\n\nfunction printLength<T extends HasLength>(input: T): void {\n  console.log(input.length);\n}\n\nprintLength('hello'); // 5\nprintLength([1, 2, 3]); // 3\n// printLength(42); // Error: number doesn't have length"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, <T extends HasLength> means T must be a type that has a \"length\" property. This lets TypeScript check your code for correctness."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, generics in TypeScript allow you to:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Write functions, interfaces, and classes that work with multiple types.\n- Improve code reusability without sacrificing type safety.\n- Use constraints to restrict generics to certain shapes or capabilities."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these concepts in hand, you can write cleaner and more flexible TypeScript code. Try introducing generics into your next project and see how they can simplify your codebase!"
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-typescript-utility-types-to-catch-subtle-errors-early",
+    "title": "Harnessing TypeScript Utility Types to Catch Subtle Errors Early",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's built-in utility types to spot and fix subtle coding errors before they cause problems.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that helps us catch errors early by adding static types to JavaScript. One of its great features is the set of built-in utility types. These utility types allow you to manipulate types easily and can help you spot subtle bugs before your code runs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore some of the most helpful utility types and see how they can prevent common errors in your code. Even if you're new to TypeScript, these tools are simple to use and can make your coding more robust."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Partial<Type>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have an object with several properties, but you want to create or update it incrementally. The `Partial` utility makes all properties in a type optional. This can help avoid errors when you don't need to provide all properties at once."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Partial<User> means all properties are optional\nfunction updateUser(id: number, newData: Partial<User>) {\n  // Update user logic\n}\n\n// This is allowed because 'name' and 'email' are optional here\nupdateUser(1, { name: \"Alice\" });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Without `Partial`, you would need to provide all the fields every time you update, which can be redundant and error-prone."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Required<Type>"
+      },
+      {
+        "type": "paragraph",
+        "value": "`Required` is the opposite of `Partial`. It makes all properties in a type required. This helps catch errors where a property might unintentionally be optional."
+      },
+      {
+        "type": "code",
+        "value": "interface Config {\n  url?: string;\n  method?: string;\n}\n\n// Make all properties required\nconst fullConfig: Required<Config> = {\n  url: \"https://api.example.com\",\n  method: \"GET\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you forget a property, TypeScript will prompt an error, ensuring you don't miss required configuration values."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pick<Type, Keys> and Omit<Type, Keys>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you only need a few properties from a type, or want to exclude some. `Pick` lets you select specific keys, while `Omit` excludes keys. These utilities help reduce errors by focusing on exactly what you need."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: number;\n  name: string;\n  price: number;\n  stock: number;\n}\n\n// We only need id and name for a simple display\nconst simpleProduct: Pick<Product, \"id\" | \"name\"> = {\n  id: 1,\n  name: \"Laptop\"\n};\n\n// Or exclude stock if it isn't needed\nconst productWithoutStock: Omit<Product, \"stock\"> = {\n  id: 2,\n  name: \"Phone\",\n  price: 499\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, you avoid accidentally accessing or providing properties that shouldn't be there."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Readonly<Type>"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent accidental modifications, `Readonly` makes all properties in an object immutable. This helps catch cases where data should not be changed, avoiding bugs related to unexpected state changes."
+      },
+      {
+        "type": "code",
+        "value": "interface Settings {\n  theme: string;\n  fontSize: number;\n}\n\nconst defaultSettings: Readonly<Settings> = {\n  theme: \"dark\",\n  fontSize: 14\n};\n\n// This will cause a TypeScript error:\n// defaultSettings.theme = \"light\";"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `Readonly` can make your intentions clear and your code safer."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript utility types like `Partial`, `Required`, `Pick`, `Omit`, and `Readonly` are simple but powerful tools. They help you write clearer, safer code and catch subtle errors before they happen. Experiment with these utilities in your projects to see how they improve your development experience."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-profiling-tools-to-identify-performance-bottlenecks",
+    "title": "Mastering Python Profiling Tools to Identify Performance Bottlenecks",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python profiling tools to find and fix performance bottlenecks in your code with easy-to-understand examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=BZl6x92Px8Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When your Python program runs slowly, it can be hard to know where the problem is. Is it a slow loop? A heavy function? Python's profiling tools help you find the parts of your code that take the most time, so you can optimize them. This article introduces beginner-friendly ways to profile your Python code and interpret the results."
+      },
+      {
+        "type": "paragraph",
+        "value": "One simple and built-in tool is the `cProfile` module. It collects data about each function called during your program's execution, including time spent and how many times the function was called."
+      },
+      {
+        "type": "code",
+        "value": "import cProfile\n\ndef slow_function():\n    total = 0\n    for i in range(10**6):\n        total += i\n    return total\n\ndef main():\n    print('Starting...')\n    result = slow_function()\n    print('Result:', result)\n\n# Profile main function\ncProfile.run('main()')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code profiles the `main()` function. Running it will display a table showing each function's call count and time spent. Pay attention to the functions with the highest total time to find bottlenecks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful tool is the `timeit` module, which is great for measuring the execution time of small bits of code. It runs the code multiple times and reports the average time, helping you compare different approaches."
+      },
+      {
+        "type": "code",
+        "value": "import timeit\n\ncode1 = '''\nresult = 0\nfor i in range(1000):\n    result += i\n'''\n\ncode2 = '''\nresult = sum(range(1000))\n'''\n\nprint('Loop timing:', timeit.timeit(code1, number=1000))\nprint('Sum timing:', timeit.timeit(code2, number=1000))"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `timeit` shows that using the built-in `sum()` is usually faster than a manual loop. Comparing snippets like this helps improve performance in small sections."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more detailed analysis, you can save profiling data to a file and use visualization tools like `snakeviz` to explore your program's performance interactively. First, install snakeviz with `pip install snakeviz`."
+      },
+      {
+        "type": "code",
+        "value": "import cProfile\n\ncProfile.run('main()', 'output.prof')\n\n# Then run in terminal: snakeviz output.prof"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, remember: profiling tools help find problems, but you need to optimize wisely. Focus on slow parts that are called many times or take much time. Avoid premature optimization. Use profiling regularly for smoother and faster code!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-recursive-queries-in-sql-beyond-basic-ctes",
+    "title": "Handling Recursive Queries in SQL: Beyond Basic CTEs",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to effectively write and optimize recursive queries in SQL using advanced techniques beyond basic Common Table Expressions (CTEs).",
+    "videoUrl": "https://www.youtube.com/watch?v=m6RKbrHYY_8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive queries in SQL are a powerful way to work with hierarchical or self-referential data. Many beginners start by learning basic recursive Common Table Expressions (CTEs) to handle simple parent-child relationships. However, real-world scenarios often require more than just basic recursion. This tutorial will guide you through advanced practices for handling recursive queries, making your SQL more efficient and easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before diving deeper, let's revisit a basic recursive CTE example. Suppose we have an employee table where each employee reports to a manager. We want to find the full reporting hierarchy for a specific employee."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n  SELECT EmployeeID, ManagerID, Name, 1 AS Level\n  FROM Employees\n  WHERE EmployeeID = 5  -- Starting employee\n  \n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Name, eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.EmployeeID = eh.ManagerID\n)\nSELECT * FROM EmployeeHierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query starts with employee 5 and finds their managers up the hierarchy. Now let's explore ways to go beyond this basic example."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Limit Maximum Recursion Depth\nSometimes, recursive queries can run into infinite loops if the data has cycles or inconsistent references. Database platforms like SQL Server allow you to limit recursion depth to prevent runaway queries."
+      },
+      {
+        "type": "code",
+        "value": "OPTION (MAXRECURSION 10);\n-- Use this at the end of your recursive query to limit recursion to 10 levels\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In PostgreSQL and MySQL, you may need to manually control recursion depth using a level counter in your CTE and filtering results."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Handling Cycles Safely\nIf your hierarchical data contains cycles, your recursive query might loop endlessly. To prevent this, keep track of visited nodes by accumulating their IDs in an array or string and check for repeats."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE SafeHierarchy AS (\n  SELECT EmployeeID, ManagerID, Name, ARRAY[EmployeeID] AS Path\n  FROM Employees\n  WHERE EmployeeID = 5\n\n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Name, Path || e.EmployeeID\n  FROM Employees e\n  JOIN SafeHierarchy sh ON e.EmployeeID = sh.ManagerID\n  WHERE NOT e.EmployeeID = ANY(sh.Path)\n)\nSELECT * FROM SafeHierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This PostgreSQL example uses an array to store the path of visited employee IDs and prevents revisiting the same node."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Calculating Aggregates in Recursion\nYou can also compute aggregates such as total sales or cumulative values over a hierarchy during recursion."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE SalesHierarchy AS (\n  SELECT EmployeeID, ManagerID, Sales, Sales AS TotalSales\n  FROM Employees\n  WHERE ManagerID IS NULL  -- Top-level employees\n\n  UNION ALL\n\n  SELECT e.EmployeeID, e.ManagerID, e.Sales, sh.TotalSales + e.Sales\n  FROM Employees e\n  JOIN SalesHierarchy sh ON e.ManagerID = sh.EmployeeID\n)\nSELECT * FROM SalesHierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query sums up sales figures from managers down to individual employees."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use Recursive Queries with Indexes and Performance in Mind\nRecursive queries can become slow on large datasets. Ensure your tables have indexes on the columns used in joins (e.g., EmployeeID and ManagerID) to optimize performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nHandling recursive queries effectively means using safety checks, limiting recursion depth, calculating aggregates smartly, and optimizing for performance. As you practice, you'll be able to handle more complex hierarchical SQL problems beyond basic CTE examples."
+      }
+    ]
   }
 ];
