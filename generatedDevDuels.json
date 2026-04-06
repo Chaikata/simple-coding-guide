@@ -1,170 +1,172 @@
 [
   {
-    "slug": "fix-the-incorrect-join-condition-in-employee-salary-query",
-    "title": "Fix the Incorrect JOIN Condition in Employee Salary Query",
-    "language": "sql",
-    "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "Identify and fix the bug in the provided SQL query that calculates the total salary by department. The current query returns incorrect totals due to a faulty JOIN condition.",
-    "prompt": "You have two tables: Employees(emp_id, emp_name, dept_id, salary) and Departments(dept_id, dept_name). The goal is to write a query that returns each department name along with the total salary of its employees. The provided query is intended to do this but returns incorrect results. Fix the bug in the query so it works correctly.",
+    "slug": "advanced-task-scheduler-with-dependency-resolution",
+    "title": "Advanced Task Scheduler with Dependency Resolution",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a task scheduler function that accepts a list of asynchronous tasks with dependencies and executes them in the correct order. The scheduler must support concurrency for independent tasks and return results in dependency-resolved order.",
+    "prompt": "You are asked to implement an advanced task scheduler in JavaScript. Each task is represented by an object with an `id`, an async `run` function, and an array of `dependencies` representing task ids that must complete before this task runs. Your scheduler function receives an array of these task objects and should execute tasks while respecting dependencies. Tasks with no dependencies can run immediately. Tasks can run concurrently where dependencies allow. The scheduler must return a Promise that resolves to an array of results ordered by the completion of each task (not input order). Tasks that fail should reject the entire scheduler promise immediately with the error. \n\nRequirements:\n- Detect circular dependencies and reject with an error.\n- Maximize concurrency without violating dependencies.\n- Collect results in order of completion.\n\nImplement this scheduler function and demonstrate its usage with several tasks having varied dependencies and async durations.",
     "guidance": [
-      "Check the JOIN condition carefully to ensure employees are matched to their correct department.",
-      "Verify that aggregations (SUM) are done correctly grouped by department.",
-      "Test the query after fixing it to confirm results are as expected."
+      "Create a graph structure to track dependencies and the number of unresolved dependent tasks for each node.",
+      "Use a queue or similar structure to manage tasks ready to run (those with zero unresolved dependencies).",
+      "Run tasks concurrently but delay starting a task until all its dependencies have completed.",
+      "Use Promises to handle async execution and collect results as tasks complete."
     ],
     "hints": [
-      "The ON clause might be joining columns incorrectly or using wrong table aliases.",
-      "Ensure the GROUP BY clause correctly references the grouped columns.",
-      "Check for typos or misuse of columns in either SELECT or JOIN parts."
+      "Topological sorting algorithms like Kahn's algorithm handle dependency resolution and cycle detection.",
+      "Use a Map to store task ids to task objects for quick lookup.",
+      "Use Promise.allSettled or similar methods carefully to collect results but stop on first failure."
     ],
-    "starterCode": "SELECT d.dept_name, SUM(e.salary) AS total_salary\nFROM Employees e\nJOIN Departments d ON e.emp_id = d.dept_id\nGROUP BY d.dept_name;",
-    "expectedOutput": "A list of department names each with the sum of all employee salaries in that department, e.g.\n\n| dept_name   | total_salary |\n|-------------|--------------|\n| Sales       | 150000       |\n| Engineering | 250000       |\n| HR          | 90000        |",
+    "starterCode": "async function taskScheduler(tasks) {\n  // Your code here\n}",
+    "expectedOutput": "An array of task results in the order tasks complete successfully, or a rejection error if a cycle is detected or any task fails.",
     "concepts": [
-      "SQL JOINs",
-      "Aggregation (SUM, GROUP BY)",
-      "Debugging SQL queries"
+      "Asynchronous programming",
+      "Graph theory (dependency graphs, topological sort)",
+      "Concurrency and Promise management",
+      "Error handling in async workflows"
     ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
   },
   {
-    "slug": "implement-a-simple-task-manager-cli-in-c",
-    "title": "Implement a Simple Task Manager CLI in C++",
-    "language": "cpp",
-    "difficulty": "intermediate",
-    "category": "mini-projects",
-    "description": "Create a command-line task manager application that allows users to add, list, complete, and remove tasks stored in memory during the program session.",
-    "prompt": "Write a C++ program that manages tasks using a simple command-line interface. The program should support the following commands: add a new task with a description, list all tasks with their status (completed or pending), mark a task as completed by its ID, and remove a task by its ID. Tasks should be stored in an appropriate data structure in memory. The program should keep running until the user types \"exit\".",
+    "slug": "create-a-simple-library-database-schema-with-tables-and-queries",
+    "title": "Create a Simple Library Database Schema with Tables and Queries",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a basic SQL schema for a library system and write queries to retrieve information about books and authors.",
+    "prompt": "Create two tables: 'Authors' and 'Books'. The 'Authors' table should include columns for 'AuthorID' (primary key) and 'AuthorName'. The 'Books' table should include columns for 'BookID' (primary key), 'Title', and 'AuthorID' (foreign key referencing 'Authors'). Then, write an SQL query that lists all book titles along with their author names.",
     "guidance": [
-      "Use a vector or list of structs/classes to store tasks with an ID, description, and completion status.",
-      "Create a loop to continuously read user input and process commands.",
-      "Implement functions for each command to keep code organized and modular."
+      "Define primary keys for each table appropriately.",
+      "Ensure the foreign key relationship between 'Books' and 'Authors' is correct.",
+      "Write a SELECT query joining both tables to display each book title with its corresponding author."
     ],
     "hints": [
-      "Consider using a struct or class named Task with fields like `id`, `description`, and `completed`.",
-      "You can assign incremental IDs to new tasks starting from 1 for easier reference.",
-      "Remember to check if the task ID exists before marking or removing to avoid errors."
+      "Use 'CREATE TABLE' statements to define the tables with columns and data types.",
+      "Use 'INNER JOIN' to connect the 'Books' table to the 'Authors' table on 'AuthorID'.",
+      "Remember to use aliases for tables to make the SELECT query easier to read."
     ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Task {\n    int id;\n    std::string description;\n    bool completed;\n};\n\nint main() {\n    std::vector<Task> tasks;\n    std::string command;\n    // Your code here\n    return 0;\n}",
-    "expectedOutput": "Commands should be handled interactively. Example session:\n\n> add Buy groceries\nTask added with ID 1\n> add Finish homework\nTask added with ID 2\n> list\n1. [ ] Buy groceries\n2. [ ] Finish homework\n> complete 1\nTask 1 marked as completed.\n> list\n1. [x] Buy groceries\n2. [ ] Finish homework\n> remove 2\nTask 2 removed.\n> list\n1. [x] Buy groceries\n> exit\nProgram ends.",
+    "starterCode": "CREATE TABLE Authors (\n  AuthorID INT PRIMARY KEY,\n  AuthorName VARCHAR(100)\n);\n\nCREATE TABLE Books (\n  BookID INT PRIMARY KEY,\n  Title VARCHAR(200),\n  AuthorID INT,\n  FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)\n);\n\n-- Write your query below\n",
+    "expectedOutput": "Title           | AuthorName\n----------------|----------------\nHarry Potter    | J.K. Rowling\nThe Hobbit     | J.R.R. Tolkien\nTo Kill a Mockingbird | Harper Lee",
     "concepts": [
-      "structs and classes",
-      "vectors",
-      "command line input/output",
-      "loops",
-      "conditionals"
+      "SQL CREATE TABLE",
+      "Primary Key",
+      "Foreign Key",
+      "JOIN"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-task-management-app-with-javascript",
+    "title": "Build a Task Management App with JavaScript",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a simple task management mini-project where users can add, mark complete, and delete tasks dynamically using JavaScript arrays and DOM manipulation.",
+    "prompt": "Build a task management app that allows users to: (1) add new tasks with a task description, (2) toggle completion status of any task, and (3) delete tasks. The app should maintain an array of task objects, each with a description and a completed status. Render the task list dynamically based on this array. Whenever a task is toggled or deleted, update the array and re-render the list to reflect the changes.",
+    "guidance": [
+      "Use an array of objects to store the tasks; each object should contain 'description' and 'completed' properties.",
+      "Create functions to handle adding tasks, toggling the completed state, and deleting tasks.",
+      "Use event delegation or attach event listeners dynamically to handle user interactions on task items.",
+      "Each time the task list changes, re-render the task list in the DOM to keep it in sync with the array."
+    ],
+    "hints": [
+      "Consider using the array methods like push, filter, and map to manipulate task data.",
+      "Use `element.innerHTML` or DOM methods to generate the task list with appropriate CSS classes to show completed tasks.",
+      "To toggle completion, invert the boolean value of the 'completed' property for the targeted task object."
+    ],
+    "starterCode": "function TaskManager() {\n  this.tasks = [];\n\n  this.addTask = function(description) {\n    // Add your code here\n  };\n\n  this.toggleTask = function(index) {\n    // Add your code here\n  };\n\n  this.deleteTask = function(index) {\n    // Add your code here\n  };\n\n  this.render = function() {\n    // Add your code here to dynamically update the displayed task list\n  };\n\n}\n\nconst taskManager = new TaskManager();\n\n// Example usage:\n// taskManager.addTask('Learn JavaScript');\n// taskManager.render();",
+    "expectedOutput": "When tasks are added, toggled, or deleted, the rendered list updates dynamically. Completed tasks are visually distinct (for example, crossed out or greyed out). Deleting a task removes it from the list. Adding a task appends it to the bottom of the list.",
+    "concepts": [
+      "arrays",
+      "DOM manipulation",
+      "event handling",
+      "object management"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "refactor-complex-data-aggregation-for-readability-and-performance-in-python",
-    "title": "Refactor Complex Data Aggregation for Readability and Performance in Python",
+    "slug": "predict-the-output-of-complex-recursive-function-with-memoization-in-javascript",
+    "title": "Predict the Output of Complex Recursive Function with Memoization in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a recursive JavaScript function that uses memoization and array transformations. Predict the output when the function is called with a specific argument.",
+    "prompt": "Given the following JavaScript code which defines a recursive function that calculates a custom sequence with memoization and array transformations, predict the exact output of calling computeSequence(5). Explain your reasoning step-by-step.",
+    "guidance": [
+      "Carefully trace the recursive calls and the memoization cache's population.",
+      "Understand the use of array methods like map, reduce, and how they transform values at each recursion depth."
+    ],
+    "hints": [
+      "Break down the function into smaller parts: focus first on the base case, then on the recursive case.",
+      "Visualize or write down intermediate cache states after each call."
+    ],
+    "starterCode": "function computeSequence(n, memo = {}) {\n  if (n <= 1) return [n];\n  if (memo[n]) return memo[n];\n\n  const prev = computeSequence(n - 1, memo);\n  const transformed = prev.map(x => x * n);\n  const sum = transformed.reduce((acc, val) => acc + val, 0);\n\n  memo[n] = [...prev, sum];\n  return memo[n];\n}\n\nconsole.log(computeSequence(5));",
+    "expectedOutput": "[0, 1, 3, 12, 60, 360]",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "array transformation",
+      "reduce method"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-off-by-one-error-in-loop-summation",
+    "title": "Fix the Off-By-One Error in Loop Summation",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Debug a simple function in C++ that aims to sum integers from 1 to n but produces incorrect results due to an off-by-one error in the loop.",
+    "prompt": "The provided C++ function sumUpTo attempts to calculate the sum of all integers from 1 up to a given number n (inclusive). However, the function currently returns incorrect outputs. Identify and correct the bug in the loop to ensure the function returns the correct summation.",
+    "guidance": [
+      "Check the loop boundaries carefully — is the loop iterating the correct number of times?",
+      "Remember that loops usually start at zero or one depending on the problem; verify that your loop aligns with the summation requirement.",
+      "Test the function with small values of n such as 1, 2, and 3 to verify correctness."
+    ],
+    "hints": [
+      "The existing loop stops one iteration too early, so adjust the loop condition.",
+      "Consider whether the comparison operator '<' or '<=' is appropriate in the for loop condition."
+    ],
+    "starterCode": "int sumUpTo(int n) {\n    int sum = 0;\n    for (int i = 1; i < n; ++i) {\n        sum += i;\n    }\n    return sum;\n}",
+    "expectedOutput": "sumUpTo(3) should return 6 (1 + 2 + 3 = 6)",
+    "concepts": [
+      "loops",
+      "for loop",
+      "off-by-one error",
+      "basic arithmetic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-recursive-nested-dictionary-merge-with-side-effects",
+    "title": "Predict the Output of Recursive Nested Dictionary Merge with Side Effects",
     "language": "python",
     "difficulty": "advanced",
-    "category": "code-quality",
-    "description": "You are given a Python function that processes a nested list of sales data to compute total sales per product category, but the code is messy, hard to read, and inefficient. Refactor the function to improve code quality without changing its behavior.",
-    "prompt": "The provided function takes a list of sales records where each record is a dictionary containing 'category', 'product', and 'amount'. It calculates the total sales amount per category. The current implementation uses nested loops, redundant variables, and repeated conditional checks, resulting in unmaintainable and suboptimal code. Refactor this function to enhance readability, reduce complexity, and improve performance while preserving the exact output.",
+    "category": "logic",
+    "description": "Analyze the given Python function that performs a recursive merge of nested dictionaries with side effects on mutable inputs. Predict the exact output of the code including the final printed dictionaries.",
+    "prompt": "Given the following Python code which merges two dictionaries recursively, with in-place modifications, predict the printed output after calling merge_dicts on two nested dictionaries with overlapping keys.",
     "guidance": [
-      "Preserve the output structure: a dictionary mapping each category to its total sales amount.",
-      "Use built-in Python features like collections.defaultdict or itertools to simplify aggregation.",
-      "Avoid repeated lookups and redundant variables to reduce computational overhead."
+      "Understand how recursion is used to merge dictionaries at nested levels.",
+      "Pay close attention to in-place mutations versus copied values.",
+      "Trace the dictionary references carefully to see which parts get modified."
     ],
     "hints": [
-      "Consider using defaultdict from the collections module to remove the need for manual key checks.",
-      "Replace nested loops with comprehensions or functions that process data in a single pass.",
-      "Focus on writing clear, descriptive variable names and modular code."
+      "Remember that updating a dictionary in-place affects all references to that dictionary.",
+      "Consider cases where values are dictionaries in both dicts vs. non-dictionary keys.",
+      "Keep track of how new keys are added and how existing keys are overwritten."
     ],
-    "starterCode": "def calculate_total_sales(sales_data):\n    result = {}\n    for record in sales_data:\n        category = record['category']\n        amount = record['amount']\n        if category not in result:\n            result[category] = 0\n        current_total = result[category]\n        for other_record in sales_data:\n            if other_record['category'] == category:\n                current_total += other_record['amount']\n        result[category] = current_total\n    return result",
-    "expectedOutput": "{'electronics': 4500, 'furniture': 2700, 'clothing': 1200}",
+    "starterCode": "def merge_dicts(d1, d2):\n    for k, v in d2.items():\n        if k in d1:\n            if isinstance(d1[k], dict) and isinstance(v, dict):\n                merge_dicts(d1[k], v)\n            else:\n                d1[k] = v\n        else:\n            d1[k] = v\n    return d1\n\n\na = {'x': 1, 'y': {'a': 10, 'b': 20}}\nb = {'y': {'b': 30, 'c': 40}, 'z': 3}\n\nresult = merge_dicts(a, b)\nprint('a:', a)\nprint('b:', b)\nprint('result:', result)",
+    "expectedOutput": "a: {'x': 1, 'y': {'a': 10, 'b': 30, 'c': 40}, 'z': 3}\nb: {'y': {'b': 30, 'c': 40}, 'z': 3}\nresult: {'x': 1, 'y': {'a': 10, 'b': 30, 'c': 40}, 'z': 3}",
     "concepts": [
-      "code refactoring",
-      "dictionary aggregation",
-      "collections.defaultdict",
-      "performance optimization"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "simple-console-budget-tracker-in-c",
-    "title": "Simple Console Budget Tracker in C++",
-    "language": "cpp",
-    "difficulty": "beginner",
-    "category": "mini-projects",
-    "description": "Build a beginner-friendly console application that helps users track their daily expenses and remaining budget.",
-    "prompt": "Create a C++ program that allows the user to enter their total budget for a day and then input multiple expenses one by one. After each expense, display the remaining budget. The user should be able to stop entering expenses by typing a sentinel value (e.g., 0). When the user finishes, display the total expenses and how much budget remains (or if they have overspent).",
-    "guidance": [
-      "Use a loop to continuously accept expense inputs until the user enters 0.",
-      "Maintain variables to keep track of total expenses and remaining budget.",
-      "Use simple input/output statements to interact with the user."
-    ],
-    "hints": [
-      "Initialize total expenses to 0 before starting to take inputs.",
-      "Subtract each expense from the remaining budget after input.",
-      "Check if the input is the sentinel value (0) inside the loop to stop taking expenses."
-    ],
-    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double budget, expense, totalExpenses = 0;\n\n    cout << \"Enter your total budget for the day: \";\n    cin >> budget;\n\n    cout << \"Enter your expenses one by one (enter 0 to finish):\\n\";\n    while (true) {\n        cin >> expense;\n        // Your code to process each expense goes here\n    }\n\n    // Output total expenses and remaining budget\n    \n    return 0;\n}",
-    "expectedOutput": "Enter your total budget for the day: 100\nEnter your expenses one by one (enter 0 to finish):\n20\nRemaining budget: 80\n15.50\nRemaining budget: 64.5\n0\nTotal expenses: 35.5\nRemaining budget: 64.5",
-    "concepts": [
-      "variables",
-      "loops",
-      "conditionals",
-      "basic I/O"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "refactor-nested-loops-to-improve-code-readability-and-efficiency",
-    "title": "Refactor Nested Loops to Improve Code Readability and Efficiency",
-    "language": "python",
-    "difficulty": "intermediate",
-    "category": "code-quality",
-    "description": "Refactor the given Python function that uses nested loops to find common elements between two lists. Improve its readability and performance without changing its behavior.",
-    "prompt": "You are given a function that finds all common elements between two lists by using nested loops. While this approach works, it is not efficient and the code is harder to read. Refactor the function to produce the same result but improve its readability and performance. Do not change the function signature or the output format.",
-    "guidance": [
-      "Aim to reduce the time complexity by avoiding nested loops where possible.",
-      "Improve code readability by using meaningful variable names and simpler constructs.",
-      "Keep the output in the same order as the original function."
-    ],
-    "hints": [
-      "Consider using Python sets to eliminate the need for nested loops.",
-      "Remember that converting lists to sets can improve lookup speed drastically."
-    ],
-    "starterCode": "def common_elements(list1, list2):\n    result = []\n    for i in list1:\n        for j in list2:\n            if i == j:\n                if i not in result:\n                    result.append(i)\n    return result",
-    "expectedOutput": "[2, 4]",
-    "concepts": [
-      "refactoring",
-      "performance optimization",
-      "data structures (sets and lists)"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-to-optimize-a-basic-employee-salary-query",
-    "title": "Refactor to Optimize a Basic Employee Salary Query",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "optimization",
-    "description": "Improve the given SQL query that retrieves employee names and salaries, by refactoring it to be more efficient while keeping the result unchanged.",
-    "prompt": "You have the following SQL query that selects employee names and their salaries from the Employees table, but it includes redundant operations that can be optimized. Refactor the query to produce the same output but with simplified and more efficient SQL syntax.",
-    "guidance": [
-      "Look for unnecessary subqueries or repeated table scans.",
-      "Try to simplify logic like filtering or selecting columns directly."
-    ],
-    "hints": [
-      "Avoid using a subquery if the same results can be achieved with a simpler SELECT.",
-      "Check if filtering conditions can be applied directly without nested queries."
-    ],
-    "starterCode": "SELECT name, salary FROM (SELECT * FROM Employees) AS emp WHERE salary > 30000;",
-    "expectedOutput": "A list of employee names and their salaries where salary is greater than 30000.",
-    "concepts": [
-      "SELECT",
-      "WHERE clause",
-      "subqueries",
-      "query optimization"
+      "recursion",
+      "dictionary mutation",
+      "nested data structures"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true

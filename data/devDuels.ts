@@ -5471,5 +5471,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "advanced-task-scheduler-with-dependency-resolution",
+    "title": "Advanced Task Scheduler with Dependency Resolution",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a task scheduler function that accepts a list of asynchronous tasks with dependencies and executes them in the correct order. The scheduler must support concurrency for independent tasks and return results in dependency-resolved order.",
+    "prompt": "You are asked to implement an advanced task scheduler in JavaScript. Each task is represented by an object with an `id`, an async `run` function, and an array of `dependencies` representing task ids that must complete before this task runs. Your scheduler function receives an array of these task objects and should execute tasks while respecting dependencies. Tasks with no dependencies can run immediately. Tasks can run concurrently where dependencies allow. The scheduler must return a Promise that resolves to an array of results ordered by the completion of each task (not input order). Tasks that fail should reject the entire scheduler promise immediately with the error. \n\nRequirements:\n- Detect circular dependencies and reject with an error.\n- Maximize concurrency without violating dependencies.\n- Collect results in order of completion.\n\nImplement this scheduler function and demonstrate its usage with several tasks having varied dependencies and async durations.",
+    "guidance": [
+      "Create a graph structure to track dependencies and the number of unresolved dependent tasks for each node.",
+      "Use a queue or similar structure to manage tasks ready to run (those with zero unresolved dependencies).",
+      "Run tasks concurrently but delay starting a task until all its dependencies have completed.",
+      "Use Promises to handle async execution and collect results as tasks complete."
+    ],
+    "hints": [
+      "Topological sorting algorithms like Kahn's algorithm handle dependency resolution and cycle detection.",
+      "Use a Map to store task ids to task objects for quick lookup.",
+      "Use Promise.allSettled or similar methods carefully to collect results but stop on first failure."
+    ],
+    "starterCode": "async function taskScheduler(tasks) {\n  // Your code here\n}",
+    "expectedOutput": "An array of task results in the order tasks complete successfully, or a rejection error if a cycle is detected or any task fails.",
+    "concepts": [
+      "Asynchronous programming",
+      "Graph theory (dependency graphs, topological sort)",
+      "Concurrency and Promise management",
+      "Error handling in async workflows"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-simple-library-database-schema-with-tables-and-queries",
+    "title": "Create a Simple Library Database Schema with Tables and Queries",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a basic SQL schema for a library system and write queries to retrieve information about books and authors.",
+    "prompt": "Create two tables: 'Authors' and 'Books'. The 'Authors' table should include columns for 'AuthorID' (primary key) and 'AuthorName'. The 'Books' table should include columns for 'BookID' (primary key), 'Title', and 'AuthorID' (foreign key referencing 'Authors'). Then, write an SQL query that lists all book titles along with their author names.",
+    "guidance": [
+      "Define primary keys for each table appropriately.",
+      "Ensure the foreign key relationship between 'Books' and 'Authors' is correct.",
+      "Write a SELECT query joining both tables to display each book title with its corresponding author."
+    ],
+    "hints": [
+      "Use 'CREATE TABLE' statements to define the tables with columns and data types.",
+      "Use 'INNER JOIN' to connect the 'Books' table to the 'Authors' table on 'AuthorID'.",
+      "Remember to use aliases for tables to make the SELECT query easier to read."
+    ],
+    "starterCode": "CREATE TABLE Authors (\n  AuthorID INT PRIMARY KEY,\n  AuthorName VARCHAR(100)\n);\n\nCREATE TABLE Books (\n  BookID INT PRIMARY KEY,\n  Title VARCHAR(200),\n  AuthorID INT,\n  FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)\n);\n\n-- Write your query below\n",
+    "expectedOutput": "Title           | AuthorName\n----------------|----------------\nHarry Potter    | J.K. Rowling\nThe Hobbit     | J.R.R. Tolkien\nTo Kill a Mockingbird | Harper Lee",
+    "concepts": [
+      "SQL CREATE TABLE",
+      "Primary Key",
+      "Foreign Key",
+      "JOIN"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-task-management-app-with-javascript",
+    "title": "Build a Task Management App with JavaScript",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a simple task management mini-project where users can add, mark complete, and delete tasks dynamically using JavaScript arrays and DOM manipulation.",
+    "prompt": "Build a task management app that allows users to: (1) add new tasks with a task description, (2) toggle completion status of any task, and (3) delete tasks. The app should maintain an array of task objects, each with a description and a completed status. Render the task list dynamically based on this array. Whenever a task is toggled or deleted, update the array and re-render the list to reflect the changes.",
+    "guidance": [
+      "Use an array of objects to store the tasks; each object should contain 'description' and 'completed' properties.",
+      "Create functions to handle adding tasks, toggling the completed state, and deleting tasks.",
+      "Use event delegation or attach event listeners dynamically to handle user interactions on task items.",
+      "Each time the task list changes, re-render the task list in the DOM to keep it in sync with the array."
+    ],
+    "hints": [
+      "Consider using the array methods like push, filter, and map to manipulate task data.",
+      "Use `element.innerHTML` or DOM methods to generate the task list with appropriate CSS classes to show completed tasks.",
+      "To toggle completion, invert the boolean value of the 'completed' property for the targeted task object."
+    ],
+    "starterCode": "function TaskManager() {\n  this.tasks = [];\n\n  this.addTask = function(description) {\n    // Add your code here\n  };\n\n  this.toggleTask = function(index) {\n    // Add your code here\n  };\n\n  this.deleteTask = function(index) {\n    // Add your code here\n  };\n\n  this.render = function() {\n    // Add your code here to dynamically update the displayed task list\n  };\n\n}\n\nconst taskManager = new TaskManager();\n\n// Example usage:\n// taskManager.addTask('Learn JavaScript');\n// taskManager.render();",
+    "expectedOutput": "When tasks are added, toggled, or deleted, the rendered list updates dynamically. Completed tasks are visually distinct (for example, crossed out or greyed out). Deleting a task removes it from the list. Adding a task appends it to the bottom of the list.",
+    "concepts": [
+      "arrays",
+      "DOM manipulation",
+      "event handling",
+      "object management"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-complex-recursive-function-with-memoization-in-javascript",
+    "title": "Predict the Output of Complex Recursive Function with Memoization in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a recursive JavaScript function that uses memoization and array transformations. Predict the output when the function is called with a specific argument.",
+    "prompt": "Given the following JavaScript code which defines a recursive function that calculates a custom sequence with memoization and array transformations, predict the exact output of calling computeSequence(5). Explain your reasoning step-by-step.",
+    "guidance": [
+      "Carefully trace the recursive calls and the memoization cache's population.",
+      "Understand the use of array methods like map, reduce, and how they transform values at each recursion depth."
+    ],
+    "hints": [
+      "Break down the function into smaller parts: focus first on the base case, then on the recursive case.",
+      "Visualize or write down intermediate cache states after each call."
+    ],
+    "starterCode": "function computeSequence(n, memo = {}) {\n  if (n <= 1) return [n];\n  if (memo[n]) return memo[n];\n\n  const prev = computeSequence(n - 1, memo);\n  const transformed = prev.map(x => x * n);\n  const sum = transformed.reduce((acc, val) => acc + val, 0);\n\n  memo[n] = [...prev, sum];\n  return memo[n];\n}\n\nconsole.log(computeSequence(5));",
+    "expectedOutput": "[0, 1, 3, 12, 60, 360]",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "array transformation",
+      "reduce method"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-off-by-one-error-in-loop-summation",
+    "title": "Fix the Off-By-One Error in Loop Summation",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Debug a simple function in C++ that aims to sum integers from 1 to n but produces incorrect results due to an off-by-one error in the loop.",
+    "prompt": "The provided C++ function sumUpTo attempts to calculate the sum of all integers from 1 up to a given number n (inclusive). However, the function currently returns incorrect outputs. Identify and correct the bug in the loop to ensure the function returns the correct summation.",
+    "guidance": [
+      "Check the loop boundaries carefully — is the loop iterating the correct number of times?",
+      "Remember that loops usually start at zero or one depending on the problem; verify that your loop aligns with the summation requirement.",
+      "Test the function with small values of n such as 1, 2, and 3 to verify correctness."
+    ],
+    "hints": [
+      "The existing loop stops one iteration too early, so adjust the loop condition.",
+      "Consider whether the comparison operator '<' or '<=' is appropriate in the for loop condition."
+    ],
+    "starterCode": "int sumUpTo(int n) {\n    int sum = 0;\n    for (int i = 1; i < n; ++i) {\n        sum += i;\n    }\n    return sum;\n}",
+    "expectedOutput": "sumUpTo(3) should return 6 (1 + 2 + 3 = 6)",
+    "concepts": [
+      "loops",
+      "for loop",
+      "off-by-one error",
+      "basic arithmetic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-recursive-nested-dictionary-merge-with-side-effects",
+    "title": "Predict the Output of Recursive Nested Dictionary Merge with Side Effects",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze the given Python function that performs a recursive merge of nested dictionaries with side effects on mutable inputs. Predict the exact output of the code including the final printed dictionaries.",
+    "prompt": "Given the following Python code which merges two dictionaries recursively, with in-place modifications, predict the printed output after calling merge_dicts on two nested dictionaries with overlapping keys.",
+    "guidance": [
+      "Understand how recursion is used to merge dictionaries at nested levels.",
+      "Pay close attention to in-place mutations versus copied values.",
+      "Trace the dictionary references carefully to see which parts get modified."
+    ],
+    "hints": [
+      "Remember that updating a dictionary in-place affects all references to that dictionary.",
+      "Consider cases where values are dictionaries in both dicts vs. non-dictionary keys.",
+      "Keep track of how new keys are added and how existing keys are overwritten."
+    ],
+    "starterCode": "def merge_dicts(d1, d2):\n    for k, v in d2.items():\n        if k in d1:\n            if isinstance(d1[k], dict) and isinstance(v, dict):\n                merge_dicts(d1[k], v)\n            else:\n                d1[k] = v\n        else:\n            d1[k] = v\n    return d1\n\n\na = {'x': 1, 'y': {'a': 10, 'b': 20}}\nb = {'y': {'b': 30, 'c': 40}, 'z': 3}\n\nresult = merge_dicts(a, b)\nprint('a:', a)\nprint('b:', b)\nprint('result:', result)",
+    "expectedOutput": "a: {'x': 1, 'y': {'a': 10, 'b': 30, 'c': 40}, 'z': 3}\nb: {'y': {'b': 30, 'c': 40}, 'z': 3}\nresult: {'x': 1, 'y': {'a': 10, 'b': 30, 'c': 40}, 'z': 3}",
+    "concepts": [
+      "recursion",
+      "dictionary mutation",
+      "nested data structures"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
