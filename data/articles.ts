@@ -42882,5 +42882,319 @@ export const articles = [
         "value": "By following these simple guidelines, you can avoid common pitfalls and make your time zone related SQL queries more reliable and accurate."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-destructuring-unlocking-cleaner-code-with-practical-examples",
+    "title": "Mastering JavaScript Destructuring: Unlocking Cleaner Code with Practical Examples",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript destructuring to write cleaner and more readable code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=UgEaJBz3bjY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript destructuring is a powerful feature that allows you to extract values from arrays or objects and assign them to variables in a concise way. This can make your code cleaner, easier to read, and reduce the amount of code you write. In this tutorial, you will learn the basics of destructuring and see practical examples so you can start applying it in your projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with array destructuring. Suppose you have an array of fruits and you want to assign each fruit to a variable:"
+      },
+      {
+        "type": "code",
+        "value": "const fruits = ['apple', 'banana', 'orange'];\n\n// Without destructuring\nconst first = fruits[0];\nconst second = fruits[1];\nconst third = fruits[2];\n\n// With destructuring\nconst [firstFruit, secondFruit, thirdFruit] = fruits;\n\nconsole.log(firstFruit);  // apple\nconsole.log(secondFruit); // banana\nconsole.log(thirdFruit);  // orange"
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, destructuring makes your code shorter and easier to understand. You can also skip certain values by leaving gaps:"
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [10, 20, 30, 40];\nconst [firstNum, , thirdNum] = numbers;\n\nconsole.log(firstNum);  // 10\nconsole.log(thirdNum);  // 30"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's look at object destructuring. Objects often have multiple properties, and destructuring helps extract these properties without repeating the object name:"
+      },
+      {
+        "type": "code",
+        "value": "const person = {\n  name: 'Alice',\n  age: 25,\n  city: 'New York'\n};\n\n// Without destructuring\nconst name1 = person.name;\nconst age1 = person.age;\n\n// With destructuring\nconst { name, age, city } = person;\n\nconsole.log(name); // Alice\nconsole.log(age);  // 25\nconsole.log(city); // New York"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also rename variables when destructuring to avoid name conflicts or for clarity:"
+      },
+      {
+        "type": "code",
+        "value": "const { name: fullName, age: years } = person;\n\nconsole.log(fullName); // Alice\nconsole.log(years);    // 25"
+      },
+      {
+        "type": "paragraph",
+        "value": "Destructuring works great with default values, so you can provide fallback values if a property does not exist:"
+      },
+      {
+        "type": "code",
+        "value": "const { country = 'USA' } = person;\n\nconsole.log(country); // USA"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also destructure function parameters to directly access properties of an object passed as an argument. This makes your functions cleaner:"
+      },
+      {
+        "type": "code",
+        "value": "function greet({ name, city }) {\n  console.log(`Hello, ${name} from ${city}!`);\n}\n\ngreet(person); // Hello, Alice from New York!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, remember you can combine array and object destructuring for more complex data structures. Here's an example with an array of objects:"
+      },
+      {
+        "type": "code",
+        "value": "const users = [\n  { id: 1, username: 'john' },\n  { id: 2, username: 'jane' }\n];\n\nconst [user1, user2] = users;\nconsole.log(user1.username); // john\nconsole.log(user2.username); // jane"
+      },
+      {
+        "type": "paragraph",
+        "value": "Destructuring is a simple but powerful tool that helps you write cleaner and more maintainable JavaScript code. Start using it today, and you'll notice your code becoming easier to understand and less repetitive."
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-errors-javascript",
+    "title": "Handling Floating Point Precision Errors in JavaScript: Best Practices and Solutions",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle floating point precision errors in JavaScript with beginner-friendly explanations, common issues, and practical solutions to write more accurate code.",
+    "videoUrl": "https://www.youtube.com/watch?v=38dmbYWrOV0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Floating point numbers in JavaScript can sometimes cause unexpected results because of how numbers are stored in binary. This issue, known as floating point precision error, often appears during arithmetic operations, especially with decimals. For beginners, this can be confusing when simple calculations like 0.1 + 0.2 don’t equal 0.3 exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example to understand this problem better."
+      },
+      {
+        "type": "code",
+        "value": "console.log(0.1 + 0.2 === 0.3); // returns false\nconsole.log(0.1 + 0.2);        // outputs 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, adding 0.1 and 0.2 doesn’t exactly equal 0.3 due to floating point precision limitations. This happens because JavaScript uses the IEEE 754 standard for storing numbers, which sometimes can't perfectly represent decimals."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some best practices and solutions to handle floating point precision errors in your JavaScript code:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use toFixed() Method**: This method formats a number to a fixed number of decimal places and returns it as a string. It's useful for displaying results, but keep in mind that the output is a string, so convert it back to a number if needed."
+      },
+      {
+        "type": "code",
+        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2)); // \"0.30\"\nconsole.log(Number(sum.toFixed(2))); // 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Multiply and Divide**: A common trick is to convert decimals to integers by multiplying, perform the operation, then divide back."
+      },
+      {
+        "type": "code",
+        "value": "const sum = (0.1 * 10 + 0.2 * 10) / 10;\nconsole.log(sum === 0.3); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use the Number.EPSILON Property**: This represents the smallest interval between two representable numbers. You can use it to compare floating point numbers instead of direct equality."
+      },
+      {
+        "type": "code",
+        "value": "function isEqual(a, b) {\n  return Math.abs(a - b) < Number.EPSILON;\n}\n\nconsole.log(isEqual(0.1 + 0.2, 0.3)); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use External Libraries**: For complex calculations, libraries like decimal.js or math.js provide arbitrary-precision arithmetic and handle floating point errors for you."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, floating point precision errors are a common quirk in JavaScript, but you can handle them effectively using built-in methods, simple arithmetic tricks, or specialized libraries. Being aware of this will make your numerical computations much more accurate and reliable."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-structural-type-system-vs-nominal-typing-errors",
+    "title": "Understanding TypeScript's Structural Type System vs. Nominal Typing Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn the key differences between TypeScript's structural type system and nominal typing, with a focus on common errors and how to fix them.",
+    "videoUrl": "https://www.youtube.com/watch?v=MbZoQlmQaWQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript uses a structural type system, which means compatibility between types is based on the shape or structure of the data, rather than its explicit name or declaration. This contrasts with nominal typing used in some other languages, where type compatibility depends on explicit declarations or names."
+      },
+      {
+        "type": "paragraph",
+        "value": "In a structural type system, if two types have the same properties and types, they are considered compatible, even if they are declared separately. This can sometimes cause confusion for beginners coming from nominally typed languages, especially when expecting type errors that do not occur, or when nominal typing would catch certain mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example illustrating structural typing in TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "interface Point {\n  x: number;\n  y: number;\n}\n\ninterface Coordinate {\n  x: number;\n  y: number;\n}\n\nfunction logPoint(p: Point) {\n  console.log(`${p.x}, ${p.y}`);\n}\n\nconst coord: Coordinate = { x: 10, y: 20 };\nlogPoint(coord); // Works because coord and Point have the same structure"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though `Point` and `Coordinate` are different interfaces, TypeScript allows passing a `Coordinate` to a function expecting a `Point` because their structures match."
+      },
+      {
+        "type": "paragraph",
+        "value": "In contrast, nominal typing would require explicit inheritance or declaration to treat these two types as compatible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, developers want nominal typing to prevent mixing different types with the same structure. TypeScript doesn’t have built-in nominal typing, but you can simulate it using techniques such as \"branding\":"
+      },
+      {
+        "type": "code",
+        "value": "// Simulating nominal typing using branding\ntype UserId = string & { readonly brand: unique symbol };\ntype OrderId = string & { readonly brand: unique symbol };\n\nfunction createUserId(id: string): UserId {\n  return id as UserId;\n}\n\nfunction createOrderId(id: string): OrderId {\n  return id as OrderId;\n}\n\nfunction getUser(id: UserId) {\n  console.log(`User ID: ${id}`);\n}\n\nconst userId = createUserId(\"abc123\");\nconst orderId = createOrderId(\"xyz789\");\n\ngetUser(userId); // Works\n// getUser(orderId); // Error: Argument of type 'OrderId' is not assignable to parameter of type 'UserId'."
+      },
+      {
+        "type": "paragraph",
+        "value": "By adding a unique \"brand\" property with `unique symbol`, you help TypeScript distinguish types that are structurally identical but logically different, preventing mixing them up and catching errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- TypeScript uses structural typing, meaning types are compatible if their shapes match.\n- This enables flexibility but can cause confusion if you expect nominal type checks.\n- To simulate nominal typing, you can use branding techniques to make types incompatible unless explicitly converted.\n- Understanding this difference helps you avoid type errors and design more robust TypeScript programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "With this knowledge, you'll better understand TypeScript errors related to type compatibility and how to design types that reflect your intended logic."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-hierarchy-error-handling",
+    "title": "Mastering Python's Exception Hierarchy for Smarter Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's exception hierarchy to handle errors effectively and write robust code.",
+    "videoUrl": "https://www.youtube.com/watch?v=Lay3pQF3I3c",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling errors gracefully is an essential skill for any Python programmer. Python uses exceptions to indicate errors that occur during program execution. Understanding Python's exception hierarchy enables you to write smarter error handling code by catching specific errors and responding appropriately."
+      },
+      {
+        "type": "paragraph",
+        "value": "At the top of Python's exception hierarchy is the built-in Exception class. All standard exceptions inherit from it. Here is a simplified view of the hierarchy:\n\n- BaseException (top-level, rarely caught except for system-exit cases)\n  - Exception (base for most user-defined and standard exceptions)\n    - ArithmeticError (includes ZeroDivisionError)\n    - LookupError (includes IndexError, KeyError)\n    - ValueError\n    - TypeError\n    - IOError (now often OSError)\n    - and many more"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you write a try-except block, you often want to catch only the errors you expect and handle them properly rather than catching all exceptions blindly. Catching specific exceptions makes your code clearer and avoids masking bugs."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input('Enter a number: '))\n    result = 10 / number\n    print(f'Result is {result}')\nexcept ZeroDivisionError:\n    print('Error: You cannot divide by zero.')\nexcept ValueError:\n    print('Error: Please enter a valid integer.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above example, we specifically catch ZeroDivisionError and ValueError. This means if the user enters zero, it handles division by zero gracefully. If the input isn't a number, it informs the user accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also catch multiple exceptions in one except block by grouping them in parentheses. This is useful when you want to handle different exceptions in the same way."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    data = {'apple': 5}\n    fruit = input('Enter fruit to buy: ')\n    count = int(input('How many? '))\n    print(f'Cost: {data[fruit] * count}')\nexcept (KeyError, ValueError) as e:\n    print(f'Error: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding the exception hierarchy also helps when creating your own custom exceptions. Custom exceptions typically inherit from Exception or its subclasses, making your error handling consistent."
+      },
+      {
+        "type": "code",
+        "value": "class MyCustomError(Exception):\n    pass\n\ntry:\n    raise MyCustomError('Something went wrong!')\nexcept MyCustomError as e:\n    print(f'Caught custom error: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering Python's exception hierarchy helps you:\n\n- Handle errors more precisely\n- Avoid catching unexpected exceptions\n- Write cleaner, more maintainable code\n- Create meaningful custom exceptions\n\nStart using specific exceptions in your try-except blocks to write smarter and more robust Python programs!"
+      }
+    ]
+  },
+  {
+    "slug": "unlocking-the-power-of-window-functions-advanced-sql-tricks-for-analytical-queries",
+    "title": "Unlocking the Power of Window Functions: Advanced SQL Tricks for Analytical Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Discover how to avoid common errors and unlock the power of SQL window functions for powerful and efficient analytical queries, even as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions are powerful tools in SQL used to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not group rows but instead provide a way to calculate running totals, ranks, moving averages, and more while retaining individual row details."
+      },
+      {
+        "type": "paragraph",
+        "value": "Beginners often face errors when working with window functions due to misunderstandings about their syntax, usage, or the requirements of the OVER() clause. In this article, we will explore common errors and how to fix them, making it easier for you to use these advanced features in your analytical queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of a window function: calculating a running total of sales by date."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sale_date,\n  sales_amount,\n  SUM(sales_amount) OVER (ORDER BY sale_date) AS running_total\nFROM sales;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error #1: Missing or incorrect OVER() clause\nOne of the most frequent errors is forgetting the OVER() clause, which defines the window for the function. For example, this query will cause an error:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT SUM(sales_amount) FROM sales; -- works as aggregate, but window function requires OVER()\n\nSELECT SUM(sales_amount); -- Error: window function requires OVER clause\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Fix:\nAlways include the OVER() clause when using window functions, even if it's empty (meaning the function applies to the entire result set):"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sales_amount,\n  SUM(sales_amount) OVER () AS total_sales\nFROM sales;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error #2: Using window functions in WHERE clause\nWindow functions are evaluated after WHERE filtering, so you can't use them directly in a WHERE clause."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM (\n  SELECT\n    sale_date,\n    sales_amount,\n    RANK() OVER (ORDER BY sales_amount DESC) AS sales_rank\n  FROM sales\n) sub\nWHERE sales_rank = 1;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Fix:\nTo filter on a window function's result, use a subquery or a Common Table Expression (CTE), as shown above."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error #3: Misusing PARTITION BY causing unexpected results\nThe PARTITION BY clause divides the result set into partitions for the window function. Omitting it or partitioning incorrectly can cause confusing outputs."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank\nFROM employees;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This ranks employees within each department by salary. Forgetting PARTITION BY will rank all employees together."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary:\n- Always use the OVER() clause with window functions.\n- Window functions can't be used in WHERE clauses directly; use subqueries or CTEs.\n- Use PARTITION BY to define groups within the window for ranking or aggregation.\n\nBy understanding and avoiding these common errors, you unlock the ability to write clear, efficient analytical SQL queries with window functions."
+      }
+    ]
   }
 ];

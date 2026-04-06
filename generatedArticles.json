@@ -1,549 +1,517 @@
 [
   {
-    "slug": "mastering-lazy-loading-in-javascript-for-faster-web-apps",
-    "title": "Mastering Lazy Loading in JavaScript for Faster Web Apps",
+    "slug": "mastering-javascript-destructuring-unlocking-cleaner-code-with-practical-examples",
+    "title": "Mastering JavaScript Destructuring: Unlocking Cleaner Code with Practical Examples",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to speed up your website by mastering lazy loading techniques in JavaScript. This beginner-friendly tutorial covers what lazy loading is, why it’s important, and how to implement it step-by-step.",
-    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
+    "description": "Learn how to use JavaScript destructuring to write cleaner and more readable code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=UgEaJBz3bjY",
     "content": [
       {
         "type": "paragraph",
-        "value": "Lazy loading is a technique that delays the loading of images, scripts, or other resources until they are actually needed. This helps make your web app faster by reducing the initial load time and saving bandwidth."
+        "value": "JavaScript destructuring is a powerful feature that allows you to extract values from arrays or objects and assign them to variables in a concise way. This can make your code cleaner, easier to read, and reduce the amount of code you write. In this tutorial, you will learn the basics of destructuring and see practical examples so you can start applying it in your projects."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, you’ll learn how to implement lazy loading for images using native JavaScript and the Intersection Observer API. This approach is efficient and widely supported in modern browsers."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, let’s understand the basics: Instead of loading all images when the page loads, we only load them when they come into the user’s viewport (the visible area of the web page)."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example of how to set up lazy loading for images using the Intersection Observer API."
+        "value": "Let's start with array destructuring. Suppose you have an array of fruits and you want to assign each fruit to a variable:"
       },
       {
         "type": "code",
-        "value": "<img data-src=\"image1.jpg\" alt=\"Example Image\" class=\"lazy\">\n<img data-src=\"image2.jpg\" alt=\"Example Image\" class=\"lazy\">\n<img data-src=\"image3.jpg\" alt=\"Example Image\" class=\"lazy\">\n\n<script>\n  document.addEventListener(\"DOMContentLoaded\", function() {\n    const lazyImages = document.querySelectorAll('img.lazy');\n\n    if ('IntersectionObserver' in window) {\n      let observer = new IntersectionObserver((entries, observer) => {\n        entries.forEach(entry => {\n          if (entry.isIntersecting) {\n            let img = entry.target;\n            img.src = img.getAttribute('data-src');\n            img.classList.remove('lazy');\n            observer.unobserve(img);\n          }\n        });\n      });\n\n      lazyImages.forEach(img => {\n        observer.observe(img);\n      });\n    } else {\n      // Fallback - load all images immediately\n      lazyImages.forEach(img => {\n        img.src = img.getAttribute('data-src');\n        img.classList.remove('lazy');\n      });\n    }\n  });\n</script>"
+        "value": "const fruits = ['apple', 'banana', 'orange'];\n\n// Without destructuring\nconst first = fruits[0];\nconst second = fruits[1];\nconst third = fruits[2];\n\n// With destructuring\nconst [firstFruit, secondFruit, thirdFruit] = fruits;\n\nconsole.log(firstFruit);  // apple\nconsole.log(secondFruit); // banana\nconsole.log(thirdFruit);  // orange"
       },
       {
         "type": "paragraph",
-        "value": "In this code snippet, images use a placeholder attribute called `data-src` instead of `src`. The Intersection Observer waits until each image enters the viewport, then sets their `src` attribute to the real image URL to trigger loading."
+        "value": "As you can see, destructuring makes your code shorter and easier to understand. You can also skip certain values by leaving gaps:"
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [10, 20, 30, 40];\nconst [firstNum, , thirdNum] = numbers;\n\nconsole.log(firstNum);  // 10\nconsole.log(thirdNum);  // 30"
       },
       {
         "type": "paragraph",
-        "value": "This method provides several benefits:\n- Improves page load speed by loading only necessary images\n- Saves user bandwidth, especially on mobile devices\n- Provides a smooth user experience as images load only when needed"
+        "value": "Next, let's look at object destructuring. Objects often have multiple properties, and destructuring helps extract these properties without repeating the object name:"
+      },
+      {
+        "type": "code",
+        "value": "const person = {\n  name: 'Alice',\n  age: 25,\n  city: 'New York'\n};\n\n// Without destructuring\nconst name1 = person.name;\nconst age1 = person.age;\n\n// With destructuring\nconst { name, age, city } = person;\n\nconsole.log(name); // Alice\nconsole.log(age);  // 25\nconsole.log(city); // New York"
       },
       {
         "type": "paragraph",
-        "value": "If you want to go further, you can also lazy load JavaScript modules or other resources dynamically using `import()` or other techniques, but image lazy loading is a great place to start."
+        "value": "You can also rename variables when destructuring to avoid name conflicts or for clarity:"
+      },
+      {
+        "type": "code",
+        "value": "const { name: fullName, age: years } = person;\n\nconsole.log(fullName); // Alice\nconsole.log(years);    // 25"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, mastering lazy loading in JavaScript helps create faster, more efficient, and user-friendly web apps. Try implementing it in your next project and see the difference!"
+        "value": "Destructuring works great with default values, so you can provide fallback values if a property does not exist:"
+      },
+      {
+        "type": "code",
+        "value": "const { country = 'USA' } = person;\n\nconsole.log(country); // USA"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also destructure function parameters to directly access properties of an object passed as an argument. This makes your functions cleaner:"
+      },
+      {
+        "type": "code",
+        "value": "function greet({ name, city }) {\n  console.log(`Hello, ${name} from ${city}!`);\n}\n\ngreet(person); // Hello, Alice from New York!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, remember you can combine array and object destructuring for more complex data structures. Here's an example with an array of objects:"
+      },
+      {
+        "type": "code",
+        "value": "const users = [\n  { id: 1, username: 'john' },\n  { id: 2, username: 'jane' }\n];\n\nconst [user1, user2] = users;\nconsole.log(user1.username); // john\nconsole.log(user2.username); // jane"
+      },
+      {
+        "type": "paragraph",
+        "value": "Destructuring is a simple but powerful tool that helps you write cleaner and more maintainable JavaScript code. Start using it today, and you'll notice your code becoming easier to understand and less repetitive."
       }
     ]
   },
   {
-    "slug": "understanding-javascript-type-coercion-errors-in-comparison-operators",
-    "title": "Understanding JavaScript Type Coercion Errors in Comparison Operators",
+    "slug": "handling-floating-point-precision-errors-javascript",
+    "title": "Handling Floating Point Precision Errors in JavaScript: Best Practices and Solutions",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how JavaScript type coercion can cause unexpected results in comparison operators and how to avoid common errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=GKJh3vdat8A",
+    "description": "Learn how to handle floating point precision errors in JavaScript with beginner-friendly explanations, common issues, and practical solutions to write more accurate code.",
+    "videoUrl": "https://www.youtube.com/watch?v=38dmbYWrOV0",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible language that often converts values from one type to another automatically. This process is called type coercion. While this feature makes coding easier in many cases, it can also cause unexpected errors, especially when using comparison operators like == and !=."
+        "value": "Floating point numbers in JavaScript can sometimes cause unexpected results because of how numbers are stored in binary. This issue, known as floating point precision error, often appears during arithmetic operations, especially with decimals. For beginners, this can be confusing when simple calculations like 0.1 + 0.2 don’t equal 0.3 exactly."
       },
       {
         "type": "paragraph",
-        "value": "There are two main types of comparison operators in JavaScript: loose equality (== and !=) and strict equality (=== and !==). Loose equality operators convert the types of values before comparing them, which can sometimes lead to confusing results. Strict equality operators, on the other hand, compare both value and type, avoiding coercion."
-      },
-      {
-        "type": "paragraph",
-        "value": "Consider this simple example:"
+        "value": "Let's look at an example to understand this problem better."
       },
       {
         "type": "code",
-        "value": "console.log(5 == '5');  // true\nconsole.log(5 === '5'); // false"
+        "value": "console.log(0.1 + 0.2 === 0.3); // returns false\nconsole.log(0.1 + 0.2);        // outputs 0.30000000000000004"
       },
       {
         "type": "paragraph",
-        "value": "Here, the loose equality operator (==) converts the string '5' into a number before comparing it with 5, so the result is true. The strict equality operator (===) compares both the value and type, so since one is a string and the other is a number, the result is false."
+        "value": "As you can see, adding 0.1 and 0.2 doesn’t exactly equal 0.3 due to floating point precision limitations. This happens because JavaScript uses the IEEE 754 standard for storing numbers, which sometimes can't perfectly represent decimals."
       },
       {
         "type": "paragraph",
-        "value": "Type coercion errors often happen when you expect two variables to be different based on their types, but JavaScript converts them and they become equal. For example:"
+        "value": "Here are some best practices and solutions to handle floating point precision errors in your JavaScript code:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use toFixed() Method**: This method formats a number to a fixed number of decimal places and returns it as a string. It's useful for displaying results, but keep in mind that the output is a string, so convert it back to a number if needed."
       },
       {
         "type": "code",
-        "value": "console.log(false == 0);    // true\nconsole.log(false === 0);   // false\nconsole.log('' == 0);       // true\nconsole.log('' === 0);      // false"
+        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2)); // \"0.30\"\nconsole.log(Number(sum.toFixed(2))); // 0.3"
       },
       {
         "type": "paragraph",
-        "value": "In the examples above, false and an empty string ('') are loosely equal to 0 because JavaScript coerces these values to numbers during the comparison. However, they are not strictly equal because their types differ."
-      },
-      {
-        "type": "paragraph",
-        "value": "To avoid type coercion errors:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Always prefer using strict equality (===) and strict inequality (!==) operators unless you have a specific reason to allow type conversion.\n2. Be mindful when comparing values from user input or external sources, as they may be strings or other types.\n3. Use explicit type conversion like Number(), String(), or Boolean() to make your intentions clear."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's an example with explicit conversion:"
+        "value": "2. **Multiply and Divide**: A common trick is to convert decimals to integers by multiplying, perform the operation, then divide back."
       },
       {
         "type": "code",
-        "value": "const userInput = '10';\nconst actualNumber = 10;\n\n// Explicitly convert userInput to a number\nif (Number(userInput) === actualNumber) {\n  console.log('Values and types match!');\n} else {\n  console.log('No match.');\n}"
+        "value": "const sum = (0.1 * 10 + 0.2 * 10) / 10;\nconsole.log(sum === 0.3); // true"
       },
       {
         "type": "paragraph",
-        "value": "In summary, understanding how JavaScript performs type coercion with comparison operators helps you avoid bugs and write clearer, more predictable code. Using strict equality and explicit conversions are safe practices for beginners and experienced developers alike."
+        "value": "3. **Use the Number.EPSILON Property**: This represents the smallest interval between two representable numbers. You can use it to compare floating point numbers instead of direct equality."
+      },
+      {
+        "type": "code",
+        "value": "function isEqual(a, b) {\n  return Math.abs(a - b) < Number.EPSILON;\n}\n\nconsole.log(isEqual(0.1 + 0.2, 0.3)); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use External Libraries**: For complex calculations, libraries like decimal.js or math.js provide arbitrary-precision arithmetic and handle floating point errors for you."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, floating point precision errors are a common quirk in JavaScript, but you can handle them effectively using built-in methods, simple arithmetic tricks, or specialized libraries. Being aware of this will make your numerical computations much more accurate and reliable."
       }
     ]
   },
   {
-    "slug": "typescript-vs-javascript-detailed-comparison-for-modern-web-development",
-    "title": "TypeScript vs JavaScript: Detailed Comparison for Modern Web Development",
+    "slug": "building-real-time-chat-application-with-typescript-websocket",
+    "title": "Building a Real-Time Chat Application with TypeScript and WebSocket",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Explore the key differences between TypeScript and JavaScript to learn which language suits your modern web development needs. This beginner-friendly guide covers basics, advantages, and practical code examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=HCXPJmtV47I",
+    "description": "Learn how to create a simple yet powerful real-time chat application using TypeScript and WebSocket, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is the most widely used programming language for web development, known for its flexibility and ability to run directly in browsers. TypeScript is a superset of JavaScript, developed by Microsoft, that adds static types and modern features to make code more robust and easier to maintain. In this article, we'll compare TypeScript and JavaScript in detail, helping beginners understand when and why to use each."
+        "value": "Real-time communication is essential for modern web applications. In this tutorial, you will learn how to build a basic real-time chat app using TypeScript and WebSocket. WebSocket provides a full-duplex communication channel over a single TCP connection, making it ideal for chat applications."
       },
       {
         "type": "paragraph",
-        "value": "### What is JavaScript?"
+        "value": "We'll create a simple server that handles WebSocket connections and a client that connects to the server to send and receive messages in real time."
       },
       {
         "type": "paragraph",
-        "value": "JavaScript is a dynamically typed, interpreted language that runs natively in web browsers. It allows developers to write code that manipulates web pages, handles events, and performs asynchronous operations. Since it is dynamically typed, variables can hold any type of data without explicit declarations."
+        "value": "### Step 1: Setup your project\nFirst, create a folder for your project and initialize it with npm:\nbash\nmkdir realtime-chat\ncd realtime-chat\nnpm init -y\n\nThen install the necessary dependencies:\nbash\nnpm install ws typescript @types/ws\n\nFinally, initialize TypeScript configuration:\nbash\ntsc --init\n"
       },
       {
         "type": "paragraph",
-        "value": "Example of JavaScript code:"
+        "value": "### Step 2: Create the WebSocket Server\nNow, create a file named `server.ts` for your WebSocket server. This server will accept connections and broadcast messages to all connected clients."
       },
       {
         "type": "code",
-        "value": "function greet(name) {\n  return \"Hello, \" + name + \"!\";\n}\n\nconsole.log(greet('World'));"
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst wss = new WebSocketServer({ port: 8080 });\n\nwss.on('connection', (ws: WebSocket) => {\n  console.log('New client connected');\n\n  ws.on('message', (data) => {\n    // Broadcast incoming message to all clients\n    wss.clients.forEach(client => {\n      if (client.readyState === WebSocket.OPEN) {\n        client.send(data.toString());\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the parameter `name` can be any type, but typically it's a string. JavaScript does not enforce type checking during development, which can sometimes lead to runtime bugs."
+        "value": "This simple server accepts connections, listens for messages, and then broadcasts each message to every connected client. The `ws` library is used here, which is a popular WebSocket implementation for Node.js."
       },
       {
         "type": "paragraph",
-        "value": "### What is TypeScript?"
+        "value": "### Step 3: Create the Client\nNow let's create a basic client using HTML and TypeScript. Create an `index.html` file and a `client.ts` file."
       },
       {
         "type": "paragraph",
-        "value": "TypeScript builds on JavaScript by adding optional static types, interfaces, and modern language features. This means you can declare what type of data variables, parameters, or function returns should have. These types are checked at compile time, before running the code, which reduces errors and improves code quality."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example of TypeScript code:"
+        "value": "In `index.html`, include a simple user interface for your chat:"
       },
       {
         "type": "code",
-        "value": "function greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n</head>\n<body>\n  <h2>TypeScript WebSocket Chat</h2>\n  <div id=\"chat\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type a message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script src=\"client.js\"></script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "Here, `name` is explicitly defined as a string, and the function return type is also string. If you pass a value that is not a string, TypeScript will show an error during compilation."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Key Differences Between TypeScript and JavaScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Typing:** JavaScript is dynamically typed, while TypeScript is statically typed (optional but highly recommended to use)."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Compilation:** JavaScript runs directly in browsers; TypeScript needs to be compiled (transpiled) into JavaScript before execution."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Tooling and IDE Support:** TypeScript offers better editor support with autocompletion, refactoring, and error checking due to static typing."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Learning Curve:** JavaScript is easier to start with, while TypeScript requires learning types and compilation setup."
-      },
-      {
-        "type": "paragraph",
-        "value": "5. **Community and Ecosystem:** JavaScript has a broader ecosystem as the foundational web language, but TypeScript usage is growing rapidly and supported by many frameworks."
-      },
-      {
-        "type": "paragraph",
-        "value": "### When Should You Use TypeScript?"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript is particularly helpful when working on large codebases or in teams, where enforcing data types can prevent bugs. It also works well with modern frameworks like Angular, React, and Vue.js, which have official TypeScript support."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Simple Example Comparing Both"
+        "value": "Now, in `client.ts`, write TypeScript that connects to the WebSocket server and handles sending and receiving messages."
       },
       {
         "type": "code",
-        "value": "// JavaScript example (dynamic typing)\nfunction add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(5, 10)); // 15\nconsole.log(add('5', 10)); // '510' - unexpected string concatenation\n\n// TypeScript example (static typing)\nfunction addTyped(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(addTyped(5, 10)); // 15\n// console.log(addTyped('5', 10)); // Error: Argument of type 'string' is not assignable to parameter of type 'number'."
+        "value": "const ws = new WebSocket('ws://localhost:8080');\n\nconst chatDiv = document.getElementById('chat') as HTMLDivElement;\nconst messageInput = document.getElementById('messageInput') as HTMLInputElement;\nconst sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;\n\nws.onopen = () => {\n  addMessage('Connected to the chat server');\n};\n\nws.onmessage = (event) => {\n  addMessage(event.data);\n};\n\nws.onclose = () => {\n  addMessage('Disconnected from the server');\n};\n\nsendBtn.onclick = () => {\n  const message = messageInput.value.trim();\n  if (message) {\n    ws.send(message);\n    messageInput.value = '';\n  }\n};\n\nfunction addMessage(message: string) {\n  const p = document.createElement('p');\n  p.textContent = message;\n  chatDiv.appendChild(p);\n}"
       },
       {
         "type": "paragraph",
-        "value": "In JavaScript, passing a string to the `add` function causes unintended behavior (string concatenation). In TypeScript, the error is caught before running the code, preventing bugs."
+        "value": "### Step 4: Compile TypeScript and Run\nCompile the TypeScript files:\nbash\nnpx tsc\n\nThis will generate JavaScript files for both `server.ts` and `client.ts` if your `tsconfig.json` is set up with the default `outDir` or the source is in the same directory.\n\nRun the server:\nbash\nnode server.js\n\n\nOpen `index.html` in your browser to access the chat client. Open multiple tabs to see messages broadcasted in real time."
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Both JavaScript and TypeScript have their place in modern web development. JavaScript is excellent for quick scripting and smaller projects, while TypeScript enhances scalability and maintainability with type safety. Learning TypeScript can improve your coding skills and prepare you for large, professional projects that require clean and bug-free code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try experimenting with both and see which language fits your development workflow best!"
+        "value": "### Conclusion\nYou've just built a simple real-time chat app using TypeScript and WebSocket! This foundation can be extended by adding user authentication, message history, or a prettier UI. WebSocket allows for efficient two-way communication, essential for interactive web apps like chat or live notifications."
       }
     ]
   },
   {
-    "slug": "deep-dive-into-typescripts-conditional-types-for-advanced-error-handling",
-    "title": "Deep Dive into TypeScript's Conditional Types for Advanced Error Handling",
+    "slug": "understanding-typescripts-structural-type-system-vs-nominal-typing-errors",
+    "title": "Understanding TypeScript's Structural Type System vs. Nominal Typing Errors",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to leverage TypeScript's powerful conditional types to create advanced, flexible error handling patterns in your applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=7BnoNWu2y3Y",
+    "description": "Learn the key differences between TypeScript's structural type system and nominal typing, with a focus on common errors and how to fix them.",
+    "videoUrl": "https://www.youtube.com/watch?v=MbZoQlmQaWQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful language that enhances JavaScript with types, enabling safer coding and better developer experience. One super useful feature for advanced error handling is conditional types. These allow you to create types that change based on conditions, making your error management more precise and adaptable."
+        "value": "TypeScript uses a structural type system, which means compatibility between types is based on the shape or structure of the data, rather than its explicit name or declaration. This contrasts with nominal typing used in some other languages, where type compatibility depends on explicit declarations or names."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explore how to use conditional types in TypeScript to build flexible error handling patterns. We'll start with simple examples and then get into more practical use cases involving API responses and custom error types."
+        "value": "In a structural type system, if two types have the same properties and types, they are considered compatible, even if they are declared separately. This can sometimes cause confusion for beginners coming from nominally typed languages, especially when expecting type errors that do not occur, or when nominal typing would catch certain mistakes."
       },
       {
         "type": "paragraph",
-        "value": "### What are Conditional Types?\nConditional types allow you to relate types to each other based on a condition. They follow a syntax like `T extends U ? X : Y`, meaning: if type `T` is assignable to type `U`, then use type `X`; otherwise use type `Y`."
+        "value": "Here's an example illustrating structural typing in TypeScript:"
       },
       {
         "type": "code",
-        "value": "type IsString<T> = T extends string ? 'Yes' : 'No';\n\ntype Test1 = IsString<string>;  // 'Yes'\ntype Test2 = IsString<number>;  // 'No'"
+        "value": "interface Point {\n  x: number;\n  y: number;\n}\n\ninterface Coordinate {\n  x: number;\n  y: number;\n}\n\nfunction logPoint(p: Point) {\n  console.log(`${p.x}, ${p.y}`);\n}\n\nconst coord: Coordinate = { x: 10, y: 20 };\nlogPoint(coord); // Works because coord and Point have the same structure"
       },
       {
         "type": "paragraph",
-        "value": "This flexibility is perfect for error handling because it enables creating utility types that can adapt based on passed types or conditions in your code."
+        "value": "Even though `Point` and `Coordinate` are different interfaces, TypeScript allows passing a `Coordinate` to a function expecting a `Point` because their structures match."
       },
       {
         "type": "paragraph",
-        "value": "### Creating a Basic Conditional Error Type\nSuppose you want a function that returns different error object shapes depending on the context. You can use conditional types to define which error type to return."
+        "value": "In contrast, nominal typing would require explicit inheritance or declaration to treat these two types as compatible."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, developers want nominal typing to prevent mixing different types with the same structure. TypeScript doesn’t have built-in nominal typing, but you can simulate it using techniques such as \"branding\":"
       },
       {
         "type": "code",
-        "value": "type ApiError = { message: string; statusCode: number };\ntype ValidationError = { message: string; fields: string[] };\n\ntype ErrorType<T> = T extends 'api' ? ApiError : ValidationError;"
+        "value": "// Simulating nominal typing using branding\ntype UserId = string & { readonly brand: unique symbol };\ntype OrderId = string & { readonly brand: unique symbol };\n\nfunction createUserId(id: string): UserId {\n  return id as UserId;\n}\n\nfunction createOrderId(id: string): OrderId {\n  return id as OrderId;\n}\n\nfunction getUser(id: UserId) {\n  console.log(`User ID: ${id}`);\n}\n\nconst userId = createUserId(\"abc123\");\nconst orderId = createOrderId(\"xyz789\");\n\ngetUser(userId); // Works\n// getUser(orderId); // Error: Argument of type 'OrderId' is not assignable to parameter of type 'UserId'."
       },
       {
         "type": "paragraph",
-        "value": "Here, `ErrorType` changes based on the string literal type passed to it."
-      },
-      {
-        "type": "code",
-        "value": "function handleError<T extends 'api' | 'validation'>(type: T, errorData: ErrorType<T>): void {\n  if (type === 'api') {\n    console.log('API error:', errorData.statusCode, errorData.message);\n  } else {\n    console.log('Validation error on fields:', errorData.fields.join(', '));\n  }\n}\n\nhandleError('api', { message: 'Not Found', statusCode: 404 });\nhandleError('validation', { message: 'Invalid input', fields: ['email', 'password'] });"
+        "value": "By adding a unique \"brand\" property with `unique symbol`, you help TypeScript distinguish types that are structurally identical but logically different, preventing mixing them up and catching errors."
       },
       {
         "type": "paragraph",
-        "value": "Try passing wrong error data for the type, and TypeScript will catch the mistake at compile time."
+        "value": "To summarize:"
       },
       {
         "type": "paragraph",
-        "value": "### Using Conditional Types for API Response Error Handling\nOften when dealing with API responses, you want to differentiate success from error responses clearly."
-      },
-      {
-        "type": "code",
-        "value": "type ApiResponse<T> =\n  T extends { error: true }\n    ? { error: true; code: number; message: string }\n    : { error: false; data: T };\n\nfunction handleApiResponse<T>(response: ApiResponse<T>) {\n  if (response.error) {\n    console.error(`Error (${response.code}):`, response.message);\n  } else {\n    console.log('Success:', response.data);\n  }\n}"
+        "value": "- TypeScript uses structural typing, meaning types are compatible if their shapes match.\n- This enables flexibility but can cause confusion if you expect nominal type checks.\n- To simulate nominal typing, you can use branding techniques to make types incompatible unless explicitly converted.\n- Understanding this difference helps you avoid type errors and design more robust TypeScript programs."
       },
       {
         "type": "paragraph",
-        "value": "This type will ensure you provide either a successful response with data or an error with proper error details."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nConditional types in TypeScript offer a powerful way to build smarter error handling patterns that adapt to different scenarios and improve type safety. Whether you are dealing with API errors or validation failures, leveraging conditional types helps catch problems early and write clearer code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try experimenting with conditional types for your own error handling needs, and you'll notice how much easier and safer managing errors can become!"
+        "value": "With this knowledge, you'll better understand TypeScript errors related to type compatibility and how to design types that reflect your intended logic."
       }
     ]
   },
   {
-    "slug": "comparing-python-data-classes-vs-named-tuples-for-clean-code",
-    "title": "Comparing Python's Data Classes vs Named Tuples for Clean Code",
+    "slug": "handling-floating-point-precision-edge-cases-python",
+    "title": "Handling Floating Point Precision and Edge Cases in Python Calculations",
     "language": "python",
     "type": "tutorials",
-    "description": "Explore the differences between Python's data classes and named tuples to write cleaner, more readable code. Learn when to use each for beginner-friendly data structures.",
-    "videoUrl": "https://www.youtube.com/watch?v=5mMpM8zK4pY",
+    "description": "Learn how to manage floating point precision issues and handle edge cases effectively in Python calculations with practical tips and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Gbac7pc3rnY",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with simple data structures in Python, two popular choices are data classes and named tuples. Both help you write cleaner and more readable code by giving names to the fields of your objects instead of using normal tuples or dictionaries. In this tutorial, we'll explore what data classes and named tuples are, their differences, and when to use each."
+        "value": "When working with numbers in Python, especially decimal numbers, you might notice that some calculations don't give the exact result you expect. This happens because computers use floating point representation, which can cause small precision errors. In this tutorial, we'll explore why this occurs and how you can handle these floating point precision issues as well as some common edge cases."
       },
       {
         "type": "paragraph",
-        "value": "First, let's start with named tuples. Named tuples are an extension of regular tuples that allow you to access elements by name instead of position. They are immutable, lightweight, and come from the collections module."
+        "value": "### What is Floating Point Precision?\nFloating point numbers are a way computers represent decimal numbers approximately, which sometimes leads to tiny differences in the result. For example, adding 0.1 and 0.2 in Python doesn’t exactly equal 0.3 due to how these numbers are stored internally."
       },
       {
         "type": "code",
-        "value": "from collections import namedtuple\n\n# Define a named tuple to represent a Point in 2D space\nPoint = namedtuple('Point', ['x', 'y'])\n\np1 = Point(10, 20)\nprint(p1.x)  # Output: 10\nprint(p1.y)  # Output: 20\n\n# Named tuples are immutable\n# p1.x = 5  # This would raise an error"
+        "value": "print(0.1 + 0.2 == 0.3)  # Outputs: False\nprint(0.1 + 0.2)           # Outputs: 0.30000000000000004"
       },
       {
         "type": "paragraph",
-        "value": "Named tuples are great for simple use cases where you want immutability and a lightweight object. However, they don’t support default values or easy customization like methods or property setters."
-      },
-      {
-        "type": "paragraph",
-        "value": "On the other hand, data classes were introduced in Python 3.7 to make defining classes for storing data easier and cleaner. Using the `@dataclass` decorator, Python automatically generates special methods like `__init__`, `__repr__`, and `__eq__` for your class."
+        "value": "### How to Handle Floating Point Precision Issues\nOne practical way to handle this is using the `round()` function, which rounds the result to a specified number of decimal places."
       },
       {
         "type": "code",
-        "value": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\np2 = Point(10, 20)\nprint(p2.x)  # Output: 10\nprint(p2)    # Output: Point(x=10, y=20)\n\n# Data classes are mutable by default\np2.x = 5\nprint(p2.x)  # Output: 5"
+        "value": "result = 0.1 + 0.2\nprint(round(result, 2))  # Outputs: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "Data classes allow default values, mutable fields, and defining methods within the class. You can also make them immutable by setting `frozen=True` in the decorator."
+        "value": "However, rounding is not always enough when you need exact decimal representation, such as in financial calculations. In such cases, use the `decimal` module which provides decimal floating point arithmetic with more precise control."
       },
       {
         "type": "code",
-        "value": "@dataclass(frozen=True)\nclass ImmutablePoint:\n    x: int\n    y: int\n\np3 = ImmutablePoint(1, 2)\n# p3.x = 3  # This would raise: FrozenInstanceError"
+        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result)  # Outputs: 0.3\nprint(result == Decimal('0.3'))  # Outputs: True"
       },
       {
         "type": "paragraph",
-        "value": "### When to use Named Tuples\n- You want lightweight, immutable objects similar to tuples.\n- You do not need methods or default values.\n- You prefer tuple-like behavior with named fields.\n\n### When to use Data Classes\n- You want more flexibility like default values, methods, and mutable objects.\n- You want clear, maintainable code with minimal boilerplate.\n- You need to customize behavior like sorting or comparisons."
+        "value": "### Handling Edge Cases\nWhen performing calculations, sometimes unexpected inputs or values can cause errors or incorrect results. Let’s see a few examples and how to handle them gracefully:"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nBoth data classes and named tuples improve code readability compared to normal tuples or dictionaries. Named tuples are simple and immutable, making them ideal for lightweight structures. Data classes provide more power and customization, suitable for more complex or mutable data objects."
+        "value": "1. **Division by zero:** This will raise a `ZeroDivisionError`. Always check the divisor before dividing."
+      },
+      {
+        "type": "code",
+        "value": "def safe_divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    return a / b\n\nprint(safe_divide(5, 0))  # Outputs: Cannot divide by zero!"
       },
       {
         "type": "paragraph",
-        "value": "By choosing the right tool for your data needs, you can keep your Python code clean, easy to understand, and efficient."
+        "value": "2. **Very small or very large floating point numbers:** Sometimes calculations can underflow or overflow."
+      },
+      {
+        "type": "code",
+        "value": "import sys\n\nvery_small = 1e-324  # Smaller than the smallest positive float\nprint(very_small)       # Outputs: 0.0 because of underflow\n\nvery_large = sys.float_info.max * 2\nprint(very_large)       # Outputs: inf because of overflow"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use the `math.isfinite()` function to check if a number is finite before using it in further calculations."
+      },
+      {
+        "type": "code",
+        "value": "import math\n\nx = 1e309  # This will be inf\nif math.isfinite(x):\n    print(\"Number is finite\")\nelse:\n    print(\"Number is not finite\")  # Outputs: Number is not finite"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Floating point arithmetic can lead to small precision errors.\n- Use `round()` for simple rounding needs.\n- Use the `decimal` module for exact decimal calculations.\n- Always handle edge cases like zero division and check for infinite or underflow values.\n\nWith these practices, your Python programs will be more reliable and your calculations more accurate!"
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-errors-python",
-    "title": "Handling Floating Point Precision Errors in Python: Best Practices and Pitfalls",
+    "slug": "mastering-python-exception-hierarchy-error-handling",
+    "title": "Mastering Python's Exception Hierarchy for Smarter Error Handling",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to handle floating point precision errors in Python with practical tips and best practices for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=t-OdS6SxQqQ",
+    "description": "Learn how to use Python's exception hierarchy to handle errors effectively and write robust code.",
+    "videoUrl": "https://www.youtube.com/watch?v=Lay3pQF3I3c",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with floating point numbers in Python, you might encounter unexpected results due to how computers represent decimal numbers internally. This phenomenon is called floating point precision error. Understanding why it happens and how to handle it will make your programs more reliable and accurate."
+        "value": "Handling errors gracefully is an essential skill for any Python programmer. Python uses exceptions to indicate errors that occur during program execution. Understanding Python's exception hierarchy enables you to write smarter error handling code by catching specific errors and responding appropriately."
       },
       {
         "type": "paragraph",
-        "value": "Floating point numbers are stored in binary form, which can't always precisely represent decimal fractions. For example, the decimal number 0.1 does not have an exact binary representation, leading to small precision errors when performing arithmetic operations."
+        "value": "At the top of Python's exception hierarchy is the built-in Exception class. All standard exceptions inherit from it. Here is a simplified view of the hierarchy:\n\n- BaseException (top-level, rarely caught except for system-exit cases)\n  - Exception (base for most user-defined and standard exceptions)\n    - ArithmeticError (includes ZeroDivisionError)\n    - LookupError (includes IndexError, KeyError)\n    - ValueError\n    - TypeError\n    - IOError (now often OSError)\n    - and many more"
       },
       {
         "type": "paragraph",
-        "value": "Let's see a common example:"
+        "value": "When you write a try-except block, you often want to catch only the errors you expect and handle them properly rather than catching all exceptions blindly. Catching specific exceptions makes your code clearer and avoids masking bugs."
       },
       {
         "type": "code",
-        "value": "print(0.1 + 0.2 == 0.3)  # This will return False"
+        "value": "try:\n    number = int(input('Enter a number: '))\n    result = 10 / number\n    print(f'Result is {result}')\nexcept ZeroDivisionError:\n    print('Error: You cannot divide by zero.')\nexcept ValueError:\n    print('Error: Please enter a valid integer.')"
       },
       {
         "type": "paragraph",
-        "value": "Although mathematically 0.1 + 0.2 equals 0.3, the expression returns `False` because of tiny floating point rounding errors."
+        "value": "In the above example, we specifically catch ZeroDivisionError and ValueError. This means if the user enters zero, it handles division by zero gracefully. If the input isn't a number, it informs the user accordingly."
       },
       {
         "type": "paragraph",
-        "value": "### Best Practice: Use `math.isclose()` for comparison"
-      },
-      {
-        "type": "paragraph",
-        "value": "`math.isclose()` is a function introduced in Python 3.5 that helps compare floating point numbers within a tolerance margin."
+        "value": "You can also catch multiple exceptions in one except block by grouping them in parentheses. This is useful when you want to handle different exceptions in the same way."
       },
       {
         "type": "code",
-        "value": "import math\n\nprint(math.isclose(0.1 + 0.2, 0.3))  # This will return True"
+        "value": "try:\n    data = {'apple': 5}\n    fruit = input('Enter fruit to buy: ')\n    count = int(input('How many? '))\n    print(f'Cost: {data[fruit] * count}')\nexcept (KeyError, ValueError) as e:\n    print(f'Error: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "### Alternative: Use the `decimal` module for exact decimal arithmetic"
-      },
-      {
-        "type": "paragraph",
-        "value": "The `decimal` module provides decimal floating point arithmetic with more precision and control. It is very useful for financial and other applications where precision is critical."
+        "value": "Understanding the exception hierarchy also helps when creating your own custom exceptions. Custom exceptions typically inherit from Exception or its subclasses, making your error handling consistent."
       },
       {
         "type": "code",
-        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result == Decimal('0.3'))  # This will return True\nprint(result)  # Will print 0.3 exactly"
+        "value": "class MyCustomError(Exception):\n    pass\n\ntry:\n    raise MyCustomError('Something went wrong!')\nexcept MyCustomError as e:\n    print(f'Caught custom error: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "### Pitfalls to Avoid"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Avoid direct equality checks (`==`) with floats when exact equality is expected.\n2. Be mindful of accumulated errors in large computations or loops.\n3. Remember that converting floats to strings or vice versa can also introduce precision issues."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Floating point precision errors are a natural limitation of computer arithmetic. Use `math.isclose()` to safely compare float values and consider the `decimal` module when precise decimal representation is needed. By understanding these concepts, you can write more robust and predictable Python code."
+        "value": "To summarize, mastering Python's exception hierarchy helps you:\n\n- Handle errors more precisely\n- Avoid catching unexpected exceptions\n- Write cleaner, more maintainable code\n- Create meaningful custom exceptions\n\nStart using specific exceptions in your try-except blocks to write smarter and more robust Python programs!"
       }
     ]
   },
   {
-    "slug": "mastering-sql-window-functions-beginners-guide",
-    "title": "Mastering SQL Window Functions: A Beginner's Guide to Advanced Data Analysis",
+    "slug": "optimizing-sql-window-functions-for-large-datasets",
+    "title": "Optimizing SQL Window Functions for Large Datasets: A Step-by-Step Guide",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform advanced data analysis with ease. This beginner-friendly guide covers key window functions with practical examples.",
+    "description": "Learn how to improve the performance of SQL window functions when working with large datasets. This beginner-friendly guide offers practical tips and clear examples.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of rows related to the current query row, without collapsing your results like GROUP BY. If you're new to SQL or want to elevate your data analysis skills, mastering window functions can open up new possibilities."
+        "value": "Window functions in SQL are powerful tools for performing calculations across a set of rows related to the current row. They are often used for ranking, running totals, moving averages, and more. However, when dealing with large datasets, these functions can become slow if not optimized properly. This guide will walk you through simple steps to speed up window function queries."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore the basics of window functions, understand how they work, and review common functions such as ROW_NUMBER(), RANK(), SUM(), and AVG() used with the OVER() clause."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a sample dataset of sales transactions:"
+        "value": "Step 1: Understand the Window Function Syntax. A window function looks like this:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n  id INT PRIMARY KEY,\n  salesperson VARCHAR(50),\n  region VARCHAR(50),\n  amount DECIMAL(10,2),\n  sale_date DATE\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', 'East', 500.00, '2024-01-01'),\n(2, 'Bob', 'West', 300.00, '2024-01-02'),\n(3, 'Alice', 'East', 700.00, '2024-01-03'),\n(4, 'Carol', 'East', 200.00, '2024-01-04'),\n(5, 'Bob', 'West', 400.00, '2024-01-05'),\n(6, 'Alice', 'East', 100.00, '2024-01-06');"
+        "value": "SELECT employee_id,\n       department_id,\n       salary,\n       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "### What Are Window Functions?\nWindow functions perform calculations across a set of rows related to the current row without grouping the results into a single output row. They use the OVER() clause to define this 'window' or partition of rows."
+        "value": "This example ranks employees within each department by salary. The PARTITION BY clause divides the data into groups, and ORDER BY sorts the rows within each group."
       },
       {
         "type": "paragraph",
-        "value": "### Example 1: ROW_NUMBER() to Assign Unique Row Numbers\nROW_NUMBER() assigns a unique sequential integer to rows within a partition. Here, we assign row numbers partitioned by salesperson ordered by their sale_date."
+        "value": "Step 2: Indexing the Partition and Order Columns. To optimize window functions, ensure the columns used in PARTITION BY and ORDER BY have indexes. For instance, create an index on (department_id, salary):"
       },
       {
         "type": "code",
-        "value": "SELECT\n  id,\n  salesperson,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS row_num\nFROM sales;"
+        "value": "CREATE INDEX idx_department_salary ON employees(department_id, salary DESC);"
       },
       {
         "type": "paragraph",
-        "value": "### Example 2: RANK() to Rank Sales Amounts\nRANK() assigns rankings to rows within a partition, with ties receiving the same rank. Let's rank sales amounts by salesperson."
+        "value": "This helps the database retrieve and sort data faster when performing window calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 3: Limit the Use of Complex Functions Inside Window Frames. Some window frame specifications like ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW can be expensive on large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, try to use simpler window frames or avoid framing when possible. For example, calculating a running total:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  id,\n  salesperson,\n  amount,\n  RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS sales_rank\nFROM sales;"
+        "value": "SELECT department_id,\n       sale_date,\n       amount,\n       SUM(amount) OVER (PARTITION BY department_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### Example 3: SUM() as a Running Total\nCalculate a running total of sales amount for each salesperson ordered by sale date."
+        "value": "If performance is an issue, evaluate whether you can pre-aggregate data or reduce the dataset before applying the window function."
+      },
+      {
+        "type": "paragraph",
+        "value": "Step 4: Use Materialized Views or Temporary Tables. For very large datasets or repeated queries, consider creating a materialized view or temporary table that precomputes expensive parts. This reduces the workload on each query run."
       },
       {
         "type": "code",
-        "value": "SELECT\n  id,\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+        "value": "CREATE MATERIALIZED VIEW mv_department_sales_rank AS\nSELECT employee_id, department_id, salary,\n       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;\n\n-- Then query directly from the materialized view:\nSELECT * FROM mv_department_sales_rank WHERE department_id = 10;"
       },
       {
         "type": "paragraph",
-        "value": "### Example 4: AVG() to Find Average Sales in Each Region\nFind the average sales amount per region without grouping rows using window functions."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  id,\n  region,\n  amount,\n  AVG(amount) OVER (PARTITION BY region) AS avg_region_sales\nFROM sales;"
+        "value": "Step 5: Analyze and Monitor Query Performance. Use database EXPLAIN plans or query profiling tools to understand how your window functions are executed. Look for full table scans, missing indexes, or inefficient sorting."
       },
       {
         "type": "paragraph",
-        "value": "### Why Use Window Functions?\n- Perform calculations like running totals, rankings, and moving averages while keeping detailed rows\n- Avoid complex self-joins or subqueries\n- Write more readable and efficient queries"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nWindow functions extend SQL's power to analyze data over a set of rows related to the current row. Try using ROW_NUMBER(), RANK(), SUM(), and AVG() with the OVER() clause in your queries to unlock advanced analytics easily."
-      },
-      {
-        "type": "paragraph",
-        "value": "Keep practicing with your own datasets, and soon you'll be mastering SQL window functions for advanced data analysis!"
+        "value": "In summary, optimizing window functions involves proper indexing, simplifying window frames, leveraging pre-aggregation, and monitoring query plans. Following these tips will help your SQL queries run faster on large datasets."
       }
     ]
   },
   {
-    "slug": "handling-time-zone-conversions-and-edge-cases-in-sql-queries",
-    "title": "Handling Time Zone Conversions and Edge Cases in SQL Queries",
+    "slug": "unlocking-the-power-of-window-functions-advanced-sql-tricks-for-analytical-queries",
+    "title": "Unlocking the Power of Window Functions: Advanced SQL Tricks for Analytical Queries",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to properly handle time zone conversions in SQL queries, including common edge cases and mistakes beginners often encounter.",
-    "videoUrl": "https://www.youtube.com/watch?v=pwmynHnr704",
+    "description": "Discover how to avoid common errors and unlock the power of SQL window functions for powerful and efficient analytical queries, even as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Working with dates and times in SQL can be tricky, especially when you need to deal with multiple time zones. Improper handling of time zone conversions often leads to incorrect query results, missed records, or unexpected behavior. This article will guide you through the basics of time zone conversion in SQL and how to avoid common edge case errors."
+        "value": "Window functions are powerful tools in SQL used to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not group rows but instead provide a way to calculate running totals, ranks, moving averages, and more while retaining individual row details."
       },
       {
         "type": "paragraph",
-        "value": "The first step in dealing with time zones is understanding the difference between timezone-aware and timezone-unaware data types. Most SQL databases provide types like TIMESTAMP WITHOUT TIME ZONE (which stores only the timestamp without any time zone info) and TIMESTAMP WITH TIME ZONE (which stores the time in UTC internally and adjusts for time zones when displaying)."
+        "value": "Beginners often face errors when working with window functions due to misunderstandings about their syntax, usage, or the requirements of the OVER() clause. In this article, we will explore common errors and how to fix them, making it easier for you to use these advanced features in your analytical queries."
       },
       {
         "type": "paragraph",
-        "value": "A common beginner mistake is assuming that a TIMESTAMP WITHOUT TIME ZONE column is storing UTC times. It might actually be storing local times, which will cause incorrect results when you try to convert or compare times across time zones."
-      },
-      {
-        "type": "paragraph",
-        "value": "To convert between time zones in SQL (example below uses PostgreSQL syntax), you can use the AT TIME ZONE construct. Here's how you convert a timestamp from UTC to Eastern Time:"
+        "value": "Let's start with a simple example of a window function: calculating a running total of sales by date."
       },
       {
         "type": "code",
-        "value": "SELECT\n  event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS event_time_et\nFROM events;"
+        "value": "SELECT\n  sale_date,\n  sales_amount,\n  SUM(sales_amount) OVER (ORDER BY sale_date) AS running_total\nFROM sales;\n"
       },
       {
         "type": "paragraph",
-        "value": "In this query, `event_time` is assumed to be stored as a TIMESTAMP WITHOUT TIME ZONE in UTC. The first AT TIME ZONE 'UTC' tells SQL to treat the timestamp as UTC time, converting it to TIMESTAMP WITH TIME ZONE. The second AT TIME ZONE 'America/New_York' converts it into Eastern Time and returns a TIMESTAMP WITHOUT TIME ZONE adjusted accordingly."
-      },
-      {
-        "type": "paragraph",
-        "value": "Edge cases to be aware of include daylight saving time (DST) changes. When clocks move forward or backward, some local times may not exist or may be ambiguous. For example, the hour lost in spring or repeated in fall can confuse SQL and cause errors or unexpected results."
-      },
-      {
-        "type": "paragraph",
-        "value": "If you want to filter records based on a local time range that spans a DST transition, it’s safer to convert your local times to UTC before comparing. For example:"
+        "value": "Common Error #1: Missing or incorrect OVER() clause\nOne of the most frequent errors is forgetting the OVER() clause, which defines the window for the function. For example, this query will cause an error:"
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM events\nWHERE event_time AT TIME ZONE 'America/New_York' AT TIME ZONE 'UTC' BETWEEN '2024-03-10 07:00:00+00' AND '2024-03-10 08:00:00+00';"
+        "value": "SELECT SUM(sales_amount) FROM sales; -- works as aggregate, but window function requires OVER()\n\nSELECT SUM(sales_amount); -- Error: window function requires OVER clause\n"
       },
       {
         "type": "paragraph",
-        "value": "This example ensures your filtering is based on a consistent UTC timeline, avoiding confusion during DST changes."
+        "value": "Fix:\nAlways include the OVER() clause when using window functions, even if it's empty (meaning the function applies to the entire result set):"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  sales_amount,\n  SUM(sales_amount) OVER () AS total_sales\nFROM sales;\n"
       },
       {
         "type": "paragraph",
-        "value": "Another tip is to always store timestamps in UTC in your database. This avoids ambiguity and makes your conversions predictable. Convert to the user's local time zone only when displaying data in your application."
+        "value": "Common Error #2: Using window functions in WHERE clause\nWindow functions are evaluated after WHERE filtering, so you can't use them directly in a WHERE clause."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM (\n  SELECT\n    sale_date,\n    sales_amount,\n    RANK() OVER (ORDER BY sales_amount DESC) AS sales_rank\n  FROM sales\n) sub\nWHERE sales_rank = 1;\n"
       },
       {
         "type": "paragraph",
-        "value": "In summary, to handle time zone conversions properly in SQL:\n\n- Know your data types (aware vs unaware timestamps).\n- Use `AT TIME ZONE` for conversions (PostgreSQL) or equivalent functions in other databases.\n- Be cautious around daylight saving time shifts.\n- Store timestamps in UTC to maintain consistency.\n- Convert to local time zones at the presentation layer whenever possible."
+        "value": "Fix:\nTo filter on a window function's result, use a subquery or a Common Table Expression (CTE), as shown above."
       },
       {
         "type": "paragraph",
-        "value": "By following these simple guidelines, you can avoid common pitfalls and make your time zone related SQL queries more reliable and accurate."
+        "value": "Common Error #3: Misusing PARTITION BY causing unexpected results\nThe PARTITION BY clause divides the result set into partitions for the window function. Omitting it or partitioning incorrectly can cause confusing outputs."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank\nFROM employees;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This ranks employees within each department by salary. Forgetting PARTITION BY will rank all employees together."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary:\n- Always use the OVER() clause with window functions.\n- Window functions can't be used in WHERE clauses directly; use subqueries or CTEs.\n- Use PARTITION BY to define groups within the window for ranking or aggregation.\n\nBy understanding and avoiding these common errors, you unlock the ability to write clear, efficient analytical SQL queries with window functions."
       }
     ]
   }
