@@ -43196,5 +43196,507 @@ export const articles = [
         "value": "Summary:\n- Always use the OVER() clause with window functions.\n- Window functions can't be used in WHERE clauses directly; use subqueries or CTEs.\n- Use PARTITION BY to define groups within the window for ranking or aggregation.\n\nBy understanding and avoiding these common errors, you unlock the ability to write clear, efficient analytical SQL queries with window functions."
       }
     ]
+  },
+  {
+    "slug": "designing-scalable-event-driven-architectures-in-javascript",
+    "title": "Designing Scalable Event-Driven Architectures in JavaScript: A Beginner's Guide",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of building scalable event-driven architectures in JavaScript with practical examples and simple code snippets.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture (EDA) is a design pattern where the flow of the program is determined by events such as user actions, sensor outputs, or messages from other programs. This approach enables scalable, flexible, and loosely coupled applications, especially useful in modern JavaScript development."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore how to design a simple yet scalable event-driven system in JavaScript. We will create an event emitter, define events, and show how to handle asynchronous workflows efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand the core concept: an event emitter is an object that allows us to register event listeners (callbacks) and emit events to notify these listeners. This pattern promotes decoupling, as the event producers don't need to know about the consumers."
+      },
+      {
+        "type": "code",
+        "value": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n\n  on(event, listener) {\n    if (!this.events[event]) {\n      this.events[event] = [];\n    }\n    this.events[event].push(listener);\n  }\n\n  emit(event, data) {\n    if (this.events[event]) {\n      this.events[event].forEach(listener => listener(data));\n    }\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above code, the EventEmitter class manages event listeners: the `on` method registers listeners, and the `emit` method triggers all listeners for a particular event."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create an example where a user logs in, and the system emits an event that other parts of the app can subscribe to. This allows the app to react to the login event without tight coupling."
+      },
+      {
+        "type": "code",
+        "value": "const emitter = new EventEmitter();\n\n// Register a listener for the 'login' event\nemitter.on('login', (user) => {\n  console.log(`User logged in: ${user.name}`);\n  // Further actions like fetching user settings can be triggered here\n});\n\n// Simulate a login function\nfunction loginUser(name) {\n  const user = { name };\n  console.log('Logging in...');\n  emitter.emit('login', user);\n}\n\nloginUser('Alice');\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\nLogging in...\nUser logged in: Alice\n\nThis output shows how emitting 'login' triggered the listener. You can add multiple listeners to the same event to handle different aspects of the system."
+      },
+      {
+        "type": "paragraph",
+        "value": "To ensure scalability, especially for real-world applications, consider the following best practices:\n- Use asynchronous event handlers if processing is heavy, to avoid blocking the main thread.\n- Implement event queues or message brokers (like Redis, RabbitMQ) for distributed systems.\n- Maintain clear event naming conventions to avoid confusion.\n- Decouple event producers and consumers to facilitate independent development and deployment."
+      },
+      {
+        "type": "code",
+        "value": "// Example of asynchronous event handling\nemitter.on('data', async (payload) => {\n  console.log('Processing data asynchronously...');\n  await new Promise(resolve => setTimeout(resolve, 1000)); // simulate async operation\n  console.log('Data processed:', payload);\n});\n\nemitter.emit('data', { id: 123, content: 'Hello World' });"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this asynchronous example, event listeners can perform async tasks using promises or async/await syntax, improving app responsiveness and scalability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, building scalable event-driven architectures in JavaScript starts with a simple event emitter pattern and grows by introducing asynchronous handling and distributed event management. This allows you to build flexible, maintainable, and scalable applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-javascript-async-error-handling-with-custom-retry-logic",
+    "title": "Mastering JavaScript Async Error Handling with Custom Retry Logic",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle asynchronous errors in JavaScript by building custom retry logic to make your apps more reliable and resilient.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with asynchronous JavaScript, such as fetching data from an API, errors can occur due to various reasons like network issues or server problems. Handling these errors properly is crucial to building reliable applications. One effective way to improve error handling is by implementing custom retry logic that attempts the operation multiple times before failing."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore a simple yet powerful approach to retry failed async operations using JavaScript's async/await syntax. You’ll learn how to create a reusable function that retries requests and handles errors gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a function that simulates an unreliable asynchronous task. This function will randomly fail or succeed to help us test our retry logic."
+      },
+      {
+        "type": "code",
+        "value": "async function unreliableAsyncTask() {\n  return new Promise((resolve, reject) => {\n    // Simulate a 50% chance of failure\n    const succeed = Math.random() > 0.5;\n    setTimeout(() => {\n      if (succeed) {\n        resolve('Success!');\n      } else {\n        reject(new Error('Something went wrong'));\n      }\n    }, 500);\n  });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, we’ll create our custom retry function. This function takes an async function as a parameter, along with the maximum number of retries and an optional delay between retries."
+      },
+      {
+        "type": "code",
+        "value": "async function retryAsync(fn, retries = 3, delay = 1000) {\n  for (let attempt = 1; attempt <= retries; attempt++) {\n    try {\n      // Attempt to execute the async function\n      const result = await fn();\n      return result;  // Return if successful\n    } catch (error) {\n      // If last attempt, throw the error\n      if (attempt === retries) {\n        throw error;\n      }\n      console.log(`Attempt ${attempt} failed. Retrying in ${delay}ms...`);\n      // Wait before retrying\n      await new Promise(res => setTimeout(res, delay));\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, let's use our retryAsync function with the unreliableAsyncTask. This will automatically retry the task up to three times before throwing an error."
+      },
+      {
+        "type": "code",
+        "value": "retryAsync(unreliableAsyncTask, 3, 1000)\n  .then(result => console.log('Final result:', result))\n  .catch(error => console.error('Failed after retries:', error.message));"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern is incredibly useful when dealing with APIs or any async tasks prone to temporary failures. You can customize the number of retries and delay between attempts to suit your application’s needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering async error handling with custom retry logic involves wrapping your async calls in a retry loop, catching errors, and optionally adding delays between retries. This makes your application more robust and resistant to transient errors."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-typescript-systems-handling-edge-cases-in-distributed-architectures",
+    "title": "Designing Resilient TypeScript Systems: Handling Edge Cases in Distributed Architectures",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to design resilient TypeScript applications by effectively handling edge cases and errors in distributed systems, ensuring your apps stay robust and reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=nZuWCo52wTg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Distributed architectures, such as microservices or serverless systems, offer scalability and flexibility but also introduce challenges like network failures, data inconsistencies, and race conditions. When building these types of systems with TypeScript, it’s crucial to anticipate and handle edge cases to create resilient applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "This article will introduce beginners to common edge cases in distributed systems and demonstrate practical TypeScript patterns and error-handling techniques to mitigate these risks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Edge Cases in Distributed Systems"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Network Failures:** Requests can timeout or fail due to unreliable network connectivity."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Partial Failures:** Some services succeed, others fail, leading to inconsistent states."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Race Conditions:** Simultaneous operations result in unexpected data overwrites or corruption."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Duplicate Messages:** Retries or network issues can cause duplicated requests or events."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Error Handling in TypeScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "The following example demonstrates a simple retry mechanism with exponential backoff to handle network errors when calling an external service."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithRetry(url: string, retries = 3, delay = 500): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n    return await response.text();\n  } catch (error) {\n    if (retries > 0) {\n      console.warn(`Request failed. Retrying in ${delay}ms...`);\n      await new Promise(res => setTimeout(res, delay));\n      return fetchWithRetry(url, retries - 1, delay * 2);\n    } else {\n      throw error;\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this function, we recursively retry fetching data, doubling the wait time after each failure. This helps minimize overwhelming a struggling service."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Partial Failures"
+      },
+      {
+        "type": "paragraph",
+        "value": "When performing multiple dependent operations across services, use try-catch blocks and compensating actions to maintain system consistency."
+      },
+      {
+        "type": "code",
+        "value": "async function processOrder(orderId: string) {\n  try {\n    await reserveInventory(orderId);\n    await chargePayment(orderId);\n    await confirmOrder(orderId);\n  } catch (error) {\n    console.error('Error processing order:', error);\n    await cancelInventoryReservation(orderId); // Undo reserved inventory\n    throw error;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows how to rollback inventory reservation if payment or confirmation fails, avoiding inconsistent order states."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Preventing Race Conditions"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use concurrency-safe mechanisms like database transactions, optimistic locking, or distributed locks to avoid race conditions."
+      },
+      {
+        "type": "code",
+        "value": "async function updateUserProfile(userId: string, update: Partial<UserProfile>) {\n  const maxRetries = 3;\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    const user = await getUser(userId);\n    user.version = user.version || 0;\n    const updatedProfile = { ...user, ...update, version: user.version + 1 };\n\n    const success = await updateUserIfVersionMatches(userId, updatedProfile, user.version);\n    if (success) return updatedProfile;\n    // If not successful, another update happened concurrently, retry\n  }\n  throw new Error('Failed to update profile due to concurrent modifications');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This optimistic locking approach retries updates if the data version has changed due to another process updating simultaneously."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Distributed systems are prone to unique challenges. By anticipating edge cases and using robust error handling, retries, rollbacks, and concurrency controls, you can increase your TypeScript application's resilience and reliability. Start simple with try-catch blocks and gradually implement more advanced patterns as your system grows."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-python-web-scraper-to-monitor-ecommerce-price-changes",
+    "title": "Building a Python Web Scraper to Monitor E-commerce Price Changes",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a beginner-friendly Python web scraper to track price changes on e-commerce websites with simple code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=nCuPv3tf2Hg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Monitoring price changes on e-commerce websites can help you find the best deals and save money. In this tutorial, we'll create a simple Python web scraper that checks product prices periodically. We'll use Python libraries like requests to fetch web pages and BeautifulSoup to parse HTML content. This guide is beginner-friendly and will walk you through each step."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before we start coding, make sure you have Python installed. You'll also need two libraries: requests and BeautifulSoup4. You can install them using pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install requests beautifulsoup4"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's pick a product page from an e-commerce site to scrape. Be sure to check the website's terms of use before scraping, and avoid heavy requests that might overload the server. For this tutorial, we'll demonstrate using a sample HTML snippet, but the method applies to real product pages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple script that fetches the product page and extracts the price."
+      },
+      {
+        "type": "code",
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# URL of the product page (replace this with the actual URL)\nurl = 'https://example.com/product-page'\n\n# Function to get the product price\ndef get_price(url):\n    response = requests.get(url)\n    if response.status_code != 200:\n        print(f'Failed to retrieve page: {response.status_code}')\n        return None\n    \n    soup = BeautifulSoup(response.text, 'html.parser')\n\n    # Example: find a span with class 'price' (change based on the website)\n    price_tag = soup.find('span', class_='price')\n    if price_tag:\n        price = price_tag.text.strip()\n        return price\n    else:\n        print('Price tag not found on the page')\n        return None\n\n# Example usage\nprice = get_price(url)\nif price:\n    print(f'The current price is: {price}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this script, we define a function get_price that takes a product page URL, makes an HTTP GET request to fetch the page content, then uses BeautifulSoup to parse the HTML. We look for a span element with a class name 'price'. Different sites use different HTML structures, so you should use your browser's developer tools to inspect the price element on the product page you're interested in."
+      },
+      {
+        "type": "paragraph",
+        "value": "Once you can extract the current price, you might want to monitor it regularly and check if it changes. Here's a simple way to check the price repeatedly and notify you if it drops."
+      },
+      {
+        "type": "code",
+        "value": "import time\n\n# Monitor the price every hour (3600 seconds)\ncheck_interval = 3600\n\n# Store the last recorded price\nlast_price = None\n\nwhile True:\n    current_price = get_price(url)\n    if current_price:\n        if current_price != last_price:\n            print(f'Price changed to {current_price}')\n            last_price = current_price\n        else:\n            print(f'Price remains the same: {current_price}')\n    else:\n        print('Could not fetch the price.')\n    \n    time.sleep(check_interval)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This loop checks the product price every hour. If the price has changed since the last check, it prints a notification. You could extend this example by sending email alerts or logging the data to a file or database."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, building a Python web scraper involves sending HTTP requests to get web page content and then parsing the HTML to extract the information you want—in this case, price data. Remember to respect website policies and avoid sending too many requests in a short time."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-data-model-validation-errors-in-python",
+    "title": "Understanding Data Model Validation Errors in Python: A Hands-On Guide",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle and understand data model validation errors in Python with practical examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=XIdQ6gO3Anc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications in Python, especially with modern libraries like Pydantic or Django, you often define data models that represent your data structure. These data models come with validation rules to ensure the data is correct and in the expected format. When data doesn’t meet these rules, the system raises validation errors. Understanding these errors is crucial for debugging and writing robust programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this guide, we will use Pydantic, a popular data validation library, to illustrate common data model validation errors and how to interpret them."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's install Pydantic if you haven't already:"
+      },
+      {
+        "type": "code",
+        "value": "pip install pydantic"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's create a simple data model for a user that expects a name as a string and an age as an integer:"
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel\n\nclass User(BaseModel):\n    name: str\n    age: int"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's try to create a user with correct data first:"
+      },
+      {
+        "type": "code",
+        "value": "user = User(name=\"Alice\", age=30)\nprint(user)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This should work without any errors. But what happens if we pass wrong data types? For example, passing a string for age instead of an integer:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    user = User(name=\"Bob\", age=\"thirty\")\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic will raise a validation error telling you that age should be an integer, but it received a string. This error helps you catch wrong data early in your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common error is missing required fields. For instance, if you forget to provide the age field:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    user = User(name=\"Charlie\")\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error message will indicate that age is a required field but was not provided."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also add custom data validation by using Pydantic validators, which allows you to enforce more complex rules and see detailed error messages."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import validator\n\nclass User(BaseModel):\n    name: str\n    age: int\n\n    @validator('age')\n    def age_must_be_positive(cls, v):\n        if v <= 0:\n            raise ValueError('Age must be a positive integer')\n        return v"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now if you try to create a user with an invalid age:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    user = User(name=\"David\", age=-5)\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error message clearly informs that the age must be positive."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, data model validation errors in Python help ensure your data is correct and useful. When you use libraries like Pydantic, these errors become easy to detect and fix with clear, actionable messages. Practice catching and understanding these errors to improve your coding skills and application reliability."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-advanced-techniques-for-real-world-scenarios",
+    "title": "Mastering SQL Window Functions: Advanced Techniques for Real-World Scenarios",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how SQL window functions work and apply advanced techniques to solve real-world business problems using powerful, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Ww71knvhQ-s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of rows related to the current row without collapsing the result into a single output row. Unlike aggregate functions, window functions retain row-level detail, enabling you to solve complex problems like running totals, ranking, moving averages, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, you'll master the use of SQL window functions with practical examples that are commonly encountered in business scenarios. We'll cover ranking, cumulative sums, calculating differences between rows, and using partitions effectively, all explained in a beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a sample sales table called `sales_data` that contains these columns: `sale_id`, `salesperson`, `region`, `sale_date`, and `amount`."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM sales_data;\n-- Example output:\n-- sale_id | salesperson | region | sale_date  | amount\n-- 1       | John        | East   | 2024-01-01 | 100\n-- 2       | Jane        | West   | 2024-01-01 | 200\n-- 3       | John        | East   | 2024-01-02 | 150\n-- 4       | Jane        | West   | 2024-01-02 | 300"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Ranking Salespeople by Their Sales Amount"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `RANK()` function allows you to assign rankings to rows within a window of rows, such as sales by each salesperson ordered by amount."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  RANK() OVER (PARTITION BY sale_date ORDER BY amount DESC) AS sales_rank\nFROM sales_data;\n\n-- This query ranks salespeople for each day by their sales amount."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Calculating a Running Total of Sales"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can calculate the running total of sales for each salesperson over time using the `SUM()` window function."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales_data;\n\n-- This shows cumulative sales amounts for each salesperson ordered by date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Calculating Differences Between Current and Previous Row"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the `LAG()` function, you can compare each sale amount with the previous day’s sale amount for the same salesperson."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_amount,\n  amount - LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS difference\nFROM sales_data;\n\n-- This shows how much the current sale amount increased or decreased compared to the previous day."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Using `ROW_NUMBER()` to Assign Unique Sequence Numbers"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `ROW_NUMBER()` function gives a unique sequential number to rows in the window. For example, number sales chronologically for each region."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  region,\n  sale_date,\n  salesperson,\n  ROW_NUMBER() OVER (PARTITION BY region ORDER BY sale_date) AS sale_sequence\nFROM sales_data;\n\n-- This numbers sales in each region from earliest to latest."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Combining Multiple Window Functions"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can combine window functions for deeper insights. For example, showing ranking, running total, and differences altogether can give a full picture of sales performance."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  RANK() OVER (PARTITION BY sale_date ORDER BY amount DESC) AS daily_rank,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_amount\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "## Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL window functions unlock advanced querying techniques without complicated joins or subqueries. They enable row-wise calculations, ranking, and cumulative analyses that fit many real-world business needs. By practicing functions like `RANK()`, `ROW_NUMBER()`, `SUM() OVER()`, and `LAG()`, you'll enhance your ability to generate insightful reports and meaningful data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start experimenting with these simple examples using your own data, and soon you will master window functions to address complex queries seamlessly."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-sql-window-functions-to-simplify-complex-error-handling",
+    "title": "Leveraging SQL Window Functions to Simplify Complex Error Handling",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how SQL window functions can simplify complex error handling by providing powerful tools for analyzing data over partitions and sequences, making debugging and error detection easier.",
+    "videoUrl": "https://www.youtube.com/watch?v=yJv7XFOcAwc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large datasets, error detection and handling can become quite complex. SQL window functions provide a powerful way to perform calculations across sets of rows related to the current row without collapsing the result into a single output. This ability helps simplify many error-handling scenarios."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions let you analyze and identify errors such as duplicates, missing data, or out-of-sequence values by partitioning data, ordering rows, and calculating running totals or ranks across those partitions. They offer more readable and maintainable queries compared to traditional GROUP BY or self-joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore how to use some common window functions like ROW_NUMBER(), LAG(), and SUM() to detect errors in a sales transactions table."
+      },
+      {
+        "type": "code",
+        "value": "-- Sample sales data with potential issues\nCREATE TABLE sales (\n  transaction_id INT,\n  customer_id INT,\n  transaction_date DATE,\n  amount NUMERIC\n);\n\nINSERT INTO sales VALUES\n(1, 101, '2024-05-01', 100),\n(2, 101, '2024-05-01', 100),  -- duplicate transaction\n(3, 102, '2024-05-03', 50),\n(4, 103, '2024-05-05', NULL), -- missing amount error\n(5, 101, '2024-05-02', 75);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Detecting Duplicate Transactions\nWe use ROW_NUMBER() partitioned by customer and date to find duplicates. Rows with a row number greater than 1 indicate duplicate transactions for the same customer on the same day."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  transaction_id,\n  customer_id,\n  transaction_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY customer_id, transaction_date ORDER BY transaction_id) AS rn\nFROM sales\nWHERE rn > 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Finding Missing Amounts\nWe simply check for rows where the amount is NULL, indicating missing or incomplete data that needs attention."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM sales WHERE amount IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Detecting Out-of-Sequence Transactions\nUsing LAG(), you can compare the date of the current transaction to the previous transaction for the same customer to identify if the sequence is incorrect or any transaction is out of order."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  transaction_id,\n  customer_id,\n  transaction_date,\n  LAG(transaction_date) OVER (PARTITION BY customer_id ORDER BY transaction_date) AS previous_date\nFROM sales\nWHERE transaction_date < COALESCE(\n    LAG(transaction_date) OVER (PARTITION BY customer_id ORDER BY transaction_date),\n    transaction_date\n  );"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBy leveraging window functions, you can easily build practical queries to surface data issues without complicated joins or subqueries. This approach simplifies error detection and helps in maintaining clean, reliable datasets for downstream processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start experimenting with window functions in your own error-handling workflows to discover how much simpler your SQL queries become!"
+      }
+    ]
   }
 ];

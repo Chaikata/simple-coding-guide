@@ -1,517 +1,557 @@
 [
   {
-    "slug": "mastering-javascript-destructuring-unlocking-cleaner-code-with-practical-examples",
-    "title": "Mastering JavaScript Destructuring: Unlocking Cleaner Code with Practical Examples",
+    "slug": "designing-scalable-event-driven-architectures-in-javascript",
+    "title": "Designing Scalable Event-Driven Architectures in JavaScript: A Beginner's Guide",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to use JavaScript destructuring to write cleaner and more readable code with practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=UgEaJBz3bjY",
+    "description": "Learn the basics of building scalable event-driven architectures in JavaScript with practical examples and simple code snippets.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript destructuring is a powerful feature that allows you to extract values from arrays or objects and assign them to variables in a concise way. This can make your code cleaner, easier to read, and reduce the amount of code you write. In this tutorial, you will learn the basics of destructuring and see practical examples so you can start applying it in your projects."
+        "value": "Event-driven architecture (EDA) is a design pattern where the flow of the program is determined by events such as user actions, sensor outputs, or messages from other programs. This approach enables scalable, flexible, and loosely coupled applications, especially useful in modern JavaScript development."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with array destructuring. Suppose you have an array of fruits and you want to assign each fruit to a variable:"
+        "value": "In this tutorial, we'll explore how to design a simple yet scalable event-driven system in JavaScript. We will create an event emitter, define events, and show how to handle asynchronous workflows efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand the core concept: an event emitter is an object that allows us to register event listeners (callbacks) and emit events to notify these listeners. This pattern promotes decoupling, as the event producers don't need to know about the consumers."
       },
       {
         "type": "code",
-        "value": "const fruits = ['apple', 'banana', 'orange'];\n\n// Without destructuring\nconst first = fruits[0];\nconst second = fruits[1];\nconst third = fruits[2];\n\n// With destructuring\nconst [firstFruit, secondFruit, thirdFruit] = fruits;\n\nconsole.log(firstFruit);  // apple\nconsole.log(secondFruit); // banana\nconsole.log(thirdFruit);  // orange"
+        "value": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n\n  on(event, listener) {\n    if (!this.events[event]) {\n      this.events[event] = [];\n    }\n    this.events[event].push(listener);\n  }\n\n  emit(event, data) {\n    if (this.events[event]) {\n      this.events[event].forEach(listener => listener(data));\n    }\n  }\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "As you can see, destructuring makes your code shorter and easier to understand. You can also skip certain values by leaving gaps:"
+        "value": "In the above code, the EventEmitter class manages event listeners: the `on` method registers listeners, and the `emit` method triggers all listeners for a particular event."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create an example where a user logs in, and the system emits an event that other parts of the app can subscribe to. This allows the app to react to the login event without tight coupling."
       },
       {
         "type": "code",
-        "value": "const numbers = [10, 20, 30, 40];\nconst [firstNum, , thirdNum] = numbers;\n\nconsole.log(firstNum);  // 10\nconsole.log(thirdNum);  // 30"
+        "value": "const emitter = new EventEmitter();\n\n// Register a listener for the 'login' event\nemitter.on('login', (user) => {\n  console.log(`User logged in: ${user.name}`);\n  // Further actions like fetching user settings can be triggered here\n});\n\n// Simulate a login function\nfunction loginUser(name) {\n  const user = { name };\n  console.log('Logging in...');\n  emitter.emit('login', user);\n}\n\nloginUser('Alice');\n"
       },
       {
         "type": "paragraph",
-        "value": "Next, let's look at object destructuring. Objects often have multiple properties, and destructuring helps extract these properties without repeating the object name:"
+        "value": "Output:\nLogging in...\nUser logged in: Alice\n\nThis output shows how emitting 'login' triggered the listener. You can add multiple listeners to the same event to handle different aspects of the system."
+      },
+      {
+        "type": "paragraph",
+        "value": "To ensure scalability, especially for real-world applications, consider the following best practices:\n- Use asynchronous event handlers if processing is heavy, to avoid blocking the main thread.\n- Implement event queues or message brokers (like Redis, RabbitMQ) for distributed systems.\n- Maintain clear event naming conventions to avoid confusion.\n- Decouple event producers and consumers to facilitate independent development and deployment."
       },
       {
         "type": "code",
-        "value": "const person = {\n  name: 'Alice',\n  age: 25,\n  city: 'New York'\n};\n\n// Without destructuring\nconst name1 = person.name;\nconst age1 = person.age;\n\n// With destructuring\nconst { name, age, city } = person;\n\nconsole.log(name); // Alice\nconsole.log(age);  // 25\nconsole.log(city); // New York"
+        "value": "// Example of asynchronous event handling\nemitter.on('data', async (payload) => {\n  console.log('Processing data asynchronously...');\n  await new Promise(resolve => setTimeout(resolve, 1000)); // simulate async operation\n  console.log('Data processed:', payload);\n});\n\nemitter.emit('data', { id: 123, content: 'Hello World' });"
       },
       {
         "type": "paragraph",
-        "value": "You can also rename variables when destructuring to avoid name conflicts or for clarity:"
-      },
-      {
-        "type": "code",
-        "value": "const { name: fullName, age: years } = person;\n\nconsole.log(fullName); // Alice\nconsole.log(years);    // 25"
+        "value": "In this asynchronous example, event listeners can perform async tasks using promises or async/await syntax, improving app responsiveness and scalability."
       },
       {
         "type": "paragraph",
-        "value": "Destructuring works great with default values, so you can provide fallback values if a property does not exist:"
-      },
-      {
-        "type": "code",
-        "value": "const { country = 'USA' } = person;\n\nconsole.log(country); // USA"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also destructure function parameters to directly access properties of an object passed as an argument. This makes your functions cleaner:"
-      },
-      {
-        "type": "code",
-        "value": "function greet({ name, city }) {\n  console.log(`Hello, ${name} from ${city}!`);\n}\n\ngreet(person); // Hello, Alice from New York!"
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, remember you can combine array and object destructuring for more complex data structures. Here's an example with an array of objects:"
-      },
-      {
-        "type": "code",
-        "value": "const users = [\n  { id: 1, username: 'john' },\n  { id: 2, username: 'jane' }\n];\n\nconst [user1, user2] = users;\nconsole.log(user1.username); // john\nconsole.log(user2.username); // jane"
-      },
-      {
-        "type": "paragraph",
-        "value": "Destructuring is a simple but powerful tool that helps you write cleaner and more maintainable JavaScript code. Start using it today, and you'll notice your code becoming easier to understand and less repetitive."
+        "value": "In summary, building scalable event-driven architectures in JavaScript starts with a simple event emitter pattern and grows by introducing asynchronous handling and distributed event management. This allows you to build flexible, maintainable, and scalable applications."
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-errors-javascript",
-    "title": "Handling Floating Point Precision Errors in JavaScript: Best Practices and Solutions",
+    "slug": "mastering-javascript-async-error-handling-with-custom-retry-logic",
+    "title": "Mastering JavaScript Async Error Handling with Custom Retry Logic",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to handle floating point precision errors in JavaScript with beginner-friendly explanations, common issues, and practical solutions to write more accurate code.",
-    "videoUrl": "https://www.youtube.com/watch?v=38dmbYWrOV0",
+    "description": "Learn how to handle asynchronous errors in JavaScript by building custom retry logic to make your apps more reliable and resilient.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
     "content": [
       {
         "type": "paragraph",
-        "value": "Floating point numbers in JavaScript can sometimes cause unexpected results because of how numbers are stored in binary. This issue, known as floating point precision error, often appears during arithmetic operations, especially with decimals. For beginners, this can be confusing when simple calculations like 0.1 + 0.2 don’t equal 0.3 exactly."
+        "value": "When working with asynchronous JavaScript, such as fetching data from an API, errors can occur due to various reasons like network issues or server problems. Handling these errors properly is crucial to building reliable applications. One effective way to improve error handling is by implementing custom retry logic that attempts the operation multiple times before failing."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at an example to understand this problem better."
+        "value": "In this article, we'll explore a simple yet powerful approach to retry failed async operations using JavaScript's async/await syntax. You’ll learn how to create a reusable function that retries requests and handles errors gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a function that simulates an unreliable asynchronous task. This function will randomly fail or succeed to help us test our retry logic."
       },
       {
         "type": "code",
-        "value": "console.log(0.1 + 0.2 === 0.3); // returns false\nconsole.log(0.1 + 0.2);        // outputs 0.30000000000000004"
+        "value": "async function unreliableAsyncTask() {\n  return new Promise((resolve, reject) => {\n    // Simulate a 50% chance of failure\n    const succeed = Math.random() > 0.5;\n    setTimeout(() => {\n      if (succeed) {\n        resolve('Success!');\n      } else {\n        reject(new Error('Something went wrong'));\n      }\n    }, 500);\n  });\n}"
       },
       {
         "type": "paragraph",
-        "value": "As you can see, adding 0.1 and 0.2 doesn’t exactly equal 0.3 due to floating point precision limitations. This happens because JavaScript uses the IEEE 754 standard for storing numbers, which sometimes can't perfectly represent decimals."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here are some best practices and solutions to handle floating point precision errors in your JavaScript code:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use toFixed() Method**: This method formats a number to a fixed number of decimal places and returns it as a string. It's useful for displaying results, but keep in mind that the output is a string, so convert it back to a number if needed."
+        "value": "Now, we’ll create our custom retry function. This function takes an async function as a parameter, along with the maximum number of retries and an optional delay between retries."
       },
       {
         "type": "code",
-        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2)); // \"0.30\"\nconsole.log(Number(sum.toFixed(2))); // 0.3"
+        "value": "async function retryAsync(fn, retries = 3, delay = 1000) {\n  for (let attempt = 1; attempt <= retries; attempt++) {\n    try {\n      // Attempt to execute the async function\n      const result = await fn();\n      return result;  // Return if successful\n    } catch (error) {\n      // If last attempt, throw the error\n      if (attempt === retries) {\n        throw error;\n      }\n      console.log(`Attempt ${attempt} failed. Retrying in ${delay}ms...`);\n      // Wait before retrying\n      await new Promise(res => setTimeout(res, delay));\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "2. **Multiply and Divide**: A common trick is to convert decimals to integers by multiplying, perform the operation, then divide back."
+        "value": "Finally, let's use our retryAsync function with the unreliableAsyncTask. This will automatically retry the task up to three times before throwing an error."
       },
       {
         "type": "code",
-        "value": "const sum = (0.1 * 10 + 0.2 * 10) / 10;\nconsole.log(sum === 0.3); // true"
+        "value": "retryAsync(unreliableAsyncTask, 3, 1000)\n  .then(result => console.log('Final result:', result))\n  .catch(error => console.error('Failed after retries:', error.message));"
       },
       {
         "type": "paragraph",
-        "value": "3. **Use the Number.EPSILON Property**: This represents the smallest interval between two representable numbers. You can use it to compare floating point numbers instead of direct equality."
-      },
-      {
-        "type": "code",
-        "value": "function isEqual(a, b) {\n  return Math.abs(a - b) < Number.EPSILON;\n}\n\nconsole.log(isEqual(0.1 + 0.2, 0.3)); // true"
+        "value": "This pattern is incredibly useful when dealing with APIs or any async tasks prone to temporary failures. You can customize the number of retries and delay between attempts to suit your application’s needs."
       },
       {
         "type": "paragraph",
-        "value": "4. **Use External Libraries**: For complex calculations, libraries like decimal.js or math.js provide arbitrary-precision arithmetic and handle floating point errors for you."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, floating point precision errors are a common quirk in JavaScript, but you can handle them effectively using built-in methods, simple arithmetic tricks, or specialized libraries. Being aware of this will make your numerical computations much more accurate and reliable."
+        "value": "To summarize, mastering async error handling with custom retry logic involves wrapping your async calls in a retry loop, catching errors, and optionally adding delays between retries. This makes your application more robust and resistant to transient errors."
       }
     ]
   },
   {
-    "slug": "building-real-time-chat-application-with-typescript-websocket",
-    "title": "Building a Real-Time Chat Application with TypeScript and WebSocket",
+    "slug": "building-scalable-data-models-in-typescript-for-enterprise-applications",
+    "title": "Building Scalable Data Models in TypeScript for Enterprise Applications",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to create a simple yet powerful real-time chat application using TypeScript and WebSocket, perfect for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
+    "description": "Learn how to design and build scalable data models in TypeScript to create maintainable and efficient enterprise applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=tj5VW2xJsqU",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time communication is essential for modern web applications. In this tutorial, you will learn how to build a basic real-time chat app using TypeScript and WebSocket. WebSocket provides a full-duplex communication channel over a single TCP connection, making it ideal for chat applications."
+        "value": "In enterprise applications, managing complex data structures efficiently is crucial. TypeScript, with its strong typing system, enables developers to build scalable data models that are both clear and maintainable. In this tutorial, we will explore how to create scalable data models in TypeScript by organizing data, using interfaces and classes effectively, and applying best practices."
       },
       {
         "type": "paragraph",
-        "value": "We'll create a simple server that handles WebSocket connections and a client that connects to the server to send and receive messages in real time."
+        "value": "### 1. Understand Your Data Shape\nBefore coding, understand the data your application will handle. Break down the data into smaller logical entities. For example, in a user management system, you might have users, roles, and permissions as separate entities."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setup your project\nFirst, create a folder for your project and initialize it with npm:\nbash\nmkdir realtime-chat\ncd realtime-chat\nnpm init -y\n\nThen install the necessary dependencies:\nbash\nnpm install ws typescript @types/ws\n\nFinally, initialize TypeScript configuration:\nbash\ntsc --init\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 2: Create the WebSocket Server\nNow, create a file named `server.ts` for your WebSocket server. This server will accept connections and broadcast messages to all connected clients."
+        "value": "### 2. Use Interfaces for Data Contracts\nInterfaces in TypeScript describe the shape of data without implementation details. They help ensure consistency across your application."
       },
       {
         "type": "code",
-        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst wss = new WebSocketServer({ port: 8080 });\n\nwss.on('connection', (ws: WebSocket) => {\n  console.log('New client connected');\n\n  ws.on('message', (data) => {\n    // Broadcast incoming message to all clients\n    wss.clients.forEach(client => {\n      if (client.readyState === WebSocket.OPEN) {\n        client.send(data.toString());\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  roles: Role[];\n}\n\ninterface Role {\n  id: number;\n  name: string;\n  permissions: Permission[];\n}\n\ninterface Permission {\n  id: number;\n  action: string;\n  resource: string;\n}"
       },
       {
         "type": "paragraph",
-        "value": "This simple server accepts connections, listens for messages, and then broadcasts each message to every connected client. The `ws` library is used here, which is a popular WebSocket implementation for Node.js."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 3: Create the Client\nNow let's create a basic client using HTML and TypeScript. Create an `index.html` file and a `client.ts` file."
-      },
-      {
-        "type": "paragraph",
-        "value": "In `index.html`, include a simple user interface for your chat:"
+        "value": "### 3. Use Classes for Behavior\nTo add behavior or methods related to your data models, use classes. For example, you can create a class that implements the User interface and add methods like checking user permissions."
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n</head>\n<body>\n  <h2>TypeScript WebSocket Chat</h2>\n  <div id=\"chat\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type a message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script src=\"client.js\"></script>\n</body>\n</html>"
+        "value": "class UserModel implements User {\n  id: number;\n  name: string;\n  email: string;\n  roles: Role[];\n\n  constructor(id: number, name: string, email: string, roles: Role[]) {\n    this.id = id;\n    this.name = name;\n    this.email = email;\n    this.roles = roles;\n  }\n\n  // Check if user has a specific permission\n  hasPermission(action: string, resource: string): boolean {\n    return this.roles.some(role => \n      role.permissions.some(p => p.action === action && p.resource === resource)\n    );\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Now, in `client.ts`, write TypeScript that connects to the WebSocket server and handles sending and receiving messages."
+        "value": "### 4. Leverage Generics for Reusability\nGenerics help create flexible and reusable data models. For example, creating a paginated response type to handle large datasets."
       },
       {
         "type": "code",
-        "value": "const ws = new WebSocket('ws://localhost:8080');\n\nconst chatDiv = document.getElementById('chat') as HTMLDivElement;\nconst messageInput = document.getElementById('messageInput') as HTMLInputElement;\nconst sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;\n\nws.onopen = () => {\n  addMessage('Connected to the chat server');\n};\n\nws.onmessage = (event) => {\n  addMessage(event.data);\n};\n\nws.onclose = () => {\n  addMessage('Disconnected from the server');\n};\n\nsendBtn.onclick = () => {\n  const message = messageInput.value.trim();\n  if (message) {\n    ws.send(message);\n    messageInput.value = '';\n  }\n};\n\nfunction addMessage(message: string) {\n  const p = document.createElement('p');\n  p.textContent = message;\n  chatDiv.appendChild(p);\n}"
+        "value": "interface PaginatedResponse<T> {\n  items: T[];\n  totalItems: number;\n  currentPage: number;\n  totalPages: number;\n}\n\n// Example usage:\nconst userPage: PaginatedResponse<User> = {\n  items: [],\n  totalItems: 0,\n  currentPage: 1,\n  totalPages: 0\n};"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Compile TypeScript and Run\nCompile the TypeScript files:\nbash\nnpx tsc\n\nThis will generate JavaScript files for both `server.ts` and `client.ts` if your `tsconfig.json` is set up with the default `outDir` or the source is in the same directory.\n\nRun the server:\nbash\nnode server.js\n\n\nOpen `index.html` in your browser to access the chat client. Open multiple tabs to see messages broadcasted in real time."
+        "value": "### 5. Organize Models and Follow Naming Conventions\nKeep your models organized in dedicated folders like `models/` or `interfaces/`. Follow consistent naming conventions like PascalCase for types and classes. This improves maintainability as your application grows."
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion\nYou've just built a simple real-time chat app using TypeScript and WebSocket! This foundation can be extended by adding user authentication, message history, or a prettier UI. WebSocket allows for efficient two-way communication, essential for interactive web apps like chat or live notifications."
+        "value": "### 6. Validate Data Correctly\nWhile TypeScript provides compile-time validation, sometimes you need runtime validation especially when handling external data (APIs, user input). Consider using libraries like `zod` or `io-ts` for schema validation. This keeps your data safe and error-free."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Thoughts\nBuilding scalable data models in TypeScript requires careful planning and consistent coding practices. Use interfaces to define data shapes, classes for encapsulating behavior, and generics for flexibility. Organizing your models properly and validating data ensures a maintainable and scalable codebase suitable for enterprise applications."
       }
     ]
   },
   {
-    "slug": "understanding-typescripts-structural-type-system-vs-nominal-typing-errors",
-    "title": "Understanding TypeScript's Structural Type System vs. Nominal Typing Errors",
+    "slug": "designing-resilient-typescript-systems-handling-edge-cases-in-distributed-architectures",
+    "title": "Designing Resilient TypeScript Systems: Handling Edge Cases in Distributed Architectures",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn the key differences between TypeScript's structural type system and nominal typing, with a focus on common errors and how to fix them.",
-    "videoUrl": "https://www.youtube.com/watch?v=MbZoQlmQaWQ",
+    "description": "Learn how to design resilient TypeScript applications by effectively handling edge cases and errors in distributed systems, ensuring your apps stay robust and reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=nZuWCo52wTg",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript uses a structural type system, which means compatibility between types is based on the shape or structure of the data, rather than its explicit name or declaration. This contrasts with nominal typing used in some other languages, where type compatibility depends on explicit declarations or names."
+        "value": "Distributed architectures, such as microservices or serverless systems, offer scalability and flexibility but also introduce challenges like network failures, data inconsistencies, and race conditions. When building these types of systems with TypeScript, it’s crucial to anticipate and handle edge cases to create resilient applications."
       },
       {
         "type": "paragraph",
-        "value": "In a structural type system, if two types have the same properties and types, they are considered compatible, even if they are declared separately. This can sometimes cause confusion for beginners coming from nominally typed languages, especially when expecting type errors that do not occur, or when nominal typing would catch certain mistakes."
+        "value": "This article will introduce beginners to common edge cases in distributed systems and demonstrate practical TypeScript patterns and error-handling techniques to mitigate these risks."
       },
       {
         "type": "paragraph",
-        "value": "Here's an example illustrating structural typing in TypeScript:"
+        "value": "### Common Edge Cases in Distributed Systems"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Network Failures:** Requests can timeout or fail due to unreliable network connectivity."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Partial Failures:** Some services succeed, others fail, leading to inconsistent states."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Race Conditions:** Simultaneous operations result in unexpected data overwrites or corruption."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Duplicate Messages:** Retries or network issues can cause duplicated requests or events."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Error Handling in TypeScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "The following example demonstrates a simple retry mechanism with exponential backoff to handle network errors when calling an external service."
       },
       {
         "type": "code",
-        "value": "interface Point {\n  x: number;\n  y: number;\n}\n\ninterface Coordinate {\n  x: number;\n  y: number;\n}\n\nfunction logPoint(p: Point) {\n  console.log(`${p.x}, ${p.y}`);\n}\n\nconst coord: Coordinate = { x: 10, y: 20 };\nlogPoint(coord); // Works because coord and Point have the same structure"
+        "value": "async function fetchWithRetry(url: string, retries = 3, delay = 500): Promise<string> {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n    return await response.text();\n  } catch (error) {\n    if (retries > 0) {\n      console.warn(`Request failed. Retrying in ${delay}ms...`);\n      await new Promise(res => setTimeout(res, delay));\n      return fetchWithRetry(url, retries - 1, delay * 2);\n    } else {\n      throw error;\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Even though `Point` and `Coordinate` are different interfaces, TypeScript allows passing a `Coordinate` to a function expecting a `Point` because their structures match."
+        "value": "In this function, we recursively retry fetching data, doubling the wait time after each failure. This helps minimize overwhelming a struggling service."
       },
       {
         "type": "paragraph",
-        "value": "In contrast, nominal typing would require explicit inheritance or declaration to treat these two types as compatible."
+        "value": "### Handling Partial Failures"
       },
       {
         "type": "paragraph",
-        "value": "Sometimes, developers want nominal typing to prevent mixing different types with the same structure. TypeScript doesn’t have built-in nominal typing, but you can simulate it using techniques such as \"branding\":"
+        "value": "When performing multiple dependent operations across services, use try-catch blocks and compensating actions to maintain system consistency."
       },
       {
         "type": "code",
-        "value": "// Simulating nominal typing using branding\ntype UserId = string & { readonly brand: unique symbol };\ntype OrderId = string & { readonly brand: unique symbol };\n\nfunction createUserId(id: string): UserId {\n  return id as UserId;\n}\n\nfunction createOrderId(id: string): OrderId {\n  return id as OrderId;\n}\n\nfunction getUser(id: UserId) {\n  console.log(`User ID: ${id}`);\n}\n\nconst userId = createUserId(\"abc123\");\nconst orderId = createOrderId(\"xyz789\");\n\ngetUser(userId); // Works\n// getUser(orderId); // Error: Argument of type 'OrderId' is not assignable to parameter of type 'UserId'."
+        "value": "async function processOrder(orderId: string) {\n  try {\n    await reserveInventory(orderId);\n    await chargePayment(orderId);\n    await confirmOrder(orderId);\n  } catch (error) {\n    console.error('Error processing order:', error);\n    await cancelInventoryReservation(orderId); // Undo reserved inventory\n    throw error;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "By adding a unique \"brand\" property with `unique symbol`, you help TypeScript distinguish types that are structurally identical but logically different, preventing mixing them up and catching errors."
+        "value": "This example shows how to rollback inventory reservation if payment or confirmation fails, avoiding inconsistent order states."
       },
       {
         "type": "paragraph",
-        "value": "To summarize:"
+        "value": "### Preventing Race Conditions"
       },
       {
         "type": "paragraph",
-        "value": "- TypeScript uses structural typing, meaning types are compatible if their shapes match.\n- This enables flexibility but can cause confusion if you expect nominal type checks.\n- To simulate nominal typing, you can use branding techniques to make types incompatible unless explicitly converted.\n- Understanding this difference helps you avoid type errors and design more robust TypeScript programs."
+        "value": "Use concurrency-safe mechanisms like database transactions, optimistic locking, or distributed locks to avoid race conditions."
+      },
+      {
+        "type": "code",
+        "value": "async function updateUserProfile(userId: string, update: Partial<UserProfile>) {\n  const maxRetries = 3;\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    const user = await getUser(userId);\n    user.version = user.version || 0;\n    const updatedProfile = { ...user, ...update, version: user.version + 1 };\n\n    const success = await updateUserIfVersionMatches(userId, updatedProfile, user.version);\n    if (success) return updatedProfile;\n    // If not successful, another update happened concurrently, retry\n  }\n  throw new Error('Failed to update profile due to concurrent modifications');\n}"
       },
       {
         "type": "paragraph",
-        "value": "With this knowledge, you'll better understand TypeScript errors related to type compatibility and how to design types that reflect your intended logic."
+        "value": "This optimistic locking approach retries updates if the data version has changed due to another process updating simultaneously."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Distributed systems are prone to unique challenges. By anticipating edge cases and using robust error handling, retries, rollbacks, and concurrency controls, you can increase your TypeScript application's resilience and reliability. Start simple with try-catch blocks and gradually implement more advanced patterns as your system grows."
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-edge-cases-python",
-    "title": "Handling Floating Point Precision and Edge Cases in Python Calculations",
+    "slug": "building-a-python-web-scraper-to-monitor-ecommerce-price-changes",
+    "title": "Building a Python Web Scraper to Monitor E-commerce Price Changes",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to manage floating point precision issues and handle edge cases effectively in Python calculations with practical tips and examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=Gbac7pc3rnY",
+    "description": "Learn how to create a beginner-friendly Python web scraper to track price changes on e-commerce websites with simple code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=nCuPv3tf2Hg",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with numbers in Python, especially decimal numbers, you might notice that some calculations don't give the exact result you expect. This happens because computers use floating point representation, which can cause small precision errors. In this tutorial, we'll explore why this occurs and how you can handle these floating point precision issues as well as some common edge cases."
+        "value": "Monitoring price changes on e-commerce websites can help you find the best deals and save money. In this tutorial, we'll create a simple Python web scraper that checks product prices periodically. We'll use Python libraries like requests to fetch web pages and BeautifulSoup to parse HTML content. This guide is beginner-friendly and will walk you through each step."
       },
       {
         "type": "paragraph",
-        "value": "### What is Floating Point Precision?\nFloating point numbers are a way computers represent decimal numbers approximately, which sometimes leads to tiny differences in the result. For example, adding 0.1 and 0.2 in Python doesn’t exactly equal 0.3 due to how these numbers are stored internally."
+        "value": "Before we start coding, make sure you have Python installed. You'll also need two libraries: requests and BeautifulSoup4. You can install them using pip:"
       },
       {
         "type": "code",
-        "value": "print(0.1 + 0.2 == 0.3)  # Outputs: False\nprint(0.1 + 0.2)           # Outputs: 0.30000000000000004"
+        "value": "pip install requests beautifulsoup4"
       },
       {
         "type": "paragraph",
-        "value": "### How to Handle Floating Point Precision Issues\nOne practical way to handle this is using the `round()` function, which rounds the result to a specified number of decimal places."
+        "value": "Let's pick a product page from an e-commerce site to scrape. Be sure to check the website's terms of use before scraping, and avoid heavy requests that might overload the server. For this tutorial, we'll demonstrate using a sample HTML snippet, but the method applies to real product pages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple script that fetches the product page and extracts the price."
       },
       {
         "type": "code",
-        "value": "result = 0.1 + 0.2\nprint(round(result, 2))  # Outputs: 0.3"
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# URL of the product page (replace this with the actual URL)\nurl = 'https://example.com/product-page'\n\n# Function to get the product price\ndef get_price(url):\n    response = requests.get(url)\n    if response.status_code != 200:\n        print(f'Failed to retrieve page: {response.status_code}')\n        return None\n    \n    soup = BeautifulSoup(response.text, 'html.parser')\n\n    # Example: find a span with class 'price' (change based on the website)\n    price_tag = soup.find('span', class_='price')\n    if price_tag:\n        price = price_tag.text.strip()\n        return price\n    else:\n        print('Price tag not found on the page')\n        return None\n\n# Example usage\nprice = get_price(url)\nif price:\n    print(f'The current price is: {price}')"
       },
       {
         "type": "paragraph",
-        "value": "However, rounding is not always enough when you need exact decimal representation, such as in financial calculations. In such cases, use the `decimal` module which provides decimal floating point arithmetic with more precise control."
+        "value": "In this script, we define a function get_price that takes a product page URL, makes an HTTP GET request to fetch the page content, then uses BeautifulSoup to parse the HTML. We look for a span element with a class name 'price'. Different sites use different HTML structures, so you should use your browser's developer tools to inspect the price element on the product page you're interested in."
+      },
+      {
+        "type": "paragraph",
+        "value": "Once you can extract the current price, you might want to monitor it regularly and check if it changes. Here's a simple way to check the price repeatedly and notify you if it drops."
       },
       {
         "type": "code",
-        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result)  # Outputs: 0.3\nprint(result == Decimal('0.3'))  # Outputs: True"
+        "value": "import time\n\n# Monitor the price every hour (3600 seconds)\ncheck_interval = 3600\n\n# Store the last recorded price\nlast_price = None\n\nwhile True:\n    current_price = get_price(url)\n    if current_price:\n        if current_price != last_price:\n            print(f'Price changed to {current_price}')\n            last_price = current_price\n        else:\n            print(f'Price remains the same: {current_price}')\n    else:\n        print('Could not fetch the price.')\n    \n    time.sleep(check_interval)"
       },
       {
         "type": "paragraph",
-        "value": "### Handling Edge Cases\nWhen performing calculations, sometimes unexpected inputs or values can cause errors or incorrect results. Let’s see a few examples and how to handle them gracefully:"
+        "value": "This loop checks the product price every hour. If the price has changed since the last check, it prints a notification. You could extend this example by sending email alerts or logging the data to a file or database."
       },
       {
         "type": "paragraph",
-        "value": "1. **Division by zero:** This will raise a `ZeroDivisionError`. Always check the divisor before dividing."
-      },
-      {
-        "type": "code",
-        "value": "def safe_divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    return a / b\n\nprint(safe_divide(5, 0))  # Outputs: Cannot divide by zero!"
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Very small or very large floating point numbers:** Sometimes calculations can underflow or overflow."
-      },
-      {
-        "type": "code",
-        "value": "import sys\n\nvery_small = 1e-324  # Smaller than the smallest positive float\nprint(very_small)       # Outputs: 0.0 because of underflow\n\nvery_large = sys.float_info.max * 2\nprint(very_large)       # Outputs: inf because of overflow"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can use the `math.isfinite()` function to check if a number is finite before using it in further calculations."
-      },
-      {
-        "type": "code",
-        "value": "import math\n\nx = 1e309  # This will be inf\nif math.isfinite(x):\n    print(\"Number is finite\")\nelse:\n    print(\"Number is not finite\")  # Outputs: Number is not finite"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\n- Floating point arithmetic can lead to small precision errors.\n- Use `round()` for simple rounding needs.\n- Use the `decimal` module for exact decimal calculations.\n- Always handle edge cases like zero division and check for infinite or underflow values.\n\nWith these practices, your Python programs will be more reliable and your calculations more accurate!"
+        "value": "To sum up, building a Python web scraper involves sending HTTP requests to get web page content and then parsing the HTML to extract the information you want—in this case, price data. Remember to respect website policies and avoid sending too many requests in a short time."
       }
     ]
   },
   {
-    "slug": "mastering-python-exception-hierarchy-error-handling",
-    "title": "Mastering Python's Exception Hierarchy for Smarter Error Handling",
+    "slug": "understanding-data-model-validation-errors-in-python",
+    "title": "Understanding Data Model Validation Errors in Python: A Hands-On Guide",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to use Python's exception hierarchy to handle errors effectively and write robust code.",
-    "videoUrl": "https://www.youtube.com/watch?v=Lay3pQF3I3c",
+    "description": "Learn how to handle and understand data model validation errors in Python with practical examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=XIdQ6gO3Anc",
     "content": [
       {
         "type": "paragraph",
-        "value": "Handling errors gracefully is an essential skill for any Python programmer. Python uses exceptions to indicate errors that occur during program execution. Understanding Python's exception hierarchy enables you to write smarter error handling code by catching specific errors and responding appropriately."
+        "value": "When building applications in Python, especially with modern libraries like Pydantic or Django, you often define data models that represent your data structure. These data models come with validation rules to ensure the data is correct and in the expected format. When data doesn’t meet these rules, the system raises validation errors. Understanding these errors is crucial for debugging and writing robust programs."
       },
       {
         "type": "paragraph",
-        "value": "At the top of Python's exception hierarchy is the built-in Exception class. All standard exceptions inherit from it. Here is a simplified view of the hierarchy:\n\n- BaseException (top-level, rarely caught except for system-exit cases)\n  - Exception (base for most user-defined and standard exceptions)\n    - ArithmeticError (includes ZeroDivisionError)\n    - LookupError (includes IndexError, KeyError)\n    - ValueError\n    - TypeError\n    - IOError (now often OSError)\n    - and many more"
+        "value": "In this guide, we will use Pydantic, a popular data validation library, to illustrate common data model validation errors and how to interpret them."
       },
       {
         "type": "paragraph",
-        "value": "When you write a try-except block, you often want to catch only the errors you expect and handle them properly rather than catching all exceptions blindly. Catching specific exceptions makes your code clearer and avoids masking bugs."
+        "value": "First, let's install Pydantic if you haven't already:"
       },
       {
         "type": "code",
-        "value": "try:\n    number = int(input('Enter a number: '))\n    result = 10 / number\n    print(f'Result is {result}')\nexcept ZeroDivisionError:\n    print('Error: You cannot divide by zero.')\nexcept ValueError:\n    print('Error: Please enter a valid integer.')"
+        "value": "pip install pydantic"
       },
       {
         "type": "paragraph",
-        "value": "In the above example, we specifically catch ZeroDivisionError and ValueError. This means if the user enters zero, it handles division by zero gracefully. If the input isn't a number, it informs the user accordingly."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also catch multiple exceptions in one except block by grouping them in parentheses. This is useful when you want to handle different exceptions in the same way."
+        "value": "Now, let's create a simple data model for a user that expects a name as a string and an age as an integer:"
       },
       {
         "type": "code",
-        "value": "try:\n    data = {'apple': 5}\n    fruit = input('Enter fruit to buy: ')\n    count = int(input('How many? '))\n    print(f'Cost: {data[fruit] * count}')\nexcept (KeyError, ValueError) as e:\n    print(f'Error: {e}')"
+        "value": "from pydantic import BaseModel\n\nclass User(BaseModel):\n    name: str\n    age: int"
       },
       {
         "type": "paragraph",
-        "value": "Understanding the exception hierarchy also helps when creating your own custom exceptions. Custom exceptions typically inherit from Exception or its subclasses, making your error handling consistent."
+        "value": "Let's try to create a user with correct data first:"
       },
       {
         "type": "code",
-        "value": "class MyCustomError(Exception):\n    pass\n\ntry:\n    raise MyCustomError('Something went wrong!')\nexcept MyCustomError as e:\n    print(f'Caught custom error: {e}')"
+        "value": "user = User(name=\"Alice\", age=30)\nprint(user)"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, mastering Python's exception hierarchy helps you:\n\n- Handle errors more precisely\n- Avoid catching unexpected exceptions\n- Write cleaner, more maintainable code\n- Create meaningful custom exceptions\n\nStart using specific exceptions in your try-except blocks to write smarter and more robust Python programs!"
+        "value": "This should work without any errors. But what happens if we pass wrong data types? For example, passing a string for age instead of an integer:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    user = User(name=\"Bob\", age=\"thirty\")\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic will raise a validation error telling you that age should be an integer, but it received a string. This error helps you catch wrong data early in your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common error is missing required fields. For instance, if you forget to provide the age field:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    user = User(name=\"Charlie\")\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error message will indicate that age is a required field but was not provided."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also add custom data validation by using Pydantic validators, which allows you to enforce more complex rules and see detailed error messages."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import validator\n\nclass User(BaseModel):\n    name: str\n    age: int\n\n    @validator('age')\n    def age_must_be_positive(cls, v):\n        if v <= 0:\n            raise ValueError('Age must be a positive integer')\n        return v"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now if you try to create a user with an invalid age:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    user = User(name=\"David\", age=-5)\nexcept Exception as e:\n    print(\"Validation Error:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error message clearly informs that the age must be positive."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, data model validation errors in Python help ensure your data is correct and useful. When you use libraries like Pydantic, these errors become easy to detect and fix with clear, actionable messages. Practice catching and understanding these errors to improve your coding skills and application reliability."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-window-functions-for-large-datasets",
-    "title": "Optimizing SQL Window Functions for Large Datasets: A Step-by-Step Guide",
+    "slug": "mastering-sql-window-functions-advanced-techniques-for-real-world-scenarios",
+    "title": "Mastering SQL Window Functions: Advanced Techniques for Real-World Scenarios",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to improve the performance of SQL window functions when working with large datasets. This beginner-friendly guide offers practical tips and clear examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn how SQL window functions work and apply advanced techniques to solve real-world business problems using powerful, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Ww71knvhQ-s",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions in SQL are powerful tools for performing calculations across a set of rows related to the current row. They are often used for ranking, running totals, moving averages, and more. However, when dealing with large datasets, these functions can become slow if not optimized properly. This guide will walk you through simple steps to speed up window function queries."
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of rows related to the current row without collapsing the result into a single output row. Unlike aggregate functions, window functions retain row-level detail, enabling you to solve complex problems like running totals, ranking, moving averages, and more."
       },
       {
         "type": "paragraph",
-        "value": "Step 1: Understand the Window Function Syntax. A window function looks like this:"
+        "value": "In this tutorial, you'll master the use of SQL window functions with practical examples that are commonly encountered in business scenarios. We'll cover ranking, cumulative sums, calculating differences between rows, and using partitions effectively, all explained in a beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a sample sales table called `sales_data` that contains these columns: `sale_id`, `salesperson`, `region`, `sale_date`, and `amount`."
       },
       {
         "type": "code",
-        "value": "SELECT employee_id,\n       department_id,\n       salary,\n       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;"
+        "value": "SELECT * FROM sales_data;\n-- Example output:\n-- sale_id | salesperson | region | sale_date  | amount\n-- 1       | John        | East   | 2024-01-01 | 100\n-- 2       | Jane        | West   | 2024-01-01 | 200\n-- 3       | John        | East   | 2024-01-02 | 150\n-- 4       | Jane        | West   | 2024-01-02 | 300"
       },
       {
         "type": "paragraph",
-        "value": "This example ranks employees within each department by salary. The PARTITION BY clause divides the data into groups, and ORDER BY sorts the rows within each group."
+        "value": "### 1. Ranking Salespeople by Their Sales Amount"
       },
       {
         "type": "paragraph",
-        "value": "Step 2: Indexing the Partition and Order Columns. To optimize window functions, ensure the columns used in PARTITION BY and ORDER BY have indexes. For instance, create an index on (department_id, salary):"
+        "value": "The `RANK()` function allows you to assign rankings to rows within a window of rows, such as sales by each salesperson ordered by amount."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_department_salary ON employees(department_id, salary DESC);"
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  RANK() OVER (PARTITION BY sale_date ORDER BY amount DESC) AS sales_rank\nFROM sales_data;\n\n-- This query ranks salespeople for each day by their sales amount."
       },
       {
         "type": "paragraph",
-        "value": "This helps the database retrieve and sort data faster when performing window calculations."
+        "value": "### 2. Calculating a Running Total of Sales"
       },
       {
         "type": "paragraph",
-        "value": "Step 3: Limit the Use of Complex Functions Inside Window Frames. Some window frame specifications like ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW can be expensive on large datasets."
-      },
-      {
-        "type": "paragraph",
-        "value": "Instead, try to use simpler window frames or avoid framing when possible. For example, calculating a running total:"
+        "value": "You can calculate the running total of sales for each salesperson over time using the `SUM()` window function."
       },
       {
         "type": "code",
-        "value": "SELECT department_id,\n       sale_date,\n       amount,\n       SUM(amount) OVER (PARTITION BY department_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total\nFROM sales_data;\n\n-- This shows cumulative sales amounts for each salesperson ordered by date."
       },
       {
         "type": "paragraph",
-        "value": "If performance is an issue, evaluate whether you can pre-aggregate data or reduce the dataset before applying the window function."
+        "value": "### 3. Calculating Differences Between Current and Previous Row"
       },
       {
         "type": "paragraph",
-        "value": "Step 4: Use Materialized Views or Temporary Tables. For very large datasets or repeated queries, consider creating a materialized view or temporary table that precomputes expensive parts. This reduces the workload on each query run."
+        "value": "Using the `LAG()` function, you can compare each sale amount with the previous day’s sale amount for the same salesperson."
       },
       {
         "type": "code",
-        "value": "CREATE MATERIALIZED VIEW mv_department_sales_rank AS\nSELECT employee_id, department_id, salary,\n       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees;\n\n-- Then query directly from the materialized view:\nSELECT * FROM mv_department_sales_rank WHERE department_id = 10;"
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_amount,\n  amount - LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS difference\nFROM sales_data;\n\n-- This shows how much the current sale amount increased or decreased compared to the previous day."
       },
       {
         "type": "paragraph",
-        "value": "Step 5: Analyze and Monitor Query Performance. Use database EXPLAIN plans or query profiling tools to understand how your window functions are executed. Look for full table scans, missing indexes, or inefficient sorting."
+        "value": "### 4. Using `ROW_NUMBER()` to Assign Unique Sequence Numbers"
       },
       {
         "type": "paragraph",
-        "value": "In summary, optimizing window functions involves proper indexing, simplifying window frames, leveraging pre-aggregation, and monitoring query plans. Following these tips will help your SQL queries run faster on large datasets."
+        "value": "The `ROW_NUMBER()` function gives a unique sequential number to rows in the window. For example, number sales chronologically for each region."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  region,\n  sale_date,\n  salesperson,\n  ROW_NUMBER() OVER (PARTITION BY region ORDER BY sale_date) AS sale_sequence\nFROM sales_data;\n\n-- This numbers sales in each region from earliest to latest."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Combining Multiple Window Functions"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can combine window functions for deeper insights. For example, showing ranking, running total, and differences altogether can give a full picture of sales performance."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  RANK() OVER (PARTITION BY sale_date ORDER BY amount DESC) AS daily_rank,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS running_total,\n  LAG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_amount\nFROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "## Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL window functions unlock advanced querying techniques without complicated joins or subqueries. They enable row-wise calculations, ranking, and cumulative analyses that fit many real-world business needs. By practicing functions like `RANK()`, `ROW_NUMBER()`, `SUM() OVER()`, and `LAG()`, you'll enhance your ability to generate insightful reports and meaningful data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start experimenting with these simple examples using your own data, and soon you will master window functions to address complex queries seamlessly."
       }
     ]
   },
   {
-    "slug": "unlocking-the-power-of-window-functions-advanced-sql-tricks-for-analytical-queries",
-    "title": "Unlocking the Power of Window Functions: Advanced SQL Tricks for Analytical Queries",
+    "slug": "leveraging-sql-window-functions-to-simplify-complex-error-handling",
+    "title": "Leveraging SQL Window Functions to Simplify Complex Error Handling",
     "language": "sql",
     "type": "errors",
-    "description": "Discover how to avoid common errors and unlock the power of SQL window functions for powerful and efficient analytical queries, even as a beginner.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn how SQL window functions can simplify complex error handling by providing powerful tools for analyzing data over partitions and sequences, making debugging and error detection easier.",
+    "videoUrl": "https://www.youtube.com/watch?v=yJv7XFOcAwc",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions are powerful tools in SQL used to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not group rows but instead provide a way to calculate running totals, ranks, moving averages, and more while retaining individual row details."
+        "value": "When working with large datasets, error detection and handling can become quite complex. SQL window functions provide a powerful way to perform calculations across sets of rows related to the current row without collapsing the result into a single output. This ability helps simplify many error-handling scenarios."
       },
       {
         "type": "paragraph",
-        "value": "Beginners often face errors when working with window functions due to misunderstandings about their syntax, usage, or the requirements of the OVER() clause. In this article, we will explore common errors and how to fix them, making it easier for you to use these advanced features in your analytical queries."
+        "value": "Window functions let you analyze and identify errors such as duplicates, missing data, or out-of-sequence values by partitioning data, ordering rows, and calculating running totals or ranks across those partitions. They offer more readable and maintainable queries compared to traditional GROUP BY or self-joins."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a simple example of a window function: calculating a running total of sales by date."
+        "value": "Let's explore how to use some common window functions like ROW_NUMBER(), LAG(), and SUM() to detect errors in a sales transactions table."
       },
       {
         "type": "code",
-        "value": "SELECT\n  sale_date,\n  sales_amount,\n  SUM(sales_amount) OVER (ORDER BY sale_date) AS running_total\nFROM sales;\n"
+        "value": "-- Sample sales data with potential issues\nCREATE TABLE sales (\n  transaction_id INT,\n  customer_id INT,\n  transaction_date DATE,\n  amount NUMERIC\n);\n\nINSERT INTO sales VALUES\n(1, 101, '2024-05-01', 100),\n(2, 101, '2024-05-01', 100),  -- duplicate transaction\n(3, 102, '2024-05-03', 50),\n(4, 103, '2024-05-05', NULL), -- missing amount error\n(5, 101, '2024-05-02', 75);\n"
       },
       {
         "type": "paragraph",
-        "value": "Common Error #1: Missing or incorrect OVER() clause\nOne of the most frequent errors is forgetting the OVER() clause, which defines the window for the function. For example, this query will cause an error:"
+        "value": "### Detecting Duplicate Transactions\nWe use ROW_NUMBER() partitioned by customer and date to find duplicates. Rows with a row number greater than 1 indicate duplicate transactions for the same customer on the same day."
       },
       {
         "type": "code",
-        "value": "SELECT SUM(sales_amount) FROM sales; -- works as aggregate, but window function requires OVER()\n\nSELECT SUM(sales_amount); -- Error: window function requires OVER clause\n"
+        "value": "SELECT\n  transaction_id,\n  customer_id,\n  transaction_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY customer_id, transaction_date ORDER BY transaction_id) AS rn\nFROM sales\nWHERE rn > 1;"
       },
       {
         "type": "paragraph",
-        "value": "Fix:\nAlways include the OVER() clause when using window functions, even if it's empty (meaning the function applies to the entire result set):"
+        "value": "### Finding Missing Amounts\nWe simply check for rows where the amount is NULL, indicating missing or incomplete data that needs attention."
       },
       {
         "type": "code",
-        "value": "SELECT\n  sales_amount,\n  SUM(sales_amount) OVER () AS total_sales\nFROM sales;\n"
+        "value": "SELECT * FROM sales WHERE amount IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "Common Error #2: Using window functions in WHERE clause\nWindow functions are evaluated after WHERE filtering, so you can't use them directly in a WHERE clause."
+        "value": "### Detecting Out-of-Sequence Transactions\nUsing LAG(), you can compare the date of the current transaction to the previous transaction for the same customer to identify if the sequence is incorrect or any transaction is out of order."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM (\n  SELECT\n    sale_date,\n    sales_amount,\n    RANK() OVER (ORDER BY sales_amount DESC) AS sales_rank\n  FROM sales\n) sub\nWHERE sales_rank = 1;\n"
+        "value": "SELECT\n  transaction_id,\n  customer_id,\n  transaction_date,\n  LAG(transaction_date) OVER (PARTITION BY customer_id ORDER BY transaction_date) AS previous_date\nFROM sales\nWHERE transaction_date < COALESCE(\n    LAG(transaction_date) OVER (PARTITION BY customer_id ORDER BY transaction_date),\n    transaction_date\n  );"
       },
       {
         "type": "paragraph",
-        "value": "Fix:\nTo filter on a window function's result, use a subquery or a Common Table Expression (CTE), as shown above."
+        "value": "### Summary\nBy leveraging window functions, you can easily build practical queries to surface data issues without complicated joins or subqueries. This approach simplifies error detection and helps in maintaining clean, reliable datasets for downstream processing."
       },
       {
         "type": "paragraph",
-        "value": "Common Error #3: Misusing PARTITION BY causing unexpected results\nThe PARTITION BY clause divides the result set into partitions for the window function. Omitting it or partitioning incorrectly can cause confusing outputs."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank\nFROM employees;\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "This ranks employees within each department by salary. Forgetting PARTITION BY will rank all employees together."
-      },
-      {
-        "type": "paragraph",
-        "value": "Summary:\n- Always use the OVER() clause with window functions.\n- Window functions can't be used in WHERE clauses directly; use subqueries or CTEs.\n- Use PARTITION BY to define groups within the window for ranking or aggregation.\n\nBy understanding and avoiding these common errors, you unlock the ability to write clear, efficient analytical SQL queries with window functions."
+        "value": "Start experimenting with window functions in your own error-handling workflows to discover how much simpler your SQL queries become!"
       }
     ]
   }
