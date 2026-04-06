@@ -1,59 +1,207 @@
 [
   {
-    "slug": "mastering-javascript-proxies-for-advanced-reactive-programming",
-    "title": "Mastering JavaScript Proxies for Advanced Reactive Programming",
+    "slug": "mastering-lazy-loading-in-javascript-for-faster-web-apps",
+    "title": "Mastering Lazy Loading in JavaScript for Faster Web Apps",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to use JavaScript Proxies to create reactive data objects and enhance your coding skills with advanced reactive programming techniques.",
-    "videoUrl": "https://www.youtube.com/watch?v=HSpRTiTajMM",
+    "description": "Learn how to speed up your website by mastering lazy loading techniques in JavaScript. This beginner-friendly tutorial covers what lazy loading is, why it’s important, and how to implement it step-by-step.",
+    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript Proxies are powerful tools that let you intercept and customize operations performed on objects, such as reading, writing, or function calls. They become extremely useful when building reactive programs that automatically respond to data changes. In this tutorial, we'll explore how Proxies work and how you can use them to create reactive data objects in a beginner-friendly way."
+        "value": "Lazy loading is a technique that delays the loading of images, scripts, or other resources until they are actually needed. This helps make your web app faster by reducing the initial load time and saving bandwidth."
       },
       {
         "type": "paragraph",
-        "value": "### What is a JavaScript Proxy?"
+        "value": "In this tutorial, you’ll learn how to implement lazy loading for images using native JavaScript and the Intersection Observer API. This approach is efficient and widely supported in modern browsers."
       },
       {
         "type": "paragraph",
-        "value": "A Proxy wraps a target object and allows you to define traps (handlers) for various operations. For example, when you access a property, instead of directly returning it, the Proxy can run custom code."
+        "value": "First, let’s understand the basics: Instead of loading all images when the page loads, we only load them when they come into the user’s viewport (the visible area of the web page)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of how to set up lazy loading for images using the Intersection Observer API."
       },
       {
         "type": "code",
-        "value": "const target = { name: 'Alice' };\nconst proxy = new Proxy(target, {\n  get(obj, prop) {\n    console.log(`Property '${prop}' was accessed.`);\n    return obj[prop];\n  },\n  set(obj, prop, value) {\n    console.log(`Property '${prop}' set to '${value}'.`);\n    obj[prop] = value;\n    return true;\n  }\n});\n\nconsole.log(proxy.name); // Logs access, then prints 'Alice'\nproxy.age = 30;          // Logs setting the 'age' property"
+        "value": "<img data-src=\"image1.jpg\" alt=\"Example Image\" class=\"lazy\">\n<img data-src=\"image2.jpg\" alt=\"Example Image\" class=\"lazy\">\n<img data-src=\"image3.jpg\" alt=\"Example Image\" class=\"lazy\">\n\n<script>\n  document.addEventListener(\"DOMContentLoaded\", function() {\n    const lazyImages = document.querySelectorAll('img.lazy');\n\n    if ('IntersectionObserver' in window) {\n      let observer = new IntersectionObserver((entries, observer) => {\n        entries.forEach(entry => {\n          if (entry.isIntersecting) {\n            let img = entry.target;\n            img.src = img.getAttribute('data-src');\n            img.classList.remove('lazy');\n            observer.unobserve(img);\n          }\n        });\n      });\n\n      lazyImages.forEach(img => {\n        observer.observe(img);\n      });\n    } else {\n      // Fallback - load all images immediately\n      lazyImages.forEach(img => {\n        img.src = img.getAttribute('data-src');\n        img.classList.remove('lazy');\n      });\n    }\n  });\n</script>"
       },
       {
         "type": "paragraph",
-        "value": "### Building a Basic Reactive System"
+        "value": "In this code snippet, images use a placeholder attribute called `data-src` instead of `src`. The Intersection Observer waits until each image enters the viewport, then sets their `src` attribute to the real image URL to trigger loading."
       },
       {
         "type": "paragraph",
-        "value": "Let's create a simple reactive system where changes to an object trigger automatic updates, such as re-running a function when data changes."
+        "value": "This method provides several benefits:\n- Improves page load speed by loading only necessary images\n- Saves user bandwidth, especially on mobile devices\n- Provides a smooth user experience as images load only when needed"
       },
       {
         "type": "paragraph",
-        "value": "We'll use a Proxy to watch for changes and a callback function that runs when properties are updated."
+        "value": "If you want to go further, you can also lazy load JavaScript modules or other resources dynamically using `import()` or other techniques, but image lazy loading is a great place to start."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering lazy loading in JavaScript helps create faster, more efficient, and user-friendly web apps. Try implementing it in your next project and see the difference!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-type-coercion-errors-in-comparison-operators",
+    "title": "Understanding JavaScript Type Coercion Errors in Comparison Operators",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript type coercion can cause unexpected results in comparison operators and how to avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=GKJh3vdat8A",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that often converts values from one type to another automatically. This process is called type coercion. While this feature makes coding easier in many cases, it can also cause unexpected errors, especially when using comparison operators like == and !=."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are two main types of comparison operators in JavaScript: loose equality (== and !=) and strict equality (=== and !==). Loose equality operators convert the types of values before comparing them, which can sometimes lead to confusing results. Strict equality operators, on the other hand, compare both value and type, avoiding coercion."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider this simple example:"
       },
       {
         "type": "code",
-        "value": "function reactive(obj, onChange) {\n  return new Proxy(obj, {\n    set(target, prop, value) {\n      target[prop] = value;\n      onChange(prop, value);\n      return true;\n    }\n  });\n}\n\nconst person = reactive({ name: 'Bob', age: 25 }, (prop, value) => {\n  console.log(`Property '${prop}' changed to '${value}'`);\n});\n\nperson.name = 'Robert'; // Logs property change\nperson.age = 26;"
+        "value": "console.log(5 == '5');  // true\nconsole.log(5 === '5'); // false"
       },
       {
         "type": "paragraph",
-        "value": "### Tracking Dependencies for More Advanced Reactivity"
+        "value": "Here, the loose equality operator (==) converts the string '5' into a number before comparing it with 5, so the result is true. The strict equality operator (===) compares both the value and type, so since one is a string and the other is a number, the result is false."
       },
       {
         "type": "paragraph",
-        "value": "In more complex reactive frameworks, we track which functions depend on which pieces of data, so only those functions run when data changes."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's build a simple reactive effect system. When you run an effect, it records properties accessed inside it, and when those properties change, it reruns the effect."
+        "value": "Type coercion errors often happen when you expect two variables to be different based on their types, but JavaScript converts them and they become equal. For example:"
       },
       {
         "type": "code",
-        "value": "const dependentsMap = new WeakMap();\nlet activeEffect = null;\n\nfunction track(target, prop) {\n  if (!activeEffect) return;\n  let depsMap = dependentsMap.get(target);\n  if (!depsMap) {\n    depsMap = new Map();\n    dependentsMap.set(target, depsMap);\n  }\n  let deps = depsMap.get(prop);\n  if (!deps) {\n    deps = new Set();\n    depsMap.set(prop, deps);\n  }\n  deps.add(activeEffect);\n}\n\nfunction trigger(target, prop) {\n  const depsMap = dependentsMap.get(target);\n  if (!depsMap) return;\n  const deps = depsMap.get(prop);\n  if (!deps) return;\n  deps.forEach(effect => effect());\n}\n\nfunction reactive(obj) {\n  return new Proxy(obj, {\n    get(target, prop) {\n      track(target, prop);\n      return target[prop];\n    },\n    set(target, prop, value) {\n      target[prop] = value;\n      trigger(target, prop);\n      return true;\n    }\n  });\n}\n\nfunction effect(fn) {\n  activeEffect = fn;\n  fn();\n  activeEffect = null;\n}\n\n// Usage\nconst state = reactive({ count: 0 });\n\neffect(() => {\n  console.log(`Count is: ${state.count}`);\n});\n\nstate.count = 1; // Automatically logs updated count\nstate.count = 2;"
+        "value": "console.log(false == 0);    // true\nconsole.log(false === 0);   // false\nconsole.log('' == 0);       // true\nconsole.log('' === 0);      // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the examples above, false and an empty string ('') are loosely equal to 0 because JavaScript coerces these values to numbers during the comparison. However, they are not strictly equal because their types differ."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid type coercion errors:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always prefer using strict equality (===) and strict inequality (!==) operators unless you have a specific reason to allow type conversion.\n2. Be mindful when comparing values from user input or external sources, as they may be strings or other types.\n3. Use explicit type conversion like Number(), String(), or Boolean() to make your intentions clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example with explicit conversion:"
+      },
+      {
+        "type": "code",
+        "value": "const userInput = '10';\nconst actualNumber = 10;\n\n// Explicitly convert userInput to a number\nif (Number(userInput) === actualNumber) {\n  console.log('Values and types match!');\n} else {\n  console.log('No match.');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding how JavaScript performs type coercion with comparison operators helps you avoid bugs and write clearer, more predictable code. Using strict equality and explicit conversions are safe practices for beginners and experienced developers alike."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-vs-javascript-detailed-comparison-for-modern-web-development",
+    "title": "TypeScript vs JavaScript: Detailed Comparison for Modern Web Development",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore the key differences between TypeScript and JavaScript to learn which language suits your modern web development needs. This beginner-friendly guide covers basics, advantages, and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=HCXPJmtV47I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is the most widely used programming language for web development, known for its flexibility and ability to run directly in browsers. TypeScript is a superset of JavaScript, developed by Microsoft, that adds static types and modern features to make code more robust and easier to maintain. In this article, we'll compare TypeScript and JavaScript in detail, helping beginners understand when and why to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is JavaScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a dynamically typed, interpreted language that runs natively in web browsers. It allows developers to write code that manipulates web pages, handles events, and performs asynchronous operations. Since it is dynamically typed, variables can hold any type of data without explicit declarations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of JavaScript code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  return \"Hello, \" + name + \"!\";\n}\n\nconsole.log(greet('World'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the parameter `name` can be any type, but typically it's a string. JavaScript does not enforce type checking during development, which can sometimes lead to runtime bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript builds on JavaScript by adding optional static types, interfaces, and modern language features. This means you can declare what type of data variables, parameters, or function returns should have. These types are checked at compile time, before running the code, which reduces errors and improves code quality."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of TypeScript code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `name` is explicitly defined as a string, and the function return type is also string. If you pass a value that is not a string, TypeScript will show an error during compilation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences Between TypeScript and JavaScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Typing:** JavaScript is dynamically typed, while TypeScript is statically typed (optional but highly recommended to use)."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Compilation:** JavaScript runs directly in browsers; TypeScript needs to be compiled (transpiled) into JavaScript before execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Tooling and IDE Support:** TypeScript offers better editor support with autocompletion, refactoring, and error checking due to static typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Learning Curve:** JavaScript is easier to start with, while TypeScript requires learning types and compilation setup."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Community and Ecosystem:** JavaScript has a broader ecosystem as the foundational web language, but TypeScript usage is growing rapidly and supported by many frameworks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When Should You Use TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript is particularly helpful when working on large codebases or in teams, where enforcing data types can prevent bugs. It also works well with modern frameworks like Angular, React, and Vue.js, which have official TypeScript support."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Simple Example Comparing Both"
+      },
+      {
+        "type": "code",
+        "value": "// JavaScript example (dynamic typing)\nfunction add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(5, 10)); // 15\nconsole.log(add('5', 10)); // '510' - unexpected string concatenation\n\n// TypeScript example (static typing)\nfunction addTyped(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(addTyped(5, 10)); // 15\n// console.log(addTyped('5', 10)); // Error: Argument of type 'string' is not assignable to parameter of type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, passing a string to the `add` function causes unintended behavior (string concatenation). In TypeScript, the error is caught before running the code, preventing bugs."
       },
       {
         "type": "paragraph",
@@ -61,89 +209,197 @@
       },
       {
         "type": "paragraph",
-        "value": "JavaScript Proxies are a great way to build reactive systems that automatically respond to changes in data. This tutorial introduced the core concepts of Proxies and showed you practical examples to create basic and advanced reactive programming patterns. With these tools, you can build highly responsive user interfaces and dynamic apps. Keep experimenting and exploring more Proxy traps to unlock even more power!"
+        "value": "Both JavaScript and TypeScript have their place in modern web development. JavaScript is excellent for quick scripting and smaller projects, while TypeScript enhances scalability and maintainability with type safety. Learning TypeScript can improve your coding skills and prepare you for large, professional projects that require clean and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with both and see which language fits your development workflow best!"
       }
     ]
   },
   {
-    "slug": "handling-unexpected-types-in-javascript-edge-cases-in-type-coercion",
-    "title": "Handling Unexpected Types in JavaScript: Edge Cases in Type Coercion",
-    "language": "javascript",
+    "slug": "deep-dive-into-typescripts-conditional-types-for-advanced-error-handling",
+    "title": "Deep Dive into TypeScript's Conditional Types for Advanced Error Handling",
+    "language": "typescript",
     "type": "errors",
-    "description": "Learn how JavaScript handles unexpected types through type coercion and how to avoid common errors caused by these edge cases.",
-    "videoUrl": "https://www.youtube.com/watch?v=PNQpYsLP77Q",
+    "description": "Learn how to leverage TypeScript's powerful conditional types to create advanced, flexible error handling patterns in your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=7BnoNWu2y3Y",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible language that often converts values between types automatically. This automatic type conversion is called type coercion. Although it can make code shorter and sometimes easier, it can also cause unexpected behavior and errors especially when dealing with different or unexpected data types."
+        "value": "TypeScript is a powerful language that enhances JavaScript with types, enabling safer coding and better developer experience. One super useful feature for advanced error handling is conditional types. These allow you to create types that change based on conditions, making your error management more precise and adaptable."
       },
       {
         "type": "paragraph",
-        "value": "Understanding these edge cases is important to write more predictable and bug-free code. Let’s look at common examples of type coercion in JavaScript and how to handle unexpected types safely."
+        "value": "In this article, we'll explore how to use conditional types in TypeScript to build flexible error handling patterns. We'll start with simple examples and then get into more practical use cases involving API responses and custom error types."
       },
       {
         "type": "paragraph",
-        "value": "### Example 1: Adding Numbers and Strings"
-      },
-      {
-        "type": "paragraph",
-        "value": "When you use the `+` operator with a number and a string, JavaScript converts the number to a string and concatenates them instead of adding numerically."
+        "value": "### What are Conditional Types?\nConditional types allow you to relate types to each other based on a condition. They follow a syntax like `T extends U ? X : Y`, meaning: if type `T` is assignable to type `U`, then use type `X`; otherwise use type `Y`."
       },
       {
         "type": "code",
-        "value": "console.log(5 + '5'); // Output: '55' (string concatenation)\nconsole.log(5 + Number('5')); // Output: 10 (numeric addition)"
+        "value": "type IsString<T> = T extends string ? 'Yes' : 'No';\n\ntype Test1 = IsString<string>;  // 'Yes'\ntype Test2 = IsString<number>;  // 'No'"
       },
       {
         "type": "paragraph",
-        "value": "To avoid unexpected results, explicitly convert types using `Number()` or `String()` to make your intentions clear."
+        "value": "This flexibility is perfect for error handling because it enables creating utility types that can adapt based on passed types or conditions in your code."
       },
       {
         "type": "paragraph",
-        "value": "### Example 2: Comparing Values with `==` vs `===`"
-      },
-      {
-        "type": "paragraph",
-        "value": "The double equals operator `==` performs type coercion before comparison, which can lead to confusing results."
+        "value": "### Creating a Basic Conditional Error Type\nSuppose you want a function that returns different error object shapes depending on the context. You can use conditional types to define which error type to return."
       },
       {
         "type": "code",
-        "value": "console.log(0 == '0'); // true (string '0' coerced to number 0)\nconsole.log(0 === '0'); // false (strict comparison, no coercion)"
+        "value": "type ApiError = { message: string; statusCode: number };\ntype ValidationError = { message: string; fields: string[] };\n\ntype ErrorType<T> = T extends 'api' ? ApiError : ValidationError;"
       },
       {
         "type": "paragraph",
-        "value": "To avoid errors, it’s best practice to use the strict equality operator `===` which compares both value and type."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 3: Boolean Coercion with Falsy Values"
-      },
-      {
-        "type": "paragraph",
-        "value": "JavaScript treats certain values as \"falsy\" when converted to boolean. These include `0`, `''`, `null`, `undefined`, `NaN`, and `false`. Sometimes this behavior can cause bugs if not handled properly."
+        "value": "Here, `ErrorType` changes based on the string literal type passed to it."
       },
       {
         "type": "code",
-        "value": "if ('') {\n  console.log('This will not run because an empty string is falsy');\n} else {\n  console.log('Empty string is falsy');\n}"
+        "value": "function handleError<T extends 'api' | 'validation'>(type: T, errorData: ErrorType<T>): void {\n  if (type === 'api') {\n    console.log('API error:', errorData.statusCode, errorData.message);\n  } else {\n    console.log('Validation error on fields:', errorData.fields.join(', '));\n  }\n}\n\nhandleError('api', { message: 'Not Found', statusCode: 404 });\nhandleError('validation', { message: 'Invalid input', fields: ['email', 'password'] });"
       },
       {
         "type": "paragraph",
-        "value": "Be careful when checking values in conditions. If you want to check specifically for `null` or `undefined`, do so explicitly."
+        "value": "Try passing wrong error data for the type, and TypeScript will catch the mistake at compile time."
       },
       {
         "type": "paragraph",
-        "value": "### Example 4: Unexpected Results from Objects in Expressions"
-      },
-      {
-        "type": "paragraph",
-        "value": "Objects coerced to primitives can behave unexpectedly in expressions."
+        "value": "### Using Conditional Types for API Response Error Handling\nOften when dealing with API responses, you want to differentiate success from error responses clearly."
       },
       {
         "type": "code",
-        "value": "console.log({} + []); // Output: '[object Object]'\nconsole.log([] + {}); // Output: '[object Object]'\n\n// Because both objects convert to strings by default"
+        "value": "type ApiResponse<T> =\n  T extends { error: true }\n    ? { error: true; code: number; message: string }\n    : { error: false; data: T };\n\nfunction handleApiResponse<T>(response: ApiResponse<T>) {\n  if (response.error) {\n    console.error(`Error (${response.code}):`, response.message);\n  } else {\n    console.log('Success:', response.data);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Use explicit conversions or methods like `.toString()` or `.valueOf()` to clarify your code's intent."
+        "value": "This type will ensure you provide either a successful response with data or an error with proper error details."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nConditional types in TypeScript offer a powerful way to build smarter error handling patterns that adapt to different scenarios and improve type safety. Whether you are dealing with API errors or validation failures, leveraging conditional types helps catch problems early and write clearer code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with conditional types for your own error handling needs, and you'll notice how much easier and safer managing errors can become!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-data-classes-vs-named-tuples-for-clean-code",
+    "title": "Comparing Python's Data Classes vs Named Tuples for Clean Code",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Explore the differences between Python's data classes and named tuples to write cleaner, more readable code. Learn when to use each for beginner-friendly data structures.",
+    "videoUrl": "https://www.youtube.com/watch?v=5mMpM8zK4pY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with simple data structures in Python, two popular choices are data classes and named tuples. Both help you write cleaner and more readable code by giving names to the fields of your objects instead of using normal tuples or dictionaries. In this tutorial, we'll explore what data classes and named tuples are, their differences, and when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's start with named tuples. Named tuples are an extension of regular tuples that allow you to access elements by name instead of position. They are immutable, lightweight, and come from the collections module."
+      },
+      {
+        "type": "code",
+        "value": "from collections import namedtuple\n\n# Define a named tuple to represent a Point in 2D space\nPoint = namedtuple('Point', ['x', 'y'])\n\np1 = Point(10, 20)\nprint(p1.x)  # Output: 10\nprint(p1.y)  # Output: 20\n\n# Named tuples are immutable\n# p1.x = 5  # This would raise an error"
+      },
+      {
+        "type": "paragraph",
+        "value": "Named tuples are great for simple use cases where you want immutability and a lightweight object. However, they don’t support default values or easy customization like methods or property setters."
+      },
+      {
+        "type": "paragraph",
+        "value": "On the other hand, data classes were introduced in Python 3.7 to make defining classes for storing data easier and cleaner. Using the `@dataclass` decorator, Python automatically generates special methods like `__init__`, `__repr__`, and `__eq__` for your class."
+      },
+      {
+        "type": "code",
+        "value": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\np2 = Point(10, 20)\nprint(p2.x)  # Output: 10\nprint(p2)    # Output: Point(x=10, y=20)\n\n# Data classes are mutable by default\np2.x = 5\nprint(p2.x)  # Output: 5"
+      },
+      {
+        "type": "paragraph",
+        "value": "Data classes allow default values, mutable fields, and defining methods within the class. You can also make them immutable by setting `frozen=True` in the decorator."
+      },
+      {
+        "type": "code",
+        "value": "@dataclass(frozen=True)\nclass ImmutablePoint:\n    x: int\n    y: int\n\np3 = ImmutablePoint(1, 2)\n# p3.x = 3  # This would raise: FrozenInstanceError"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to use Named Tuples\n- You want lightweight, immutable objects similar to tuples.\n- You do not need methods or default values.\n- You prefer tuple-like behavior with named fields.\n\n### When to use Data Classes\n- You want more flexibility like default values, methods, and mutable objects.\n- You want clear, maintainable code with minimal boilerplate.\n- You need to customize behavior like sorting or comparisons."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBoth data classes and named tuples improve code readability compared to normal tuples or dictionaries. Named tuples are simple and immutable, making them ideal for lightweight structures. Data classes provide more power and customization, suitable for more complex or mutable data objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "By choosing the right tool for your data needs, you can keep your Python code clean, easy to understand, and efficient."
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-errors-python",
+    "title": "Handling Floating Point Precision Errors in Python: Best Practices and Pitfalls",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle floating point precision errors in Python with practical tips and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=t-OdS6SxQqQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with floating point numbers in Python, you might encounter unexpected results due to how computers represent decimal numbers internally. This phenomenon is called floating point precision error. Understanding why it happens and how to handle it will make your programs more reliable and accurate."
+      },
+      {
+        "type": "paragraph",
+        "value": "Floating point numbers are stored in binary form, which can't always precisely represent decimal fractions. For example, the decimal number 0.1 does not have an exact binary representation, leading to small precision errors when performing arithmetic operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a common example:"
+      },
+      {
+        "type": "code",
+        "value": "print(0.1 + 0.2 == 0.3)  # This will return False"
+      },
+      {
+        "type": "paragraph",
+        "value": "Although mathematically 0.1 + 0.2 equals 0.3, the expression returns `False` because of tiny floating point rounding errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice: Use `math.isclose()` for comparison"
+      },
+      {
+        "type": "paragraph",
+        "value": "`math.isclose()` is a function introduced in Python 3.5 that helps compare floating point numbers within a tolerance margin."
+      },
+      {
+        "type": "code",
+        "value": "import math\n\nprint(math.isclose(0.1 + 0.2, 0.3))  # This will return True"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Alternative: Use the `decimal` module for exact decimal arithmetic"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `decimal` module provides decimal floating point arithmetic with more precision and control. It is very useful for financial and other applications where precision is critical."
+      },
+      {
+        "type": "code",
+        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result == Decimal('0.3'))  # This will return True\nprint(result)  # Will print 0.3 exactly"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pitfalls to Avoid"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid direct equality checks (`==`) with floats when exact equality is expected.\n2. Be mindful of accumulated errors in large computations or loops.\n3. Remember that converting floats to strings or vice versa can also introduce precision issues."
       },
       {
         "type": "paragraph",
@@ -151,343 +407,143 @@
       },
       {
         "type": "paragraph",
-        "value": "Type coercion is a powerful feature in JavaScript but can cause subtle bugs when unexpected types are involved. To handle these edge cases safely, always prefer strict comparisons, explicitly convert types, and be mindful of how JavaScript treats falsy values and object-to-primitive conversions."
-      },
-      {
-        "type": "paragraph",
-        "value": "With these practices, your code will be clearer, safer, and easier to debug."
+        "value": "Floating point precision errors are a natural limitation of computer arithmetic. Use `math.isclose()` to safely compare float values and consider the `decimal` module when precise decimal representation is needed. By understanding these concepts, you can write more robust and predictable Python code."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-generics-for-high-performance-code-reuse",
-    "title": "Mastering TypeScript Generics for High-Performance Code Reuse",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to use TypeScript generics to create reusable and type-safe code that boosts performance and maintainability in your projects.",
-    "videoUrl": "https://www.youtube.com/watch?v=BKFPfzWM3CQ",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript generics allow you to write flexible, reusable functions and components that work with a variety of data types without sacrificing type safety. This tutorial will guide you through the basics of generics and show you how to apply them effectively for high-performance code reuse."
-      },
-      {
-        "type": "paragraph",
-        "value": "Imagine you want a function to return the first element of an array. You might write it like this using any:"
-      },
-      {
-        "type": "code",
-        "value": "function getFirstElement(arr: any[]): any {\n  return arr[0];\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "While this works, you lose type information. If you pass an array of strings, you don't get the benefit of TypeScript knowing the return type is a string. Instead, let's use generics to improve this:"
-      },
-      {
-        "type": "code",
-        "value": "function getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, <T> is a generic type parameter that allows the function to work with any type. If you call `getFirstElement(['a', 'b', 'c'])`, TypeScript knows the return type is a string. For `getFirstElement([1, 2, 3])`, the return type is a number."
-      },
-      {
-        "type": "paragraph",
-        "value": "Generics also work well with interfaces. Suppose you have a function that returns an object with a value and a timestamp:"
-      },
-      {
-        "type": "code",
-        "value": "interface Timestamped<T> {\n  value: T;\n  timestamp: number;\n}\n\nfunction wrapInTimestamp<T>(value: T): Timestamped<T> {\n  return {\n    value,\n    timestamp: Date.now()\n  };\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "This function takes any value and returns it wrapped with a timestamp. Using generics, you keep the original type information intact, improving both reusability and type safety."
-      },
-      {
-        "type": "paragraph",
-        "value": "Generics can also be constrained to certain types using the `extends` keyword. For example, if you only want to accept types that have a `length` property, you can do:"
-      },
-      {
-        "type": "code",
-        "value": "function logLength<T extends { length: number }>(item: T): T {\n  console.log(item.length);\n  return item;\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "This ensures `item` must have a `length` property (like strings or arrays), preventing misuse with types that don't support length."
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, generics are widely used in TypeScript’s standard library and popular frameworks. Mastering them will help you write cleaner, more general, and performant code. Experiment by converting your current functions to generic versions and see how much more flexible your code becomes!"
-      }
-    ]
-  },
-  {
-    "slug": "implementing-robust-type-guards-for-reliable-type-narrowing-in-typescript",
-    "title": "Implementing Robust Type Guards for Reliable Type Narrowing in TypeScript",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to create effective and reliable type guards in TypeScript to safely narrow types and avoid common runtime errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=hMlRf3k5oMU",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful language that helps catch errors at compile time by leveraging static types. However, sometimes you work with values that can be of multiple types (called union types), and you need to \"narrow\" these types safely before using them. This is where type guards come in."
-      },
-      {
-        "type": "paragraph",
-        "value": "Type guards are functions or expressions that tell TypeScript more information about the type of a variable at runtime. By implementing robust type guards, you can avoid common mistakes and runtime errors caused by incorrect assumptions about the data type."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example of a union type and a basic type guard."
-      },
-      {
-        "type": "code",
-        "value": "type Shape = { kind: 'circle'; radius: number } | { kind: 'square'; sideLength: number };\n\nfunction isCircle(shape: Shape): shape is { kind: 'circle'; radius: number } {\n  return shape.kind === 'circle';\n}\n\nconst shape: Shape = { kind: 'circle', radius: 10 };\n\nif (isCircle(shape)) {\n  // Inside this block, TypeScript knows shape is a circle\n  console.log(shape.radius * 2);\n} else {\n  // In this block, shape is a square\n  console.log(shape.sideLength * 4);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the example above, the function `isCircle` acts as a type guard. It checks if the `kind` property is \"circle\" and tells TypeScript to narrow the type accordingly. This ensures safe access to type-specific properties."
-      },
-      {
-        "type": "paragraph",
-        "value": "However, type guards should be robust and handle edge cases properly. Consider objects that may or may not have specific properties or external data you can't fully trust. Let's improve our type guard to be more defensive."
-      },
-      {
-        "type": "code",
-        "value": "function isCircleSafe(shape: any): shape is { kind: 'circle'; radius: number } {\n  return (\n    typeof shape === 'object' &&\n    shape !== null &&\n    shape.kind === 'circle' &&\n    typeof shape.radius === 'number'\n  );\n}\n\nconst unknownShape: any = getShapeFromUnknownSource();\n\nif (isCircleSafe(unknownShape)) {\n  console.log(unknownShape.radius * 2);\n} else {\n  console.log('Not a circle');\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Notice how the `isCircleSafe` function checks the type of each property carefully, protecting your code from runtime errors if the `shape` object is malformed or unexpected. This approach is vital when dealing with data from external APIs, user inputs, or any untyped sources."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, here are some best practices for creating robust type guards in TypeScript:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Always verify that the input is an object and is not null.\n- Check for the presence and type of all relevant properties.\n- Use `shape is Type` return type to inform TypeScript about the narrowed type.\n- Keep type guards simple and focused on checking just enough to guarantee safe usage.\n- Use type guards especially when handling data from unknown or external sources."
-      },
-      {
-        "type": "paragraph",
-        "value": "By following these tips and implementing robust type guards, your TypeScript applications will be more reliable, maintainable, and free from common runtime type errors."
-      }
-    ]
-  },
-  {
-    "slug": "step-by-step-guide-to-building-your-first-python-web-scraper",
-    "title": "Step-by-Step Guide to Building Your First Python Web Scraper",
-    "language": "python",
-    "type": "tutorials",
-    "description": "Learn how to create your first Python web scraper in a simple, step-by-step way. Perfect for beginners who want to extract data from websites using Python.",
-    "videoUrl": "https://www.youtube.com/watch?v=QhD015WUMxE",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Web scraping is the process of automatically extracting information from websites. If you're new to programming or Python, don't worry! In this guide, we'll walk you through building your very first web scraper using simple Python tools."
-      },
-      {
-        "type": "paragraph",
-        "value": "To get started, you'll need two libraries: `requests` to download the web page and `BeautifulSoup` from `bs4` to parse the HTML. You can install them using pip if you haven’t already:"
-      },
-      {
-        "type": "code",
-        "value": "pip install requests beautifulsoup4"
-      },
-      {
-        "type": "paragraph",
-        "value": "Now that you have the tools, let's write a simple script that scrapes the titles of articles from a website. For this example, we'll use the website 'example.com' as a placeholder, but you can replace it with any site you want to scrape (make sure to check the site’s terms of service before scraping)."
-      },
-      {
-        "type": "code",
-        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# Step 1: Download the web page\nurl = 'https://www.example.com'\nresponse = requests.get(url)\n\n# Step 2: Check if the request was successful\nif response.status_code == 200:\n    # Step 3: Parse the HTML content\n    soup = BeautifulSoup(response.text, 'html.parser')\n    \n    # Step 4: Find elements containing the data you want\n    # Here we assume article titles are in <h2> tags with class 'title'\n    titles = soup.find_all('h2', class_='title')\n    \n    # Step 5: Extract and print the text from these tags\n    for idx, title in enumerate(titles, 1):\n        print(f\"{idx}. {title.get_text(strip=True)}\")\nelse:\n    print(f\"Failed to retrieve the page. Status code: {response.status_code}\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's break down what this code does:\n\n1. We import the necessary libraries.\n2. We specify the URL of the web page we want to scrape.\n3. We send an HTTP GET request to the URL.\n4. If the request is successful, we parse the page’s HTML content with BeautifulSoup.\n5. We search for all `<h2>` tags with the class `title` (this depends on the website’s HTML structure).\n6. We loop through the found elements and print their text content.\n\nMake sure to update the tag and class based on the actual website you want to scrape."
-      },
-      {
-        "type": "paragraph",
-        "value": "A few additional tips:\n\n- Always respect the website’s `robots.txt` file to know what is allowed to be scraped.\n- Be gentle with your requests; avoid sending too many requests too quickly to not overload the server.\n- For more complex scraping tasks, consider using libraries like `Scrapy` or tools like Selenium."
-      },
-      {
-        "type": "paragraph",
-        "value": "With this simple script, you’ve taken your first step into the world of web scraping with Python. Happy coding!"
-      }
-    ]
-  },
-  {
-    "slug": "leveraging-pythons-logging-module-to-trace-runtime-exceptions-in-production",
-    "title": "Leveraging Python’s Logging Module to Trace Runtime Exceptions in Production",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn how to use Python’s built-in logging module to effectively trace runtime exceptions in production environments for easier debugging and better error monitoring.",
-    "videoUrl": "https://www.youtube.com/watch?v=JVQNywo4AbU",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When running Python applications in production, tracking down errors can be tricky without proper logging. The built-in logging module helps you record useful information about runtime exceptions, making it easier to understand what went wrong. This article will guide you through setting up Python’s logging module to capture and trace exceptions effectively."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, let's understand why using print statements alone isn’t enough in a production environment. Print statements clutter your output and don’t provide flexibility such as log levels, timestamps, or writing logs to files. Python’s logging module solves these problems by offering a powerful and configurable way to capture logs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple example of how to configure the logging module to log exceptions to a file:"
-      },
-      {
-        "type": "code",
-        "value": "import logging\n\n# Configure logging to write messages to a file named 'app.log'\nlogging.basicConfig(\n    filename='app.log',\n    level=logging.ERROR,  # Only log errors and above\n    format='%(asctime)s - %(levelname)s - %(message)s'\n)\n\ntry:\n    # Example code that may raise an exception\n    result = 10 / 0\nexcept Exception as e:\n    # Log the exception with stack trace\n    logging.exception('An error occurred during division')"
-      },
-      {
-        "type": "paragraph",
-        "value": "In the code above, `logging.basicConfig` is used to define where and how to log messages. We set the level to `ERROR` so that only errors and critical issues are recorded. The `logging.exception` function is used inside the except block—it automatically includes the stack trace, which is invaluable for debugging."
-      },
-      {
-        "type": "paragraph",
-        "value": "The log file `app.log` will contain entries like this when an exception happens:"
-      },
-      {
-        "type": "paragraph",
-        "value": "\n2024-04-26 15:24:12,123 - ERROR - An error occurred during division\nTraceback (most recent call last):\n  File \"example.py\", line 10, in <module>\n    result = 10 / 0\nZeroDivisionError: division by zero\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "This detailed logging helps you quickly locate the source and nature of exceptions in your application. You can also customize the logging to write to the console, include timestamps, log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL), and more."
-      },
-      {
-        "type": "paragraph",
-        "value": "For larger applications, consider configuring more advanced logging handlers, such as rotating log files or sending logs to external monitoring services. However, the basic setup shown here is a great start for beginners to understand and utilize Python’s logging for exception tracing."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize, by leveraging Python’s logging module with exception logging: \n\n- You can trace errors with stack traces.\n- Logs are timestamped and well-formatted.\n- You avoid cluttered output and gain control over log levels and destinations.\n\nStart adding logging to your code today to make debugging in production much more manageable!"
-      }
-    ]
-  },
-  {
-    "slug": "optimizing-sql-window-functions-for-faster-queries",
-    "title": "Optimizing SQL Window Functions for Faster Analytical Queries",
+    "slug": "mastering-sql-window-functions-beginners-guide",
+    "title": "Mastering SQL Window Functions: A Beginner's Guide to Advanced Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to write efficient SQL window function queries and boost performance for your analytical workloads with practical tips and examples.",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis with ease. This beginner-friendly guide covers key window functions with practical examples.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are powerful tools for analytical queries, allowing you to perform calculations across sets of rows related to the current row without collapsing result rows. Examples include running totals, ranking, and moving averages. However, if not optimized, these can cause slow query performance on large datasets. This tutorial will guide you through beginner-friendly techniques to write faster SQL window function queries."
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of rows related to the current query row, without collapsing your results like GROUP BY. If you're new to SQL or want to elevate your data analysis skills, mastering window functions can open up new possibilities."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand a basic window function example. Suppose you want to calculate the running total of sales by date:"
+        "value": "In this tutorial, we'll explore the basics of window functions, understand how they work, and review common functions such as ROW_NUMBER(), RANK(), SUM(), and AVG() used with the OVER() clause."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a sample dataset of sales transactions:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  sale_date,\n  amount,\n  SUM(amount) OVER (ORDER BY sale_date) AS running_total\nFROM sales_table;"
+        "value": "CREATE TABLE sales (\n  id INT PRIMARY KEY,\n  salesperson VARCHAR(50),\n  region VARCHAR(50),\n  amount DECIMAL(10,2),\n  sale_date DATE\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', 'East', 500.00, '2024-01-01'),\n(2, 'Bob', 'West', 300.00, '2024-01-02'),\n(3, 'Alice', 'East', 700.00, '2024-01-03'),\n(4, 'Carol', 'East', 200.00, '2024-01-04'),\n(5, 'Bob', 'West', 400.00, '2024-01-05'),\n(6, 'Alice', 'East', 100.00, '2024-01-06');"
       },
       {
         "type": "paragraph",
-        "value": "This query sums the sales amounts ordered by date for each row. But on large datasets, this can be slow. Here are ways to optimize such queries:"
+        "value": "### What Are Window Functions?\nWindow functions perform calculations across a set of rows related to the current row without grouping the results into a single output row. They use the OVER() clause to define this 'window' or partition of rows."
       },
       {
         "type": "paragraph",
-        "value": "1. **Indexing on Partition and Order Columns** – Window functions benefit from indexes on columns used in PARTITION BY and ORDER BY clauses. This helps the database efficiently sort and group data."
+        "value": "### Example 1: ROW_NUMBER() to Assign Unique Row Numbers\nROW_NUMBER() assigns a unique sequential integer to rows within a partition. Here, we assign row numbers partitioned by salesperson ordered by their sale_date."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_sales_date ON sales_table(sale_date);"
+        "value": "SELECT\n  id,\n  salesperson,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS row_num\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "2. **Limit Window Frame When Possible** – Explicitly define the window frame to reduce unnecessary computations. For example, use ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW instead of the default RANGE which can be slower."
+        "value": "### Example 2: RANK() to Rank Sales Amounts\nRANK() assigns rankings to rows within a partition, with ties receiving the same rank. Let's rank sales amounts by salesperson."
       },
       {
         "type": "code",
-        "value": "SELECT\n  sale_date,\n  amount,\n  SUM(amount) OVER (ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales_table;"
+        "value": "SELECT\n  id,\n  salesperson,\n  amount,\n  RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS sales_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "3. **Reduce Dataset Early** – Apply WHERE filters before window functions to reduce the data size window functions operate on."
+        "value": "### Example 3: SUM() as a Running Total\nCalculate a running total of sales amount for each salesperson ordered by sale date."
       },
       {
         "type": "code",
-        "value": "SELECT\n  sale_date,\n  amount,\n  SUM(amount) OVER (ORDER BY sale_date) AS running_total\nFROM sales_table\nWHERE sale_date >= '2024-01-01';"
+        "value": "SELECT\n  id,\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "4. **Avoid Large PARTITION BY Groups** – Window functions recalculate per partition. If partitions are very large, queries slow down. If possible, redesign partitions to be smaller or fewer."
+        "value": "### Example 4: AVG() to Find Average Sales in Each Region\nFind the average sales amount per region without grouping rows using window functions."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  region,\n  amount,\n  AVG(amount) OVER (PARTITION BY region) AS avg_region_sales\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "5. **Use Materialized Views or Temporary Tables for Repeated Window Calculations** – If you run similar window queries frequently, store results in a materialized view or temp table to avoid repeated expensive calculations."
+        "value": "### Why Use Window Functions?\n- Perform calculations like running totals, rankings, and moving averages while keeping detailed rows\n- Avoid complex self-joins or subqueries\n- Write more readable and efficient queries"
       },
       {
         "type": "paragraph",
-        "value": "To sum up, start by adding proper indexes, define explicit window frames when appropriate, filter rows before applying window functions, and manage partition sizes carefully. These simple tips can help you write faster, more efficient analytical SQL queries."
+        "value": "### Summary\nWindow functions extend SQL's power to analyze data over a set of rows related to the current row. Try using ROW_NUMBER(), RANK(), SUM(), and AVG() with the OVER() clause in your queries to unlock advanced analytics easily."
       },
       {
         "type": "paragraph",
-        "value": "Try applying these optimizations in your own SQL environment and observe the improvements in your query performance!"
+        "value": "Keep practicing with your own datasets, and soon you'll be mastering SQL window functions for advanced data analysis!"
       }
     ]
   },
   {
-    "slug": "mastering-sql-query-optimization-by-analyzing-execution-plan-anomalies",
-    "title": "Mastering SQL Query Optimization by Analyzing Execution Plan Anomalies",
+    "slug": "handling-time-zone-conversions-and-edge-cases-in-sql-queries",
+    "title": "Handling Time Zone Conversions and Edge Cases in SQL Queries",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to improve your SQL queries by identifying and resolving execution plan anomalies. This beginner-friendly guide covers practical steps to optimize queries effectively.",
-    "videoUrl": "https://www.youtube.com/watch?v=DXpsNQqSFQw",
+    "description": "Learn how to properly handle time zone conversions in SQL queries, including common edge cases and mistakes beginners often encounter.",
+    "videoUrl": "https://www.youtube.com/watch?v=pwmynHnr704",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL query optimization is crucial for improving the performance of your database applications. One of the best ways to optimize SQL queries is by analyzing their execution plans. Execution plans show how the database engine processes your query, highlighting the steps taken and resources used. However, anomalies in execution plans can cause slowdowns or unexpected behaviors. In this article, we'll explore common execution plan anomalies, how to identify them, and practical approaches to resolve these issues."
+        "value": "Working with dates and times in SQL can be tricky, especially when you need to deal with multiple time zones. Improper handling of time zone conversions often leads to incorrect query results, missed records, or unexpected behavior. This article will guide you through the basics of time zone conversion in SQL and how to avoid common edge case errors."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand what an execution plan is. When you run an SQL query, the database engine creates a plan to fetch the result as efficiently as possible. This plan includes steps like table scans, index seeks, joins, and sorts. Viewing this plan helps you spot inefficiencies such as full table scans on large tables or missing indexes."
+        "value": "The first step in dealing with time zones is understanding the difference between timezone-aware and timezone-unaware data types. Most SQL databases provide types like TIMESTAMP WITHOUT TIME ZONE (which stores only the timestamp without any time zone info) and TIMESTAMP WITH TIME ZONE (which stores the time in UTC internally and adjusts for time zones when displaying)."
       },
       {
         "type": "paragraph",
-        "value": "To analyze an execution plan, most databases provide a tool or command. For example, in SQL Server, you can use the following command to display the estimated execution plan:"
+        "value": "A common beginner mistake is assuming that a TIMESTAMP WITHOUT TIME ZONE column is storing UTC times. It might actually be storing local times, which will cause incorrect results when you try to convert or compare times across time zones."
+      },
+      {
+        "type": "paragraph",
+        "value": "To convert between time zones in SQL (example below uses PostgreSQL syntax), you can use the AT TIME ZONE construct. Here's how you convert a timestamp from UTC to Eastern Time:"
       },
       {
         "type": "code",
-        "value": "SET SHOWPLAN_TEXT ON;\nGO\nSELECT * FROM Employees WHERE DepartmentID = 5;\nGO\nSET SHOWPLAN_TEXT OFF;\nGO"
+        "value": "SELECT\n  event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS event_time_et\nFROM events;"
       },
       {
         "type": "paragraph",
-        "value": "A common anomaly is an unexpected Full Table Scan, where the database reads all rows in a table even if there is a filter condition. This usually happens if an appropriate index is missing or not used. Full table scans on big tables can cause slow queries."
+        "value": "In this query, `event_time` is assumed to be stored as a TIMESTAMP WITHOUT TIME ZONE in UTC. The first AT TIME ZONE 'UTC' tells SQL to treat the timestamp as UTC time, converting it to TIMESTAMP WITH TIME ZONE. The second AT TIME ZONE 'America/New_York' converts it into Eastern Time and returns a TIMESTAMP WITHOUT TIME ZONE adjusted accordingly."
       },
       {
         "type": "paragraph",
-        "value": "Another anomaly is inefficient joins. For example, nested loop joins are great for small data sets but may be inefficient for large tables. A hash join or merge join might perform better depending on your data."
+        "value": "Edge cases to be aware of include daylight saving time (DST) changes. When clocks move forward or backward, some local times may not exist or may be ambiguous. For example, the hour lost in spring or repeated in fall can confuse SQL and cause errors or unexpected results."
       },
       {
         "type": "paragraph",
-        "value": "Here’s an example of a poorly optimized query:"
+        "value": "If you want to filter records based on a local time range that spans a DST transition, it’s safer to convert your local times to UTC before comparing. For example:"
       },
       {
         "type": "code",
-        "value": "SELECT e.Name, d.Name AS Department\nFROM Employees e\nJOIN Departments d ON e.DepartmentID = d.DepartmentID\nWHERE e.HireDate > '2020-01-01';"
+        "value": "SELECT *\nFROM events\nWHERE event_time AT TIME ZONE 'America/New_York' AT TIME ZONE 'UTC' BETWEEN '2024-03-10 07:00:00+00' AND '2024-03-10 08:00:00+00';"
       },
       {
         "type": "paragraph",
-        "value": "If the Employees table is large and lacks an index on HireDate, the query planner might perform a full scan and join, causing slow performance. To optimize, add an index on the HireDate column:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_hiredate ON Employees(HireDate);"
+        "value": "This example ensures your filtering is based on a consistent UTC timeline, avoiding confusion during DST changes."
       },
       {
         "type": "paragraph",
-        "value": "After adding the index, check the execution plan again. You should see an index seek operation instead of a full scan, indicating improved efficiency."
+        "value": "Another tip is to always store timestamps in UTC in your database. This avoids ambiguity and makes your conversions predictable. Convert to the user's local time zone only when displaying data in your application."
       },
       {
         "type": "paragraph",
-        "value": "In summary, mastering execution plan analysis involves:\n- Generating and reading execution plans\n- Identifying anomalies like full table scans and inefficient joins\n- Adding or adjusting indexes\n- Rewriting queries if necessary\n\nBy regularly reviewing execution plans, you can ensure your SQL queries perform optimally and scale well with your data growth."
+        "value": "In summary, to handle time zone conversions properly in SQL:\n\n- Know your data types (aware vs unaware timestamps).\n- Use `AT TIME ZONE` for conversions (PostgreSQL) or equivalent functions in other databases.\n- Be cautious around daylight saving time shifts.\n- Store timestamps in UTC to maintain consistency.\n- Convert to local time zones at the presentation layer whenever possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these simple guidelines, you can avoid common pitfalls and make your time zone related SQL queries more reliable and accurate."
       }
     ]
   }

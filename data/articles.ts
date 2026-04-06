@@ -42408,5 +42408,479 @@ export const articles = [
         "value": "In summary, mastering execution plan analysis involves:\n- Generating and reading execution plans\n- Identifying anomalies like full table scans and inefficient joins\n- Adding or adjusting indexes\n- Rewriting queries if necessary\n\nBy regularly reviewing execution plans, you can ensure your SQL queries perform optimally and scale well with your data growth."
       }
     ]
+  },
+  {
+    "slug": "mastering-lazy-loading-in-javascript-for-faster-web-apps",
+    "title": "Mastering Lazy Loading in JavaScript for Faster Web Apps",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to speed up your website by mastering lazy loading techniques in JavaScript. This beginner-friendly tutorial covers what lazy loading is, why it’s important, and how to implement it step-by-step.",
+    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Lazy loading is a technique that delays the loading of images, scripts, or other resources until they are actually needed. This helps make your web app faster by reducing the initial load time and saving bandwidth."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, you’ll learn how to implement lazy loading for images using native JavaScript and the Intersection Observer API. This approach is efficient and widely supported in modern browsers."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let’s understand the basics: Instead of loading all images when the page loads, we only load them when they come into the user’s viewport (the visible area of the web page)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of how to set up lazy loading for images using the Intersection Observer API."
+      },
+      {
+        "type": "code",
+        "value": "<img data-src=\"image1.jpg\" alt=\"Example Image\" class=\"lazy\">\n<img data-src=\"image2.jpg\" alt=\"Example Image\" class=\"lazy\">\n<img data-src=\"image3.jpg\" alt=\"Example Image\" class=\"lazy\">\n\n<script>\n  document.addEventListener(\"DOMContentLoaded\", function() {\n    const lazyImages = document.querySelectorAll('img.lazy');\n\n    if ('IntersectionObserver' in window) {\n      let observer = new IntersectionObserver((entries, observer) => {\n        entries.forEach(entry => {\n          if (entry.isIntersecting) {\n            let img = entry.target;\n            img.src = img.getAttribute('data-src');\n            img.classList.remove('lazy');\n            observer.unobserve(img);\n          }\n        });\n      });\n\n      lazyImages.forEach(img => {\n        observer.observe(img);\n      });\n    } else {\n      // Fallback - load all images immediately\n      lazyImages.forEach(img => {\n        img.src = img.getAttribute('data-src');\n        img.classList.remove('lazy');\n      });\n    }\n  });\n</script>"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code snippet, images use a placeholder attribute called `data-src` instead of `src`. The Intersection Observer waits until each image enters the viewport, then sets their `src` attribute to the real image URL to trigger loading."
+      },
+      {
+        "type": "paragraph",
+        "value": "This method provides several benefits:\n- Improves page load speed by loading only necessary images\n- Saves user bandwidth, especially on mobile devices\n- Provides a smooth user experience as images load only when needed"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to go further, you can also lazy load JavaScript modules or other resources dynamically using `import()` or other techniques, but image lazy loading is a great place to start."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering lazy loading in JavaScript helps create faster, more efficient, and user-friendly web apps. Try implementing it in your next project and see the difference!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-type-coercion-errors-in-comparison-operators",
+    "title": "Understanding JavaScript Type Coercion Errors in Comparison Operators",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript type coercion can cause unexpected results in comparison operators and how to avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=GKJh3vdat8A",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that often converts values from one type to another automatically. This process is called type coercion. While this feature makes coding easier in many cases, it can also cause unexpected errors, especially when using comparison operators like == and !=."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are two main types of comparison operators in JavaScript: loose equality (== and !=) and strict equality (=== and !==). Loose equality operators convert the types of values before comparing them, which can sometimes lead to confusing results. Strict equality operators, on the other hand, compare both value and type, avoiding coercion."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider this simple example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 == '5');  // true\nconsole.log(5 === '5'); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the loose equality operator (==) converts the string '5' into a number before comparing it with 5, so the result is true. The strict equality operator (===) compares both the value and type, so since one is a string and the other is a number, the result is false."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion errors often happen when you expect two variables to be different based on their types, but JavaScript converts them and they become equal. For example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(false == 0);    // true\nconsole.log(false === 0);   // false\nconsole.log('' == 0);       // true\nconsole.log('' === 0);      // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the examples above, false and an empty string ('') are loosely equal to 0 because JavaScript coerces these values to numbers during the comparison. However, they are not strictly equal because their types differ."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid type coercion errors:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always prefer using strict equality (===) and strict inequality (!==) operators unless you have a specific reason to allow type conversion.\n2. Be mindful when comparing values from user input or external sources, as they may be strings or other types.\n3. Use explicit type conversion like Number(), String(), or Boolean() to make your intentions clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example with explicit conversion:"
+      },
+      {
+        "type": "code",
+        "value": "const userInput = '10';\nconst actualNumber = 10;\n\n// Explicitly convert userInput to a number\nif (Number(userInput) === actualNumber) {\n  console.log('Values and types match!');\n} else {\n  console.log('No match.');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding how JavaScript performs type coercion with comparison operators helps you avoid bugs and write clearer, more predictable code. Using strict equality and explicit conversions are safe practices for beginners and experienced developers alike."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-vs-javascript-detailed-comparison-for-modern-web-development",
+    "title": "TypeScript vs JavaScript: Detailed Comparison for Modern Web Development",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore the key differences between TypeScript and JavaScript to learn which language suits your modern web development needs. This beginner-friendly guide covers basics, advantages, and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=HCXPJmtV47I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is the most widely used programming language for web development, known for its flexibility and ability to run directly in browsers. TypeScript is a superset of JavaScript, developed by Microsoft, that adds static types and modern features to make code more robust and easier to maintain. In this article, we'll compare TypeScript and JavaScript in detail, helping beginners understand when and why to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is JavaScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a dynamically typed, interpreted language that runs natively in web browsers. It allows developers to write code that manipulates web pages, handles events, and performs asynchronous operations. Since it is dynamically typed, variables can hold any type of data without explicit declarations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of JavaScript code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  return \"Hello, \" + name + \"!\";\n}\n\nconsole.log(greet('World'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the parameter `name` can be any type, but typically it's a string. JavaScript does not enforce type checking during development, which can sometimes lead to runtime bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript builds on JavaScript by adding optional static types, interfaces, and modern language features. This means you can declare what type of data variables, parameters, or function returns should have. These types are checked at compile time, before running the code, which reduces errors and improves code quality."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of TypeScript code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `name` is explicitly defined as a string, and the function return type is also string. If you pass a value that is not a string, TypeScript will show an error during compilation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences Between TypeScript and JavaScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Typing:** JavaScript is dynamically typed, while TypeScript is statically typed (optional but highly recommended to use)."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Compilation:** JavaScript runs directly in browsers; TypeScript needs to be compiled (transpiled) into JavaScript before execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Tooling and IDE Support:** TypeScript offers better editor support with autocompletion, refactoring, and error checking due to static typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Learning Curve:** JavaScript is easier to start with, while TypeScript requires learning types and compilation setup."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Community and Ecosystem:** JavaScript has a broader ecosystem as the foundational web language, but TypeScript usage is growing rapidly and supported by many frameworks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When Should You Use TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript is particularly helpful when working on large codebases or in teams, where enforcing data types can prevent bugs. It also works well with modern frameworks like Angular, React, and Vue.js, which have official TypeScript support."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Simple Example Comparing Both"
+      },
+      {
+        "type": "code",
+        "value": "// JavaScript example (dynamic typing)\nfunction add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(5, 10)); // 15\nconsole.log(add('5', 10)); // '510' - unexpected string concatenation\n\n// TypeScript example (static typing)\nfunction addTyped(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(addTyped(5, 10)); // 15\n// console.log(addTyped('5', 10)); // Error: Argument of type 'string' is not assignable to parameter of type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, passing a string to the `add` function causes unintended behavior (string concatenation). In TypeScript, the error is caught before running the code, preventing bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both JavaScript and TypeScript have their place in modern web development. JavaScript is excellent for quick scripting and smaller projects, while TypeScript enhances scalability and maintainability with type safety. Learning TypeScript can improve your coding skills and prepare you for large, professional projects that require clean and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with both and see which language fits your development workflow best!"
+      }
+    ]
+  },
+  {
+    "slug": "deep-dive-into-typescripts-conditional-types-for-advanced-error-handling",
+    "title": "Deep Dive into TypeScript's Conditional Types for Advanced Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to leverage TypeScript's powerful conditional types to create advanced, flexible error handling patterns in your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=7BnoNWu2y3Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that enhances JavaScript with types, enabling safer coding and better developer experience. One super useful feature for advanced error handling is conditional types. These allow you to create types that change based on conditions, making your error management more precise and adaptable."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore how to use conditional types in TypeScript to build flexible error handling patterns. We'll start with simple examples and then get into more practical use cases involving API responses and custom error types."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Conditional Types?\nConditional types allow you to relate types to each other based on a condition. They follow a syntax like `T extends U ? X : Y`, meaning: if type `T` is assignable to type `U`, then use type `X`; otherwise use type `Y`."
+      },
+      {
+        "type": "code",
+        "value": "type IsString<T> = T extends string ? 'Yes' : 'No';\n\ntype Test1 = IsString<string>;  // 'Yes'\ntype Test2 = IsString<number>;  // 'No'"
+      },
+      {
+        "type": "paragraph",
+        "value": "This flexibility is perfect for error handling because it enables creating utility types that can adapt based on passed types or conditions in your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Basic Conditional Error Type\nSuppose you want a function that returns different error object shapes depending on the context. You can use conditional types to define which error type to return."
+      },
+      {
+        "type": "code",
+        "value": "type ApiError = { message: string; statusCode: number };\ntype ValidationError = { message: string; fields: string[] };\n\ntype ErrorType<T> = T extends 'api' ? ApiError : ValidationError;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `ErrorType` changes based on the string literal type passed to it."
+      },
+      {
+        "type": "code",
+        "value": "function handleError<T extends 'api' | 'validation'>(type: T, errorData: ErrorType<T>): void {\n  if (type === 'api') {\n    console.log('API error:', errorData.statusCode, errorData.message);\n  } else {\n    console.log('Validation error on fields:', errorData.fields.join(', '));\n  }\n}\n\nhandleError('api', { message: 'Not Found', statusCode: 404 });\nhandleError('validation', { message: 'Invalid input', fields: ['email', 'password'] });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Try passing wrong error data for the type, and TypeScript will catch the mistake at compile time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Conditional Types for API Response Error Handling\nOften when dealing with API responses, you want to differentiate success from error responses clearly."
+      },
+      {
+        "type": "code",
+        "value": "type ApiResponse<T> =\n  T extends { error: true }\n    ? { error: true; code: number; message: string }\n    : { error: false; data: T };\n\nfunction handleApiResponse<T>(response: ApiResponse<T>) {\n  if (response.error) {\n    console.error(`Error (${response.code}):`, response.message);\n  } else {\n    console.log('Success:', response.data);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This type will ensure you provide either a successful response with data or an error with proper error details."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nConditional types in TypeScript offer a powerful way to build smarter error handling patterns that adapt to different scenarios and improve type safety. Whether you are dealing with API errors or validation failures, leveraging conditional types helps catch problems early and write clearer code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with conditional types for your own error handling needs, and you'll notice how much easier and safer managing errors can become!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-data-classes-vs-named-tuples-for-clean-code",
+    "title": "Comparing Python's Data Classes vs Named Tuples for Clean Code",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Explore the differences between Python's data classes and named tuples to write cleaner, more readable code. Learn when to use each for beginner-friendly data structures.",
+    "videoUrl": "https://www.youtube.com/watch?v=5mMpM8zK4pY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with simple data structures in Python, two popular choices are data classes and named tuples. Both help you write cleaner and more readable code by giving names to the fields of your objects instead of using normal tuples or dictionaries. In this tutorial, we'll explore what data classes and named tuples are, their differences, and when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's start with named tuples. Named tuples are an extension of regular tuples that allow you to access elements by name instead of position. They are immutable, lightweight, and come from the collections module."
+      },
+      {
+        "type": "code",
+        "value": "from collections import namedtuple\n\n# Define a named tuple to represent a Point in 2D space\nPoint = namedtuple('Point', ['x', 'y'])\n\np1 = Point(10, 20)\nprint(p1.x)  # Output: 10\nprint(p1.y)  # Output: 20\n\n# Named tuples are immutable\n# p1.x = 5  # This would raise an error"
+      },
+      {
+        "type": "paragraph",
+        "value": "Named tuples are great for simple use cases where you want immutability and a lightweight object. However, they don’t support default values or easy customization like methods or property setters."
+      },
+      {
+        "type": "paragraph",
+        "value": "On the other hand, data classes were introduced in Python 3.7 to make defining classes for storing data easier and cleaner. Using the `@dataclass` decorator, Python automatically generates special methods like `__init__`, `__repr__`, and `__eq__` for your class."
+      },
+      {
+        "type": "code",
+        "value": "from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\np2 = Point(10, 20)\nprint(p2.x)  # Output: 10\nprint(p2)    # Output: Point(x=10, y=20)\n\n# Data classes are mutable by default\np2.x = 5\nprint(p2.x)  # Output: 5"
+      },
+      {
+        "type": "paragraph",
+        "value": "Data classes allow default values, mutable fields, and defining methods within the class. You can also make them immutable by setting `frozen=True` in the decorator."
+      },
+      {
+        "type": "code",
+        "value": "@dataclass(frozen=True)\nclass ImmutablePoint:\n    x: int\n    y: int\n\np3 = ImmutablePoint(1, 2)\n# p3.x = 3  # This would raise: FrozenInstanceError"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to use Named Tuples\n- You want lightweight, immutable objects similar to tuples.\n- You do not need methods or default values.\n- You prefer tuple-like behavior with named fields.\n\n### When to use Data Classes\n- You want more flexibility like default values, methods, and mutable objects.\n- You want clear, maintainable code with minimal boilerplate.\n- You need to customize behavior like sorting or comparisons."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBoth data classes and named tuples improve code readability compared to normal tuples or dictionaries. Named tuples are simple and immutable, making them ideal for lightweight structures. Data classes provide more power and customization, suitable for more complex or mutable data objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "By choosing the right tool for your data needs, you can keep your Python code clean, easy to understand, and efficient."
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-errors-python",
+    "title": "Handling Floating Point Precision Errors in Python: Best Practices and Pitfalls",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle floating point precision errors in Python with practical tips and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=t-OdS6SxQqQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with floating point numbers in Python, you might encounter unexpected results due to how computers represent decimal numbers internally. This phenomenon is called floating point precision error. Understanding why it happens and how to handle it will make your programs more reliable and accurate."
+      },
+      {
+        "type": "paragraph",
+        "value": "Floating point numbers are stored in binary form, which can't always precisely represent decimal fractions. For example, the decimal number 0.1 does not have an exact binary representation, leading to small precision errors when performing arithmetic operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a common example:"
+      },
+      {
+        "type": "code",
+        "value": "print(0.1 + 0.2 == 0.3)  # This will return False"
+      },
+      {
+        "type": "paragraph",
+        "value": "Although mathematically 0.1 + 0.2 equals 0.3, the expression returns `False` because of tiny floating point rounding errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice: Use `math.isclose()` for comparison"
+      },
+      {
+        "type": "paragraph",
+        "value": "`math.isclose()` is a function introduced in Python 3.5 that helps compare floating point numbers within a tolerance margin."
+      },
+      {
+        "type": "code",
+        "value": "import math\n\nprint(math.isclose(0.1 + 0.2, 0.3))  # This will return True"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Alternative: Use the `decimal` module for exact decimal arithmetic"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `decimal` module provides decimal floating point arithmetic with more precision and control. It is very useful for financial and other applications where precision is critical."
+      },
+      {
+        "type": "code",
+        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result == Decimal('0.3'))  # This will return True\nprint(result)  # Will print 0.3 exactly"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pitfalls to Avoid"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid direct equality checks (`==`) with floats when exact equality is expected.\n2. Be mindful of accumulated errors in large computations or loops.\n3. Remember that converting floats to strings or vice versa can also introduce precision issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Floating point precision errors are a natural limitation of computer arithmetic. Use `math.isclose()` to safely compare float values and consider the `decimal` module when precise decimal representation is needed. By understanding these concepts, you can write more robust and predictable Python code."
+      }
+    ]
+  },
+  {
+    "slug": "handling-time-zone-conversions-and-edge-cases-in-sql-queries",
+    "title": "Handling Time Zone Conversions and Edge Cases in SQL Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to properly handle time zone conversions in SQL queries, including common edge cases and mistakes beginners often encounter.",
+    "videoUrl": "https://www.youtube.com/watch?v=pwmynHnr704",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in SQL can be tricky, especially when you need to deal with multiple time zones. Improper handling of time zone conversions often leads to incorrect query results, missed records, or unexpected behavior. This article will guide you through the basics of time zone conversion in SQL and how to avoid common edge case errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "The first step in dealing with time zones is understanding the difference between timezone-aware and timezone-unaware data types. Most SQL databases provide types like TIMESTAMP WITHOUT TIME ZONE (which stores only the timestamp without any time zone info) and TIMESTAMP WITH TIME ZONE (which stores the time in UTC internally and adjusts for time zones when displaying)."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common beginner mistake is assuming that a TIMESTAMP WITHOUT TIME ZONE column is storing UTC times. It might actually be storing local times, which will cause incorrect results when you try to convert or compare times across time zones."
+      },
+      {
+        "type": "paragraph",
+        "value": "To convert between time zones in SQL (example below uses PostgreSQL syntax), you can use the AT TIME ZONE construct. Here's how you convert a timestamp from UTC to Eastern Time:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS event_time_et\nFROM events;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, `event_time` is assumed to be stored as a TIMESTAMP WITHOUT TIME ZONE in UTC. The first AT TIME ZONE 'UTC' tells SQL to treat the timestamp as UTC time, converting it to TIMESTAMP WITH TIME ZONE. The second AT TIME ZONE 'America/New_York' converts it into Eastern Time and returns a TIMESTAMP WITHOUT TIME ZONE adjusted accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Edge cases to be aware of include daylight saving time (DST) changes. When clocks move forward or backward, some local times may not exist or may be ambiguous. For example, the hour lost in spring or repeated in fall can confuse SQL and cause errors or unexpected results."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to filter records based on a local time range that spans a DST transition, it’s safer to convert your local times to UTC before comparing. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM events\nWHERE event_time AT TIME ZONE 'America/New_York' AT TIME ZONE 'UTC' BETWEEN '2024-03-10 07:00:00+00' AND '2024-03-10 08:00:00+00';"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example ensures your filtering is based on a consistent UTC timeline, avoiding confusion during DST changes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another tip is to always store timestamps in UTC in your database. This avoids ambiguity and makes your conversions predictable. Convert to the user's local time zone only when displaying data in your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to handle time zone conversions properly in SQL:\n\n- Know your data types (aware vs unaware timestamps).\n- Use `AT TIME ZONE` for conversions (PostgreSQL) or equivalent functions in other databases.\n- Be cautious around daylight saving time shifts.\n- Store timestamps in UTC to maintain consistency.\n- Convert to local time zones at the presentation layer whenever possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these simple guidelines, you can avoid common pitfalls and make your time zone related SQL queries more reliable and accurate."
+      }
+    ]
   }
 ];
