@@ -1,173 +1,172 @@
 [
   {
-    "slug": "write-a-sql-function-to-calculate-the-average-salary-from-employee-table",
-    "title": "Write a SQL Function to Calculate the Average Salary from Employee Table",
+    "slug": "fix-the-incorrect-join-condition-in-employee-salary-query",
+    "title": "Fix the Incorrect JOIN Condition in Employee Salary Query",
     "language": "sql",
-    "difficulty": "beginner",
-    "category": "queries",
-    "description": "Create a SQL function that calculates the average salary of all employees in a given department using a simple SELECT and AVG aggregate function.",
-    "prompt": "Write a SQL function named `GetAverageSalary` that accepts a department ID as input and returns the average salary of all employees in that department. Assume you have an `Employees` table with columns `EmployeeID`, `DepartmentID`, and `Salary`. Your function should handle the case where there are no employees in the department by returning NULL.",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided SQL query that calculates the total salary by department. The current query returns incorrect totals due to a faulty JOIN condition.",
+    "prompt": "You have two tables: Employees(emp_id, emp_name, dept_id, salary) and Departments(dept_id, dept_name). The goal is to write a query that returns each department name along with the total salary of its employees. The provided query is intended to do this but returns incorrect results. Fix the bug in the query so it works correctly.",
     "guidance": [
-      "Use the AVG() aggregate function to calculate the average salary.",
-      "Filter rows by the given DepartmentID in the WHERE clause.",
-      "Return the result from within the function."
+      "Check the JOIN condition carefully to ensure employees are matched to their correct department.",
+      "Verify that aggregations (SUM) are done correctly grouped by department.",
+      "Test the query after fixing it to confirm results are as expected."
     ],
     "hints": [
-      "Recall that AVG function ignores NULL values automatically.",
-      "Make sure your function uses correct syntax for creating scalar functions in your SQL dialect."
+      "The ON clause might be joining columns incorrectly or using wrong table aliases.",
+      "Ensure the GROUP BY clause correctly references the grouped columns.",
+      "Check for typos or misuse of columns in either SELECT or JOIN parts."
     ],
-    "starterCode": "CREATE FUNCTION GetAverageSalary(@DeptID INT)\nRETURNS FLOAT\nAS\nBEGIN\n    -- Write your query here\n    RETURN NULL\nEND",
-    "expectedOutput": "If Employees table has salaries (50000, 70000, 60000) in department 2, then GetAverageSalary(2) should return 60000.",
+    "starterCode": "SELECT d.dept_name, SUM(e.salary) AS total_salary\nFROM Employees e\nJOIN Departments d ON e.emp_id = d.dept_id\nGROUP BY d.dept_name;",
+    "expectedOutput": "A list of department names each with the sum of all employee salaries in that department, e.g.\n\n| dept_name   | total_salary |\n|-------------|--------------|\n| Sales       | 150000       |\n| Engineering | 250000       |\n| HR          | 90000        |",
     "concepts": [
-      "SQL functions",
-      "Aggregate functions",
-      "Filtering with WHERE clause"
+      "SQL JOINs",
+      "Aggregation (SUM, GROUP BY)",
+      "Debugging SQL queries"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": false
+    "isFeatured": true
   },
   {
-    "slug": "build-a-python-expense-tracker-with-categorization-and-summaries",
-    "title": "Build a Python Expense Tracker with Categorization and Summaries",
-    "language": "python",
+    "slug": "implement-a-simple-task-manager-cli-in-c",
+    "title": "Implement a Simple Task Manager CLI in C++",
+    "language": "cpp",
     "difficulty": "intermediate",
     "category": "mini-projects",
-    "description": "Create a Python mini-project to manage daily expenses, categorize them, and generate summary reports for monthly spending by category.",
-    "prompt": "You need to build a simple expense tracker program in Python. Your program will allow adding daily expenses with an amount, a category (like Food, Transport, Utilities), and a date. It should store the expenses in an appropriate data structure. The program should then be able to generate a summary report that totals spending by category for a given month and year. Implement the following functions:\n\n1. add_expense(amount, category, date) - Adds an expense to the tracker.\n2. monthly_summary(year, month) - Returns a dictionary with categories as keys and total spendings as values for the specified month.\n\nMake sure your program can handle multiple expenses in the same category and different categories per month.",
+    "description": "Create a command-line task manager application that allows users to add, list, complete, and remove tasks stored in memory during the program session.",
+    "prompt": "Write a C++ program that manages tasks using a simple command-line interface. The program should support the following commands: add a new task with a description, list all tasks with their status (completed or pending), mark a task as completed by its ID, and remove a task by its ID. Tasks should be stored in an appropriate data structure in memory. The program should keep running until the user types \"exit\".",
     "guidance": [
-      "Use a list to store expense entries as dictionaries or named tuples with fields for amount, category, and date.",
-      "Parse and manipulate dates using the datetime module to filter expenses by month and year.",
-      "Aggregate expenses by category using a dictionary within the summary function."
+      "Use a vector or list of structs/classes to store tasks with an ID, description, and completion status.",
+      "Create a loop to continuously read user input and process commands.",
+      "Implement functions for each command to keep code organized and modular."
     ],
     "hints": [
-      "To filter expenses by month and year, consider extracting year and month from the date object.",
-      "Initialize your summary dictionary with zero values for unseen categories or use defaultdict from collections.",
-      "Remember to convert input strings to appropriate types when adding expenses, if you extend the project."
+      "Consider using a struct or class named Task with fields like `id`, `description`, and `completed`.",
+      "You can assign incremental IDs to new tasks starting from 1 for easier reference.",
+      "Remember to check if the task ID exists before marking or removing to avoid errors."
     ],
-    "starterCode": "from datetime import datetime\n\nexpenses = []\n\ndef add_expense(amount, category, date):\n    \"\"\"Add an expense: amount as float, category as string, date as datetime.date.\"\"\"\n    expenses.append({'amount': amount, 'category': category, 'date': date})\n\n\ndef monthly_summary(year, month):\n    \"\"\"Return a dict of total expenses by category for given year and month.\"\"\"\n    summary = {}\n    # Your code here\n    return summary",
-    "expectedOutput": "{'Food': 150.0, 'Transport': 75.5, 'Utilities': 100.0}",
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Task {\n    int id;\n    std::string description;\n    bool completed;\n};\n\nint main() {\n    std::vector<Task> tasks;\n    std::string command;\n    // Your code here\n    return 0;\n}",
+    "expectedOutput": "Commands should be handled interactively. Example session:\n\n> add Buy groceries\nTask added with ID 1\n> add Finish homework\nTask added with ID 2\n> list\n1. [ ] Buy groceries\n2. [ ] Finish homework\n> complete 1\nTask 1 marked as completed.\n> list\n1. [x] Buy groceries\n2. [ ] Finish homework\n> remove 2\nTask 2 removed.\n> list\n1. [x] Buy groceries\n> exit\nProgram ends.",
     "concepts": [
-      "lists",
-      "dictionaries",
-      "datetime handling",
-      "aggregation"
+      "structs and classes",
+      "vectors",
+      "command line input/output",
+      "loops",
+      "conditionals"
     ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   },
   {
-    "slug": "fix-bug-in-parallel-fibonacci-computation-with-memoization",
-    "title": "Fix Bug in Parallel Fibonacci Computation with Memoization",
+    "slug": "refactor-complex-data-aggregation-for-readability-and-performance-in-python",
+    "title": "Refactor Complex Data Aggregation for Readability and Performance in Python",
     "language": "python",
     "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Debug and fix the given Python code that aims to compute Fibonacci numbers efficiently using recursion with memoization and parallel execution. The current implementation has subtle bugs causing incorrect results and inefficient execution.",
-    "prompt": "You are given a Python function designed to calculate a list of Fibonacci numbers for multiple input values concurrently using recursion, memoization, and multiprocessing. However, the code contains bugs that lead to wrong results and runtime errors. Your task is to identify and fix these bugs so that the function returns correct Fibonacci numbers for each input and utilizes multiprocessing properly without errors.",
+    "category": "code-quality",
+    "description": "You are given a Python function that processes a nested list of sales data to compute total sales per product category, but the code is messy, hard to read, and inefficient. Refactor the function to improve code quality without changing its behavior.",
+    "prompt": "The provided function takes a list of sales records where each record is a dictionary containing 'category', 'product', and 'amount'. It calculates the total sales amount per category. The current implementation uses nested loops, redundant variables, and repeated conditional checks, resulting in unmaintainable and suboptimal code. Refactor this function to enhance readability, reduce complexity, and improve performance while preserving the exact output.",
     "guidance": [
-      "Check the proper use and sharing of memoization cache among concurrent processes.",
-      "Ensure the multiprocessing part initializes and collects results correctly.",
-      "Review recursive Fibonacci logic for correctness under memoization."
+      "Preserve the output structure: a dictionary mapping each category to its total sales amount.",
+      "Use built-in Python features like collections.defaultdict or itertools to simplify aggregation.",
+      "Avoid repeated lookups and redundant variables to reduce computational overhead."
     ],
     "hints": [
-      "Memoization dictionary should not be shared across processes by passing it as a function argument.",
-      "Python multiprocessing pools require careful handling of function arguments and return values.",
-      "Check base cases of the Fibonacci function and how recursion results are combined."
+      "Consider using defaultdict from the collections module to remove the need for manual key checks.",
+      "Replace nested loops with comprehensions or functions that process data in a single pass.",
+      "Focus on writing clear, descriptive variable names and modular code."
     ],
-    "starterCode": "import multiprocessing\n\nmemo = {0: 0, 1: 1}\n\ndef fib(n, memo=memo):\n    if n in memo:\n        return memo[n]\n    memo[n] = fib(n-1, memo) + fib(n-2, memo)\n    return memo[n]\n\ndef parallel_fib(numbers):\n    with multiprocessing.Pool() as pool:\n        results = pool.map(fib, numbers)\n    return results\n\ninputs = [35, 36, 37]\nprint(parallel_fib(inputs))",
-    "expectedOutput": "[9227465, 14930352, 24157817]",
+    "starterCode": "def calculate_total_sales(sales_data):\n    result = {}\n    for record in sales_data:\n        category = record['category']\n        amount = record['amount']\n        if category not in result:\n            result[category] = 0\n        current_total = result[category]\n        for other_record in sales_data:\n            if other_record['category'] == category:\n                current_total += other_record['amount']\n        result[category] = current_total\n    return result",
+    "expectedOutput": "{'electronics': 4500, 'furniture': 2700, 'clothing': 1200}",
     "concepts": [
-      "recursion",
-      "memoization",
-      "multiprocessing",
-      "debugging"
+      "code refactoring",
+      "dictionary aggregation",
+      "collections.defaultdict",
+      "performance optimization"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-a-high-performance-memoized-fibonacci-function-using-c-templates",
-    "title": "Build a High-Performance Memoized Fibonacci Function Using C++ Templates",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "functions",
-    "description": "Create an advanced C++ function that computes Fibonacci numbers efficiently using both memoization and template metaprogramming techniques to optimize compile-time and run-time performance.",
-    "prompt": "Write a function `constexpr unsigned long long memoizedFibonacci(unsigned int n)` that calculates the nth Fibonacci number. The function should use memoization to cache previously computed results for run-time calls and also utilize template metaprogramming to enable compile-time computation for constant expressions where possible. You must ensure the function is safe for large inputs (up to 93) without integer overflow in unsigned long long. Avoid redundant calculations and optimize both compile-time and run-time efficiency.",
-    "guidance": [
-      "Design a helper structure using templates to compute Fibonacci numbers at compile-time for constant values of n.",
-      "Implement memoization using a static cache or a suitable in-function mechanism to speed up run-time calls.",
-      "Ensure your solution handles both compile-time (`constexpr`) contexts and run-time calls seamlessly.",
-      "Consider using constexpr if and inline static variables for caching in C++17 and later."
-    ],
-    "hints": [
-      "Use template specialization to define base cases for Fibonacci (e.g., for 0 and 1).",
-      "Static arrays or maps can hold cached values for run-time memoization.",
-      "Leveraging constexpr functions with inline variables allows cache sharing across calls."
-    ],
-    "starterCode": "constexpr unsigned long long compileTimeFib(unsigned int n) {\n    if (n == 0) return 0;\n    if (n == 1) return 1;\n    return compileTimeFib(n - 1) + compileTimeFib(n - 2);\n}\n\nunsigned long long memoizedFibonacci(unsigned int n) {\n    // TODO: Implement memoized Fibonacci function\n    return 0;\n}",
-    "expectedOutput": "memoizedFibonacci(10) == 55\nmemoizedFibonacci(40) == 102334155\nconstexpr auto val = memoizedFibonacci(20); // val == 6765 (computed at compile-time if possible)",
-    "concepts": [
-      "memoization",
-      "template metaprogramming",
-      "constexpr functions",
-      "optimization"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "advanced-expense-tracker-with-recurring-transactions-and-filters",
-    "title": "Advanced Expense Tracker with Recurring Transactions and Filters",
-    "language": "javascript",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build a robust expense tracking function that manages one-time and recurring transactions, supports dynamic filtering by categories and date ranges, and returns detailed summaries with optimized performance.",
-    "prompt": "Create a JavaScript function named `expenseTracker` that takes an array of transactions and an options object to generate a detailed expense summary. Transactions can be one-time or recurring. Each transaction object contains: `id` (string), `amount` (number), `date` (ISO string), `category` (string), and optional `recurrence` (object with `interval` in days and `endDate` as ISO string). Your function must: 1) Expand recurring transactions to all occurrences within their recurrence period. 2) Filter transactions by optional category array and date range (startDate, endDate) provided in the options. 3) Return an object with total spent, per-category spending, and filtered transaction list sorted by date ascending. 4) Handle large datasets efficiently, avoiding unnecessary computations. Ensure correct handling of edge cases such as overlapping filters and partial recurrence periods.",
-    "guidance": [
-      "Expand recurring transactions into individual occurrences up to the specified `endDate`, but only generate occurrences within the filter date range to optimize performance.",
-      "Apply filters strictly: if categories or date range filters are provided, include only matching transactions in the result and summary calculations.",
-      "Return results in the exact structure: { totalSpent: number, perCategory: object, transactions: array }, where `perCategory` maps category names to sums and `transactions` is sorted ascending by date."
-    ],
-    "hints": [
-      "Use a generator or lazy evaluation approach to handle recurring transactions efficiently, especially if the total occurrence count is large.",
-      "Convert date strings to Date objects once for comparisons to improve performance.",
-      "Be cautious with time boundaries in filtering; include transactions on the startDate and endDate dates."
-    ],
-    "starterCode": "function expenseTracker(transactions, options = {}) {\n  // options = { categories: array of strings, startDate: ISO string, endDate: ISO string }\n\n  // Your code here\n}",
-    "expectedOutput": "{\n  totalSpent: 350.50,\n  perCategory: {\n    food: 150.20,\n    utilities: 100.00,\n    entertainment: 100.30\n  },\n  transactions: [\n    /* expanded, filtered, and sorted transaction objects */\n  ]\n}",
-    "concepts": [
-      "recurring events expansion",
-      "filtering with multiple criteria",
-      "performance optimization",
-      "date manipulation",
-      "aggregation and sorting"
-    ],
-    "estimatedTime": "40 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-the-bug-in-celsius-to-fahrenheit-conversion-function",
-    "title": "Fix the Bug in Celsius to Fahrenheit Conversion Function",
+    "slug": "simple-console-budget-tracker-in-c",
+    "title": "Simple Console Budget Tracker in C++",
     "language": "cpp",
     "difficulty": "beginner",
-    "category": "debugging",
-    "description": "A simple function to convert a temperature from Celsius to Fahrenheit contains a bug. Fix the function so it returns the correct Fahrenheit value.",
-    "prompt": "The function celsiusToFahrenheit is intended to convert a temperature from Celsius to Fahrenheit using the formula F = C * 9/5 + 32. However, it currently returns the wrong result. Identify and fix the bug so that the function correctly converts Celsius to Fahrenheit.",
+    "category": "mini-projects",
+    "description": "Build a beginner-friendly console application that helps users track their daily expenses and remaining budget.",
+    "prompt": "Create a C++ program that allows the user to enter their total budget for a day and then input multiple expenses one by one. After each expense, display the remaining budget. The user should be able to stop entering expenses by typing a sentinel value (e.g., 0). When the user finishes, display the total expenses and how much budget remains (or if they have overspent).",
     "guidance": [
-      "Review the formula for Celsius to Fahrenheit conversion.",
-      "Check the order of operations and make sure to use floating point division if needed."
+      "Use a loop to continuously accept expense inputs until the user enters 0.",
+      "Maintain variables to keep track of total expenses and remaining budget.",
+      "Use simple input/output statements to interact with the user."
     ],
     "hints": [
-      "Integer division may be truncating your calculation result.",
-      "Try using 9.0/5.0 instead of 9/5."
+      "Initialize total expenses to 0 before starting to take inputs.",
+      "Subtract each expense from the remaining budget after input.",
+      "Check if the input is the sentinel value (0) inside the loop to stop taking expenses."
     ],
-    "starterCode": "double celsiusToFahrenheit(int celsius) {\n    return celsius * 9 / 5 + 32;\n}",
-    "expectedOutput": "celsiusToFahrenheit(0) => 32\ncelsiusToFahrenheit(100) => 212\ncelsiusToFahrenheit(-40) => -40",
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double budget, expense, totalExpenses = 0;\n\n    cout << \"Enter your total budget for the day: \";\n    cin >> budget;\n\n    cout << \"Enter your expenses one by one (enter 0 to finish):\\n\";\n    while (true) {\n        cin >> expense;\n        // Your code to process each expense goes here\n    }\n\n    // Output total expenses and remaining budget\n    \n    return 0;\n}",
+    "expectedOutput": "Enter your total budget for the day: 100\nEnter your expenses one by one (enter 0 to finish):\n20\nRemaining budget: 80\n15.50\nRemaining budget: 64.5\n0\nTotal expenses: 35.5\nRemaining budget: 64.5",
     "concepts": [
-      "basic arithmetic",
-      "order of operations",
-      "type conversion"
+      "variables",
+      "loops",
+      "conditionals",
+      "basic I/O"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "refactor-nested-loops-to-improve-code-readability-and-efficiency",
+    "title": "Refactor Nested Loops to Improve Code Readability and Efficiency",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Refactor the given Python function that uses nested loops to find common elements between two lists. Improve its readability and performance without changing its behavior.",
+    "prompt": "You are given a function that finds all common elements between two lists by using nested loops. While this approach works, it is not efficient and the code is harder to read. Refactor the function to produce the same result but improve its readability and performance. Do not change the function signature or the output format.",
+    "guidance": [
+      "Aim to reduce the time complexity by avoiding nested loops where possible.",
+      "Improve code readability by using meaningful variable names and simpler constructs.",
+      "Keep the output in the same order as the original function."
+    ],
+    "hints": [
+      "Consider using Python sets to eliminate the need for nested loops.",
+      "Remember that converting lists to sets can improve lookup speed drastically."
+    ],
+    "starterCode": "def common_elements(list1, list2):\n    result = []\n    for i in list1:\n        for j in list2:\n            if i == j:\n                if i not in result:\n                    result.append(i)\n    return result",
+    "expectedOutput": "[2, 4]",
+    "concepts": [
+      "refactoring",
+      "performance optimization",
+      "data structures (sets and lists)"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-to-optimize-a-basic-employee-salary-query",
+    "title": "Refactor to Optimize a Basic Employee Salary Query",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve the given SQL query that retrieves employee names and salaries, by refactoring it to be more efficient while keeping the result unchanged.",
+    "prompt": "You have the following SQL query that selects employee names and their salaries from the Employees table, but it includes redundant operations that can be optimized. Refactor the query to produce the same output but with simplified and more efficient SQL syntax.",
+    "guidance": [
+      "Look for unnecessary subqueries or repeated table scans.",
+      "Try to simplify logic like filtering or selecting columns directly."
+    ],
+    "hints": [
+      "Avoid using a subquery if the same results can be achieved with a simpler SELECT.",
+      "Check if filtering conditions can be applied directly without nested queries."
+    ],
+    "starterCode": "SELECT name, salary FROM (SELECT * FROM Employees) AS emp WHERE salary > 30000;",
+    "expectedOutput": "A list of employee names and their salaries where salary is greater than 30000.",
+    "concepts": [
+      "SELECT",
+      "WHERE clause",
+      "subqueries",
+      "query optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ]

@@ -5301,5 +5301,175 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-incorrect-join-condition-in-employee-salary-query",
+    "title": "Fix the Incorrect JOIN Condition in Employee Salary Query",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided SQL query that calculates the total salary by department. The current query returns incorrect totals due to a faulty JOIN condition.",
+    "prompt": "You have two tables: Employees(emp_id, emp_name, dept_id, salary) and Departments(dept_id, dept_name). The goal is to write a query that returns each department name along with the total salary of its employees. The provided query is intended to do this but returns incorrect results. Fix the bug in the query so it works correctly.",
+    "guidance": [
+      "Check the JOIN condition carefully to ensure employees are matched to their correct department.",
+      "Verify that aggregations (SUM) are done correctly grouped by department.",
+      "Test the query after fixing it to confirm results are as expected."
+    ],
+    "hints": [
+      "The ON clause might be joining columns incorrectly or using wrong table aliases.",
+      "Ensure the GROUP BY clause correctly references the grouped columns.",
+      "Check for typos or misuse of columns in either SELECT or JOIN parts."
+    ],
+    "starterCode": "SELECT d.dept_name, SUM(e.salary) AS total_salary\nFROM Employees e\nJOIN Departments d ON e.emp_id = d.dept_id\nGROUP BY d.dept_name;",
+    "expectedOutput": "A list of department names each with the sum of all employee salaries in that department, e.g.\n\n| dept_name   | total_salary |\n|-------------|--------------|\n| Sales       | 150000       |\n| Engineering | 250000       |\n| HR          | 90000        |",
+    "concepts": [
+      "SQL JOINs",
+      "Aggregation (SUM, GROUP BY)",
+      "Debugging SQL queries"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "implement-a-simple-task-manager-cli-in-c",
+    "title": "Implement a Simple Task Manager CLI in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a command-line task manager application that allows users to add, list, complete, and remove tasks stored in memory during the program session.",
+    "prompt": "Write a C++ program that manages tasks using a simple command-line interface. The program should support the following commands: add a new task with a description, list all tasks with their status (completed or pending), mark a task as completed by its ID, and remove a task by its ID. Tasks should be stored in an appropriate data structure in memory. The program should keep running until the user types \"exit\".",
+    "guidance": [
+      "Use a vector or list of structs/classes to store tasks with an ID, description, and completion status.",
+      "Create a loop to continuously read user input and process commands.",
+      "Implement functions for each command to keep code organized and modular."
+    ],
+    "hints": [
+      "Consider using a struct or class named Task with fields like `id`, `description`, and `completed`.",
+      "You can assign incremental IDs to new tasks starting from 1 for easier reference.",
+      "Remember to check if the task ID exists before marking or removing to avoid errors."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Task {\n    int id;\n    std::string description;\n    bool completed;\n};\n\nint main() {\n    std::vector<Task> tasks;\n    std::string command;\n    // Your code here\n    return 0;\n}",
+    "expectedOutput": "Commands should be handled interactively. Example session:\n\n> add Buy groceries\nTask added with ID 1\n> add Finish homework\nTask added with ID 2\n> list\n1. [ ] Buy groceries\n2. [ ] Finish homework\n> complete 1\nTask 1 marked as completed.\n> list\n1. [x] Buy groceries\n2. [ ] Finish homework\n> remove 2\nTask 2 removed.\n> list\n1. [x] Buy groceries\n> exit\nProgram ends.",
+    "concepts": [
+      "structs and classes",
+      "vectors",
+      "command line input/output",
+      "loops",
+      "conditionals"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-complex-data-aggregation-for-readability-and-performance-in-python",
+    "title": "Refactor Complex Data Aggregation for Readability and Performance in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "You are given a Python function that processes a nested list of sales data to compute total sales per product category, but the code is messy, hard to read, and inefficient. Refactor the function to improve code quality without changing its behavior.",
+    "prompt": "The provided function takes a list of sales records where each record is a dictionary containing 'category', 'product', and 'amount'. It calculates the total sales amount per category. The current implementation uses nested loops, redundant variables, and repeated conditional checks, resulting in unmaintainable and suboptimal code. Refactor this function to enhance readability, reduce complexity, and improve performance while preserving the exact output.",
+    "guidance": [
+      "Preserve the output structure: a dictionary mapping each category to its total sales amount.",
+      "Use built-in Python features like collections.defaultdict or itertools to simplify aggregation.",
+      "Avoid repeated lookups and redundant variables to reduce computational overhead."
+    ],
+    "hints": [
+      "Consider using defaultdict from the collections module to remove the need for manual key checks.",
+      "Replace nested loops with comprehensions or functions that process data in a single pass.",
+      "Focus on writing clear, descriptive variable names and modular code."
+    ],
+    "starterCode": "def calculate_total_sales(sales_data):\n    result = {}\n    for record in sales_data:\n        category = record['category']\n        amount = record['amount']\n        if category not in result:\n            result[category] = 0\n        current_total = result[category]\n        for other_record in sales_data:\n            if other_record['category'] == category:\n                current_total += other_record['amount']\n        result[category] = current_total\n    return result",
+    "expectedOutput": "{'electronics': 4500, 'furniture': 2700, 'clothing': 1200}",
+    "concepts": [
+      "code refactoring",
+      "dictionary aggregation",
+      "collections.defaultdict",
+      "performance optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-console-budget-tracker-in-c",
+    "title": "Simple Console Budget Tracker in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a beginner-friendly console application that helps users track their daily expenses and remaining budget.",
+    "prompt": "Create a C++ program that allows the user to enter their total budget for a day and then input multiple expenses one by one. After each expense, display the remaining budget. The user should be able to stop entering expenses by typing a sentinel value (e.g., 0). When the user finishes, display the total expenses and how much budget remains (or if they have overspent).",
+    "guidance": [
+      "Use a loop to continuously accept expense inputs until the user enters 0.",
+      "Maintain variables to keep track of total expenses and remaining budget.",
+      "Use simple input/output statements to interact with the user."
+    ],
+    "hints": [
+      "Initialize total expenses to 0 before starting to take inputs.",
+      "Subtract each expense from the remaining budget after input.",
+      "Check if the input is the sentinel value (0) inside the loop to stop taking expenses."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double budget, expense, totalExpenses = 0;\n\n    cout << \"Enter your total budget for the day: \";\n    cin >> budget;\n\n    cout << \"Enter your expenses one by one (enter 0 to finish):\\n\";\n    while (true) {\n        cin >> expense;\n        // Your code to process each expense goes here\n    }\n\n    // Output total expenses and remaining budget\n    \n    return 0;\n}",
+    "expectedOutput": "Enter your total budget for the day: 100\nEnter your expenses one by one (enter 0 to finish):\n20\nRemaining budget: 80\n15.50\nRemaining budget: 64.5\n0\nTotal expenses: 35.5\nRemaining budget: 64.5",
+    "concepts": [
+      "variables",
+      "loops",
+      "conditionals",
+      "basic I/O"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-nested-loops-to-improve-code-readability-and-efficiency",
+    "title": "Refactor Nested Loops to Improve Code Readability and Efficiency",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Refactor the given Python function that uses nested loops to find common elements between two lists. Improve its readability and performance without changing its behavior.",
+    "prompt": "You are given a function that finds all common elements between two lists by using nested loops. While this approach works, it is not efficient and the code is harder to read. Refactor the function to produce the same result but improve its readability and performance. Do not change the function signature or the output format.",
+    "guidance": [
+      "Aim to reduce the time complexity by avoiding nested loops where possible.",
+      "Improve code readability by using meaningful variable names and simpler constructs.",
+      "Keep the output in the same order as the original function."
+    ],
+    "hints": [
+      "Consider using Python sets to eliminate the need for nested loops.",
+      "Remember that converting lists to sets can improve lookup speed drastically."
+    ],
+    "starterCode": "def common_elements(list1, list2):\n    result = []\n    for i in list1:\n        for j in list2:\n            if i == j:\n                if i not in result:\n                    result.append(i)\n    return result",
+    "expectedOutput": "[2, 4]",
+    "concepts": [
+      "refactoring",
+      "performance optimization",
+      "data structures (sets and lists)"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-to-optimize-a-basic-employee-salary-query",
+    "title": "Refactor to Optimize a Basic Employee Salary Query",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve the given SQL query that retrieves employee names and salaries, by refactoring it to be more efficient while keeping the result unchanged.",
+    "prompt": "You have the following SQL query that selects employee names and their salaries from the Employees table, but it includes redundant operations that can be optimized. Refactor the query to produce the same output but with simplified and more efficient SQL syntax.",
+    "guidance": [
+      "Look for unnecessary subqueries or repeated table scans.",
+      "Try to simplify logic like filtering or selecting columns directly."
+    ],
+    "hints": [
+      "Avoid using a subquery if the same results can be achieved with a simpler SELECT.",
+      "Check if filtering conditions can be applied directly without nested queries."
+    ],
+    "starterCode": "SELECT name, salary FROM (SELECT * FROM Employees) AS emp WHERE salary > 30000;",
+    "expectedOutput": "A list of employee names and their salaries where salary is greater than 30000.",
+    "concepts": [
+      "SELECT",
+      "WHERE clause",
+      "subqueries",
+      "query optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
