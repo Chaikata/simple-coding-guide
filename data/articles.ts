@@ -44077,5 +44077,505 @@ export const articles = [
         "value": "### Summary\nHandling recursive queries effectively means using safety checks, limiting recursion depth, calculating aggregates smartly, and optimizing for performance. As you practice, you'll be able to handle more complex hierarchical SQL problems beyond basic CTE examples."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-patterns-javascript-promises-vs-async-await",
+    "title": "Mastering Asynchronous Patterns in JavaScript: Promises vs Async/Await",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of asynchronous programming in JavaScript by understanding Promises and Async/Await. This beginner-friendly tutorial explains how to handle async code effectively with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous programming is essential in JavaScript, especially for tasks like fetching data from an API or reading files without blocking the main thread. Two common patterns to handle asynchronous operations are Promises and Async/Await. In this tutorial, we'll learn what each pattern is and how to use them in a simple, beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Promise?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Promise represents an operation that hasn't completed yet but is expected in the future. It's an object that can be in one of three states: pending, fulfilled, or rejected. Promises allow you to write code that reacts to when the asynchronous operation finishes, either successfully or with an error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a basic example of a Promise that resolves after 2 seconds:"
+      },
+      {
+        "type": "code",
+        "value": "const myPromise = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Success!');\n  }, 2000);\n});\n\nmyPromise.then(result => {\n  console.log(result); // \"Success!\" after 2 seconds\n}).catch(error => {\n  console.error(error);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `.then()` method handles the fulfilled state, and `.catch()` handles any errors. This pattern helps avoid callback hell but can still become nested if many asynchronous calls depend on one another."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Introducing Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is a newer syntax introduced in ES2017 that makes working with Promises easier and more readable. The `async` keyword is used before a function to indicate it returns a Promise. The `await` keyword pauses the function execution until the Promise settles."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how you can rewrite the previous example using Async/Await:"
+      },
+      {
+        "type": "code",
+        "value": "function delay(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function run() {\n  await delay(2000);\n  console.log('Success!');\n}\n\nrun();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `await delay(2000);` waits asynchronously for 2 seconds before continuing. This makes asynchronous code look and behave like synchronous code, which is easier to read and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "With Promises, errors are caught using `.catch()`:"
+      },
+      {
+        "type": "code",
+        "value": "myPromise\n  .then(result => {\n    console.log(result);\n  })\n  .catch(error => {\n    console.error('Error:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "With Async/Await, use try/catch blocks for error handling:"
+      },
+      {
+        "type": "code",
+        "value": "async function runWithError() {\n  try {\n    await Promise.reject('Something went wrong');\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\nrunWithError();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Promises vs Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both Promises and Async/Await are built on the same foundation. Use Promises when you want to take advantage of chaining or when working in an environment that doesn't support Async/Await. Async/Await is better for writing cleaner, more readable asynchronous code, especially when you have multiple async operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we've covered the basics of asynchronous programming in JavaScript using Promises and Async/Await. Promises use `.then()` and `.catch()` methods to handle asynchronous results, while Async/Await enables more readable code with synchronous-looking syntax. Both patterns are powerful tools for managing async operations efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with both approaches in your own projects to see what fits best!"
+      }
+    ]
+  },
+  {
+    "slug": "how-javascript-memory-leaks-impact-performance-and-how-to-detect-them",
+    "title": "How JavaScript Memory Leaks Impact Performance and How to Detect Them",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript memory leaks can harm your app's performance and discover simple techniques to detect and fix them.",
+    "videoUrl": "https://www.youtube.com/watch?v=2hTPBiyuoMg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript memory leaks happen when your code keeps using more memory but doesn't release it when that memory is no longer needed. This can cause your web app to slow down or even crash over time, especially in long-running applications like single-page apps."
+      },
+      {
+        "type": "paragraph",
+        "value": "Memory leaks impact performance because the browser has less available memory to work with. This can lead to slower response times and a poor user experience. Detecting memory leaks early helps keep your applications running smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's go over some common causes of memory leaks in JavaScript:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Unremoved Event Listeners:** If you add event listeners and never remove them, the attached objects stay in memory.\n2. **Forgotten Timers:** Using `setInterval` or `setTimeout` without clearing them can cause leaks.\n3. **Closures Holding References:** Closures that keep references to large objects or DOM elements can prevent garbage collection.\n4. **Detached DOM Nodes:** Removing DOM elements without properly cleaning references in your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of a memory leak caused by an event listener:"
+      },
+      {
+        "type": "code",
+        "value": "const button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Clicked');\n}\n\n// Adding event listener repeatedly without removing it\nsetInterval(() => {\n  button.addEventListener('click', handleClick);\n}, 1000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above example, every second a new event listener is added to the same button without removing the old ones. Over time, this causes memory to grow unnecessarily."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Detect Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can detect memory leaks using browser developer tools. Here's how to do it in Chrome DevTools:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Open DevTools and go to the **Memory** tab.\n2. Take a **Heap Snapshot** to see current memory usage.\n3. Interact with your app to simulate normal use.\n4. Take additional snapshots.\n5. Compare snapshots to identify objects that are not released."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another helpful tool is the **Performance** tab, where you can record JavaScript CPU profiles and look for long garbage collection pauses or increasing memory over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Prevent Memory Leaks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are simple practices to avoid memory leaks:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always remove event listeners when they are no longer needed using `removeEventListener`.\n2. Clear timers with `clearInterval` or `clearTimeout` when done.\n3. Be careful with closures and avoid holding references to unused objects.\n4. Clean up DOM references when removing elements."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how you can remove event listeners properly:"
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const button = document.getElementById('myButton');\n\n  function handleClick() {\n    console.log('Clicked');\n  }\n\n  button.addEventListener('click', handleClick);\n\n  // Later, when you want to remove the listener:\n  return () => {\n    button.removeEventListener('click', handleClick);\n  };\n}\n\nconst cleanup = setup();\n// When needed\ncleanup();"
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding what causes memory leaks and using the right tools to detect them, you can build faster, more reliable JavaScript applications."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescript-type-narrowing-techniques-for-cleaner-code",
+    "title": "Understanding TypeScript's Type Narrowing Techniques for Cleaner Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's type narrowing techniques to make your code safer and easier to read with clear examples and explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=hXXNep-4TxA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool for adding static types to JavaScript, making your code more predictable and easier to debug. However, one common challenge for beginners is handling values that can be of multiple types. This is where \"type narrowing\" comes into play. Type narrowing allows TypeScript to refine the exact type of a variable within a certain scope, reducing errors and improving code clarity."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at some practical type narrowing techniques you can use in your TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Using the `typeof` Operator"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `typeof` operator is a simple way to check the primitive type of a variable (like `string`, `number`, `boolean`). TypeScript uses this check to narrow down the variable's type."
+      },
+      {
+        "type": "code",
+        "value": "function printId(id: number | string) {\n  if (typeof id === \"string\") {\n    // TypeScript knows `id` is string here\n    console.log(id.toUpperCase());\n  } else {\n    // Otherwise, `id` must be a number\n    console.log(id.toFixed(2));\n  }\n}\n\nprintId(\"abc123\");\nprintId(42);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, TypeScript narrows the type of `id` within the `if` and `else` blocks accordingly based on the `typeof` check."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Using the `instanceof` Operator"
+      },
+      {
+        "type": "paragraph",
+        "value": "`instanceof` works well when dealing with classes or constructor functions."
+      },
+      {
+        "type": "code",
+        "value": "class Dog {\n  bark() {\n    console.log(\"Woof!\");\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log(\"Meow!\");\n  }\n}\n\nfunction speak(pet: Dog | Cat) {\n  if (pet instanceof Dog) {\n    pet.bark(); // Narrowed to Dog\n  } else {\n    pet.meow(); // Narrowed to Cat\n  }\n}\n\nconst myDog = new Dog();\nspeak(myDog);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `instanceof`, TypeScript correctly identifies the type of `pet`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. User-Defined Type Guards"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you might want to create your own custom functions to narrow types. These are called user-defined type guards."
+      },
+      {
+        "type": "code",
+        "value": "interface Fish {\n  swim(): void;\n}\n\ninterface Bird {\n  fly(): void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim(); // Narrowed to Fish\n  } else {\n    pet.fly(); // Narrowed to Bird\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `isFish` is a type guard that tells TypeScript the pet is a Fish if the function returns true."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Using Truthiness Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript can narrow types by checking if a value is truthy or falsy."
+      },
+      {
+        "type": "code",
+        "value": "function printUsername(username: string | null) {\n  if (username) {\n    // username is narrowed to string (not null)\n    console.log(\"Username is - \" + username.toUpperCase());\n  } else {\n    console.log(\"No username provided.\");\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, the `if` checks if `username` is a truthy `string` rather than `null`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript's type narrowing features help you write clearer, safer code by reducing the chance of runtime errors. By using `typeof`, `instanceof`, custom type guards, and truthiness checks, you can tell TypeScript exactly what type you are working with at a specific point in your code. Practice these techniques in your projects to improve reliability and developer experience."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-best-practices-and-real-world-applications",
+    "title": "Mastering Python Context Managers: Best Practices and Real-World Applications",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the fundamentals of Python context managers, how to create your own, and practical use cases to write clean, efficient, and error-resistant code.",
+    "videoUrl": "https://www.youtube.com/watch?v=AQJbHAeUhzM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python context managers are an essential tool for managing resources such as files, network connections, and locks. They help ensure that resources are properly acquired and released, even if errors occur. This tutorial will introduce you to context managers, explain the best practices, and demonstrate real-world examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Context Manager?\nA context manager in Python is a construct that allows you to allocate and release resources precisely when you want. The most common way to use a context manager is through the `with` statement. When you use the `with` statement, Python automatically calls the methods needed to set up and tear down a resource."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, when working with files, opening and closing files manually can lead to errors or resource leaks if the file isn't closed properly. Using a context manager ensures the file is closed automatically, even if an error occurs inside the block."
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')\n# file is automatically closed here"
+      },
+      {
+        "type": "paragraph",
+        "value": "### How Do Context Managers Work?\nContext managers implement two special methods:\n- `__enter__(self)`: This method runs when the execution enters the `with` block. It typically acquires the resource and returns it.\n- `__exit__(self, exc_type, exc_value, traceback)`: This method is called when the block inside the `with` statement is left. It usually releases the resource and handles exceptions if any.\n\nYou can create your own context managers by defining a class with these two methods or by using the `contextlib` module for simpler use cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Context Manager Class\nLet's create a context manager that prints messages when entering and exiting a block."
+      },
+      {
+        "type": "code",
+        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the context')\n        return self\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n        if exc_type:\n            print(f'An exception occurred: {exc_value}')\n        # Returning False re-raises the exception if any\n        return False\n\nwith MyContextManager() as manager:\n    print('Inside the with block')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using `contextlib` for Cleaner Syntax\nPython's `contextlib` module provides a handy decorator called `@contextmanager` that lets you write context managers using generators, which can make your code easier to read and write."
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_context():\n    print('Start of context')\n    try:\n        yield\n    finally:\n        print('End of context')\n\nwith my_context():\n    print('Inside with block')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Real-World Application: Managing Files\nOpening and closing files manually can be error-prone. Context managers simplify this process by ensuring files are properly closed even if an error occurs."
+      },
+      {
+        "type": "code",
+        "value": "def read_file(filename):\n    with open(filename, 'r') as f:\n        return f.read()\n\ncontent = read_file('example.txt')\nprint(content)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Real-World Application: Timing Code Execution\nYou can create a context manager to measure how long a block of code takes to run."
+      },
+      {
+        "type": "code",
+        "value": "import time\nfrom contextlib import contextmanager\n\n@contextmanager\ndef timer():\n    start = time.time()\n    yield\n    end = time.time()\n    print(f'Elapsed time: {end - start:.4f} seconds')\n\nwith timer():\n    total = sum(range(10**6))\n    print(f'Total is {total}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices\n- Use built-in context managers whenever possible for file operations, locks, or database connections.\n- When creating custom context managers, ensure `__exit__` properly handles exceptions or explicitly re-raises them.\n- Use `contextlib.contextmanager` for simple resource management to keep your code clean.\n- Always test your context managers thoroughly to ensure resources are correctly released in all situations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nContext managers are a powerful feature in Python that help manage resources efficiently and safely. By mastering them, you can write cleaner, more readable, and more robust code. Whether you’re working with files, timing functions, or managing complex resources, context managers can simplify your life."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-typeerror-common-causes-practical-examples",
+    "title": "Understanding Python's TypeError: Common Causes and Practical Examples",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn about Python's TypeError, what causes it, and how to fix it with beginner-friendly examples and explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=uswm-Xtekfs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In Python, a TypeError occurs when an operation or function is applied to an object of an inappropriate type. This is a common error beginners encounter when mixing data types unexpectedly. Understanding TypeError and how to resolve it will help you write cleaner and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by seeing what causes TypeError with some practical examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example 1: Trying to add a string and an integer"
+      },
+      {
+        "type": "code",
+        "value": "number = 5\ntext = \"hello\"\nresult = number + text  # This will raise TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, Python will raise a TypeError because it cannot add an integer (`number`) and a string (`text`). To fix this, you can convert the integer to a string or vice versa:"
+      },
+      {
+        "type": "code",
+        "value": "# Fix by converting int to string\nresult = str(number) + text  # '5hello'\n\n# Fix by converting string to int (if string is numeric)\n# Here not applicable since 'hello' is not numeric"
+      },
+      {
+        "type": "paragraph",
+        "value": "Example 2: Calling a function with incorrect argument types"
+      },
+      {
+        "type": "code",
+        "value": "def multiply(a, b):\n    return a * b\n\nmultiply(3, 'hello')  # This works in Python, but try multiply(3, [1, 2])\n\n# However, some unexpected calls might cause TypeError\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that some operations work because Python supports operator overloading (like multiplying a string by an integer repeats the string), but others may cause TypeErrors if the types don’t fit."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example 3: Trying to index a non-subscriptable object"
+      },
+      {
+        "type": "code",
+        "value": "number = 10\nprint(number[0])  # TypeError: 'int' object is not subscriptable"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `number` is an integer, and integers cannot be treated like sequences or containers. To fix this, ensure you only index or slice sequences like strings, lists, or tuples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example 4: Using unsupported operand types"
+      },
+      {
+        "type": "code",
+        "value": "a = [1, 2, 3]\nb = {4, 5, 6}\nprint(a + b)  # TypeError: unsupported operand type(s) for +: 'list' and 'set'"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, Python does not know how to \"add\" a list and a set directly. To fix it, convert one type to the other or use appropriate methods:"
+      },
+      {
+        "type": "code",
+        "value": "# Convert set to list before adding\nprint(a + list(b))\n\n# Or use set operations\nprint(set(a).union(b))"
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary: To avoid TypeErrors, always make sure the types of objects you work with are compatible with the operations you're performing. Use functions like `type()`, `isinstance()`, and proper conversions (`str()`, `int()`, `list()`) when needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "By practicing and reading error messages carefully, handling TypeErrors will become easier as you grow your Python skills."
+      }
+    ]
+  },
+  {
+    "slug": "handling-null-values-in-complex-sql-joins-best-practices-and-pitfalls",
+    "title": "Handling NULL Values in Complex SQL Joins: Best Practices and Pitfalls",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to handle NULL values in complex SQL joins with best practices and avoid common mistakes to ensure accurate query results.",
+    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL joins, NULL values often appear, especially in OUTER JOINs. These NULLs can cause unexpected results or errors if not handled properly. This article will guide you through best practices for handling NULL values in complex joins and highlight common pitfalls to avoid."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Causes NULLs in Joins?\n\nNULL values commonly appear in LEFT, RIGHT, or FULL OUTER JOINs when there is no matching record on one side of the join. For example, a LEFT JOIN returns all rows from the left table but fills columns from the right table with NULLs where no match exists."
+      },
+      {
+        "type": "code",
+        "value": "SELECT a.id, a.name, b.order_id\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If a customer has no order, then `b.order_id` will be NULL. This is normal, but problems arise when these NULLs are not handled in conditions or calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pitfall #1: Filtering NULLs in the WHERE clause\n\nA common mistake is writing a WHERE filter that excludes NULLs unintentionally, like this:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT a.id, a.name, b.order_id\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id\nWHERE b.order_id IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This converts the LEFT JOIN effectively into an INNER JOIN because it excludes all rows where `b.order_id` is NULL. To keep the outer join behavior, apply such filters in the JOIN condition itself or use CASE statements."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice #1: Use JOIN conditions to filter rows\n\nMove filtering conditions on the joined table into the ON clause to preserve NULLs for unmatched rows."
+      },
+      {
+        "type": "code",
+        "value": "SELECT a.id, a.name, b.order_id\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id AND b.order_date > '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, the join includes only orders after January 1st, 2023, but still returns customers without orders (with NULLs in order columns)."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pitfall #2: Using NULL in expressions without handling\n\nNULLs propagate in arithmetic or string operations resulting in NULL output. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT a.id, COALESCE(b.amount, 0) + 10 AS total_amount\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Without COALESCE, if `b.amount` is NULL, `b.amount + 10` returns NULL. Using `COALESCE` or `IFNULL` replaces NULLs with a default value, preventing errors or unexpected results."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice #2: Use COALESCE for NULL-safe calculations\n\nUse `COALESCE(column, default_value)` to provide fallback for NULLs, especially in calculations or concatenations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pitfall #3: Comparing NULLs incorrectly\n\nRemember that NULL is not equal to anything, even NULL itself. So these comparisons fail:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE order_date = NULL; -- This always returns zero rows\nSELECT * FROM orders WHERE order_date != NULL; -- Also returns zero rows"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use `IS NULL` or `IS NOT NULL` to check for NULL values instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practice #3: Use IS NULL / IS NOT NULL for NULL checks\n\nAlways check NULLs using the proper syntax to avoid logic errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\n- Understand where NULLs come from in joins (mostly OUTER JOINs).\n- Avoid filtering NULLs in WHERE; instead, filter in JOIN conditions.\n- Use COALESCE or IFNULL to handle NULL values in expressions.\n- Always use IS NULL or IS NOT NULL when testing for NULLs.\n\nFollowing these rules will help you write reliable, accurate SQL queries involving complex joins."
+      }
+    ]
   }
 ];
