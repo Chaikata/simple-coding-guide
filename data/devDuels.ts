@@ -5814,5 +5814,179 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-calculate-the-total-sales-for-a-given-product",
+    "title": "Create a Function to Calculate the Total Sales for a Given Product",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Write a SQL function that takes a product ID as input and returns the total sales amount for that product from the sales table.",
+    "prompt": "You have a table named sales with columns: product_id (integer), quantity_sold (integer), and price_per_unit (decimal). Write a SQL function named get_total_sales that takes a product ID as input and returns the total sales amount for that product. The total sales amount is calculated by summing the product of quantity_sold and price_per_unit for all matching product IDs.",
+    "guidance": [
+      "Define a SQL function with one input parameter for the product ID.",
+      "Use an aggregate function to calculate the total sales amount within the function.",
+      "Return the calculated total as the function's output."
+    ],
+    "hints": [
+      "Use SUM(quantity_sold * price_per_unit) to calculate total sales.",
+      "Filter the sales table using a WHERE clause on product_id.",
+      "Remember to specify the return type of your function as numeric or decimal."
+    ],
+    "starterCode": "CREATE FUNCTION get_total_sales(p_product_id INT) RETURNS DECIMAL AS $$\nBEGIN\n    -- Your code goes here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "For product_id = 101, if the sales records are:\n| product_id | quantity_sold | price_per_unit |\n|------------|---------------|----------------|\n| 101        | 3             | 10.00          |\n| 101        | 2             | 10.00          |\n\nThe function should return: 50.00",
+    "concepts": [
+      "SQL functions",
+      "Aggregate functions",
+      "Basic SELECT queries"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-simple-grocery-list-manager",
+    "title": "Build a Simple Grocery List Manager",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a Python program that allows users to add items to a grocery list, remove items, and display the current list. This mini-project helps beginners practice working with lists, loops, and functions.",
+    "prompt": "Write a Python function called manage_grocery_list() that continuously prompts the user to perform one of the following actions: add an item, remove an item, or display the current grocery list. The function should keep running until the user types 'quit'. When adding, the user inputs the item name to add. When removing, the user inputs the item name to remove if it exists in the list. When displaying, the program prints all items in the grocery list in a clean format.",
+    "guidance": [
+      "Use a while loop to keep the program running until the user types 'quit'.",
+      "Store the grocery items in a list and update it based on user input.",
+      "Use conditionals to handle different commands: add, remove, display, and quit."
+    ],
+    "hints": [
+      "Use the list methods append() to add items and remove() to delete items from the grocery list.",
+      "Check if the item exists in the list before trying to remove it to avoid errors.",
+      "You can use input() for user input and print() to show messages or the list contents."
+    ],
+    "starterCode": "def manage_grocery_list():\n    grocery_list = []\n    while True:\n        command = input(\"Enter a command (add, remove, display, quit): \").lower()\n        # Your code here",
+    "expectedOutput": "Enter a command (add, remove, display, quit): add\nEnter the item to add: apples\n'apples' has been added.\nEnter a command (add, remove, display, quit): display\nYour grocery list:\n- apples\nEnter a command (add, remove, display, quit): remove\nEnter the item to remove: apples\n'apples' has been removed.\nEnter a command (add, remove, display, quit): quit\nGoodbye!",
+    "concepts": [
+      "lists",
+      "loops",
+      "user input",
+      "conditionals",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "advanced-file-system-explorer-and-analyzer",
+    "title": "Advanced File System Explorer and Analyzer",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a C++ program that recursively explores a given directory, constructs an in-memory model of the entire file system hierarchy starting at that directory, and generates detailed reports including total file counts, directory sizes, and file type distributions. The project tests your skills in recursion, data structures, file I/O, and performance optimization.",
+    "prompt": "Create a C++ application that accepts a directory path as input and recursively scans all files and subdirectories in that path. Construct a tree-like data structure representing the directory hierarchy, where each node contains metadata such as name, size, and file type for files or aggregated size for directories. Your program should output: 1) total number of files scanned, 2) aggregated sizes of each directory, 3) distribution count of file types by extension, and 4) the largest file found with its full path. Ensure efficient traversal and minimal memory usage during the process.",
+    "guidance": [
+      "Use recursive functions to traverse directories and build a tree structure representing the file system.",
+      "Store metadata efficiently within tree nodes to allow aggregate computations like directory sizes and file type counts.",
+      "Optimize file system access and memory usage, considering large directories and deeply nested structures.",
+      "Output a clean, readable summary report after traversal completes."
+    ],
+    "hints": [
+      "Leverage the C++17 <filesystem> library for directory iteration and metadata access.",
+      "Use maps or hash tables to track file type counts dynamically during traversal.",
+      "Consider using smart pointers or appropriate memory management techniques when constructing your in-memory tree."
+    ],
+    "starterCode": "#include <iostream>\n#include <filesystem>\n#include <map>\n#include <memory>\n\nnamespace fs = std::filesystem;\n\nstruct FileNode {\n    std::string name;\n    uintmax_t size;\n    bool isDirectory;\n    std::map<std::string, std::unique_ptr<FileNode>> children;\n\n    FileNode(std::string n, uintmax_t s, bool dir) : name(std::move(n)), size(s), isDirectory(dir) {}\n};\n\nstd::unique_ptr<FileNode> buildFileTree(const fs::path& path);\n\nint main() {\n    std::string rootPath;\n    std::cout << \"Enter directory path to scan: \";\n    std::getline(std::cin, rootPath);\n    \n    auto root = buildFileTree(rootPath);\n    // TODO: implement traversal analysis and reporting\n\n    return 0;\n}\n\n// Implement buildFileTree to recursively scan directories and construct tree\nstd::unique_ptr<FileNode> buildFileTree(const fs::path& path) {\n    // Your code here\n    return nullptr;\n}\n",
+    "expectedOutput": "Total files scanned: 235\nTotal directories scanned: 45\nDirectory sizes:\n  /root: 1,234,567 bytes\n  /root/subdir1: 456,789 bytes\n  ...\nFile type distribution:\n  .cpp: 120\n  .txt: 50\n  .jpg: 65\nLargest file: /root/videos/movie.mp4 (500,000,000 bytes)",
+    "concepts": [
+      "recursion",
+      "filesystem",
+      "data structures",
+      "memory management",
+      "performance optimization"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-function-to-merge-and-sort-unique-elements-from-two-lists",
+    "title": "Build a Function to Merge and Sort Unique Elements from Two Lists",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a Python function that takes two lists of integers and returns a sorted list containing all unique elements from both lists.",
+    "prompt": "Write a function named merge_and_sort_unique that accepts two lists of integers as input parameters. The function should merge the two lists, remove any duplicate values, and return a new list of the unique elements sorted in ascending order.",
+    "guidance": [
+      "Combine both lists into one before processing.",
+      "Remove duplicates efficiently without using nested loops.",
+      "Sort the resulting list before returning."
+    ],
+    "hints": [
+      "Consider using set operations to remove duplicates quickly.",
+      "The built-in sorted() function can be used to sort the list.",
+      "List concatenation can be done with the + operator."
+    ],
+    "starterCode": "def merge_and_sort_unique(list1, list2):\n    # Your code here\n    pass",
+    "expectedOutput": "merge_and_sort_unique([4, 1, 3], [3, 6, 2])  # Output: [1, 2, 3, 4, 6]",
+    "concepts": [
+      "list manipulation",
+      "sets",
+      "sorting"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-filtering-and-summing-product-prices",
+    "title": "Fix the Bug in Filtering and Summing Product Prices",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "The provided JavaScript function is intended to filter products by category and then calculate the total price of those filtered products. However, it contains bugs that prevent it from working correctly. Your task is to debug and fix the function so that it returns the correct total price for the specified category.",
+    "prompt": "You are given a function `getTotalCategoryPrice(products, category)` that should filter the products array to only include items of the given category and then return the sum of their prices. However, the current implementation has logical errors that cause it to return incorrect results or NaN. Debug and fix the function to produce the correct total price.",
+    "guidance": [
+      "Check how the products array is filtered and ensure the filter condition is correct.",
+      "Review how the total price is accumulated; ensure the reduce function is implemented properly.",
+      "Confirm that the function returns a number and handles empty categories correctly."
+    ],
+    "hints": [
+      "Remember that Array.prototype.filter expects a function that returns true or false for each element.",
+      "Array.prototype.reduce needs an initial value to avoid issues when the filtered array is empty."
+    ],
+    "starterCode": "function getTotalCategoryPrice(products, category) {\n  const filtered = products.filter(product => {\n    product.category = category;\n  });\n\n  const total = filtered.reduce((sum, product) => {\n    sum += product.price;\n  });\n\n  return total;\n}  \n\n// Example products array:\nconst products = [\n  { id: 1, name: 'Keyboard', category: 'electronics', price: 29 },\n  { id: 2, name: 'Shirt', category: 'clothing', price: 15 },\n  { id: 3, name: 'Mouse', category: 'electronics', price: 19 },\n  { id: 4, name: 'Pants', category: 'clothing', price: 25 }\n];\n\nconsole.log(getTotalCategoryPrice(products, 'electronics'));",
+    "expectedOutput": "48",
+    "concepts": [
+      "Array.prototype.filter",
+      "Array.prototype.reduce",
+      "Arrow functions",
+      "Debugging logical errors"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-messy-function-to-calculate-factorial",
+    "title": "Refactor Messy Function to Calculate Factorial",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and structure of a simple factorial calculation function in C++ without changing its behavior.",
+    "prompt": "You are given a function that calculates the factorial of a number, but the code is poorly formatted and uses unclear variable names. Refactor the function to make it clean, readable, and maintainable while preserving the original functionality.",
+    "guidance": [
+      "Rename variables to meaningful names.",
+      "Use consistent indentation and spacing.",
+      "Replace unnecessary code with cleaner alternatives."
+    ],
+    "hints": [
+      "Factorial of n (n!) is the product of all positive integers from 1 to n.",
+      "Consider using a descriptive loop variable name.",
+      "Avoid redundant code such as extra conditions inside the loop."
+    ],
+    "starterCode": "int fact(int n){int f=1,i=1;while(i<=n){f=f*i;i++;}return f;}",
+    "expectedOutput": "fact(5) returns 120",
+    "concepts": [
+      "loops",
+      "functions",
+      "variables",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
