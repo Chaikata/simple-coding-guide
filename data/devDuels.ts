@@ -5643,5 +5643,176 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-array-transformation-and-loop-logic-in-c",
+    "title": "Predict the Output: Array Transformation and Loop Logic in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given C++ code snippet that performs multiple array transformations and loop operations. Predict the final output printed by the program without running it.",
+    "prompt": "Consider the following C++ code:\n\nint arr[] = {2, 4, 6, 8};\nint n = 4;\n\nfor (int i = 0; i < n; i++) {\n    arr[i] = arr[i] + i;\n}\n\nfor (int i = n - 1; i > 0; i--) {\n    arr[i] = arr[i] - arr[i - 1];\n}\n\nfor (int i = 0; i < n; i++) {\n    std::cout << arr[i] << \" \";\n}\n\nWhat is the output of this program when executed? Explain your reasoning.",
+    "guidance": [
+      "Step through each loop iteration carefully, tracking how the array elements change.",
+      "Remember the effect of modifying array elements in place and how that influences subsequent calculations."
+    ],
+    "hints": [
+      "After the first loop, the array elements are incremented by their index positions.",
+      "In the second loop, each element is updated based on the difference with the previous element, starting from the end."
+    ],
+    "starterCode": "int arr[] = {2, 4, 6, 8};\nint n = 4;\n\nfor (int i = 0; i < n; i++) {\n    arr[i] = arr[i] + i;\n}\n\nfor (int i = n - 1; i > 0; i--) {\n    arr[i] = arr[i] - arr[i - 1];\n}\n\nfor (int i = 0; i < n; i++) {\n    std::cout << arr[i] << \" \";\n}\n",
+    "expectedOutput": "2 2 0 2",
+    "concepts": [
+      "array manipulation",
+      "for loops",
+      "in-place modification",
+      "basic arithmetic operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-complex-c-class-for-cleaner-design-and-performance",
+    "title": "Refactor a Complex C++ Class for Cleaner Design and Performance",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Refactor the given C++ class that manages a large dataset with inefficient and messy logic. Improve code readability, maintainability, and performance while preserving functionality.",
+    "prompt": "You are given a C++ class 'DataProcessor' that processes a vector of integers. The current implementation has poor naming, redundant computations, and lacks proper encapsulation and const-correctness. Refactor the class to improve code quality without changing its external behavior or output.\n\nYour tasks:\n- Rename variables and methods for clarity.\n- Remove redundant or repeated computations.\n- Apply const correctness where applicable.\n- Encapsulate data members properly.\n- Simplify complex or nested logic.\n\nEnsure the public interface remains unchanged. Add comments if needed for complex logic.\n\nDo not modify the main function provided for testing; only refactor the class definition and implementation.",
+    "guidance": [
+      "Focus on improving variable and method names for self-documenting code.",
+      "Identify repeated calculations and move them outside loops if possible.",
+      "Use const on member functions that do not modify class state.",
+      "Make private data members truly private and provide accessors if needed."
+    ],
+    "hints": [
+      "Look for loops that recalculate the same values repeatedly and cache them.",
+      "Consider the use of const references to avoid unnecessary copies.",
+      "Avoid using public data members; use private members with public getter methods."
+    ],
+    "starterCode": "class DataProcessor {\npublic:\n    std::vector<int> data;\n\n    int processData() {\n        int result = 0;\n        for (int i = 0; i < data.size(); ++i) {\n            int val = data[i];\n            for (int j = 0; j < data.size(); ++j) {\n                if (j != i && data[j] % 2 == 0) {\n                    result += val + data[j];\n                }\n            }\n        }\n        return result;\n    }\n\n    void addData(int d) {\n        data.push_back(d);\n    }\n};\n\n#include <iostream>\n\nint main() {\n    DataProcessor dp;\n    dp.addData(1);\n    dp.addData(2);\n    dp.addData(3);\n    dp.addData(4);\n    std::cout << dp.processData() << std::endl;\n    return 0;\n}",
+    "expectedOutput": "30",
+    "concepts": [
+      "code-refactoring",
+      "const-correctness",
+      "data-encapsulation",
+      "performance-optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-function-to-calculate-sum-of-array-elements",
+    "title": "Refactor a Function to Calculate Sum of Array Elements",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the clarity and quality of a simple C++ function that sums elements in an integer array, while keeping its behavior unchanged.",
+    "prompt": "You are given a C++ function that calculates the sum of the elements in an integer array. The function works correctly but the code style and structure can be improved to make it more readable and maintainable. Refactor the function without changing its output or functionality. Focus on simplifying the loop, improving variable naming, and removing any redundant code.",
+    "guidance": [
+      "Keep the function signature the same for compatibility.",
+      "Focus on improving variable names and removing unnecessary parts.",
+      "Make loops and code structure cleaner and easier to understand."
+    ],
+    "hints": [
+      "Consider using descriptive variable names for better readability.",
+      "Check the loop syntax and see if it can be simplified or modernized."
+    ],
+    "starterCode": "int sumArray(int arr[], int size) {\n    int s = 0;\n    for (int i = 0; i < size; i++) {\n        s = s + arr[i];\n    }\n    return s;\n}",
+    "expectedOutput": "sumArray({1, 2, 3, 4, 5}, 5) should return 15",
+    "concepts": [
+      "loops",
+      "functions",
+      "variable naming"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-nested-loops-and-conditionals-into-cleaner-javascript-function",
+    "title": "Refactor Nested Loops and Conditionals into Cleaner JavaScript Function",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a JavaScript function that processes an array of user objects by refactoring nested loops and conditionals without changing its behavior.",
+    "prompt": "You are given a JavaScript function that takes an array of user objects and returns an array of usernames for users who are active and have purchased at least one item costing over $20. The original function uses nested loops and multiple conditionals making it hard to read and maintain.\n\nRefactor the function to improve code clarity, reduce nesting, and utilize modern JavaScript methods like filter, some, and map while preserving the original functionality.",
+    "guidance": [
+      "Use Array.prototype.filter() to reduce nested if conditions where appropriate.",
+      "Replace inner loops that check purchases with Array.prototype.some() for better readability.",
+      "Use meaningful variable names and simplify return statements."
+    ],
+    "hints": [
+      "Instead of manually looping through purchases, consider if some purchase object meets the price criterion.",
+      "Filtering users first and then mapping to extract usernames can clean up the logic."
+    ],
+    "starterCode": "function getEligibleUsernames(users) {\n  const result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i].isActive) {\n      let hasExpensivePurchase = false;\n      for (let j = 0; j < users[i].purchases.length; j++) {\n        if (users[i].purchases[j].price > 20) {\n          hasExpensivePurchase = true;\n          break;\n        }\n      }\n      if (hasExpensivePurchase) {\n        result.push(users[i].username);\n      }\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "For the input:\n[\n  { username: 'alice', isActive: true, purchases: [{price: 10}, {price: 30}] },\n  { username: 'bob', isActive: false, purchases: [{price: 50}] },\n  { username: 'charlie', isActive: true, purchases: [{price: 15}] }\n]\n\nThe output should be:\n['alice']",
+    "concepts": [
+      "Array filtering",
+      "Array methods (some, map)",
+      "Code readability",
+      "Conditional simplification"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-messy-nested-loop-code-to-improve-readability-and-performance",
+    "title": "Refactor Messy Nested Loop Code to Improve Readability and Performance",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "You are given a C++ function that uses nested loops and multiple conditionals in a messy and repetitive way to find common elements between two integer vectors and sum them. Refactor the code to improve readability, reduce complexity, and maintain the same output.",
+    "prompt": "Below is a C++ function that evaluates two integer vectors and sums up all common elements between them. The code works correctly but is hard to read and inefficient due to the nested loops and repeated conditions. Refactor this function to make it cleaner, easier to understand, and ideally more performant, without changing its behavior or output.",
+    "guidance": [
+      "Consider using appropriate STL containers or algorithms to simplify membership checks and iteration.",
+      "Avoid nested loops where possible to reduce time complexity.",
+      "Make the intent of your code clearer by using descriptive variable names and breaking down complex statements."
+    ],
+    "hints": [
+      "Use an unordered_set for fast lookup of elements when checking for common values.",
+      "Utilize standard library algorithms like std::accumulate or std::count_if for summation.",
+      "Try separating logic into smaller functions or steps for clarity."
+    ],
+    "starterCode": "int sumCommonElements(const std::vector<int>& v1, const std::vector<int>& v2) {\n    int sum = 0;\n    for (int i = 0; i < v1.size(); ++i) {\n        for (int j = 0; j < v2.size(); ++j) {\n            if (v1[i] == v2[j]) {\n                sum += v1[i];\n                break;\n            }\n        }\n    }\n    return sum;\n}",
+    "expectedOutput": "For input v1 = {1, 2, 3, 4}, v2 = {3, 4, 5, 6}, the function should return 7 since 3 + 4 = 7.",
+    "concepts": [
+      "refactoring",
+      "STL containers",
+      "algorithm optimization",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-high-performance-memoized-fibonacci-function-with-custom-cache-size",
+    "title": "Build a High-Performance Memoized Fibonacci Function with Custom Cache Size",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an advanced Python function to compute Fibonacci numbers using memoization with a customizable cache size limit, evicting oldest cached values when the cache exceeds the limit. The function should be optimized for both speed and memory usage.",
+    "prompt": "Build a function named `fib_memo` that computes the nth Fibonacci number efficiently using memoization. The function should accept two arguments: `n` (the index) and an optional `cache_size` which limits the size of the memoization cache. When the number of cached entries exceeds `cache_size`, your function should evict the oldest cached value before adding a new one to keep the cache size bounded. Default `cache_size` should be 100. Your solution must handle very large n efficiently and explicitly manage the cache as a fixed-size LRU (Least Recently Used) cache without using external libraries.",
+    "guidance": [
+      "Use a dictionary or OrderedDict to store cached Fibonacci values.",
+      "Implement your own logic to track the order of cache usage to know which entry to evict when exceeding cache_size.",
+      "Optimize recursive calls by checking the cache to avoid recalculations."
+    ],
+    "hints": [
+      "Consider using collections.OrderedDict to maintain insertion order and facilitate LRU eviction.",
+      "You can update the position of a cache entry every time it is accessed to reflect recent use.",
+      "Be careful with the base cases for Fibonacci (0 and 1)."
+    ],
+    "starterCode": "def fib_memo(n, cache_size=100):\n    # Your implementation here\n    pass",
+    "expectedOutput": "fib_memo(10) -> 55\nfib_memo(50) -> 12586269025\nfib_memo(100) -> 354224848179261915075",
+    "concepts": [
+      "memoization",
+      "LRU cache",
+      "recursion",
+      "dictionary management",
+      "algorithm optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
