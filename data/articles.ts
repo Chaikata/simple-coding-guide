@@ -45311,5 +45311,423 @@ export const articles = [
         "value": "By following these simple guidelines, you can write optimized SQL queries that guard against data anomalies and maintain consistency in your database."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-event-loop-for-high-performance-web-apps",
+    "title": "Mastering JavaScript Event Loop for High-Performance Web Apps",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how the JavaScript event loop works and how to leverage it to build faster, more efficient web applications with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a single-threaded language, meaning it can only execute one piece of code at a time. However, modern web apps feel highly responsive and perform well because of the JavaScript event loop. Understanding how the event loop works is critical to writing efficient, high-performance code that doesn’t freeze the user interface."
+      },
+      {
+        "type": "paragraph",
+        "value": "The event loop allows JavaScript to handle asynchronous tasks like network requests, timers, and user interactions without blocking the main thread. It works by managing a queue of tasks and executing them one at a time as soon as the call stack is empty."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s break down the key components involved in the event loop:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Call Stack**: Where JavaScript keeps track of function calls. It processes one function at a time."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Web APIs (Browser APIs)**: These are provided by the browser and handle asynchronous tasks like timers (`setTimeout`), HTTP requests (`fetch`), and DOM events."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Callback Queue**: Once an asynchronous task completes, its callback function is pushed here, waiting to be executed once the call stack is empty."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Event Loop**: Continuously checks if the call stack is empty, then moves the next callback from the callback queue to the call stack."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example demonstrating the event loop in action:"
+      },
+      {
+        "type": "code",
+        "value": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('Timeout callback');\n}, 0);\n\nconsole.log('End');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\nStart\nEnd\nTimeout callback\n\nEven though the timeout is set to 0, it is executed after the synchronous code because the callback is placed in the callback queue and only executed when the call stack is empty."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Writing High-Performance Code Using the Event Loop"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Avoid long-running synchronous code blocks. They block the event loop and can freeze the UI."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use asynchronous APIs like Promises, `async/await`, and `setTimeout` to keep the main thread responsive."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Defer heavy computations by splitting them into smaller chunks and scheduling with `setTimeout` or `requestAnimationFrame`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of chunking a heavy task to avoid blocking:"
+      },
+      {
+        "type": "code",
+        "value": "function processLargeArray(items) {\n  const chunkSize = 100;\n  let index = 0;\n\n  function processChunk() {\n    const end = Math.min(index + chunkSize, items.length);\n    for (; index < end; index++) {\n      // Simulate processing item\n      console.log('Processing item', items[index]);\n    }\n    if (index < items.length) {\n      setTimeout(processChunk, 0); // schedule next chunk asynchronously\n    }\n  }\n\n  processChunk();\n}\n\nconst largeArray = Array.from({ length: 1000 }, (_, i) => i);\nprocessLargeArray(largeArray);"
+      },
+      {
+        "type": "paragraph",
+        "value": "By breaking the processing into small chunks and using `setTimeout`, we allow the event loop to handle user input, rendering, and other events between chunks, keeping the app responsive."
+      },
+      {
+        "type": "paragraph",
+        "value": "To conclude, mastering the JavaScript event loop helps you write non-blocking, performant web apps by understanding how asynchronous code executes in the browser environment. Use this knowledge to optimize your code and enhance user experience."
+      }
+    ]
+  },
+  {
+    "slug": "handling-precision-issues-in-javascript-floating-point-calculations",
+    "title": "Handling Precision Issues in JavaScript Floating Point Calculations",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to manage and fix common precision errors in JavaScript floating point calculations with simple tips and code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Ysgmp40YMvc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript uses the IEEE 754 standard for representing numbers, which leads to floating point precision issues. This often causes unexpected results when performing arithmetic operations. For beginners, this can be confusing, but understanding the problem and how to handle it is important for writing reliable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common example is adding decimal numbers like 0.1 and 0.2. Most would expect the result to be exactly 0.3, but JavaScript returns a value slightly off due to precision limits."
+      },
+      {
+        "type": "code",
+        "value": "console.log(0.1 + 0.2); // Output: 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle this, one straightforward approach is to use rounding methods to limit the number of decimal places after calculations. The `toFixed()` method is handy for formatting numbers to a fixed number of decimals, but be aware it returns a string."
+      },
+      {
+        "type": "code",
+        "value": "const sum = 0.1 + 0.2;\nconst roundedSum = Number(sum.toFixed(2));\nconsole.log(roundedSum); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another approach is to scale numbers to integers before performing arithmetic, then scale back after. This is useful for financial calculations where fixed decimal precision is necessary."
+      },
+      {
+        "type": "code",
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst factor = 100; // Use 10^number_of_decimal_places\nconst result = (a * factor + b * factor) / factor;\nconsole.log(result); // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "For more complex situations, libraries like Decimal.js or Big.js provide more precise decimal arithmetic. These libraries avoid floating point issues by handling decimal math correctly under the hood."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, always be cautious when comparing floating point numbers directly. Use rounding or integer scaling methods to reduce precision errors and consider decimal libraries for critical calculations."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-data-modeling-patterns-for-complex-applications",
+    "title": "Mastering TypeScript Data Modeling Patterns for Complex Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn beginner-friendly TypeScript data modeling patterns to handle errors and complex data structures efficiently, improving your application's robustness and maintainability.",
+    "videoUrl": "https://www.youtube.com/watch?v=hHt3F5mL7Tc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building complex applications with TypeScript, managing data models and error handling becomes critically important. TypeScript's type system helps catch errors early, but beginners often struggle with modeling data and handling errors properly, especially when models become complex. In this article, we'll explore practical TypeScript data modeling patterns, focusing on how to effectively represent data and errors. This will help you write safer, more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding TypeScript Interfaces and Types for Data Modeling\nTypeScript provides two main ways to define shapes of data: interfaces and types. Both are useful for modeling complex objects. Interfaces are often easier for extending and implementing multiple times, while types are great for unions and mapped types."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string; // optional property\n}\n\ntype Product = {\n  id: number;\n  title: string;\n  price: number;\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Errors with Union Types\nA common pattern in complex applications is to handle success and error states explicitly using union types. This avoids using exceptions for flow control and makes error handling clearer."
+      },
+      {
+        "type": "code",
+        "value": "type ApiResponse<T> =\n  | { success: true; data: T }\n  | { success: false; error: string };\n\nfunction fetchUser(id: number): ApiResponse<User> {\n  if (id === 0) {\n    return { success: false, error: \"User not found\" };\n  }\n  return { success: true, data: { id, name: \"Alice\" } };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Discriminated Unions for More Complex Errors\nWhen your errors can be of different types, discriminated unions allow you to safely narrow down the error kinds with TypeScript's control flow analysis."
+      },
+      {
+        "type": "code",
+        "value": "type NotFoundError = { type: \"NotFound\"; message: string };\ntype ValidationError = { type: \"Validation\"; message: string; field: string };\n\ntype Result<T> =\n  | { success: true; data: T }\n  | { success: false; error: NotFoundError | ValidationError };\n\nfunction processInput(input: string): Result<User> {\n  if (!input) {\n    return { success: false, error: { type: \"Validation\", message: \"Input required\", field: \"input\" } };\n  }\n  if (input !== \"valid\") {\n    return { success: false, error: { type: \"NotFound\", message: \"User not found\" } };\n  }\n  return { success: true, data: { id: 1, name: \"Alice\" } };\n}\n\n// Example usage:\nconst result = processInput(\"\");\nif (!result.success) {\n  if (result.error.type === \"Validation\") {\n    console.log(`Validation failed on: ${result.error.field}`);\n  } else {\n    console.log(result.error.message);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nBy modeling your data and errors clearly with TypeScript’s interfaces, union types, and discriminated unions, you improve the reliability and readability of your application. Beginners should focus on explicit error representation rather than exceptions, which makes handling errors safer and your code easier to maintain and extend."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-event-driven-architectures-in-python-step-by-step",
+    "title": "Designing Scalable Event-Driven Architectures in Python: A Step-by-Step Tutorial",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build scalable event-driven architectures in Python with this beginner-friendly tutorial covering core concepts and practical implementation.",
+    "videoUrl": "https://www.youtube.com/watch?v=RojKJnF_WWQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture (EDA) is a powerful design paradigm where software components communicate through events. It promotes scalability, flexibility, and responsiveness, making it suitable for modern applications. In this tutorial, we will explore the basics of scalable event-driven systems and how to implement one in Python step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Event-Driven Architecture?\nIn EDA, components (producers) generate events when something happens, and other components (consumers) listen for and react to those events asynchronously. This approach decouples components and can handle high volumes of operations effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Building Blocks of an Event-Driven System\n1. Event Producers: Parts of your app that emit events (e.g., user actions).\n2. Event Channel (Broker): A medium to transport events (e.g., message queues).\n3. Event Consumers: Components that react to events and perform actions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Setting Up a Simple Event Broker\nTo start, we'll design a simple event broker using Python's built-in `queue` and `threading` libraries to simulate asynchronous event handling."
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport queue\nimport time\n\n# Define an event broker class\nclass EventBroker:\n    def __init__(self):\n        self.event_queue = queue.Queue()\n        self.subscribers = {}\n\n    def subscribe(self, event_type, callback):\n        if event_type not in self.subscribers:\n            self.subscribers[event_type] = []\n        self.subscribers[event_type].append(callback)\n\n    def publish(self, event_type, data):\n        self.event_queue.put((event_type, data))\n\n    def start(self):\n        threading.Thread(target=self._dispatch_events, daemon=True).start()\n\n    def _dispatch_events(self):\n        while True:\n            event_type, data = self.event_queue.get()\n            if event_type in self.subscribers:\n                for callback in self.subscribers[event_type]:\n                    callback(data)\n            self.event_queue.task_done()"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Creating Event Producers and Consumers\nNow, we create simple producers that emit events and consumers that process them. Let's simulate a user registration system where the producer publishes a \"user_registered\" event and a consumer sends a welcome email."
+      },
+      {
+        "type": "code",
+        "value": "# Consumer function\ndef send_welcome_email(user):\n    print(f\"Sending welcome email to {user['email']}...\")\n    time.sleep(1)  # Simulate email sending delay\n    print(\"Email sent.\")\n\n# Producer function\ndef register_user(broker, username, email):\n    user = {\"username\": username, \"email\": email}\n    print(f\"Registering user: {username}\")\n    broker.publish(\"user_registered\", user)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Wiring Everything Together\nLet's initialize the event broker, subscribe the consumer to the event, and simulate a user registration."
+      },
+      {
+        "type": "code",
+        "value": "if __name__ == \"__main__\":\n    broker = EventBroker()\n    broker.subscribe(\"user_registered\", send_welcome_email)\n    broker.start()\n\n    register_user(broker, \"alice\", \"alice@example.com\")\n\n    # Keep the main thread alive for event processing\n    time.sleep(2)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Scaling Considerations\nThe example above is a simple in-memory event-driven system mostly for learning purposes. For production-grade scalable systems, consider:\n\n- Using message brokers like RabbitMQ, Apache Kafka, or Redis Streams.\n- Distributing consumers across multiple machines.\n- Implementing retry mechanisms and error handling.\n- Monitoring and logging events and consumers.\n\nPython client libraries such as `pika` (RabbitMQ), `kafka-python` (Kafka), and `redis-py` (Redis) can help integrate these technologies."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nYou've learned the core concepts of event-driven architecture and built a simple scalable event-driven system in Python. Starting with this foundation, you can explore advanced brokers and patterns to build robust, scalable applications."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-pythons-gil-impact-multithreaded-error-handling",
+    "title": "Understanding Python's GIL Impact on Multi-threaded Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how Python's Global Interpreter Lock (GIL) affects error handling in multi-threaded applications, with simple examples and practical tips for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=XVcRQ6T9RHo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's Global Interpreter Lock, or GIL, is a mechanism that ensures only one thread runs Python bytecode at a time. This can affect how errors are handled in multi-threaded programs. Even though threads run concurrently, the GIL limits execution to one thread at a time, which can sometimes make debugging and handling exceptions tricky for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "When multiple threads run tasks that might raise exceptions, catching those errors inside each thread is important. If exceptions go uncaught in threads, they may silently fail without stopping the main program. Understanding how to properly handle errors in the presence of the GIL is a key skill."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a simple example where a thread raises an error. We'll catch it inside the thread and see what happens:"
+      },
+      {
+        "type": "code",
+        "value": "import threading\n\n\ndef worker():\n    try:\n        print('Thread started')\n        x = 1 / 0  # This will raise ZeroDivisionError\n    except ZeroDivisionError as e:\n        print(f'Caught error in thread: {e}')\n\n\ndef main():\n    thread = threading.Thread(target=worker)\n    thread.start()\n    thread.join()\n    print('Main thread finished')\n\n\nif __name__ == '__main__':\n    main()"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the error is caught inside the `worker` function. Because of the GIL, even though threads run \"concurrently,\" only one thread executes Python code at a time, so error handling behaves predictably. If we didn't catch the error, the thread would crash silently, and the main thread would not be directly notified."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, the GIL limits true simultaneous thread execution but doesn't prevent raising or catching exceptions in threads. A good practice is to always catch exceptions within threads or use higher-level modules like `concurrent.futures.ThreadPoolExecutor` that provide better error reporting."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an improved example using `ThreadPoolExecutor` that captures exceptions raised in threads and propagates them back to the main thread:"
+      },
+      {
+        "type": "code",
+        "value": "from concurrent.futures import ThreadPoolExecutor\n\n\ndef task():\n    print('Task started')\n    return 1 / 0  # Will raise ZeroDivisionError\n\n\ndef main():\n    with ThreadPoolExecutor(max_workers=2) as executor:\n        future = executor.submit(task)\n        try:\n            result = future.result()  # This will re-raise the exception from task\n        except ZeroDivisionError as e:\n            print(f'Caught exception from thread: {e}')\n\n\nif __name__ == '__main__':\n    main()"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method is more reliable and recommended for real-world programs because you can handle thread exceptions centrally in the main thread, making debugging easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, understanding Python's GIL lets you write better error-handling code in multi-threaded applications. Catch errors inside threads or use higher-level concurrency tools to manage exceptions cleanly and avoid silent failures."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-for-complex-analytics-best-practices-and-techniques",
+    "title": "Optimizing SQL Queries for Complex Analytics: Best Practices and Techniques",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn beginner-friendly techniques to optimize SQL queries for complex analytics to make your data insights faster and more efficient.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL is a powerful language used to query and analyze large datasets. When working with complex analytical queries, performance can often become a bottleneck. Understanding how to write optimized SQL queries is essential. This tutorial will introduce beginner-friendly best practices and techniques to improve the speed and efficiency of your SQL analytics."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand what makes a query slow. Common performance killers include scanning huge tables unnecessarily, inefficient joins, redundant calculations, and lack of proper indexing. Addressing these issues can significantly improve query execution time."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use SELECT with Only the Columns You Need\nAvoid using SELECT * because it fetches all columns, which can slow down your query especially with large tables. Instead, specify only the columns necessary for your analysis."
+      },
+      {
+        "type": "code",
+        "value": "SELECT customer_id, total_sales, sale_date\nFROM sales_data\nWHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31';"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Filter Early with WHERE Clauses\nApply filters as early as possible in your query to reduce the number of rows processed. Use WHERE clauses to restrict data before joins or aggregations."
+      },
+      {
+        "type": "code",
+        "value": "SELECT customer_id, SUM(total_sales) AS total\nFROM sales_data\nWHERE sale_date >= '2023-01-01'\nGROUP BY customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use INNER JOIN Instead of OUTER JOIN When Possible\nINNER JOINs usually run faster because they only return matching rows. Use LEFT JOIN or RIGHT JOIN only when you need to include unmatched data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT c.customer_id, c.customer_name, SUM(s.total_sales) AS total_sales\nFROM customers c\nINNER JOIN sales_data s ON c.customer_id = s.customer_id\nGROUP BY c.customer_id, c.customer_name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Avoid Calculations in WHERE Clauses\nCalculations or functions in the WHERE clause can prevent the database from using indexes efficiently. Instead, try to pre-calculate or rewrite conditions."
+      },
+      {
+        "type": "code",
+        "value": "-- Inefficient\nSELECT *\nFROM sales_data\nWHERE YEAR(sale_date) = 2023;\n\n-- Better\nSELECT *\nFROM sales_data\nWHERE sale_date >= '2023-01-01' AND sale_date < '2024-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Use Indexes Wisely\nIndexes speed up data retrieval but slow down data insertion. Make sure important columns used in WHERE, JOIN, and ORDER BY clauses are indexed."
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Limit Use of Subqueries and Use CTEs (Common Table Expressions) When Appropriate\nSometimes breaking complex queries into smaller parts with CTEs improves readability and performance."
+      },
+      {
+        "type": "code",
+        "value": "WITH sales_summary AS (\n    SELECT customer_id, SUM(total_sales) AS total_sales\n    FROM sales_data\n    WHERE sale_date >= '2023-01-01'\n    GROUP BY customer_id\n)\nSELECT c.customer_name, s.total_sales\nFROM customers c\nJOIN sales_summary s ON c.customer_id = s.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "7. Use Aggregation Functions Efficiently\nAvoid grouping by unnecessary columns and filter data before aggregation to reduce workload."
+      },
+      {
+        "type": "code",
+        "value": "SELECT product_id, SUM(quantity) AS total_quantity\nFROM sales_data\nWHERE sale_date >= '2023-01-01'\nGROUP BY product_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the key to optimizing SQL queries for complex analytics is to limit the data you process, use efficient joins, apply filters early, and write clear, index-friendly code. Practicing these techniques will help you get faster and more meaningful insights from your data."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-and-handling-null-constraint-violations-in-sql-data-models",
+    "title": "Understanding and Handling Null Constraint Violations in SQL Data Models",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn what null constraint violations are in SQL, why they happen, and how to handle them effectively to keep your database consistent.",
+    "videoUrl": "https://www.youtube.com/watch?v=-8bYtApJNos",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, you might encounter errors related to null constraint violations. These errors occur when you try to insert or update data with a NULL value in a column that is defined to not allow NULLs. Understanding what null constraints are and how to properly handle these errors is crucial for maintaining the integrity of your data."
+      },
+      {
+        "type": "paragraph",
+        "value": "A null constraint is specified in a table's column definition using the NOT NULL keyword. It ensures that the column must always have a value. For example, consider the following table definition for storing user information:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n  id INT PRIMARY KEY,\n  username VARCHAR(50) NOT NULL,\n  email VARCHAR(100) NOT NULL,\n  age INT\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the columns 'username' and 'email' have NOT NULL constraints, meaning you cannot insert a user without providing values for these fields. The 'age' column can accept NULL values because it is not restricted."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to insert a row into the users table without supplying a 'username' or an 'email', the database will reject it and raise an error like this:"
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO users (id, username, email, age) VALUES (1, NULL, 'user@example.com', 25);\n-- ERROR: null value in column \"username\" violates not-null constraint"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent such errors, always provide values for NOT NULL columns when inserting or updating records. Here is a valid insertion:"
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO users (id, username, email, age) VALUES (1, 'john_doe', 'john@example.com', 25);"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you are designing your database and expect that some values might be missing or unknown at the time of data entry, consider whether the NOT NULL constraint is appropriate. For example, if 'age' is optional, allow it to be NULL as done above."
+      },
+      {
+        "type": "paragraph",
+        "value": "If a column should always have a default value, you can define a DEFAULT constraint. This way, if you omit the column in your insert statement, the default is assigned rather than NULL—avoiding constraint violations."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n  id INT PRIMARY KEY,\n  username VARCHAR(50) NOT NULL,\n  email VARCHAR(100) NOT NULL,\n  age INT DEFAULT 18\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, if you insert without specifying 'age', it will default to 18 instead of NULL:"
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO users (id, username, email) VALUES (2, 'jane_doe', 'jane@example.com');\n-- 'age' will automatically be set to 18"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to handle null constraint violations effectively:\n- Understand which columns have NOT NULL constraints.\n- Always provide values for NOT NULL columns during inserts and updates.\n- Use DEFAULT constraints for sensible default values where appropriate.\n- Reconsider whether a column should allow NULLs based on your data requirements."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, you can avoid common null constraint problems and maintain a healthy, consistent SQL database."
+      }
+    ]
   }
 ];
