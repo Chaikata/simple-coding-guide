@@ -1,681 +1,549 @@
 [
   {
-    "slug": "mastering-asynchronous-patterns-javascript-promises-vs-async-await",
-    "title": "Mastering Asynchronous Patterns in JavaScript: Promises vs Async/Await",
+    "slug": "building-scalable-data-models-in-javascript-for-real-time-applications",
+    "title": "Building Scalable Data Models in JavaScript for Real-Time Applications",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn the basics of asynchronous programming in JavaScript by understanding Promises and Async/Await. This beginner-friendly tutorial explains how to handle async code effectively with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "description": "Learn how to create scalable and efficient data models in JavaScript tailored for real-time applications with practical examples and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
     "content": [
       {
         "type": "paragraph",
-        "value": "Asynchronous programming is essential in JavaScript, especially for tasks like fetching data from an API or reading files without blocking the main thread. Two common patterns to handle asynchronous operations are Promises and Async/Await. In this tutorial, we'll learn what each pattern is and how to use them in a simple, beginner-friendly way."
+        "value": "Real-time applications, like chat apps or live dashboards, require fast and scalable data models that can efficiently handle frequent updates. In this tutorial, we'll explore how to structure data models in JavaScript to support real-time features while keeping them scalable and maintainable."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Promise?"
+        "value": "First, let's understand the key principles for building scalable data models in JavaScript:"
       },
       {
         "type": "paragraph",
-        "value": "A Promise represents an operation that hasn't completed yet but is expected in the future. It's an object that can be in one of three states: pending, fulfilled, or rejected. Promises allow you to write code that reacts to when the asynchronous operation finishes, either successfully or with an error."
+        "value": "- **Normalization:** Avoid data duplication by separating data into logical entities.\n- **Immutability:** Use immutable data updates to prevent side effects and manage state predictably.\n- **Indexing:** Use efficient lookup structures like maps or objects to quickly access data.\n- **Event-driven updates:** Design models that can react to events (e.g., new messages) efficiently."
       },
       {
         "type": "paragraph",
-        "value": "Here is a basic example of a Promise that resolves after 2 seconds:"
+        "value": "Let's look at a simple example: a chat application where you need to store users and their messages."
       },
       {
         "type": "code",
-        "value": "const myPromise = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Success!');\n  }, 2000);\n});\n\nmyPromise.then(result => {\n  console.log(result); // \"Success!\" after 2 seconds\n}).catch(error => {\n  console.error(error);\n});"
+        "value": "// Normalized data model for a real-time chat app\nconst dataModel = {\n  users: {\n    byId: {\n      'u1': { id: 'u1', name: 'Alice' },\n      'u2': { id: 'u2', name: 'Bob' },\n    },\n    allIds: ['u1', 'u2'],\n  },\n  messages: {\n    byId: {},\n    allIds: [],\n  },\n};"
       },
       {
         "type": "paragraph",
-        "value": "The `.then()` method handles the fulfilled state, and `.catch()` handles any errors. This pattern helps avoid callback hell but can still become nested if many asynchronous calls depend on one another."
+        "value": "This structure separates users and messages, storing them in objects (`byId`) for quick access by ID and arrays (`allIds`) to maintain order."
       },
       {
         "type": "paragraph",
-        "value": "### Introducing Async/Await"
-      },
-      {
-        "type": "paragraph",
-        "value": "Async/Await is a newer syntax introduced in ES2017 that makes working with Promises easier and more readable. The `async` keyword is used before a function to indicate it returns a Promise. The `await` keyword pauses the function execution until the Promise settles."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s how you can rewrite the previous example using Async/Await:"
+        "value": "To add a new message immutably, we can create a function that returns a new data model instead of mutating the original."
       },
       {
         "type": "code",
-        "value": "function delay(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function run() {\n  await delay(2000);\n  console.log('Success!');\n}\n\nrun();"
+        "value": "function addMessage(model, message) {\n  const newMessagesById = { ...model.messages.byId, [message.id]: message };\n  const newMessagesAllIds = [...model.messages.allIds, message.id];\n\n  return {\n    ...model,\n    messages: {\n      byId: newMessagesById,\n      allIds: newMessagesAllIds,\n    },\n  };\n}\n\n// Example usage:\nconst newMessage = { id: 'm1', userId: 'u1', text: 'Hello, world!', timestamp: Date.now() };\nconst updatedModel = addMessage(dataModel, newMessage);\nconsole.log(updatedModel.messages);"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `await delay(2000);` waits asynchronously for 2 seconds before continuing. This makes asynchronous code look and behave like synchronous code, which is easier to read and maintain."
+        "value": "By returning a new object instead of modifying the existing one, we maintain immutability, which helps in predictable state management, especially in real-time apps where multiple events update the data."
       },
       {
         "type": "paragraph",
-        "value": "### Handling Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "With Promises, errors are caught using `.catch()`:"
+        "value": "For faster lookups, consider using JavaScript's `Map` object when your data size grows large, as it offers better performance for frequent additions and deletions."
       },
       {
         "type": "code",
-        "value": "myPromise\n  .then(result => {\n    console.log(result);\n  })\n  .catch(error => {\n    console.error('Error:', error);\n  });"
+        "value": "const messages = new Map();\n\nfunction addMessageMap(messagesMap, message) {\n  const newMessages = new Map(messagesMap);\n  newMessages.set(message.id, message);\n  return newMessages;\n}\n\nconst messagesMap = new Map();\nconst msg = { id: 'm2', userId: 'u2', text: 'Hi Alice!', timestamp: Date.now() };\nconst updatedMessagesMap = addMessageMap(messagesMap, msg);\nconsole.log(updatedMessagesMap.get('m2'));"
       },
       {
         "type": "paragraph",
-        "value": "With Async/Await, use try/catch blocks for error handling:"
-      },
-      {
-        "type": "code",
-        "value": "async function runWithError() {\n  try {\n    await Promise.reject('Something went wrong');\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\nrunWithError();"
+        "value": "Finally, always keep your data model flexible and easy to extend by using plain objects and arrays or Maps. This flexibility is critical when real-time data requirements grow or change."
       },
       {
         "type": "paragraph",
-        "value": "### When to Use Promises vs Async/Await?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Both Promises and Async/Await are built on the same foundation. Use Promises when you want to take advantage of chaining or when working in an environment that doesn't support Async/Await. Async/Await is better for writing cleaner, more readable asynchronous code, especially when you have multiple async operations."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this tutorial, we've covered the basics of asynchronous programming in JavaScript using Promises and Async/Await. Promises use `.then()` and `.catch()` methods to handle asynchronous results, while Async/Await enables more readable code with synchronous-looking syntax. Both patterns are powerful tools for managing async operations efficiently."
-      },
-      {
-        "type": "paragraph",
-        "value": "Try experimenting with both approaches in your own projects to see what fits best!"
+        "value": "In summary, building scalable data models in JavaScript for real-time apps involves normalization, immutability, efficient data structures, and clean update logic. This approach will help you create applications that remain performant and easy to maintain as they grow."
       }
     ]
   },
   {
-    "slug": "how-javascript-memory-leaks-impact-performance-and-how-to-detect-them",
-    "title": "How JavaScript Memory Leaks Impact Performance and How to Detect Them",
+    "slug": "handling-memory-leaks-in-large-scale-javascript-applications",
+    "title": "Handling Memory Leaks in Large-Scale JavaScript Applications: Best Practices and Tools",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how JavaScript memory leaks can harm your app's performance and discover simple techniques to detect and fix them.",
-    "videoUrl": "https://www.youtube.com/watch?v=2hTPBiyuoMg",
+    "description": "Learn how to identify, prevent, and fix memory leaks in large-scale JavaScript applications with practical best practices and useful tools.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript memory leaks happen when your code keeps using more memory but doesn't release it when that memory is no longer needed. This can cause your web app to slow down or even crash over time, especially in long-running applications like single-page apps."
+        "value": "Memory leaks in JavaScript occur when your application holds on to memory that it no longer needs. In large-scale applications, these leaks can cause performance degradation, slow responsiveness, or even crashes. This article will guide you through understanding memory leaks, how to spot them, and best practices and tools to fix them."
       },
       {
         "type": "paragraph",
-        "value": "Memory leaks impact performance because the browser has less available memory to work with. This can lead to slower response times and a poor user experience. Detecting memory leaks early helps keep your applications running smoothly."
+        "value": "### What Causes Memory Leaks in JavaScript?\nMemory leaks often happen when variables, closures, or event listeners keep references to objects that should be garbage collected. Common causes include:\n- Forgotten timers or intervals.\n- Detached DOM nodes still referenced in JS.\n- Closures holding onto large objects.\n- Global variables or caches that never clear."
       },
       {
         "type": "paragraph",
-        "value": "Let's go over some common causes of memory leaks in JavaScript:"
+        "value": "### How to Detect Memory Leaks\nModern browsers provide developer tools to inspect memory usage. For example, Chrome DevTools has a \"Memory\" tab where you can take heap snapshots to analyze memory consumption and detect leaks. Look for objects that continuously grow or stay allocated after you expect them to be removed."
       },
       {
         "type": "paragraph",
-        "value": "1. **Unremoved Event Listeners:** If you add event listeners and never remove them, the attached objects stay in memory.\n2. **Forgotten Timers:** Using `setInterval` or `setTimeout` without clearing them can cause leaks.\n3. **Closures Holding References:** Closures that keep references to large objects or DOM elements can prevent garbage collection.\n4. **Detached DOM Nodes:** Removing DOM elements without properly cleaning references in your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is an example of a memory leak caused by an event listener:"
+        "value": "### Best Practices to Prevent Memory Leaks\nHere are some practical tips to avoid memory leaks in your large JavaScript codebases:\n1. Always clear intervals and timeouts:\n"
       },
       {
         "type": "code",
-        "value": "const button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Clicked');\n}\n\n// Adding event listener repeatedly without removing it\nsetInterval(() => {\n  button.addEventListener('click', handleClick);\n}, 1000);"
+        "value": "const intervalId = setInterval(() => {\n  console.log('Running...');\n}, 1000);\n\n// Clear it when no longer needed\nclearInterval(intervalId);"
       },
       {
         "type": "paragraph",
-        "value": "In the above example, every second a new event listener is added to the same button without removing the old ones. Over time, this causes memory to grow unnecessarily."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How to Detect Memory Leaks"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can detect memory leaks using browser developer tools. Here's how to do it in Chrome DevTools:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Open DevTools and go to the **Memory** tab.\n2. Take a **Heap Snapshot** to see current memory usage.\n3. Interact with your app to simulate normal use.\n4. Take additional snapshots.\n5. Compare snapshots to identify objects that are not released."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another helpful tool is the **Performance** tab, where you can record JavaScript CPU profiles and look for long garbage collection pauses or increasing memory over time."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How to Prevent Memory Leaks"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here are simple practices to avoid memory leaks:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Always remove event listeners when they are no longer needed using `removeEventListener`.\n2. Clear timers with `clearInterval` or `clearTimeout` when done.\n3. Be careful with closures and avoid holding references to unused objects.\n4. Clean up DOM references when removing elements."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s how you can remove event listeners properly:"
+        "value": "2. Remove event listeners when components unmount or when objects are no longer needed:\n"
       },
       {
         "type": "code",
-        "value": "function setup() {\n  const button = document.getElementById('myButton');\n\n  function handleClick() {\n    console.log('Clicked');\n  }\n\n  button.addEventListener('click', handleClick);\n\n  // Later, when you want to remove the listener:\n  return () => {\n    button.removeEventListener('click', handleClick);\n  };\n}\n\nconst cleanup = setup();\n// When needed\ncleanup();"
+        "value": "function setup() {\n  function onClick() {\n    console.log('Clicked');\n  }\n  document.addEventListener('click', onClick);\n\n  // Later, clean up\n  return () => document.removeEventListener('click', onClick);\n}\n\nconst cleanup = setup();\n// Call cleanup() when you want to remove the listener"
       },
       {
         "type": "paragraph",
-        "value": "By understanding what causes memory leaks and using the right tools to detect them, you can build faster, more reliable JavaScript applications."
+        "value": "3. Avoid unnecessary global variables. Use closures and modules judiciously to encapsulate data and reduce the scope.\n4. Watch for detached DOM nodes that are kept in memory by JavaScript references. Always nullify or remove those references.\n5. Use WeakMap or WeakSet for caches or data associations where you do not want to prevent garbage collection."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Useful Tools to Track Memory Leaks\n- **Chrome DevTools:** Use the Memory tab to take heap snapshots and analyze objects in memory.\n- **Firefox Developer Tools:** Also offers memory snapshots and allocations.\n- **Node.js --inspect:** For server-side JS, use inspector tools to profile memory.\n- **Third-party tools:** Libraries like LeakCanary (for mobile JS), or npm packages like memwatch-next (for Node.js) can help monitor memory usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Spotting a Memory Leak\nConsider this example where we unintentionally hold references to removed DOM nodes:\n"
+      },
+      {
+        "type": "code",
+        "value": "const elements = [];\n\nfunction createAndRemove() {\n  const div = document.createElement('div');\n  document.body.appendChild(div);\n\n  // Store reference\n  elements.push(div);\n\n  // Later, remove from DOM\n  document.body.removeChild(div);\n}\n\n// Continually calling this causes elements array to grow and hold onto removed nodes"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, even though the div elements are removed from the DOM, they remain in the `elements` array, preventing garbage collection and causing a memory leak. Fix this by clearing or managing that array."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nPreventing memory leaks is crucial for maintaining smooth performance in large-scale JavaScript applications. Regularly monitor memory usage, follow best practices like clearing timers and event listeners, and leverage browser tools to keep your app efficient and responsive."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-decorators-advanced-patterns-and-use-cases",
-    "title": "Mastering TypeScript Decorators: Advanced Patterns and Use Cases",
+    "slug": "getting-started-with-typescript-a-beginners-tutorial-for-javascript-developers",
+    "title": "Getting Started with TypeScript: A Beginner's Tutorial for JavaScript Developers",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn advanced TypeScript decorators patterns and practical use cases to enhance your code with cleaner, reusable, and powerful abstractions.",
-    "videoUrl": "https://www.youtube.com/watch?v=1hq_tNPWASM",
+    "description": "Learn how to start using TypeScript with this beginner-friendly tutorial designed specifically for JavaScript developers to write safer and scalable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript decorators are a powerful feature that allow you to modify or enhance classes, methods, properties, and parameters in a declarative way. While basic decorators might be familiar to you, this tutorial will guide you through advanced patterns and practical use cases to boost your productivity and code quality."
+        "value": "If you're a JavaScript developer looking to improve your code's reliability and maintainability, TypeScript is an excellent tool to explore. TypeScript is a superset of JavaScript that introduces static types, helping catch errors early during development. In this tutorial, we'll cover the basics of getting started with TypeScript, including installation, configuration, and simple examples."
       },
       {
         "type": "paragraph",
-        "value": "Before we dive into advanced patterns, let's quickly review the four types of decorators in TypeScript:"
+        "value": "### What is TypeScript?\nTypeScript is a strongly typed programming language built on top of JavaScript. It adds optional types to JavaScript, making it easier to detect bugs before running your code. Since TypeScript code compiles to plain JavaScript, it works anywhere JavaScript runs, including browsers and Node.js."
       },
       {
         "type": "paragraph",
-        "value": "1. Class decorators - Modify or annotate classes\n2. Method decorators - Intercept method definitions\n3. Property decorators - Observe or modify properties\n4. Parameter decorators - Access method parameter metadata"
-      },
-      {
-        "type": "paragraph",
-        "value": "Now let's explore some advanced patterns:"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Creating a Logger Decorator for Methods"
-      },
-      {
-        "type": "paragraph",
-        "value": "A common use case is logging method calls, arguments, and return values without cluttering your business logic."
+        "value": "### Setting Up TypeScript\nFirst, you need to have Node.js installed. Then, install the TypeScript compiler globally using npm:"
       },
       {
         "type": "code",
-        "value": "function Log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    console.log(`Calling ${propertyKey} with args:`, args);\n    const result = originalMethod.apply(this, args);\n    console.log(`Method ${propertyKey} returned:`, result);\n    return result;\n  };\n  return descriptor;\n}\n\nclass Calculator {\n  @Log\n  add(a: number, b: number): number {\n    return a + b;\n  }\n}\n\nconst calc = new Calculator();\ncalc.add(5, 7);"
+        "value": "npm install -g typescript"
       },
       {
         "type": "paragraph",
-        "value": "This pattern is useful for debugging or auditing complex applications."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. Method Debouncing Decorator"
-      },
-      {
-        "type": "paragraph",
-        "value": "Debouncing prevents a function from being called too frequently. This decorator will delay method execution until a specified wait time elapses."
+        "value": "Once installed, you can check the version to confirm installation:"
       },
       {
         "type": "code",
-        "value": "function Debounce(ms: number) {\n  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {\n    const originalMethod = descriptor.value;\n    let timeout: ReturnType<typeof setTimeout> | null = null;\n\n    descriptor.value = function (...args: any[]) {\n      if (timeout) clearTimeout(timeout);\n      timeout = setTimeout(() => {\n        originalMethod.apply(this, args);\n      }, ms);\n    };\n\n    return descriptor;\n  };\n}\n\nclass Search {\n  @Debounce(300)\n  filter(query: string) {\n    console.log(`Searching for: ${query}`);\n  }\n}\n\nconst search = new Search();\nsearch.filter('a');\nsearch.filter('ab');\nsearch.filter('abc');  // Only this call triggers after 300ms"
+        "value": "tsc --version"
       },
       {
         "type": "paragraph",
-        "value": "This helps optimize expensive operations like API calls during user input."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Property Validation Decorator"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can enforce constraints using property decorators to validate input."
+        "value": "### Creating a Simple TypeScript File\nCreate a new file called `greet.ts` and add the following code:"
       },
       {
         "type": "code",
-        "value": "function Required(target: any, propertyKey: string) {\n  let value: any;\n  const getter = () => value;\n  const setter = (newVal: any) => {\n    if (newVal === null || newVal === undefined || newVal === '') {\n      throw new Error(`${propertyKey} is required`);\n    }\n    value = newVal;\n  };\n  Object.defineProperty(target, propertyKey, {\n    get: getter,\n    set: setter,\n    enumerable: true,\n    configurable: true\n  });\n}\n\nclass User {\n  @Required\n  name!: string;\n}\n\nconst user = new User();\ntry {\n  user.name = '';\n} catch (err) {\n  console.error(err.message);  // Outputs: name is required\n}"
+        "value": "function greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('TypeScript'));"
       },
       {
         "type": "paragraph",
-        "value": "This pattern helps catch errors early and enforce domain rules."
+        "value": "Notice the use of `: string` to specify that the function `greet` takes a string argument and returns a string. This is a key feature of TypeScript's static typing."
       },
       {
         "type": "paragraph",
-        "value": "### 4. Class Decorator to Add Metadata"
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes you might want to add metadata to a class for reflection or configuration."
+        "value": "### Compiling TypeScript Code\nTo compile your `greet.ts` file to JavaScript, run:"
       },
       {
         "type": "code",
-        "value": "function Entity(tableName: string) {\n  return function (constructor: Function) {\n    constructor.prototype._tableName = tableName;\n  };\n}\n\n@Entity('users')\nclass UserEntity {\n  id!: number;\n  name!: string;\n}\n\nconst userEntity = new UserEntity();\nconsole.log(userEntity._tableName);  // Output: users"
+        "value": "tsc greet.ts"
       },
       {
         "type": "paragraph",
-        "value": "This simplifies ORM patterns or metadata-driven programming."
+        "value": "This creates a `greet.js` file that you can run with Node.js:"
+      },
+      {
+        "type": "code",
+        "value": "node greet.js"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "You should see the output: `Hello, TypeScript!`"
       },
       {
         "type": "paragraph",
-        "value": "Advanced TypeScript decorators enable you to write cleaner, more maintainable, and expressive code by abstracting repetitive logic. Whether you need logging, validation, performance optimizations, or metadata management, decorators help keep concerns separated and code concise."
+        "value": "### Using TypeScript Configuration\nFor larger projects, it’s common to use a `tsconfig.json` file to configure TypeScript options. You can create one by running:"
+      },
+      {
+        "type": "code",
+        "value": "tsc --init"
       },
       {
         "type": "paragraph",
-        "value": "Try these patterns in your projects and experiment crafting custom decorators tailored to your needs!"
+        "value": "This generates a configuration file where you can specify things like target JavaScript version, module system, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of TypeScript for JavaScript Developers\n- **Static Typing:** Catches errors early by enforcing types.\n- **Better Tooling:** Improved autocomplete, navigation, and refactoring in many editors.\n- **Modern JavaScript Features:** Use latest ECMAScript features and compile down for compatibility.\n- **Great Community:** TypeScript is widely used with excellent definitions for popular libraries."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nStarting with TypeScript is straightforward if you have a JavaScript background. Install the compiler, write typed code, and enjoy safer and more maintainable codebases. With practice, TypeScript will help you build scalable applications confidently."
       }
     ]
   },
   {
-    "slug": "understanding-typescript-type-narrowing-techniques-for-cleaner-code",
-    "title": "Understanding TypeScript's Type Narrowing Techniques for Cleaner Code",
+    "slug": "optimizing-typescript-code-for-faster-compilation-times",
+    "title": "Optimizing TypeScript Code for Faster Compilation Times",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript's type narrowing techniques to make your code safer and easier to read with clear examples and explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=hXXNep-4TxA",
+    "description": "Learn beginner-friendly tips to speed up your TypeScript compilation by avoiding common pitfalls and optimizing your project setup.",
+    "videoUrl": "https://www.youtube.com/watch?v=pNlq-EVld70",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful tool for adding static types to JavaScript, making your code more predictable and easier to debug. However, one common challenge for beginners is handling values that can be of multiple types. This is where \"type narrowing\" comes into play. Type narrowing allows TypeScript to refine the exact type of a variable within a certain scope, reducing errors and improving code clarity."
+        "value": "TypeScript is a powerful tool that adds static typing to JavaScript, helping developers catch errors early. However, as your TypeScript project grows, you might notice that compilation becomes slower, affecting your development speed. In this article, we'll explore beginner-friendly tips to optimize your TypeScript code and project to achieve faster compile times."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at some practical type narrowing techniques you can use in your TypeScript code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Using the `typeof` Operator"
-      },
-      {
-        "type": "paragraph",
-        "value": "The `typeof` operator is a simple way to check the primitive type of a variable (like `string`, `number`, `boolean`). TypeScript uses this check to narrow down the variable's type."
+        "value": "1. **Use Incremental Compilation**\nTypeScript can save information about previous compilations to speed up future ones. This is done via the `incremental` flag in your `tsconfig.json`."
       },
       {
         "type": "code",
-        "value": "function printId(id: number | string) {\n  if (typeof id === \"string\") {\n    // TypeScript knows `id` is string here\n    console.log(id.toUpperCase());\n  } else {\n    // Otherwise, `id` must be a number\n    console.log(id.toFixed(2));\n  }\n}\n\nprintId(\"abc123\");\nprintId(42);"
+        "value": "{\n  \"compilerOptions\": {\n    \"incremental\": true,\n    \"tsBuildInfoFile\": \"./.tsbuildinfo\"\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In this example, TypeScript narrows the type of `id` within the `if` and `else` blocks accordingly based on the `typeof` check."
+        "value": "This setting stores incremental build information, so only files that changed or depend on changed files are recompiled."
       },
       {
         "type": "paragraph",
-        "value": "### 2. Using the `instanceof` Operator"
-      },
-      {
-        "type": "paragraph",
-        "value": "`instanceof` works well when dealing with classes or constructor functions."
+        "value": "2. **Exclude Unnecessary Files**\nLarge projects often contain files that don’t need to be compiled by TypeScript (like tests or build output). You can exclude them in your `tsconfig.json`:"
       },
       {
         "type": "code",
-        "value": "class Dog {\n  bark() {\n    console.log(\"Woof!\");\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log(\"Meow!\");\n  }\n}\n\nfunction speak(pet: Dog | Cat) {\n  if (pet instanceof Dog) {\n    pet.bark(); // Narrowed to Dog\n  } else {\n    pet.meow(); // Narrowed to Cat\n  }\n}\n\nconst myDog = new Dog();\nspeak(myDog);"
+        "value": "{\n  \"exclude\": [\"node_modules\", \"dist\", \"tests\"]\n}"
       },
       {
         "type": "paragraph",
-        "value": "Using `instanceof`, TypeScript correctly identifies the type of `pet`."
+        "value": "This prevents TypeScript from wasting time checking files that are not part of your production code."
       },
       {
         "type": "paragraph",
-        "value": "### 3. User-Defined Type Guards"
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes you might want to create your own custom functions to narrow types. These are called user-defined type guards."
+        "value": "3. **Use `skipLibCheck` to Avoid Checking Declaration Files**\nTypeScript performs type checking on all imported declaration files by default. In large projects, this can slow down compilation."
       },
       {
         "type": "code",
-        "value": "interface Fish {\n  swim(): void;\n}\n\ninterface Bird {\n  fly(): void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim(); // Narrowed to Fish\n  } else {\n    pet.fly(); // Narrowed to Bird\n  }\n}"
+        "value": "{\n  \"compilerOptions\": {\n    \"skipLibCheck\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, `isFish` is a type guard that tells TypeScript the pet is a Fish if the function returns true."
+        "value": "Setting `skipLibCheck` to `true` tells TypeScript to skip type checking of `.d.ts` files, accelerating compile time without sacrificing much safety."
       },
       {
         "type": "paragraph",
-        "value": "### 4. Using Truthiness Checks"
+        "value": "4. **Avoid Large, Complex Types When Possible**\nTypeScript can slow down on very complex types or deeply nested generics. Try to simplify types or break them into smaller, reusable parts if you notice slowdowns."
       },
       {
         "type": "paragraph",
-        "value": "TypeScript can narrow types by checking if a value is truthy or falsy."
+        "value": "5. **Use `tsc --watch` or Fast Incremental Build Tools**\nUsing the `--watch` flag with the TypeScript compiler lets it keep running and only update changed files, speeding up development."
       },
       {
         "type": "code",
-        "value": "function printUsername(username: string | null) {\n  if (username) {\n    // username is narrowed to string (not null)\n    console.log(\"Username is - \" + username.toUpperCase());\n  } else {\n    console.log(\"No username provided.\");\n  }\n}"
+        "value": "tsc --watch"
       },
       {
         "type": "paragraph",
-        "value": "In this case, the `if` checks if `username` is a truthy `string` rather than `null`."
+        "value": "You might also consider tools like `esbuild` or `SWC` for super fast builds, combined with TypeScript for type checking."
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript's type narrowing features help you write clearer, safer code by reducing the chance of runtime errors. By using `typeof`, `instanceof`, custom type guards, and truthiness checks, you can tell TypeScript exactly what type you are working with at a specific point in your code. Practice these techniques in your projects to improve reliability and developer experience."
+        "value": "By applying these beginner-friendly tips—enabling incremental compilation, excluding unnecessary files, skipping library checks, simplifying complex types, and using watch mode—you can significantly reduce your TypeScript compile times and improve your development workflow."
       }
     ]
   },
   {
-    "slug": "mastering-python-context-managers-best-practices-and-real-world-applications",
-    "title": "Mastering Python Context Managers: Best Practices and Real-World Applications",
+    "slug": "mastering-pythons-asyncio-building-high-performance-concurrent-network-applications",
+    "title": "Mastering Python's AsyncIO: Building High-Performance Concurrent Network Applications",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the fundamentals of Python context managers, how to create your own, and practical use cases to write clean, efficient, and error-resistant code.",
-    "videoUrl": "https://www.youtube.com/watch?v=AQJbHAeUhzM",
+    "description": "Learn how to use Python's AsyncIO library to create efficient, high-performance concurrent network applications, ideal for beginners wanting to improve network programming skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python context managers are an essential tool for managing resources such as files, network connections, and locks. They help ensure that resources are properly acquired and released, even if errors occur. This tutorial will introduce you to context managers, explain the best practices, and demonstrate real-world examples."
+        "value": "Python's AsyncIO library provides a powerful way to write concurrent code using the async/await syntax. Unlike traditional threading or multiprocessing, AsyncIO uses an event loop to manage tasks efficiently, making it perfect for network applications that handle many connections simultaneously."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Context Manager?\nA context manager in Python is a construct that allows you to allocate and release resources precisely when you want. The most common way to use a context manager is through the `with` statement. When you use the `with` statement, Python automatically calls the methods needed to set up and tear down a resource."
+        "value": "In this tutorial, we'll introduce the basics of AsyncIO and build a simple TCP echo server that can handle multiple clients concurrently without blocking."
       },
       {
         "type": "paragraph",
-        "value": "For example, when working with files, opening and closing files manually can lead to errors or resource leaks if the file isn't closed properly. Using a context manager ensures the file is closed automatically, even if an error occurs inside the block."
+        "value": "First, let's understand the core concepts:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Event Loop:** The core of AsyncIO, responsible for running asynchronous tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Coroutine:** A special function defined with `async def` that can pause and resume its execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Task:** A wrapper for a coroutine that schedules it to be run on the event loop."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by writing a simple asynchronous function that prints messages with delays, demonstrating non-blocking behavior:"
       },
       {
         "type": "code",
-        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')\n# file is automatically closed here"
+        "value": "import asyncio\n\nasync def say_after(delay, message):\n    await asyncio.sleep(delay)\n    print(message)\n\nasync def main():\n    print('Start')\n    await asyncio.gather(\n        say_after(1, 'Hello'),\n        say_after(2, 'World')\n    )\n    print('End')\n\nasyncio.run(main())"
       },
       {
         "type": "paragraph",
-        "value": "### How Do Context Managers Work?\nContext managers implement two special methods:\n- `__enter__(self)`: This method runs when the execution enters the `with` block. It typically acquires the resource and returns it.\n- `__exit__(self, exc_type, exc_value, traceback)`: This method is called when the block inside the `with` statement is left. It usually releases the resource and handles exceptions if any.\n\nYou can create your own context managers by defining a class with these two methods or by using the `contextlib` module for simpler use cases."
+        "value": "Running this code you will notice 'Hello' is printed after 1 second, 'World' after 2 seconds, but the total run time is about 2 seconds, demonstrating concurrency."
       },
       {
         "type": "paragraph",
-        "value": "### Creating a Simple Context Manager Class\nLet's create a context manager that prints messages when entering and exiting a block."
+        "value": "Now, let's build a simple asynchronous TCP echo server. This server will accept connections, receive messages, and send them back to the client."
       },
       {
         "type": "code",
-        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Entering the context')\n        return self\n    \n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting the context')\n        if exc_type:\n            print(f'An exception occurred: {exc_value}')\n        # Returning False re-raises the exception if any\n        return False\n\nwith MyContextManager() as manager:\n    print('Inside the with block')"
+        "value": "import asyncio\n\nasync def handle_echo(reader, writer):\n    addr = writer.get_extra_info('peername')\n    print(f\"Connection from {addr}\")\n    while True:\n        data = await reader.read(100)\n        if not data:\n            print(f\"Connection closed by {addr}\")\n            break\n        message = data.decode()\n        print(f\"Received {message} from {addr}\")\n        writer.write(data)\n        await writer.drain()\n    writer.close()\n    await writer.wait_closed()\n\nasync def main():\n    server = await asyncio.start_server(handle_echo, '127.0.0.1', 8888)\n    addr = server.sockets[0].getsockname()\n    print(f'Serving on {addr}')\n    async with server:\n        await server.serve_forever()\n\nasyncio.run(main())"
       },
       {
         "type": "paragraph",
-        "value": "### Using `contextlib` for Cleaner Syntax\nPython's `contextlib` module provides a handy decorator called `@contextmanager` that lets you write context managers using generators, which can make your code easier to read and write."
-      },
-      {
-        "type": "code",
-        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef my_context():\n    print('Start of context')\n    try:\n        yield\n    finally:\n        print('End of context')\n\nwith my_context():\n    print('Inside with block')"
+        "value": "You can test this server by connecting using `telnet 127.0.0.1 8888` or any TCP client. Whatever you type will be echoed back, handled concurrently for multiple clients without blocking the server."
       },
       {
         "type": "paragraph",
-        "value": "### Real-World Application: Managing Files\nOpening and closing files manually can be error-prone. Context managers simplify this process by ensuring files are properly closed even if an error occurs."
-      },
-      {
-        "type": "code",
-        "value": "def read_file(filename):\n    with open(filename, 'r') as f:\n        return f.read()\n\ncontent = read_file('example.txt')\nprint(content)"
+        "value": "In summary, Python AsyncIO allows your network applications to handle many connections efficiently and with less complexity than traditional threading models. By embracing `async` and `await` along with the event loop, you can write performant and scalable network servers."
       },
       {
         "type": "paragraph",
-        "value": "### Real-World Application: Timing Code Execution\nYou can create a context manager to measure how long a block of code takes to run."
-      },
-      {
-        "type": "code",
-        "value": "import time\nfrom contextlib import contextmanager\n\n@contextmanager\ndef timer():\n    start = time.time()\n    yield\n    end = time.time()\n    print(f'Elapsed time: {end - start:.4f} seconds')\n\nwith timer():\n    total = sum(range(10**6))\n    print(f'Total is {total}')"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices\n- Use built-in context managers whenever possible for file operations, locks, or database connections.\n- When creating custom context managers, ensure `__exit__` properly handles exceptions or explicitly re-raises them.\n- Use `contextlib.contextmanager` for simple resource management to keep your code clean.\n- Always test your context managers thoroughly to ensure resources are correctly released in all situations."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nContext managers are a powerful feature in Python that help manage resources efficiently and safely. By mastering them, you can write cleaner, more readable, and more robust code. Whether you’re working with files, timing functions, or managing complex resources, context managers can simplify your life."
+        "value": "For next steps, explore combining AsyncIO with other libraries like `aiohttp` for asynchronous web servers or clients to further enhance your skills."
       }
     ]
   },
   {
-    "slug": "understanding-python-typeerror-common-causes-practical-examples",
-    "title": "Understanding Python's TypeError: Common Causes and Practical Examples",
+    "slug": "optimizing-python-code-performance-with-profiling-tools",
+    "title": "Optimizing Python Code Performance with Profiling Tools: A Step-by-Step Guide",
     "language": "python",
     "type": "errors",
-    "description": "Learn about Python's TypeError, what causes it, and how to fix it with beginner-friendly examples and explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=uswm-Xtekfs",
+    "description": "Learn how to improve your Python code's performance by using profiling tools to identify bottlenecks and optimize them effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
     "content": [
       {
         "type": "paragraph",
-        "value": "In Python, a TypeError occurs when an operation or function is applied to an object of an inappropriate type. This is a common error beginners encounter when mixing data types unexpectedly. Understanding TypeError and how to resolve it will help you write cleaner and bug-free code."
+        "value": "When writing Python programs, performance can sometimes become an issue, especially as your projects grow. To fix this, it's important to know which parts of your code use the most resources or run slow. Profiling tools help you find these bottlenecks so you can focus your optimization efforts effectively."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by seeing what causes TypeError with some practical examples."
+        "value": "In this guide, we'll learn how to use Python's built-in profiling tools like cProfile and the pstats module to measure and improve your code's performance step-by-step."
       },
       {
         "type": "paragraph",
-        "value": "Example 1: Trying to add a string and an integer"
+        "value": "Let's start with a simple example function that sums up all prime numbers below a certain limit. This example is not optimized and will help us see how profiling points out the slow parts."
       },
       {
         "type": "code",
-        "value": "number = 5\ntext = \"hello\"\nresult = number + text  # This will raise TypeError"
+        "value": "def is_prime(n):\n    if n <= 1:\n        return False\n    for i in range(2, n):\n        if n % i == 0:\n            return False\n    return True\n\ndef sum_primes(limit):\n    total = 0\n    for num in range(limit):\n        if is_prime(num):\n            total += num\n    return total\n\nprint(sum_primes(10000))"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, Python will raise a TypeError because it cannot add an integer (`number`) and a string (`text`). To fix this, you can convert the integer to a string or vice versa:"
+        "value": "To profile this code and find where it spends the most time, we use the cProfile module. Run this code with profiling enabled:"
       },
       {
         "type": "code",
-        "value": "# Fix by converting int to string\nresult = str(number) + text  # '5hello'\n\n# Fix by converting string to int (if string is numeric)\n# Here not applicable since 'hello' is not numeric"
+        "value": "import cProfile\n\ncProfile.run('sum_primes(10000)')"
       },
       {
         "type": "paragraph",
-        "value": "Example 2: Calling a function with incorrect argument types"
+        "value": "This will output a list of functions with statistics such as how many times they were called and how much time was spent in them. You will likely see that the is_prime function is called many times and takes most of the runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "To make the output easier to analyze, you can save the profile results to a file and use the pstats module to sort and view the data:"
       },
       {
         "type": "code",
-        "value": "def multiply(a, b):\n    return a * b\n\nmultiply(3, 'hello')  # This works in Python, but try multiply(3, [1, 2])\n\n# However, some unexpected calls might cause TypeError\n"
+        "value": "import cProfile\nimport pstats\n\ncProfile.run('sum_primes(10000)', 'profile.stats')\n\np = pstats.Stats('profile.stats')\np.strip_dirs().sort_stats('time').print_stats(10)"
       },
       {
         "type": "paragraph",
-        "value": "Notice that some operations work because Python supports operator overloading (like multiplying a string by an integer repeats the string), but others may cause TypeErrors if the types don’t fit."
+        "value": "The above code sorts the results by the time spent in each function and prints the top 10 results, making it easier to pinpoint which parts to optimize."
       },
       {
         "type": "paragraph",
-        "value": "Example 3: Trying to index a non-subscriptable object"
+        "value": "One way to optimize the is_prime function is to limit the range of numbers checked — instead of going up to n, check only up to the square root of n. This reduces the number of checks dramatically."
       },
       {
         "type": "code",
-        "value": "number = 10\nprint(number[0])  # TypeError: 'int' object is not subscriptable"
+        "value": "import math\n\ndef is_prime_optimized(n):\n    if n <= 1:\n        return False\n    for i in range(2, int(math.sqrt(n)) + 1):\n        if n % i == 0:\n            return False\n    return True\n\ndef sum_primes_optimized(limit):\n    total = 0\n    for num in range(limit):\n        if is_prime_optimized(num):\n            total += num\n    return total\n\nprint(sum_primes_optimized(10000))"
       },
       {
         "type": "paragraph",
-        "value": "Here, `number` is an integer, and integers cannot be treated like sequences or containers. To fix this, ensure you only index or slice sequences like strings, lists, or tuples."
+        "value": "After rewriting your function, run the profiler again. You should see less time spent in the is_prime_optimized function. This process of profiling, identifying bottlenecks, and improving your code can be repeated until your code runs efficiently."
       },
       {
         "type": "paragraph",
-        "value": "Example 4: Using unsupported operand types"
-      },
-      {
-        "type": "code",
-        "value": "a = [1, 2, 3]\nb = {4, 5, 6}\nprint(a + b)  # TypeError: unsupported operand type(s) for +: 'list' and 'set'"
+        "value": "Remember, premature optimization can waste time. Always profile first to find the real bottlenecks. Python's cProfile and pstats modules make this process easy and beginner-friendly."
       },
       {
         "type": "paragraph",
-        "value": "In this example, Python does not know how to \"add\" a list and a set directly. To fix it, convert one type to the other or use appropriate methods:"
-      },
-      {
-        "type": "code",
-        "value": "# Convert set to list before adding\nprint(a + list(b))\n\n# Or use set operations\nprint(set(a).union(b))"
-      },
-      {
-        "type": "paragraph",
-        "value": "Summary: To avoid TypeErrors, always make sure the types of objects you work with are compatible with the operations you're performing. Use functions like `type()`, `isinstance()`, and proper conversions (`str()`, `int()`, `list()`) when needed."
-      },
-      {
-        "type": "paragraph",
-        "value": "By practicing and reading error messages carefully, handling TypeErrors will become easier as you grow your Python skills."
+        "value": "Happy coding and optimizing!"
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-in-sql-for-advanced-data-analysis",
-    "title": "Mastering Window Functions in SQL for Advanced Data Analysis",
+    "slug": "mastering-sql-window-functions-beginners-guide",
+    "title": "Mastering SQL Window Functions: A Beginner's Guide to Advanced Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform advanced data analysis, including ranking, running totals, and moving averages with beginner-friendly examples.",
+    "description": "Learn how to use SQL window functions to perform powerful data analysis like running totals, rankings, and moving averages with this easy beginner-friendly guide.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions in SQL are powerful tools that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not collapse the result set; instead, they add useful information to each row. This makes them invaluable for advanced data analysis, such as calculating running totals, rankings, and averages over a specific partition of data."
+        "value": "SQL window functions are incredibly useful tools that allow you to perform advanced calculations across a set of table rows related to the current row—without collapsing your result set. If you've ever wanted to calculate running totals, rankings, or averages without grouping your data, window functions are the key. In this guide, we'll cover the basics of window functions, explore common examples, and help you get started with practical SQL code."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a simple example dataset called `sales` that contains sales data for different employees and dates:"
+        "value": "### What are SQL Window Functions?\nUnlike aggregate functions that group rows and return a single result per group, window functions operate on a 'window' of rows around the current row but still return one result per row. This means you can perform calculations across your data while retaining the original row-level details."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Syntax\nThe general syntax of a window function looks like this:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n  id INT PRIMARY KEY,\n  employee VARCHAR(50),\n  sale_date DATE,\n  amount DECIMAL(10,2)\n);\n\nINSERT INTO sales (id, employee, sale_date, amount) VALUES\n(1, 'Alice', '2024-01-01', 500.00),\n(2, 'Bob', '2024-01-01', 300.00),\n(3, 'Alice', '2024-01-02', 700.00),\n(4, 'Bob', '2024-01-02', 200.00),\n(5, 'Alice', '2024-01-03', 600.00);\n"
+        "value": "function_name(column_name) OVER (\n  PARTITION BY column_to_partition\n  ORDER BY column_to_order\n  ROWS frame_specification\n)"
       },
       {
         "type": "paragraph",
-        "value": "### 1. Using ROW_NUMBER() to get the rank of sales per employee by date"
+        "value": "- **function_name()**: The window function, e.g., `ROW_NUMBER()`, `RANK()`, `SUM()`, `AVG()`, etc.\n- **PARTITION BY**: Divides the result set into partitions to apply the function separately to each partition.\n- **ORDER BY**: Defines the order of rows within each partition.\n- **ROWS**: (Optional) Specifies the set of rows considered for the calculation relative to the current row."
       },
       {
         "type": "paragraph",
-        "value": "The `ROW_NUMBER()` function assigns a unique sequential integer to rows within a partition of a result set:"
+        "value": "### Example Setup\nLet's use a sample `sales` table containing `id`, `salesperson`, `region`, and `amount` columns."
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY employee ORDER BY sale_date) AS sale_rank\nFROM sales;\n"
+        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(50),\n  region VARCHAR(50),\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', 'North', 500),\n(2, 'Bob', 'North', 700),\n(3, 'Alice', 'South', 300),\n(4, 'Charlie', 'North', 200),\n(5, 'Bob', 'South', 400);"
       },
       {
         "type": "paragraph",
-        "value": "This query ranks each sale by date for each employee separately."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. Calculating a running total of sales per employee"
-      },
-      {
-        "type": "paragraph",
-        "value": "Running totals are common in financial and time series analyses. Use the `SUM()` window function for this:"
+        "value": "### 1. Running Total\nCalculate the running total of sales per region ordered by `id`:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY employee ORDER BY sale_date) AS running_total\nFROM sales;\n"
+        "value": "SELECT\n  id,\n  salesperson,\n  region,\n  amount,\n  SUM(amount) OVER (PARTITION BY region ORDER BY id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "This query calculates the cumulative sales amount for each employee ordered by date."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Calculating a moving average with window functions"
-      },
-      {
-        "type": "paragraph",
-        "value": "Moving averages smooth out short-term fluctuations. Here's how to compute a 2-day moving average of sales per employee:"
+        "value": "### 2. Ranking Sales by Region\nRank salespersons by their sales amount within each region:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee,\n  sale_date,\n  amount,\n  AVG(amount) OVER (PARTITION BY employee ORDER BY sale_date ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales;\n"
+        "value": "SELECT\n  id,\n  salesperson,\n  region,\n  amount,\n  RANK() OVER (PARTITION BY region ORDER BY amount DESC) AS sales_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "This calculates the average of the current day and the previous day's sales."
+        "value": "### 3. Moving Average\nCalculate the moving average of the last 2 sales amounts per region ordered by `id`:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  salesperson,\n  region,\n  amount,\n  AVG(amount) OVER (PARTITION BY region ORDER BY id ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "### Tips for Beginners\n- Start with `OVER()` clause to understand how partitioning and ordering affect results.\n- Use window functions for comparison purposes alongside base row data.\n- Remember that window functions do not reduce rows like GROUP BY, they augment each row with additional information.\n\nWith just a few lines of code, window functions can vastly improve your ability to analyze and report data in SQL. Experiment by combining partitions, orderings, and frame specifications to gain the most from your data."
       },
       {
         "type": "paragraph",
-        "value": "Window functions unlock advanced analysis capabilities in SQL without collapsing your data. By using functions like `ROW_NUMBER()`, `SUM()`, and `AVG()` with the `OVER()` clause, you can easily rank data, calculate running totals, and derive moving averages. Experiment with these functions on your datasets to gain deeper insights!"
+        "value": "Now that you understand the basics, try applying window functions to your own datasets and unlock smarter, more insightful queries!"
       }
     ]
   },
   {
-    "slug": "handling-null-values-in-complex-sql-joins-best-practices-and-pitfalls",
-    "title": "Handling NULL Values in Complex SQL Joins: Best Practices and Pitfalls",
+    "slug": "handling-null-comparisons-in-sql-best-practices-for-edge-cases",
+    "title": "Handling NULL Comparisons in SQL: Best Practices for Edge Cases",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to handle NULL values in complex SQL joins with best practices and avoid common mistakes to ensure accurate query results.",
-    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "description": "Learn how to properly handle NULL comparisons in SQL with beginner-friendly examples and best practices to avoid common mistakes and errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=Htp-N9V9T_g",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL joins, NULL values often appear, especially in OUTER JOINs. These NULLs can cause unexpected results or errors if not handled properly. This article will guide you through best practices for handling NULL values in complex joins and highlight common pitfalls to avoid."
+        "value": "In SQL, NULL represents missing or unknown data. Unlike regular values, NULL is not equal to anything, not even another NULL. This can cause confusion when writing queries involving comparisons. Understanding how to handle NULL values properly is important to avoid unexpected results and errors."
       },
       {
         "type": "paragraph",
-        "value": "### What Causes NULLs in Joins?\n\nNULL values commonly appear in LEFT, RIGHT, or FULL OUTER JOINs when there is no matching record on one side of the join. For example, a LEFT JOIN returns all rows from the left table but fills columns from the right table with NULLs where no match exists."
+        "value": "A common mistake is using the equals (=) operator to check for NULL values. For example, the query below might seem correct but will not return any rows if the column contains NULL values."
       },
       {
         "type": "code",
-        "value": "SELECT a.id, a.name, b.order_id\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id;"
+        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
       },
       {
         "type": "paragraph",
-        "value": "If a customer has no order, then `b.order_id` will be NULL. This is normal, but problems arise when these NULLs are not handled in conditions or calculations."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Pitfall #1: Filtering NULLs in the WHERE clause\n\nA common mistake is writing a WHERE filter that excludes NULLs unintentionally, like this:"
+        "value": "The problem is that in SQL, NULL is not equal to anything, including NULL itself. To check for NULL values, always use the IS NULL or IS NOT NULL operators."
       },
       {
         "type": "code",
-        "value": "SELECT a.id, a.name, b.order_id\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id\nWHERE b.order_id IS NOT NULL;"
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "This converts the LEFT JOIN effectively into an INNER JOIN because it excludes all rows where `b.order_id` is NULL. To keep the outer join behavior, apply such filters in the JOIN condition itself or use CASE statements."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice #1: Use JOIN conditions to filter rows\n\nMove filtering conditions on the joined table into the ON clause to preserve NULLs for unmatched rows."
+        "value": "Similarly, if you want to find rows where a column is not NULL, use IS NOT NULL."
       },
       {
         "type": "code",
-        "value": "SELECT a.id, a.name, b.order_id\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id AND b.order_date > '2023-01-01';"
+        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
       },
       {
         "type": "paragraph",
-        "value": "This way, the join includes only orders after January 1st, 2023, but still returns customers without orders (with NULLs in order columns)."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Pitfall #2: Using NULL in expressions without handling\n\nNULLs propagate in arithmetic or string operations resulting in NULL output. For example:"
+        "value": "Sometimes you may want to treat NULL as a specific value during comparisons. You can use the COALESCE function to substitute NULL with a default value. For example, to treat NULL manager_id as 0:"
       },
       {
         "type": "code",
-        "value": "SELECT a.id, COALESCE(b.amount, 0) + 10 AS total_amount\nFROM customers a\nLEFT JOIN orders b ON a.id = b.customer_id;"
+        "value": "SELECT * FROM employees WHERE COALESCE(manager_id, 0) = 0;"
       },
       {
         "type": "paragraph",
-        "value": "Without COALESCE, if `b.amount` is NULL, `b.amount + 10` returns NULL. Using `COALESCE` or `IFNULL` replaces NULLs with a default value, preventing errors or unexpected results."
+        "value": "When using logical operators like AND, OR, or NOT with NULL values, remember that the result could be UNKNOWN (null) instead of TRUE or FALSE. This can affect query outcomes. To avoid confusion, always explicitly check for NULLs to control query logic."
       },
       {
         "type": "paragraph",
-        "value": "### Best Practice #2: Use COALESCE for NULL-safe calculations\n\nUse `COALESCE(column, default_value)` to provide fallback for NULLs, especially in calculations or concatenations."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Pitfall #3: Comparing NULLs incorrectly\n\nRemember that NULL is not equal to anything, even NULL itself. So these comparisons fail:"
+        "value": "Finally, SQL provides the <=> operator (in some databases like MySQL) for NULL-safe equality comparisons. It returns TRUE if both values are NULL. But this operator is not standard SQL, so use it only if your database supports it."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM orders WHERE order_date = NULL; -- This always returns zero rows\nSELECT * FROM orders WHERE order_date != NULL; -- Also returns zero rows"
+        "value": "SELECT * FROM employees WHERE manager_id <=> NULL;"
       },
       {
         "type": "paragraph",
-        "value": "Use `IS NULL` or `IS NOT NULL` to check for NULL values instead."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practice #3: Use IS NULL / IS NOT NULL for NULL checks\n\nAlways check NULLs using the proper syntax to avoid logic errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\n\n- Understand where NULLs come from in joins (mostly OUTER JOINs).\n- Avoid filtering NULLs in WHERE; instead, filter in JOIN conditions.\n- Use COALESCE or IFNULL to handle NULL values in expressions.\n- Always use IS NULL or IS NOT NULL when testing for NULLs.\n\nFollowing these rules will help you write reliable, accurate SQL queries involving complex joins."
+        "value": "In summary, avoid using '=' with NULL, use IS NULL/IS NOT NULL instead, consider COALESCE for substitutions, and understand that NULL affects logical operations differently. Mastering these will help you handle edge cases in SQL and write more reliable queries."
       }
     ]
   }

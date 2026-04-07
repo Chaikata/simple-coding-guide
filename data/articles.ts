@@ -44577,5 +44577,359 @@ export const articles = [
         "value": "### Summary\n\n- Understand where NULLs come from in joins (mostly OUTER JOINs).\n- Avoid filtering NULLs in WHERE; instead, filter in JOIN conditions.\n- Use COALESCE or IFNULL to handle NULL values in expressions.\n- Always use IS NULL or IS NOT NULL when testing for NULLs.\n\nFollowing these rules will help you write reliable, accurate SQL queries involving complex joins."
       }
     ]
+  },
+  {
+    "slug": "getting-started-with-typescript-a-beginners-tutorial-for-javascript-developers",
+    "title": "Getting Started with TypeScript: A Beginner's Tutorial for JavaScript Developers",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to start using TypeScript with this beginner-friendly tutorial designed specifically for JavaScript developers to write safer and scalable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're a JavaScript developer looking to improve your code's reliability and maintainability, TypeScript is an excellent tool to explore. TypeScript is a superset of JavaScript that introduces static types, helping catch errors early during development. In this tutorial, we'll cover the basics of getting started with TypeScript, including installation, configuration, and simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is TypeScript?\nTypeScript is a strongly typed programming language built on top of JavaScript. It adds optional types to JavaScript, making it easier to detect bugs before running your code. Since TypeScript code compiles to plain JavaScript, it works anywhere JavaScript runs, including browsers and Node.js."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Setting Up TypeScript\nFirst, you need to have Node.js installed. Then, install the TypeScript compiler globally using npm:"
+      },
+      {
+        "type": "code",
+        "value": "npm install -g typescript"
+      },
+      {
+        "type": "paragraph",
+        "value": "Once installed, you can check the version to confirm installation:"
+      },
+      {
+        "type": "code",
+        "value": "tsc --version"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple TypeScript File\nCreate a new file called `greet.ts` and add the following code:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('TypeScript'));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice the use of `: string` to specify that the function `greet` takes a string argument and returns a string. This is a key feature of TypeScript's static typing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Compiling TypeScript Code\nTo compile your `greet.ts` file to JavaScript, run:"
+      },
+      {
+        "type": "code",
+        "value": "tsc greet.ts"
+      },
+      {
+        "type": "paragraph",
+        "value": "This creates a `greet.js` file that you can run with Node.js:"
+      },
+      {
+        "type": "code",
+        "value": "node greet.js"
+      },
+      {
+        "type": "paragraph",
+        "value": "You should see the output: `Hello, TypeScript!`"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using TypeScript Configuration\nFor larger projects, it’s common to use a `tsconfig.json` file to configure TypeScript options. You can create one by running:"
+      },
+      {
+        "type": "code",
+        "value": "tsc --init"
+      },
+      {
+        "type": "paragraph",
+        "value": "This generates a configuration file where you can specify things like target JavaScript version, module system, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of TypeScript for JavaScript Developers\n- **Static Typing:** Catches errors early by enforcing types.\n- **Better Tooling:** Improved autocomplete, navigation, and refactoring in many editors.\n- **Modern JavaScript Features:** Use latest ECMAScript features and compile down for compatibility.\n- **Great Community:** TypeScript is widely used with excellent definitions for popular libraries."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nStarting with TypeScript is straightforward if you have a JavaScript background. Install the compiler, write typed code, and enjoy safer and more maintainable codebases. With practice, TypeScript will help you build scalable applications confidently."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-typescript-code-for-faster-compilation-times",
+    "title": "Optimizing TypeScript Code for Faster Compilation Times",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips to speed up your TypeScript compilation by avoiding common pitfalls and optimizing your project setup.",
+    "videoUrl": "https://www.youtube.com/watch?v=pNlq-EVld70",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool that adds static typing to JavaScript, helping developers catch errors early. However, as your TypeScript project grows, you might notice that compilation becomes slower, affecting your development speed. In this article, we'll explore beginner-friendly tips to optimize your TypeScript code and project to achieve faster compile times."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use Incremental Compilation**\nTypeScript can save information about previous compilations to speed up future ones. This is done via the `incremental` flag in your `tsconfig.json`."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"incremental\": true,\n    \"tsBuildInfoFile\": \"./.tsbuildinfo\"\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This setting stores incremental build information, so only files that changed or depend on changed files are recompiled."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Exclude Unnecessary Files**\nLarge projects often contain files that don’t need to be compiled by TypeScript (like tests or build output). You can exclude them in your `tsconfig.json`:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"exclude\": [\"node_modules\", \"dist\", \"tests\"]\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This prevents TypeScript from wasting time checking files that are not part of your production code."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use `skipLibCheck` to Avoid Checking Declaration Files**\nTypeScript performs type checking on all imported declaration files by default. In large projects, this can slow down compilation."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"skipLibCheck\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Setting `skipLibCheck` to `true` tells TypeScript to skip type checking of `.d.ts` files, accelerating compile time without sacrificing much safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Avoid Large, Complex Types When Possible**\nTypeScript can slow down on very complex types or deeply nested generics. Try to simplify types or break them into smaller, reusable parts if you notice slowdowns."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Use `tsc --watch` or Fast Incremental Build Tools**\nUsing the `--watch` flag with the TypeScript compiler lets it keep running and only update changed files, speeding up development."
+      },
+      {
+        "type": "code",
+        "value": "tsc --watch"
+      },
+      {
+        "type": "paragraph",
+        "value": "You might also consider tools like `esbuild` or `SWC` for super fast builds, combined with TypeScript for type checking."
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these beginner-friendly tips—enabling incremental compilation, excluding unnecessary files, skipping library checks, simplifying complex types, and using watch mode—you can significantly reduce your TypeScript compile times and improve your development workflow."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-asyncio-building-high-performance-concurrent-network-applications",
+    "title": "Mastering Python's AsyncIO: Building High-Performance Concurrent Network Applications",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's AsyncIO library to create efficient, high-performance concurrent network applications, ideal for beginners wanting to improve network programming skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's AsyncIO library provides a powerful way to write concurrent code using the async/await syntax. Unlike traditional threading or multiprocessing, AsyncIO uses an event loop to manage tasks efficiently, making it perfect for network applications that handle many connections simultaneously."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll introduce the basics of AsyncIO and build a simple TCP echo server that can handle multiple clients concurrently without blocking."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand the core concepts:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Event Loop:** The core of AsyncIO, responsible for running asynchronous tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Coroutine:** A special function defined with `async def` that can pause and resume its execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Task:** A wrapper for a coroutine that schedules it to be run on the event loop."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by writing a simple asynchronous function that prints messages with delays, demonstrating non-blocking behavior:"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def say_after(delay, message):\n    await asyncio.sleep(delay)\n    print(message)\n\nasync def main():\n    print('Start')\n    await asyncio.gather(\n        say_after(1, 'Hello'),\n        say_after(2, 'World')\n    )\n    print('End')\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running this code you will notice 'Hello' is printed after 1 second, 'World' after 2 seconds, but the total run time is about 2 seconds, demonstrating concurrency."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's build a simple asynchronous TCP echo server. This server will accept connections, receive messages, and send them back to the client."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def handle_echo(reader, writer):\n    addr = writer.get_extra_info('peername')\n    print(f\"Connection from {addr}\")\n    while True:\n        data = await reader.read(100)\n        if not data:\n            print(f\"Connection closed by {addr}\")\n            break\n        message = data.decode()\n        print(f\"Received {message} from {addr}\")\n        writer.write(data)\n        await writer.drain()\n    writer.close()\n    await writer.wait_closed()\n\nasync def main():\n    server = await asyncio.start_server(handle_echo, '127.0.0.1', 8888)\n    addr = server.sockets[0].getsockname()\n    print(f'Serving on {addr}')\n    async with server:\n        await server.serve_forever()\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can test this server by connecting using `telnet 127.0.0.1 8888` or any TCP client. Whatever you type will be echoed back, handled concurrently for multiple clients without blocking the server."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, Python AsyncIO allows your network applications to handle many connections efficiently and with less complexity than traditional threading models. By embracing `async` and `await` along with the event loop, you can write performant and scalable network servers."
+      },
+      {
+        "type": "paragraph",
+        "value": "For next steps, explore combining AsyncIO with other libraries like `aiohttp` for asynchronous web servers or clients to further enhance your skills."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-performance-with-profiling-tools",
+    "title": "Optimizing Python Code Performance with Profiling Tools: A Step-by-Step Guide",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to improve your Python code's performance by using profiling tools to identify bottlenecks and optimize them effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, performance can sometimes become an issue, especially as your projects grow. To fix this, it's important to know which parts of your code use the most resources or run slow. Profiling tools help you find these bottlenecks so you can focus your optimization efforts effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this guide, we'll learn how to use Python's built-in profiling tools like cProfile and the pstats module to measure and improve your code's performance step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example function that sums up all prime numbers below a certain limit. This example is not optimized and will help us see how profiling points out the slow parts."
+      },
+      {
+        "type": "code",
+        "value": "def is_prime(n):\n    if n <= 1:\n        return False\n    for i in range(2, n):\n        if n % i == 0:\n            return False\n    return True\n\ndef sum_primes(limit):\n    total = 0\n    for num in range(limit):\n        if is_prime(num):\n            total += num\n    return total\n\nprint(sum_primes(10000))"
+      },
+      {
+        "type": "paragraph",
+        "value": "To profile this code and find where it spends the most time, we use the cProfile module. Run this code with profiling enabled:"
+      },
+      {
+        "type": "code",
+        "value": "import cProfile\n\ncProfile.run('sum_primes(10000)')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This will output a list of functions with statistics such as how many times they were called and how much time was spent in them. You will likely see that the is_prime function is called many times and takes most of the runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "To make the output easier to analyze, you can save the profile results to a file and use the pstats module to sort and view the data:"
+      },
+      {
+        "type": "code",
+        "value": "import cProfile\nimport pstats\n\ncProfile.run('sum_primes(10000)', 'profile.stats')\n\np = pstats.Stats('profile.stats')\np.strip_dirs().sort_stats('time').print_stats(10)"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above code sorts the results by the time spent in each function and prints the top 10 results, making it easier to pinpoint which parts to optimize."
+      },
+      {
+        "type": "paragraph",
+        "value": "One way to optimize the is_prime function is to limit the range of numbers checked — instead of going up to n, check only up to the square root of n. This reduces the number of checks dramatically."
+      },
+      {
+        "type": "code",
+        "value": "import math\n\ndef is_prime_optimized(n):\n    if n <= 1:\n        return False\n    for i in range(2, int(math.sqrt(n)) + 1):\n        if n % i == 0:\n            return False\n    return True\n\ndef sum_primes_optimized(limit):\n    total = 0\n    for num in range(limit):\n        if is_prime_optimized(num):\n            total += num\n    return total\n\nprint(sum_primes_optimized(10000))"
+      },
+      {
+        "type": "paragraph",
+        "value": "After rewriting your function, run the profiler again. You should see less time spent in the is_prime_optimized function. This process of profiling, identifying bottlenecks, and improving your code can be repeated until your code runs efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, premature optimization can waste time. Always profile first to find the real bottlenecks. Python's cProfile and pstats modules make this process easy and beginner-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding and optimizing!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-null-comparisons-in-sql-best-practices-for-edge-cases",
+    "title": "Handling NULL Comparisons in SQL: Best Practices for Edge Cases",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to properly handle NULL comparisons in SQL with beginner-friendly examples and best practices to avoid common mistakes and errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=Htp-N9V9T_g",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In SQL, NULL represents missing or unknown data. Unlike regular values, NULL is not equal to anything, not even another NULL. This can cause confusion when writing queries involving comparisons. Understanding how to handle NULL values properly is important to avoid unexpected results and errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common mistake is using the equals (=) operator to check for NULL values. For example, the query below might seem correct but will not return any rows if the column contains NULL values."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The problem is that in SQL, NULL is not equal to anything, including NULL itself. To check for NULL values, always use the IS NULL or IS NOT NULL operators."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, if you want to find rows where a column is not NULL, use IS NOT NULL."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you may want to treat NULL as a specific value during comparisons. You can use the COALESCE function to substitute NULL with a default value. For example, to treat NULL manager_id as 0:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE COALESCE(manager_id, 0) = 0;"
+      },
+      {
+        "type": "paragraph",
+        "value": "When using logical operators like AND, OR, or NOT with NULL values, remember that the result could be UNKNOWN (null) instead of TRUE or FALSE. This can affect query outcomes. To avoid confusion, always explicitly check for NULLs to control query logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, SQL provides the <=> operator (in some databases like MySQL) for NULL-safe equality comparisons. It returns TRUE if both values are NULL. But this operator is not standard SQL, so use it only if your database supports it."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id <=> NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, avoid using '=' with NULL, use IS NULL/IS NOT NULL instead, consider COALESCE for substitutions, and understand that NULL affects logical operations differently. Mastering these will help you handle edge cases in SQL and write more reliable queries."
+      }
+    ]
   }
 ];
