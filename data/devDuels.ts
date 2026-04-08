@@ -6159,5 +6159,181 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-memory-leak-and-logic-bugs-in-advanced-custom-smart-pointer-implementation",
+    "title": "Fix Memory Leak and Logic Bugs in Advanced Custom Smart Pointer Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are given a custom smart pointer class in C++ designed to manage dynamic memory with reference counting. The implementation contains subtle memory leaks and logic bugs causing incorrect reference counting and dangling pointers. Your task is to identify and fix these bugs to ensure safe and correct memory management.",
+    "prompt": "The provided CustomSmartPointer class aims to replicate basic shared pointer functionality using reference counting. However, it currently leaks memory, mishandles copy and assignment, and may cause double deletes or use-after-frees. Your challenge is to spot all logical errors and fix them so that the pointer properly manages dynamic memory without leaks or crashes. The class interface should remain unchanged and support copy construction, assignment, and destruction correctly.",
+    "guidance": [
+      "Review the reference counting logic carefully, especially in copy constructor and assignment operator.",
+      "Check that resources are freed exactly once when the last owner releases them.",
+      "Ensure all pointer updates and reference count increments/decrements happen safely and in the right order."
+    ],
+    "hints": [
+      "The assignment operator should handle self-assignment safely and decrement the old pointer's ref count correctly.",
+      "The destructor must only delete the managed object if no other references remain.",
+      "Consider edge cases like assigning the smart pointer to itself or resetting pointers to nullptr."
+    ],
+    "starterCode": "template<typename T>\nclass CustomSmartPointer {\nprivate:\n    T* ptr;\n    int* refCount;\npublic:\n    CustomSmartPointer(T* p = nullptr) : ptr(p), refCount(new int(1)) {}\n\n    CustomSmartPointer(const CustomSmartPointer& other) {\n        ptr = other.ptr;\n        refCount = other.refCount;\n        (*refCount)++;\n    }\n\n    CustomSmartPointer& operator=(const CustomSmartPointer& other) {\n        if (this != &other) {\n            ptr = other.ptr;\n            refCount = other.refCount;\n            (*refCount)++;\n        }\n        return *this;\n    }\n\n    ~CustomSmartPointer() {\n        (*refCount)--;\n        if (*refCount == 0) {\n            delete ptr;\n            delete refCount;\n        }\n    }\n\n    T& operator*() { return *ptr; }\n    T* operator->() { return ptr; }\n};",
+    "expectedOutput": "All dynamically allocated objects are properly deleted without memory leaks or crashes during sample usage and testing.",
+    "concepts": [
+      "C++ pointers",
+      "reference counting",
+      "copy constructor",
+      "assignment operator",
+      "memory management"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "basic-bank-account-manager",
+    "title": "Basic Bank Account Manager",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a simple bank account manager that allows deposits, withdrawals, and balance checks using functions and conditionals.",
+    "prompt": "Write a program in C++ to simulate a basic bank account. Create a structure or class to represent the account, containing the account owner's name and current balance. Implement the following functions: deposit funds, withdraw funds, and check balance. Withdrawals should only be allowed if there are sufficient funds. After implementing these, demonstrate the functionality by creating an account, making a deposit, attempting a withdrawal, and displaying the final balance.",
+    "guidance": [
+      "Use a class or struct to group account information and related functions.",
+      "Use conditionals to check if the withdrawal amount does not exceed the balance.",
+      "Write small helper functions for deposit, withdrawal, and balance display."
+    ],
+    "hints": [
+      "Remember to update the balance after a successful deposit or withdrawal.",
+      "Use 'if' statements to prevent overdrawing the account balance.",
+      "Keep the account owner's name as a member variable to personalize the output."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nstruct BankAccount {\n    string owner;\n    double balance;\n\n    // Implement deposit, withdrawal, and getBalance functions\n};\n\nint main() {\n    BankAccount myAccount; \n    myAccount.owner = \"Alice\";\n    myAccount.balance = 0.0;\n\n    // Your code to call functions and display results goes here\n\n    return 0;\n}",
+    "expectedOutput": "Account owner: Alice\nDeposited: 150\nWithdrawal: 100\nRemaining balance: 50",
+    "concepts": [
+      "structs/classes",
+      "functions",
+      "conditionals",
+      "basic I/O"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-simple-customer-orders-summary-view",
+    "title": "Create a Simple Customer Orders Summary View",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a SQL query to create a summary view that lists each customer alongside the total number of orders they have placed and the total amount spent.",
+    "prompt": "You have two tables: Customers and Orders. The Customers table contains customer_id, customer_name, and contact_info. The Orders table contains order_id, customer_id, order_date, and order_amount. Write a SQL query to create a view called CustomerOrderSummary that displays customer_id, customer_name, total_orders (count of orders), and total_spent (sum of order_amount) for each customer. Include customers even if they have placed zero orders (show total_orders as 0 and total_spent as 0 in such cases).",
+    "guidance": [
+      "Use a LEFT JOIN from Customers to Orders to include all customers.",
+      "Use aggregate functions COUNT and SUM to calculate total orders and spending.",
+      "Use COALESCE to handle NULL values for customers with no orders.",
+      "Group by customer_id and customer_name to aggregate data correctly."
+    ],
+    "hints": [
+      "Remember that COUNT(column) does not count NULL values, but COUNT(*) counts rows.",
+      "COALESCE(expression, 0) can replace NULL with 0 in your SELECT statement.",
+      "LEFT JOIN ensures all customers are included regardless of orders."
+    ],
+    "starterCode": "CREATE VIEW CustomerOrderSummary AS\nSELECT\n  c.customer_id,\n  c.customer_name,\n  COUNT(o.order_id) AS total_orders,\n  SUM(o.order_amount) AS total_spent\nFROM Customers c\nLEFT JOIN Orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_id, c.customer_name;",
+    "expectedOutput": "A view named CustomerOrderSummary with columns: customer_id, customer_name, total_orders, total_spent where each row corresponds to a unique customer and aggregates their order count and total spending, showing zeroes if no orders exist.",
+    "concepts": [
+      "LEFT JOIN",
+      "AGGREGATE FUNCTIONS",
+      "GROUP BY",
+      "COALESCE"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-for-sales-data-aggregation-to-improve-performance",
+    "title": "Refactor SQL Query for Sales Data Aggregation to Improve Performance",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Optimize a given SQL query that aggregates sales data by product category and month, making it cleaner and more efficient while preserving its functionality.",
+    "prompt": "You are provided with a SQL query that calculates total sales and average sales per month for each product category. The query currently uses multiple subqueries and redundant joins which degrade performance and readability. Refactor the query to use cleaner joins, reduce unnecessary subqueries, and improve its efficiency. Ensure the final output contains the product category, month (as YYYY-MM), total sales, and average monthly sales.",
+    "guidance": [
+      "Analyze the query to identify redundant or repeated calculations and subqueries.",
+      "Consider using common table expressions (CTEs) or derived tables to simplify the query logic.",
+      "Ensure that groupings and joins are done efficiently to avoid scanning the same tables multiple times."
+    ],
+    "hints": [
+      "Try consolidating all sales aggregations in a single aggregation step before joining with categories.",
+      "Use DATE_FORMAT or similar functions carefully to avoid interfering with index usage if applicable.",
+      "Check if the join conditions can be simplified or replaced with inner joins that provide the same result."
+    ],
+    "starterCode": "SELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  (SELECT SUM(amount) FROM sales WHERE product_id IN (SELECT product_id FROM products WHERE category_id = c.category_id) AND DATE_FORMAT(sale_date, '%Y-%m') = DATE_FORMAT(s.sale_date, '%Y-%m')) AS total_sales,\n  (SELECT AVG(monthly_sales) FROM (\n    SELECT DATE_FORMAT(sale_date, '%Y-%m') AS month, SUM(amount) AS monthly_sales\n    FROM sales\n    WHERE product_id IN (SELECT product_id FROM products WHERE category_id = c.category_id)\n    GROUP BY month\n  ) AS monthly_data) AS avg_sales\nFROM categories c\nJOIN sales s ON s.product_id IN (SELECT product_id FROM products WHERE category_id = c.category_id)\nGROUP BY c.category_name, sale_month;",
+    "expectedOutput": "category_name | sale_month | total_sales | avg_sales\n--------------|------------|-------------|----------\nElectronics   | 2024-01    | 120000      | 10000\nElectronics   | 2024-02    | 80000       | 10000\nBooks        | 2024-01    | 50000       | 8333\nBooks        | 2024-02    | 10000       | 8333",
+    "concepts": [
+      "SQL joins",
+      "Aggregation functions",
+      "Subquery optimization",
+      "Common Table Expressions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-text-summarizer-using-tf-idf-and-cosine-similarity",
+    "title": "Advanced Text Summarizer Using TF-IDF and Cosine Similarity",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a Python function that performs extractive text summarization by selecting the most important sentences based on TF-IDF vectors and sentence similarity measures.",
+    "prompt": "Create a function called 'extractive_summarizer' that takes a long-form text as input and returns a concise summary consisting of the top N most important sentences. The importance of sentences should be determined using TF-IDF vectorization and ranked by their centrality measured via cosine similarity between sentences. Your summarizer should preprocess the text by tokenizing sentences and words, computing TF-IDF weights for each word in sentences, building a similarity matrix, and finally selecting the most central sentences for the summary in their original order.",
+    "guidance": [
+      "Preprocess the text into sentences and tokenize each sentence into words (consider removing stopwords and applying basic normalization).",
+      "Use TF-IDF vectorization to represent sentences as vectors.",
+      "Build a similarity matrix (using cosine similarity) where each element represents similarity between two sentences.",
+      "Rank sentences based on their importance derived from the similarity matrix and return the top N sentences in their original order."
+    ],
+    "hints": [
+      "Use libraries such as NLTK or spaCy for sentence and word tokenization and stopword removal.",
+      "Leverage scikit-learn's TfidfVectorizer for TF-IDF calculations.",
+      "Consider using PageRank or a simple weighted sum approach on the similarity matrix to score sentences."
+    ],
+    "starterCode": "from sklearn.feature_extraction.text import TfidfVectorizer\nfrom sklearn.metrics.pairwise import cosine_similarity\nimport nltk\n\nnltk.download('punkt')\nnltk.download('stopwords')\nfrom nltk.tokenize import sent_tokenize, word_tokenize\nfrom nltk.corpus import stopwords\n\n\ndef extractive_summarizer(text, top_n=3):\n    # Tokenize text into sentences\n    sentences = sent_tokenize(text)\n    \n    # Preprocessing steps (implement stopword removal, lowercasing, etc.) goes here\n    \n    # Calculate TF-IDF vectors for sentences\n    \n    # Build similarity matrix\n    \n    # Rank sentences by centrality\n    \n    # Return top_n sentences in original order\n    \n    return []",
+    "expectedOutput": "A list of the most important sentences (strings), representing a concise summary of the input text, preserving original sentence ordering.",
+    "concepts": [
+      "Text preprocessing",
+      "TF-IDF vectorization",
+      "Cosine similarity",
+      "Extractive summarization"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-calculating-the-sum-of-list-elements",
+    "title": "Fix the Bug in Calculating the Sum of List Elements",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Help correct the given Python function that is supposed to calculate the sum of all elements in a list but currently returns incorrect output due to a logic error.",
+    "prompt": "The function 'calculate_sum' is intended to iterate through a list of numbers and return their total sum. However, the provided code contains a bug that causes incorrect results. Identify and fix the bug so that the function returns the correct sum of all elements in the list.",
+    "guidance": [
+      "Check how the sum is being updated inside the loop.",
+      "Ensure the initial sum variable is correctly defined and updated.",
+      "Test your fixed function with different numeric lists to confirm correctness."
+    ],
+    "hints": [
+      "Look carefully at whether the function uses '+=' to add each element or just '=' which might overwrite the sum.",
+      "Remember the sum should start at zero before adding any elements."
+    ],
+    "starterCode": "def calculate_sum(numbers):\n    total = 0\n    for num in numbers:\n        total = num\n    return total",
+    "expectedOutput": "calculate_sum([1, 2, 3, 4]) should return 10",
+    "concepts": [
+      "loops",
+      "variables",
+      "basic arithmetic",
+      "function definition"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];

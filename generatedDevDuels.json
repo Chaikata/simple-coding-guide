@@ -1,171 +1,176 @@
 [
   {
-    "slug": "advanced-event-scheduler-with-conflict-resolution-in-c",
-    "title": "Advanced Event Scheduler with Conflict Resolution in C++",
+    "slug": "fix-memory-leak-and-logic-bugs-in-advanced-custom-smart-pointer-implementation",
+    "title": "Fix Memory Leak and Logic Bugs in Advanced Custom Smart Pointer Implementation",
     "language": "cpp",
     "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build an advanced event scheduler that manages multiple events with time conflicts resolution. The scheduler must support adding, removing, updating events, and querying free time slots efficiently.",
-    "prompt": "Create an EventScheduler class in C++ that allows users to add, remove, and update events, each with a start and end time. When adding an event, the scheduler should detect and resolve any conflicts by automatically shifting or merging overlapping events to avoid clashes. Implement querying functionality to return available free time slots within a given time range. Optimize your implementation to handle large numbers of events efficiently.",
-    "guidance": [
-      "Design appropriate data structures (e.g., balanced trees or interval trees) for efficient overlap detection and event management.",
-      "Implement conflict resolution logic that can adjust event timings without removing events unnecessarily.",
-      "Provide methods for querying free time slots between events in a specified time frame."
-    ],
-    "hints": [
-      "Consider storing events sorted by start time for quick conflict detection.",
-      "Use interval tree or segment tree concepts to efficiently find conflicting events.",
-      "Merging events can be done by extending the end time of the earlier event if overlaps occur."
-    ],
-    "starterCode": "class Event {\npublic:\n    int start;\n    int end;\n    std::string description;\n\n    Event(int s, int e, std::string desc) : start(s), end(e), description(desc) {}\n};\n\nclass EventScheduler {\nprivate:\n    std::vector<Event> events;\npublic:\n    bool addEvent(int start, int end, std::string description);\n    bool removeEvent(int start, int end);\n    bool updateEvent(int oldStart, int oldEnd, int newStart, int newEnd, std::string newDescription);\n    std::vector<std::pair<int, int>> queryFreeSlots(int startRange, int endRange);\n    // Implement additional helper methods as needed\n};",
-    "expectedOutput": "After adding multiple events, the scheduler should manage overlapping events by merging or shifting them per the defined logic. Querying free slots between 9:00 and 17:00 may output intervals like [(9,10), (12,13), (15,17)] representing available time blocks.",
-    "concepts": [
-      "interval trees",
-      "conflict resolution",
-      "data structures",
-      "algorithm optimization"
-    ],
-    "estimatedTime": "45 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-sql-query-for-retrieving-active-users",
-    "title": "Refactor SQL Query for Retrieving Active Users",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "optimization",
-    "description": "Optimize and refactor a simple SQL query to improve readability and performance while maintaining the same output.",
-    "prompt": "You are given a SQL query that retrieves all users marked as active from a users table. The original query works correctly but is written in a way that can be simplified and made more efficient. Refactor the query to write it more cleanly and optimize the filtering condition. Ensure your refactored query returns the same list of active users with their id, name, and email.",
-    "guidance": [
-      "Focus on simplifying the WHERE clause and removing any unnecessary conditions.",
-      "Use clear and straightforward syntax for filtering active users.",
-      "Keep the selected columns and table name unchanged for consistency."
-    ],
-    "hints": [
-      "Check if the WHERE clause conditions are redundant or overly complex.",
-      "Consider if any JOINs or subqueries are unnecessary or can be removed."
-    ],
-    "starterCode": "SELECT id, name, email FROM users WHERE active = 'true' AND active IS NOT NULL;",
-    "expectedOutput": "A list of user IDs, names, and emails who are active (active = true).",
-    "concepts": [
-      "SQL SELECT",
-      "WHERE clause filtering",
-      "Query simplification"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "fix-the-bug-in-user-age-filter-function",
-    "title": "Fix the Bug in User Age Filter Function",
-    "language": "javascript",
-    "difficulty": "intermediate",
     "category": "debugging",
-    "description": "The provided JavaScript function is intended to filter an array of user objects to return only those aged 18 or older. However, it contains bugs that prevent it from working correctly. Identify and fix the bugs so that the function behaves as expected.",
-    "prompt": "You have a function named filterAdults which takes an array of user objects, each with a name and age property. The function should return a new array containing only users who are 18 years old or older. Currently, the function does not return the correct result. Fix the bugs so the function properly filters the users by age.",
+    "description": "You are given a custom smart pointer class in C++ designed to manage dynamic memory with reference counting. The implementation contains subtle memory leaks and logic bugs causing incorrect reference counting and dangling pointers. Your task is to identify and fix these bugs to ensure safe and correct memory management.",
+    "prompt": "The provided CustomSmartPointer class aims to replicate basic shared pointer functionality using reference counting. However, it currently leaks memory, mishandles copy and assignment, and may cause double deletes or use-after-frees. Your challenge is to spot all logical errors and fix them so that the pointer properly manages dynamic memory without leaks or crashes. The class interface should remain unchanged and support copy construction, assignment, and destruction correctly.",
     "guidance": [
-      "Examine the function's syntax and logic carefully.",
-      "Check how the filter method is used and what is returned inside its callback."
+      "Review the reference counting logic carefully, especially in copy constructor and assignment operator.",
+      "Check that resources are freed exactly once when the last owner releases them.",
+      "Ensure all pointer updates and reference count increments/decrements happen safely and in the right order."
     ],
     "hints": [
-      "Ensure that the filter callback returns a boolean value.",
-      "Check if you are comparing the user's age correctly."
+      "The assignment operator should handle self-assignment safely and decrement the old pointer's ref count correctly.",
+      "The destructor must only delete the managed object if no other references remain.",
+      "Consider edge cases like assigning the smart pointer to itself or resetting pointers to nullptr."
     ],
-    "starterCode": "function filterAdults(users) {\n  return users.filter(user => {\n    if (user.age > 18) {\n      user\n    }\n  });\n}",
-    "expectedOutput": "[{ name: 'Alice', age: 22 }, { name: 'Charlie', age: 19 }]",
+    "starterCode": "template<typename T>\nclass CustomSmartPointer {\nprivate:\n    T* ptr;\n    int* refCount;\npublic:\n    CustomSmartPointer(T* p = nullptr) : ptr(p), refCount(new int(1)) {}\n\n    CustomSmartPointer(const CustomSmartPointer& other) {\n        ptr = other.ptr;\n        refCount = other.refCount;\n        (*refCount)++;\n    }\n\n    CustomSmartPointer& operator=(const CustomSmartPointer& other) {\n        if (this != &other) {\n            ptr = other.ptr;\n            refCount = other.refCount;\n            (*refCount)++;\n        }\n        return *this;\n    }\n\n    ~CustomSmartPointer() {\n        (*refCount)--;\n        if (*refCount == 0) {\n            delete ptr;\n            delete refCount;\n        }\n    }\n\n    T& operator*() { return *ptr; }\n    T* operator->() { return ptr; }\n};",
+    "expectedOutput": "All dynamically allocated objects are properly deleted without memory leaks or crashes during sample usage and testing.",
     "concepts": [
-      "array filtering",
-      "callback functions",
-      "return statement",
-      "comparison operators"
+      "C++ pointers",
+      "reference counting",
+      "copy constructor",
+      "assignment operator",
+      "memory management"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "basic-bank-account-manager",
+    "title": "Basic Bank Account Manager",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a simple bank account manager that allows deposits, withdrawals, and balance checks using functions and conditionals.",
+    "prompt": "Write a program in C++ to simulate a basic bank account. Create a structure or class to represent the account, containing the account owner's name and current balance. Implement the following functions: deposit funds, withdraw funds, and check balance. Withdrawals should only be allowed if there are sufficient funds. After implementing these, demonstrate the functionality by creating an account, making a deposit, attempting a withdrawal, and displaying the final balance.",
+    "guidance": [
+      "Use a class or struct to group account information and related functions.",
+      "Use conditionals to check if the withdrawal amount does not exceed the balance.",
+      "Write small helper functions for deposit, withdrawal, and balance display."
+    ],
+    "hints": [
+      "Remember to update the balance after a successful deposit or withdrawal.",
+      "Use 'if' statements to prevent overdrawing the account balance.",
+      "Keep the account owner's name as a member variable to personalize the output."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nstruct BankAccount {\n    string owner;\n    double balance;\n\n    // Implement deposit, withdrawal, and getBalance functions\n};\n\nint main() {\n    BankAccount myAccount; \n    myAccount.owner = \"Alice\";\n    myAccount.balance = 0.0;\n\n    // Your code to call functions and display results goes here\n\n    return 0;\n}",
+    "expectedOutput": "Account owner: Alice\nDeposited: 150\nWithdrawal: 100\nRemaining balance: 50",
+    "concepts": [
+      "structs/classes",
+      "functions",
+      "conditionals",
+      "basic I/O"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "advanced-expense-tracker-cli-with-data-persistence-and-reporting",
-    "title": "Advanced Expense Tracker CLI with Data Persistence and Reporting",
+    "slug": "create-a-simple-customer-orders-summary-view",
+    "title": "Create a Simple Customer Orders Summary View",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a SQL query to create a summary view that lists each customer alongside the total number of orders they have placed and the total amount spent.",
+    "prompt": "You have two tables: Customers and Orders. The Customers table contains customer_id, customer_name, and contact_info. The Orders table contains order_id, customer_id, order_date, and order_amount. Write a SQL query to create a view called CustomerOrderSummary that displays customer_id, customer_name, total_orders (count of orders), and total_spent (sum of order_amount) for each customer. Include customers even if they have placed zero orders (show total_orders as 0 and total_spent as 0 in such cases).",
+    "guidance": [
+      "Use a LEFT JOIN from Customers to Orders to include all customers.",
+      "Use aggregate functions COUNT and SUM to calculate total orders and spending.",
+      "Use COALESCE to handle NULL values for customers with no orders.",
+      "Group by customer_id and customer_name to aggregate data correctly."
+    ],
+    "hints": [
+      "Remember that COUNT(column) does not count NULL values, but COUNT(*) counts rows.",
+      "COALESCE(expression, 0) can replace NULL with 0 in your SELECT statement.",
+      "LEFT JOIN ensures all customers are included regardless of orders."
+    ],
+    "starterCode": "CREATE VIEW CustomerOrderSummary AS\nSELECT\n  c.customer_id,\n  c.customer_name,\n  COUNT(o.order_id) AS total_orders,\n  SUM(o.order_amount) AS total_spent\nFROM Customers c\nLEFT JOIN Orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_id, c.customer_name;",
+    "expectedOutput": "A view named CustomerOrderSummary with columns: customer_id, customer_name, total_orders, total_spent where each row corresponds to a unique customer and aggregates their order count and total spending, showing zeroes if no orders exist.",
+    "concepts": [
+      "LEFT JOIN",
+      "AGGREGATE FUNCTIONS",
+      "GROUP BY",
+      "COALESCE"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-for-sales-data-aggregation-to-improve-performance",
+    "title": "Refactor SQL Query for Sales Data Aggregation to Improve Performance",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Optimize a given SQL query that aggregates sales data by product category and month, making it cleaner and more efficient while preserving its functionality.",
+    "prompt": "You are provided with a SQL query that calculates total sales and average sales per month for each product category. The query currently uses multiple subqueries and redundant joins which degrade performance and readability. Refactor the query to use cleaner joins, reduce unnecessary subqueries, and improve its efficiency. Ensure the final output contains the product category, month (as YYYY-MM), total sales, and average monthly sales.",
+    "guidance": [
+      "Analyze the query to identify redundant or repeated calculations and subqueries.",
+      "Consider using common table expressions (CTEs) or derived tables to simplify the query logic.",
+      "Ensure that groupings and joins are done efficiently to avoid scanning the same tables multiple times."
+    ],
+    "hints": [
+      "Try consolidating all sales aggregations in a single aggregation step before joining with categories.",
+      "Use DATE_FORMAT or similar functions carefully to avoid interfering with index usage if applicable.",
+      "Check if the join conditions can be simplified or replaced with inner joins that provide the same result."
+    ],
+    "starterCode": "SELECT\n  c.category_name,\n  DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n  (SELECT SUM(amount) FROM sales WHERE product_id IN (SELECT product_id FROM products WHERE category_id = c.category_id) AND DATE_FORMAT(sale_date, '%Y-%m') = DATE_FORMAT(s.sale_date, '%Y-%m')) AS total_sales,\n  (SELECT AVG(monthly_sales) FROM (\n    SELECT DATE_FORMAT(sale_date, '%Y-%m') AS month, SUM(amount) AS monthly_sales\n    FROM sales\n    WHERE product_id IN (SELECT product_id FROM products WHERE category_id = c.category_id)\n    GROUP BY month\n  ) AS monthly_data) AS avg_sales\nFROM categories c\nJOIN sales s ON s.product_id IN (SELECT product_id FROM products WHERE category_id = c.category_id)\nGROUP BY c.category_name, sale_month;",
+    "expectedOutput": "category_name | sale_month | total_sales | avg_sales\n--------------|------------|-------------|----------\nElectronics   | 2024-01    | 120000      | 10000\nElectronics   | 2024-02    | 80000       | 10000\nBooks        | 2024-01    | 50000       | 8333\nBooks        | 2024-02    | 10000       | 8333",
+    "concepts": [
+      "SQL joins",
+      "Aggregation functions",
+      "Subquery optimization",
+      "Common Table Expressions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-text-summarizer-using-tf-idf-and-cosine-similarity",
+    "title": "Advanced Text Summarizer Using TF-IDF and Cosine Similarity",
     "language": "python",
     "difficulty": "advanced",
     "category": "mini-projects",
-    "description": "Build a command-line Python application that allows users to add, update, delete, and categorize expenses. Implement data persistence using JSON files and generate summary reports on spending by category and date range.",
-    "prompt": "Create an advanced command-line expense tracker application with the following features:\n\n1. Add expenses with fields: description, amount, category (e.g., Food, Transport, Utilities), and date.\n2. Update and delete existing expense entries.\n3. Persist all data in a JSON file to retain data between runs.\n4. List all expenses with optional filters by category and date range.\n5. Generate summary reports showing total amount spent per category and total spending within a user-specified date range.\n6. Implement error handling for invalid inputs and file operations.\n\nYour solution should be modular and designed with extensibility in mind for future features.",
+    "description": "Build a Python function that performs extractive text summarization by selecting the most important sentences based on TF-IDF vectors and sentence similarity measures.",
+    "prompt": "Create a function called 'extractive_summarizer' that takes a long-form text as input and returns a concise summary consisting of the top N most important sentences. The importance of sentences should be determined using TF-IDF vectorization and ranked by their centrality measured via cosine similarity between sentences. Your summarizer should preprocess the text by tokenizing sentences and words, computing TF-IDF weights for each word in sentences, building a similarity matrix, and finally selecting the most central sentences for the summary in their original order.",
     "guidance": [
-      "Define clear data models for expense entries and structure the JSON file accordingly.",
-      "Create separate functions for CRUD operations and reporting logic.",
-      "Use Python's datetime module for handling dates and filtering by ranges.",
-      "Ensure that the program reads the existing data on start and writes updates back safely after each change."
+      "Preprocess the text into sentences and tokenize each sentence into words (consider removing stopwords and applying basic normalization).",
+      "Use TF-IDF vectorization to represent sentences as vectors.",
+      "Build a similarity matrix (using cosine similarity) where each element represents similarity between two sentences.",
+      "Rank sentences based on their importance derived from the similarity matrix and return the top N sentences in their original order."
     ],
     "hints": [
-      "Structure your JSON file as a list of expense dictionaries, each containing keys like 'description', 'amount', 'category', and 'date'.",
-      "Use try-except blocks to handle file read/write errors and validate user inputs.",
-      "For date filtering, parse user input into datetime objects and compare expense dates accordingly."
+      "Use libraries such as NLTK or spaCy for sentence and word tokenization and stopword removal.",
+      "Leverage scikit-learn's TfidfVectorizer for TF-IDF calculations.",
+      "Consider using PageRank or a simple weighted sum approach on the similarity matrix to score sentences."
     ],
-    "starterCode": "import json\nfrom datetime import datetime\n\nDATA_FILE = 'expenses.json'\n\n# Load expenses from file\ntry:\n    with open(DATA_FILE, 'r') as f:\n        expenses = json.load(f)\nexcept (FileNotFoundError, json.JSONDecodeError):\n    expenses = []\n\n# Define functions for add_expense, update_expense, delete_expense, list_expenses, generate_report\n\ndef main():\n    print('Welcome to Advanced Expense Tracker')\n    # TODO: Implement CLI interaction\n\nif __name__ == '__main__':\n    main()",
-    "expectedOutput": "A CLI where users can add, update, delete, and list expenses, and generate spending reports. For example, when listing expenses filtered by category 'Food' and date range '2023-01-01' to '2023-01-31', the output shows expenses matching those criteria and a summary total.\n\nSample summary report output:\nTotal spend by category:\n- Food: $150.00\n- Transport: $70.00\n- Utilities: $90.00\n\nTotal spend from 2023-01-01 to 2023-01-31: $310.00",
+    "starterCode": "from sklearn.feature_extraction.text import TfidfVectorizer\nfrom sklearn.metrics.pairwise import cosine_similarity\nimport nltk\n\nnltk.download('punkt')\nnltk.download('stopwords')\nfrom nltk.tokenize import sent_tokenize, word_tokenize\nfrom nltk.corpus import stopwords\n\n\ndef extractive_summarizer(text, top_n=3):\n    # Tokenize text into sentences\n    sentences = sent_tokenize(text)\n    \n    # Preprocessing steps (implement stopword removal, lowercasing, etc.) goes here\n    \n    # Calculate TF-IDF vectors for sentences\n    \n    # Build similarity matrix\n    \n    # Rank sentences by centrality\n    \n    # Return top_n sentences in original order\n    \n    return []",
+    "expectedOutput": "A list of the most important sentences (strings), representing a concise summary of the input text, preserving original sentence ordering.",
     "concepts": [
-      "file handling",
-      "data persistence",
-      "datetime manipulation",
-      "command line interface",
-      "data filtering and aggregation"
+      "Text preprocessing",
+      "TF-IDF vectorization",
+      "Cosine similarity",
+      "Extractive summarization"
     ],
     "estimatedTime": "60 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "refactor-a-sql-query-to-improve-readability-and-efficiency",
-    "title": "Refactor a SQL Query to Improve Readability and Efficiency",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "optimization",
-    "description": "You are given a simple SQL query written with redundant expressions and unnecessary complexity. Refactor the query to improve its readability and optimize performance while keeping the same output.",
-    "prompt": "The following SQL query retrieves all records from the 'employees' table where the employee's department is 'Sales' and the salary is greater than 50000. It also calculates a 10% bonus for each employee. Refactor this query to eliminate redundant conditions and improve clarity without changing the result.\n\nOriginal query:\n\nSELECT * FROM employees WHERE department = 'Sales' AND department = 'Sales' AND salary > 50000 AND salary > 50000;\n\nSELECT employee_id, name, salary, salary * 0.10 AS bonus FROM employees WHERE department = 'Sales' AND salary > 50000;",
-    "guidance": [
-      "Remove duplicate conditions in the WHERE clause to simplify the query.",
-      "Separate the selection of all fields and the calculation of bonus into a single clear SELECT statement.",
-      "Use meaningful column aliases to clarify the data you are retrieving."
-    ],
-    "hints": [
-      "Check for repeated conditions in the WHERE clause and remove duplicates.",
-      "Combine the two SELECT statements into one that retrieves only relevant columns along with the calculated bonus.",
-      "Use aliasing to clearly label the calculated bonus column."
-    ],
-    "starterCode": "SELECT * FROM employees WHERE department = 'Sales' AND department = 'Sales' AND salary > 50000 AND salary > 50000;\n\nSELECT employee_id, name, salary, salary * 0.10 AS bonus FROM employees WHERE department = 'Sales' AND salary > 50000;",
-    "expectedOutput": "A query returning employee_id, name, salary, and a bonus column for all employees in 'Sales' with salary > 50000, with no redundant conditions.",
-    "concepts": [
-      "SQL SELECT statement",
-      "WHERE clause optimization",
-      "Column aliasing"
-    ],
-    "estimatedTime": "10 minutes",
     "isFeatured": true
   },
   {
-    "slug": "refactor-a-complex-data-transformation-function-in-javascript",
-    "title": "Refactor a Complex Data Transformation Function in JavaScript",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "code-quality",
-    "description": "Improve the readability and maintainability of a complex JavaScript function that processes and transforms an array of user objects, ensuring the behavior remains identical.",
-    "prompt": "You are given a JavaScript function that takes an array of user objects and performs multiple transformations including filtering, mapping, and sorting. The current implementation is correct but hard to read and maintain due to nested loops, repeated code, and unclear variable names. Refactor this function to improve its clarity, modularity, and efficiency without changing its output or behavior.",
+    "slug": "fix-the-bug-in-calculating-the-sum-of-list-elements",
+    "title": "Fix the Bug in Calculating the Sum of List Elements",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "Help correct the given Python function that is supposed to calculate the sum of all elements in a list but currently returns incorrect output due to a logic error.",
+    "prompt": "The function 'calculate_sum' is intended to iterate through a list of numbers and return their total sum. However, the provided code contains a bug that causes incorrect results. Identify and fix the bug so that the function returns the correct sum of all elements in the list.",
     "guidance": [
-      "Break down the function into smaller helper functions with meaningful names.",
-      "Use array helper methods like filter, map, and sort in a clear and consistent way.",
-      "Avoid duplicated code and magic numbers; use named constants where applicable."
+      "Check how the sum is being updated inside the loop.",
+      "Ensure the initial sum variable is correctly defined and updated.",
+      "Test your fixed function with different numeric lists to confirm correctness."
     ],
     "hints": [
-      "Consider descriptive variable names that reflect the data they hold.",
-      "Extract filtering and mapping steps into separate functions.",
-      "Test the output after refactoring to ensure it remains unchanged."
+      "Look carefully at whether the function uses '+=' to add each element or just '=' which might overwrite the sum.",
+      "Remember the sum should start at zero before adding any elements."
     ],
-    "starterCode": "function processUsers(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i].age > 18) {\n      let score = users[i].points * 2;\n      if (users[i].active) {\n        score += 10;\n      }\n      result.push({\n        id: users[i].id,\n        name: users[i].name.toUpperCase(),\n        score: score\n      });\n    }\n  }\n  for (let j = 0; j < result.length - 1; j++) {\n    for (let k = 0; k < result.length - j - 1; k++) {\n      if (result[k].score < result[k + 1].score) {\n        let temp = result[k];\n        result[k] = result[k + 1];\n        result[k + 1] = temp;\n      }\n    }\n  }\n  return result;\n}",
-    "expectedOutput": "[\n  { id: 5, name: 'ALICE', score: 54 },\n  { id: 1, name: 'BOB', score: 50 },\n  { id: 3, name: 'JANE', score: 46 },\n  { id: 4, name: 'MIKE', score: 36 }\n]",
+    "starterCode": "def calculate_sum(numbers):\n    total = 0\n    for num in numbers:\n        total = num\n    return total",
+    "expectedOutput": "calculate_sum([1, 2, 3, 4]) should return 10",
     "concepts": [
-      "array methods",
-      "refactoring",
-      "code readability",
-      "modularization"
+      "loops",
+      "variables",
+      "basic arithmetic",
+      "function definition"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
