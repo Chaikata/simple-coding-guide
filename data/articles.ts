@@ -47107,5 +47107,373 @@ export const articles = [
         "value": "By following these basic principles, you can build a scalable, maintainable multi-tenant database in SQL that keeps tenant data isolated and queries performant. Start with tenant-aware table design, enforce tenant filters in your queries, and optimize with proper indexing."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-proxy-for-dynamic-error-handling-and-debugging",
+    "title": "Mastering JavaScript Proxy for Dynamic Error Handling and Debugging",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use JavaScript Proxy to enhance error handling and debugging dynamically, making your code more robust and easier to maintain.",
+    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript's Proxy object is a powerful feature that allows you to intercept and customize operations performed on objects. This makes it an excellent tool for dynamic error handling and debugging. In this beginner-friendly guide, we'll explore how you can use Proxy to catch errors and log useful debugging information without cluttering your core logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy wraps around a target object and intercepts fundamental operations like property access, assignment, and more. You can define traps (methods) to customize these behaviors. Let's start with a simple example demonstrating how Proxy can catch errors when accessing undefined properties."
+      },
+      {
+        "type": "code",
+        "value": "const target = {};\n\nconst handler = {\n  get(obj, prop) {\n    if (!(prop in obj)) {\n      console.error(`Property \"${prop}\" does not exist.`);\n      return undefined;\n    }\n    return obj[prop];\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nconsole.log(proxy.name); // Logs error and returns undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, whenever you try to access a property that doesn't exist on the target object, the handler logs an error instead of silently returning `undefined`. This makes debugging easier since you immediately see what went wrong."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use Proxy to trap method calls and add error handling dynamically. Here's an example where we intercept method calls on an object and handle errors gracefully."
+      },
+      {
+        "type": "code",
+        "value": "const mathOperations = {\n  divide(a, b) {\n    return a / b;\n  }\n};\n\nconst handler = {\n  get(target, prop) {\n    const value = target[prop];\n    if (typeof value === 'function') {\n      return function(...args) {\n        try {\n          if (prop === 'divide' && args[1] === 0) {\n            throw new Error('Cannot divide by zero');\n          }\n          return value.apply(this, args);\n        } catch (error) {\n          console.error(`Error in method \"${prop}\":`, error.message);\n          return null;\n        }\n      };\n    }\n    return value;\n  }\n};\n\nconst proxyMath = new Proxy(mathOperations, handler);\n\nconsole.log(proxyMath.divide(10, 2)); // 5\nconsole.log(proxyMath.divide(10, 0)); // Logs error and returns null"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern enhances your function by adding error checks and logging without modifying the original object's methods. It’s especially useful when you need centralized error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Additionally, Proxies can be used to monitor any property changes, allowing you to catch unintended mutations or invalid data assignments."
+      },
+      {
+        "type": "code",
+        "value": "const user = {\n  name: 'Alice',\n  age: 25\n};\n\nconst handler = {\n  set(obj, prop, value) {\n    if (prop === 'age' && (typeof value !== 'number' || value < 0)) {\n      console.error('Invalid age value:', value);\n      return false; // Prevent assignment\n    }\n    obj[prop] = value;\n    console.log(`Property \"${prop}\" set to ${value}`);\n    return true;\n  }\n};\n\nconst proxyUser = new Proxy(user, handler);\n\nproxyUser.age = 30; // Logs property set\nproxyUser.age = -5; // Logs invalid age error\nproxyUser.name = 'Bob'; // Logs property set"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this Proxy, you can validate changes and output helpful debug messages whenever properties are updated."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, JavaScript Proxy offers a flexible way to intercept object operations, making dynamic error handling and debugging easier and cleaner. As you become more comfortable with it, you'll find it invaluable for building robust, maintainable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with Proxy in your projects to catch issues early and keep your codebase easy to understand!"
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-advanced-typescript-types-for-robust-data-modeling",
+    "title": "Leveraging Advanced TypeScript Types for Robust Data Modeling",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use advanced TypeScript types like unions, intersections, and mapped types to create strong, reliable data models in your apps.",
+    "videoUrl": "https://www.youtube.com/watch?v=hHt3F5mL7Tc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is more than just JavaScript with types — it offers powerful tools to model your data accurately. Using advanced types can help you catch errors early and make your code easier to maintain. In this tutorial, we'll explore how to use union types, intersection types, and mapped types to build robust data models that reflect real-world scenarios."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with union types. Imagine you need to model a user status that can only be 'active', 'inactive', or 'pending'. Instead of using strings that can accept any value, a union type restricts it to just these options."
+      },
+      {
+        "type": "code",
+        "value": "type UserStatus = 'active' | 'inactive' | 'pending';\n\nfunction updateUserStatus(status: UserStatus) {\n  console.log(`User status updated to: ${status}`);\n}\n\nupdateUserStatus('active'); // ✅ valid\n// updateUserStatus('enabled'); // ❌ Error: Argument of type '\"enabled\"' is not assignable to parameter of type 'UserStatus'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Union types improve code safety by preventing invalid values. Now, let's explore intersection types, which combine multiple types into one. For example, if you want to create a type that combines basic user info with admin privileges, you can use intersections."
+      },
+      {
+        "type": "code",
+        "value": "type User = {\n  id: number;\n  name: string;\n};\n\ntype Admin = {\n  isAdmin: true;\n  permissions: string[];\n};\n\n// Intersection of User and Admin\n\ntype AdminUser = User & Admin;\n\nconst adminUser: AdminUser = {\n  id: 1,\n  name: 'Alice',\n  isAdmin: true,\n  permissions: ['read', 'write', 'delete'],\n};\n\nconsole.log(adminUser);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Intersection types are great for building precise models when an object needs to satisfy multiple roles or interfaces at once. Finally, let's look at mapped types, which allow you to create new types by transforming existing ones."
+      },
+      {
+        "type": "code",
+        "value": "type User = {\n  id: number;\n  name: string;\n  email?: string;\n};\n\n// Make all properties required\n\ntype RequiredUser = {\n  [K in keyof User]-?: User[K];\n};\n\nconst user: RequiredUser = {\n  id: 123,\n  name: 'Bob',\n  email: 'bob@example.com',\n};\n\nconsole.log(user);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the mapped type iterates over all keys of the User type and removes the optional modifier, making every property required. Mapped types are very useful for converting and creating flexible variations of your data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "To conclude, leveraging advanced TypeScript types like unions, intersections, and mapped types helps create strong, maintainable models that align with real application needs. These tools improve type safety, reduce bugs, and make your code clearer. Start using them today to build more robust TypeScript applications!"
+      }
+    ]
+  },
+  {
+    "slug": "building-your-first-python-web-scraper",
+    "title": "Building Your First Python Web Scraper: A Step-by-Step Tutorial for Beginners",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create your first Python web scraper with this easy-to-follow tutorial. Grab data from websites using Python's requests and BeautifulSoup libraries.",
+    "videoUrl": "https://www.youtube.com/watch?v=QhD015WUMxE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping is a powerful tool to extract information from websites automatically. In this tutorial, we will build a simple Python web scraper that fetches and parses data from a web page. No prior experience is needed!"
+      },
+      {
+        "type": "paragraph",
+        "value": "We will use two popular libraries: requests to get the webpage content, and BeautifulSoup to parse the HTML and extract the data. Let's get started!"
+      },
+      {
+        "type": "paragraph",
+        "value": "First, install the required libraries if you haven't already. You can do this using pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install requests beautifulsoup4"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, create a new Python file, for example, scraper.py. We'll import the libraries and download a webpage’s HTML."
+      },
+      {
+        "type": "code",
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# URL of the page to scrape\nurl = 'https://quotes.toscrape.com/'\n\n# Send a GET request to the website\nresponse = requests.get(url)\n\n# Check if the request was successful\nif response.status_code == 200:\n    print('Successfully fetched the page!')\nelse:\n    print('Failed to retrieve the page')"
+      },
+      {
+        "type": "paragraph",
+        "value": "If the page is retrieved successfully, we can proceed to parse the HTML using BeautifulSoup. Let's extract all the quotes on the page."
+      },
+      {
+        "type": "code",
+        "value": "soup = BeautifulSoup(response.text, 'html.parser')\n\n# Find all quote containers by their HTML tag and class\nquotes = soup.find_all('div', class_='quote')\n\n# Loop through each quote container and print the text and author\nfor quote in quotes:\n    text = quote.find('span', class_='text').get_text()\n    author = quote.find('small', class_='author').get_text()\n    print(f'\"{text}\" — {author}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run your script, you should see a list of quotes and their authors printed in your terminal. This simple example shows how you can start scraping data with just a few lines of code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to always check a website's terms of use and robots.txt file before scraping data, and avoid overloading the server with too many requests."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now that you have the basics, you can explore scraping more complex data, saving the results to files, or even scraping multiple pages. Happy scraping!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-errors-python-financial-applications",
+    "title": "Handling Floating Point Precision Errors in Python for Financial Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to manage floating point precision errors in Python to ensure accurate financial calculations, making your applications reliable and precise.",
+    "videoUrl": "https://www.youtube.com/watch?v=PLW2DDma6zI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with financial applications in Python, accurate calculations are crucial. However, floating point numbers can introduce small precision errors because of the way computers represent decimal numbers. These tiny inaccuracies can accumulate and cause problems in financial operations, such as calculating balances or interest."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, in Python, when you add or subtract decimals, you might see unexpected results:"
+      },
+      {
+        "type": "code",
+        "value": "print(0.1 + 0.2)  # Output: 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "This happens because floating point numbers are stored as binary fractions, and some decimal fractions can't be represented exactly in binary."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid these issues, there are two common and practical solutions for financial calculations in Python:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Using the `decimal` module for exact decimal arithmetic.\n2. Using integers to represent the smallest currency unit (like cents) instead of floating point numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore both methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Using the `decimal` module"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `decimal` module provides decimal floating point arithmetic with more precision and control over rounding. This is especially useful in finance where you need exact decimal representation."
+      },
+      {
+        "type": "code",
+        "value": "from decimal import Decimal, getcontext\n\n# Set precision if needed\ngetcontext().prec = 10\n\nprice = Decimal('0.1')\ntax = Decimal('0.2')\ntotal = price + tax\nprint(total)  # Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how we create `Decimal` objects using strings. This ensures the value is stored exactly as typed, avoiding floating point errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Using integers to represent cents"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another method is to store all monetary values as integers representing the smallest unit of currency (e.g., cents for dollars). This avoids decimals altogether and uses integer arithmetic, which is exact."
+      },
+      {
+        "type": "code",
+        "value": "price_cents = 10  # represents $0.10\n tax_cents = 20   # represents $0.20\n total_cents = price_cents + tax_cents\n print(f\"Total: ${total_cents / 100:.2f}\")  # Output: Total: $0.30"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach is very fast and precise but requires careful handling to ensure all values are correctly converted and displayed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "For financial applications, avoid using floating point numbers for money calculations directly. Use the `decimal` module for simplicity and correctness or use integer arithmetic for maximum performance and accuracy when dealing with small fixed units like cents."
+      },
+      {
+        "type": "paragraph",
+        "value": "By managing floating point precision properly, you can build reliable financial software that avoids common pitfalls and errors."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-sql-window-functions-row-number-vs-rank-vs-dense-rank",
+    "title": "Comparing SQL Window Functions: ROW_NUMBER vs RANK vs DENSE_RANK Explained",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the differences between SQL window functions ROW_NUMBER, RANK, and DENSE_RANK with easy-to-understand examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools for performing calculations across a set of table rows related to the current row. Among these, ROW_NUMBER, RANK, and DENSE_RANK are commonly used to assign ranks or numbering within partitions of data. Understanding their differences is important for producing the desired result in your queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down each function with simple explanations and examples to help you decide which one to use."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. ROW_NUMBER() - This function assigns a unique sequential integer to rows within a partition, starting at 1. Even if there are ties in the ordering column, ROW_NUMBER will give a different number to each row."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  EmployeeID,\n  Department,\n  Salary,\n  ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Salary DESC) AS RowNum\nFROM Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, ROW_NUMBER numbers employees by salary within each department. Employees with the same salary will have unique row numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. RANK() - This function assigns a rank to each row within the partition ordered by the specified column. Rows with the same value receive the same rank, but ranks can skip numbers after ties."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  EmployeeID,\n  Department,\n  Salary,\n  RANK() OVER (PARTITION BY Department ORDER BY Salary DESC) AS Rank\nFROM Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, employees with the same salary share the same rank. However, if two employees tie at rank 1, the next rank will be 3, skipping rank 2."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. DENSE_RANK() - Similar to RANK(), but it does not skip ranks after ties. If two employees share rank 1, the next rank will be 2."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  EmployeeID,\n  Department,\n  Salary,\n  DENSE_RANK() OVER (PARTITION BY Department ORDER BY Salary DESC) AS DenseRank\nFROM Employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is useful when you want consecutive rankings without gaps, despite ties."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use ROW_NUMBER() when you need a unique row number per partition.\n- Use RANK() when you want to give the same rank to ties but keep gaps in ranks.\n- Use DENSE_RANK() when you want to rank ties equally and keep ranks consecutive without gaps."
+      },
+      {
+        "type": "paragraph",
+        "value": "These window functions help you rank or number rows based on your query needs. Try experimenting with each on your data to see how their behavior differs!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-data-integrity-violations-in-sql",
+    "title": "Handling Data Integrity Violations in SQL: Strategies for Real-World Applications",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn practical and beginner-friendly strategies to handle data integrity violations in SQL, ensuring your database remains accurate and reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=xuxgxdbCPnY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data integrity violations occur when your SQL database constraints are not met, such as unique key or foreign key constraints being broken. These errors can disrupt your applications, causing failed transactions or inconsistent data. Understanding how to handle these errors is crucial for maintaining a reliable database."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common data integrity constraints that might cause violations include PRIMARY KEY, UNIQUE, FOREIGN KEY, and CHECK constraints. When these constraints are violated, SQL raises errors that need to be caught and handled gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some beginner-friendly strategies for handling these violations in SQL:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use TRY...CATCH blocks (in database systems that support it, like SQL Server) to catch and respond to integrity violation errors."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRY\n    INSERT INTO Employees (EmployeeID, Name) VALUES (1, 'John Doe');\nEND TRY\nBEGIN CATCH\n    PRINT 'Data integrity violation occurred: ' + ERROR_MESSAGE();\n    -- Additional error handling logic here\nEND CATCH;"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Implement validation logic in your application code before sending data to the database. For example, check if a key already exists to prevent duplicate inserts."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use ON CONFLICT or ON DUPLICATE KEY UPDATE clauses in databases like PostgreSQL or MySQL to handle violations by updating existing records instead of failing."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Employees (EmployeeID, Name) VALUES (1, 'John Doe')\nON CONFLICT (EmployeeID) DO UPDATE SET Name = EXCLUDED.Name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Define foreign keys with ON DELETE CASCADE or ON DELETE SET NULL options to handle related data deletion cleanly."
+      },
+      {
+        "type": "code",
+        "value": "ALTER TABLE Orders\nADD CONSTRAINT FK_CustomerOrder FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\nON DELETE CASCADE;"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Use explicit transactions to ensure that data modifications meet all integrity constraints before committing, allowing rollbacks if errors occur."
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\n\nINSERT INTO Customers (CustomerID, Name) VALUES (1, 'Acme Corp');\n-- additional queries\n\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling data integrity violations proactively helps maintain clean data, prevents errors from cascading, and improves the overall stability of your applications. Start integrating these strategies to build more robust SQL applications."
+      }
+    ]
   }
 ];
