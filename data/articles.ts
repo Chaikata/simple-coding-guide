@@ -46641,5 +46641,471 @@ export const articles = [
         "value": "In summary, different SQL databases execute queries differently due to their internal optimizers, indexing, and caching strategies. Use indexes wisely, check your query plans with `EXPLAIN`, and tailor your queries for the specific database system you are using to achieve the best performance."
       }
     ]
+  },
+  {
+    "slug": "comparing-javascript-promises-vs-async-await-best-use-cases-and-performance",
+    "title": "Comparing JavaScript Promises vs Async/Await: Best Use Cases and Performance",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between JavaScript Promises and Async/Await, with practical examples and advice on when to use each approach for better code readability and performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=jTKnKLx-wZs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous programming is a key part of JavaScript development, especially for tasks like fetching data from an API or reading files. Two popular ways to handle asynchronous code are Promises and Async/Await. In this article, we'll explore what Promises and Async/Await are, how to use them, and which scenarios are best for each."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Promises?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Promise is an object that represents the eventual completion or failure of an asynchronous operation. You can use `.then()` and `.catch()` methods to handle the outcome of a Promise."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if(success) {\n        resolve('Data loaded');\n      } else {\n        reject('Error loading data');\n      }\n    }, 1000);\n  });\n};\n\nfetchData()\n  .then(data => console.log(data))\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Is Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is syntactic sugar built on top of Promises. It allows you to write asynchronous code that looks and behaves more like synchronous code, making it easier to read and maintain."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve('Data loaded'), 1000);\n  });\n};\n\nasync function getData() {\n  try {\n    const data = await fetchData();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Promises"
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises are great for simple asynchronous tasks or when you want to chain multiple asynchronous actions. They are also useful when handling complex error handling paths or when multiple handlers might listen to the same Promise."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example with promise chaining:"
+      },
+      {
+        "type": "code",
+        "value": "fetchData()\n  .then(data => {\n    console.log(data);\n    return fetchData();\n  })\n  .then(moreData => {\n    console.log('More:', moreData);\n  })\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await shines when you want to write clean and readable asynchronous code without deeply nested `.then()` chains. It works best for sequential asynchronous operations and improves error-handling clarity via try/catch blocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example with async/await for sequential tasks:"
+      },
+      {
+        "type": "code",
+        "value": "async function loadSequentialData() {\n  try {\n    const data1 = await fetchData();\n    console.log(data1);\n    const data2 = await fetchData();\n    console.log(data2);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nloadSequentialData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Performance Considerations"
+      },
+      {
+        "type": "paragraph",
+        "value": "In most cases, Promises and Async/Await have similar performance because Async/Await is syntactic sugar over Promises. Any performance difference is minimal and rarely noticeable. Your focus should be on code clarity and maintainability rather than micro-optimizations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use **Promises** when you want straightforward chaining or to handle multiple listeners on the same asynchronous event.\n- Use **Async/Await** to write cleaner, more readable asynchronous code, especially for sequential operations or complex control flow.\n- Performance differences are negligible; choose the style that improves your code's readability and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these points in mind, you can confidently apply Promises and Async/Await in your JavaScript projects depending on your needs."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-nan-in-javascript-common-pitfalls-and-how-to-compare-it-properly",
+    "title": "Understanding NaN in JavaScript: Common Pitfalls and How to Compare It Properly",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what NaN means in JavaScript, why it can be tricky, common mistakes when comparing it, and how to check for NaN correctly.",
+    "videoUrl": "https://www.youtube.com/watch?v=ZPR5RPMmJFk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, NaN stands for \"Not-a-Number.\" It represents a value that is not a legal number. This can happen, for example, when you try to perform a math operation on something that isn’t a valid number. NaN is part of JavaScript’s way of handling errors silently without crashing your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common pitfall with NaN is that it is the only value in JavaScript that is not equal to itself. This means using the usual comparison operators (== or ===) to check if a value is NaN will not work as expected."
+      },
+      {
+        "type": "code",
+        "value": "console.log(NaN === NaN); // false\nconsole.log(NaN == NaN);  // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "Because of this unusual behavior, if you want to check whether a value is NaN, you should use the built-in function isNaN() or the more reliable Number.isNaN() introduced in ES6."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you use both:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(isNaN(\"hello\"));        // true, \"hello\" cannot be converted to a number\nconsole.log(isNaN(123));              // false, 123 is a number\n\nconsole.log(Number.isNaN(\"hello\")); // false, \"hello\" is not NaN, just not a number\nconsole.log(Number.isNaN(NaN));       // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that isNaN converts the input to a number first, which can sometimes lead to confusing results. Number.isNaN() is more strict and only returns true if the value is actually NaN."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, avoid using === or == to check for NaN. Instead, use Number.isNaN() when you want to make sure the value is exactly NaN."
+      },
+      {
+        "type": "code",
+        "value": "// Correct way to check for NaN\nfunction checkIfNaN(value) {\n  if (Number.isNaN(value)) {\n    console.log(\"Value is NaN!\");\n  } else {\n    console.log(\"Value is NOT NaN.\");\n  }\n}\n\ncheckIfNaN(NaN);      // Value is NaN!\ncheckIfNaN(5);        // Value is NOT NaN.\ncheckIfNaN(\"test\"); // Value is NOT NaN."
+      }
+    ]
+  },
+  {
+    "slug": "handling-complex-recursive-data-structures-safely-in-typescript",
+    "title": "Handling Complex Recursive Data Structures Safely in TypeScript",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to define and manage complex recursive data structures in TypeScript with safety and ease, using interfaces, types, and runtime checks.",
+    "videoUrl": "https://www.youtube.com/watch?v=QryUZJ0Tx90",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive data structures are widely used in programming to represent hierarchical or nested data, such as trees, nested menus, or file directories. In TypeScript, handling these structures safely can be tricky for beginners because the types need to refer to themselves in some way. This tutorial will walk you through how to define recursive types in TypeScript and how to work with them safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's imagine we want to represent a simple file system where folders can contain files or other folders. This requires a recursive data structure because folders can nest infinitely."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, we'll define two types: one for a file and one for a folder. The folder will contain an array of items, each of which can be either a file or another folder."
+      },
+      {
+        "type": "code",
+        "value": "interface File {\n  type: \"file\";\n  name: string;\n  size: number; // size in bytes\n}\n\ninterface Folder {\n  type: \"folder\";\n  name: string;\n  children: FileSystemItem[]; // recursive reference here\n}\n\ntype FileSystemItem = File | Folder;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `FileSystemItem` type is a union type that can be either a `File` or a `Folder`. The `Folder` contains a `children` array with the same union type, making it recursive. This setup allows us to create nested folders and files."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's create an example data structure using this type:"
+      },
+      {
+        "type": "code",
+        "value": "const myFileSystem: FileSystemItem = {\n  type: \"folder\",\n  name: \"root\",\n  children: [\n    {\n      type: \"file\",\n      name: \"photo.png\",\n      size: 3400\n    },\n    {\n      type: \"folder\",\n      name: \"documents\",\n      children: [\n        {\n          type: \"file\",\n          name: \"resume.pdf\",\n          size: 12000\n        }\n      ]\n    }\n  ]\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "To work with this data safely, we often need to traverse it. When traversing, it’s important to check the type of each item to correctly handle files and folders."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example function that calculates the total size of all files inside a folder (including nested folders):"
+      },
+      {
+        "type": "code",
+        "value": "function getTotalSize(item: FileSystemItem): number {\n  if (item.type === \"file\") {\n    return item.size;\n  } else {\n    return item.children.reduce((total, child) => total + getTotalSize(child), 0);\n  }\n}\n\nconsole.log(`Total size: ${getTotalSize(myFileSystem)} bytes`);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This function works recursively by checking the item type. If it's a file, it returns its size. If it's a folder, it sums the sizes from all its children by recursively calling itself."
+      },
+      {
+        "type": "paragraph",
+        "value": "For better safety especially when consuming external or dynamic data, consider runtime type checks or validation libraries like `io-ts` or `zod`. These tools can help ensure your data matches the expected recursive structure before processing it."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, handling complex recursive data structures in TypeScript involves:\n\n- Defining recursive types using interfaces and union types.\n- Using type guards to distinguish among types during runtime.\n- Recursively processing nested data safely.\n\nWith these foundations, you can confidently manage deeply nested data in your TypeScript projects."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-typescript-apis-for-scalable-distributed-systems",
+    "title": "Designing Resilient TypeScript APIs for Scalable Distributed Systems",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to build resilient TypeScript APIs that effectively handle errors, ensuring your distributed system scales smoothly and remains robust.",
+    "videoUrl": "https://www.youtube.com/watch?v=7bsr9ot1ILY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Building scalable distributed systems requires APIs that can gracefully handle errors. When services fail or become slow, your system should recover or degrade gracefully without crashing. In this article, we'll explore beginner-friendly approaches to designing resilient TypeScript APIs focusing on error handling, retries, and timeouts."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Centralize Error Handling Using Custom Error Classes\nStart by defining custom error classes to classify common API errors. This helps you distinguish between client errors, server errors, and network failures easily."
+      },
+      {
+        "type": "code",
+        "value": "class ApiError extends Error {\n  statusCode: number;\n  constructor(message: string, statusCode: number) {\n    super(message);\n    this.name = 'ApiError';\n    this.statusCode = statusCode;\n  }\n}\n\nclass NetworkError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'NetworkError';\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Handle API Calls with Try-Catch and Return Clear Results\nAlways use try-catch blocks around your asynchronous calls to handle errors gracefully. Returning a consistent response shape with error details helps your frontend or consumer services take appropriate action."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUserData(userId: string) {\n  try {\n    const response = await fetch(`https://api.example.com/users/${userId}`);\n    if (!response.ok) {\n      throw new ApiError('Failed to fetch user data', response.status);\n    }\n    return await response.json();\n  } catch (error) {\n    if (error instanceof ApiError) {\n      // Handle known API errors\n      console.error('API error:', error.message);\n    } else {\n      // Handle network errors or unknown issues\n      console.error('Unexpected error:', error);\n    }\n    return null; // Return null or a fallback to keep the system stable\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Implement Retries with Exponential Backoff\nFor transient errors like network hiccups, retries can improve resilience. Exponential backoff gradually increases wait times between retries to reduce load on your services during outages."
+      },
+      {
+        "type": "code",
+        "value": "async function retry<T>(fn: () => Promise<T>, retries = 3, delay = 500): Promise<T> {\n  try {\n    return await fn();\n  } catch (error) {\n    if (retries === 0) throw error;\n    await new Promise(resolve => setTimeout(resolve, delay));\n    return retry(fn, retries - 1, delay * 2);\n  }\n}\n\n// Usage example:\nasync function getUser() {\n  return retry(() => fetchUserData('123'));\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use Timeouts to Avoid Hanging Requests\nIn distributed systems, requests can hang if a service doesn't respond. Wrapping API calls in timeouts protects your system from waiting indefinitely."
+      },
+      {
+        "type": "code",
+        "value": "function timeout<T>(promise: Promise<T>, ms: number): Promise<T> {\n  return new Promise((resolve, reject) => {\n    const timer = setTimeout(() => {\n      reject(new NetworkError('Request timed out'));\n    }, ms);\n    promise\n      .then(value => {\n        clearTimeout(timer);\n        resolve(value);\n      })\n      .catch(err => {\n        clearTimeout(timer);\n        reject(err);\n      });\n  });\n}\n\n// Usage example:\nasync function fetchWithTimeout() {\n  try {\n    const data = await timeout(fetchUserData('123'), 3000); // 3 seconds timeout\n    return data;\n  } catch (error) {\n    console.error(error);\n    return null;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBy centralizing error handling with custom errors, using try-catch blocks properly, implementing retries with exponential backoff, and adding request timeouts, your TypeScript APIs will be more resilient in distributed systems. These techniques help maintain system stability and provide a better experience for users and services that depend on your APIs."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-list-comprehensions-for-large-data-sets",
+    "title": "Optimizing Python List Comprehensions for Large Data Sets",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn practical tips for optimizing Python list comprehensions to handle large data sets efficiently, helping beginners write faster and more memory-friendly code.",
+    "videoUrl": "https://www.youtube.com/watch?v=YlY2g2xrl6Q",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python list comprehensions are a powerful and concise way to create lists by iterating over sequences. While they are easy to write and read, working with large data sets can lead to performance and memory issues if not optimized properly. In this tutorial, we'll explore beginner-friendly strategies to optimize list comprehensions for handling large data sets efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding List Comprehensions"
+      },
+      {
+        "type": "paragraph",
+        "value": "A list comprehension lets you generate a list in one readable line. For example, to create a list of squares from 0 to 9:"
+      },
+      {
+        "type": "code",
+        "value": "squares = [x**2 for x in range(10)]\nprint(squares)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is simple and fast for small data. But if `range(10)` becomes `range(10_000_000)`, generating and storing the whole list at once can consume a lot of memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Optimize with Generators Instead of Lists"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators compute items on the fly and don’t store the whole list in memory. You can convert your list comprehension into a generator expression by using parentheses instead of square brackets."
+      },
+      {
+        "type": "code",
+        "value": "squares_gen = (x**2 for x in range(10_000_000))\n# Use next() to get values one by one or loop through it\nprint(next(squares_gen))  # Outputs: 0\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators are especially useful if you don't need all items at once, such as when filtering or writing data sequentially."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Delay Expensive Computations with Filtering Early"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you only need items meeting a specific condition, filter items as early as possible in your comprehension to avoid unnecessary computation."
+      },
+      {
+        "type": "code",
+        "value": "# Without filtering early\nresult = [expensive_func(x) for x in data if check_condition(x)]\n\n# Better: filter first, then compute\nresult = [expensive_func(x) for x in data if check_condition(x)]"
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, the filtering (`if check_condition(x)`) naturally happens before applying `expensive_func(x)`, but when working with large data, consider filtering data beforehand or using generator expressions for better memory handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Avoid Nested Loops if Possible"
+      },
+      {
+        "type": "paragraph",
+        "value": "Nested list comprehensions can be costly. Try to minimize nesting or use functions like `itertools.product` that are optimized for such tasks."
+      },
+      {
+        "type": "code",
+        "value": "from itertools import product\n\npairs = ((x, y) for x, y in product(range(1000), repeat=2) if x != y)\nfor pair in pairs:\n    pass  # process pairs one by one instead of creating a huge list"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Built-in Functions Where Possible"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes built-in functions like `map()` or list functions are implemented in C and can be faster than equivalent list comprehensions."
+      },
+      {
+        "type": "code",
+        "value": "result = list(map(str, range(1000000)))  # Convert numbers to strings\n# This can be faster and use less memory with lazy evaluation when combined with other tools"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize list comprehensions for large data sets:\n- Use generator expressions to save memory.\n- Filter data early to minimize unnecessary computations.\n- Avoid complex nested comprehensions when possible.\n- Leverage built-in functions or libraries optimized for large data.\n\nThese practices help make your Python programs faster and more memory-efficient when working with big lists."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-design-fault-tolerant-python-systems-with-graceful-error-handling",
+    "title": "How to Design Fault-Tolerant Python Systems with Graceful Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to build fault-tolerant Python applications by implementing graceful error handling techniques. This beginner-friendly guide covers practical strategies to improve your program’s reliability and user experience.",
+    "videoUrl": "https://www.youtube.com/watch?v=XMCz5NcBjrw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In software development, errors and unexpected situations are inevitable. Designing fault-tolerant systems means writing code that can handle these issues gracefully without crashing or producing incorrect output. In Python, this is mostly achieved through effective use of try-except blocks and thoughtful error handling strategies."
+      },
+      {
+        "type": "paragraph",
+        "value": "This article will walk you through the basics of exception handling in Python and then show how to design your system to be fault-tolerant with helpful examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Exception Handling in Python\nPython uses exceptions to manage errors. When an error occurs, Python raises an exception which can be caught and handled using try-except blocks. This prevents the program from crashing and gives you the chance to deal with the problem or inform the user accordingly."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input('Enter a number: '))\n    print('You entered:', number)\nexcept ValueError:\n    print('That was not a valid number. Please try again.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if the user enters something that can’t convert to an integer, the `ValueError` is caught, and a helpful message is shown instead of the program crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Designing Fault-Tolerant Systems\nTo make your system fault-tolerant, consider these key ideas:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Catch Specific Exceptions:** Catch only exceptions you expect and know how to handle, without hiding other unexpected errors.\n- **Provide Meaningful Messages:** Inform users or developers about what went wrong and possibly how to fix it.\n- **Use Finally for Cleanup:** Always release resources like files or connections even if errors occur.\n- **Log Errors:** Keep a log of errors for debugging and monitoring.\n- **Fallback Strategies:** Provide alternatives if an operation fails."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example illustrating these concepts in a simple file-reading scenario:"
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\nlogging.basicConfig(filename='app.log', level=logging.ERROR)\n\ndef read_file(filepath):\n    try:\n        with open(filepath, 'r') as file:\n            return file.read()\n    except FileNotFoundError:\n        print(f'Error: File not found: {filepath}')\n        logging.error(f'FileNotFoundError: {filepath} does not exist.')\n        return None\n    except Exception as e:\n        print('An unexpected error occurred.')\n        logging.error(f'Unexpected error: {e}')\n        return None\n    finally:\n        print('Attempted to read the file.')\n\ncontent = read_file('data.txt')\nif content is not None:\n    print('File content loaded successfully.')\nelse:\n    print('Could not load the file.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, we attempt to open and read a file. If the file doesn’t exist, a specific message is displayed and logged. If any other error occurs, it is logged and a general message is shown. The `finally` block runs no matter what, so you can ensure cleanup or notifications happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips to Keep Your Python Systems Fault-Tolerant\n1. Always anticipate where things might fail (like file I/O, network calls, or user input).\n2. Avoid bare except blocks, as they can hide bugs.\n3. Use custom exceptions to represent domain-specific issues for clearer handling.\n4. Test your error handling by simulating failures.\n5. Log errors with useful details for debugging later.\n\nBy thoughtfully managing exceptions, your Python applications will become more reliable, easier to maintain, and user-friendly even when problems occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start applying these error handling techniques in your projects today, and build stronger, fault-tolerant Python systems!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-multi-tenant-database-architectures-using-sql",
+    "title": "Designing Scalable Multi-Tenant Database Architectures Using SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the basics of creating scalable multi-tenant database designs using SQL with clear examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant database architectures allow multiple customers (tenants) to share the same database infrastructure while keeping their data logically separated. This model is common in SaaS applications where data isolation, scalability, and performance are critical. In this tutorial, we will explore beginner-friendly SQL techniques to design scalable multi-tenant databases."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are three common approaches to multi-tenancy in database design:\n\n1. Shared Database, Shared Schema\n2. Shared Database, Separate Schema\n3. Separate Database\n\nWe will focus on the Shared Database, Shared Schema model because it is the most scalable and cost-effective for many use cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Define a Tenant Identifier\nEvery table that stores tenant-specific data should include a tenant identifier column, usually `tenant_id`. This allows you to filter and isolate data per tenant with SQL queries."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n    id SERIAL PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    username VARCHAR(50) NOT NULL,\n    email VARCHAR(100) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    CONSTRAINT fk_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the `users` table includes a `tenant_id` that references a `tenants` table, which holds tenant-related information. This setup ensures that each user's data is associated with exactly one tenant."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Create a Tenants Table\nThe tenants table keeps track of each customer or tenant using your system. This lets you manage tenants and improve security by validating tenant existence."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE tenants (\n    id SERIAL PRIMARY KEY,\n    name VARCHAR(100) NOT NULL UNIQUE,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Query with Tenant Isolation\nTo get all users for a specific tenant, always include tenant filtering in your queries. This ensures data from other tenants is never exposed."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users\nWHERE tenant_id = 123;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Replace `123` with the actual tenant's ID from your application logic or user session."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Indexing for Performance\nAdd indexes on the tenant_id column to optimize queries filtering by tenant. Without indexes, the database will scan the entire table, which hurts performance as data grows."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_users_tenant_id ON users(tenant_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Bonus Tips for Scalability and Security\n- Use Row-Level Security (RLS) if your SQL platform supports it, to enforce tenant isolation automatically.\n- Regularly archive inactive tenant data.\n- Monitor query performance and optimize slow queries involving tenant filtering.\n- Backup tenant data individually if possible to avoid data loss."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these basic principles, you can build a scalable, maintainable multi-tenant database in SQL that keeps tenant data isolated and queries performant. Start with tenant-aware table design, enforce tenant filters in your queries, and optimize with proper indexing."
+      }
+    ]
   }
 ];
