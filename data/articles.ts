@@ -46195,5 +46195,451 @@ export const articles = [
         "value": "By carefully structuring recursive CTEs and applying these optimization techniques, you can efficiently model hierarchical data in SQL while avoiding common errors like infinite recursion and poor performance."
       }
     ]
+  },
+  {
+    "slug": "mastering-async-await-error-handling-best-practices-for-cleaner-javascript",
+    "title": "Mastering Async/Await Error Handling: Best Practices for Cleaner JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors with async/await in JavaScript using beginner-friendly tips and best practices for cleaner, more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=wsoQ-fgaoyQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Async/await is a modern JavaScript feature that makes working with asynchronous code easier and more readable. However, managing errors in async functions requires some care to write clean, reliable programs. In this article, we'll explore beginner-friendly ways to handle errors using async/await, ensuring your code is clean and easy to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "The async/await syntax allows you to write asynchronous code that looks synchronous. An async function returns a promise, and using await pauses the function execution until the promise resolves."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  const response = await fetch('https://api.example.com/data');\n  const data = await response.json();\n  return data;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When working with async functions, errors that occur inside can be caught like promises using try/catch blocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Try/Catch for Error Handling"
+      },
+      {
+        "type": "paragraph",
+        "value": "The simplest and safest way to handle errors with async/await is by surrounding your code with a try/catch block. If anything goes wrong inside the try block, the catch block will run."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Fetch error:', error);\n    // Handle or rethrow error as needed\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Try/Catch?"
+      },
+      {
+        "type": "paragraph",
+        "value": "- It captures both rejected promises and synchronous errors.\n- It makes your code more readable compared to .then().catch() chaining.\n- You can customize error handling for different cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Mistakes to Avoid"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Not using try/catch inside async functions, which causes unhandled Promise rejections.\n2. Using .catch() outside async/await instead of try/catch (mixing patterns can be confusing).\n3. Ignoring error checks, like failing to verify response.ok when fetching."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Helper Functions for Cleaner Code"
+      },
+      {
+        "type": "paragraph",
+        "value": "To reduce repetitive try/catch blocks, you can create a helper function that wraps your async call and returns an array of [error, result]. This pattern helps keep your code clean and easy to follow."
+      },
+      {
+        "type": "code",
+        "value": "async function to(promise) {\n  try {\n    const result = await promise;\n    return [null, result];\n  } catch (error) {\n    return [error];\n  }\n}\n\nasync function fetchData() {\n  const [error, response] = await to(fetch('https://api.example.com/data'));\n  if (error) {\n    console.error('Fetch failed:', error);\n    return;\n  }\n\n  if (!response.ok) {\n    console.error('Network response not ok');\n    return;\n  }\n\n  const data = await response.json();\n  console.log('Data:', data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering async/await error handling with try/catch and helper functions leads to cleaner, more reliable JavaScript code. Always remember to check for errors, use try/catch blocks inside your async functions, and consider helper patterns to avoid repetitive code. With these best practices, you’ll write asynchronous JavaScript that’s much easier to debug and maintain."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-chat-application-typescript-websocket",
+    "title": "Building a Scalable Chat Application with TypeScript and WebSocket",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build a simple and scalable chat application using TypeScript and WebSocket. This beginner-friendly tutorial covers setting up the server and client for real-time messaging.",
+    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time messaging is a key feature of many applications today. Building a scalable chat application might seem complex at first, but using TypeScript and WebSocket makes the process straightforward and enjoyable. In this tutorial, we will create a simple chat server and a client using TypeScript, focusing on core concepts to help you understand how WebSocket works in practice."
+      },
+      {
+        "type": "paragraph",
+        "value": "WebSocket is a protocol that allows full-duplex communication channels over a single TCP connection. Unlike HTTP, where the client requests and the server responds, WebSocket enables both sides to send messages independently in real-time. This is perfect for chat apps."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by building the WebSocket server."
+      },
+      {
+        "type": "code",
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst PORT = 8080;\nconst wss = new WebSocketServer({ port: PORT });\n\n// Store all connected clients\nconst clients = new Set<WebSocket>();\n\nwss.on('connection', (ws) => {\n  clients.add(ws);\n  console.log('New client connected');\n\n  // Listen for incoming messages\n  ws.on('message', (message) => {\n    console.log(`Received: ${message}`);\n\n    // Broadcast message to all other clients\n    clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message.toString());\n      }\n    });\n  });\n\n  // Handle client disconnect\n  ws.on('close', () => {\n    clients.delete(ws);\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log(`WebSocket server running on ws://localhost:${PORT}`);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this server code, we create a WebSocket server that listens on port 8080. We keep track of all connected clients using a Set. When a client sends a message, the server broadcasts it to all other connected clients, enabling group chat functionality."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's build the client side using the browser's native WebSocket API."
+      },
+      {
+        "type": "code",
+        "value": "// client.ts\n\nconst ws = new WebSocket('ws://localhost:8080');\n\nws.onopen = () => {\n  console.log('Connected to chat server');\n};\n\nws.onmessage = (event) => {\n  const message = event.data;\n  console.log('New message:', message);\n  // Here you could update your UI to display the message\n};\n\nws.onclose = () => {\n  console.log('Disconnected from chat server');\n};\n\n// Function to send a chat message\nfunction sendMessage(text: string) {\n  if (ws.readyState === WebSocket.OPEN) {\n    ws.send(text);\n  } else {\n    console.log('Connection is not open');\n  }\n}\n\n// Example usage: send a message after connecting\nsetTimeout(() => {\n  sendMessage('Hello from client!');\n}, 1000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple client connects to the WebSocket server and listens for messages. The sendMessage function allows you to send messages to the server, which then distributes them to other clients. You can expand this client by adding a user interface with HTML and CSS."
+      },
+      {
+        "type": "paragraph",
+        "value": "To run the server, save it as server.ts, install the 'ws' package via npm (`npm install ws`), and compile it with TypeScript or run it directly with ts-node. For the client, you can include the code in a TypeScript-enabled web project or compile it to JavaScript for use in a browser."
+      },
+      {
+        "type": "paragraph",
+        "value": "This setup provides the foundation for a scalable chat application. You can further enhance scalability by deploying the server with load balancers, using Redis or another message queue to synchronize clients across multiple server instances, or adding authentication for secure communication."
+      },
+      {
+        "type": "paragraph",
+        "value": "With this knowledge, you now know how to create a real-time chat app using TypeScript and WebSockets. Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-typescript-systems-handling-complex-error-propagation-patterns",
+    "title": "Designing Scalable TypeScript Systems: Handling Complex Error Propagation Patterns",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to design scalable TypeScript applications by effectively handling complex error propagation patterns with practical techniques and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=ldsEoxDwodA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building scalable TypeScript systems, managing errors becomes crucial, especially as your application grows in complexity. Proper error propagation ensures that your application stays robust and maintainable. This article introduces beginner-friendly techniques to handle complex error patterns in TypeScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why is error handling important in scalable systems? Many errors in large systems come from unexpected states, failed external calls, or invalid inputs. Properly propagating these errors through layers lets you react appropriately—logging details, recovering when possible, or informing the user."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using TypeScript's built-in Error class. The most straightforward way is using try-catch with standard Error objects. Customizing error classes for specific cases helps distinguish errors when propagating upward."
+      },
+      {
+        "type": "code",
+        "value": "class DatabaseError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'DatabaseError';\n  }\n}\n\nfunction fetchUser(id: number) {\n  if (id <= 0) {\n    throw new DatabaseError('Invalid user ID');\n  }\n  // Simulate database fetch\n  return { id, name: 'Alice' };\n}\n\nfunction getUserProfile(id: number) {\n  try {\n    const user = fetchUser(id);\n    return `User: ${user.name}`;\n  } catch (error) {\n    if (error instanceof DatabaseError) {\n      console.error('Database issue:', error.message);\n      // Propagate or transform\n      throw new Error('Failed to get user profile');\n    }\n    throw error;  // Unknown error\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a standardized error type for better propagation. Instead of throwing raw errors, use a structured approach that includes an error code, message, and optionally metadata. This pattern is especially helpful in large teams."
+      },
+      {
+        "type": "code",
+        "value": "interface AppError {\n  code: string;\n  message: string;\n  details?: any;\n}\n\nfunction createError(code: string, message: string, details?: any): AppError {\n  return { code, message, details };\n}\n\nfunction validateInput(input: string): AppError | null {\n  if (!input) {\n    return createError('VALIDATION_ERROR', 'Input cannot be empty');\n  }\n  return null;\n}\n\nfunction process(input: string): string | AppError {\n  const error = validateInput(input);\n  if (error) return error;\n  return `Processed: ${input}`;\n}\n\nconst result = process('');\nif ('code' in result) {\n  console.error(`Error [${result.code}]: ${result.message}`);\n} else {\n  console.log(result);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Leveraging Result Types for functional-style error handling. Some developers prefer using a Result<T, E> pattern instead of exceptions, making error handling explicit and easier to compose."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };\n\nfunction parseNumber(input: string): Result<number, string> {\n  const parsed = Number(input);\n  if (isNaN(parsed)) {\n    return { ok: false, error: 'Invalid number format' };\n  }\n  return { ok: true, value: parsed };\n}\n\nfunction double(input: string): Result<number, string> {\n  const numResult = parseNumber(input);\n  if (!numResult.ok) {\n    return numResult;  // Propagate error\n  }\n  return { ok: true, value: numResult.value * 2 };\n}\n\nconst result = double('abc');\nif (result.ok) {\n  console.log('Double is', result.value);\n} else {\n  console.error('Error:', result.error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary. To handle complex error propagation in scalable TypeScript systems:\n- Use custom error classes for clear identification.\n- Consider an application-wide error shape.\n- Explore Result types for explicit error handling.\n- Always propagate errors to the appropriate level for correct handling.\nThese practices improve maintainability and reliability as your project grows."
+      }
+    ]
+  },
+  {
+    "slug": "handling-timezone-edge-cases-python-date-time",
+    "title": "Handling Timezone Edge Cases in Python Date and Time Applications",
+    "language": "python",
+    "type": "tutorials",
+    "description": "A beginner-friendly guide to managing timezone edge cases in Python using the datetime and zoneinfo modules for accurate date and time handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=-5wpm-gesOY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in Python can be tricky, especially when dealing with different timezones and edge cases like daylight saving time (DST) changes. In this tutorial, we'll explore how to handle timezone edge cases effectively using Python's built-in modules."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python's datetime module along with zoneinfo (available in Python 3.9 and later) helps you handle timezones without external dependencies. Let's first see how to create timezone-aware datetime objects."
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nfrom zoneinfo import ZoneInfo\n\n# Create a timezone-aware datetime for New York\nny_time = datetime(2024, 11, 3, 1, 30, tzinfo=ZoneInfo('America/New_York'))\nprint(\"New York time:\", ny_time)"
+      },
+      {
+        "type": "paragraph",
+        "value": "One common edge case is the 'fall back' DST transition, when clocks are set back one hour, resulting in ambiguous times. For example, at 2:00 AM on November 3, 2024, New York switches from EDT to EST, causing the hour between 1:00 AM and 2:00 AM to occur twice."
+      },
+      {
+        "type": "paragraph",
+        "value": "To resolve ambiguous times during DST changes, you need to handle them carefully. Python's standard library doesn't provide built-in support to distinguish between the two identical times. However, you can manage this manually by using the is_dst flag or by converting times to UTC."
+      },
+      {
+        "type": "code",
+        "value": "from datetime import timedelta\n\n# First occurrence of 1:30 AM (DST is in effect)\nfirst_1_30 = datetime(2024, 11, 3, 1, 30, tzinfo=ZoneInfo('America/New_York'))\n# Add one hour to get the second occurrence (standard time)\nsecond_1_30 = first_1_30 + timedelta(hours=1)\n\nprint(f\"First 1:30 AM: {first_1_30} (UTC: {first_1_30.astimezone(ZoneInfo('UTC'))})\")\nprint(f\"Second 1:30 AM: {second_1_30} (UTC: {second_1_30.astimezone(ZoneInfo('UTC'))})\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice here that although the local time seems the same, converting to UTC reveals the difference. This approach helps you distinguish ambiguous times safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case occurs during the 'spring forward' DST transition, where clocks jump forward, and certain local times do not exist. For example, 2:30 AM on March 10, 2024, may never happen in some timezones."
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nfrom zoneinfo import ZoneInfo\n\ntry:\n    non_existent = datetime(2024, 3, 10, 2, 30, tzinfo=ZoneInfo('America/New_York'))\n    print(f\"Non-existent time: {non_existent}\")\nexcept Exception as e:\n    print(f\"Error: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Python's standard datetime with zoneinfo may not automatically raise errors for non-existent times. To handle this, it's often better to convert naive times to timezone-aware ones carefully or work in UTC to avoid this issue."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a recommended approach: create naive datetime objects and convert to timezone-aware UTC times before converting to your local timezone."
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nfrom zoneinfo import ZoneInfo\n\nnaive_time = datetime(2024, 3, 10, 2, 30)\n\n# Convert naive time to UTC by assuming it is local time first\nlocal_zone = ZoneInfo('America/New_York')\nlocal_time = naive_time.replace(tzinfo=local_zone)\nutc_time = local_time.astimezone(ZoneInfo('UTC'))\nprint(f\"UTC time: {utc_time}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary: Handling timezone edge cases requires awareness of ambiguous times during DST transitions and non-existent times when clocks jump forward. Use Python's zoneinfo module, convert ambiguous times carefully, prefer working in UTC internally, and convert to local times for display purposes."
+      },
+      {
+        "type": "paragraph",
+        "value": "With practice and careful handling, your Python applications will manage timezones correctly and reliably!"
+      }
+    ]
+  },
+  {
+    "slug": "advanced-data-validation-techniques-python",
+    "title": "Advanced Data Validation Techniques to Prevent Modeling Errors in Python",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use advanced data validation techniques in Python to catch and prevent modeling errors, ensuring your data is clean and reliable for building accurate models.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data validation is a crucial step in any modeling workflow to ensure the quality and integrity of your data. Without proper validation, you risk feeding incorrect or inconsistent data into your models, which can lead to inaccurate predictions and flawed insights. In this article, we will explore some advanced data validation techniques in Python that help beginners prevent common modeling errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "One powerful Python library for data validation is `pydantic`. It helps define clear data models with validation rules, providing automatic error checks and useful error messages. Let's start by installing it:"
+      },
+      {
+        "type": "code",
+        "value": "pip install pydantic"
+      },
+      {
+        "type": "paragraph",
+        "value": "`pydantic` lets you create classes that specify data types and validation rules. Here's an example of a user input data model with some validation:"
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, ValidationError, conint, confloat\n\nclass UserData(BaseModel):\n    age: conint(ge=0, le=120)  # age must be between 0 and 120\n    height_cm: confloat(gt=0)    # height must be a positive float\n    email: str                 # basic string, could add more email validation\n\n# Valid data example\ntry:\n    user = UserData(age=25, height_cm=175.5, email='test@example.com')\n    print(user)\nexcept ValidationError as e:\n    print('Validation error:', e)\n\n# Invalid data example\ntry:\n    user = UserData(age=-5, height_cm=0, email='')\nexcept ValidationError as e:\n    print('Validation error:', e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, `pydantic` automatically checks the data against our constraints and raises helpful errors if anything is wrong. You can use this to catch bad data before modeling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful tool to validate data is the Python library `pandera`. It works well with pandas DataFrames and lets you define schemas to enforce column types, ranges, and even relationships between columns."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's install `pandera` and see how it works:"
+      },
+      {
+        "type": "code",
+        "value": "pip install pandera"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a basic example to validate a dataset before modeling:"
+      },
+      {
+        "type": "code",
+        "value": "import pandas as pd\nimport pandera as pa\nfrom pandera import Column, Check\n\nschema = pa.DataFrameSchema({\n    \"age\": Column(int, Check.in_range(0, 120)),\n    \"height_cm\": Column(float, Check.greater_than(0)),\n    \"email\": Column(str, Check.str_length(min_value=5))\n})\n\ndata = pd.DataFrame({\n    \"age\": [25, 30, -1],\n    \"height_cm\": [175.5, 160.2, 180.0],\n    \"email\": [\"user1@example.com\", \"user2@example.com\", \"x\"]\n})\n\ntry:\n    validated_data = schema.validate(data)\n    print(\"Data is valid\")\nexcept pa.errors.SchemaError as err:\n    print(f\"Data validation failed: {err}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the schema checks that age values are between 0 and 120, height is positive, and emails have a minimum length. If the data doesn’t meet the criteria, `pandera` raises a detailed error, making it easy to spot and fix issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "In addition to these libraries, you can adopt some practical habits for advanced validation:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Check for missing or null values with `pandas.DataFrame.isnull()`.\n- Use assertions to enforce domain-specific rules.\n- Test edge cases (extreme values, unexpected types).\n- Automate validation in your data pipeline or modeling scripts."
+      },
+      {
+        "type": "paragraph",
+        "value": "Combining these techniques will help you catch errors early, guaranteeing that your models work on clean and valid data. This reduces bugs and boosts confidence in the results of your machine learning or statistical models."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy modeling!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-window-functions-vs-group-by-when-to-use-each-in-sql",
+    "title": "Comparing Window Functions vs Group By: When to Use Each in SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the differences between SQL Window Functions and GROUP BY, and discover when to choose each for your data analysis.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, two powerful techniques to aggregate or analyze data are GROUP BY and Window Functions. Both help you summarize data, but they work differently and are suited for different scenarios. This tutorial explains the key differences, with examples, so beginners can easily decide when to use GROUP BY or Window Functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "GROUP BY is used to group rows that have the same values in specified columns and then aggregate data within those groups. It collapses multiple rows into a single row for each group."
+      },
+      {
+        "type": "paragraph",
+        "value": "In contrast, Window Functions perform calculations across a set of rows related to the current query row, without collapsing rows. This allows you to retain row-level detail alongside aggregated values."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a practical example. Imagine you have a sales table:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(50),\n  region VARCHAR(50),\n  sale_amount DECIMAL(10,2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', 'North', 500),\n(2, 'Bob', 'South', 700),\n(3, 'Alice', 'North', 300),\n(4, 'Bob', 'South', 200),\n(5, 'Carol', 'East', 1000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using GROUP BY: If you want to know the total sales made by each salesperson, you can use a GROUP BY query:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT salesperson, SUM(sale_amount) AS total_sales\nFROM sales\nGROUP BY salesperson;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns one row per salesperson with their total sales. Notice that the original multiple sales rows per salesperson are combined into one."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using Window Functions: Now, if you want to keep every sale row but also show the total sales per salesperson next to each individual sale, use a window function:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, salesperson, sale_amount,\n       SUM(sale_amount) OVER (PARTITION BY salesperson) AS total_sales_per_person\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, we calculate the sum of sales per salesperson but do not group or collapse rows. Every sale is shown with an additional column showing that salesperson's total sales."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary of When to Use Each:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use GROUP BY when you want to reduce rows and only see aggregated results per group.\n- Use Window Functions when you want to perform calculations across rows while keeping row-level data intact, for example, running totals, rankings, or averages alongside details."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding this difference will help you write SQL queries that provide the exact data insights you need."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-query-performance-differences-across-major-databases",
+    "title": "Understanding SQL Query Performance Differences Across Major Databases",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn why the same SQL query can perform differently on popular databases like MySQL, PostgreSQL, and SQL Server, and how to troubleshoot common performance issues.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, you might notice that a query that runs quickly on one database runs slowly on another. This can be confusing, especially for beginners trying to optimize their queries. Different SQL databases like MySQL, PostgreSQL, and SQL Server have their own ways of executing queries. Understanding these differences can help you write better queries and fix performance issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common reason for different query speeds is how each database uses indexes. Indexes help the database find data faster. If an index is missing or not used properly, the query may do a full table scan, making it slow."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example. Suppose we have a table called `employees` with columns `id`, `name`, and `department_id`. We want to find all employees in a department."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE department_id = 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If there's no index on `department_id`, this query will scan the entire table. Adding an index helps:"
+      },
+      {
+        "type": "code",
+        "value": "-- Create an index on department_id\nCREATE INDEX idx_department ON employees(department_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "However, different databases handle indexing and query plans differently. For example, MySQL might choose to use the index while PostgreSQL might decide a sequential scan is faster based on internal statistics. This means the same query can perform differently depending on how the database decides to execute it."
+      },
+      {
+        "type": "paragraph",
+        "value": "To understand why a query is slow, you can use the `EXPLAIN` command before your query. This shows how the database plans to execute it."
+      },
+      {
+        "type": "code",
+        "value": "-- Check query plan in MySQL\nEXPLAIN SELECT * FROM employees WHERE department_id = 5;"
+      },
+      {
+        "type": "code",
+        "value": "-- Check query plan in PostgreSQL\nEXPLAIN ANALYZE SELECT * FROM employees WHERE department_id = 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The output tells you if indexes are being used or if a full table scan will happen. If you find full scans on large tables, consider adding appropriate indexes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another factor is how databases cache data and manage memory. Some databases are better optimized for certain workloads, which impacts performance too. Staying updated with your database version and reading the official documentation can also provide tips on improving query speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, different SQL databases execute queries differently due to their internal optimizers, indexing, and caching strategies. Use indexes wisely, check your query plans with `EXPLAIN`, and tailor your queries for the specific database system you are using to achieve the best performance."
+      }
+    ]
   }
 ];
