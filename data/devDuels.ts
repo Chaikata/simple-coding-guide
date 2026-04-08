@@ -5988,5 +5988,176 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "advanced-event-scheduler-with-conflict-resolution-in-c",
+    "title": "Advanced Event Scheduler with Conflict Resolution in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build an advanced event scheduler that manages multiple events with time conflicts resolution. The scheduler must support adding, removing, updating events, and querying free time slots efficiently.",
+    "prompt": "Create an EventScheduler class in C++ that allows users to add, remove, and update events, each with a start and end time. When adding an event, the scheduler should detect and resolve any conflicts by automatically shifting or merging overlapping events to avoid clashes. Implement querying functionality to return available free time slots within a given time range. Optimize your implementation to handle large numbers of events efficiently.",
+    "guidance": [
+      "Design appropriate data structures (e.g., balanced trees or interval trees) for efficient overlap detection and event management.",
+      "Implement conflict resolution logic that can adjust event timings without removing events unnecessarily.",
+      "Provide methods for querying free time slots between events in a specified time frame."
+    ],
+    "hints": [
+      "Consider storing events sorted by start time for quick conflict detection.",
+      "Use interval tree or segment tree concepts to efficiently find conflicting events.",
+      "Merging events can be done by extending the end time of the earlier event if overlaps occur."
+    ],
+    "starterCode": "class Event {\npublic:\n    int start;\n    int end;\n    std::string description;\n\n    Event(int s, int e, std::string desc) : start(s), end(e), description(desc) {}\n};\n\nclass EventScheduler {\nprivate:\n    std::vector<Event> events;\npublic:\n    bool addEvent(int start, int end, std::string description);\n    bool removeEvent(int start, int end);\n    bool updateEvent(int oldStart, int oldEnd, int newStart, int newEnd, std::string newDescription);\n    std::vector<std::pair<int, int>> queryFreeSlots(int startRange, int endRange);\n    // Implement additional helper methods as needed\n};",
+    "expectedOutput": "After adding multiple events, the scheduler should manage overlapping events by merging or shifting them per the defined logic. Querying free slots between 9:00 and 17:00 may output intervals like [(9,10), (12,13), (15,17)] representing available time blocks.",
+    "concepts": [
+      "interval trees",
+      "conflict resolution",
+      "data structures",
+      "algorithm optimization"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-sql-query-for-retrieving-active-users",
+    "title": "Refactor SQL Query for Retrieving Active Users",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Optimize and refactor a simple SQL query to improve readability and performance while maintaining the same output.",
+    "prompt": "You are given a SQL query that retrieves all users marked as active from a users table. The original query works correctly but is written in a way that can be simplified and made more efficient. Refactor the query to write it more cleanly and optimize the filtering condition. Ensure your refactored query returns the same list of active users with their id, name, and email.",
+    "guidance": [
+      "Focus on simplifying the WHERE clause and removing any unnecessary conditions.",
+      "Use clear and straightforward syntax for filtering active users.",
+      "Keep the selected columns and table name unchanged for consistency."
+    ],
+    "hints": [
+      "Check if the WHERE clause conditions are redundant or overly complex.",
+      "Consider if any JOINs or subqueries are unnecessary or can be removed."
+    ],
+    "starterCode": "SELECT id, name, email FROM users WHERE active = 'true' AND active IS NOT NULL;",
+    "expectedOutput": "A list of user IDs, names, and emails who are active (active = true).",
+    "concepts": [
+      "SQL SELECT",
+      "WHERE clause filtering",
+      "Query simplification"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-user-age-filter-function",
+    "title": "Fix the Bug in User Age Filter Function",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "The provided JavaScript function is intended to filter an array of user objects to return only those aged 18 or older. However, it contains bugs that prevent it from working correctly. Identify and fix the bugs so that the function behaves as expected.",
+    "prompt": "You have a function named filterAdults which takes an array of user objects, each with a name and age property. The function should return a new array containing only users who are 18 years old or older. Currently, the function does not return the correct result. Fix the bugs so the function properly filters the users by age.",
+    "guidance": [
+      "Examine the function's syntax and logic carefully.",
+      "Check how the filter method is used and what is returned inside its callback."
+    ],
+    "hints": [
+      "Ensure that the filter callback returns a boolean value.",
+      "Check if you are comparing the user's age correctly."
+    ],
+    "starterCode": "function filterAdults(users) {\n  return users.filter(user => {\n    if (user.age > 18) {\n      user\n    }\n  });\n}",
+    "expectedOutput": "[{ name: 'Alice', age: 22 }, { name: 'Charlie', age: 19 }]",
+    "concepts": [
+      "array filtering",
+      "callback functions",
+      "return statement",
+      "comparison operators"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-expense-tracker-cli-with-data-persistence-and-reporting",
+    "title": "Advanced Expense Tracker CLI with Data Persistence and Reporting",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a command-line Python application that allows users to add, update, delete, and categorize expenses. Implement data persistence using JSON files and generate summary reports on spending by category and date range.",
+    "prompt": "Create an advanced command-line expense tracker application with the following features:\n\n1. Add expenses with fields: description, amount, category (e.g., Food, Transport, Utilities), and date.\n2. Update and delete existing expense entries.\n3. Persist all data in a JSON file to retain data between runs.\n4. List all expenses with optional filters by category and date range.\n5. Generate summary reports showing total amount spent per category and total spending within a user-specified date range.\n6. Implement error handling for invalid inputs and file operations.\n\nYour solution should be modular and designed with extensibility in mind for future features.",
+    "guidance": [
+      "Define clear data models for expense entries and structure the JSON file accordingly.",
+      "Create separate functions for CRUD operations and reporting logic.",
+      "Use Python's datetime module for handling dates and filtering by ranges.",
+      "Ensure that the program reads the existing data on start and writes updates back safely after each change."
+    ],
+    "hints": [
+      "Structure your JSON file as a list of expense dictionaries, each containing keys like 'description', 'amount', 'category', and 'date'.",
+      "Use try-except blocks to handle file read/write errors and validate user inputs.",
+      "For date filtering, parse user input into datetime objects and compare expense dates accordingly."
+    ],
+    "starterCode": "import json\nfrom datetime import datetime\n\nDATA_FILE = 'expenses.json'\n\n# Load expenses from file\ntry:\n    with open(DATA_FILE, 'r') as f:\n        expenses = json.load(f)\nexcept (FileNotFoundError, json.JSONDecodeError):\n    expenses = []\n\n# Define functions for add_expense, update_expense, delete_expense, list_expenses, generate_report\n\ndef main():\n    print('Welcome to Advanced Expense Tracker')\n    # TODO: Implement CLI interaction\n\nif __name__ == '__main__':\n    main()",
+    "expectedOutput": "A CLI where users can add, update, delete, and list expenses, and generate spending reports. For example, when listing expenses filtered by category 'Food' and date range '2023-01-01' to '2023-01-31', the output shows expenses matching those criteria and a summary total.\n\nSample summary report output:\nTotal spend by category:\n- Food: $150.00\n- Transport: $70.00\n- Utilities: $90.00\n\nTotal spend from 2023-01-01 to 2023-01-31: $310.00",
+    "concepts": [
+      "file handling",
+      "data persistence",
+      "datetime manipulation",
+      "command line interface",
+      "data filtering and aggregation"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-sql-query-to-improve-readability-and-efficiency",
+    "title": "Refactor a SQL Query to Improve Readability and Efficiency",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "You are given a simple SQL query written with redundant expressions and unnecessary complexity. Refactor the query to improve its readability and optimize performance while keeping the same output.",
+    "prompt": "The following SQL query retrieves all records from the 'employees' table where the employee's department is 'Sales' and the salary is greater than 50000. It also calculates a 10% bonus for each employee. Refactor this query to eliminate redundant conditions and improve clarity without changing the result.\n\nOriginal query:\n\nSELECT * FROM employees WHERE department = 'Sales' AND department = 'Sales' AND salary > 50000 AND salary > 50000;\n\nSELECT employee_id, name, salary, salary * 0.10 AS bonus FROM employees WHERE department = 'Sales' AND salary > 50000;",
+    "guidance": [
+      "Remove duplicate conditions in the WHERE clause to simplify the query.",
+      "Separate the selection of all fields and the calculation of bonus into a single clear SELECT statement.",
+      "Use meaningful column aliases to clarify the data you are retrieving."
+    ],
+    "hints": [
+      "Check for repeated conditions in the WHERE clause and remove duplicates.",
+      "Combine the two SELECT statements into one that retrieves only relevant columns along with the calculated bonus.",
+      "Use aliasing to clearly label the calculated bonus column."
+    ],
+    "starterCode": "SELECT * FROM employees WHERE department = 'Sales' AND department = 'Sales' AND salary > 50000 AND salary > 50000;\n\nSELECT employee_id, name, salary, salary * 0.10 AS bonus FROM employees WHERE department = 'Sales' AND salary > 50000;",
+    "expectedOutput": "A query returning employee_id, name, salary, and a bonus column for all employees in 'Sales' with salary > 50000, with no redundant conditions.",
+    "concepts": [
+      "SQL SELECT statement",
+      "WHERE clause optimization",
+      "Column aliasing"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-complex-data-transformation-function-in-javascript",
+    "title": "Refactor a Complex Data Transformation Function in JavaScript",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a complex JavaScript function that processes and transforms an array of user objects, ensuring the behavior remains identical.",
+    "prompt": "You are given a JavaScript function that takes an array of user objects and performs multiple transformations including filtering, mapping, and sorting. The current implementation is correct but hard to read and maintain due to nested loops, repeated code, and unclear variable names. Refactor this function to improve its clarity, modularity, and efficiency without changing its output or behavior.",
+    "guidance": [
+      "Break down the function into smaller helper functions with meaningful names.",
+      "Use array helper methods like filter, map, and sort in a clear and consistent way.",
+      "Avoid duplicated code and magic numbers; use named constants where applicable."
+    ],
+    "hints": [
+      "Consider descriptive variable names that reflect the data they hold.",
+      "Extract filtering and mapping steps into separate functions.",
+      "Test the output after refactoring to ensure it remains unchanged."
+    ],
+    "starterCode": "function processUsers(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i].age > 18) {\n      let score = users[i].points * 2;\n      if (users[i].active) {\n        score += 10;\n      }\n      result.push({\n        id: users[i].id,\n        name: users[i].name.toUpperCase(),\n        score: score\n      });\n    }\n  }\n  for (let j = 0; j < result.length - 1; j++) {\n    for (let k = 0; k < result.length - j - 1; k++) {\n      if (result[k].score < result[k + 1].score) {\n        let temp = result[k];\n        result[k] = result[k + 1];\n        result[k + 1] = temp;\n      }\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "[\n  { id: 5, name: 'ALICE', score: 54 },\n  { id: 1, name: 'BOB', score: 50 },\n  { id: 3, name: 'JANE', score: 46 },\n  { id: 4, name: 'MIKE', score: 36 }\n]",
+    "concepts": [
+      "array methods",
+      "refactoring",
+      "code readability",
+      "modularization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
