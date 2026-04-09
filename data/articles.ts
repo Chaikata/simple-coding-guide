@@ -48199,5 +48199,457 @@ export const articles = [
         "value": "In summary, remember these best practices when dealing with NULLs in SQL:\n\n- Use IS NULL or IS NOT NULL for NULL checks.\n- Understand how NULLs interact with aggregate and logical functions.\n- Use COALESCE() to provide default values instead of NULL.\n\nBy applying these tips, you'll avoid common errors and write more reliable SQL queries."
       }
     ]
+  },
+  {
+    "slug": "understanding-type-coercion-errors-in-javascript",
+    "title": "Understanding Type Coercion Errors in JavaScript: A Deep Dive with Examples",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what type coercion errors are in JavaScript, why they happen, and how to spot and fix them through simple examples designed for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=1LX4MqiJifE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that often converts (or 'coerces') data types automatically to make operations work. While this feature can be helpful, it sometimes leads to unexpected results or errors, especially for beginners. These are known as type coercion errors. In this article, we'll explore what type coercion is, common examples that cause errors, and how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion happens when JavaScript automatically converts one data type to another to complete an operation. For example, when you use the + operator between a number and a string, JavaScript converts the number to a string and concatenates them instead of adding the numbers."
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 + '3'); // Output: '53' (number 5 is coerced to string '5')"
+      },
+      {
+        "type": "paragraph",
+        "value": "While sometimes helpful, this automatic conversion can lead to confusion or bugs if you're not expecting it. Let's look at some common type coercion errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Unexpected String Concatenation When Adding Numbers"
+      },
+      {
+        "type": "code",
+        "value": "let result = 10 + '20';\nconsole.log(result); // '1020', not 30 as you might expect"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the number 10 is converted into a string '10', so instead of adding 10 and 20, JavaScript joins them together as strings."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Comparing Values with Loose Equality (==)"
+      },
+      {
+        "type": "code",
+        "value": "console.log(0 == false);  // true\nconsole.log('' == 0);     // true\nconsole.log(null == undefined); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "The double-equal (==) operator performs type coercion before comparison, which can lead to surprising results. For instance, 0 is coerced to false, so 0 == false is true."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Arithmetic on Non-numeric Strings"
+      },
+      {
+        "type": "code",
+        "value": "let result = 'hello' - 5;\nconsole.log(result); // NaN (Not a Number)"
+      },
+      {
+        "type": "paragraph",
+        "value": "When JavaScript tries to subtract a number from a string that doesn't represent a numeric value, it results in NaN, which may cause errors if not handled."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Avoid Type Coercion Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use the Strict Equality Operator (===) Instead of ==: This avoids unexpected coercion during comparisons."
+      },
+      {
+        "type": "code",
+        "value": "console.log(0 === false); // false\nconsole.log('' === 0);    // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Explicitly Convert Types When Needed: Use functions like Number(), String(), or Boolean() to clearly convert types."
+      },
+      {
+        "type": "code",
+        "value": "let a = '5';\nlet b = 10;\nlet sum = Number(a) + b;\nconsole.log(sum); // 15"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Be Careful with Operator Usage: Remember that + can mean addition or concatenation based on operand types."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion is a powerful feature in JavaScript but can cause subtle bugs if misunderstood. By knowing how coercion works and using strict equality and explicit conversions, you can write more predictable and error-free code."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-typescript-for-ecommerce-platforms",
+    "title": "Building Scalable Data Models in TypeScript for E-commerce Platforms",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create scalable and easy-to-maintain data models in TypeScript specifically tailored for e-commerce platforms. This beginner-friendly tutorial covers key concepts and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=CXh55uorQs0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "E-commerce platforms need to handle a variety of data such as products, users, orders, and payments. Building scalable data models in TypeScript helps ensure your application is maintainable, reliable, and easy to extend as your platform grows. This tutorial will guide you through creating beginner-friendly, scalable data models using TypeScript interfaces and classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand what data models are. They are simply the shape of the data your app deals with. In TypeScript, data models can be defined using interfaces or classes, which strongly type your objects and help catch errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "To begin, let's define a basic Product model. A product in an e-commerce store typically has fields like an ID, name, description, price, and stock quantity."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id: string;\n  name: string;\n  description: string;\n  price: number;\n  stock: number;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using an interface is simple and effective for type checking product objects. But as your app grows, you might want functionality directly related to products, such as calculating discounts or updating stock."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's convert this interface into a class that encapsulates product data and behavior."
+      },
+      {
+        "type": "code",
+        "value": "class Product {\n  constructor(\n    public id: string,\n    public name: string,\n    public description: string,\n    public price: number,\n    public stock: number\n  ) {}\n\n  applyDiscount(discountPercent: number): void {\n    this.price = this.price - this.price * (discountPercent / 100);\n  }\n\n  updateStock(quantity: number): void {\n    this.stock += quantity;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This class allows you to create Product instances with methods to apply discounts and update stock easily. As you develop your e-commerce platform, you can add more models such as User, Order, and Payment, following a similar pattern."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of a User model that stores user information and roles using an enum for role consistency."
+      },
+      {
+        "type": "code",
+        "value": "enum UserRole {\n  CUSTOMER = 'CUSTOMER',\n  ADMIN = 'ADMIN',\n  SELLER = 'SELLER'\n}\n\nclass User {\n  constructor(\n    public id: string,\n    public name: string,\n    public email: string,\n    public role: UserRole\n  ) {}\n\n  isAdmin(): boolean {\n    return this.role === UserRole.ADMIN;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using enums helps avoid errors from mistyped strings and enforces consistency across your application. This is just one technique to build scalable, reliable data models."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, to handle relationships between models, you can reference instances within other classes. For example, an Order might contain multiple Products and a User who placed the order."
+      },
+      {
+        "type": "code",
+        "value": "class Order {\n  constructor(\n    public id: string,\n    public user: User,\n    public products: Product[],\n    public orderDate: Date\n  ) {}\n\n  getTotal(): number {\n    return this.products.reduce((sum, product) => sum + product.price, 0);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By designing your data models this way, your e-commerce platform code becomes easier to understand, maintain, and extend. TypeScript’s features like interfaces, classes, and enums give strong typing and help catch mistakes early."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep experimenting with more models and gradually introduce features like validation, database integration, and API communication to continue improving your scalable e-commerce platform."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-typescripts-type-narrowing-for-better-error-handling",
+    "title": "Understanding TypeScript's Type Narrowing for Better Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's type narrowing helps you catch errors early and write safer code by understanding how to refine variable types during runtime checks.",
+    "videoUrl": "https://www.youtube.com/watch?v=nBcANhO29b8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful extension of JavaScript that adds static types to the language. One of its most helpful features is type narrowing, which lets you refine a variable's type within certain parts of your code. This is especially useful for handling errors and ensuring your program behaves correctly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing happens when you use control flow statements like `if`, `typeof`, or `instanceof` to check a variable’s type. TypeScript then 'narrows' the variable's type inside that block, giving you better type safety and preventing common runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example where we want to safely handle a value that can either be a string or null:"
+      },
+      {
+        "type": "code",
+        "value": "function printLength(value: string | null) {\n  if (value !== null) {\n    // Here, TypeScript knows 'value' is a string\n    console.log(value.length);\n  } else {\n    console.log('No value provided');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the condition `value !== null` narrows the type from `string | null` to just `string` inside the `if` block. Without this check, if you tried to access `value.length` directly, TypeScript would warn you about a possible error because `null` does not have a `.length` property."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing is also very helpful when working with error objects, especially if you want to check for specific types of errors."
+      },
+      {
+        "type": "code",
+        "value": "function handleError(error: unknown) {\n  if (error instanceof Error) {\n    // Narrowed from 'unknown' to 'Error'\n    console.log('Error message:', error.message);\n  } else {\n    console.log('Unexpected error', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, using `error instanceof Error` narrows the `error` type from the wide `unknown` to a specific `Error` object, making it safe to access `error.message`. This is a common and recommended way to improve error handling safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use type predicates to create your own narrowing functions. For example, to check if a value is a string:"
+      },
+      {
+        "type": "code",
+        "value": "function isString(value: unknown): value is string {\n  return typeof value === 'string';\n}\n\nfunction printValue(value: unknown) {\n  if (isString(value)) {\n    // Within this block, TypeScript knows 'value' is a string\n    console.log(value.toUpperCase());\n  } else {\n    console.log('Not a string');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, type narrowing helps you write safer code by refining types based on runtime checks. This prevents errors like calling methods on `null` or handling data incorrectly. Understanding and using type narrowing will make your TypeScript code more robust and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "building-real-time-chat-application-websockets-python",
+    "title": "Building a Real-Time Chat Application with WebSockets in Python",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a real-time chat application using Python and WebSockets. This beginner-friendly tutorial guides you step-by-step through building a basic chat server and client.",
+    "videoUrl": "https://www.youtube.com/watch?v=nDgdldBPoE0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time communication is essential in modern web applications, especially for chat systems. WebSockets allow full-duplex communication channels over a single long-lived connection between client and server. In this tutorial, we'll build a simple real-time chat application using Python's WebSockets library."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand the components: our chat application consists of a server that manages client connections and broadcasts messages, and multiple clients that connect to this server and send/receive messages in real-time."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started, you'll need to install the `websockets` package, which is a popular choice for implementing WebSocket servers and clients in Python. You can install it using pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install websockets"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's create the WebSocket chat server. The server will accept new connections, listen for messages from any client, and broadcast those messages to all other connected clients."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport websockets\n\nconnected_clients = set()\n\nasync def chat_server(websocket, path):\n    # Register new client\n    connected_clients.add(websocket)\n    try:\n        async for message in websocket:\n            # Broadcast received message to all clients\n            for client in connected_clients:\n                if client != websocket:\n                    await client.send(message)\n    except websockets.exceptions.ConnectionClosed:\n        pass\n    finally:\n        # Unregister client\n        connected_clients.remove(websocket)\n\nasync def main():\n    async with websockets.serve(chat_server, \"localhost\", 6789):\n        print(\"Chat server started on ws://localhost:6789\")\n        await asyncio.Future()  # Run forever\n\nif __name__ == \"__main__\":\n    asyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "This server listens on `ws://localhost:6789`. When a client connects, it adds the connection to a set. Each message received is forwarded to all other connected clients. When a client disconnects, it is removed from the set."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we need a simple client to send and receive messages. Here's an example command-line WebSocket client in Python:"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport websockets\n\nasync def chat_client():\n    uri = \"ws://localhost:6789\"\n    async with websockets.connect(uri) as websocket:\n        print(\"Connected to chat server.\")\n\n        async def send_messages():\n            while True:\n                message = input(\"\")\n                await websocket.send(message)\n\n        async def receive_messages():\n            async for message in websocket:\n                print(f\"Received: {message}\")\n\n        await asyncio.gather(send_messages(), receive_messages())\n\nif __name__ == \"__main__\":\n    asyncio.run(chat_client())"
+      },
+      {
+        "type": "paragraph",
+        "value": "This client connects to the server, reads user input, sends messages, and simultaneously listens for incoming messages to display them. Run the server script first, then start multiple clients to chat."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, this project helped us understand how to implement WebSocket servers and clients in Python to create a real-time chat application. You can further enhance this by adding user authentication, message history, or a web interface for easier usability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding and enjoy building your real-time apps with WebSockets!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-multi-tenant-databases-sql-best-practices-patterns",
+    "title": "Designing Scalable Multi-Tenant Databases in SQL: Best Practices and Patterns",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design scalable multi-tenant databases using SQL with beginner-friendly best practices and common architectural patterns.",
+    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Multi-tenant databases are designed to support multiple customers (tenants) using the same infrastructure while keeping their data separate and secure. This is a popular approach for SaaS applications that need to scale efficiently. In this tutorial, we will explore beginner-friendly best practices and common SQL patterns to design scalable multi-tenant databases."
+      },
+      {
+        "type": "paragraph",
+        "value": "There are three main multi-tenant design patterns in SQL databases:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Shared Database, Shared Schema: All tenants share the same tables and schema. Each data row includes a tenant identifier to separate data."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Shared Database, Separate Schema: The database is shared, but each tenant gets its own schema within the database."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Separate Databases: Each tenant has its own database instance."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll focus on the shared database, shared schema model, as it is the most cost-effective and scalable for a large number of tenants."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Designing Tables with Tenant ID"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this pattern, tables include a `tenant_id` column to identify which tenant owns that row. This allows queries to filter data specific to a tenant. Here's an example of a `users` table in a multi-tenant setup:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE users (\n    user_id INT PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    username VARCHAR(50) NOT NULL,\n    email VARCHAR(100) NOT NULL,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    CONSTRAINT fk_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Make sure to always include `tenant_id` in your table and queries to keep tenant data separated."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Enforcing Tenant Isolation with Indexes and Constraints"
+      },
+      {
+        "type": "paragraph",
+        "value": "To ensure efficient queries and uniqueness within tenants, create composite indexes and constraints including the tenant ID. For example, to make sure usernames are unique per tenant, you can do:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE UNIQUE INDEX idx_users_tenant_username ON users (tenant_id, username);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This index guarantees that each tenant has unique usernames while allowing the same username to exist across different tenants."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Writing Tenant-Aware Queries"
+      },
+      {
+        "type": "paragraph",
+        "value": "All your queries need to filter on `tenant_id` to fetch or modify data for the correct tenant. Here's a sample query to get all users for tenant with ID 100:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT user_id, username, email\nFROM users\nWHERE tenant_id = 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, when inserting data, always provide the correct `tenant_id`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Using Row-Level Security (Optional, if Supported)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Some databases like PostgreSQL support row-level security (RLS) to enforce tenant isolation at the database level. This reduces the risk of accidental cross-tenant data access by automatically restricting rows based on the tenant's context."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, enabling RLS on the `users` table:"
+      },
+      {
+        "type": "code",
+        "value": "ALTER TABLE users ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY tenant_isolation_policy ON users\n    USING (tenant_id = current_setting('app.current_tenant')::int);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the application sets `app.current_tenant` before running queries to restrict access automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Scaling Considerations"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Partitioning:** Consider partitioning tables by `tenant_id` if supported to improve query performance for large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Connection Pooling:** Use efficient connection pooling since all tenants share a single database."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Monitoring:** Regularly monitor query performance and optimize indexes for tenant-specific queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Designing scalable multi-tenant databases using the shared schema pattern is cost-effective and suitable for many use cases. Key best practices include adding `tenant_id` columns, creating composite unique indexes, writing tenant-aware queries, and optionally using row-level security where supported. With careful planning and monitoring, your multi-tenant database will scale smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-complex-joins-for-high-volume-data-queries",
+    "title": "Optimizing Complex Joins for High-Volume Data Queries in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to avoid common errors and optimize your complex SQL joins to efficiently handle high-volume data queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large datasets in SQL, complex joins can sometimes lead to slow queries or errors like timeouts and memory issues. As a beginner, it's important to understand how to structure your joins and use optimization techniques to keep your queries efficient and error-free."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake is joining too many tables without proper filtering, which results in unnecessarily large intermediate results. To avoid this, always use filters (WHERE clauses) before joining whenever possible, and join only the needed columns."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example to demonstrate an optimized join between two large tables:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT c.customer_id, c.customer_name, o.order_id, o.order_date\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_date >= '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, the WHERE clause is applied after the JOIN which can slow things down if the orders table is very large. Instead, filter orders before joining like this:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT c.customer_id, c.customer_name, o.order_id, o.order_date\nFROM customers c\nJOIN (\n    SELECT * FROM orders WHERE order_date >= '2023-01-01'\n) o ON c.customer_id = o.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, the database does fewer join calculations because it only processes recent orders. Using subqueries or Common Table Expressions (CTEs) to limit data before joins is a key optimization technique."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another tip is to ensure columns used in JOIN and WHERE clauses are indexed. Indexes help databases quickly locate matching rows, improving join performance. If you forget to index these columns, your query might become very slow or even fail on large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, if you encounter errors such as \"out of memory\" or \"query timeout,\" consider breaking the query into smaller steps, processing parts of the data separately, or increasing database resource limits if possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "By filtering early, using indexes, and managing query complexity, you can avoid many errors and optimize complex joins to efficiently query high-volume data."
+      }
+    ]
   }
 ];
