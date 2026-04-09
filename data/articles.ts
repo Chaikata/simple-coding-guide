@@ -48651,5 +48651,538 @@ export const articles = [
         "value": "By filtering early, using indexes, and managing query complexity, you can avoid many errors and optimize complex joins to efficiently query high-volume data."
       }
     ]
+  },
+  {
+    "slug": "handling-large-number-precision-in-javascript-edge-cases-and-workarounds",
+    "title": "Handling Large Number Precision in JavaScript: Edge Cases and Workarounds",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to handle large number precision issues in JavaScript with practical examples and simple workarounds.",
+    "videoUrl": "https://www.youtube.com/watch?v=1sE2su_a_W8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript uses the IEEE 754 double-precision floating-point format for representing numbers. While this format works well for many cases, it can lead to precision problems when working with very large numbers. Understanding these edge cases and learning how to overcome them is important for developers dealing with financial data, scientific calculations, or any situation requiring high numerical accuracy."
+      },
+      {
+        "type": "paragraph",
+        "value": "The maximum safe integer in JavaScript is defined by `Number.MAX_SAFE_INTEGER`, which is 2^53 - 1 (9,007,199,254,740,991). Numbers larger than this value cannot be represented accurately using the standard Number type, leading to precision loss."
+      },
+      {
+        "type": "code",
+        "value": "console.log(Number.MAX_SAFE_INTEGER); // 9007199254740991\n\n// Example of precision loss:\nconst largeNum = 9007199254740991;\nconsole.log(largeNum === largeNum + 1); // true, which is unexpected\nconsole.log(largeNum + 1); // 9007199254740992\nconsole.log(largeNum + 2); // 9007199254740992, same as previous"
+      },
+      {
+        "type": "paragraph",
+        "value": "As shown, JavaScript treats `largeNum`, `largeNum + 1`, and `largeNum + 2` as the same value due to precision limitations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using BigInt for Large Integers\nSince ES2020, JavaScript introduced `BigInt`, a built-in object that can represent arbitrarily large integers with full precision. You create a BigInt by appending `n` to the end of the integer or by calling `BigInt()`."
+      },
+      {
+        "type": "code",
+        "value": "const bigInt1 = 9007199254740991n;\nconst bigInt2 = bigInt1 + 1n;\nconsole.log(bigInt1 === bigInt2); // false\nconsole.log(bigInt2); // 9007199254740992n\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "BigInt works great for integers, but it doesn’t support decimals. If you need arbitrary precision with decimals, you’ll require special libraries."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Large Decimal Numbers\nFor decimal arithmetic with large numbers, libraries like `decimal.js`, `big.js`, or `bignumber.js` provide precise calculations without losing accuracy."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example using `decimal.js` (you need to install it using npm or use a CDN in the browser):"
+      },
+      {
+        "type": "code",
+        "value": "// npm install decimal.js\nconst Decimal = require('decimal.js');\n\nconst largeDecimal = new Decimal('9007199254740991.123456789');\nconst sum = largeDecimal.plus('0.000000001');\nconsole.log(sum.toString()); // 9007199254740991.12345679"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method avoids the floating-point precision errors native JavaScript numbers would have caused."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- JavaScript's `Number` type has limitations with very large integers due to IEEE 754 precision.\n- Use `BigInt` for working with large integer values safely.\n- Use third-party libraries for arbitrary precision decimal arithmetic.\n- Always consider precision requirements when dealing with large or precise numeric data."
+      }
+    ]
+  },
+  {
+    "slug": "handling-typescripts-unknown-type-practical-edge-cases-strategies",
+    "title": "Handling TypeScript's Unknown Type: Practical Edge Cases and Strategies",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to work effectively with TypeScript's unknown type through practical edge cases and smart strategies to keep your code safe and maintainable.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript's `unknown` type is a safer alternative to `any` when you don't know the exact type of a value upfront. Unlike `any`, `unknown` forces you to do some form of type checking before using the value, reducing bugs and increasing code safety. In this tutorial, we'll explore practical edge cases and strategies to handle `unknown` in your TypeScript projects, especially if you're just starting out."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is `unknown`? Why use it?\nThe `unknown` type represents any value but requires you to perform a type check before accessing members or performing operations on it. It acts as a type-safe counterpart to `any`. This helps prevent runtime errors caused by invalid operations on unknown data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's the simplest example:"
+      },
+      {
+        "type": "code",
+        "value": "let data: unknown = \"Hello, TypeScript!\";\n\n// Won't compile without a check\n// console.log(data.toUpperCase()); // Error: Object is of type 'unknown'.\n\nif (typeof data === 'string') {\n  // Now TypeScript knows 'data' is a string here\n  console.log(data.toUpperCase());\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical edge case #1: Handling JSON data\nImagine you receive JSON from an external API. Its type is unknown at first. You want to safely parse and use it."
+      },
+      {
+        "type": "code",
+        "value": "function parseJson(input: string): unknown {\n  return JSON.parse(input);\n}\n\nconst userData = parseJson('{\"name\": \"Alice\", \"age\": 30}');\n\n// You can't directly access userData.name\nif (\n  typeof userData === 'object' &&\n  userData !== null &&\n  'name' in userData\n) {\n  // Use a type assertion to help TypeScript\n  const user = userData as { name: string };\n  console.log(user.name); // Prints: Alice\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Strategy: Custom Type Guards\nCreating your own type guard functions lets you reuse logic and make your code cleaner."
+      },
+      {
+        "type": "code",
+        "value": "function isUser(obj: unknown): obj is { name: string; age: number } {\n  return (\n    typeof obj === 'object' &&\n    obj !== null &&\n    'name' in obj &&\n    typeof (obj as any).name === 'string' &&\n    'age' in obj &&\n    typeof (obj as any).age === 'number'\n  );\n}\n\nconst value: unknown = { name: 'Bob', age: 25 };\n\nif (isUser(value)) {\n  console.log(value.name, value.age); // TypeScript knows value is a user\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical edge case #2: Working with unions and exhaustive checks\nSometimes, your `unknown` value could be one of many types. Use exhaustive checks to narrow down safely."
+      },
+      {
+        "type": "code",
+        "value": "type Possible = string | number | boolean;\n\nfunction handleValue(value: unknown) {\n  if (typeof value === 'string') {\n    console.log('String:', value);\n  } else if (typeof value === 'number') {\n    console.log('Number:', value);\n  } else if (typeof value === 'boolean') {\n    console.log('Boolean:', value);\n  } else {\n    console.log(\"Unknown type - can't handle it safely.\");\n  }\n}\n\nhandleValue(42);      // Number: 42\nhandleValue(\"hello\"); // String: hello\nhandleValue(true);    // Boolean: true\nhandleValue({});      // Unknown type - can't handle it safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Strategy: Use type assertions carefully\nIf you’re confident about the type due to runtime checks or guarantees (such as from API docs or internal code), you can use type assertions. However, use this sparingly to avoid mask bugs."
+      },
+      {
+        "type": "code",
+        "value": "function process(value: unknown) {\n  if (typeof value === 'string') {\n    // Safe to assert\n    const strValue = value as string;\n    console.log(strValue.length);\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Use `unknown` when you want type safety with flexible data.\n- Always narrow `unknown` types before using them (via `typeof`, `in`, or custom type guards).\n- Create reusable type guards for complex types.\n- Use exhaustive checks with union types.\n- Avoid overusing type assertions to keep code safe.\n\nBy following these strategies, you'll avoid common pitfalls and write more robust TypeScript code even when dealing with uncertain data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Got questions or examples you want to share? Leave a comment and keep practicing handling TypeScript's `unknown` type!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-complex-type-narrowing-errors-in-large-scale-typescript-applications",
+    "title": "Handling Complex Type Narrowing Errors in Large-Scale TypeScript Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn practical tips to effectively resolve complex type narrowing errors in large-scale TypeScript projects with beginner-friendly explanations and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=vRICq8wigI0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool for building large-scale applications by adding strong typing to JavaScript. However, as applications grow, handling complex types and narrowing them correctly often leads to type narrowing errors. Understanding how to manage these errors can improve code reliability and developer experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing means telling TypeScript more precisely what type a variable is at a given point in the code. This is especially important when we work with unions or complex nested types. When TypeScript can't confidently narrow a type, it throws errors which can sometimes be confusing for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example to start. Imagine you have a union type and want TypeScript to understand which branch you are working with:"
+      },
+      {
+        "type": "code",
+        "value": "type Shape = { kind: 'circle'; radius: number } | { kind: 'square'; sideLength: number };\n\nfunction getArea(shape: Shape) {\n  if (shape.kind === 'circle') {\n    // TypeScript knows shape is a circle here\n    return Math.PI * shape.radius * shape.radius;\n  } else {\n    // Here TypeScript knows shape is a square\n    return shape.sideLength * shape.sideLength;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, TypeScript can narrow the `shape` type easily by checking the `kind` property. However, as types become more complex with deeper nested objects or multiple union types, TypeScript may produce errors because it cannot conclusively narrow the type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common causes of narrowing errors in large applications include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Using complex unions or intersections without clear discriminators\n- Incomplete runtime checks for properties\n- Ambiguous null or undefined states\n- Optional chaining that confuses the type analysis"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle these errors effectively, consider these best practices:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use Discriminated Unions**: Always include a literal property (like `kind` or `type`) that clearly identifies the variant type."
+      },
+      {
+        "type": "code",
+        "value": "type Vehicle =\n  | { type: 'car'; wheels: 4 }\n  | { type: 'bike'; wheels: 2 };\n\nfunction getWheelCount(vehicle: Vehicle) {\n  switch (vehicle.type) {\n    case 'car':\n      return vehicle.wheels; // narrowed to car type\n    case 'bike':\n      return vehicle.wheels; // narrowed to bike type\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Add Explicit Type Guards**: Sometimes TypeScript needs help narrowing complex objects. You can write custom type guard functions to check if an object matches a type."
+      },
+      {
+        "type": "code",
+        "value": "function isCircle(shape: Shape): shape is { kind: 'circle'; radius: number } {\n  return shape.kind === 'circle';\n}\n\n// Usage\nif (isCircle(shape)) {\n  // TypeScript now knows shape is a circle.\n  console.log(shape.radius);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use Non-Null Assertions Carefully**: If you are sure a value is not null/undefined but TypeScript cannot infer it, you can use `!` to tell the compiler explicitly. However, use this cautiously to avoid runtime errors."
+      },
+      {
+        "type": "code",
+        "value": "function printName(user?: { name?: string }) {\n  // Assert that user and name exist\n  console.log(user!.name!);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Break Down Complex Conditions**: Instead of writing a single if-statement to narrow one complicated type, split checks into multiple clearer steps."
+      },
+      {
+        "type": "code",
+        "value": "if (obj !== null && typeof obj === 'object') {\n  if ('propertyA' in obj) {\n    // now obj.propertyA is accessible and type narrowed\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In large-scale codebases, using these strategies consistently helps TypeScript understand your types better, reducing narrowing errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, when you encounter a narrowing error:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Check if you can use a discriminated union\n- Confirm your runtime checks cover all possibilities\n- Use explicit type guards when needed\n- Avoid overly complicated expressions in narrowing\n- Use non-null assertions as a last resort"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these beginner-friendly practices, you can handle complex type narrowing errors effectively and write safer TypeScript code for large-scale applications."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-python-pydantic-dataclasses",
+    "title": "Building Scalable Data Models in Python Using Pydantic and Dataclasses",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and maintainable data models in Python using Pydantic and dataclasses with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=c-Bqg7Gbuc8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications, data modeling is essential for organizing and validating data. Python offers great tools for this purpose, like dataclasses and Pydantic. In this tutorial, you'll learn how to create scalable data models leveraging Python's built-in dataclasses for simplicity and Pydantic for powerful validation."
+      },
+      {
+        "type": "paragraph",
+        "value": "Dataclasses are part of the standard Python library and help reduce boilerplate when creating classes mainly used to store data. Pydantic builds on this idea, adding type validation and parsing, making it a great choice when you want your data models to be both concise and robust."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s start with a simple example of a dataclass to represent a User."
+      },
+      {
+        "type": "code",
+        "value": "from dataclasses import dataclass\n\n@dataclass\nclass User:\n    id: int\n    name: str\n    email: str\n\nuser = User(id=1, name='Alice', email='alice@example.com')\nprint(user)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach is clear and concise, but it lacks automatic validation. For example, you could accidentally create a User with an invalid email or the wrong data types and Python would not raise any error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let’s see how Pydantic improves upon this by validating the data during model creation."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, EmailStr\n\nclass UserModel(BaseModel):\n    id: int\n    name: str\n    email: EmailStr\n\nuser = UserModel(id=1, name='Alice', email='alice@example.com')\nprint(user)\n\n# If email is invalid, it raises a validation error\n# user = UserModel(id=1, name='Alice', email='invalid-email')  # Raises ValidationError"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how Pydantic uses Python type hints to validate the data dynamically. For example, if you provide an invalid email, Pydantic raises a validation error immediately. This is useful for applications that rely on user input or external APIs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Pydantic models also support data serialization out-of-the-box using methods like `.dict()` and `.json()`. This makes it easy to convert your models for storage, logging, or API responses."
+      },
+      {
+        "type": "code",
+        "value": "print(user.dict())  # Returns a dictionary\nprint(user.json())  # Returns JSON string"
+      },
+      {
+        "type": "paragraph",
+        "value": "For larger projects, you can combine both approaches. Use dataclasses for internal simple structures where validation is not critical, and Pydantic models for data coming from external sources that require validation."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example combining both tools in a scalable way:"
+      },
+      {
+        "type": "code",
+        "value": "from dataclasses import dataclass\nfrom typing import List\nfrom pydantic import BaseModel, ValidationError, EmailStr\n\n@dataclass\nclass Address:\n    street: str\n    city: str\n    zipcode: str\n\nclass UserModel(BaseModel):\n    id: int\n    name: str\n    email: EmailStr\n    addresses: List[Address]\n\n# Correct input\naddresses = [Address(street=\"123 Python Rd\", city=\"Pytown\", zipcode=\"12345\")]\nuser = UserModel(id=1, name='Alice', email='alice@example.com', addresses=addresses)\nprint(user)\n\n# Invalid email example\ntry:\n    bad_user = UserModel(id=2, name='Bob', email='bad-email', addresses=addresses)\nexcept ValidationError as e:\n    print(\"Validation Error:\", e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the addresses are simple dataclasses because no extra validation is needed beyond their fields being strings. The UserModel, however, is a Pydantic model that validates the email and the list of addresses. This design keeps your code clean, readable, and scalable."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use Python dataclasses when you want simple, boilerplate-free data containers without heavy validation.\n- Use Pydantic models when you want automatic data validation, parsing, and serialization.\n- Combine both approaches to keep your codebase scalable and maintainable.\n\nWith these tools, building data models in Python becomes straightforward and robust."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-python-systems-handling-resource-exhaustion-gracefully",
+    "title": "Designing Resilient Python Systems: Handling Resource Exhaustion Gracefully",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to make your Python applications more resilient by handling resource exhaustion errors gracefully with practical examples and best practices.",
+    "videoUrl": "https://www.youtube.com/watch?v=hgcySH8cETU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building Python applications, it's important to ensure they can handle unexpected situations without crashing. One common challenge developers face is resource exhaustion — when your program runs out of memory, file handles, or other system resources. This article will guide you through understanding resource exhaustion and how to handle it gracefully in your Python code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Resource exhaustion happens when your program uses up all of a particular resource such as memory, disk space, or network connections. For example, trying to open too many files or creating too many objects can lead to errors like `MemoryError` or `OSError`. Handling these errors properly can prevent your program from crashing unexpectedly and allow it to recover or fail safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle these scenarios, Python provides exceptions such as `MemoryError` for memory exhaustion and `OSError` for system-level errors, including too many open files. The key approach is to anticipate where resources might be exhausted and use try-except blocks to catch and respond to these errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of handling a `MemoryError` that might occur during a large data processing task:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # Simulate processing a large list\n    large_list = [x for x in range(10**9)]  # This may cause MemoryError\nexcept MemoryError:\n    print(\"Oops! Too much memory used. Try processing smaller chunks.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if Python runs out of memory while creating a huge list, the program catches the `MemoryError` and prints a helpful message instead of crashing. Depending on your use case, you can also free resources, save progress, or alert the user."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common resource exhaustion is hitting the maximum number of open files. Python raises an `OSError` with a specific error code. You can catch this and respond accordingly."
+      },
+      {
+        "type": "code",
+        "value": "import os\n\ntry:\n    # Attempt to open too many files\n    files = [open(f\"file_{i}.txt\", \"w\") for i in range(10000)]\nexcept OSError as e:\n    if e.errno == 24:  # EMFILE: Too many open files\n        print(\"Reached open file limit! Closing some files.\")\n        # Close previously opened files to free resources\n        for f in files:\n            f.close()\n    else:\n        raise"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, we specifically check for the 'Too many open files' error using the error number `24` (which is system-dependent but common on Unix-like systems). This allows us to handle the situation by cleaning up resources properly."
+      },
+      {
+        "type": "paragraph",
+        "value": "In addition to catching exceptions, it is good practice to manage resources carefully using context managers — for example, opening files with the `with` statement. This ensures files are closed automatically, reducing the chance of resource leaks."
+      },
+      {
+        "type": "code",
+        "value": "def process_files(file_names):\n    for file_name in file_names:\n        try:\n            with open(file_name, 'r') as f:\n                data = f.read()\n                # Process the file data here\n        except OSError as e:\n            print(f\"Error opening {file_name}: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `with` statement ensures files are closed immediately after use, minimizing resource consumption and preventing exhaustion."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, designing resilient Python systems to handle resource exhaustion involves:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Anticipating where resource limits can be hit (memory, files, etc.)\n- Using try-except blocks to catch exceptions like `MemoryError` and `OSError`\n- Cleaning up resources when limits are reached\n- Using context managers (`with` statements) for automatic resource management\n- Considering graceful degradation or user notifications when resources run out"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these guidelines, your Python applications will be more robust and maintain stability even when system limits are under pressure."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-for-advanced-data-analytics-in-sql",
+    "title": "Mastering Window Functions for Advanced Data Analytics in SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to perform powerful and advanced data analytics with beginner-friendly examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Window functions are a powerful feature in SQL that allow you to perform calculations across a set of table rows related to the current row. They are essential for advanced data analytics because they let you compute running totals, rankings, moving averages, and other cumulative metrics without collapsing your query results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Unlike aggregate functions, which group rows and return a single result per group, window functions preserve individual rows while still performing calculations over values in a defined window (or partition). This enables detailed analytics and reporting within your dataset."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some common window functions with practical examples using a sample sales table structured like this:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n    id INT,\n    salesperson VARCHAR(50),\n    region VARCHAR(50),\n    sale_amount DECIMAL(10, 2),\n    sale_date DATE\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. ROW_NUMBER(): Assigns a unique sequential number to each row within a partition ordered by some columns."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  sale_amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS sale_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query ranks each sale per salesperson by the sale date, starting at 1 for the earliest sale."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. RANK() and DENSE_RANK(): Similar to ROW_NUMBER but handle ties differently."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_amount,\n  RANK() OVER (PARTITION BY salesperson ORDER BY sale_amount DESC) AS rank,\n  DENSE_RANK() OVER (PARTITION BY salesperson ORDER BY sale_amount DESC) AS dense_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "RANK gives the same rank to tied values but skips rank numbers after ties. DENSE_RANK also ties but does not skip numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. SUM() with OVER(): Calculate running totals or totals per partition while keeping all rows."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This calculates a running total of sales for each salesperson ordered by the sale date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. LAG() and LEAD(): Access data from previous or next rows without self-joins."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  sale_amount,\n  LAG(sale_amount, 1) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_sale,\n  LEAD(sale_amount, 1) OVER (PARTITION BY salesperson ORDER BY sale_date) AS next_sale\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "These functions let you compare each sale amount to the previous and next sale amounts for the same salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Case: Finding Top Sales per Region"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM (\n  SELECT\n    region,\n    salesperson,\n    sale_amount,\n    RANK() OVER (PARTITION BY region ORDER BY sale_amount DESC) AS sales_rank\n  FROM sales\n) ranked_sales\nWHERE sales_rank = 1;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query identifies the top salespeople in each region with the highest sales amount."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions extend SQL's analytical capabilities by allowing you to perform complex calculations across related rows without losing detail. With ROW_NUMBER, RANK, SUM, LAG, LEAD, and others, you can create insightful reports and dashboards easily. Practice these functions on your datasets to become proficient in advanced SQL data analysis."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-null-handling-mechanisms-across-popular-sql-databases",
+    "title": "Comparing NULL Handling Mechanisms Across Popular SQL Databases",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how popular SQL databases like MySQL, PostgreSQL, and SQL Server handle NULL values differently, and avoid common errors with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Yh4CrPHVBdE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, handling NULL values correctly is crucial to avoid bugs and unexpected behavior. Although NULL is a standard concept in SQL, popular databases like MySQL, PostgreSQL, and SQL Server handle NULL comparisons and operations in subtly different ways. This article introduces beginners to these differences and provides practical code examples to help you avoid common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand that NULL represents an unknown or missing value. It is not the same as zero or an empty string. Comparing NULL using standard operators (like = or <>) can lead to unexpected results."
+      },
+      {
+        "type": "paragraph",
+        "value": "### NULL Comparison Using `=` and `IS NULL`"
+      },
+      {
+        "type": "paragraph",
+        "value": "All popular SQL databases require `IS NULL` or `IS NOT NULL` for checking NULL values. Using `=` or `<>` with NULL does not work as expected because NULL is not equal to anything—including itself."
+      },
+      {
+        "type": "code",
+        "value": "-- This will not work as expected in MySQL, PostgreSQL, or SQL Server\nSELECT * FROM users WHERE last_login = NULL;\n\n-- The correct way is:\nSELECT * FROM users WHERE last_login IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### NULL Handling in MySQL, PostgreSQL, and SQL Server"
+      },
+      {
+        "type": "paragraph",
+        "value": "All three database systems follow the SQL standard that NULL comparisons using `=` or `<>` result in UNKNOWN, effectively filtering those rows out. However, there are small differences in how functions and operators treat NULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, the `COALESCE` function returns the first non-NULL value and behaves the same across MySQL, PostgreSQL, and SQL Server."
+      },
+      {
+        "type": "code",
+        "value": "-- Using COALESCE to handle NULL values\nSELECT id, COALESCE(phone, 'No phone provided') AS contact_phone FROM customers;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### NULL and Sorting Behavior"
+      },
+      {
+        "type": "paragraph",
+        "value": "When sorting NULL values, the order varies by database:"
+      },
+      {
+        "type": "code",
+        "value": "-- In PostgreSQL, NULLs sort first by default when ASC\nSELECT name FROM employees ORDER BY department ASC;\n\n-- To sort NULLs last in PostgreSQL\nSELECT name FROM employees ORDER BY department ASC NULLS LAST;\n\n-- MySQL places NULLs first when ASC; no NULLS LAST option (available from 8.0 with tricks)\n\n-- SQL Server places NULLs last by default when ASC\nSELECT name FROM employees ORDER BY department ASC;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### NULL in UNIQUE Constraints"
+      },
+      {
+        "type": "paragraph",
+        "value": "In SQL Server and PostgreSQL, NULLs are treated as distinct values in unique constraints, so multiple NULLs are allowed. In contrast, MySQL treats multiple NULLs as duplicates in unique indexes in some storage engines, which can cause errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common NULL-Related Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Trying to find rows with `= NULL` instead of `IS NULL`.\n2. Using functions or calculations that do not handle NULL, causing unexpected NULL results.\n3. Unique constraint violations due to unexpected NULL handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid errors and unexpected results:\n- Always use `IS NULL` or `IS NOT NULL` to check for NULL.\n- Use `COALESCE` to provide default values when NULLs may exist.\n- Be aware of NULL sorting differences if ordering is important.\n- Understand your DBMS's behavior with NULLs in unique constraints.\n\nWith these guidelines, you can better work with NULLs and create more reliable SQL queries across different database systems."
+      }
+    ]
   }
 ];
