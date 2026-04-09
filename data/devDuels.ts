@@ -6335,5 +6335,176 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-sql-syntax-error-in-a-basic-select-query",
+    "title": "Fix the SQL Syntax Error in a Basic SELECT Query",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple SQL query has a syntax error that causes it to fail. Your task is to identify and fix the bug so that the query returns the correct results from the Employees table.",
+    "prompt": "You are given a broken SQL query intended to select all employees with the job title 'Developer' from the Employees table. The query throws a syntax error and doesn't run. Find and fix the error so the query works correctly.",
+    "guidance": [
+      "Check the syntax of the SELECT statement carefully.",
+      "Make sure string values in the WHERE clause are properly quoted."
+    ],
+    "hints": [
+      "SQL string literals should be enclosed in single quotes ' ' not double quotes \" \".",
+      "The WHERE clause syntax must be valid and complete."
+    ],
+    "starterCode": "SELECT * FROM Employees WHERE JobTitle = \"Developer\";",
+    "expectedOutput": "All rows from Employees table where JobTitle equals 'Developer'.",
+    "concepts": [
+      "SQL SELECT statement",
+      "WHERE clause",
+      "String literals in SQL"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-function-for-summarizing-employee-sales-data",
+    "title": "Refactor a Function for Summarizing Employee Sales Data",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability and efficiency of a given Python function that processes a list of employee sales records and returns a summary dictionary.",
+    "prompt": "You are given a function that takes a list of dictionaries representing employee sales records. Each record contains 'employee_id' and 'sales' fields. The function returns a dictionary that sums total sales per employee. The existing code is functional but messy and inefficient. Refactor the function to improve code clarity, remove redundant operations, and maintain the exact output behavior.",
+    "guidance": [
+      "Focus on simplifying loops and minimizing dictionary lookups.",
+      "Use meaningful variable names and Python's dictionary methods.",
+      "Ensure the function runs efficiently on large input lists."
+    ],
+    "hints": [
+      "Consider using dict.get() to simplify your code when updating sales totals.",
+      "Avoid recalculating values or unnecessary intermediate variables.",
+      "Think about how you can combine operations inside a single loop."
+    ],
+    "starterCode": "def summarize_sales(records):\n    result = {}\n    for record in records:\n        emp = record['employee_id']\n        sale = record['sales']\n        if emp in result:\n            result[emp] = result.get(emp, 0) + sale\n        else:\n            result[emp] = sale\n    return result",
+    "expectedOutput": "{'e1': 450, 'e2': 300, 'e3': 150}",
+    "concepts": [
+      "refactoring",
+      "dictionary operations",
+      "loops",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-output-of-recursive-python-function-with-mutable-default-arguments",
+    "title": "Predict Output of Recursive Python Function with Mutable Default Arguments",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze the output of an advanced recursive Python function that uses mutable default arguments and in-place list modifications to understand how state is preserved and mutated across recursive calls.",
+    "prompt": "Consider the following Python function that recursively modifies a list passed via a mutable default argument and uses conditional logic to build a result. Predict the exact output when the function is called without arguments.\n\nWhat will be printed after executing main()?\n\nAnalyze the recursion, list mutations, and order of execution carefully.",
+    "guidance": [
+      "Trace the recursive calls step-by-step, keeping track of how the list 'acc' changes each time.",
+      "Remember that default arguments are evaluated once when the function is defined, not each time it is called.",
+      "Pay close attention to the base case and the order in which the recursive calls append to the list."
+    ],
+    "hints": [
+      "Mutable default arguments retain changes between function calls.",
+      "Each recursive call modifies the same list instance passed down, leading to an accumulation of elements.",
+      "Consider the recursion unwinding phase and how elements are appended during that phase."
+    ],
+    "starterCode": "def recursive_accumulate(n, acc=[]):\n    if n == 0:\n        acc.append('base')\n        return acc\n    acc.append(n)\n    recursive_accumulate(n-1, acc)\n    acc.append(-n)\n    return acc\n\ndef main():\n    result = recursive_accumulate(3)\n    print(result)\n\nmain()",
+    "expectedOutput": "['3', '2', '1', 'base', '-1', '-2', '-3']\n\n(Note: Output will actually be [3, 2, 1, 'base', -1, -2, -3])",
+    "concepts": [
+      "recursion",
+      "mutable default arguments",
+      "list mutation",
+      "order of operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-task-progress-tracker-with-status-summary",
+    "title": "Build a Task Progress Tracker with Status Summary",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a Python function to track the progress of multiple tasks with varying statuses and provide a summary of counts per status.",
+    "prompt": "You are given a list of task dictionaries where each task has at least a 'name' and a 'status'. Status can be 'Pending', 'In Progress', or 'Completed'. Write a function `track_task_progress(tasks)` that returns a summary dictionary containing the count of tasks for each status and a list of all tasks grouped by their status. The output dictionary should have statuses as keys, each mapping to a dictionary with two keys: 'count' for the number of tasks, and 'tasks', a list of task names having that status.",
+    "guidance": [
+      "Iterate through the list of tasks, grouping them by their status.",
+      "Count the number of tasks for each status and collect their names.",
+      "Return a dictionary structured as {status: {'count': int, 'tasks': [list of task names]}, ...}."
+    ],
+    "hints": [
+      "Consider using a dictionary to accumulate results as you iterate.",
+      "Use dict.setdefault() or collections.defaultdict for easier grouping.",
+      "Ensure to handle cases when no tasks exist for a particular status."
+    ],
+    "starterCode": "def track_task_progress(tasks):\n    # Your code here\n    pass",
+    "expectedOutput": "For input:\n[\n  {'name': 'Task 1', 'status': 'Pending'},\n  {'name': 'Task 2', 'status': 'In Progress'},\n  {'name': 'Task 3', 'status': 'Pending'},\n  {'name': 'Task 4', 'status': 'Completed'}\n]\nOutput:\n{\n  'Pending': {'count': 2, 'tasks': ['Task 1', 'Task 3']},\n  'In Progress': {'count': 1, 'tasks': ['Task 2']},\n  'Completed': {'count': 1, 'tasks': ['Task 4']}\n}",
+    "concepts": [
+      "dictionaries",
+      "list iteration",
+      "grouping data",
+      "conditional logic"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-bug-in-concurrent-rate-limiter-implementation",
+    "title": "Fix Bug in Concurrent Rate Limiter Implementation",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Given a broken Python implementation of a token bucket rate limiter intended to handle concurrent requests with thread safety, identify and fix the bugs causing incorrect rate limiting behavior and race conditions.",
+    "prompt": "The provided Python code is intended to implement a token bucket rate limiter for an API, enforcing a max request rate over time and supporting concurrency with thread safety. However, it currently fails under concurrent load, either allowing more requests than allowed or deadlocking. Your task is to identify and fix the concurrency and logic bugs so that the rate limiter correctly enforces the limit in multithreaded environments.",
+    "guidance": [
+      "Review thread synchronization mechanisms used in the code and ensure proper locking to avoid race conditions.",
+      "Verify that token refill logic accounts for time and concurrency correctly and only adds tokens once per period.",
+      "Test with concurrent threads to confirm that no more than the allowed requests pass within the specified window."
+    ],
+    "hints": [
+      "Look for improper use or missing use of thread locks around shared state modifications.",
+      "Check if the token refill timing is calculated correctly and whether multiple threads might simultaneously refill tokens improperly.",
+      "Consider the atomicity of checking and decrementing token counts under concurrency."
+    ],
+    "starterCode": "import threading\nimport time\n\nclass TokenBucket:\n    def __init__(self, rate, capacity):\n        self.capacity = capacity\n        self.tokens = capacity\n        self.rate = rate\n        self.timestamp = time.time()\n        self.lock = threading.Lock()\n\n    def allow_request(self):\n        now = time.time()\n        elapsed = now - self.timestamp\n        add_tokens = elapsed * self.rate\n        if add_tokens > 0:\n            self.tokens = min(self.capacity, self.tokens + add_tokens)\n            self.timestamp = now\n\n        if self.tokens >= 1:\n            self.tokens -= 1\n            return True\n        else:\n            return False",
+    "expectedOutput": "The fixed TokenBucket should correctly limit requests so that no more than capacity tokens are used per second regardless of concurrency. For example, in a test with 10 threads attempting to call allow_request 100 times each with rate=5 and capacity=10, roughly 10-15 requests per second are permitted, reflecting the rate limiter's constraints without race conditions.",
+    "concepts": [
+      "threading",
+      "concurrency",
+      "rate limiting",
+      "locks",
+      "token bucket algorithm"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-to-use-where-instead-of-having-for-simple-conditions",
+    "title": "Refactor SQL Query to Use WHERE Instead of HAVING for Simple Conditions",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve the given SQL query by refactoring it to replace the HAVING clause with a WHERE clause where appropriate, optimizing performance without changing the result.",
+    "prompt": "You are given a SQL query that uses a HAVING clause to filter rows on a simple condition that could be done using a WHERE clause. Refactor the query to optimize it by using WHERE instead of HAVING, while ensuring the output remains exactly the same.\n\nOriginal query:\nSELECT employee_id, department_id\nFROM employees\nGROUP BY employee_id, department_id\nHAVING department_id = 3;",
+    "guidance": [
+      "Understand that HAVING is used to filter aggregated results, while WHERE filters rows before grouping.",
+      "Check if the condition in HAVING can be applied before aggregation; if yes, use WHERE.",
+      "Refactor the query by moving the condition inside the WHERE clause and removing HAVING."
+    ],
+    "hints": [
+      "Try running the query with the condition in WHERE and see if the result matches the original.",
+      "Remember, WHERE filters rows before aggregation happens, which is more efficient.",
+      "Use GROUP BY only if necessary for other aggregations."
+    ],
+    "starterCode": "SELECT employee_id, department_id\nFROM employees\nGROUP BY employee_id, department_id\nHAVING department_id = 3;",
+    "expectedOutput": "The query returns all unique employee_id and department_id pairs where department_id is 3, identical before and after refactoring.",
+    "concepts": [
+      "SQL WHERE clause",
+      "SQL HAVING clause",
+      "Query optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
