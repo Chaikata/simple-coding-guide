@@ -1,477 +1,461 @@
 [
   {
-    "slug": "mastering-immutable-data-structures-in-javascript-for-cleaner-state-management",
-    "title": "Mastering Immutable Data Structures in JavaScript for Cleaner State Management",
+    "slug": "how-to-build-interactive-to-do-lists-with-javascript-for-beginners",
+    "title": "How to Build Interactive To-Do Lists with JavaScript for Beginners",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to use immutable data structures in JavaScript to write cleaner and more predictable state management code, even as a beginner.",
-    "videoUrl": "https://www.youtube.com/watch?v=BcvezP2Av_4",
+    "description": "Learn how to create simple, interactive to-do lists using JavaScript. This beginner-friendly tutorial helps you understand event handling, DOM manipulation, and basic logic to build practical web apps.",
+    "videoUrl": "https://www.youtube.com/watch?v=G0jO8kUrg-I",
     "content": [
       {
         "type": "paragraph",
-        "value": "Managing state in JavaScript applications can get complicated, especially when data changes in unexpected ways. One powerful approach to writing cleaner and more predictable code is by using immutable data structures. In this tutorial, you will learn what immutability means, why it matters, and how to work with immutable data in JavaScript."
+        "value": "To-do lists are a great way to practice JavaScript because they involve core concepts like events, DOM manipulation, and data handling. In this tutorial, you'll learn how to create a basic interactive to-do list where you can add, mark, and delete tasks."
       },
       {
         "type": "paragraph",
-        "value": "### What is Immutability?\nImmutability means that once a data structure is created, it cannot be changed. Instead of modifying existing data, you create new copies with the changes applied. This approach helps avoid bugs related to unexpected side-effects and makes debugging easier."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why Use Immutable Data Structures?\n- Predictability: The state can't be changed accidentally.\n- Easier Debugging: Previous states remain unchanged for inspection.\n- Useful in Frameworks: Libraries like React and Redux rely heavily on immutability to optimize rendering."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How to Work with Immutable Data in JavaScript\nPrimitive types like strings and numbers are already immutable. However, objects and arrays are mutable by default. To manage immutability, you can:\n- Use methods that return new copies without modifying the original data.\n- Use libraries designed for immutability.\n\nBelow are some examples of handling immutability with objects and arrays."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Working with Immutable Objects"
+        "value": "Let's start by creating a simple HTML structure with an input box, a button, and a list to display the tasks."
       },
       {
         "type": "code",
-        "value": "const person = { name: 'Alice', age: 25 };\n\n// Instead of modifying, create a new object with spread operator\nconst updatedPerson = { ...person, age: 26 };\n\nconsole.log(person);       // { name: 'Alice', age: 25 }\nconsole.log(updatedPerson); // { name: 'Alice', age: 26 }"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Interactive To-Do List</title>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Add a new task...\">\n  <button id=\"addTaskBtn\">Add Task</button>\n  <ul id=\"taskList\"></ul>\n\n  <script src=\"app.js\"></script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the original person object remains unchanged, and a new object with the updated age is created."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Working with Immutable Arrays"
+        "value": "Next, we will write JavaScript to add task items to the list when the user clicks the button or presses 'Enter' in the input box."
       },
       {
         "type": "code",
-        "value": "const numbers = [1, 2, 3];\n\n// Adding an element without mutation\nconst newNumbers = [...numbers, 4];\n\n// Removing an element without mutation\nconst filteredNumbers = numbers.filter(n => n !== 2);\n\nconsole.log(numbers);        // [1, 2, 3]\nconsole.log(newNumbers);     // [1, 2, 3, 4]\nconsole.log(filteredNumbers); // [1, 3]"
+        "value": "const taskInput = document.getElementById('taskInput');\nconst addTaskBtn = document.getElementById('addTaskBtn');\nconst taskList = document.getElementById('taskList');\n\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if(taskText === '') return;  // Prevent empty tasks\n\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Add a button to delete the task\n  const deleteBtn = document.createElement('button');\n  deleteBtn.textContent = 'Delete';\n  deleteBtn.style.marginLeft = '10px';\n\n  deleteBtn.addEventListener('click', () => {\n    taskList.removeChild(li);\n  });\n\n  li.appendChild(deleteBtn);\n  taskList.appendChild(li);\n\n  taskInput.value = '';\n  taskInput.focus();\n}\n\naddTaskBtn.addEventListener('click', addTask);\ntaskInput.addEventListener('keypress', (e) => {\n  if(e.key === 'Enter') addTask();\n});"
       },
       {
         "type": "paragraph",
-        "value": "Here, both adding and removing elements are done without changing the original array."
+        "value": "Now that users can add and delete tasks, let's improve the interaction by allowing them to mark tasks as done. We'll do this by toggling a CSS class when a task is clicked."
+      },
+      {
+        "type": "code",
+        "value": "const style = document.createElement('style');\nstyle.textContent = `\n  .done {\n    text-decoration: line-through;\n    color: gray;\n  }\n`;\ndocument.head.appendChild(style);\n\n// Modify the addTask function to add toggle on click:\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if(taskText === '') return;\n\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Toggle 'done' class on click\n  li.addEventListener('click', (e) => {\n    if(e.target.tagName !== 'BUTTON') { // Ignore clicks on the Delete button\n      li.classList.toggle('done');\n    }\n  });\n\n  const deleteBtn = document.createElement('button');\n  deleteBtn.textContent = 'Delete';\n  deleteBtn.style.marginLeft = '10px';\n\n  deleteBtn.addEventListener('click', () => {\n    taskList.removeChild(li);\n  });\n\n  li.appendChild(deleteBtn);\n  taskList.appendChild(li);\n\n  taskInput.value = '';\n  taskInput.focus();\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Immutable Libraries\nFor complex data, you might want to use libraries such as Immutable.js or Immer. These provide powerful utilities to handle immutability at scale without the performance overhead of deep cloning."
+        "value": "Great! You've built a functional interactive to-do list. You can add tasks, mark them as done by clicking on them, and remove them. To continue learning, you can try saving the tasks in the browser's local storage for persistence or style it with more CSS."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nUsing immutable data structures improves your JavaScript code by preventing accidental mutations, making state changes easier to track and debug. Start by using techniques like the spread operator for objects and arrays, and explore libraries as your apps grow."
+        "value": "This simple project covers JavaScript fundamentals like DOM selection, event listeners, element creation, and class manipulation — essential skills for beginner web developers."
       }
     ]
   },
   {
-    "slug": "optimizing-javascript-performance-minimizing-memory-leaks",
-    "title": "Optimizing JavaScript Performance by Minimizing Memory Leaks in Large-scale Applications",
+    "slug": "optimizing-javascript-memory-usage-to-boost-web-app-performance",
+    "title": "Optimizing JavaScript Memory Usage to Boost Web App Performance",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to improve JavaScript performance in large applications by identifying and preventing memory leaks with beginner-friendly tips and examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "description": "Learn beginner-friendly tips on how to optimize JavaScript memory usage to improve your web application's performance and reduce common memory-related errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=uEsSye9tKFs",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks happen when your JavaScript application keeps using more and more memory over time without releasing it. In large-scale applications, these leaks can cause slower performance, crashes, or increased loading times. Understanding how to spot and fix memory leaks is key to writing efficient and maintainable code."
+        "value": "JavaScript is a powerful language used widely in web development, but inefficient memory usage can cause your web app to slow down or even crash. In this article, we'll cover beginner-friendly techniques to help you optimize memory usage and avoid common errors like memory leaks."
       },
       {
         "type": "paragraph",
-        "value": "A memory leak occurs when unused objects remain referenced somewhere in the code, preventing JavaScript's garbage collector from freeing up that memory. Common causes include global variables, forgotten timers or event listeners, and closures holding onto unused data."
+        "value": "A memory leak happens when your app keeps references to objects or variables that are no longer needed. Browsers can't free up memory in these cases, causing your app to use more and more memory over time."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at some common scenarios and how to avoid them."
+        "value": "Here are some practical tips to optimize your JavaScript memory usage:"
       },
       {
         "type": "paragraph",
-        "value": "1. Avoid Global Variables: Declaring variables globally can unintentionally keep data in memory for the entire application lifecycle. Instead, use `let`, `const`, or local variables inside functions or blocks."
+        "value": "1. Avoid Global Variables: Global variables stay in memory for the lifetime of the app. Limit their use by declaring variables inside functions or blocks."
       },
       {
         "type": "code",
-        "value": "function fetchData() {\n  // Good: Variable scoped locally\n  let result = [];\n  // ... fetch and use data\n}\n\n// Bad: Global variable (memory stays until page unload)\nvar globalData = [];"
+        "value": "function example() {\n  let localVar = 'I exist only inside this function';\n  console.log(localVar);\n}\n\nexample();"
       },
       {
         "type": "paragraph",
-        "value": "2. Clean up Event Listeners: If you add event listeners to DOM elements and don't remove them when they are no longer needed, those elements might stay in memory."
+        "value": "2. Clean Up DOM References: If you store references to DOM elements in variables, make sure to clear them when they are no longer needed."
       },
       {
         "type": "code",
-        "value": "const button = document.getElementById('myBtn');\nfunction onClick() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', onClick);\n\n// Later, when button is removed from the DOM:\nbutton.removeEventListener('click', onClick);"
+        "value": "let button = document.getElementById('myButton');\n\n// After you're done using the button\nbutton = null; // Helps garbage collector free up memory"
       },
       {
         "type": "paragraph",
-        "value": "3. Clear Timers: Functions like `setInterval` or `setTimeout` hold references until cleared. Always clear intervals or timeouts you no longer need."
+        "value": "3. Use Closures Carefully: Closures keep variables alive in memory. Avoid holding onto unnecessary data inside closures."
       },
       {
         "type": "code",
-        "value": "const intervalId = setInterval(() => {\n  console.log('Running repeatedly');\n}, 1000);\n\n// When the repeating action is no longer necessary:\nclearInterval(intervalId);"
+        "value": "function createCounter() {\n  let count = 0;\n  return function () {\n    count++;\n    return count;\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2"
       },
       {
         "type": "paragraph",
-        "value": "4. Be Careful with Closures: Closures can unintentionally keep references to variables, causing memory to stay allocated longer than needed."
+        "value": "4. Remove Event Listeners When Not Needed: Event listeners that are never removed can cause memory leaks because they keep references alive."
       },
       {
         "type": "code",
-        "value": "function createClosure() {\n  let largeData = new Array(1000000).fill('data');\n  return function() {\n    console.log(largeData.length);\n  };\n}\n\nconst closure = createClosure();\n// largeData stays in memory as closure holds it, so avoid unnecessary large closures."
+        "value": "const button = document.getElementById('myButton');\n\nfunction onClick() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', onClick);\n\n// Later, when you don't need this:\nbutton.removeEventListener('click', onClick);"
       },
       {
         "type": "paragraph",
-        "value": "5. Use Tools to Detect Memory Leaks: Browsers like Chrome have developer tools with memory profilers. Use these to take snapshots and compare memory usage over time."
+        "value": "5. Use Tools to Detect Memory Leaks: Modern browsers have memory profiling tools. In Chrome, open DevTools > Memory tab to track down leaks."
       },
       {
         "type": "paragraph",
-        "value": "In summary, minimizing memory leaks involves writing clean code with proper variable scoping, removing unused event listeners and timers, and being mindful about closures. Regularly profiling your app’s memory usage ensures your application stays fast and responsive."
+        "value": "By following these tips, you can keep your JavaScript web app running smoothly and avoid common memory-related errors that degrade performance. Remember, efficient memory management improves user experience and keeps your application stable."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-generics-for-performance-critical-applications",
-    "title": "Mastering TypeScript Generics for Performance-Critical Applications",
+    "slug": "mastering-typescript-utility-types-for-cleaner-maintainable-code",
+    "title": "Mastering TypeScript Utility Types for Cleaner and More Maintainable Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript generics to write flexible and high-performance code ideal for performance-critical applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "description": "Learn how to use TypeScript utility types to write cleaner, more maintainable code with simple and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=hNDPgK-IrrE",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript generics allow you to create reusable, type-safe functions and classes that work with a variety of data types while maintaining performance. When building performance-critical applications, generics help avoid unnecessary type casting and ensure your code runs efficiently without losing type safety."
+        "value": "TypeScript offers a set of powerful utility types that help you manipulate and transform types in a clean and efficient way. These utility types not only reduce boilerplate but also make your code easier to read and maintain. In this tutorial, we'll explore some of the most commonly used utility types in TypeScript with beginner-friendly examples."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we will cover the basics of TypeScript generics and explore practical examples demonstrating their performance benefits."
+        "value": "Let's start by understanding the utility types and how they can be used in real-world projects."
       },
       {
         "type": "paragraph",
-        "value": "### What Are Generics?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Generics provide a way to create components that can work with any data type without sacrificing the type information. Instead of using `any` which loses type safety, generics preserve the type and enable compile-time checks."
+        "value": "### Partial<T>\nThe `Partial` utility type transforms all properties of a type into optional properties. This is particularly useful when you want to update only some fields of an object."
       },
       {
         "type": "code",
-        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst numberOutput = identity(42);   // Type inferred as number\nconst stringOutput = identity('Hi'); // Type inferred as string"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nfunction updateUser(user: User, updates: Partial<User>): User {\n  return { ...user, ...updates };\n}\n\nconst user: User = { id: 1, name: 'Alice', email: 'alice@example.com' };\nconst updatedUser = updateUser(user, { email: 'newemail@example.com' });\nconsole.log(updatedUser);\n"
       },
       {
         "type": "paragraph",
-        "value": "### Why Use Generics in Performance-Critical Applications?"
-      },
-      {
-        "type": "paragraph",
-        "value": "In high-performance apps, type casting or loosely typed operations can lead to unexpected overhead and runtime errors. Using generics ensures your functions operate directly with the type provided, preventing unnecessary checks and improving maintainability and speed."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, when working with collections like arrays, generics avoid the need for manual casting and help with inline optimizations."
+        "value": "### Required<T>\nOpposite to `Partial`, the `Required` utility type makes all properties of a type required. It's useful when you want to enforce that all fields must have values."
       },
       {
         "type": "code",
-        "value": "function getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst nums = [10, 20, 30];\nconst firstNum = getFirstElement(nums); // Automatically inferred as number\n\nconst words = ['a', 'b', 'c'];\nconst firstWord = getFirstElement(words); // Inferred as string"
+        "value": "interface Product {\n  id?: number;\n  name?: string;\n  price?: number;\n}\n\n// Now all properties must be present\nconst fullProduct: Required<Product> = {\n  id: 1,\n  name: 'Laptop',\n  price: 999.99\n};\n"
       },
       {
         "type": "paragraph",
-        "value": "### Generics with Interfaces and Classes"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also create generic interfaces and classes for reusable data structures optimized for performance-critical operations."
+        "value": "### Readonly<T>\nThe `Readonly` utility type makes all properties of an object type read-only, preventing modification after initialization."
       },
       {
         "type": "code",
-        "value": "interface KeyValuePair<K, V> {\n  key: K;\n  value: V;\n}\n\nclass DataStore<T> {\n  private data: T[] = [];\n  add(item: T): void {\n    this.data.push(item);\n  }\n  get(index: number): T | undefined {\n    return this.data[index];\n  }\n}\n\n// Usage\nconst store = new DataStore<number>();\nstore.add(100);\nconst storedValue = store.get(0);"
+        "value": "interface Config {\n  url: string;\n  timeout: number;\n}\n\nconst config: Readonly<Config> = {\n  url: 'https://api.example.com',\n  timeout: 5000\n};\n\n// config.timeout = 10000; // Error: Cannot assign to 'timeout' because it is a read-only property.\n"
       },
       {
         "type": "paragraph",
-        "value": "### Best Practices for Performance"
+        "value": "### Pick<T, K>\n`Pick` allows you to create a new type by selecting a subset of properties from an existing type. This helps you focus only on the relevant fields."
+      },
+      {
+        "type": "code",
+        "value": "interface Employee {\n  id: number;\n  name: string;\n  department: string;\n  salary: number;\n}\n\ntype EmployeePreview = Pick<Employee, 'id' | 'name'>;\n\nconst preview: EmployeePreview = {\n  id: 101,\n  name: 'John Doe'\n};\n"
       },
       {
         "type": "paragraph",
-        "value": "1. Use generics to avoid unnecessary type assertions.\n2. Prefer generic functions or classes for repeated logic that works on multiple types.\n3. Avoid over-complicating generics with excessive constraints, as it can impact readability.\n4. Write clear and simple generic types to help the compiler optimize faster."
+        "value": "### Omit<T, K>\n`Omit` is the opposite of `Pick`. It creates a new type by excluding specific properties from an existing type."
+      },
+      {
+        "type": "code",
+        "value": "type EmployeeWithoutSalary = Omit<Employee, 'salary'>;\n\nconst employee: EmployeeWithoutSalary = {\n  id: 101,\n  name: 'John Doe',\n  department: 'Marketing'\n};\n"
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion"
+        "value": "### Record<K, T>\n`Record` helps you create an object type whose keys are of type `K` and values are of type `T`. It’s useful for cases like mapping statuses or IDs to specific types."
+      },
+      {
+        "type": "code",
+        "value": "type Page = 'home' | 'about' | 'contact';\n\nconst navRoutes: Record<Page, string> = {\n  home: '/',\n  about: '/about-us',\n  contact: '/contact'\n};\n"
       },
       {
         "type": "paragraph",
-        "value": "Mastering TypeScript generics allows you to write efficient, reusable, and safe code tailored for performance-critical applications. Leveraging generics correctly reduces runtime errors, enhances maintainability, and keeps the applications fast."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start integrating generics in your TypeScript projects today to see improved performance and cleaner code!"
+        "value": "### Conclusion\nMastering TypeScript utility types can significantly improve your code’s clarity and reduce redundancy. These tools abstract common patterns and allow you to express your intent clearly. Practice using these utility types in your projects and watch your TypeScript skills grow!"
       }
     ]
   },
   {
-    "slug": "optimizing-typescript-error-handling-for-faster-runtime-performance",
-    "title": "Optimizing TypeScript Error Handling for Faster Runtime Performance",
+    "slug": "mastering-typescript-conditional-types-for-smarter-error-handling",
+    "title": "Mastering TypeScript Conditional Types for Smarter Error Handling",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn beginner-friendly techniques to optimize error handling in TypeScript for improved runtime performance and cleaner code.",
-    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "description": "Learn how to use TypeScript conditional types to create smarter, type-safe error handling in your code. This beginner-friendly guide covers the basics and practical examples to help you write cleaner, more maintainable error management.",
+    "videoUrl": "https://www.youtube.com/watch?v=y193EGxpX0E",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is an essential part of any application. In TypeScript, using try-catch blocks is common practice to manage errors. However, overusing try-catch, or handling errors improperly, can sometimes lead to slower runtime performance."
+        "value": "Error handling is a critical part of any application. TypeScript, with its powerful type system, allows us to handle errors in a more structured and safe way. One useful feature for this is conditional types. In this article, we'll explore how conditional types can help us create smarter error handling patterns that improve code reliability and developer experience."
       },
       {
         "type": "paragraph",
-        "value": "In this article, you'll learn practical ways to optimize your TypeScript error handling to keep your app running smoothly and efficiently."
+        "value": "Conditional types let you express types that depend on a condition. Think of them as \"if-else\" statements but for types. This feature is very helpful in error handling because errors often come in different shapes, and we want TypeScript to properly infer their types."
       },
       {
         "type": "paragraph",
-        "value": "### Why optimize error handling?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Try-catch blocks allow your program to gracefully handle exceptions. However, they come with a cost: try-catch can interfere with JavaScript engine optimizations and slow down execution, especially if used inside frequently called functions or loops."
-      },
-      {
-        "type": "paragraph",
-        "value": "By minimizing unnecessary error handling, and handling errors in the right places, you can improve your program’s speed without losing reliability."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best practices for faster TypeScript error handling"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Limit try-catch to critical sections**: Don’t wrap large blocks of code or entire functions in try-catch. Instead, isolate just the risky parts that might throw errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Validate inputs before processing**: Prevent errors by checking incoming data early rather than catching exceptions later."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Use union types and type guards**: TypeScript’s static typing helps catch errors at compile time, reducing the need for runtime errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Avoid overusing try-catch"
+        "value": "Let's start with a simple example. Imagine a function that can return a successful result or an error. We'll use a discriminated union type to describe this:"
       },
       {
         "type": "code",
-        "value": "function processData(data: any) {\n  try {\n    // Potentially unsafe parsing\n    const parsed = JSON.parse(data);\n    console.log(parsed);\n  } catch (error) {\n    console.error('Invalid JSON:', error);\n  }\n}\n\n// Improved approach\nfunction isJSONString(text: string): boolean {\n  try {\n    JSON.parse(text);\n    return true;\n  } catch {\n    return false;\n  }\n}\n\nfunction processDataOptimized(data: any) {\n  if (typeof data === 'string' && isJSONString(data)) {\n    const parsed = JSON.parse(data);\n    console.log(parsed);\n  } else {\n    console.error('Invalid JSON string');\n  }\n}"
+        "value": "type Success<T> = { status: 'success'; data: T };\ntype Failure<E> = { status: 'failure'; error: E };\n\ntype Result<T, E> = Success<T> | Failure<E>;"
       },
       {
         "type": "paragraph",
-        "value": "In the improved example, the `isJSONString` function isolates the try-catch, and we call `JSON.parse` only when we are confident the string is valid. This reduces error handling code inside the main logic, making it cleaner and more efficient."
+        "value": "This generic `Result` type represents either a success with data or a failure with an error. Now, let's create a type that extracts just the error part when a failure happens, using conditional types."
+      },
+      {
+        "type": "code",
+        "value": "type ExtractError<T> = T extends Failure<infer E> ? E : never;\n\n// Usage example:\ntype MyError = ExtractError<Result<string, Error>>;  // MyError is of type Error"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "Here, `ExtractError` checks if the type `T` fits the Failure pattern. If yes, it extracts the error type `E` using the `infer` keyword. Otherwise, it returns `never`. This is useful when you want to retrieve just the error information for further handling."
       },
       {
         "type": "paragraph",
-        "value": "Efficient TypeScript error handling means placing try-catch blocks thoughtfully, using TypeScript’s type system to catch many errors at compile time, and validating data before processing. Applying these tips will help your code run faster and be easier to maintain."
+        "value": "Conditional types also allow you to create smarter utility types for error handling. For instance, you can write a type that transforms a union of results to separate success and failure types."
+      },
+      {
+        "type": "code",
+        "value": "type ExtractSuccess<T> = T extends Success<infer D> ? D : never;\n\ntype ExtractFailures<T> = T extends Failure<infer E> ? E : never;\n\n// Combined example:\ntype AllSuccessData = ExtractSuccess<Result<string, number> | Result<boolean, string>>;\n// AllSuccessData is string | boolean\n\ntype AllErrors = ExtractFailures<Result<string, number> | Result<boolean, string>>;\n// AllErrors is number | string"
+      },
+      {
+        "type": "paragraph",
+        "value": "With these types, you can effectively separate and type-check the data and errors separately, improving type safety especially when dealing with APIs or asynchronous operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a practical function that handles the result and throws an error if it exists, with the error type inferred correctly."
+      },
+      {
+        "type": "code",
+        "value": "function handleResult<T, E>(result: Result<T, E>): T {\n  if (result.status === 'failure') {\n    throw result.error;\n  }\n  return result.data;\n}\n\n// Usage example:\nconst response: Result<string, Error> = { status: 'failure', error: new Error('Network issue') };\n\ntry {\n  const data = handleResult(response);\n  console.log(data);\n} catch (e) {\n  console.error('Caught error:', e.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this function, thanks to TypeScript's control flow analysis and the discriminated union, the error type is known and correctly caught. You get all the benefits of type safety and code clarity."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering conditional types can greatly improve your error handling in TypeScript. They enable you to create flexible, yet strongly typed abstractions that lead to safer and more maintainable codebases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try experimenting with conditional types in your projects by defining error structures and writing type-safe utility types. You'll find your error handling becoming smarter and your code easier to understand."
       }
     ]
   },
   {
-    "slug": "leveraging-pythons-asyncio-for-high-performance-network-applications",
-    "title": "Leveraging Python’s Asyncio for High-Performance Network Applications",
+    "slug": "comparing-python-asyncio-vs-threading-for-concurrent-programming",
+    "title": "Comparing Python's Asyncio vs Threading for Concurrent Programming",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python’s asyncio library to build efficient and scalable network applications, perfect for beginners stepping into asynchronous programming.",
-    "videoUrl": "https://www.youtube.com/watch?v=WYfzG3AdAzA",
+    "description": "Learn the basics of Python's asyncio and threading modules for concurrent programming with practical examples and understand when to use each approach.",
+    "videoUrl": "https://www.youtube.com/watch?v=QlkXji08lno",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python’s asyncio module provides a powerful framework to write concurrent code using the async/await syntax. This is especially useful for network applications, where waiting for I/O can cause performance bottlenecks. In this tutorial, we’ll explore the basics of asyncio and create a simple high-performance network application that can handle multiple connections asynchronously."
+        "value": "Concurrent programming allows your Python programs to handle multiple tasks at the same time, improving performance especially for I/O-bound operations. Two popular ways to achieve concurrency in Python are using the threading module and the asyncio library. This tutorial explains both with beginner-friendly examples and clarifies when to use one over the other."
       },
       {
         "type": "paragraph",
-        "value": "Traditional network programming often uses threading or multiprocessing to handle multiple connections simultaneously. However, these approaches come with overhead and complexity such as context switching and synchronization issues. Asyncio offers a lightweight alternative by using a single-threaded event loop to manage multiple tasks concurrently without blocking."
+        "value": "### What is Threading?\nThreading lets you run several threads (smaller units of a process) concurrently. Each thread runs independently but shares the same memory space, which is powerful but requires careful management to avoid conflicts."
       },
       {
         "type": "paragraph",
-        "value": "Let’s start by creating a simple echo server using asyncio. This server will listen for incoming connections and echo back any data sent by clients."
+        "value": "Here's a simple example of threading that runs two tasks simultaneously:"
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def handle_client(reader, writer):\n    while True:\n        data = await reader.read(100)\n        if not data:\n            break\n        message = data.decode()\n        addr = writer.get_extra_info('peername')\n        print(f\"Received {message!r} from {addr}\")\n\n        print(f\"Send: {message!r}\")\n        writer.write(data)\n        await writer.drain()\n\n    print(\"Close the connection\")\n    writer.close()\n    await writer.wait_closed()\n\nasync def main():\n    server = await asyncio.start_server(handle_client, '127.0.0.1', 8888)\n    addr = server.sockets[0].getsockname()\n    print(f'Serving on {addr}')\n\n    async with server:\n        await server.serve_forever()\n\nasyncio.run(main())"
+        "value": "import threading\nimport time\n\ndef print_numbers():\n    for i in range(1, 6):\n        print(f\"Number: {i}\")\n        time.sleep(1)\n\ndef print_letters():\n    for letter in ['A', 'B', 'C', 'D', 'E']:\n        print(f\"Letter: {letter}\")\n        time.sleep(1)\n\n# Create threads\nthread1 = threading.Thread(target=print_numbers)\nthread2 = threading.Thread(target=print_letters)\n\n# Start threads\nthread1.start()\nthread2.start()\n\n# Wait for both threads to finish\nthread1.join()\nthread2.join()\n\nprint(\"Done with threading!\")"
       },
       {
         "type": "paragraph",
-        "value": "In this code, the `handle_client` coroutine handles individual client connections by reading data asynchronously, then writing back the same data (echo). The server is created with `asyncio.start_server` and runs forever using an event loop initialized by `asyncio.run(main())`."
+        "value": "### What is Asyncio?\nAsyncio is a library for writing asynchronous code using the async/await syntax. It uses a single thread but switches between tasks when they are waiting (like waiting for a file or network operation), making it efficient for I/O bound tasks without using multiple threads."
       },
       {
         "type": "paragraph",
-        "value": "To test the server, open a terminal and use a tool like `telnet` or `nc` (netcat) to connect:\n\nbash\nnc 127.0.0.1 8888\n\n\nThen type any message, and you’ll see it echoed back immediately. Meanwhile, the server can handle multiple clients concurrently without the complexity of threading."
+        "value": "Here's how you can run similar tasks concurrently with asyncio:"
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def print_numbers():\n    for i in range(1, 6):\n        print(f\"Number: {i}\")\n        await asyncio.sleep(1)\n\nasync def print_letters():\n    for letter in ['A', 'B', 'C', 'D', 'E']:\n        print(f\"Letter: {letter}\")\n        await asyncio.sleep(1)\n\nasync def main():\n    # Schedule both coroutines to run concurrently\n    await asyncio.gather(print_numbers(), print_letters())\n\nasyncio.run(main())\nprint(\"Done with asyncio!\")"
       },
       {
         "type": "paragraph",
-        "value": "The key benefits of using asyncio for network applications are:\n\n- Efficient use of resources by avoiding multiple threads/processes\n- Simplified concurrency with `async`/`await` syntax\n- Easily scalable to many simultaneous connections\n\nBy mastering these basics, you can start building more complex asynchronous applications like chat servers, web scrapers, or API clients."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, Python’s asyncio module offers a beginner-friendly yet powerful way to write high-performance network applications. Start experimenting with coroutines and event loops to take full advantage of asynchronous programming."
+        "value": "### When to Use Threading vs Asyncio\n- Use **threading** when dealing with CPU-bound tasks or when you need real parallelism (Python threads are limited by the Global Interpreter Lock for CPU tasks).\n- Use **asyncio** when working with many I/O-bound operations like web scraping, networking, or file operations, as it can handle thousands of tasks efficiently in a single thread.\n\n### Key Differences\n- Threading uses real OS threads; asyncio uses cooperative multitasking within one thread.\n- Threading requires careful locking and synchronization; asyncio tasks yield control with await.\n- Asyncio can be more complex initially due to the async/await syntax but offers better scalability for I/O tasks.\n\n### Conclusion\nUnderstanding both threading and asyncio will help you choose the right concurrency method for your Python projects. Try running the examples above, and gradually experiment with more complex tasks to become comfortable with each approach!"
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-errors-python",
-    "title": "Handling Floating Point Precision Errors in Python: Best Practices and Pitfalls",
+    "slug": "handling-api-rate-limit-errors-gracefully-python",
+    "title": "Handling API Rate Limit Errors Gracefully in Python Projects",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to handle common floating point precision errors in Python with practical tips and examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=t-OdS6SxQqQ",
+    "description": "Learn how to properly handle API rate limit errors in Python to make your projects reliable and user-friendly when working with web APIs.",
+    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with decimal numbers in Python (or any programming language), you might encounter unexpected results due to floating point precision errors. This happens because computers represent decimal numbers in binary, which cannot always precisely store certain values like 0.1 or 0.2."
+        "value": "When working with web APIs in Python, you might encounter a rate limit error. These errors happen when your project sends too many requests in a short period, and the API temporarily blocks further requests. Handling these errors gracefully ensures your program doesn’t crash and respects the API’s limits."
       },
       {
         "type": "paragraph",
-        "value": "For example, if you add 0.1 and 0.2, you might expect 0.3, but Python returns a value slightly different from 0.3 due to floating point rounding."
+        "value": "Most APIs return a specific HTTP status code, usually 429, when you hit a rate limit. To handle this, you need to catch this response, wait for some time, and then retry the request."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example using the popular `requests` library in Python to handle rate limit errors by checking the status code and retrying after a delay."
       },
       {
         "type": "code",
-        "value": "print(0.1 + 0.2)  # Output: 0.30000000000000004"
+        "value": "import time\nimport requests\n\nAPI_URL = \"https://api.example.com/data\"\n\n\ndef fetch_data():\n    while True:\n        response = requests.get(API_URL)\n\n        if response.status_code == 200:\n            print(\"Data fetched successfully!\")\n            return response.json()\n        elif response.status_code == 429:\n            # Rate limit hit; wait before retrying\n            retry_after = int(response.headers.get(\"Retry-After\", 5))\n            print(f\"Rate limit exceeded. Retrying in {retry_after} seconds...\")\n            time.sleep(retry_after)\n        else:\n            # Handle other errors\n            print(f\"Failed with status code: {response.status_code}\")\n            return None\n\n\nif __name__ == \"__main__\":\n    data = fetch_data()"
       },
       {
         "type": "paragraph",
-        "value": "This tiny difference may cause bugs, especially in financial calculations or conditional checks. Let's explore best practices to handle this issue."
+        "value": "In this code, we send a GET request to an API. If the response status is 429, the program checks the `Retry-After` header for how many seconds to wait (some APIs provide this), otherwise it defaults to 5 seconds. It then pauses before trying again. This simple approach prevents your app from crashing due to rate limits and helps it recover automatically."
       },
       {
         "type": "paragraph",
-        "value": "1. Using the round() function: You can round the result to a fixed number of decimal places to minimize the impact of floating point errors."
-      },
-      {
-        "type": "code",
-        "value": "result = round(0.1 + 0.2, 2)\nprint(result)  # Output: 0.3"
+        "value": "Remember to always review the API documentation for specific rate limit rules. You might want to implement more advanced techniques like exponential backoff or use third-party libraries that handle retries smarter."
       },
       {
         "type": "paragraph",
-        "value": "2. Using math.isclose() for comparisons: Instead of checking if two floats are exactly equal, use math.isclose() which allows a tolerance."
-      },
-      {
-        "type": "code",
-        "value": "import math\n\nvalue1 = 0.1 + 0.2\nvalue2 = 0.3\n\nprint(value1 == value2)            # False\nprint(math.isclose(value1, value2))  # True"
-      },
-      {
-        "type": "paragraph",
-        "value": "3. Using the decimal module: For financial or high-precision applications, use Python's built-in decimal module, which handles decimal numbers more accurately."
-      },
-      {
-        "type": "code",
-        "value": "from decimal import Decimal\n\nvalue1 = Decimal('0.1') + Decimal('0.2')\nvalue2 = Decimal('0.3')\n\nprint(value1 == value2)  # True\nprint(value1)           # 0.3"
-      },
-      {
-        "type": "paragraph",
-        "value": "Common pitfalls to avoid:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Avoid comparing floats directly using == unless you are sure they will be exactly equal.\n- Don’t rely on floating point arithmetic for currency calculations; use decimal instead.\n- Remember that rounding can introduce its own errors if applied inconsistently."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, understanding that floating point precision issues exist, and applying one or more of these techniques will help you write more reliable Python code when working with decimal numbers."
+        "value": "Handling API rate limits correctly helps your Python projects run smoothly and reliably while respecting the API provider’s constraints."
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-in-sql-practical-use-cases-and-best-practices",
-    "title": "Mastering Window Functions in SQL: Practical Use Cases and Best Practices",
+    "slug": "designing-scalable-data-warehouses-using-sql-best-practices-and-strategies",
+    "title": "Designing Scalable Data Warehouses Using SQL: Best Practices and Strategies",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn the basics of SQL window functions with practical examples and best practices. Perfect for beginners looking to enhance their SQL querying skills.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn beginner-friendly best practices and strategies for designing scalable data warehouses using SQL. Understand key concepts and practical examples to build efficient data storage systems.",
+    "videoUrl": "https://www.youtube.com/watch?v=BIlFTFrEFOI",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions in SQL are powerful tools used for performing calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not group rows into a single output but provide aggregate-like calculations without collapsing the rows. This makes them perfect for advanced analytics, ranking, running totals, and more."
+        "value": "Data warehouses are critical for storing and analyzing large volumes of data efficiently. As your business grows, it’s important to design scalable data warehouses that handle increasing data and user demands without performance loss. This tutorial will guide you through beginner-friendly best practices and strategies using SQL to build a scalable data warehouse."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with the basic syntax of a window function. A window function specification includes the function itself, followed by an OVER() clause that defines the partitioning and ordering of rows."
+        "value": "### 1. Understand the Basics of Data Warehousing\nData warehouses typically organize data in a way that optimizes query performance for analytics instead of transaction processing. Data is usually structured into fact and dimension tables using a star or snowflake schema."
+      },
+      {
+        "type": "paragraph",
+        "value": "Fact tables store measurable, quantitative data such as sales or clicks, while dimension tables store descriptive attributes such as date, customer, or product information."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Choose the Right Schema Design\nA star schema simplifies queries with direct joins between fact and dimension tables, making it more performant for large-scale analytics."
       },
       {
         "type": "code",
-        "value": "SELECT \n  employee_id, \n  department, \n  salary, \n  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rank_within_department\nFROM employees;"
+        "value": "-- Example: Simple star schema fact table creation\nCREATE TABLE sales_fact (\n  sale_id INT PRIMARY KEY,\n  product_id INT,\n  customer_id INT,\n  sale_date DATE,\n  total_amount DECIMAL(10, 2)\n);\n\n-- Dimension table example\nCREATE TABLE product_dim (\n  product_id INT PRIMARY KEY,\n  product_name VARCHAR(100),\n  category VARCHAR(50)\n);"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the RANK() function ranks employees by their salary within each department. The PARTITION BY clause groups rows by department, and the ORDER BY clause orders them by salary descending."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Window Functions\nHere are some often-used window functions every beginner should know:\n\n- ROW_NUMBER(): Assigns a unique sequential number to rows within a partition.\n- RANK(): Gives rank, assigning the same rank to ties and skipping subsequent ranks.\n- DENSE_RANK(): Similar to RANK() but does not skip ranks after ties.\n- SUM(), AVG(), COUNT(): Can be used as window functions to calculate running totals or averages.\n\nLet's see a practical example using ROW_NUMBER():"
+        "value": "### 3. Partition Your Large Tables\nPartitioning helps manage very large tables by splitting data into smaller, manageable pieces based on a key such as date. This improves query speed and maintenance."
       },
       {
         "type": "code",
-        "value": "SELECT \n  order_id, \n  customer_id, \n  order_date, \n  ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_sequence\nFROM orders;"
+        "value": "-- Example: Partitioning a fact table by month\nCREATE TABLE sales_fact (\n  sale_id INT,\n  product_id INT,\n  customer_id INT,\n  sale_date DATE,\n  total_amount DECIMAL(10, 2)\n)\nPARTITION BY RANGE (EXTRACT(YEAR FROM sale_date) * 100 + EXTRACT(MONTH FROM sale_date));"
       },
       {
         "type": "paragraph",
-        "value": "This query assigns a sequential number to each order per customer based on the order date, which can help when tracking the order history."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Running Totals and Moving Averages\nWindow functions can also be used for cumulative sums and moving averages. For example, to calculate a running total of sales by date:"
+        "value": "### 4. Index Dimension Tables\nCreate indexes on foreign keys and frequently queried columns in your dimension tables to speed up joins and lookups."
       },
       {
         "type": "code",
-        "value": "SELECT \n  sales_date, \n  amount, \n  SUM(amount) OVER (ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+        "value": "-- Example: Creating an index on product_id in sales_fact\nCREATE INDEX idx_sales_product ON sales_fact(product_id);"
       },
       {
         "type": "paragraph",
-        "value": "Here, SUM() calculates a running total of the sales amount up to the current row ordered by sales_date."
+        "value": "### 5. Use Materialized Views for Complex Aggregations\nMaterialized views store the result of complex queries like aggregations, improving performance especially for frequently accessed summary data."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Create materialized view for monthly sales totals\nCREATE MATERIALIZED VIEW monthly_sales_summary AS\nSELECT product_id, EXTRACT(YEAR FROM sale_date) AS sale_year, EXTRACT(MONTH FROM sale_date) AS sale_month,\n       SUM(total_amount) AS total_sales\nFROM sales_fact\nGROUP BY product_id, sale_year, sale_month;"
       },
       {
         "type": "paragraph",
-        "value": "### Best Practices\n- Always use PARTITION BY to logically segment data when needed.\n- Use ORDER BY within the OVER() clause to define the sequence for calculations.\n- Be mindful of performance; window functions can be compute-intensive on large datasets.\n- Test complex window function queries step-by-step to ensure correct logic.\n\nMastering window functions takes some practice, but once you get comfortable, they open up great new ways to analyze data efficiently."
+        "value": "### 6. Regularly Archive and Purge Old Data\nKeep your data warehouse scalable by archiving historical data that is infrequently accessed into cheaper storage or separate databases."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these core strategies—choosing optimal schema design, partitioning data, indexing wisely, leveraging materialized views, and managing data growth—you can build a scalable data warehouse ready to support your analytics needs as data volumes grow."
+      },
+      {
+        "type": "paragraph",
+        "value": "Feel free to experiment with these SQL examples and adapt them to your specific database system and business requirements."
       }
     ]
   },
   {
-    "slug": "understanding-sql-constraint-violations-how-to-diagnose-and-handle-them-effectively",
-    "title": "Understanding SQL Constraint Violations: How to Diagnose and Handle Them Effectively",
+    "slug": "understanding-sql-null-handling-best-practices-for-beginners",
+    "title": "Understanding SQL Null Handling: Best Practices for Beginners",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to identify and fix common SQL constraint violations with beginner-friendly explanations and practical tips.",
-    "videoUrl": "https://www.youtube.com/watch?v=oIwjPU_SMPM",
+    "description": "A beginner-friendly guide to handling NULL values in SQL, explaining common errors and best practices to write accurate queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=hF6wqnDIuK0",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, constraints help maintain data integrity by enforcing rules on your tables. However, when these rules are violated, your database will throw constraint violation errors. Understanding these errors is crucial for beginners to diagnose and fix issues quickly. This article covers the most common SQL constraint violations, how to recognize them, and best practices to handle them."
+        "value": "When working with SQL databases, handling NULL values correctly is essential to avoid common errors and ensure your queries return the expected results. NULL represents missing or unknown data, and it requires special treatment in SQL because it is not equivalent to zero or an empty string."
       },
       {
         "type": "paragraph",
-        "value": "Common SQL constraints include PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, and CHECK. Each enforces different rules on your data. When an operation violates a constraint, the database returns an error to let you know what went wrong."
+        "value": "One common mistake beginners make is using the equals (=) operator to check for NULL values. Since NULL means \"unknown\", expressions like column = NULL will not work as expected and always return false or unknown."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at examples of these constraints and how violations occur."
+        "value": "To properly check for NULLs, use the IS NULL or IS NOT NULL operators. Here's how you can select rows where a column value is NULL:"
       },
       {
         "type": "code",
-        "value": "-- Create a sample table with various constraints\nCREATE TABLE Users (\n    UserID INT PRIMARY KEY,\n    Email VARCHAR(255) UNIQUE NOT NULL,\n    Age INT CHECK (Age >= 18),\n    ReferrerID INT,\n    CONSTRAINT FK_Referrer FOREIGN KEY (ReferrerID) REFERENCES Users(UserID)\n);"
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "This table has several constraints:\n- UserID must be unique and not null (PRIMARY KEY).\n- Email must be unique and not null.\n- Age must be 18 or older (CHECK).\n- ReferrerID must refer to an existing UserID in the same table (FOREIGN KEY)."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Diagnosing Constraint Violations\nIf you try to insert or update data that breaks these rules, the database will return an error like:"
+        "value": "Similarly, to find rows where the column is not NULL, use IS NOT NULL:"
       },
       {
         "type": "code",
-        "value": "INSERT INTO Users (UserID, Email, Age) VALUES (1, 'alice@example.com', 20);\n-- This works fine\n\nINSERT INTO Users (UserID, Email, Age) VALUES (1, 'bob@example.com', 25);\n-- Error: Violation of PRIMARY KEY constraint because UserID 1 already exists\n\nINSERT INTO Users (UserID, Email, Age) VALUES (2, 'alice@example.com', 30);\n-- Error: UNIQUE constraint violation on Email\n\nINSERT INTO Users (UserID, Email, Age) VALUES (3, 'carol@example.com', 17);\n-- Error: CHECK constraint violation because Age is less than 18"
+        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
       },
       {
         "type": "paragraph",
-        "value": "Similarly, reference violations happen when FOREIGN KEY constraints are ignored:"
+        "value": "Another important aspect is using NULLs with aggregate functions like COUNT, SUM, or AVG. These functions often ignore NULL values, which is usually helpful. For example:"
       },
       {
         "type": "code",
-        "value": "INSERT INTO Users (UserID, Email, Age, ReferrerID) VALUES (4, 'dave@example.com', 22, 999);\n-- Error: FOREIGN KEY violation because UserID 999 does not exist"
+        "value": "SELECT COUNT(manager_id) AS number_of_managers FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "### How to Handle Constraint Violations\n1. **Read the Error Message**: SQL errors usually specify which constraint was violated.\n2. **Check the Data**: Make sure data respects uniqueness, non-null, and domain rules.\n3. **Modify or Clean Data**: Fix incorrect data before insertion or update.\n4. **Handle References Carefully**: Ensure foreign key references exist.\n5. **Use TRY/CATCH Blocks or Transactions**: In some SQL dialects, these help manage errors gracefully."
+        "value": "This query counts only non-NULL manager_id values. If you want to count all rows regardless of NULLs, use COUNT(*)."
       },
       {
         "type": "paragraph",
-        "value": "By understanding what causes constraint violations, you can write cleaner SQL and avoid common pitfalls that break your database integrity."
+        "value": "You should also be careful when using NULLs with logical operators such as AND and OR. Since NULL represents unknown, combining it with TRUE or FALSE might yield unexpected results. Using parentheses and clear conditions can help avoid confusion."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, to replace NULL values with a default value in your query results, use the COALESCE() function. It returns the first non-NULL value from its arguments. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_name, COALESCE(manager_id, 0) AS manager_id FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query replaces any NULL manager_id with 0, which can be useful for reporting or calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, remember these best practices when dealing with NULLs in SQL:\n\n- Use IS NULL or IS NOT NULL for NULL checks.\n- Understand how NULLs interact with aggregate and logical functions.\n- Use COALESCE() to provide default values instead of NULL.\n\nBy applying these tips, you'll avoid common errors and write more reliable SQL queries."
       }
     ]
   }

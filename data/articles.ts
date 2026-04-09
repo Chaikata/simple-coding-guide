@@ -47889,5 +47889,315 @@ export const articles = [
         "value": "By understanding what causes constraint violations, you can write cleaner SQL and avoid common pitfalls that break your database integrity."
       }
     ]
+  },
+  {
+    "slug": "how-to-build-interactive-to-do-lists-with-javascript-for-beginners",
+    "title": "How to Build Interactive To-Do Lists with JavaScript for Beginners",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create simple, interactive to-do lists using JavaScript. This beginner-friendly tutorial helps you understand event handling, DOM manipulation, and basic logic to build practical web apps.",
+    "videoUrl": "https://www.youtube.com/watch?v=G0jO8kUrg-I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "To-do lists are a great way to practice JavaScript because they involve core concepts like events, DOM manipulation, and data handling. In this tutorial, you'll learn how to create a basic interactive to-do list where you can add, mark, and delete tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a simple HTML structure with an input box, a button, and a list to display the tasks."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Interactive To-Do List</title>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Add a new task...\">\n  <button id=\"addTaskBtn\">Add Task</button>\n  <ul id=\"taskList\"></ul>\n\n  <script src=\"app.js\"></script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we will write JavaScript to add task items to the list when the user clicks the button or presses 'Enter' in the input box."
+      },
+      {
+        "type": "code",
+        "value": "const taskInput = document.getElementById('taskInput');\nconst addTaskBtn = document.getElementById('addTaskBtn');\nconst taskList = document.getElementById('taskList');\n\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if(taskText === '') return;  // Prevent empty tasks\n\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Add a button to delete the task\n  const deleteBtn = document.createElement('button');\n  deleteBtn.textContent = 'Delete';\n  deleteBtn.style.marginLeft = '10px';\n\n  deleteBtn.addEventListener('click', () => {\n    taskList.removeChild(li);\n  });\n\n  li.appendChild(deleteBtn);\n  taskList.appendChild(li);\n\n  taskInput.value = '';\n  taskInput.focus();\n}\n\naddTaskBtn.addEventListener('click', addTask);\ntaskInput.addEventListener('keypress', (e) => {\n  if(e.key === 'Enter') addTask();\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now that users can add and delete tasks, let's improve the interaction by allowing them to mark tasks as done. We'll do this by toggling a CSS class when a task is clicked."
+      },
+      {
+        "type": "code",
+        "value": "const style = document.createElement('style');\nstyle.textContent = `\n  .done {\n    text-decoration: line-through;\n    color: gray;\n  }\n`;\ndocument.head.appendChild(style);\n\n// Modify the addTask function to add toggle on click:\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if(taskText === '') return;\n\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Toggle 'done' class on click\n  li.addEventListener('click', (e) => {\n    if(e.target.tagName !== 'BUTTON') { // Ignore clicks on the Delete button\n      li.classList.toggle('done');\n    }\n  });\n\n  const deleteBtn = document.createElement('button');\n  deleteBtn.textContent = 'Delete';\n  deleteBtn.style.marginLeft = '10px';\n\n  deleteBtn.addEventListener('click', () => {\n    taskList.removeChild(li);\n  });\n\n  li.appendChild(deleteBtn);\n  taskList.appendChild(li);\n\n  taskInput.value = '';\n  taskInput.focus();\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Great! You've built a functional interactive to-do list. You can add tasks, mark them as done by clicking on them, and remove them. To continue learning, you can try saving the tasks in the browser's local storage for persistence or style it with more CSS."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple project covers JavaScript fundamentals like DOM selection, event listeners, element creation, and class manipulation — essential skills for beginner web developers."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-javascript-memory-usage-to-boost-web-app-performance",
+    "title": "Optimizing JavaScript Memory Usage to Boost Web App Performance",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips on how to optimize JavaScript memory usage to improve your web application's performance and reduce common memory-related errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=uEsSye9tKFs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a powerful language used widely in web development, but inefficient memory usage can cause your web app to slow down or even crash. In this article, we'll cover beginner-friendly techniques to help you optimize memory usage and avoid common errors like memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "A memory leak happens when your app keeps references to objects or variables that are no longer needed. Browsers can't free up memory in these cases, causing your app to use more and more memory over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some practical tips to optimize your JavaScript memory usage:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid Global Variables: Global variables stay in memory for the lifetime of the app. Limit their use by declaring variables inside functions or blocks."
+      },
+      {
+        "type": "code",
+        "value": "function example() {\n  let localVar = 'I exist only inside this function';\n  console.log(localVar);\n}\n\nexample();"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Clean Up DOM References: If you store references to DOM elements in variables, make sure to clear them when they are no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "let button = document.getElementById('myButton');\n\n// After you're done using the button\nbutton = null; // Helps garbage collector free up memory"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use Closures Carefully: Closures keep variables alive in memory. Avoid holding onto unnecessary data inside closures."
+      },
+      {
+        "type": "code",
+        "value": "function createCounter() {\n  let count = 0;\n  return function () {\n    count++;\n    return count;\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Remove Event Listeners When Not Needed: Event listeners that are never removed can cause memory leaks because they keep references alive."
+      },
+      {
+        "type": "code",
+        "value": "const button = document.getElementById('myButton');\n\nfunction onClick() {\n  console.log('Button clicked');\n}\n\nbutton.addEventListener('click', onClick);\n\n// Later, when you don't need this:\nbutton.removeEventListener('click', onClick);"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Use Tools to Detect Memory Leaks: Modern browsers have memory profiling tools. In Chrome, open DevTools > Memory tab to track down leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips, you can keep your JavaScript web app running smoothly and avoid common memory-related errors that degrade performance. Remember, efficient memory management improves user experience and keeps your application stable."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-utility-types-for-cleaner-maintainable-code",
+    "title": "Mastering TypeScript Utility Types for Cleaner and More Maintainable Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript utility types to write cleaner, more maintainable code with simple and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=hNDPgK-IrrE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript offers a set of powerful utility types that help you manipulate and transform types in a clean and efficient way. These utility types not only reduce boilerplate but also make your code easier to read and maintain. In this tutorial, we'll explore some of the most commonly used utility types in TypeScript with beginner-friendly examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding the utility types and how they can be used in real-world projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Partial<T>\nThe `Partial` utility type transforms all properties of a type into optional properties. This is particularly useful when you want to update only some fields of an object."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nfunction updateUser(user: User, updates: Partial<User>): User {\n  return { ...user, ...updates };\n}\n\nconst user: User = { id: 1, name: 'Alice', email: 'alice@example.com' };\nconst updatedUser = updateUser(user, { email: 'newemail@example.com' });\nconsole.log(updatedUser);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Required<T>\nOpposite to `Partial`, the `Required` utility type makes all properties of a type required. It's useful when you want to enforce that all fields must have values."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  id?: number;\n  name?: string;\n  price?: number;\n}\n\n// Now all properties must be present\nconst fullProduct: Required<Product> = {\n  id: 1,\n  name: 'Laptop',\n  price: 999.99\n};\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Readonly<T>\nThe `Readonly` utility type makes all properties of an object type read-only, preventing modification after initialization."
+      },
+      {
+        "type": "code",
+        "value": "interface Config {\n  url: string;\n  timeout: number;\n}\n\nconst config: Readonly<Config> = {\n  url: 'https://api.example.com',\n  timeout: 5000\n};\n\n// config.timeout = 10000; // Error: Cannot assign to 'timeout' because it is a read-only property.\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Pick<T, K>\n`Pick` allows you to create a new type by selecting a subset of properties from an existing type. This helps you focus only on the relevant fields."
+      },
+      {
+        "type": "code",
+        "value": "interface Employee {\n  id: number;\n  name: string;\n  department: string;\n  salary: number;\n}\n\ntype EmployeePreview = Pick<Employee, 'id' | 'name'>;\n\nconst preview: EmployeePreview = {\n  id: 101,\n  name: 'John Doe'\n};\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Omit<T, K>\n`Omit` is the opposite of `Pick`. It creates a new type by excluding specific properties from an existing type."
+      },
+      {
+        "type": "code",
+        "value": "type EmployeeWithoutSalary = Omit<Employee, 'salary'>;\n\nconst employee: EmployeeWithoutSalary = {\n  id: 101,\n  name: 'John Doe',\n  department: 'Marketing'\n};\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Record<K, T>\n`Record` helps you create an object type whose keys are of type `K` and values are of type `T`. It’s useful for cases like mapping statuses or IDs to specific types."
+      },
+      {
+        "type": "code",
+        "value": "type Page = 'home' | 'about' | 'contact';\n\nconst navRoutes: Record<Page, string> = {\n  home: '/',\n  about: '/about-us',\n  contact: '/contact'\n};\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nMastering TypeScript utility types can significantly improve your code’s clarity and reduce redundancy. These tools abstract common patterns and allow you to express your intent clearly. Practice using these utility types in your projects and watch your TypeScript skills grow!"
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-data-warehouses-using-sql-best-practices-and-strategies",
+    "title": "Designing Scalable Data Warehouses Using SQL: Best Practices and Strategies",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn beginner-friendly best practices and strategies for designing scalable data warehouses using SQL. Understand key concepts and practical examples to build efficient data storage systems.",
+    "videoUrl": "https://www.youtube.com/watch?v=BIlFTFrEFOI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data warehouses are critical for storing and analyzing large volumes of data efficiently. As your business grows, it’s important to design scalable data warehouses that handle increasing data and user demands without performance loss. This tutorial will guide you through beginner-friendly best practices and strategies using SQL to build a scalable data warehouse."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Understand the Basics of Data Warehousing\nData warehouses typically organize data in a way that optimizes query performance for analytics instead of transaction processing. Data is usually structured into fact and dimension tables using a star or snowflake schema."
+      },
+      {
+        "type": "paragraph",
+        "value": "Fact tables store measurable, quantitative data such as sales or clicks, while dimension tables store descriptive attributes such as date, customer, or product information."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Choose the Right Schema Design\nA star schema simplifies queries with direct joins between fact and dimension tables, making it more performant for large-scale analytics."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Simple star schema fact table creation\nCREATE TABLE sales_fact (\n  sale_id INT PRIMARY KEY,\n  product_id INT,\n  customer_id INT,\n  sale_date DATE,\n  total_amount DECIMAL(10, 2)\n);\n\n-- Dimension table example\nCREATE TABLE product_dim (\n  product_id INT PRIMARY KEY,\n  product_name VARCHAR(100),\n  category VARCHAR(50)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Partition Your Large Tables\nPartitioning helps manage very large tables by splitting data into smaller, manageable pieces based on a key such as date. This improves query speed and maintenance."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Partitioning a fact table by month\nCREATE TABLE sales_fact (\n  sale_id INT,\n  product_id INT,\n  customer_id INT,\n  sale_date DATE,\n  total_amount DECIMAL(10, 2)\n)\nPARTITION BY RANGE (EXTRACT(YEAR FROM sale_date) * 100 + EXTRACT(MONTH FROM sale_date));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Index Dimension Tables\nCreate indexes on foreign keys and frequently queried columns in your dimension tables to speed up joins and lookups."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Creating an index on product_id in sales_fact\nCREATE INDEX idx_sales_product ON sales_fact(product_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Use Materialized Views for Complex Aggregations\nMaterialized views store the result of complex queries like aggregations, improving performance especially for frequently accessed summary data."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Create materialized view for monthly sales totals\nCREATE MATERIALIZED VIEW monthly_sales_summary AS\nSELECT product_id, EXTRACT(YEAR FROM sale_date) AS sale_year, EXTRACT(MONTH FROM sale_date) AS sale_month,\n       SUM(total_amount) AS total_sales\nFROM sales_fact\nGROUP BY product_id, sale_year, sale_month;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. Regularly Archive and Purge Old Data\nKeep your data warehouse scalable by archiving historical data that is infrequently accessed into cheaper storage or separate databases."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these core strategies—choosing optimal schema design, partitioning data, indexing wisely, leveraging materialized views, and managing data growth—you can build a scalable data warehouse ready to support your analytics needs as data volumes grow."
+      },
+      {
+        "type": "paragraph",
+        "value": "Feel free to experiment with these SQL examples and adapt them to your specific database system and business requirements."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-null-handling-best-practices-for-beginners",
+    "title": "Understanding SQL Null Handling: Best Practices for Beginners",
+    "language": "sql",
+    "type": "errors",
+    "description": "A beginner-friendly guide to handling NULL values in SQL, explaining common errors and best practices to write accurate queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=hF6wqnDIuK0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, handling NULL values correctly is essential to avoid common errors and ensure your queries return the expected results. NULL represents missing or unknown data, and it requires special treatment in SQL because it is not equivalent to zero or an empty string."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake beginners make is using the equals (=) operator to check for NULL values. Since NULL means \"unknown\", expressions like column = NULL will not work as expected and always return false or unknown."
+      },
+      {
+        "type": "paragraph",
+        "value": "To properly check for NULLs, use the IS NULL or IS NOT NULL operators. Here's how you can select rows where a column value is NULL:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, to find rows where the column is not NULL, use IS NOT NULL:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another important aspect is using NULLs with aggregate functions like COUNT, SUM, or AVG. These functions often ignore NULL values, which is usually helpful. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT COUNT(manager_id) AS number_of_managers FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query counts only non-NULL manager_id values. If you want to count all rows regardless of NULLs, use COUNT(*)."
+      },
+      {
+        "type": "paragraph",
+        "value": "You should also be careful when using NULLs with logical operators such as AND and OR. Since NULL represents unknown, combining it with TRUE or FALSE might yield unexpected results. Using parentheses and clear conditions can help avoid confusion."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, to replace NULL values with a default value in your query results, use the COALESCE() function. It returns the first non-NULL value from its arguments. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_name, COALESCE(manager_id, 0) AS manager_id FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query replaces any NULL manager_id with 0, which can be useful for reporting or calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, remember these best practices when dealing with NULLs in SQL:\n\n- Use IS NULL or IS NOT NULL for NULL checks.\n- Understand how NULLs interact with aggregate and logical functions.\n- Use COALESCE() to provide default values instead of NULL.\n\nBy applying these tips, you'll avoid common errors and write more reliable SQL queries."
+      }
+    ]
   }
 ];
