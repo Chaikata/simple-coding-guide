@@ -6506,5 +6506,178 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "implement-a-multi-threaded-file-search-utility-in-c",
+    "title": "Implement a Multi-threaded File Search Utility in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create an advanced multi-threaded file search utility in C++ that scans directories recursively to find files containing a specific keyword. The program should optimize search performance using concurrency and handle large directory trees efficiently.",
+    "prompt": "Write a C++ program that takes two arguments: a directory path and a search keyword. The program should recursively search all files in the directory and its subdirectories for the keyword. Implement multithreading to parallelize file processing for improved performance. Your output should include the full path of each file containing the keyword and the line numbers where the keyword appears. Ensure thread safety and efficient resource management.",
+    "guidance": [
+      "Use C++17 filesystem library for recursive directory traversal.",
+      "Deploy a thread pool or use std::async to manage multiple threads efficiently.",
+      "Implement synchronization mechanisms to safely write results concurrently.",
+      "Optimize I/O operations to handle potentially large files with minimal bottlenecks."
+    ],
+    "hints": [
+      "Consider buffering file content and avoid loading entire huge files into memory.",
+      "Use mutexes or thread-safe queues to collect matching results from threads.",
+      "Limit the number of active threads based on hardware concurrency."
+    ],
+    "starterCode": "#include <iostream>\n#include <filesystem>\n#include <fstream>\n#include <string>\n#include <vector>\n#include <thread>\n#include <mutex>\n#include <future>\n\nnamespace fs = std::filesystem;\n\nstd::mutex output_mutex;\n\nvoid searchFile(const fs::path &filePath, const std::string &keyword) {\n    std::ifstream file(filePath);\n    if (!file.is_open()) return;\n\n    std::string line;\n    int lineNumber = 0;\n    std::vector<int> matchedLines;\n\n    while (std::getline(file, line)) {\n        ++lineNumber;\n        if (line.find(keyword) != std::string::npos) {\n            matchedLines.push_back(lineNumber);\n        }\n    }\n\n    if (!matchedLines.empty()) {\n        std::lock_guard<std::mutex> lock(output_mutex);\n        std::cout << \"Found in: \" << filePath << \" Lines: \";\n        for (int num : matchedLines) {\n            std::cout << num << \" \";\n        }\n        std::cout << std::endl;\n    }\n}\n\nint main(int argc, char* argv[]) {\n    if (argc != 3) {\n        std::cerr << \"Usage: \" << argv[0] << \" <directory_path> <keyword>\" << std::endl;\n        return 1;\n    }\n\n    const fs::path dirPath = argv[1];\n    const std::string keyword = argv[2];\n\n    // Your implementation here\n\n    return 0;\n}\n",
+    "expectedOutput": "Found in: /path/to/file.txt Lines: 3 15 27\nFound in: /path/to/subdir/log.txt Lines: 1 2 5",
+    "concepts": [
+      "multithreading",
+      "filesystem traversal",
+      "file I/O",
+      "synchronization"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-imperative-sum-calculator-to-clearer-functional-code",
+    "title": "Refactor Imperative Sum Calculator to Clearer Functional Code",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a simple JavaScript function that calculates the sum of numbers in an array by refactoring it from a verbose imperative style to a clean and concise functional style.",
+    "prompt": "You are given a function that calculates the sum of elements in an array using a traditional for loop with extra variables. Refactor this function to make it simpler and more readable without changing its behavior. Use JavaScript best practices to improve the code quality, clarity, and conciseness.",
+    "guidance": [
+      "Focus on simplifying the function while keeping the output identical for any input array.",
+      "Consider replacing the loop and accumulator variables with a more functional approach.",
+      "Make sure the function still returns the correct sum for both empty and non-empty arrays."
+    ],
+    "hints": [
+      "Look into the array method 'reduce' for summing elements in a functional style.",
+      "Avoid unnecessary variable initializations if they don’t improve clarity.",
+      "Keep your function signature and return behavior unchanged."
+    ],
+    "starterCode": "function sumArray(arr) {\n  let sum = 0;\n  for (let i = 0; i < arr.length; i++) {\n    sum += arr[i];\n  }\n  return sum;\n}",
+    "expectedOutput": "sumArray([1, 2, 3, 4]) // 10\nsumArray([]) // 0\nsumArray([10, -5, 20]) // 25",
+    "concepts": [
+      "refactoring",
+      "functional programming",
+      "array methods",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-recursive-function-to-calculate-maximum-path-sum-in-binary-tree",
+    "title": "Fix Bug in Recursive Function to Calculate Maximum Path Sum in Binary Tree",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "The provided Python function aims to find the maximum path sum in a binary tree, where a path can start and end at any node. However, the current implementation contains bugs that lead to incorrect results and runtime errors. Your task is to identify and fix these bugs, ensuring the function correctly computes the maximum path sum.",
+    "prompt": "A binary tree path is any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain at least one node and does not need to go through the root. The maximum path sum is the largest possible sum of the values of nodes on any path. Here is a buggy Python implementation of a function maxPathSum(root) that should return this maximum path sum for the binary tree rooted at root. Fix the code so it works correctly for any input binary tree.",
+    "guidance": [
+      "Check how negative path sums are handled and whether they should be excluded.",
+      "Ensure the recursive helper function correctly updates and returns the maximum single-side path sums.",
+      "Remember that the global maximum path sum might include both left and right children's paths plus the current node's value."
+    ],
+    "hints": [
+      "Pay attention to how you handle None nodes or leaf nodes to avoid attribute errors.",
+      "Consider using a class attribute or mutable object to keep track of the global maximum path sum across recursion.",
+      "Watch out for updating the maximum path sum before returning from recursion."
+    ],
+    "starterCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef maxPathSum(root):\n    max_sum = float('-inf')\n    \n    def max_gain(node):\n        if not node:\n            return 0\n        left_gain = max_gain(node.left)\n        right_gain = max_gain(node.right)\n        price_newpath = node.val + left_gain + right_gain\n        max_sum = max(max_sum, price_newpath)\n        return node.val + max(left_gain, right_gain)\n    \n    max_gain(root)\n    return max_sum",
+    "expectedOutput": "For the tree:\n    1\n   / \\\n  2   3\nThe function should return 6, which corresponds to the path 2 -> 1 -> 3.",
+    "concepts": [
+      "recursion",
+      "binary tree",
+      "dynamic programming",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-nested-loops-and-conditionals-in-c",
+    "title": "Predict the Output of Nested Loops and Conditionals in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the following C++ code with nested loops, conditionals, and array manipulation, then determine and predict what the output will be when the program runs.",
+    "prompt": "Given the C++ code snippet below, predict the exact output printed to the console. Pay careful attention to the nested loops, the conditional checks inside the inner loop, and how the array 'results' is modified.\n\nExplain your reasoning about loop iterations and the conditional logic used to modify the 'results' array.\n\nCode snippet:\n\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    int results[5] = {0, 1, 2, 3, 4};\n    for (int i = 0; i < 5; i++) {\n        for (int j = 0; j < 5; j++) {\n            if ((i + j) % 3 == 0) {\n                results[i] += j;\n            } else if ((i * j) % 4 == 0) {\n                results[i] -= j;\n            }\n        }\n    }\n    for (int i = 0; i < 5; i++) {\n        cout << results[i] << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
+    "guidance": [
+      "Carefully track each iteration of both loops and note how 'results[i]' is updated with each condition.",
+      "Remember that the conditions in the if-else statements are mutually exclusive: only one block executes per inner loop iteration.",
+      "Focus on the arithmetic operations and think about how the index sums and products relate to the modulus conditions."
+    ],
+    "hints": [
+      "Try to break down iterations for a single index 'i' to understand the transformation of 'results[i]'.",
+      "Consider writing down the values of i + j and i * j for each j in inner loop to verify which condition triggers."
+    ],
+    "starterCode": "#include <iostream>\n\nusing namespace std;\n\nint main() {\n    int results[5] = {0, 1, 2, 3, 4};\n    for (int i = 0; i < 5; i++) {\n        for (int j = 0; j < 5; j++) {\n            if ((i + j) % 3 == 0) {\n                results[i] += j;\n            } else if ((i * j) % 4 == 0) {\n                results[i] -= j;\n            }\n        }\n    }\n    for (int i = 0; i < 5; i++) {\n        cout << results[i] << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
+    "expectedOutput": "7 9 10 10 9",
+    "concepts": [
+      "nested loops",
+      "conditionals",
+      "modulus operator",
+      "array manipulation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-file-system-simulator-with-permissions-and-command-parsing",
+    "title": "Advanced File System Simulator with Permissions and Command Parsing",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a mini file system simulator in C++ that supports file creation, deletion, directory navigation, and permission handling with a command-line interface.",
+    "prompt": "Build a command-line based file system simulator in C++ that allows users to execute commands to create files and directories, navigate directories, delete files/directories, and manage user permissions (read, write, execute). The file system should be represented in-memory with appropriate data structures, supporting nested directories. Implement commands including mkdir, touch, cd, ls, rm, chmod, and stat. Permissions should be checked on all applicable operations, and the program should provide feedback for invalid operations or permission denials.",
+    "guidance": [
+      "Represent the file system as a tree data structure with nodes for directories and files.",
+      "Implement permission checks for each command based on user roles and file permissions.",
+      "Parse and handle complex command input while maintaining state of the current working directory."
+    ],
+    "hints": [
+      "Use enums or bit flags to represent permissions and simplify permission checking logic.",
+      "Design a base class or struct for file system nodes with derived classes or types for files and directories.",
+      "Consider using a stack or string manipulation to handle path resolution for 'cd' and related commands."
+    ],
+    "starterCode": "#include <iostream>\n#include <string>\n#include <vector>\n#include <memory>\n\n// Define Permission flags\nenum Permission {\n  READ = 1 << 0,\n  WRITE = 1 << 1,\n  EXECUTE = 1 << 2\n};\n\n// Base class for FileSystem node\nclass FSNode {\npublic:\n    std::string name;\n    int permissions; // bit flags\n    FSNode* parent;\n\n    FSNode(const std::string& name, int perms, FSNode* parent)\n        : name(name), permissions(perms), parent(parent) {}\n\n    virtual bool isDirectory() const = 0;\n    virtual ~FSNode() {}\n};\n\n// TODO: Implement Directory and File classes inheriting FSNode\n// TODO: Implement commands and file system logic\n\nint main() {\n    // TODO: Initialize root directory and simulate command input and output loop\n    std::cout << \"File system simulator started. Enter commands:\\n\";\n    return 0;\n}",
+    "expectedOutput": "File system simulator started. Enter commands:\n> mkdir projects\n> cd projects\n> touch readme.txt\n> ls\nreadme.txt\n> chmod readme.txt 6\n> stat readme.txt\nName: readme.txt\nPermissions: Read, Write\n> cd ..\n> rm projects\nError: Permission denied",
+    "concepts": [
+      "file system simulation",
+      "bitwise operations",
+      "command parsing",
+      "tree data structures"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-bug-in-sql-query-calculating-running-totals-with-incorrect-window-frames",
+    "title": "Fix the Bug in SQL Query Calculating Running Totals with Incorrect Window Frames",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the logical error in the given SQL query that attempts to calculate running totals of sales per customer, but returns incorrect results due to improper window frame specification.",
+    "prompt": "You are provided with a SQL query intended to calculate the running total of sales amounts per customer ordered by sale date. However, the query returns incorrect running totals, especially when multiple sales occur on the same date or for customers with multiple transactions. Analyze the query, identify the bug related to the window frame definition, and correct it to ensure accurate running totals per customer.",
+    "guidance": [
+      "Review how window functions and frames work, especially the ROWS and RANGE clauses within OVER()",
+      "Focus on partitioning by customer and ordering by sale date so that running totals accumulate correctly",
+      "Consider how the frame affects duplicates in ordering column or when multiple rows have the same date"
+    ],
+    "hints": [
+      "The default frame for ORDER BY in window functions may not behave as expected with RANGE UNBOUNDED PRECEDING",
+      "Switching to ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW can fix cumulative totals when there are duplicates in order key",
+      "Check if the ORDER BY column has duplicate timestamps or repeated values"
+    ],
+    "starterCode": "SELECT customer_id,\n       sale_date,\n       sale_amount,\n       SUM(sale_amount) OVER (PARTITION BY customer_id ORDER BY sale_date RANGE UNBOUNDED PRECEDING) AS running_total\nFROM sales\nORDER BY customer_id, sale_date;",
+    "expectedOutput": "A result set where each row shows customer_id, sale_date, sale_amount, and running_total with running_total correctly summing sale_amounts from the first sale_date up to the current sale_date per customer, accounting properly for multiple sales on the same date.",
+    "concepts": [
+      "window functions",
+      "window frames",
+      "SQL debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ];
