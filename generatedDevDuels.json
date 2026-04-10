@@ -1,175 +1,179 @@
 [
   {
-    "slug": "implement-a-multi-threaded-file-search-utility-in-c",
-    "title": "Implement a Multi-threaded File Search Utility in C++",
-    "language": "cpp",
+    "slug": "advanced-todo-list-with-tag-filtering-and-persistent-storage",
+    "title": "Advanced ToDo List with Tag Filtering and Persistent Storage",
+    "language": "javascript",
     "difficulty": "advanced",
     "category": "mini-projects",
-    "description": "Create an advanced multi-threaded file search utility in C++ that scans directories recursively to find files containing a specific keyword. The program should optimize search performance using concurrency and handle large directory trees efficiently.",
-    "prompt": "Write a C++ program that takes two arguments: a directory path and a search keyword. The program should recursively search all files in the directory and its subdirectories for the keyword. Implement multithreading to parallelize file processing for improved performance. Your output should include the full path of each file containing the keyword and the line numbers where the keyword appears. Ensure thread safety and efficient resource management.",
+    "description": "Build an advanced ToDo List application in JavaScript that supports task creation, dynamic filtering by tags, completion toggling, and persists data across sessions using localStorage.",
+    "prompt": "Create a function named `createAdvancedTodoList` that initializes a ToDo list manager object with the following capabilities:\n\n1. Add tasks with mandatory title and optional tags (array of strings).\n2. Mark tasks as completed or uncompleted.\n3. Filter tasks by one or multiple tags, returning all tasks that match any of the provided tags.\n4. Retrieve all tasks, optionally filtered by completion status.\n5. Persist tasks to localStorage automatically after any modification.\n6. Load persisted tasks from localStorage when initialized.\n\nYour solution should focus on writing clean, efficient code and managing state properly. You should expose methods such as `addTask(title, tags)`, `toggleComplete(taskId)`, `filterByTags(tagsArray)`, and `getTasks(filter)`. Each task should have a unique ID, title, tags array, and completion boolean.\n\nDo not build UI elements; focus solely on the JavaScript logic with proper data persistence.",
     "guidance": [
-      "Use C++17 filesystem library for recursive directory traversal.",
-      "Deploy a thread pool or use std::async to manage multiple threads efficiently.",
-      "Implement synchronization mechanisms to safely write results concurrently.",
-      "Optimize I/O operations to handle potentially large files with minimal bottlenecks."
+      "Use an internal array to represent the list of tasks and maintain their state.",
+      "Implement a unique ID generator for tasks to track them reliably during updates.",
+      "Use JSON.stringify and JSON.parse for saving and loading tasks from localStorage.",
+      "Design your filter functions to support flexible combination of tags and completion status."
     ],
     "hints": [
-      "Consider buffering file content and avoid loading entire huge files into memory.",
-      "Use mutexes or thread-safe queues to collect matching results from threads.",
-      "Limit the number of active threads based on hardware concurrency."
+      "Leverage the Date.now() method or an incrementing counter to generate unique IDs.",
+      "Remember to stringify complex objects before saving them in localStorage.",
+      "Consider using Array.prototype.filter and Array.prototype.some for efficient tag matching."
     ],
-    "starterCode": "#include <iostream>\n#include <filesystem>\n#include <fstream>\n#include <string>\n#include <vector>\n#include <thread>\n#include <mutex>\n#include <future>\n\nnamespace fs = std::filesystem;\n\nstd::mutex output_mutex;\n\nvoid searchFile(const fs::path &filePath, const std::string &keyword) {\n    std::ifstream file(filePath);\n    if (!file.is_open()) return;\n\n    std::string line;\n    int lineNumber = 0;\n    std::vector<int> matchedLines;\n\n    while (std::getline(file, line)) {\n        ++lineNumber;\n        if (line.find(keyword) != std::string::npos) {\n            matchedLines.push_back(lineNumber);\n        }\n    }\n\n    if (!matchedLines.empty()) {\n        std::lock_guard<std::mutex> lock(output_mutex);\n        std::cout << \"Found in: \" << filePath << \" Lines: \";\n        for (int num : matchedLines) {\n            std::cout << num << \" \";\n        }\n        std::cout << std::endl;\n    }\n}\n\nint main(int argc, char* argv[]) {\n    if (argc != 3) {\n        std::cerr << \"Usage: \" << argv[0] << \" <directory_path> <keyword>\" << std::endl;\n        return 1;\n    }\n\n    const fs::path dirPath = argv[1];\n    const std::string keyword = argv[2];\n\n    // Your implementation here\n\n    return 0;\n}\n",
-    "expectedOutput": "Found in: /path/to/file.txt Lines: 3 15 27\nFound in: /path/to/subdir/log.txt Lines: 1 2 5",
+    "starterCode": "function createAdvancedTodoList() {\n  const STORAGE_KEY = 'advanced_todo_tasks';\n  let tasks = [];\n\n  // Load tasks from localStorage or initialize empty\n  function loadTasks() {\n    const saved = localStorage.getItem(STORAGE_KEY);\n    tasks = saved ? JSON.parse(saved) : [];\n  }\n\n  // Save tasks to localStorage\n  function saveTasks() {\n    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));\n  }\n\n  // Implement the methods below...\n\n  return {\n    addTask(title, tags) {\n      // TODO\n    },\n    toggleComplete(taskId) {\n      // TODO\n    },\n    filterByTags(tags) {\n      // TODO\n    },\n    getTasks(filter) {\n      // TODO\n    }\n  };\n}\n\n// Example usage:\n// const todo = createAdvancedTodoList();\n// todo.addTask('Learn JavaScript', ['programming', 'js']);",
+    "expectedOutput": "After adding tasks and toggling completion, calls to getTasks() and filterByTags() should return arrays of task objects matching the criteria with properties: { id, title, tags, completed }.\n\nExample:\n[\n  { id: 1, title: 'Learn JavaScript', tags: ['programming', 'js'], completed: false },\n  { id: 2, title: 'Write blog post', tags: ['writing'], completed: true }\n]",
     "concepts": [
+      "JavaScript closures",
+      "localStorage API",
+      "Array methods (filter, some)",
+      "Data persistence",
+      "State management"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-for-improved-performance-using-index-friendly-joins",
+    "title": "Refactor SQL Query for Improved Performance Using Index-Friendly Joins",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "You are given a SQL query that fetches customer orders with detailed product information, but the current query is slow and inefficient. Refactor the query to optimize performance while keeping the same result set.",
+    "prompt": "The provided query joins three tables: customers, orders, and products to show customer_name, order_id, product_name, and order_date. However, it uses nested subqueries and non-sargable where clauses, leading to poor performance. Refactor the given query to improve readability and optimize execution without changing the output. Explain your improvements.",
+    "guidance": [
+      "Replace subqueries used in the FROM or WHERE clauses with explicit JOIN statements.",
+      "Eliminate non-sargable expressions in WHERE clauses to leverage indexing effectively.",
+      "Use table aliases consistently for readability and shorter code.",
+      "Preserve the same output columns and filtering conditions."
+    ],
+    "hints": [
+      "Look for subqueries that can be flattened into JOINs to improve query planner choices.",
+      "Avoid using functions or calculations directly on indexed columns in WHERE conditions.",
+      "Check the join types carefully to maintain the logical data relationship."
+    ],
+    "starterCode": "SELECT c.customer_name, o.order_id, p.product_name, o.order_date\nFROM customers c\nWHERE c.customer_id IN (\n  SELECT o.customer_id\n  FROM orders o\n  WHERE o.order_id IN (\n    SELECT order_id\n    FROM order_items oi\n    WHERE oi.product_id IN (\n      SELECT product_id\n      FROM products p\n      WHERE p.category = 'Electronics'\n    )\n  )\n)",
+    "expectedOutput": "A list of customer names with their order IDs, product names for products in 'Electronics' category, and the order dates, matching the original logic but returned in a more efficient and readable way.",
+    "concepts": [
+      "SQL JOIN optimization",
+      "Query refactoring",
+      "Index utilization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-memory-leak-and-logic-errors-in-a-multi-threaded-task-scheduler",
+    "title": "Fix Memory Leak and Logic Errors in a Multi-threaded Task Scheduler",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are given a flawed C++ implementation of a simple multi-threaded task scheduler that manages and executes tasks concurrently. The code contains memory leaks, race conditions, and logic errors that cause incorrect task execution and resource cleanup issues. Your job is to identify and fix the bugs to produce a robust, leak-free, and correctly functioning scheduler.",
+    "prompt": "The provided code implements a TaskScheduler class that allows scheduling and executing tasks concurrently using std::thread. The implementation should allow adding tasks and then start execution, waiting for all tasks to finish. However, there are multiple issues including memory leaks, race conditions, and incorrect handling of thread lifecycle causing crashes or undefined behavior. Fix the bugs so that the scheduler can safely execute all tasks concurrently and clean up all resources properly.",
+    "guidance": [
+      "Carefully review how std::thread objects are created, stored, and joined to prevent detached threads or dangling resources.",
+      "Investigate potential data races on shared containers used to store tasks and threads; consider applying appropriate synchronization or safer data structures.",
+      "Use smart pointers or containers to ensure automatic cleanup of dynamically allocated memory and prevent leaks."
+    ],
+    "hints": [
+      "Avoid storing threads as raw pointers and consider using joinable checks before joining threads.",
+      "Make sure no task is lost or overwritten in the container due to multi-threaded access or invalid iterators.",
+      "Check whether the vector holding threads is growing unexpectedly or if threads are joined multiple times."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <thread>\n#include <functional>\n\nclass TaskScheduler {\nprivate:\n    std::vector<std::thread*> threads;\n    std::vector<std::function<void()>> tasks;\n\npublic:\n    void addTask(std::function<void()> task) {\n        tasks.push_back(task);\n    }\n\n    void run() {\n        for (auto& task : tasks) {\n            std::thread* t = new std::thread(task);\n            threads.push_back(t);\n        }\n\n        for (auto& t : threads) {\n            t->join();\n            // Missing delete on t\n        }\n    }\n\n    ~TaskScheduler() {\n        // Destructor is empty, leading to potential leaks\n    }\n};\n\nint main() {\n    TaskScheduler scheduler;\n    for (int i = 0; i < 5; ++i) {\n        scheduler.addTask([i]() { std::cout << \"Task \" << i << \" executed\" << std::endl; });\n    }\n    scheduler.run();\n    return 0;\n}",
+    "expectedOutput": "Task 0 executed\nTask 1 executed\nTask 2 executed\nTask 3 executed\nTask 4 executed",
+    "concepts": [
+      "memory management",
       "multithreading",
-      "filesystem traversal",
-      "file I/O",
+      "resource cleanup",
+      "std::thread",
       "synchronization"
     ],
-    "estimatedTime": "60 minutes",
-    "isFeatured": false
+    "estimatedTime": "20 minutes",
+    "isFeatured": true
   },
   {
-    "slug": "refactor-imperative-sum-calculator-to-clearer-functional-code",
-    "title": "Refactor Imperative Sum Calculator to Clearer Functional Code",
+    "slug": "build-a-dynamic-kanban-board-with-drag-and-drop-in-javascript",
+    "title": "Build a Dynamic Kanban Board with Drag-and-Drop in JavaScript",
     "language": "javascript",
-    "difficulty": "beginner",
-    "category": "code-quality",
-    "description": "Improve the readability and maintainability of a simple JavaScript function that calculates the sum of numbers in an array by refactoring it from a verbose imperative style to a clean and concise functional style.",
-    "prompt": "You are given a function that calculates the sum of elements in an array using a traditional for loop with extra variables. Refactor this function to make it simpler and more readable without changing its behavior. Use JavaScript best practices to improve the code quality, clarity, and conciseness.",
-    "guidance": [
-      "Focus on simplifying the function while keeping the output identical for any input array.",
-      "Consider replacing the loop and accumulator variables with a more functional approach.",
-      "Make sure the function still returns the correct sum for both empty and non-empty arrays."
-    ],
-    "hints": [
-      "Look into the array method 'reduce' for summing elements in a functional style.",
-      "Avoid unnecessary variable initializations if they don’t improve clarity.",
-      "Keep your function signature and return behavior unchanged."
-    ],
-    "starterCode": "function sumArray(arr) {\n  let sum = 0;\n  for (let i = 0; i < arr.length; i++) {\n    sum += arr[i];\n  }\n  return sum;\n}",
-    "expectedOutput": "sumArray([1, 2, 3, 4]) // 10\nsumArray([]) // 0\nsumArray([10, -5, 20]) // 25",
-    "concepts": [
-      "refactoring",
-      "functional programming",
-      "array methods",
-      "code readability"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-bug-in-recursive-function-to-calculate-maximum-path-sum-in-binary-tree",
-    "title": "Fix Bug in Recursive Function to Calculate Maximum Path Sum in Binary Tree",
-    "language": "python",
-    "difficulty": "advanced",
-    "category": "debugging",
-    "description": "The provided Python function aims to find the maximum path sum in a binary tree, where a path can start and end at any node. However, the current implementation contains bugs that lead to incorrect results and runtime errors. Your task is to identify and fix these bugs, ensuring the function correctly computes the maximum path sum.",
-    "prompt": "A binary tree path is any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain at least one node and does not need to go through the root. The maximum path sum is the largest possible sum of the values of nodes on any path. Here is a buggy Python implementation of a function maxPathSum(root) that should return this maximum path sum for the binary tree rooted at root. Fix the code so it works correctly for any input binary tree.",
-    "guidance": [
-      "Check how negative path sums are handled and whether they should be excluded.",
-      "Ensure the recursive helper function correctly updates and returns the maximum single-side path sums.",
-      "Remember that the global maximum path sum might include both left and right children's paths plus the current node's value."
-    ],
-    "hints": [
-      "Pay attention to how you handle None nodes or leaf nodes to avoid attribute errors.",
-      "Consider using a class attribute or mutable object to keep track of the global maximum path sum across recursion.",
-      "Watch out for updating the maximum path sum before returning from recursion."
-    ],
-    "starterCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef maxPathSum(root):\n    max_sum = float('-inf')\n    \n    def max_gain(node):\n        if not node:\n            return 0\n        left_gain = max_gain(node.left)\n        right_gain = max_gain(node.right)\n        price_newpath = node.val + left_gain + right_gain\n        max_sum = max(max_sum, price_newpath)\n        return node.val + max(left_gain, right_gain)\n    \n    max_gain(root)\n    return max_sum",
-    "expectedOutput": "For the tree:\n    1\n   / \\\n  2   3\nThe function should return 6, which corresponds to the path 2 -> 1 -> 3.",
-    "concepts": [
-      "recursion",
-      "binary tree",
-      "dynamic programming",
-      "debugging"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "predict-the-output-of-nested-loops-and-conditionals-in-c",
-    "title": "Predict the Output of Nested Loops and Conditionals in C++",
-    "language": "cpp",
-    "difficulty": "intermediate",
-    "category": "logic",
-    "description": "Analyze the following C++ code with nested loops, conditionals, and array manipulation, then determine and predict what the output will be when the program runs.",
-    "prompt": "Given the C++ code snippet below, predict the exact output printed to the console. Pay careful attention to the nested loops, the conditional checks inside the inner loop, and how the array 'results' is modified.\n\nExplain your reasoning about loop iterations and the conditional logic used to modify the 'results' array.\n\nCode snippet:\n\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    int results[5] = {0, 1, 2, 3, 4};\n    for (int i = 0; i < 5; i++) {\n        for (int j = 0; j < 5; j++) {\n            if ((i + j) % 3 == 0) {\n                results[i] += j;\n            } else if ((i * j) % 4 == 0) {\n                results[i] -= j;\n            }\n        }\n    }\n    for (int i = 0; i < 5; i++) {\n        cout << results[i] << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
-    "guidance": [
-      "Carefully track each iteration of both loops and note how 'results[i]' is updated with each condition.",
-      "Remember that the conditions in the if-else statements are mutually exclusive: only one block executes per inner loop iteration.",
-      "Focus on the arithmetic operations and think about how the index sums and products relate to the modulus conditions."
-    ],
-    "hints": [
-      "Try to break down iterations for a single index 'i' to understand the transformation of 'results[i]'.",
-      "Consider writing down the values of i + j and i * j for each j in inner loop to verify which condition triggers."
-    ],
-    "starterCode": "#include <iostream>\n\nusing namespace std;\n\nint main() {\n    int results[5] = {0, 1, 2, 3, 4};\n    for (int i = 0; i < 5; i++) {\n        for (int j = 0; j < 5; j++) {\n            if ((i + j) % 3 == 0) {\n                results[i] += j;\n            } else if ((i * j) % 4 == 0) {\n                results[i] -= j;\n            }\n        }\n    }\n    for (int i = 0; i < 5; i++) {\n        cout << results[i] << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
-    "expectedOutput": "7 9 10 10 9",
-    "concepts": [
-      "nested loops",
-      "conditionals",
-      "modulus operator",
-      "array manipulation"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "advanced-file-system-simulator-with-permissions-and-command-parsing",
-    "title": "Advanced File System Simulator with Permissions and Command Parsing",
-    "language": "cpp",
     "difficulty": "advanced",
     "category": "mini-projects",
-    "description": "Create a mini file system simulator in C++ that supports file creation, deletion, directory navigation, and permission handling with a command-line interface.",
-    "prompt": "Build a command-line based file system simulator in C++ that allows users to execute commands to create files and directories, navigate directories, delete files/directories, and manage user permissions (read, write, execute). The file system should be represented in-memory with appropriate data structures, supporting nested directories. Implement commands including mkdir, touch, cd, ls, rm, chmod, and stat. Permissions should be checked on all applicable operations, and the program should provide feedback for invalid operations or permission denials.",
+    "description": "Create a fully functional Kanban board application that supports adding, moving, and editing tasks across multiple columns using native JavaScript and the Drag-and-Drop API.",
+    "prompt": "Build a Kanban board app with at least three columns (e.g., To Do, In Progress, Done). Users should be able to add new tasks, edit existing tasks inline, and move tasks between columns using drag-and-drop functionality. The board's state should persist in localStorage, so refreshing the page retains the current tasks and their column positions.",
     "guidance": [
-      "Represent the file system as a tree data structure with nodes for directories and files.",
-      "Implement permission checks for each command based on user roles and file permissions.",
-      "Parse and handle complex command input while maintaining state of the current working directory."
+      "Structure your application using modular functions or ES6 classes to manage the board and tasks cleanly.",
+      "Utilize the HTML5 Drag and Drop API for intuitive task moving with proper drag event handling.",
+      "Implement localStorage to save and retrieve tasks and their states on page load.",
+      "Ensure accessibility by allowing keyboard navigation and providing clear visual feedback during dragging."
     ],
     "hints": [
-      "Use enums or bit flags to represent permissions and simplify permission checking logic.",
-      "Design a base class or struct for file system nodes with derived classes or types for files and directories.",
-      "Consider using a stack or string manipulation to handle path resolution for 'cd' and related commands."
+      "Use data attributes to track task ids and their current column during drag events.",
+      "Debounce or throttle save operations to localStorage to optimize performance during frequent updates.",
+      "Use event delegation for handling clicks and edits within dynamically created task elements."
     ],
-    "starterCode": "#include <iostream>\n#include <string>\n#include <vector>\n#include <memory>\n\n// Define Permission flags\nenum Permission {\n  READ = 1 << 0,\n  WRITE = 1 << 1,\n  EXECUTE = 1 << 2\n};\n\n// Base class for FileSystem node\nclass FSNode {\npublic:\n    std::string name;\n    int permissions; // bit flags\n    FSNode* parent;\n\n    FSNode(const std::string& name, int perms, FSNode* parent)\n        : name(name), permissions(perms), parent(parent) {}\n\n    virtual bool isDirectory() const = 0;\n    virtual ~FSNode() {}\n};\n\n// TODO: Implement Directory and File classes inheriting FSNode\n// TODO: Implement commands and file system logic\n\nint main() {\n    // TODO: Initialize root directory and simulate command input and output loop\n    std::cout << \"File system simulator started. Enter commands:\\n\";\n    return 0;\n}",
-    "expectedOutput": "File system simulator started. Enter commands:\n> mkdir projects\n> cd projects\n> touch readme.txt\n> ls\nreadme.txt\n> chmod readme.txt 6\n> stat readme.txt\nName: readme.txt\nPermissions: Read, Write\n> cd ..\n> rm projects\nError: Permission denied",
+    "starterCode": "class KanbanBoard {\n  constructor(containerId) {\n    this.container = document.getElementById(containerId);\n    this.columns = ['To Do', 'In Progress', 'Done'];\n    this.tasks = {};\n    this.loadTasks();\n    this.render();\n    this.addEventListeners();\n  }\n\n  loadTasks() {\n    const saved = localStorage.getItem('kanbanTasks');\n    this.tasks = saved ? JSON.parse(saved) : {\n      'To Do': [],\n      'In Progress': [],\n      'Done': []\n    };\n  }\n\n  saveTasks() {\n    localStorage.setItem('kanbanTasks', JSON.stringify(this.tasks));\n  }\n\n  render() {\n    this.container.innerHTML = '';\n    this.columns.forEach(column => {\n      const colDiv = document.createElement('div');\n      colDiv.className = 'column';\n      colDiv.dataset.column = column;\n      colDiv.innerHTML = `<h2>${column}</h2><div class='task-list'></div><button>Add Task</button>`;\n      this.container.appendChild(colDiv);\n      const taskList = colDiv.querySelector('.task-list');\n      this.tasks[column].forEach(task => {\n        const taskEl = document.createElement('div');\n        taskEl.className = 'task';\n        taskEl.textContent = task.text;\n        taskEl.draggable = true;\n        taskEl.dataset.id = task.id;\n        taskList.appendChild(taskEl);\n      });\n    });\n  }\n\n  addEventListeners() {\n    // Implement drag, drop, add and edit logic here\n  }\n}\n\n// Usage\n// const board = new KanbanBoard('kanbanContainer');",
+    "expectedOutput": "A dynamic Kanban board with three columns. Users can add new tasks to any column by clicking 'Add Task', edit tasks inline by clicking on the task text, and drag tasks between columns. The state remains consistent after refreshing the page.",
     "concepts": [
-      "file system simulation",
-      "bitwise operations",
-      "command parsing",
-      "tree data structures"
+      "Drag and Drop API",
+      "localStorage persistence",
+      "DOM manipulation",
+      "Event handling",
+      "Data structures"
     ],
     "estimatedTime": "60 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-output-for-recursive-state-machine-with-complex-memoization",
+    "title": "Predict Output for Recursive State Machine with Complex Memoization",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a recursive function that behaves like a state machine with memoization to predict the final output of given input values.",
+    "prompt": "Given the Python function below, predict the exact output when the function `state_machine(10)` is called and its return value is printed. Explain your reasoning regarding the recursion, memoization, and state transitions made by the function.",
+    "guidance": [
+      "Carefully track the recursive calls and the memoization cache to understand repeated calls.",
+      "Observe how the state changes based on conditions and how values are combined in recursion.",
+      "Consider edge cases of the input values and how base cases influence the recursion outcome."
+    ],
+    "hints": [
+      "Focus on how the cache dictionary stores results and prevents re-computation.",
+      "Examine the conditions that change the state and how that affects recursive depth and return values."
+    ],
+    "starterCode": "def state_machine(n, state=0, cache={}):\n    if (n, state) in cache:\n        return cache[(n, state)]\n    if n == 0:\n        return 1 if state == 0 else 0\n    if state == 0:\n        result = state_machine(n - 1, 0, cache) + 2 * state_machine(n - 1, 1, cache)\n    elif state == 1:\n        result = 3 * state_machine(n - 1, 0, cache) + state_machine(n - 1, 2, cache)\n    else:\n        result = state_machine(n - 1, 2, cache) + state_machine(n - 1, 0, cache)\n    cache[(n, state)] = result\n    return result\n\nprint(state_machine(10))",
+    "expectedOutput": "6831",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "state machine",
+      "dynamic programming"
+    ],
+    "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-the-bug-in-sql-query-calculating-running-totals-with-incorrect-window-frames",
-    "title": "Fix the Bug in SQL Query Calculating Running Totals with Incorrect Window Frames",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Identify and fix the logical error in the given SQL query that attempts to calculate running totals of sales per customer, but returns incorrect results due to improper window frame specification.",
-    "prompt": "You are provided with a SQL query intended to calculate the running total of sales amounts per customer ordered by sale date. However, the query returns incorrect running totals, especially when multiple sales occur on the same date or for customers with multiple transactions. Analyze the query, identify the bug related to the window frame definition, and correct it to ensure accurate running totals per customer.",
+    "slug": "refactor-a-simple-temperature-converter-function",
+    "title": "Refactor a Simple Temperature Converter Function",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and efficiency of a basic Python function that converts temperatures from Celsius to Fahrenheit.",
+    "prompt": "You are given a function that converts temperatures from Celsius to Fahrenheit, but the code is written in a messy way with unnecessary variables and redundant steps. Your task is to refactor the function to make it cleaner, simpler, and easier to understand, while keeping the same behavior and output.",
     "guidance": [
-      "Review how window functions and frames work, especially the ROWS and RANGE clauses within OVER()",
-      "Focus on partitioning by customer and ordering by sale date so that running totals accumulate correctly",
-      "Consider how the frame affects duplicates in ordering column or when multiple rows have the same date"
+      "Remove any unnecessary intermediate variables to simplify the code.",
+      "Use meaningful variable names or streamline expressions directly.",
+      "Ensure the returned value is accurate and the function still works correctly."
     ],
     "hints": [
-      "The default frame for ORDER BY in window functions may not behave as expected with RANGE UNBOUNDED PRECEDING",
-      "Switching to ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW can fix cumulative totals when there are duplicates in order key",
-      "Check if the ORDER BY column has duplicate timestamps or repeated values"
+      "Remember the formula: Fahrenheit = Celsius * 9/5 + 32.",
+      "You can return the expression directly without storing it in a separate variable first.",
+      "Avoid redundant prints or unused variables to keep the function concise."
     ],
-    "starterCode": "SELECT customer_id,\n       sale_date,\n       sale_amount,\n       SUM(sale_amount) OVER (PARTITION BY customer_id ORDER BY sale_date RANGE UNBOUNDED PRECEDING) AS running_total\nFROM sales\nORDER BY customer_id, sale_date;",
-    "expectedOutput": "A result set where each row shows customer_id, sale_date, sale_amount, and running_total with running_total correctly summing sale_amounts from the first sale_date up to the current sale_date per customer, accounting properly for multiple sales on the same date.",
+    "starterCode": "def celsius_to_fahrenheit(c):\n    temperature_in_fahrenheit = 0\n    temperature_in_fahrenheit = c * (9 / 5)\n    temperature_in_fahrenheit = temperature_in_fahrenheit + 32\n    return temperature_in_fahrenheit",
+    "expectedOutput": "celsius_to_fahrenheit(0)  # 32.0\ncelsius_to_fahrenheit(100)  # 212.0\ncelsius_to_fahrenheit(-40)  # -40.0",
     "concepts": [
-      "window functions",
-      "window frames",
-      "SQL debugging"
+      "function refactoring",
+      "basic arithmetic operations",
+      "return statements"
     ],
-    "estimatedTime": "15 minutes",
+    "estimatedTime": "10 minutes",
     "isFeatured": true
   }
 ]

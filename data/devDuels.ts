@@ -6679,5 +6679,182 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "advanced-todo-list-with-tag-filtering-and-persistent-storage",
+    "title": "Advanced ToDo List with Tag Filtering and Persistent Storage",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build an advanced ToDo List application in JavaScript that supports task creation, dynamic filtering by tags, completion toggling, and persists data across sessions using localStorage.",
+    "prompt": "Create a function named `createAdvancedTodoList` that initializes a ToDo list manager object with the following capabilities:\n\n1. Add tasks with mandatory title and optional tags (array of strings).\n2. Mark tasks as completed or uncompleted.\n3. Filter tasks by one or multiple tags, returning all tasks that match any of the provided tags.\n4. Retrieve all tasks, optionally filtered by completion status.\n5. Persist tasks to localStorage automatically after any modification.\n6. Load persisted tasks from localStorage when initialized.\n\nYour solution should focus on writing clean, efficient code and managing state properly. You should expose methods such as `addTask(title, tags)`, `toggleComplete(taskId)`, `filterByTags(tagsArray)`, and `getTasks(filter)`. Each task should have a unique ID, title, tags array, and completion boolean.\n\nDo not build UI elements; focus solely on the JavaScript logic with proper data persistence.",
+    "guidance": [
+      "Use an internal array to represent the list of tasks and maintain their state.",
+      "Implement a unique ID generator for tasks to track them reliably during updates.",
+      "Use JSON.stringify and JSON.parse for saving and loading tasks from localStorage.",
+      "Design your filter functions to support flexible combination of tags and completion status."
+    ],
+    "hints": [
+      "Leverage the Date.now() method or an incrementing counter to generate unique IDs.",
+      "Remember to stringify complex objects before saving them in localStorage.",
+      "Consider using Array.prototype.filter and Array.prototype.some for efficient tag matching."
+    ],
+    "starterCode": "function createAdvancedTodoList() {\n  const STORAGE_KEY = 'advanced_todo_tasks';\n  let tasks = [];\n\n  // Load tasks from localStorage or initialize empty\n  function loadTasks() {\n    const saved = localStorage.getItem(STORAGE_KEY);\n    tasks = saved ? JSON.parse(saved) : [];\n  }\n\n  // Save tasks to localStorage\n  function saveTasks() {\n    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));\n  }\n\n  // Implement the methods below...\n\n  return {\n    addTask(title, tags) {\n      // TODO\n    },\n    toggleComplete(taskId) {\n      // TODO\n    },\n    filterByTags(tags) {\n      // TODO\n    },\n    getTasks(filter) {\n      // TODO\n    }\n  };\n}\n\n// Example usage:\n// const todo = createAdvancedTodoList();\n// todo.addTask('Learn JavaScript', ['programming', 'js']);",
+    "expectedOutput": "After adding tasks and toggling completion, calls to getTasks() and filterByTags() should return arrays of task objects matching the criteria with properties: { id, title, tags, completed }.\n\nExample:\n[\n  { id: 1, title: 'Learn JavaScript', tags: ['programming', 'js'], completed: false },\n  { id: 2, title: 'Write blog post', tags: ['writing'], completed: true }\n]",
+    "concepts": [
+      "JavaScript closures",
+      "localStorage API",
+      "Array methods (filter, some)",
+      "Data persistence",
+      "State management"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-for-improved-performance-using-index-friendly-joins",
+    "title": "Refactor SQL Query for Improved Performance Using Index-Friendly Joins",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "You are given a SQL query that fetches customer orders with detailed product information, but the current query is slow and inefficient. Refactor the query to optimize performance while keeping the same result set.",
+    "prompt": "The provided query joins three tables: customers, orders, and products to show customer_name, order_id, product_name, and order_date. However, it uses nested subqueries and non-sargable where clauses, leading to poor performance. Refactor the given query to improve readability and optimize execution without changing the output. Explain your improvements.",
+    "guidance": [
+      "Replace subqueries used in the FROM or WHERE clauses with explicit JOIN statements.",
+      "Eliminate non-sargable expressions in WHERE clauses to leverage indexing effectively.",
+      "Use table aliases consistently for readability and shorter code.",
+      "Preserve the same output columns and filtering conditions."
+    ],
+    "hints": [
+      "Look for subqueries that can be flattened into JOINs to improve query planner choices.",
+      "Avoid using functions or calculations directly on indexed columns in WHERE conditions.",
+      "Check the join types carefully to maintain the logical data relationship."
+    ],
+    "starterCode": "SELECT c.customer_name, o.order_id, p.product_name, o.order_date\nFROM customers c\nWHERE c.customer_id IN (\n  SELECT o.customer_id\n  FROM orders o\n  WHERE o.order_id IN (\n    SELECT order_id\n    FROM order_items oi\n    WHERE oi.product_id IN (\n      SELECT product_id\n      FROM products p\n      WHERE p.category = 'Electronics'\n    )\n  )\n)",
+    "expectedOutput": "A list of customer names with their order IDs, product names for products in 'Electronics' category, and the order dates, matching the original logic but returned in a more efficient and readable way.",
+    "concepts": [
+      "SQL JOIN optimization",
+      "Query refactoring",
+      "Index utilization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-memory-leak-and-logic-errors-in-a-multi-threaded-task-scheduler",
+    "title": "Fix Memory Leak and Logic Errors in a Multi-threaded Task Scheduler",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are given a flawed C++ implementation of a simple multi-threaded task scheduler that manages and executes tasks concurrently. The code contains memory leaks, race conditions, and logic errors that cause incorrect task execution and resource cleanup issues. Your job is to identify and fix the bugs to produce a robust, leak-free, and correctly functioning scheduler.",
+    "prompt": "The provided code implements a TaskScheduler class that allows scheduling and executing tasks concurrently using std::thread. The implementation should allow adding tasks and then start execution, waiting for all tasks to finish. However, there are multiple issues including memory leaks, race conditions, and incorrect handling of thread lifecycle causing crashes or undefined behavior. Fix the bugs so that the scheduler can safely execute all tasks concurrently and clean up all resources properly.",
+    "guidance": [
+      "Carefully review how std::thread objects are created, stored, and joined to prevent detached threads or dangling resources.",
+      "Investigate potential data races on shared containers used to store tasks and threads; consider applying appropriate synchronization or safer data structures.",
+      "Use smart pointers or containers to ensure automatic cleanup of dynamically allocated memory and prevent leaks."
+    ],
+    "hints": [
+      "Avoid storing threads as raw pointers and consider using joinable checks before joining threads.",
+      "Make sure no task is lost or overwritten in the container due to multi-threaded access or invalid iterators.",
+      "Check whether the vector holding threads is growing unexpectedly or if threads are joined multiple times."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <thread>\n#include <functional>\n\nclass TaskScheduler {\nprivate:\n    std::vector<std::thread*> threads;\n    std::vector<std::function<void()>> tasks;\n\npublic:\n    void addTask(std::function<void()> task) {\n        tasks.push_back(task);\n    }\n\n    void run() {\n        for (auto& task : tasks) {\n            std::thread* t = new std::thread(task);\n            threads.push_back(t);\n        }\n\n        for (auto& t : threads) {\n            t->join();\n            // Missing delete on t\n        }\n    }\n\n    ~TaskScheduler() {\n        // Destructor is empty, leading to potential leaks\n    }\n};\n\nint main() {\n    TaskScheduler scheduler;\n    for (int i = 0; i < 5; ++i) {\n        scheduler.addTask([i]() { std::cout << \"Task \" << i << \" executed\" << std::endl; });\n    }\n    scheduler.run();\n    return 0;\n}",
+    "expectedOutput": "Task 0 executed\nTask 1 executed\nTask 2 executed\nTask 3 executed\nTask 4 executed",
+    "concepts": [
+      "memory management",
+      "multithreading",
+      "resource cleanup",
+      "std::thread",
+      "synchronization"
+    ],
+    "estimatedTime": "20 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-dynamic-kanban-board-with-drag-and-drop-in-javascript",
+    "title": "Build a Dynamic Kanban Board with Drag-and-Drop in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a fully functional Kanban board application that supports adding, moving, and editing tasks across multiple columns using native JavaScript and the Drag-and-Drop API.",
+    "prompt": "Build a Kanban board app with at least three columns (e.g., To Do, In Progress, Done). Users should be able to add new tasks, edit existing tasks inline, and move tasks between columns using drag-and-drop functionality. The board's state should persist in localStorage, so refreshing the page retains the current tasks and their column positions.",
+    "guidance": [
+      "Structure your application using modular functions or ES6 classes to manage the board and tasks cleanly.",
+      "Utilize the HTML5 Drag and Drop API for intuitive task moving with proper drag event handling.",
+      "Implement localStorage to save and retrieve tasks and their states on page load.",
+      "Ensure accessibility by allowing keyboard navigation and providing clear visual feedback during dragging."
+    ],
+    "hints": [
+      "Use data attributes to track task ids and their current column during drag events.",
+      "Debounce or throttle save operations to localStorage to optimize performance during frequent updates.",
+      "Use event delegation for handling clicks and edits within dynamically created task elements."
+    ],
+    "starterCode": "class KanbanBoard {\n  constructor(containerId) {\n    this.container = document.getElementById(containerId);\n    this.columns = ['To Do', 'In Progress', 'Done'];\n    this.tasks = {};\n    this.loadTasks();\n    this.render();\n    this.addEventListeners();\n  }\n\n  loadTasks() {\n    const saved = localStorage.getItem('kanbanTasks');\n    this.tasks = saved ? JSON.parse(saved) : {\n      'To Do': [],\n      'In Progress': [],\n      'Done': []\n    };\n  }\n\n  saveTasks() {\n    localStorage.setItem('kanbanTasks', JSON.stringify(this.tasks));\n  }\n\n  render() {\n    this.container.innerHTML = '';\n    this.columns.forEach(column => {\n      const colDiv = document.createElement('div');\n      colDiv.className = 'column';\n      colDiv.dataset.column = column;\n      colDiv.innerHTML = `<h2>${column}</h2><div class='task-list'></div><button>Add Task</button>`;\n      this.container.appendChild(colDiv);\n      const taskList = colDiv.querySelector('.task-list');\n      this.tasks[column].forEach(task => {\n        const taskEl = document.createElement('div');\n        taskEl.className = 'task';\n        taskEl.textContent = task.text;\n        taskEl.draggable = true;\n        taskEl.dataset.id = task.id;\n        taskList.appendChild(taskEl);\n      });\n    });\n  }\n\n  addEventListeners() {\n    // Implement drag, drop, add and edit logic here\n  }\n}\n\n// Usage\n// const board = new KanbanBoard('kanbanContainer');",
+    "expectedOutput": "A dynamic Kanban board with three columns. Users can add new tasks to any column by clicking 'Add Task', edit tasks inline by clicking on the task text, and drag tasks between columns. The state remains consistent after refreshing the page.",
+    "concepts": [
+      "Drag and Drop API",
+      "localStorage persistence",
+      "DOM manipulation",
+      "Event handling",
+      "Data structures"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-output-for-recursive-state-machine-with-complex-memoization",
+    "title": "Predict Output for Recursive State Machine with Complex Memoization",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a recursive function that behaves like a state machine with memoization to predict the final output of given input values.",
+    "prompt": "Given the Python function below, predict the exact output when the function `state_machine(10)` is called and its return value is printed. Explain your reasoning regarding the recursion, memoization, and state transitions made by the function.",
+    "guidance": [
+      "Carefully track the recursive calls and the memoization cache to understand repeated calls.",
+      "Observe how the state changes based on conditions and how values are combined in recursion.",
+      "Consider edge cases of the input values and how base cases influence the recursion outcome."
+    ],
+    "hints": [
+      "Focus on how the cache dictionary stores results and prevents re-computation.",
+      "Examine the conditions that change the state and how that affects recursive depth and return values."
+    ],
+    "starterCode": "def state_machine(n, state=0, cache={}):\n    if (n, state) in cache:\n        return cache[(n, state)]\n    if n == 0:\n        return 1 if state == 0 else 0\n    if state == 0:\n        result = state_machine(n - 1, 0, cache) + 2 * state_machine(n - 1, 1, cache)\n    elif state == 1:\n        result = 3 * state_machine(n - 1, 0, cache) + state_machine(n - 1, 2, cache)\n    else:\n        result = state_machine(n - 1, 2, cache) + state_machine(n - 1, 0, cache)\n    cache[(n, state)] = result\n    return result\n\nprint(state_machine(10))",
+    "expectedOutput": "6831",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "state machine",
+      "dynamic programming"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-simple-temperature-converter-function",
+    "title": "Refactor a Simple Temperature Converter Function",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and efficiency of a basic Python function that converts temperatures from Celsius to Fahrenheit.",
+    "prompt": "You are given a function that converts temperatures from Celsius to Fahrenheit, but the code is written in a messy way with unnecessary variables and redundant steps. Your task is to refactor the function to make it cleaner, simpler, and easier to understand, while keeping the same behavior and output.",
+    "guidance": [
+      "Remove any unnecessary intermediate variables to simplify the code.",
+      "Use meaningful variable names or streamline expressions directly.",
+      "Ensure the returned value is accurate and the function still works correctly."
+    ],
+    "hints": [
+      "Remember the formula: Fahrenheit = Celsius * 9/5 + 32.",
+      "You can return the expression directly without storing it in a separate variable first.",
+      "Avoid redundant prints or unused variables to keep the function concise."
+    ],
+    "starterCode": "def celsius_to_fahrenheit(c):\n    temperature_in_fahrenheit = 0\n    temperature_in_fahrenheit = c * (9 / 5)\n    temperature_in_fahrenheit = temperature_in_fahrenheit + 32\n    return temperature_in_fahrenheit",
+    "expectedOutput": "celsius_to_fahrenheit(0)  # 32.0\ncelsius_to_fahrenheit(100)  # 212.0\ncelsius_to_fahrenheit(-40)  # -40.0",
+    "concepts": [
+      "function refactoring",
+      "basic arithmetic operations",
+      "return statements"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
