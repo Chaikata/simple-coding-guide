@@ -1,493 +1,537 @@
 [
   {
-    "slug": "building-your-first-interactive-to-do-list-app-with-javascript",
-    "title": "Building Your First Interactive To-Do List App with JavaScript",
+    "slug": "building-real-time-chat-application-websockets-javascript",
+    "title": "Building a Real-Time Chat Application with WebSockets in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to create a simple and interactive to-do list app using JavaScript, HTML, and CSS. Perfect for beginners looking to practice JavaScript basics.",
-    "videoUrl": "https://www.youtube.com/watch?v=G0jO8kUrg-I",
+    "description": "Learn how to build a simple real-time chat application using WebSockets in JavaScript. This beginner-friendly tutorial walks you through setting up a WebSocket server and creating a client to send and receive messages instantly.",
+    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Creating a to-do list app is a great way to practice JavaScript, HTML, and CSS fundamentals. In this tutorial, you'll build a simple interactive to-do list that allows users to add tasks, mark them as done, and remove tasks."
+        "value": "In today's connected world, real-time communication is essential for many applications. One of the best ways to achieve real-time updates in web applications is through WebSockets. They allow two-way communication between a client and server, enabling instant message exchange without the need for constant client requests. This tutorial will guide you step-by-step to build a simple real-time chat application using JavaScript and WebSockets."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by creating the basic HTML structure for our to-do list app."
+        "value": "We will create two parts: a WebSocket server running with Node.js and a client-side HTML page that communicates with the server. Before you begin, make sure you have Node.js installed on your computer."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's create the WebSocket server. We will use the popular `ws` library for WebSocket support in Node.js. Open your terminal and create a new project folder, then run:"
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>To-Do List App</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      margin: 50px auto;\n      max-width: 400px;\n      padding: 20px;\n      background-color: #f9f9f9;\n    }\n    h1 {\n      text-align: center;\n    }\n    input[type=\"text\"] {\n      width: 70%;\n      padding: 10px;\n      margin-right: 10px;\n      font-size: 16px;\n    }\n    button {\n      padding: 10px 15px;\n      font-size: 16px;\n      cursor: pointer;\n    }\n    ul {\n      list-style-type: none;\n      padding-left: 0;\n      margin-top: 20px;\n    }\n    li {\n      background-color: #fff;\n      padding: 12px;\n      margin-bottom: 10px;\n      border-radius: 4px;\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    }\n    li.completed {\n      text-decoration: line-through;\n      color: gray;\n    }\n    .remove-btn {\n      background-color: transparent;\n      border: none;\n      color: #c00;\n      font-weight: bold;\n      cursor: pointer;\n    }\n  </style>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Add a new task...\" />\n  <button id=\"addBtn\">Add</button>\n  <ul id=\"taskList\"></ul>\n  <script src=\"app.js\"></script>\n</body>\n</html>"
+        "value": "npm init -y\nnpm install ws"
       },
       {
         "type": "paragraph",
-        "value": "In this HTML, we have a text input where users can type their tasks, an Add button, and an unordered list to display tasks. Now let's write the JavaScript to add interactivity."
-      },
-      {
-        "type": "paragraph",
-        "value": "The JavaScript will do the following:\n- Listen for clicks on the Add button\n- Create a new list item with the task entered\n- Allow users to mark tasks as completed by clicking on them\n- Add a remove button to delete tasks"
+        "value": "Next, create a file called `server.js` in your project folder and add the following code:"
       },
       {
         "type": "code",
-        "value": "const taskInput = document.getElementById('taskInput');\nconst addBtn = document.getElementById('addBtn');\nconst taskList = document.getElementById('taskList');\n\n// Function to add a new task\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if (taskText === '') {\n    alert('Please enter a task!');\n    return;\n  }\n\n  // Create list item\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Toggle completion on click\n  li.addEventListener('click', () => {\n    li.classList.toggle('completed');\n  });\n\n  // Create remove button\n  const removeBtn = document.createElement('button');\n  removeBtn.textContent = 'X';\n  removeBtn.className = 'remove-btn';\n\n  // Remove task on button click\n  removeBtn.addEventListener('click', (e) => {\n    e.stopPropagation(); // Prevent li click event\n    taskList.removeChild(li);\n  });\n\n  li.appendChild(removeBtn);\n  taskList.appendChild(li);\n  taskInput.value = '';\n  taskInput.focus();\n}\n\n// Add task on button click\naddBtn.addEventListener('click', addTask);\n\n// Add task on pressing Enter key\ntaskInput.addEventListener('keydown', (e) => {\n  if (e.key === 'Enter') {\n    addTask();\n  }\n});"
+        "value": "const WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', ws => {\n  console.log('A new client connected');\n\n  ws.on('message', message => {\n    console.log(`Received: ${message}`);\n\n    // Broadcast the message to all connected clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.send('Welcome to the chat!');\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "Here's what happens in the JavaScript code:\n- We grab references to input, button, and task list elements.\n- The addTask function checks if the input is empty. If not, it creates a new <li> element.\n- Clicking on the task toggles its 'completed' state, visually crossing it out.\n- A remove button is created inside each task to allow deleting it.\n- The button click and pressing Enter key both call addTask to add a new task."
+        "value": "This server listens on port 8080. When a client connects, it welcomes the user, and every time it receives a message from a client, it broadcasts the message to all other connected clients."
       },
       {
         "type": "paragraph",
-        "value": "This simple app is a good stepping stone to learning about DOM manipulation and event handling in JavaScript. You can expand it further by saving tasks to local storage or adding task priorities. But for now, enjoy your fully functional to-do list!"
+        "value": "Now, let's build the client side. Create an `index.html` file in the same folder with the following content:"
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Real-Time Chat</title>\n  <style>\n    body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; }\n    #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }\n    #input { width: 80%; padding: 10px; }\n    #send { padding: 10px; }\n  </style>\n</head>\n<body>\n  <h1>Real-Time Chat Application</h1>\n  <div id=\"messages\"></div>\n  <input id=\"input\" type=\"text\" placeholder=\"Type a message...\" />\n  <button id=\"send\">Send</button>\n\n  <script>\n    const ws = new WebSocket('ws://localhost:8080');\n    const messages = document.getElementById('messages');\n    const input = document.getElementById('input');\n    const sendButton = document.getElementById('send');\n\n    // Display messages\n    ws.onmessage = event => {\n      const message = document.createElement('div');\n      message.textContent = event.data;\n      messages.appendChild(message);\n      messages.scrollTop = messages.scrollHeight;\n    };\n\n    // Send message function\n    function sendMessage() {\n      const text = input.value.trim();\n      if (text !== '') {\n        ws.send(text);\n        input.value = '';\n      }\n    }\n\n    sendButton.addEventListener('click', sendMessage);\n\n    // Enable sending message by pressing Enter\n    input.addEventListener('keypress', event => {\n      if (event.key === 'Enter') {\n        sendMessage();\n      }\n    });\n\n    ws.onopen = () => {\n      console.log('Connected to the WebSocket server');\n    };\n\n    ws.onerror = error => {\n      console.error('WebSocket error:', error);\n    };\n\n    ws.onclose = () => {\n      console.log('WebSocket connection closed');\n    };\n  </script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple HTML page sets up a WebSocket connection to the server. You can type messages into the input box and send them. All messages received from the server will be displayed in the messages area, enabling real-time chat."
+      },
+      {
+        "type": "paragraph",
+        "value": "To test your chat app, follow these steps:\n1. Run the WebSocket server by executing `node server.js` in your terminal.\n2. Open the `index.html` file in multiple browser tabs or windows.\n3. Send messages from any tab and see them appear instantly in all other tabs.\n\nThis demonstrates a basic real-time communication app using WebSockets in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Feel free to enhance this application further by adding usernames, message timestamps, or improving the user interface. WebSockets provide a powerful way to build responsive and interactive applications with real-time data flow."
       }
     ]
   },
   {
-    "slug": "mastering-error-boundaries-in-react-handle-ui-crashes-gracefully",
-    "title": "Mastering Error Boundaries in React: A Cool Trick to Handle UI Crashes Gracefully",
+    "slug": "mastering-asynchronous-error-handling-in-javascript-promises",
+    "title": "Mastering Asynchronous Error Handling in JavaScript Promises: Beyond Try/Catch",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to use React error boundaries to catch UI errors and prevent your app from crashing, improving user experience in a beginner-friendly way.",
-    "videoUrl": "https://www.youtube.com/watch?v=_FuDMEgIy7I",
+    "description": "Learn how to effectively handle errors in JavaScript promises beyond simple try/catch, using best practices for robust asynchronous code.",
+    "videoUrl": "https://www.youtube.com/watch?v=wlTKcthuNnY",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building React applications, sometimes parts of your UI might break due to bugs or unexpected errors. Without proper handling, these errors can cause the entire app to crash or show a blank screen, which frustrates users. This is where Error Boundaries come in—a helpful React feature that lets you catch errors in your UI components and show a fallback interface instead."
+        "value": "JavaScript promises are a powerful way to handle asynchronous operations, but managing errors can sometimes be tricky, especially for beginners. While many developers start by using try/catch with async/await, there are other strategies to master asynchronous error handling that make your code cleaner and more reliable."
       },
       {
         "type": "paragraph",
-        "value": "Error Boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. They help you handle UI crashes gracefully and improve the overall user experience."
+        "value": "Let's explore how promise error handling works, common pitfalls, and the best practices to catch errors both inside promises and in async functions."
       },
       {
         "type": "paragraph",
-        "value": "Let's create a simple error boundary component step-by-step."
+        "value": "At its core, a Promise represents a value that will be available in the future. Errors in promises don't behave exactly like synchronous errors, so it's important to understand how they propagate."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple promise that rejects (throws an error):"
       },
       {
         "type": "code",
-        "value": "import React from 'react';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  static getDerivedStateFromError(error) {\n    // Update state so the next render shows the fallback UI.\n    return { hasError: true };\n  }\n\n  componentDidCatch(error, errorInfo) {\n    // You can also log the error to an error reporting service\n    console.error('Error caught by ErrorBoundary:', error, errorInfo);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // Customize your fallback UI\n      return <h1>Oops! Something went wrong.</h1>;\n    }\n\n    return this.props.children;\n  }\n}\n\nexport default ErrorBoundary;"
+        "value": "const failingPromise = new Promise((resolve, reject) => {\n  reject(new Error('Something went wrong!'));\n});"
       },
       {
         "type": "paragraph",
-        "value": "This `ErrorBoundary` component catches any errors in its child components. It updates its state when an error occurs, then shows a fallback UI message instead of crashing the entire app."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let's see how you use this `ErrorBoundary` in your app. Wrap any components that might throw errors with the `ErrorBoundary` component."
+        "value": "If you try to handle this using a try/catch block without awaiting, the catch block won't catch the error:"
       },
       {
         "type": "code",
-        "value": "import React from 'react';\nimport ErrorBoundary from './ErrorBoundary';\n\nfunction BuggyComponent() {\n  // This component throws an error to simulate a crash\n  throw new Error('I crashed!');\n  return <div>This will never render.</div>;\n}\n\nfunction App() {\n  return (\n    <div>\n      <ErrorBoundary>\n        <BuggyComponent />\n      </ErrorBoundary>\n      <p>Other parts of the app are still working fine.</p>\n    </div>\n  );\n}\n\nexport default App;"
+        "value": "try {\n  failingPromise;\n} catch (error) {\n  console.log('Caught error:', error); // This will NOT run\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, `BuggyComponent` will throw an error, but instead of crashing the entire app, the `ErrorBoundary` gracefully catches it and shows the fallback UI. Meanwhile, other parts of your app continue to work as expected."
+        "value": "This is because the error is asynchronous and the promise is not awaited. Instead, you should either use `.catch()` on the promise or use async/await with try/catch."
       },
       {
         "type": "paragraph",
-        "value": "### Key points to remember:\n\n- Error boundaries catch errors only in the components below them in the tree.\n- They do not catch errors inside event handlers, async code, or server-side rendering.\n- You must use a class component to create an error boundary (as of React 18).\n\nUsing error boundaries is a simple but powerful way to keep your React app robust and user-friendly, even when unexpected errors happen."
+        "value": "Handling the error using `.catch()`:"
+      },
+      {
+        "type": "code",
+        "value": "failingPromise\n  .then(result => console.log(result))\n  .catch(err => console.log('Caught with .catch():', err.message));"
       },
       {
         "type": "paragraph",
-        "value": "Try integrating error boundaries into your projects to master this cool trick of handling UI crashes gracefully!"
+        "value": "Or, with async/await and try/catch:"
+      },
+      {
+        "type": "code",
+        "value": "async function handleAsync() {\n  try {\n    const result = await failingPromise;\n    console.log(result);\n  } catch (error) {\n    console.log('Caught with try/catch:', error.message);\n  }\n}\nhandleAsync();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why go beyond try/catch?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though try/catch looks clean, sometimes you need more nuanced error handling on promises that haven't been awaited yet, or when chaining multiple promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, when chaining promises, placing a single `.catch()` at the end can catch errors from the entire chain:"
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://jsonplaceholder.typicode.com/posts/1')\n  .then(response => response.json())\n  .then(data => {\n    if (!data.title) throw new Error('Title missing');\n    console.log('Post title:', data.title);\n  })\n  .catch(error => console.error('Error in promise chain:', error.message));"
+      },
+      {
+        "type": "paragraph",
+        "value": "But if you wanted to handle errors at each step differently, you could add `.catch()` after a specific stage, like this:"
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://jsonplaceholder.typicode.com/posts/1')\n  .then(response => {\n    if (!response.ok) throw new Error('Network response was not ok');\n    return response.json();\n  })\n  .catch(error => console.error('Fetch error:', error.message))\n  .then(data => {\n    if (data && !data.title) throw new Error('Title missing');\n    return data;\n  })\n  .catch(error => console.error('Data processing error:', error.message));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for mastering asynchronous error handling:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always return or await promises so you can catch their errors.\n2. Use `.catch()` for handling errors immediately after promises when you don't use async/await.\n3. Use try/catch inside async functions for a synchronous feel.\n4. Chain `.catch()` judiciously to pinpoint errors in complex workflows.\n5. Avoid unhandled promise rejections by always catching errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To effectively handle asynchronous errors in JavaScript, understand how promise error propagation works. While try/catch works great with async/await, `.catch()` on promises is essential for catching errors in non-async code or promise chains. Combining both approaches thoughtfully results in robust, readable, and maintainable asynchronous JavaScript."
       }
     ]
   },
   {
-    "slug": "mastering-lazy-loading-in-typescript-for-faster-web-apps",
-    "title": "Mastering Lazy Loading in TypeScript for Faster Web Apps",
+    "slug": "building-scalable-data-models-typescript",
+    "title": "Building Scalable Data Models in TypeScript for Modern Web Applications",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to implement lazy loading in TypeScript to improve your web app's performance by loading resources only when needed.",
-    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
+    "description": "Learn how to create scalable and maintainable data models in TypeScript to build robust modern web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=tj5VW2xJsqU",
     "content": [
       {
         "type": "paragraph",
-        "value": "Lazy loading is a technique that delays the loading of resources until they are actually needed. This helps improve the initial loading time of web applications, making them faster and more efficient. In this tutorial, we will explore how to use lazy loading in TypeScript, focusing on dynamically importing modules to optimize your app's performance."
+        "value": "As modern web applications grow, managing data efficiently becomes essential. TypeScript's type system helps create clear and scalable data models that simplify development and reduce bugs. In this tutorial, we'll learn how to build scalable data models using TypeScript by leveraging interfaces, types, and classes."
       },
       {
         "type": "paragraph",
-        "value": "The main idea behind lazy loading is to split your code into smaller chunks and load them on demand. TypeScript supports this natively with the dynamic `import()` function, which returns a promise that resolves to the module you requested."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example. Assume you have a utility module that performs some complex calculations, but this functionality is not always required when your app first loads."
+        "value": "Let's start by defining a simple data model for a user in an application. We will use TypeScript's interface to describe the shape of user objects."
       },
       {
         "type": "code",
-        "value": "export function complexCalculation(num: number): number {\n  // Simulate a complex task\n  return num * num + 42;\n}"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  isActive: boolean;\n}"
       },
       {
         "type": "paragraph",
-        "value": "Instead of importing this module normally, we can lazily load it only when needed."
+        "value": "This interface defines the structure our user data must follow. It helps TypeScript catch errors if we try to use any object that doesn't fit this pattern."
+      },
+      {
+        "type": "paragraph",
+        "value": "For scalable applications, data models can become more complex. We often need to reuse and extend them. TypeScript allows you to extend interfaces which is great for such cases."
       },
       {
         "type": "code",
-        "value": "async function useLazyLoadedFunction() {\n  const module = await import('./complexCalculation');\n  const result = module.complexCalculation(10);\n  console.log('Result:', result);\n}\n\nuseLazyLoadedFunction();"
+        "value": "interface AdminUser extends User {\n  adminSince: Date;\n  permissions: string[];\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here’s what happens: The `import()` statement dynamically loads the `complexCalculation` module only when `useLazyLoadedFunction` is called. This avoids loading that module during the initial page load, reducing the app’s startup time."
+        "value": "Here, AdminUser extends User adding additional properties specific to admins. This keeps your models clean and manageable."
       },
       {
         "type": "paragraph",
-        "value": "### Benefits of Lazy Loading\n- **Improved Performance:** Load only what you need, when you need it.\n- **Better User Experience:** Faster initial load encourages users to stay.\n- **Efficient Resource Use:** Reduce unnecessary network requests."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Handling Errors\nSince dynamic imports return promises, it's good practice to handle possible errors."
+        "value": "Sometimes you want stricter control over how data is created and managed. Classes in TypeScript let you implement logic along with your data structures."
       },
       {
         "type": "code",
-        "value": "async function useLazyLoadedFunctionSafe() {\n  try {\n    const module = await import('./complexCalculation');\n    const result = module.complexCalculation(10);\n    console.log('Result:', result);\n  } catch (error) {\n    console.error('Failed to load the module:', error);\n  }\n}\n\nuseLazyLoadedFunctionSafe();"
+        "value": "class UserModel implements User {\n  constructor(\n    public id: number,\n    public name: string,\n    public email: string,\n    public isActive: boolean = true\n  ) {}\n\n  deactivate() {\n    this.isActive = false;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Integrating Lazy Loading in React with TypeScript\nIf you use React, lazy loading components is easy with `React.lazy` and `Suspense`. Here's a quick example:"
+        "value": "In this example, UserModel implements the User interface and adds a method to deactivate a user. This makes your data model more than just data — it can hold behaviors too."
+      },
+      {
+        "type": "paragraph",
+        "value": "To structure larger apps, consider grouping related models and interfaces into modules or folders. Also use utility types like Partial<T>, Omit<T, K>, and Pick<T, K> to manipulate models efficiently."
       },
       {
         "type": "code",
-        "value": "import React, { Suspense } from 'react';\n\nconst LazyComponent = React.lazy(() => import('./MyComponent'));\n\nfunction App() {\n  return (\n    <Suspense fallback={<div>Loading...</div>}>\n      <LazyComponent />\n    </Suspense>\n  );\n}\n\nexport default App;"
+        "value": "type UserPreview = Pick<User, 'id' | 'name'>;\n\nfunction printUserPreview(user: UserPreview) {\n  console.log(`User: ${user.name} (ID: ${user.id})`);\n}"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `MyComponent` loads only when it is rendered, and a fallback UI shows while loading."
+        "value": "Here, UserPreview only contains some fields from User. This is useful when you only need part of the data, improving clarity and performance."
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion\nLazy loading is a powerful way to optimize your TypeScript-based web apps. By dynamically importing modules or components, you reduce initial load times and improve overall user experience. Start incorporating lazy loading into your projects today for faster, leaner, and more efficient web applications."
+        "value": "In summary, building scalable data models in TypeScript involves:\n- Using interfaces to define clear data shapes\n- Extending interfaces for reuse and specialization\n- Leveraging classes for data with logic\n- Utilizing utility types for flexible models\n- Organizing models for maintainability"
+      },
+      {
+        "type": "paragraph",
+        "value": "With these principles, you'll be able to build robust data models that scale gracefully as your application grows."
       }
     ]
   },
   {
-    "slug": "mastering-typescripts-advanced-type-inference-to-prevent-subtle-runtime-errors",
-    "title": "Mastering TypeScript's Advanced Type Inference to Prevent Subtle Runtime Errors",
+    "slug": "advanced-typescript-error-handling-patterns-for-scalable-applications",
+    "title": "Advanced TypeScript Error Handling Patterns for Scalable Applications",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript's advanced type inference features to catch subtle runtime errors early and write more reliable code.",
-    "videoUrl": "",
+    "description": "Learn practical and advanced TypeScript error handling techniques to build scalable and maintainable applications with clear, robust, and type-safe error management.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful tool for JavaScript developers because it helps catch errors before they even run your code. One of TypeScript's most helpful features is its type inference system, which can often determine variable types automatically. However, understanding how advanced type inference works can prevent subtle runtime errors that are hard to debug. In this article, we'll explore some key concepts and practical examples to help beginners master TypeScript's type inference and write safer code."
+        "value": "Error handling is a crucial part of building scalable applications, and TypeScript can help by adding strong type safety to your error management. In this article, we'll explore advanced error handling patterns that are beginner-friendly yet very effective for building maintainable codebases."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a simple example to illustrate basic type inference. When you declare a variable and initialize it, TypeScript automatically infers the type based on the assigned value."
+        "value": "A common pattern is using custom error classes instead of throwing generic errors. This makes debugging easier and allows TypeScript to understand error types better."
       },
       {
         "type": "code",
-        "value": "let message = \"Hello, TypeScript!\"; // TypeScript infers that 'message' is a string\n\nmessage = 123; // Error: Type 'number' is not assignable to type 'string'"
+        "value": "class AppError extends Error {\n  public readonly code: number;\n\n  constructor(message: string, code: number) {\n    super(message);\n    this.code = code;\n    this.name = this.constructor.name;\n\n    // Maintains proper stack trace for where error was thrown (only in V8 engines)\n    if (Error.captureStackTrace) {\n      Error.captureStackTrace(this, this.constructor);\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, TypeScript inferred that `message` is a string, so trying to assign a number to it results in a compile-time error, preventing a runtime error later. But things become trickier when working with functions and generics."
-      },
-      {
-        "type": "paragraph",
-        "value": "Consider a function that returns the first element of an array. If the array is empty, it returns `undefined`. TypeScript can infer the return type based on the input."
+        "value": "Using this class, you can throw errors with specific codes, which can help you categorize errors easily later on."
       },
       {
         "type": "code",
-        "value": "function getFirst<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst names = [\"Alice\", \"Bob\"];\nconst firstName = getFirst(names); // Type inferred: string | undefined\n\nconst empty: number[] = [];\nconst firstNumber = getFirst(empty); // Type inferred: number | undefined"
+        "value": "function fetchData(url: string): Promise<string> {\n  return new Promise((resolve, reject) => {\n    if (!url.startsWith('https://')) {\n      reject(new AppError('URL must start with https://', 400));\n      return;\n    }\n\n    // Simulate fetching data\n    setTimeout(() => {\n      resolve('Data from ' + url);\n    }, 1000);\n  });\n}"
       },
       {
         "type": "paragraph",
-        "value": "In this example, TypeScript intelligently infers the type of the returned value as either the array element type or `undefined` if the array is empty. This helps you handle potential `undefined`s correctly, avoiding subtle runtime crashes."
-      },
-      {
-        "type": "paragraph",
-        "value": "Advanced inference also shines with discriminated unions, which allow safe handling of multiple object types. Here’s an example:"
+        "value": "When consuming functions that might throw errors, use `try-catch` blocks cautiously. Always narrow the possible error types using TypeScript's `instanceof` guard to handle different error shapes correctly."
       },
       {
         "type": "code",
-        "value": "type Shape =\n  | { kind: \"circle\"; radius: number }\n  | { kind: \"square\"; sideLength: number };\n\nfunction area(shape: Shape): number {\n  switch (shape.kind) {\n    case \"circle\":\n      return Math.PI * shape.radius ** 2;\n    case \"square\":\n      return shape.sideLength ** 2;\n  }\n}\n\nconst myCircle: Shape = { kind: \"circle\", radius: 10 };\nconsole.log(area(myCircle)); // 314.159... "
+        "value": "async function getData() {\n  try {\n    const data = await fetchData('http://example.com');\n    console.log(data);\n  } catch (error) {\n    if (error instanceof AppError) {\n      console.error(`App error (${error.code}): ${error.message}`);\n    } else if (error instanceof Error) {\n      console.error(`General error: ${error.message}`);\n    } else {\n      console.error('Unknown error', error);\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "TypeScript uses the `kind` property to narrow down the type inside the switch statement, ensuring you access only the relevant properties. This prevents runtime errors from accessing nonexistent properties."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another subtle pitfall stems from the `any` type, which disables inference and type checks. Avoiding `any` when possible is key to leveraging TypeScript’s power. Instead, opt for `unknown` when you want to accept any value but still enforce type checks."
+        "value": "Another useful pattern for scalable applications is creating a unified error response object when working with APIs. This object explicitly defines error data, which helps frontend and backend developers handle errors in a consistent way."
       },
       {
         "type": "code",
-        "value": "function processValue(value: unknown) {\n  if (typeof value === \"string\") {\n    // TypeScript knows 'value' is string here\n    console.log(value.toUpperCase());\n  } else {\n    console.log(\"Not a string\");\n  }\n}\n\nprocessValue(\"hello\");\nprocessValue(123);"
+        "value": "interface ApiError {\n  message: string;\n  statusCode: number;\n  details?: any;\n}\n\nfunction createApiError(message: string, statusCode: number, details?: any): ApiError {\n  return { message, statusCode, details };\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, `unknown` forces you to check the type before using it, preventing errors like calling string methods on a number."
+        "value": "This way, instead of throwing raw errors, you return structured error objects, making it easier to serialize and handle them across services."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUser(id: string): Promise<{ name: string } | ApiError> {\n  if (id === '0') {\n    return createApiError('User not found', 404);\n  }\n\n  return { name: 'John Doe' };\n}\n\nasync function main() {\n  const result = await fetchUser('0');\n  if ('statusCode' in result) {\n    console.error(`Error ${result.statusCode}: ${result.message}`);\n  } else {\n    console.log('User:', result.name);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, mastering TypeScript’s advanced type inference involves understanding how it infers types in different contexts, such as variables, generics, and unions. Writing explicit type guards and avoiding `any` helps catch bugs early. With these tools, your TypeScript applications will be safer and easier to maintain."
+        "value": "Finally, TypeScript’s union types and discriminated unions allow you to model complex error states cleanly and safely."
+      },
+      {
+        "type": "code",
+        "value": "type NetworkError = { type: 'NETWORK_ERROR'; message: string };\ntype ValidationError = { type: 'VALIDATION_ERROR'; message: string; field: string };\ntype AppErrors = NetworkError | ValidationError;\n\nfunction handleError(error: AppErrors) {\n  switch (error.type) {\n    case 'NETWORK_ERROR':\n      console.error('Network problem:', error.message);\n      break;\n    case 'VALIDATION_ERROR':\n      console.error(`Validation failed on ${error.field}: ${error.message}`);\n      break;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Start practicing these patterns today, and you’ll find fewer surprises in your runtime behavior!"
+        "value": "In summary, advanced TypeScript error handling is about clarity and safety. Use custom errors with classes, unify error return types for APIs, and take advantage of TypeScript’s type system to distinguish errors. This leads to more maintainable and scalable applications."
       }
     ]
   },
   {
-    "slug": "comparing-python-asyncio-vs-threads-for-concurrent-web-scraping",
-    "title": "Comparing Python's Asyncio vs Threads for Concurrent Web Scraping",
+    "slug": "mastering-python-asyncio-writing-high-performance-concurrent-code",
+    "title": "Mastering Python's Asyncio: Writing High-Performance Concurrent Code",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the basics of concurrent web scraping in Python by comparing asyncio and threading, with beginner-friendly examples and explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=Ii7x4mpIhIs",
+    "description": "Learn how to use Python's asyncio module to write efficient and high-performance concurrent code even as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
     "content": [
       {
         "type": "paragraph",
-        "value": "Web scraping often involves making multiple requests to fetch data from different web pages. Doing this sequentially can be slow, so using concurrency can speed things up. In Python, two popular ways to achieve concurrency are using threads and asyncio. This tutorial explains both approaches in a beginner-friendly way and shows simple examples for web scraping."
+        "value": "Concurrency is crucial for improving the performance of modern programs, especially when dealing with I/O-bound tasks like networking or file reading. Python's asyncio module provides a powerful framework to write concurrent code using the async/await syntax, which is both readable and efficient. In this tutorial, we'll explore the basics of asyncio and how you can leverage it to write high-performance code even if you're just getting started with Python."
       },
       {
         "type": "paragraph",
-        "value": "### Threads: Python's Threading Module\nThreads allow your program to run several operations seemingly at the same time. Python's `threading` module lets you create threads easily. However, due to the Global Interpreter Lock (GIL), CPU-bound tasks are not truly parallel. For I/O-bound tasks like web scraping (which mostly wait for network responses), threads can improve performance by working concurrently while waiting."
+        "value": "First, let's understand the key concepts: Asyncio allows you to run multiple tasks seemingly at the same time by switching between them when they're waiting for something like network data. This is different from multithreading because it doesn't involve starting new threads, thus avoiding a lot of complexity and overhead."
       },
       {
         "type": "paragraph",
-        "value": "Let's see a simple threaded example that fetches multiple URLs concurrently."
+        "value": "To begin, you need to define functions using the 'async def' syntax. These are called coroutines and are special functions that can pause and resume their execution. You also use 'await' to wait for an async operation to complete."
       },
       {
         "type": "code",
-        "value": "import threading\nimport requests\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nresponses = []\n\n# Function to fetch a URL\n\ndef fetch(url):\n    print(f\"Starting {url}\")\n    response = requests.get(url)\n    print(f\"Done {url} with status {response.status_code}\")\n    responses.append(response.text)\n\n# List to keep track of threads\nthreads = []\n\nfor url in urls:\n    thread = threading.Thread(target=fetch, args=(url,))\n    thread.start()\n    threads.append(thread)\n\n# Wait for all threads to complete\nfor thread in threads:\n    thread.join()\n\nprint(f\"Fetched {len(responses)} pages.\")"
+        "value": "import asyncio\n\nasync def say_hello():\n    print('Hello')\n    await asyncio.sleep(1)  # Simulates an I/O operation\n    print('World')\n\nasyncio.run(say_hello())"
       },
       {
         "type": "paragraph",
-        "value": "This code creates a thread for each URL and fetches them in parallel. Notice how the delays in URLs simulate waiting times. Threads help utilize waiting time to start other requests. But `requests` library is synchronous and blocking, so each thread blocks while waiting for its request."
+        "value": "In this example, the 'say_hello' coroutine prints 'Hello', waits asynchronously for one second, then prints 'World'. Using \"await asyncio.sleep(1)\" simulates an I/O-bound operation without blocking the entire program."
       },
       {
         "type": "paragraph",
-        "value": "### Asyncio: Python's Asynchronous IO\n`asyncio` is a library for writing concurrent code using the async/await syntax. It is especially efficient for I/O-bound tasks because it uses a single thread but can switch between tasks while waiting for I/O operations, avoiding blocking."
-      },
-      {
-        "type": "paragraph",
-        "value": "To use asyncio with web requests, an async HTTP client like `aiohttp` is needed instead of `requests`."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s how you can fetch multiple URLs concurrently using asyncio and aiohttp."
+        "value": "Now, let's see how to run multiple coroutines concurrently using asyncio.gather(). This allows tasks to run in a non-blocking way and take advantage of time spent waiting."
       },
       {
         "type": "code",
-        "value": "import asyncio\nimport aiohttp\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nasync def fetch(session, url):\n    print(f\"Starting {url}\")\n    async with session.get(url) as response:\n        text = await response.text()\n        print(f\"Done {url} with status {response.status}\")\n        return text\n\nasync def main():\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        responses = await asyncio.gather(*tasks)\n        print(f\"Fetched {len(responses)} pages.\")\n\nasyncio.run(main())"
+        "value": "import asyncio\n\nasync def fetch_data(id):\n    print(f'Start fetching data {id}')\n    await asyncio.sleep(2)  # Simulating a network call\n    print(f'Finished fetching data {id}')\n    return f'data-{id}'\n\nasync def main():\n    tasks = [fetch_data(i) for i in range(3)]\n    results = await asyncio.gather(*tasks)\n    print('Results:', results)\n\nasyncio.run(main())"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the `fetch` function is asynchronous. When it awaits network I/O, the event loop switches to other tasks. This makes the code efficient and easy to manage without threads."
+        "value": "In the above code, three fetch_data tasks are started concurrently. Instead of waiting 6 seconds serially (2 seconds each), all run together, completing in about 2 seconds total. This pattern is common in applications that perform network requests or I/O operations."
       },
       {
         "type": "paragraph",
-        "value": "### Key Differences:\n- **Threads** run code in parallel with OS threads, which is great for blocking I/O but can cause overhead.\n- **Asyncio** uses a single thread and runs multiple tasks cooperatively, which is more lightweight but requires async-compatible libraries.\n- For beginners, threading might be easier to start with since it uses familiar synchronous code, but asyncio offers better scalability for many concurrent network operations."
+        "value": "A few practical tips for writing asyncio code effectively:\n- Avoid blocking calls like time.sleep(); use await asyncio.sleep() instead.\n- Make sure your I/O operations support asynchronous methods.\n- Use asyncio.run() to execute the main async function from a synchronous context.\n- Handle exceptions inside coroutines as usual using try-except blocks."
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion\nFor concurrent web scraping, both threading and asyncio can improve speed over sequential scraping. If you want simple, quick concurrency and are already comfortable with synchronous code, try threading. If you want efficient handling of many connections and don't mind learning async/await syntax, asyncio plus aiohttp is a powerful choice."
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember to always respect website terms of service and avoid overwhelming servers with too many requests."
+        "value": "By mastering asyncio, you can write high-performance applications without the complexity of threads. Whether it's web scraping, networking, or server-side applications, learning asyncio will significantly boost your Python concurrency skills."
       }
     ]
   },
   {
-    "slug": "comparing-exception-handling-approaches-in-python-best-practices-for-robust-code",
-    "title": "Comparing Exception Handling Approaches in Python: Best Practices for Robust Code",
+    "slug": "understanding-python-tracebacks-step-by-step-beginners-guide",
+    "title": "Understanding Python Tracebacks: A Step-by-Step Beginner's Guide",
     "language": "python",
     "type": "errors",
-    "description": "Learn beginner-friendly best practices for handling exceptions in Python. Understand different approaches and how to write robust, error-resistant code.",
-    "videoUrl": "https://www.youtube.com/watch?v=pUBR-ofQtAQ",
+    "description": "Learn how to read and understand Python tracebacks to debug your code effectively with this step-by-step beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=15RB1TqjK7c",
     "content": [
       {
         "type": "paragraph",
-        "value": "Exception handling is a crucial part of writing robust Python programs. It helps your code gracefully handle unexpected errors without crashing. In this article, we'll compare common approaches to exception handling in Python and explore best practices you can use to make your code more reliable."
+        "value": "When you're learning Python, encountering errors can be frustrating. However, Python provides a helpful tool called a \"traceback\" that tells you exactly where and why your program failed. Understanding tracebacks is an essential skill for debugging and improving your coding journey."
       },
       {
         "type": "paragraph",
-        "value": "The most basic way to handle exceptions is by using a try/except block. This allows you to catch errors that occur in a block of code and respond to them. Let's see a simple example of catching a specific exception:"
+        "value": "A traceback is a report containing information about the sequence of calls that led to an error. Let's look at a simple example to understand what a traceback looks like."
       },
       {
         "type": "code",
-        "value": "try:\n    number = int(input('Enter a number: '))\n    print(f'You entered: {number}')\nexcept ValueError:\n    print('Oops! That was not a valid number.')"
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)\nprint(result)"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, if the user inputs something that can't be converted to an integer, Python raises a ValueError. The except block catches it and prints a friendly message. Catching specific exceptions like this is important because it prevents you from hiding other unexpected problems."
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes, beginners use a general except statement that catches all exceptions without specifying the error type. For example:"
+        "value": "If you run this code, you'll see an error message with a traceback that might look like this:"
       },
       {
         "type": "code",
-        "value": "try:\n    # some code\n    pass\nexcept:\n    print('Something went wrong!')"
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 5, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
       },
       {
         "type": "paragraph",
-        "value": "While this looks convenient, it is considered a bad practice because it catches every possible exception, including system-exiting ones like KeyboardInterrupt or MemoryError. This can make debugging very difficult and may hide important issues."
+        "value": "Let's break down this traceback step-by-step:"
       },
       {
         "type": "paragraph",
-        "value": "A better option is to catch multiple specific exceptions if needed. You can handle different errors in one block like this:"
+        "value": "- The first line \"Traceback (most recent call last):\" means Python is showing you the latest error.\n- The next lines show the call stack, starting from the point where the program crashed. It tells you the file name, line number, and function names.\n- Finally, the last line shows the actual error type and message: \"ZeroDivisionError: division by zero.\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can use this information:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Locate the error:** Check the filename and line number. In our example, the error is on line 2 inside the `divide` function.\n2. **Understand the error type:** \"ZeroDivisionError\" means you tried to divide a number by zero, which is not allowed.\n3. **Fix the problem:** Modify the code to handle or avoid dividing by zero."
       },
       {
         "type": "code",
-        "value": "try:\n    value = int(input('Enter a number: '))\n    result = 10 / value\n    print(f'Result is {result}')\nexcept ValueError:\n    print('Please enter a valid integer.')\nexcept ZeroDivisionError:\n    print('Cannot divide by zero.')"
+        "value": "def divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    else:\n        return a / b\n\nresult = divide(10, 0)\nprint(result)"
       },
       {
         "type": "paragraph",
-        "value": "This way, you respond precisely to each type of error, making your program more user-friendly and easier to maintain."
+        "value": "This code now avoids the error by checking if `b` is zero before dividing."
       },
       {
         "type": "paragraph",
-        "value": "You can also use the else and finally blocks to further control flow:"
+        "value": "Tracebacks can sometimes be longer, especially when functions call other functions. Here's an example:"
       },
       {
         "type": "code",
-        "value": "try:\n    value = int(input('Enter a number: '))\nexcept ValueError:\n    print('Invalid input!')\nelse:\n    print(f'You entered {value}, which is valid.')\nfinally:\n    print('This runs no matter what.')"
+        "value": "def add_numbers(a, b):\n    return a + b\n\ndef calculate():\n    x = 5\n    y = '10'\n    return add_numbers(x, y)\n\nprint(calculate())"
       },
       {
         "type": "paragraph",
-        "value": "The else block runs only if no exceptions were raised, and the finally block runs no matter what — even if an exception was raised or not. This is useful for clean-up actions like closing files or releasing resources."
+        "value": "Running this will produce a traceback like this:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 9, in <module>\n    print(calculate())\n  File \"example.py\", line 7, in calculate\n    return add_numbers(x, y)\n  File \"example.py\", line 2, in add_numbers\n    return a + b\nTypeError: unsupported operand type(s) for +: 'int' and 'str'"
       },
       {
         "type": "paragraph",
-        "value": "To summarize best practices for beginners:"
+        "value": "Here the error occurred in the `add_numbers` function when trying to add an integer and a string, which is not allowed. The traceback helps you trace the flow: `print(calculate())` calls `calculate()`, which calls `add_numbers(x, y)` where the error happens."
       },
       {
         "type": "paragraph",
-        "value": "1. Catch specific exceptions instead of a general except.\n2. Use multiple except blocks for different errors.\n3. Avoid leaving except blocks empty or with vague messages.\n4. Use else for code that should run only if no exceptions occur.\n5. Use finally to clean up resources regardless of errors."
+        "value": "In summary, whenever you see a Python error trace, follow these steps:"
       },
       {
         "type": "paragraph",
-        "value": "By following these guidelines, your Python code will handle errors more gracefully and be easier to read and maintain."
+        "value": "1. Read the traceback from the bottom up to find the error type and message.\n2. Locate the file and line number where the error occurred.\n3. Review the code at those lines to understand why the error happened.\n4. Fix the issue and re-run your program."
+      },
+      {
+        "type": "paragraph",
+        "value": "With regular practice, reading tracebacks will become easier, transforming errors into learning opportunities!"
       }
     ]
   },
   {
-    "slug": "mastering-sql-window-functions-for-enhanced-query-performance",
-    "title": "Mastering SQL Window Functions for Enhanced Query Performance",
+    "slug": "mastering-recursive-ctes-practical-sql-tricks-for-hierarchical-data",
+    "title": "Mastering Recursive CTEs: Practical SQL Tricks for Hierarchical Data",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to write efficient, powerful queries with practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=i_1UlpjRYRA",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) to handle hierarchical data in SQL with ease. This beginner-friendly guide includes practical examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are a powerful tool that allow you to perform calculations across a set of rows related to the current row without collapsing the result set. They are extremely useful for advanced data analysis and can significantly enhance query performance by reducing the need for subqueries and joins."
+        "value": "When working with hierarchical data in SQL—such as organizational charts, category trees, or folder structures—you need a way to query data that references itself. Recursive Common Table Expressions (CTEs) offer a powerful and elegant solution to this problem. This tutorial will guide you through the basics of recursive CTEs, with practical examples that are perfect for beginners."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll explore the basics of SQL window functions, understand when to use them, and walk through practical examples using common window functions such as ROW_NUMBER(), RANK(), and SUM()."
+        "value": "A recursive CTE is a CTE that references itself to perform repeated operations, typically used to traverse hierarchical data. It consists of two parts: the anchor member and the recursive member. The anchor member defines the starting point, and the recursive member joins back to the CTE to iterate through related rows."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Window Function? \nA window function performs a calculation across a set of table rows that are somehow related to the current row. Unlike aggregate functions, window functions do not group rows into a single output row — they return a value for every row in the dataset."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Basic Syntax\nMost window functions use the following syntax:\n\n\nfunction_name() OVER (\n  PARTITION BY column1, column2, ...\n  ORDER BY column3\n  ROWS BETWEEN frame_start AND frame_end\n)\n\n\n- **PARTITION BY** divides the result set into partitions to which the function is applied independently.\n- **ORDER BY** defines the order of rows in each partition.\n- **ROWS BETWEEN** specifies the window frame relative to the current row."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example Dataset\nWe'll use a sample sales table to demonstrate window functions:\n\nsql\nCREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(100),\n  sales_date DATE,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', '2023-01-01', 500.00),\n(2, 'Bob', '2023-01-01', 300.00),\n(3, 'Alice', '2023-01-02', 700.00),\n(4, 'Alice', '2023-01-03', 600.00),\n(5, 'Bob', '2023-01-02', 1000.00);\n\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. ROW_NUMBER() - Assign Unique Row Numbers\nThis function assigns a unique number to each row within a partition, ordered by a specified column."
+        "value": "Let's start with a simple example. Imagine you have an `employees` table with the following columns: `employee_id`, `employee_name`, and `manager_id`. The `manager_id` column points to the employee's manager, creating a hierarchy."
       },
       {
         "type": "code",
-        "value": "SELECT id, salesperson, sales_date, amount,\n       ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sales_date) AS row_num\nFROM sales;\n"
+        "value": "CREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  employee_name VARCHAR(100),\n  manager_id INT NULL\n);\n\nINSERT INTO employees (employee_id, employee_name, manager_id) VALUES\n(1, 'Alice', NULL),\n(2, 'Bob', 1),\n(3, 'Charlie', 1),\n(4, 'David', 2),\n(5, 'Eva', 2);"
       },
       {
         "type": "paragraph",
-        "value": "This query numbers sales for each salesperson ordered by sales date."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. RANK() - Assign Ranking with Gaps\nRANK() assigns ranks with ties receiving the same rank and gaps in ranks after ties."
+        "value": "Suppose you want to find the full organizational hierarchy starting from Alice, tracing all employees under her management. Here's how to do it using a recursive CTE:"
       },
       {
         "type": "code",
-        "value": "SELECT id, salesperson, amount,\n       RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS sales_rank\nFROM sales;\n"
+        "value": "WITH RECURSIVE employee_hierarchy AS (\n  -- Anchor member: start with the top-level employee (Alice)\n  SELECT employee_id, employee_name, manager_id, 0 AS level\n  FROM employees\n  WHERE employee_name = 'Alice'\n\n  UNION ALL\n\n  -- Recursive member: get employees managed by the ones found in the previous iteration\n  SELECT e.employee_id, e.employee_name, e.manager_id, eh.level + 1\n  FROM employees e\n  INNER JOIN employee_hierarchy eh ON e.manager_id = eh.employee_id\n)\nSELECT * FROM employee_hierarchy\nORDER BY level;"
       },
       {
         "type": "paragraph",
-        "value": "This ranks sales amounts per salesperson from highest to lowest."
+        "value": "Here’s what this SQL code does:\n- The anchor member selects the root employee, Alice, who has no manager.\n- The recursive member joins the `employees` table back to the recursive CTE to find employees where `manager_id` matches the `employee_id` in the current hierarchy.\n- The query continuously repeats until no more employees are found under the hierarchy.\n\nThe result lists all employees under Alice, with the `level` column indicating how many steps down the hierarchy each employee is."
       },
       {
         "type": "paragraph",
-        "value": "### 3. SUM() - Running Total\nUsing SUM() as a window function allows us to calculate running totals."
-      },
-      {
-        "type": "code",
-        "value": "SELECT id, salesperson, sales_date, amount,\n       SUM(amount) OVER (PARTITION BY salesperson ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;\n"
+        "value": "Recursive CTEs can also be used for other hierarchical data, like categories or folder paths. Here’s a general structure to follow when writing recursive CTEs:\n\n1. Define the anchor member as the base case.\n2. Write the recursive member that joins back to the CTE.\n3. Use UNION ALL to combine results.\n4. Select from the recursive CTE to get your hierarchy."
       },
       {
         "type": "paragraph",
-        "value": "Here, the running total is calculated for each salesperson ordered by sales date, showing cumulative sales over time."
+        "value": "Remember a few key points when using recursive CTEs:\n- Most SQL databases limit recursion depth to prevent infinite loops (e.g., 100 iterations by default).\n- Always include a termination condition by ensuring the recursive member will eventually fail to find more rows.\n- You can add columns like `level` or `path` to track the hierarchy or create breadcrumbs."
       },
       {
         "type": "paragraph",
-        "value": "### Why Use Window Functions?\n- They keep detailed rows available instead of aggregating.\n- Improve query readability and maintainability.\n- Generally perform better compared to self-joins or subqueries for similar tasks.\n\nStart experimenting with these functions by replacing your common aggregation queries to see the performance and clarity benefits!"
+        "value": "To sum up, recursive CTEs provide an easy and readable way to work with hierarchical data in SQL. Understanding their structure and use cases will greatly expand your ability to handle complex queries. Try adapting the example in this article to your own hierarchical data and watch your SQL skills grow!"
       }
     ]
   },
   {
-    "slug": "optimizing-sql-server-performance-handling-large-scale-data-without-timeouts",
-    "title": "Optimizing SQL Server Performance: Handling Large-Scale Data Without Timeouts",
+    "slug": "understanding-sql-execution-plan-anomalies-advanced-diagnostics-and-optimization",
+    "title": "Understanding SQL Execution Plan Anomalies: Advanced Diagnostics and Optimization",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to prevent SQL Server command timeouts when working with large datasets by optimizing queries and using practical techniques.",
-    "videoUrl": "https://www.youtube.com/watch?v=7V1ooqV6Jz4",
+    "description": "Learn how to identify and fix SQL execution plan anomalies with advanced diagnostics to optimize query performance for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=FjIbs4i9aZ8",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with large-scale data in SQL Server, you may encounter command timeout errors due to long-running queries. These timeouts happen when SQL Server takes too long to return results, disrupting your applications. Fortunately, there are practical ways to optimize your queries and database settings to prevent these timeouts."
+        "value": "SQL execution plans show how the database engine processes a query. They are essential for understanding query performance and diagnosing issues. Sometimes, execution plans behave unexpectedly, causing slow queries or higher resource consumption—these are called execution plan anomalies."
       },
       {
         "type": "paragraph",
-        "value": "A key reason for long-running queries is inefficient data retrieval. To improve performance, always ensure your queries use indexes effectively. Indexes speed up searches by allowing SQL Server to quickly find relevant rows instead of scanning the whole table."
+        "value": "Common execution plan anomalies include missing indexes, incorrect statistics, parameter sniffing problems, and outdated plans. Detecting these requires a good grasp of how the database optimizer works and how to interpret execution plans."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by getting the execution plan of a query using SQL Server's `EXPLAIN` or Oracle’s `EXPLAIN PLAN`."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_customer_lastname ON Customers(LastName);"
+        "value": "-- SQL Server example to display execution plan\nSET STATISTICS PROFILE ON;\n\nSELECT * FROM Orders WHERE CustomerID = 'ALFKI';\n\nSET STATISTICS PROFILE OFF;"
       },
       {
         "type": "paragraph",
-        "value": "Another common technique is to limit the amount of data processed at once. Use the WHERE clause to filter data and SELECT only the columns you need rather than using SELECT *."
+        "value": "Look for operators such as Index Scan vs Index Seek. An Index Scan might mean no efficient index is being used, leading to slow performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Check if statistics are outdated as they guide the optimizer in choosing plans. You can update statistics with:"
       },
       {
         "type": "code",
-        "value": "SELECT FirstName, LastName, Email FROM Customers WHERE Country = 'USA';"
+        "value": "UPDATE STATISTICS Orders;"
       },
       {
         "type": "paragraph",
-        "value": "If your query still takes too long, consider breaking it into smaller batches. This approach processes limited rows repeatedly, reducing resource consumption and avoiding timeouts."
+        "value": "Parameter sniffing is a common anomaly where SQL Server uses parameter values from the first query execution to compile the plan, which may not be optimal for later executions with different parameters."
+      },
+      {
+        "type": "paragraph",
+        "value": "To detect parameter sniffing issues, compare execution plans with different parameter values or use the `OPTION (RECOMPILE)` hint to force plan recompilation."
       },
       {
         "type": "code",
-        "value": "DECLARE @BatchSize INT = 1000;\nDECLARE @LastId INT = 0;\n\nWHILE (1=1)\nBEGIN\n    WITH CTE AS (\n        SELECT TOP (@BatchSize) * FROM Orders WHERE OrderId > @LastId ORDER BY OrderId\n    )\n    UPDATE CTE SET OrderStatus = 'Processed';\n\n    SET @LastId = (SELECT MAX(OrderId) FROM CTE);\n    IF @@ROWCOUNT < @BatchSize BREAK;\nEND"
+        "value": "SELECT * FROM Orders WHERE CustomerID = @CustomerID\nOPTION (RECOMPILE);"
       },
       {
         "type": "paragraph",
-        "value": "Additionally, increasing the SQL Server command timeout setting can help during heavy operations, but it’s best used as a last resort after query optimization."
-      },
-      {
-        "type": "code",
-        "value": "-- Example: Increase timeout in application connection string\nServer=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;Connection Timeout=120;"
+        "value": "Finally, consider using the Query Store (in SQL Server) or Automatic Workload Repository (in Oracle) to capture and analyze plan changes over time."
       },
       {
         "type": "paragraph",
-        "value": "Finally, regularly updating statistics and rebuilding indexes keep your database optimized for query execution, helping to reduce the chance of timeouts."
-      },
-      {
-        "type": "code",
-        "value": "EXEC sp_updatestats;\nALTER INDEX ALL ON Customers REBUILD;"
-      },
-      {
-        "type": "paragraph",
-        "value": "By applying these beginner-friendly techniques—proper indexing, filtering data, batching operations, adjusting timeouts, and maintaining your database—you can handle large-scale data in SQL Server more efficiently and avoid frustrating timeout errors."
+        "value": "In summary, diagnosing execution plan anomalies involves: Reviewing the plan for scans or expensive operations, updating statistics, handling parameter sniffing, and monitoring plan stability over time. These practices help optimize query performance effectively even for beginners."
       }
     ]
   }

@@ -49609,5 +49609,483 @@ export const articles = [
         "value": "By applying these beginner-friendly techniques—proper indexing, filtering data, batching operations, adjusting timeouts, and maintaining your database—you can handle large-scale data in SQL Server more efficiently and avoid frustrating timeout errors."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-error-handling-in-javascript-promises",
+    "title": "Mastering Asynchronous Error Handling in JavaScript Promises: Beyond Try/Catch",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to effectively handle errors in JavaScript promises beyond simple try/catch, using best practices for robust asynchronous code.",
+    "videoUrl": "https://www.youtube.com/watch?v=wlTKcthuNnY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript promises are a powerful way to handle asynchronous operations, but managing errors can sometimes be tricky, especially for beginners. While many developers start by using try/catch with async/await, there are other strategies to master asynchronous error handling that make your code cleaner and more reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore how promise error handling works, common pitfalls, and the best practices to catch errors both inside promises and in async functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, a Promise represents a value that will be available in the future. Errors in promises don't behave exactly like synchronous errors, so it's important to understand how they propagate."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple promise that rejects (throws an error):"
+      },
+      {
+        "type": "code",
+        "value": "const failingPromise = new Promise((resolve, reject) => {\n  reject(new Error('Something went wrong!'));\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to handle this using a try/catch block without awaiting, the catch block won't catch the error:"
+      },
+      {
+        "type": "code",
+        "value": "try {\n  failingPromise;\n} catch (error) {\n  console.log('Caught error:', error); // This will NOT run\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is because the error is asynchronous and the promise is not awaited. Instead, you should either use `.catch()` on the promise or use async/await with try/catch."
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling the error using `.catch()`:"
+      },
+      {
+        "type": "code",
+        "value": "failingPromise\n  .then(result => console.log(result))\n  .catch(err => console.log('Caught with .catch():', err.message));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Or, with async/await and try/catch:"
+      },
+      {
+        "type": "code",
+        "value": "async function handleAsync() {\n  try {\n    const result = await failingPromise;\n    console.log(result);\n  } catch (error) {\n    console.log('Caught with try/catch:', error.message);\n  }\n}\nhandleAsync();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why go beyond try/catch?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though try/catch looks clean, sometimes you need more nuanced error handling on promises that haven't been awaited yet, or when chaining multiple promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, when chaining promises, placing a single `.catch()` at the end can catch errors from the entire chain:"
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://jsonplaceholder.typicode.com/posts/1')\n  .then(response => response.json())\n  .then(data => {\n    if (!data.title) throw new Error('Title missing');\n    console.log('Post title:', data.title);\n  })\n  .catch(error => console.error('Error in promise chain:', error.message));"
+      },
+      {
+        "type": "paragraph",
+        "value": "But if you wanted to handle errors at each step differently, you could add `.catch()` after a specific stage, like this:"
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://jsonplaceholder.typicode.com/posts/1')\n  .then(response => {\n    if (!response.ok) throw new Error('Network response was not ok');\n    return response.json();\n  })\n  .catch(error => console.error('Fetch error:', error.message))\n  .then(data => {\n    if (data && !data.title) throw new Error('Title missing');\n    return data;\n  })\n  .catch(error => console.error('Data processing error:', error.message));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for mastering asynchronous error handling:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always return or await promises so you can catch their errors.\n2. Use `.catch()` for handling errors immediately after promises when you don't use async/await.\n3. Use try/catch inside async functions for a synchronous feel.\n4. Chain `.catch()` judiciously to pinpoint errors in complex workflows.\n5. Avoid unhandled promise rejections by always catching errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "To effectively handle asynchronous errors in JavaScript, understand how promise error propagation works. While try/catch works great with async/await, `.catch()` on promises is essential for catching errors in non-async code or promise chains. Combining both approaches thoughtfully results in robust, readable, and maintainable asynchronous JavaScript."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-typescript",
+    "title": "Building Scalable Data Models in TypeScript for Modern Web Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create scalable and maintainable data models in TypeScript to build robust modern web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=tj5VW2xJsqU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "As modern web applications grow, managing data efficiently becomes essential. TypeScript's type system helps create clear and scalable data models that simplify development and reduce bugs. In this tutorial, we'll learn how to build scalable data models using TypeScript by leveraging interfaces, types, and classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by defining a simple data model for a user in an application. We will use TypeScript's interface to describe the shape of user objects."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  isActive: boolean;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This interface defines the structure our user data must follow. It helps TypeScript catch errors if we try to use any object that doesn't fit this pattern."
+      },
+      {
+        "type": "paragraph",
+        "value": "For scalable applications, data models can become more complex. We often need to reuse and extend them. TypeScript allows you to extend interfaces which is great for such cases."
+      },
+      {
+        "type": "code",
+        "value": "interface AdminUser extends User {\n  adminSince: Date;\n  permissions: string[];\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, AdminUser extends User adding additional properties specific to admins. This keeps your models clean and manageable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want stricter control over how data is created and managed. Classes in TypeScript let you implement logic along with your data structures."
+      },
+      {
+        "type": "code",
+        "value": "class UserModel implements User {\n  constructor(\n    public id: number,\n    public name: string,\n    public email: string,\n    public isActive: boolean = true\n  ) {}\n\n  deactivate() {\n    this.isActive = false;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, UserModel implements the User interface and adds a method to deactivate a user. This makes your data model more than just data — it can hold behaviors too."
+      },
+      {
+        "type": "paragraph",
+        "value": "To structure larger apps, consider grouping related models and interfaces into modules or folders. Also use utility types like Partial<T>, Omit<T, K>, and Pick<T, K> to manipulate models efficiently."
+      },
+      {
+        "type": "code",
+        "value": "type UserPreview = Pick<User, 'id' | 'name'>;\n\nfunction printUserPreview(user: UserPreview) {\n  console.log(`User: ${user.name} (ID: ${user.id})`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, UserPreview only contains some fields from User. This is useful when you only need part of the data, improving clarity and performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, building scalable data models in TypeScript involves:\n- Using interfaces to define clear data shapes\n- Extending interfaces for reuse and specialization\n- Leveraging classes for data with logic\n- Utilizing utility types for flexible models\n- Organizing models for maintainability"
+      },
+      {
+        "type": "paragraph",
+        "value": "With these principles, you'll be able to build robust data models that scale gracefully as your application grows."
+      }
+    ]
+  },
+  {
+    "slug": "advanced-typescript-error-handling-patterns-for-scalable-applications",
+    "title": "Advanced TypeScript Error Handling Patterns for Scalable Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn practical and advanced TypeScript error handling techniques to build scalable and maintainable applications with clear, robust, and type-safe error management.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of building scalable applications, and TypeScript can help by adding strong type safety to your error management. In this article, we'll explore advanced error handling patterns that are beginner-friendly yet very effective for building maintainable codebases."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common pattern is using custom error classes instead of throwing generic errors. This makes debugging easier and allows TypeScript to understand error types better."
+      },
+      {
+        "type": "code",
+        "value": "class AppError extends Error {\n  public readonly code: number;\n\n  constructor(message: string, code: number) {\n    super(message);\n    this.code = code;\n    this.name = this.constructor.name;\n\n    // Maintains proper stack trace for where error was thrown (only in V8 engines)\n    if (Error.captureStackTrace) {\n      Error.captureStackTrace(this, this.constructor);\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using this class, you can throw errors with specific codes, which can help you categorize errors easily later on."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData(url: string): Promise<string> {\n  return new Promise((resolve, reject) => {\n    if (!url.startsWith('https://')) {\n      reject(new AppError('URL must start with https://', 400));\n      return;\n    }\n\n    // Simulate fetching data\n    setTimeout(() => {\n      resolve('Data from ' + url);\n    }, 1000);\n  });\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When consuming functions that might throw errors, use `try-catch` blocks cautiously. Always narrow the possible error types using TypeScript's `instanceof` guard to handle different error shapes correctly."
+      },
+      {
+        "type": "code",
+        "value": "async function getData() {\n  try {\n    const data = await fetchData('http://example.com');\n    console.log(data);\n  } catch (error) {\n    if (error instanceof AppError) {\n      console.error(`App error (${error.code}): ${error.message}`);\n    } else if (error instanceof Error) {\n      console.error(`General error: ${error.message}`);\n    } else {\n      console.error('Unknown error', error);\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful pattern for scalable applications is creating a unified error response object when working with APIs. This object explicitly defines error data, which helps frontend and backend developers handle errors in a consistent way."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiError {\n  message: string;\n  statusCode: number;\n  details?: any;\n}\n\nfunction createApiError(message: string, statusCode: number, details?: any): ApiError {\n  return { message, statusCode, details };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, instead of throwing raw errors, you return structured error objects, making it easier to serialize and handle them across services."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUser(id: string): Promise<{ name: string } | ApiError> {\n  if (id === '0') {\n    return createApiError('User not found', 404);\n  }\n\n  return { name: 'John Doe' };\n}\n\nasync function main() {\n  const result = await fetchUser('0');\n  if ('statusCode' in result) {\n    console.error(`Error ${result.statusCode}: ${result.message}`);\n  } else {\n    console.log('User:', result.name);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, TypeScript’s union types and discriminated unions allow you to model complex error states cleanly and safely."
+      },
+      {
+        "type": "code",
+        "value": "type NetworkError = { type: 'NETWORK_ERROR'; message: string };\ntype ValidationError = { type: 'VALIDATION_ERROR'; message: string; field: string };\ntype AppErrors = NetworkError | ValidationError;\n\nfunction handleError(error: AppErrors) {\n  switch (error.type) {\n    case 'NETWORK_ERROR':\n      console.error('Network problem:', error.message);\n      break;\n    case 'VALIDATION_ERROR':\n      console.error(`Validation failed on ${error.field}: ${error.message}`);\n      break;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, advanced TypeScript error handling is about clarity and safety. Use custom errors with classes, unify error return types for APIs, and take advantage of TypeScript’s type system to distinguish errors. This leads to more maintainable and scalable applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-asyncio-writing-high-performance-concurrent-code",
+    "title": "Mastering Python's Asyncio: Writing High-Performance Concurrent Code",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's asyncio module to write efficient and high-performance concurrent code even as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Concurrency is crucial for improving the performance of modern programs, especially when dealing with I/O-bound tasks like networking or file reading. Python's asyncio module provides a powerful framework to write concurrent code using the async/await syntax, which is both readable and efficient. In this tutorial, we'll explore the basics of asyncio and how you can leverage it to write high-performance code even if you're just getting started with Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand the key concepts: Asyncio allows you to run multiple tasks seemingly at the same time by switching between them when they're waiting for something like network data. This is different from multithreading because it doesn't involve starting new threads, thus avoiding a lot of complexity and overhead."
+      },
+      {
+        "type": "paragraph",
+        "value": "To begin, you need to define functions using the 'async def' syntax. These are called coroutines and are special functions that can pause and resume their execution. You also use 'await' to wait for an async operation to complete."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def say_hello():\n    print('Hello')\n    await asyncio.sleep(1)  # Simulates an I/O operation\n    print('World')\n\nasyncio.run(say_hello())"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the 'say_hello' coroutine prints 'Hello', waits asynchronously for one second, then prints 'World'. Using \"await asyncio.sleep(1)\" simulates an I/O-bound operation without blocking the entire program."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's see how to run multiple coroutines concurrently using asyncio.gather(). This allows tasks to run in a non-blocking way and take advantage of time spent waiting."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def fetch_data(id):\n    print(f'Start fetching data {id}')\n    await asyncio.sleep(2)  # Simulating a network call\n    print(f'Finished fetching data {id}')\n    return f'data-{id}'\n\nasync def main():\n    tasks = [fetch_data(i) for i in range(3)]\n    results = await asyncio.gather(*tasks)\n    print('Results:', results)\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above code, three fetch_data tasks are started concurrently. Instead of waiting 6 seconds serially (2 seconds each), all run together, completing in about 2 seconds total. This pattern is common in applications that perform network requests or I/O operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "A few practical tips for writing asyncio code effectively:\n- Avoid blocking calls like time.sleep(); use await asyncio.sleep() instead.\n- Make sure your I/O operations support asynchronous methods.\n- Use asyncio.run() to execute the main async function from a synchronous context.\n- Handle exceptions inside coroutines as usual using try-except blocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering asyncio, you can write high-performance applications without the complexity of threads. Whether it's web scraping, networking, or server-side applications, learning asyncio will significantly boost your Python concurrency skills."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-tracebacks-step-by-step-beginners-guide",
+    "title": "Understanding Python Tracebacks: A Step-by-Step Beginner's Guide",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to read and understand Python tracebacks to debug your code effectively with this step-by-step beginner-friendly guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=15RB1TqjK7c",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're learning Python, encountering errors can be frustrating. However, Python provides a helpful tool called a \"traceback\" that tells you exactly where and why your program failed. Understanding tracebacks is an essential skill for debugging and improving your coding journey."
+      },
+      {
+        "type": "paragraph",
+        "value": "A traceback is a report containing information about the sequence of calls that led to an error. Let's look at a simple example to understand what a traceback looks like."
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you run this code, you'll see an error message with a traceback that might look like this:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 5, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down this traceback step-by-step:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- The first line \"Traceback (most recent call last):\" means Python is showing you the latest error.\n- The next lines show the call stack, starting from the point where the program crashed. It tells you the file name, line number, and function names.\n- Finally, the last line shows the actual error type and message: \"ZeroDivisionError: division by zero.\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can use this information:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Locate the error:** Check the filename and line number. In our example, the error is on line 2 inside the `divide` function.\n2. **Understand the error type:** \"ZeroDivisionError\" means you tried to divide a number by zero, which is not allowed.\n3. **Fix the problem:** Modify the code to handle or avoid dividing by zero."
+      },
+      {
+        "type": "code",
+        "value": "def divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    else:\n        return a / b\n\nresult = divide(10, 0)\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code now avoids the error by checking if `b` is zero before dividing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Tracebacks can sometimes be longer, especially when functions call other functions. Here's an example:"
+      },
+      {
+        "type": "code",
+        "value": "def add_numbers(a, b):\n    return a + b\n\ndef calculate():\n    x = 5\n    y = '10'\n    return add_numbers(x, y)\n\nprint(calculate())"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running this will produce a traceback like this:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 9, in <module>\n    print(calculate())\n  File \"example.py\", line 7, in calculate\n    return add_numbers(x, y)\n  File \"example.py\", line 2, in add_numbers\n    return a + b\nTypeError: unsupported operand type(s) for +: 'int' and 'str'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here the error occurred in the `add_numbers` function when trying to add an integer and a string, which is not allowed. The traceback helps you trace the flow: `print(calculate())` calls `calculate()`, which calls `add_numbers(x, y)` where the error happens."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, whenever you see a Python error trace, follow these steps:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Read the traceback from the bottom up to find the error type and message.\n2. Locate the file and line number where the error occurred.\n3. Review the code at those lines to understand why the error happened.\n4. Fix the issue and re-run your program."
+      },
+      {
+        "type": "paragraph",
+        "value": "With regular practice, reading tracebacks will become easier, transforming errors into learning opportunities!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-practical-sql-tricks-for-hierarchical-data",
+    "title": "Mastering Recursive CTEs: Practical SQL Tricks for Hierarchical Data",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) to handle hierarchical data in SQL with ease. This beginner-friendly guide includes practical examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with hierarchical data in SQL—such as organizational charts, category trees, or folder structures—you need a way to query data that references itself. Recursive Common Table Expressions (CTEs) offer a powerful and elegant solution to this problem. This tutorial will guide you through the basics of recursive CTEs, with practical examples that are perfect for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE is a CTE that references itself to perform repeated operations, typically used to traverse hierarchical data. It consists of two parts: the anchor member and the recursive member. The anchor member defines the starting point, and the recursive member joins back to the CTE to iterate through related rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Imagine you have an `employees` table with the following columns: `employee_id`, `employee_name`, and `manager_id`. The `manager_id` column points to the employee's manager, creating a hierarchy."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  employee_name VARCHAR(100),\n  manager_id INT NULL\n);\n\nINSERT INTO employees (employee_id, employee_name, manager_id) VALUES\n(1, 'Alice', NULL),\n(2, 'Bob', 1),\n(3, 'Charlie', 1),\n(4, 'David', 2),\n(5, 'Eva', 2);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you want to find the full organizational hierarchy starting from Alice, tracing all employees under her management. Here's how to do it using a recursive CTE:"
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE employee_hierarchy AS (\n  -- Anchor member: start with the top-level employee (Alice)\n  SELECT employee_id, employee_name, manager_id, 0 AS level\n  FROM employees\n  WHERE employee_name = 'Alice'\n\n  UNION ALL\n\n  -- Recursive member: get employees managed by the ones found in the previous iteration\n  SELECT e.employee_id, e.employee_name, e.manager_id, eh.level + 1\n  FROM employees e\n  INNER JOIN employee_hierarchy eh ON e.manager_id = eh.employee_id\n)\nSELECT * FROM employee_hierarchy\nORDER BY level;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s what this SQL code does:\n- The anchor member selects the root employee, Alice, who has no manager.\n- The recursive member joins the `employees` table back to the recursive CTE to find employees where `manager_id` matches the `employee_id` in the current hierarchy.\n- The query continuously repeats until no more employees are found under the hierarchy.\n\nThe result lists all employees under Alice, with the `level` column indicating how many steps down the hierarchy each employee is."
+      },
+      {
+        "type": "paragraph",
+        "value": "Recursive CTEs can also be used for other hierarchical data, like categories or folder paths. Here’s a general structure to follow when writing recursive CTEs:\n\n1. Define the anchor member as the base case.\n2. Write the recursive member that joins back to the CTE.\n3. Use UNION ALL to combine results.\n4. Select from the recursive CTE to get your hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember a few key points when using recursive CTEs:\n- Most SQL databases limit recursion depth to prevent infinite loops (e.g., 100 iterations by default).\n- Always include a termination condition by ensuring the recursive member will eventually fail to find more rows.\n- You can add columns like `level` or `path` to track the hierarchy or create breadcrumbs."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, recursive CTEs provide an easy and readable way to work with hierarchical data in SQL. Understanding their structure and use cases will greatly expand your ability to handle complex queries. Try adapting the example in this article to your own hierarchical data and watch your SQL skills grow!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-execution-plan-anomalies-advanced-diagnostics-and-optimization",
+    "title": "Understanding SQL Execution Plan Anomalies: Advanced Diagnostics and Optimization",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix SQL execution plan anomalies with advanced diagnostics to optimize query performance for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=FjIbs4i9aZ8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL execution plans show how the database engine processes a query. They are essential for understanding query performance and diagnosing issues. Sometimes, execution plans behave unexpectedly, causing slow queries or higher resource consumption—these are called execution plan anomalies."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common execution plan anomalies include missing indexes, incorrect statistics, parameter sniffing problems, and outdated plans. Detecting these requires a good grasp of how the database optimizer works and how to interpret execution plans."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by getting the execution plan of a query using SQL Server's `EXPLAIN` or Oracle’s `EXPLAIN PLAN`."
+      },
+      {
+        "type": "code",
+        "value": "-- SQL Server example to display execution plan\nSET STATISTICS PROFILE ON;\n\nSELECT * FROM Orders WHERE CustomerID = 'ALFKI';\n\nSET STATISTICS PROFILE OFF;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Look for operators such as Index Scan vs Index Seek. An Index Scan might mean no efficient index is being used, leading to slow performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Check if statistics are outdated as they guide the optimizer in choosing plans. You can update statistics with:"
+      },
+      {
+        "type": "code",
+        "value": "UPDATE STATISTICS Orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Parameter sniffing is a common anomaly where SQL Server uses parameter values from the first query execution to compile the plan, which may not be optimal for later executions with different parameters."
+      },
+      {
+        "type": "paragraph",
+        "value": "To detect parameter sniffing issues, compare execution plans with different parameter values or use the `OPTION (RECOMPILE)` hint to force plan recompilation."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders WHERE CustomerID = @CustomerID\nOPTION (RECOMPILE);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, consider using the Query Store (in SQL Server) or Automatic Workload Repository (in Oracle) to capture and analyze plan changes over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, diagnosing execution plan anomalies involves: Reviewing the plan for scans or expensive operations, updating statistics, handling parameter sniffing, and monitoring plan stability over time. These practices help optimize query performance effectively even for beginners."
+      }
+    ]
   }
 ];
