@@ -1,597 +1,493 @@
 [
   {
-    "slug": "handling-large-number-precision-in-javascript-edge-cases-and-workarounds",
-    "title": "Handling Large Number Precision in JavaScript: Edge Cases and Workarounds",
+    "slug": "building-your-first-interactive-to-do-list-app-with-javascript",
+    "title": "Building Your First Interactive To-Do List App with JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to handle large number precision issues in JavaScript with practical examples and simple workarounds.",
-    "videoUrl": "https://www.youtube.com/watch?v=1sE2su_a_W8",
+    "description": "Learn how to create a simple and interactive to-do list app using JavaScript, HTML, and CSS. Perfect for beginners looking to practice JavaScript basics.",
+    "videoUrl": "https://www.youtube.com/watch?v=G0jO8kUrg-I",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript uses the IEEE 754 double-precision floating-point format for representing numbers. While this format works well for many cases, it can lead to precision problems when working with very large numbers. Understanding these edge cases and learning how to overcome them is important for developers dealing with financial data, scientific calculations, or any situation requiring high numerical accuracy."
+        "value": "Creating a to-do list app is a great way to practice JavaScript, HTML, and CSS fundamentals. In this tutorial, you'll build a simple interactive to-do list that allows users to add tasks, mark them as done, and remove tasks."
       },
       {
         "type": "paragraph",
-        "value": "The maximum safe integer in JavaScript is defined by `Number.MAX_SAFE_INTEGER`, which is 2^53 - 1 (9,007,199,254,740,991). Numbers larger than this value cannot be represented accurately using the standard Number type, leading to precision loss."
+        "value": "Let's start by creating the basic HTML structure for our to-do list app."
       },
       {
         "type": "code",
-        "value": "console.log(Number.MAX_SAFE_INTEGER); // 9007199254740991\n\n// Example of precision loss:\nconst largeNum = 9007199254740991;\nconsole.log(largeNum === largeNum + 1); // true, which is unexpected\nconsole.log(largeNum + 1); // 9007199254740992\nconsole.log(largeNum + 2); // 9007199254740992, same as previous"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>To-Do List App</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      margin: 50px auto;\n      max-width: 400px;\n      padding: 20px;\n      background-color: #f9f9f9;\n    }\n    h1 {\n      text-align: center;\n    }\n    input[type=\"text\"] {\n      width: 70%;\n      padding: 10px;\n      margin-right: 10px;\n      font-size: 16px;\n    }\n    button {\n      padding: 10px 15px;\n      font-size: 16px;\n      cursor: pointer;\n    }\n    ul {\n      list-style-type: none;\n      padding-left: 0;\n      margin-top: 20px;\n    }\n    li {\n      background-color: #fff;\n      padding: 12px;\n      margin-bottom: 10px;\n      border-radius: 4px;\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    }\n    li.completed {\n      text-decoration: line-through;\n      color: gray;\n    }\n    .remove-btn {\n      background-color: transparent;\n      border: none;\n      color: #c00;\n      font-weight: bold;\n      cursor: pointer;\n    }\n  </style>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Add a new task...\" />\n  <button id=\"addBtn\">Add</button>\n  <ul id=\"taskList\"></ul>\n  <script src=\"app.js\"></script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "As shown, JavaScript treats `largeNum`, `largeNum + 1`, and `largeNum + 2` as the same value due to precision limitations."
+        "value": "In this HTML, we have a text input where users can type their tasks, an Add button, and an unordered list to display tasks. Now let's write the JavaScript to add interactivity."
       },
       {
         "type": "paragraph",
-        "value": "### Using BigInt for Large Integers\nSince ES2020, JavaScript introduced `BigInt`, a built-in object that can represent arbitrarily large integers with full precision. You create a BigInt by appending `n` to the end of the integer or by calling `BigInt()`."
+        "value": "The JavaScript will do the following:\n- Listen for clicks on the Add button\n- Create a new list item with the task entered\n- Allow users to mark tasks as completed by clicking on them\n- Add a remove button to delete tasks"
       },
       {
         "type": "code",
-        "value": "const bigInt1 = 9007199254740991n;\nconst bigInt2 = bigInt1 + 1n;\nconsole.log(bigInt1 === bigInt2); // false\nconsole.log(bigInt2); // 9007199254740992n\n"
+        "value": "const taskInput = document.getElementById('taskInput');\nconst addBtn = document.getElementById('addBtn');\nconst taskList = document.getElementById('taskList');\n\n// Function to add a new task\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if (taskText === '') {\n    alert('Please enter a task!');\n    return;\n  }\n\n  // Create list item\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Toggle completion on click\n  li.addEventListener('click', () => {\n    li.classList.toggle('completed');\n  });\n\n  // Create remove button\n  const removeBtn = document.createElement('button');\n  removeBtn.textContent = 'X';\n  removeBtn.className = 'remove-btn';\n\n  // Remove task on button click\n  removeBtn.addEventListener('click', (e) => {\n    e.stopPropagation(); // Prevent li click event\n    taskList.removeChild(li);\n  });\n\n  li.appendChild(removeBtn);\n  taskList.appendChild(li);\n  taskInput.value = '';\n  taskInput.focus();\n}\n\n// Add task on button click\naddBtn.addEventListener('click', addTask);\n\n// Add task on pressing Enter key\ntaskInput.addEventListener('keydown', (e) => {\n  if (e.key === 'Enter') {\n    addTask();\n  }\n});"
       },
       {
         "type": "paragraph",
-        "value": "BigInt works great for integers, but it doesn’t support decimals. If you need arbitrary precision with decimals, you’ll require special libraries."
+        "value": "Here's what happens in the JavaScript code:\n- We grab references to input, button, and task list elements.\n- The addTask function checks if the input is empty. If not, it creates a new <li> element.\n- Clicking on the task toggles its 'completed' state, visually crossing it out.\n- A remove button is created inside each task to allow deleting it.\n- The button click and pressing Enter key both call addTask to add a new task."
       },
       {
         "type": "paragraph",
-        "value": "### Handling Large Decimal Numbers\nFor decimal arithmetic with large numbers, libraries like `decimal.js`, `big.js`, or `bignumber.js` provide precise calculations without losing accuracy."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example using `decimal.js` (you need to install it using npm or use a CDN in the browser):"
-      },
-      {
-        "type": "code",
-        "value": "// npm install decimal.js\nconst Decimal = require('decimal.js');\n\nconst largeDecimal = new Decimal('9007199254740991.123456789');\nconst sum = largeDecimal.plus('0.000000001');\nconsole.log(sum.toString()); // 9007199254740991.12345679"
-      },
-      {
-        "type": "paragraph",
-        "value": "This method avoids the floating-point precision errors native JavaScript numbers would have caused."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\n- JavaScript's `Number` type has limitations with very large integers due to IEEE 754 precision.\n- Use `BigInt` for working with large integer values safely.\n- Use third-party libraries for arbitrary precision decimal arithmetic.\n- Always consider precision requirements when dealing with large or precise numeric data."
+        "value": "This simple app is a good stepping stone to learning about DOM manipulation and event handling in JavaScript. You can expand it further by saving tasks to local storage or adding task priorities. But for now, enjoy your fully functional to-do list!"
       }
     ]
   },
   {
-    "slug": "understanding-type-coercion-pitfalls-in-javascript-comparisons",
-    "title": "Understanding Type Coercion Pitfalls in JavaScript Comparisons",
+    "slug": "mastering-error-boundaries-in-react-handle-ui-crashes-gracefully",
+    "title": "Mastering Error Boundaries in React: A Cool Trick to Handle UI Crashes Gracefully",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn about type coercion pitfalls in JavaScript comparisons and how to avoid common errors with practical examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=m58Jc9G3yDY",
+    "description": "Learn how to use React error boundaries to catch UI errors and prevent your app from crashing, improving user experience in a beginner-friendly way.",
+    "videoUrl": "https://www.youtube.com/watch?v=_FuDMEgIy7I",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible language that sometimes automatically converts values to different types when comparing them. This behavior is called type coercion. While useful in some cases, type coercion can also cause confusing bugs, especially for beginners."
+        "value": "When building React applications, sometimes parts of your UI might break due to bugs or unexpected errors. Without proper handling, these errors can cause the entire app to crash or show a blank screen, which frustrates users. This is where Error Boundaries come in—a helpful React feature that lets you catch errors in your UI components and show a fallback interface instead."
       },
       {
         "type": "paragraph",
-        "value": "In JavaScript, you often see two types of comparison operators: the double equals (==) and the triple equals (===). Understanding how these operators handle type coercion is essential to avoid unexpected results."
+        "value": "Error Boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. They help you handle UI crashes gracefully and improve the overall user experience."
       },
       {
         "type": "paragraph",
-        "value": "The double equals (==) compares values for equality but converts their types if needed. In contrast, the triple equals (===) compares both the value and the type, so no conversion happens."
+        "value": "Let's create a simple error boundary component step-by-step."
       },
       {
         "type": "code",
-        "value": "console.log('5' == 5);  // true\nconsole.log('5' === 5); // false"
+        "value": "import React from 'react';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  static getDerivedStateFromError(error) {\n    // Update state so the next render shows the fallback UI.\n    return { hasError: true };\n  }\n\n  componentDidCatch(error, errorInfo) {\n    // You can also log the error to an error reporting service\n    console.error('Error caught by ErrorBoundary:', error, errorInfo);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // Customize your fallback UI\n      return <h1>Oops! Something went wrong.</h1>;\n    }\n\n    return this.props.children;\n  }\n}\n\nexport default ErrorBoundary;"
       },
       {
         "type": "paragraph",
-        "value": "'5' == 5 returns true because JavaScript converts the string '5' to a number before comparing. However, '5' === 5 returns false because the types (string and number) are different."
+        "value": "This `ErrorBoundary` component catches any errors in its child components. It updates its state when an error occurs, then shows a fallback UI message instead of crashing the entire app."
       },
       {
         "type": "paragraph",
-        "value": "Here are some common pitfalls caused by type coercion when using ==:"
+        "value": "Now, let's see how you use this `ErrorBoundary` in your app. Wrap any components that might throw errors with the `ErrorBoundary` component."
       },
       {
         "type": "code",
-        "value": "console.log(false == 0);       // true\nconsole.log('' == 0);          // true\nconsole.log(null == undefined); // true\nconsole.log([] == '');         // true\nconsole.log([1,2] == '1,2');   // true"
+        "value": "import React from 'react';\nimport ErrorBoundary from './ErrorBoundary';\n\nfunction BuggyComponent() {\n  // This component throws an error to simulate a crash\n  throw new Error('I crashed!');\n  return <div>This will never render.</div>;\n}\n\nfunction App() {\n  return (\n    <div>\n      <ErrorBoundary>\n        <BuggyComponent />\n      </ErrorBoundary>\n      <p>Other parts of the app are still working fine.</p>\n    </div>\n  );\n}\n\nexport default App;"
       },
       {
         "type": "paragraph",
-        "value": "As you can see, many values might seem equal because JavaScript tries to convert them to a common type. This can lead to bugs if you expect strict equality."
+        "value": "Here, `BuggyComponent` will throw an error, but instead of crashing the entire app, the `ErrorBoundary` gracefully catches it and shows the fallback UI. Meanwhile, other parts of your app continue to work as expected."
       },
       {
         "type": "paragraph",
-        "value": "To avoid these pitfalls, it’s recommended to always use the triple equals (===) operator for comparisons. This operator does not perform type conversion and helps you write more predictable code."
-      },
-      {
-        "type": "code",
-        "value": "console.log(false === 0);       // false\nconsole.log('' === 0);          // false\nconsole.log(null === undefined); // false\nconsole.log([] === '');         // false\nconsole.log([1,2] === '1,2');   // false"
+        "value": "### Key points to remember:\n\n- Error boundaries catch errors only in the components below them in the tree.\n- They do not catch errors inside event handlers, async code, or server-side rendering.\n- You must use a class component to create an error boundary (as of React 18).\n\nUsing error boundaries is a simple but powerful way to keep your React app robust and user-friendly, even when unexpected errors happen."
       },
       {
         "type": "paragraph",
-        "value": "If you do need to compare values of different types, consider explicitly converting them yourself with functions like Number(), String(), or Boolean(). This makes your intentions clear and avoids unexpected coercion."
-      },
-      {
-        "type": "code",
-        "value": "console.log(Number('5') === 5);  // true\nconsole.log(String(5) === '5');  // true\nconsole.log(Boolean(1) === true); // true"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, understanding type coercion in JavaScript comparisons will help you avoid common errors and write cleaner, more reliable code. Always prefer === over == unless you have a specific reason to allow type conversion."
+        "value": "Try integrating error boundaries into your projects to master this cool trick of handling UI crashes gracefully!"
       }
     ]
   },
   {
-    "slug": "handling-typescripts-unknown-type-practical-edge-cases-strategies",
-    "title": "Handling TypeScript's Unknown Type: Practical Edge Cases and Strategies",
+    "slug": "mastering-lazy-loading-in-typescript-for-faster-web-apps",
+    "title": "Mastering Lazy Loading in TypeScript for Faster Web Apps",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to work effectively with TypeScript's unknown type through practical edge cases and smart strategies to keep your code safe and maintainable.",
+    "description": "Learn how to implement lazy loading in TypeScript to improve your web app's performance by loading resources only when needed.",
+    "videoUrl": "https://www.youtube.com/watch?v=rVDBxCgU5oA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Lazy loading is a technique that delays the loading of resources until they are actually needed. This helps improve the initial loading time of web applications, making them faster and more efficient. In this tutorial, we will explore how to use lazy loading in TypeScript, focusing on dynamically importing modules to optimize your app's performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "The main idea behind lazy loading is to split your code into smaller chunks and load them on demand. TypeScript supports this natively with the dynamic `import()` function, which returns a promise that resolves to the module you requested."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Assume you have a utility module that performs some complex calculations, but this functionality is not always required when your app first loads."
+      },
+      {
+        "type": "code",
+        "value": "export function complexCalculation(num: number): number {\n  // Simulate a complex task\n  return num * num + 42;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of importing this module normally, we can lazily load it only when needed."
+      },
+      {
+        "type": "code",
+        "value": "async function useLazyLoadedFunction() {\n  const module = await import('./complexCalculation');\n  const result = module.complexCalculation(10);\n  console.log('Result:', result);\n}\n\nuseLazyLoadedFunction();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s what happens: The `import()` statement dynamically loads the `complexCalculation` module only when `useLazyLoadedFunction` is called. This avoids loading that module during the initial page load, reducing the app’s startup time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Lazy Loading\n- **Improved Performance:** Load only what you need, when you need it.\n- **Better User Experience:** Faster initial load encourages users to stay.\n- **Efficient Resource Use:** Reduce unnecessary network requests."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Errors\nSince dynamic imports return promises, it's good practice to handle possible errors."
+      },
+      {
+        "type": "code",
+        "value": "async function useLazyLoadedFunctionSafe() {\n  try {\n    const module = await import('./complexCalculation');\n    const result = module.complexCalculation(10);\n    console.log('Result:', result);\n  } catch (error) {\n    console.error('Failed to load the module:', error);\n  }\n}\n\nuseLazyLoadedFunctionSafe();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Integrating Lazy Loading in React with TypeScript\nIf you use React, lazy loading components is easy with `React.lazy` and `Suspense`. Here's a quick example:"
+      },
+      {
+        "type": "code",
+        "value": "import React, { Suspense } from 'react';\n\nconst LazyComponent = React.lazy(() => import('./MyComponent'));\n\nfunction App() {\n  return (\n    <Suspense fallback={<div>Loading...</div>}>\n      <LazyComponent />\n    </Suspense>\n  );\n}\n\nexport default App;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `MyComponent` loads only when it is rendered, and a fallback UI shows while loading."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nLazy loading is a powerful way to optimize your TypeScript-based web apps. By dynamically importing modules or components, you reduce initial load times and improve overall user experience. Start incorporating lazy loading into your projects today for faster, leaner, and more efficient web applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-advanced-type-inference-to-prevent-subtle-runtime-errors",
+    "title": "Mastering TypeScript's Advanced Type Inference to Prevent Subtle Runtime Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's advanced type inference features to catch subtle runtime errors early and write more reliable code.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript's `unknown` type is a safer alternative to `any` when you don't know the exact type of a value upfront. Unlike `any`, `unknown` forces you to do some form of type checking before using the value, reducing bugs and increasing code safety. In this tutorial, we'll explore practical edge cases and strategies to handle `unknown` in your TypeScript projects, especially if you're just starting out."
+        "value": "TypeScript is a powerful tool for JavaScript developers because it helps catch errors before they even run your code. One of TypeScript's most helpful features is its type inference system, which can often determine variable types automatically. However, understanding how advanced type inference works can prevent subtle runtime errors that are hard to debug. In this article, we'll explore some key concepts and practical examples to help beginners master TypeScript's type inference and write safer code."
       },
       {
         "type": "paragraph",
-        "value": "### What is `unknown`? Why use it?\nThe `unknown` type represents any value but requires you to perform a type check before accessing members or performing operations on it. It acts as a type-safe counterpart to `any`. This helps prevent runtime errors caused by invalid operations on unknown data."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's the simplest example:"
+        "value": "Let's start with a simple example to illustrate basic type inference. When you declare a variable and initialize it, TypeScript automatically infers the type based on the assigned value."
       },
       {
         "type": "code",
-        "value": "let data: unknown = \"Hello, TypeScript!\";\n\n// Won't compile without a check\n// console.log(data.toUpperCase()); // Error: Object is of type 'unknown'.\n\nif (typeof data === 'string') {\n  // Now TypeScript knows 'data' is a string here\n  console.log(data.toUpperCase());\n}"
+        "value": "let message = \"Hello, TypeScript!\"; // TypeScript infers that 'message' is a string\n\nmessage = 123; // Error: Type 'number' is not assignable to type 'string'"
       },
       {
         "type": "paragraph",
-        "value": "### Practical edge case #1: Handling JSON data\nImagine you receive JSON from an external API. Its type is unknown at first. You want to safely parse and use it."
+        "value": "Here, TypeScript inferred that `message` is a string, so trying to assign a number to it results in a compile-time error, preventing a runtime error later. But things become trickier when working with functions and generics."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a function that returns the first element of an array. If the array is empty, it returns `undefined`. TypeScript can infer the return type based on the input."
       },
       {
         "type": "code",
-        "value": "function parseJson(input: string): unknown {\n  return JSON.parse(input);\n}\n\nconst userData = parseJson('{\"name\": \"Alice\", \"age\": 30}');\n\n// You can't directly access userData.name\nif (\n  typeof userData === 'object' &&\n  userData !== null &&\n  'name' in userData\n) {\n  // Use a type assertion to help TypeScript\n  const user = userData as { name: string };\n  console.log(user.name); // Prints: Alice\n}"
+        "value": "function getFirst<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst names = [\"Alice\", \"Bob\"];\nconst firstName = getFirst(names); // Type inferred: string | undefined\n\nconst empty: number[] = [];\nconst firstNumber = getFirst(empty); // Type inferred: number | undefined"
       },
       {
         "type": "paragraph",
-        "value": "### Strategy: Custom Type Guards\nCreating your own type guard functions lets you reuse logic and make your code cleaner."
+        "value": "In this example, TypeScript intelligently infers the type of the returned value as either the array element type or `undefined` if the array is empty. This helps you handle potential `undefined`s correctly, avoiding subtle runtime crashes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced inference also shines with discriminated unions, which allow safe handling of multiple object types. Here’s an example:"
       },
       {
         "type": "code",
-        "value": "function isUser(obj: unknown): obj is { name: string; age: number } {\n  return (\n    typeof obj === 'object' &&\n    obj !== null &&\n    'name' in obj &&\n    typeof (obj as any).name === 'string' &&\n    'age' in obj &&\n    typeof (obj as any).age === 'number'\n  );\n}\n\nconst value: unknown = { name: 'Bob', age: 25 };\n\nif (isUser(value)) {\n  console.log(value.name, value.age); // TypeScript knows value is a user\n}"
+        "value": "type Shape =\n  | { kind: \"circle\"; radius: number }\n  | { kind: \"square\"; sideLength: number };\n\nfunction area(shape: Shape): number {\n  switch (shape.kind) {\n    case \"circle\":\n      return Math.PI * shape.radius ** 2;\n    case \"square\":\n      return shape.sideLength ** 2;\n  }\n}\n\nconst myCircle: Shape = { kind: \"circle\", radius: 10 };\nconsole.log(area(myCircle)); // 314.159... "
       },
       {
         "type": "paragraph",
-        "value": "### Practical edge case #2: Working with unions and exhaustive checks\nSometimes, your `unknown` value could be one of many types. Use exhaustive checks to narrow down safely."
+        "value": "TypeScript uses the `kind` property to narrow down the type inside the switch statement, ensuring you access only the relevant properties. This prevents runtime errors from accessing nonexistent properties."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another subtle pitfall stems from the `any` type, which disables inference and type checks. Avoiding `any` when possible is key to leveraging TypeScript’s power. Instead, opt for `unknown` when you want to accept any value but still enforce type checks."
       },
       {
         "type": "code",
-        "value": "type Possible = string | number | boolean;\n\nfunction handleValue(value: unknown) {\n  if (typeof value === 'string') {\n    console.log('String:', value);\n  } else if (typeof value === 'number') {\n    console.log('Number:', value);\n  } else if (typeof value === 'boolean') {\n    console.log('Boolean:', value);\n  } else {\n    console.log(\"Unknown type - can't handle it safely.\");\n  }\n}\n\nhandleValue(42);      // Number: 42\nhandleValue(\"hello\"); // String: hello\nhandleValue(true);    // Boolean: true\nhandleValue({});      // Unknown type - can't handle it safely."
+        "value": "function processValue(value: unknown) {\n  if (typeof value === \"string\") {\n    // TypeScript knows 'value' is string here\n    console.log(value.toUpperCase());\n  } else {\n    console.log(\"Not a string\");\n  }\n}\n\nprocessValue(\"hello\");\nprocessValue(123);"
       },
       {
         "type": "paragraph",
-        "value": "### Strategy: Use type assertions carefully\nIf you’re confident about the type due to runtime checks or guarantees (such as from API docs or internal code), you can use type assertions. However, use this sparingly to avoid mask bugs."
-      },
-      {
-        "type": "code",
-        "value": "function process(value: unknown) {\n  if (typeof value === 'string') {\n    // Safe to assert\n    const strValue = value as string;\n    console.log(strValue.length);\n  }\n}\n"
+        "value": "Here, `unknown` forces you to check the type before using it, preventing errors like calling string methods on a number."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\n- Use `unknown` when you want type safety with flexible data.\n- Always narrow `unknown` types before using them (via `typeof`, `in`, or custom type guards).\n- Create reusable type guards for complex types.\n- Use exhaustive checks with union types.\n- Avoid overusing type assertions to keep code safe.\n\nBy following these strategies, you'll avoid common pitfalls and write more robust TypeScript code even when dealing with uncertain data."
+        "value": "To summarize, mastering TypeScript’s advanced type inference involves understanding how it infers types in different contexts, such as variables, generics, and unions. Writing explicit type guards and avoiding `any` helps catch bugs early. With these tools, your TypeScript applications will be safer and easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "Got questions or examples you want to share? Leave a comment and keep practicing handling TypeScript's `unknown` type!"
+        "value": "Start practicing these patterns today, and you’ll find fewer surprises in your runtime behavior!"
       }
     ]
   },
   {
-    "slug": "handling-complex-type-narrowing-errors-in-large-scale-typescript-applications",
-    "title": "Handling Complex Type Narrowing Errors in Large-Scale TypeScript Applications",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn practical tips to effectively resolve complex type narrowing errors in large-scale TypeScript projects with beginner-friendly explanations and examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=vRICq8wigI0",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful tool for building large-scale applications by adding strong typing to JavaScript. However, as applications grow, handling complex types and narrowing them correctly often leads to type narrowing errors. Understanding how to manage these errors can improve code reliability and developer experience."
-      },
-      {
-        "type": "paragraph",
-        "value": "Type narrowing means telling TypeScript more precisely what type a variable is at a given point in the code. This is especially important when we work with unions or complex nested types. When TypeScript can't confidently narrow a type, it throws errors which can sometimes be confusing for beginners."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at a simple example to start. Imagine you have a union type and want TypeScript to understand which branch you are working with:"
-      },
-      {
-        "type": "code",
-        "value": "type Shape = { kind: 'circle'; radius: number } | { kind: 'square'; sideLength: number };\n\nfunction getArea(shape: Shape) {\n  if (shape.kind === 'circle') {\n    // TypeScript knows shape is a circle here\n    return Math.PI * shape.radius * shape.radius;\n  } else {\n    // Here TypeScript knows shape is a square\n    return shape.sideLength * shape.sideLength;\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, TypeScript can narrow the `shape` type easily by checking the `kind` property. However, as types become more complex with deeper nested objects or multiple union types, TypeScript may produce errors because it cannot conclusively narrow the type."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common causes of narrowing errors in large applications include:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Using complex unions or intersections without clear discriminators\n- Incomplete runtime checks for properties\n- Ambiguous null or undefined states\n- Optional chaining that confuses the type analysis"
-      },
-      {
-        "type": "paragraph",
-        "value": "To handle these errors effectively, consider these best practices:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use Discriminated Unions**: Always include a literal property (like `kind` or `type`) that clearly identifies the variant type."
-      },
-      {
-        "type": "code",
-        "value": "type Vehicle =\n  | { type: 'car'; wheels: 4 }\n  | { type: 'bike'; wheels: 2 };\n\nfunction getWheelCount(vehicle: Vehicle) {\n  switch (vehicle.type) {\n    case 'car':\n      return vehicle.wheels; // narrowed to car type\n    case 'bike':\n      return vehicle.wheels; // narrowed to bike type\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Add Explicit Type Guards**: Sometimes TypeScript needs help narrowing complex objects. You can write custom type guard functions to check if an object matches a type."
-      },
-      {
-        "type": "code",
-        "value": "function isCircle(shape: Shape): shape is { kind: 'circle'; radius: number } {\n  return shape.kind === 'circle';\n}\n\n// Usage\nif (isCircle(shape)) {\n  // TypeScript now knows shape is a circle.\n  console.log(shape.radius);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Use Non-Null Assertions Carefully**: If you are sure a value is not null/undefined but TypeScript cannot infer it, you can use `!` to tell the compiler explicitly. However, use this cautiously to avoid runtime errors."
-      },
-      {
-        "type": "code",
-        "value": "function printName(user?: { name?: string }) {\n  // Assert that user and name exist\n  console.log(user!.name!);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Break Down Complex Conditions**: Instead of writing a single if-statement to narrow one complicated type, split checks into multiple clearer steps."
-      },
-      {
-        "type": "code",
-        "value": "if (obj !== null && typeof obj === 'object') {\n  if ('propertyA' in obj) {\n    // now obj.propertyA is accessible and type narrowed\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "In large-scale codebases, using these strategies consistently helps TypeScript understand your types better, reducing narrowing errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember, when you encounter a narrowing error:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Check if you can use a discriminated union\n- Confirm your runtime checks cover all possibilities\n- Use explicit type guards when needed\n- Avoid overly complicated expressions in narrowing\n- Use non-null assertions as a last resort"
-      },
-      {
-        "type": "paragraph",
-        "value": "By following these beginner-friendly practices, you can handle complex type narrowing errors effectively and write safer TypeScript code for large-scale applications."
-      }
-    ]
-  },
-  {
-    "slug": "building-scalable-data-models-python-pydantic-dataclasses",
-    "title": "Building Scalable Data Models in Python Using Pydantic and Dataclasses",
+    "slug": "comparing-python-asyncio-vs-threads-for-concurrent-web-scraping",
+    "title": "Comparing Python's Asyncio vs Threads for Concurrent Web Scraping",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to build scalable and maintainable data models in Python using Pydantic and dataclasses with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=c-Bqg7Gbuc8",
+    "description": "Learn the basics of concurrent web scraping in Python by comparing asyncio and threading, with beginner-friendly examples and explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=Ii7x4mpIhIs",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building applications, data modeling is essential for organizing and validating data. Python offers great tools for this purpose, like dataclasses and Pydantic. In this tutorial, you'll learn how to create scalable data models leveraging Python's built-in dataclasses for simplicity and Pydantic for powerful validation."
+        "value": "Web scraping often involves making multiple requests to fetch data from different web pages. Doing this sequentially can be slow, so using concurrency can speed things up. In Python, two popular ways to achieve concurrency are using threads and asyncio. This tutorial explains both approaches in a beginner-friendly way and shows simple examples for web scraping."
       },
       {
         "type": "paragraph",
-        "value": "Dataclasses are part of the standard Python library and help reduce boilerplate when creating classes mainly used to store data. Pydantic builds on this idea, adding type validation and parsing, making it a great choice when you want your data models to be both concise and robust."
+        "value": "### Threads: Python's Threading Module\nThreads allow your program to run several operations seemingly at the same time. Python's `threading` module lets you create threads easily. However, due to the Global Interpreter Lock (GIL), CPU-bound tasks are not truly parallel. For I/O-bound tasks like web scraping (which mostly wait for network responses), threads can improve performance by working concurrently while waiting."
       },
       {
         "type": "paragraph",
-        "value": "Let’s start with a simple example of a dataclass to represent a User."
+        "value": "Let's see a simple threaded example that fetches multiple URLs concurrently."
       },
       {
         "type": "code",
-        "value": "from dataclasses import dataclass\n\n@dataclass\nclass User:\n    id: int\n    name: str\n    email: str\n\nuser = User(id=1, name='Alice', email='alice@example.com')\nprint(user)"
+        "value": "import threading\nimport requests\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nresponses = []\n\n# Function to fetch a URL\n\ndef fetch(url):\n    print(f\"Starting {url}\")\n    response = requests.get(url)\n    print(f\"Done {url} with status {response.status_code}\")\n    responses.append(response.text)\n\n# List to keep track of threads\nthreads = []\n\nfor url in urls:\n    thread = threading.Thread(target=fetch, args=(url,))\n    thread.start()\n    threads.append(thread)\n\n# Wait for all threads to complete\nfor thread in threads:\n    thread.join()\n\nprint(f\"Fetched {len(responses)} pages.\")"
       },
       {
         "type": "paragraph",
-        "value": "This approach is clear and concise, but it lacks automatic validation. For example, you could accidentally create a User with an invalid email or the wrong data types and Python would not raise any error."
+        "value": "This code creates a thread for each URL and fetches them in parallel. Notice how the delays in URLs simulate waiting times. Threads help utilize waiting time to start other requests. But `requests` library is synchronous and blocking, so each thread blocks while waiting for its request."
       },
       {
         "type": "paragraph",
-        "value": "Now, let’s see how Pydantic improves upon this by validating the data during model creation."
+        "value": "### Asyncio: Python's Asynchronous IO\n`asyncio` is a library for writing concurrent code using the async/await syntax. It is especially efficient for I/O-bound tasks because it uses a single thread but can switch between tasks while waiting for I/O operations, avoiding blocking."
+      },
+      {
+        "type": "paragraph",
+        "value": "To use asyncio with web requests, an async HTTP client like `aiohttp` is needed instead of `requests`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how you can fetch multiple URLs concurrently using asyncio and aiohttp."
       },
       {
         "type": "code",
-        "value": "from pydantic import BaseModel, EmailStr\n\nclass UserModel(BaseModel):\n    id: int\n    name: str\n    email: EmailStr\n\nuser = UserModel(id=1, name='Alice', email='alice@example.com')\nprint(user)\n\n# If email is invalid, it raises a validation error\n# user = UserModel(id=1, name='Alice', email='invalid-email')  # Raises ValidationError"
+        "value": "import asyncio\nimport aiohttp\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nasync def fetch(session, url):\n    print(f\"Starting {url}\")\n    async with session.get(url) as response:\n        text = await response.text()\n        print(f\"Done {url} with status {response.status}\")\n        return text\n\nasync def main():\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        responses = await asyncio.gather(*tasks)\n        print(f\"Fetched {len(responses)} pages.\")\n\nasyncio.run(main())"
       },
       {
         "type": "paragraph",
-        "value": "Notice how Pydantic uses Python type hints to validate the data dynamically. For example, if you provide an invalid email, Pydantic raises a validation error immediately. This is useful for applications that rely on user input or external APIs."
+        "value": "In this example, the `fetch` function is asynchronous. When it awaits network I/O, the event loop switches to other tasks. This makes the code efficient and easy to manage without threads."
       },
       {
         "type": "paragraph",
-        "value": "Pydantic models also support data serialization out-of-the-box using methods like `.dict()` and `.json()`. This makes it easy to convert your models for storage, logging, or API responses."
-      },
-      {
-        "type": "code",
-        "value": "print(user.dict())  # Returns a dictionary\nprint(user.json())  # Returns JSON string"
+        "value": "### Key Differences:\n- **Threads** run code in parallel with OS threads, which is great for blocking I/O but can cause overhead.\n- **Asyncio** uses a single thread and runs multiple tasks cooperatively, which is more lightweight but requires async-compatible libraries.\n- For beginners, threading might be easier to start with since it uses familiar synchronous code, but asyncio offers better scalability for many concurrent network operations."
       },
       {
         "type": "paragraph",
-        "value": "For larger projects, you can combine both approaches. Use dataclasses for internal simple structures where validation is not critical, and Pydantic models for data coming from external sources that require validation."
+        "value": "### Conclusion\nFor concurrent web scraping, both threading and asyncio can improve speed over sequential scraping. If you want simple, quick concurrency and are already comfortable with synchronous code, try threading. If you want efficient handling of many connections and don't mind learning async/await syntax, asyncio plus aiohttp is a powerful choice."
       },
       {
         "type": "paragraph",
-        "value": "Here is an example combining both tools in a scalable way:"
-      },
-      {
-        "type": "code",
-        "value": "from dataclasses import dataclass\nfrom typing import List\nfrom pydantic import BaseModel, ValidationError, EmailStr\n\n@dataclass\nclass Address:\n    street: str\n    city: str\n    zipcode: str\n\nclass UserModel(BaseModel):\n    id: int\n    name: str\n    email: EmailStr\n    addresses: List[Address]\n\n# Correct input\naddresses = [Address(street=\"123 Python Rd\", city=\"Pytown\", zipcode=\"12345\")]\nuser = UserModel(id=1, name='Alice', email='alice@example.com', addresses=addresses)\nprint(user)\n\n# Invalid email example\ntry:\n    bad_user = UserModel(id=2, name='Bob', email='bad-email', addresses=addresses)\nexcept ValidationError as e:\n    print(\"Validation Error:\", e)"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, the addresses are simple dataclasses because no extra validation is needed beyond their fields being strings. The UserModel, however, is a Pydantic model that validates the email and the list of addresses. This design keeps your code clean, readable, and scalable."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use Python dataclasses when you want simple, boilerplate-free data containers without heavy validation.\n- Use Pydantic models when you want automatic data validation, parsing, and serialization.\n- Combine both approaches to keep your codebase scalable and maintainable.\n\nWith these tools, building data models in Python becomes straightforward and robust."
+        "value": "Remember to always respect website terms of service and avoid overwhelming servers with too many requests."
       }
     ]
   },
   {
-    "slug": "designing-resilient-python-systems-handling-resource-exhaustion-gracefully",
-    "title": "Designing Resilient Python Systems: Handling Resource Exhaustion Gracefully",
+    "slug": "comparing-exception-handling-approaches-in-python-best-practices-for-robust-code",
+    "title": "Comparing Exception Handling Approaches in Python: Best Practices for Robust Code",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to make your Python applications more resilient by handling resource exhaustion errors gracefully with practical examples and best practices.",
-    "videoUrl": "https://www.youtube.com/watch?v=hgcySH8cETU",
+    "description": "Learn beginner-friendly best practices for handling exceptions in Python. Understand different approaches and how to write robust, error-resistant code.",
+    "videoUrl": "https://www.youtube.com/watch?v=pUBR-ofQtAQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building Python applications, it's important to ensure they can handle unexpected situations without crashing. One common challenge developers face is resource exhaustion — when your program runs out of memory, file handles, or other system resources. This article will guide you through understanding resource exhaustion and how to handle it gracefully in your Python code."
+        "value": "Exception handling is a crucial part of writing robust Python programs. It helps your code gracefully handle unexpected errors without crashing. In this article, we'll compare common approaches to exception handling in Python and explore best practices you can use to make your code more reliable."
       },
       {
         "type": "paragraph",
-        "value": "Resource exhaustion happens when your program uses up all of a particular resource such as memory, disk space, or network connections. For example, trying to open too many files or creating too many objects can lead to errors like `MemoryError` or `OSError`. Handling these errors properly can prevent your program from crashing unexpectedly and allow it to recover or fail safely."
-      },
-      {
-        "type": "paragraph",
-        "value": "To handle these scenarios, Python provides exceptions such as `MemoryError` for memory exhaustion and `OSError` for system-level errors, including too many open files. The key approach is to anticipate where resources might be exhausted and use try-except blocks to catch and respond to these errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example of handling a `MemoryError` that might occur during a large data processing task:"
+        "value": "The most basic way to handle exceptions is by using a try/except block. This allows you to catch errors that occur in a block of code and respond to them. Let's see a simple example of catching a specific exception:"
       },
       {
         "type": "code",
-        "value": "try:\n    # Simulate processing a large list\n    large_list = [x for x in range(10**9)]  # This may cause MemoryError\nexcept MemoryError:\n    print(\"Oops! Too much memory used. Try processing smaller chunks.\")"
+        "value": "try:\n    number = int(input('Enter a number: '))\n    print(f'You entered: {number}')\nexcept ValueError:\n    print('Oops! That was not a valid number.')"
       },
       {
         "type": "paragraph",
-        "value": "In this example, if Python runs out of memory while creating a huge list, the program catches the `MemoryError` and prints a helpful message instead of crashing. Depending on your use case, you can also free resources, save progress, or alert the user."
+        "value": "In the example above, if the user inputs something that can't be converted to an integer, Python raises a ValueError. The except block catches it and prints a friendly message. Catching specific exceptions like this is important because it prevents you from hiding other unexpected problems."
       },
       {
         "type": "paragraph",
-        "value": "Another common resource exhaustion is hitting the maximum number of open files. Python raises an `OSError` with a specific error code. You can catch this and respond accordingly."
+        "value": "Sometimes, beginners use a general except statement that catches all exceptions without specifying the error type. For example:"
       },
       {
         "type": "code",
-        "value": "import os\n\ntry:\n    # Attempt to open too many files\n    files = [open(f\"file_{i}.txt\", \"w\") for i in range(10000)]\nexcept OSError as e:\n    if e.errno == 24:  # EMFILE: Too many open files\n        print(\"Reached open file limit! Closing some files.\")\n        # Close previously opened files to free resources\n        for f in files:\n            f.close()\n    else:\n        raise"
+        "value": "try:\n    # some code\n    pass\nexcept:\n    print('Something went wrong!')"
       },
       {
         "type": "paragraph",
-        "value": "In the code above, we specifically check for the 'Too many open files' error using the error number `24` (which is system-dependent but common on Unix-like systems). This allows us to handle the situation by cleaning up resources properly."
+        "value": "While this looks convenient, it is considered a bad practice because it catches every possible exception, including system-exiting ones like KeyboardInterrupt or MemoryError. This can make debugging very difficult and may hide important issues."
       },
       {
         "type": "paragraph",
-        "value": "In addition to catching exceptions, it is good practice to manage resources carefully using context managers — for example, opening files with the `with` statement. This ensures files are closed automatically, reducing the chance of resource leaks."
+        "value": "A better option is to catch multiple specific exceptions if needed. You can handle different errors in one block like this:"
       },
       {
         "type": "code",
-        "value": "def process_files(file_names):\n    for file_name in file_names:\n        try:\n            with open(file_name, 'r') as f:\n                data = f.read()\n                # Process the file data here\n        except OSError as e:\n            print(f\"Error opening {file_name}: {e}\")"
+        "value": "try:\n    value = int(input('Enter a number: '))\n    result = 10 / value\n    print(f'Result is {result}')\nexcept ValueError:\n    print('Please enter a valid integer.')\nexcept ZeroDivisionError:\n    print('Cannot divide by zero.')"
       },
       {
         "type": "paragraph",
-        "value": "Here, the `with` statement ensures files are closed immediately after use, minimizing resource consumption and preventing exhaustion."
+        "value": "This way, you respond precisely to each type of error, making your program more user-friendly and easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, designing resilient Python systems to handle resource exhaustion involves:"
+        "value": "You can also use the else and finally blocks to further control flow:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    value = int(input('Enter a number: '))\nexcept ValueError:\n    print('Invalid input!')\nelse:\n    print(f'You entered {value}, which is valid.')\nfinally:\n    print('This runs no matter what.')"
       },
       {
         "type": "paragraph",
-        "value": "- Anticipating where resource limits can be hit (memory, files, etc.)\n- Using try-except blocks to catch exceptions like `MemoryError` and `OSError`\n- Cleaning up resources when limits are reached\n- Using context managers (`with` statements) for automatic resource management\n- Considering graceful degradation or user notifications when resources run out"
+        "value": "The else block runs only if no exceptions were raised, and the finally block runs no matter what — even if an exception was raised or not. This is useful for clean-up actions like closing files or releasing resources."
       },
       {
         "type": "paragraph",
-        "value": "By following these guidelines, your Python applications will be more robust and maintain stability even when system limits are under pressure."
+        "value": "To summarize best practices for beginners:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Catch specific exceptions instead of a general except.\n2. Use multiple except blocks for different errors.\n3. Avoid leaving except blocks empty or with vague messages.\n4. Use else for code that should run only if no exceptions occur.\n5. Use finally to clean up resources regardless of errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these guidelines, your Python code will handle errors more gracefully and be easier to read and maintain."
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-for-advanced-data-analytics-in-sql",
-    "title": "Mastering Window Functions for Advanced Data Analytics in SQL",
+    "slug": "mastering-sql-window-functions-for-enhanced-query-performance",
+    "title": "Mastering SQL Window Functions for Enhanced Query Performance",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform powerful and advanced data analytics with beginner-friendly examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn how to use SQL window functions to write efficient, powerful queries with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=i_1UlpjRYRA",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions are a powerful feature in SQL that allow you to perform calculations across a set of table rows related to the current row. They are essential for advanced data analytics because they let you compute running totals, rankings, moving averages, and other cumulative metrics without collapsing your query results."
+        "value": "SQL window functions are a powerful tool that allow you to perform calculations across a set of rows related to the current row without collapsing the result set. They are extremely useful for advanced data analysis and can significantly enhance query performance by reducing the need for subqueries and joins."
       },
       {
         "type": "paragraph",
-        "value": "Unlike aggregate functions, which group rows and return a single result per group, window functions preserve individual rows while still performing calculations over values in a defined window (or partition). This enables detailed analytics and reporting within your dataset."
+        "value": "In this tutorial, we'll explore the basics of SQL window functions, understand when to use them, and walk through practical examples using common window functions such as ROW_NUMBER(), RANK(), and SUM()."
       },
       {
         "type": "paragraph",
-        "value": "Let's explore some common window functions with practical examples using a sample sales table structured like this:"
+        "value": "### What is a Window Function? \nA window function performs a calculation across a set of table rows that are somehow related to the current row. Unlike aggregate functions, window functions do not group rows into a single output row — they return a value for every row in the dataset."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Syntax\nMost window functions use the following syntax:\n\n\nfunction_name() OVER (\n  PARTITION BY column1, column2, ...\n  ORDER BY column3\n  ROWS BETWEEN frame_start AND frame_end\n)\n\n\n- **PARTITION BY** divides the result set into partitions to which the function is applied independently.\n- **ORDER BY** defines the order of rows in each partition.\n- **ROWS BETWEEN** specifies the window frame relative to the current row."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Dataset\nWe'll use a sample sales table to demonstrate window functions:\n\nsql\nCREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(100),\n  sales_date DATE,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', '2023-01-01', 500.00),\n(2, 'Bob', '2023-01-01', 300.00),\n(3, 'Alice', '2023-01-02', 700.00),\n(4, 'Alice', '2023-01-03', 600.00),\n(5, 'Bob', '2023-01-02', 1000.00);\n\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. ROW_NUMBER() - Assign Unique Row Numbers\nThis function assigns a unique number to each row within a partition, ordered by a specified column."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n    id INT,\n    salesperson VARCHAR(50),\n    region VARCHAR(50),\n    sale_amount DECIMAL(10, 2),\n    sale_date DATE\n);"
+        "value": "SELECT id, salesperson, sales_date, amount,\n       ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sales_date) AS row_num\nFROM sales;\n"
       },
       {
         "type": "paragraph",
-        "value": "### 1. ROW_NUMBER(): Assigns a unique sequential number to each row within a partition ordered by some columns."
+        "value": "This query numbers sales for each salesperson ordered by sales date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. RANK() - Assign Ranking with Gaps\nRANK() assigns ranks with ties receiving the same rank and gaps in ranks after ties."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  sale_amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS sale_rank\nFROM sales;"
+        "value": "SELECT id, salesperson, amount,\n       RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS sales_rank\nFROM sales;\n"
       },
       {
         "type": "paragraph",
-        "value": "This query ranks each sale per salesperson by the sale date, starting at 1 for the earliest sale."
+        "value": "This ranks sales amounts per salesperson from highest to lowest."
       },
       {
         "type": "paragraph",
-        "value": "### 2. RANK() and DENSE_RANK(): Similar to ROW_NUMBER but handle ties differently."
+        "value": "### 3. SUM() - Running Total\nUsing SUM() as a window function allows us to calculate running totals."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_amount,\n  RANK() OVER (PARTITION BY salesperson ORDER BY sale_amount DESC) AS rank,\n  DENSE_RANK() OVER (PARTITION BY salesperson ORDER BY sale_amount DESC) AS dense_rank\nFROM sales;"
+        "value": "SELECT id, salesperson, sales_date, amount,\n       SUM(amount) OVER (PARTITION BY salesperson ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;\n"
       },
       {
         "type": "paragraph",
-        "value": "RANK gives the same rank to tied values but skips rank numbers after ties. DENSE_RANK also ties but does not skip numbers."
+        "value": "Here, the running total is calculated for each salesperson ordered by sales date, showing cumulative sales over time."
       },
       {
         "type": "paragraph",
-        "value": "### 3. SUM() with OVER(): Calculate running totals or totals per partition while keeping all rows."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This calculates a running total of sales for each salesperson ordered by the sale date."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. LAG() and LEAD(): Access data from previous or next rows without self-joins."
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  salesperson,\n  sale_date,\n  sale_amount,\n  LAG(sale_amount, 1) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_sale,\n  LEAD(sale_amount, 1) OVER (PARTITION BY salesperson ORDER BY sale_date) AS next_sale\nFROM sales;"
-      },
-      {
-        "type": "paragraph",
-        "value": "These functions let you compare each sale amount to the previous and next sale amounts for the same salesperson."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Use Case: Finding Top Sales per Region"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM (\n  SELECT\n    region,\n    salesperson,\n    sale_amount,\n    RANK() OVER (PARTITION BY region ORDER BY sale_amount DESC) AS sales_rank\n  FROM sales\n) ranked_sales\nWHERE sales_rank = 1;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query identifies the top salespeople in each region with the highest sales amount."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Window functions extend SQL's analytical capabilities by allowing you to perform complex calculations across related rows without losing detail. With ROW_NUMBER, RANK, SUM, LAG, LEAD, and others, you can create insightful reports and dashboards easily. Practice these functions on your datasets to become proficient in advanced SQL data analysis."
+        "value": "### Why Use Window Functions?\n- They keep detailed rows available instead of aggregating.\n- Improve query readability and maintainability.\n- Generally perform better compared to self-joins or subqueries for similar tasks.\n\nStart experimenting with these functions by replacing your common aggregation queries to see the performance and clarity benefits!"
       }
     ]
   },
   {
-    "slug": "comparing-null-handling-mechanisms-across-popular-sql-databases",
-    "title": "Comparing NULL Handling Mechanisms Across Popular SQL Databases",
+    "slug": "optimizing-sql-server-performance-handling-large-scale-data-without-timeouts",
+    "title": "Optimizing SQL Server Performance: Handling Large-Scale Data Without Timeouts",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how popular SQL databases like MySQL, PostgreSQL, and SQL Server handle NULL values differently, and avoid common errors with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=Yh4CrPHVBdE",
+    "description": "Learn how to prevent SQL Server command timeouts when working with large datasets by optimizing queries and using practical techniques.",
+    "videoUrl": "https://www.youtube.com/watch?v=7V1ooqV6Jz4",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with databases, handling NULL values correctly is crucial to avoid bugs and unexpected behavior. Although NULL is a standard concept in SQL, popular databases like MySQL, PostgreSQL, and SQL Server handle NULL comparisons and operations in subtly different ways. This article introduces beginners to these differences and provides practical code examples to help you avoid common errors."
+        "value": "When working with large-scale data in SQL Server, you may encounter command timeout errors due to long-running queries. These timeouts happen when SQL Server takes too long to return results, disrupting your applications. Fortunately, there are practical ways to optimize your queries and database settings to prevent these timeouts."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand that NULL represents an unknown or missing value. It is not the same as zero or an empty string. Comparing NULL using standard operators (like = or <>) can lead to unexpected results."
-      },
-      {
-        "type": "paragraph",
-        "value": "### NULL Comparison Using `=` and `IS NULL`"
-      },
-      {
-        "type": "paragraph",
-        "value": "All popular SQL databases require `IS NULL` or `IS NOT NULL` for checking NULL values. Using `=` or `<>` with NULL does not work as expected because NULL is not equal to anything—including itself."
+        "value": "A key reason for long-running queries is inefficient data retrieval. To improve performance, always ensure your queries use indexes effectively. Indexes speed up searches by allowing SQL Server to quickly find relevant rows instead of scanning the whole table."
       },
       {
         "type": "code",
-        "value": "-- This will not work as expected in MySQL, PostgreSQL, or SQL Server\nSELECT * FROM users WHERE last_login = NULL;\n\n-- The correct way is:\nSELECT * FROM users WHERE last_login IS NULL;"
+        "value": "CREATE INDEX idx_customer_lastname ON Customers(LastName);"
       },
       {
         "type": "paragraph",
-        "value": "### NULL Handling in MySQL, PostgreSQL, and SQL Server"
-      },
-      {
-        "type": "paragraph",
-        "value": "All three database systems follow the SQL standard that NULL comparisons using `=` or `<>` result in UNKNOWN, effectively filtering those rows out. However, there are small differences in how functions and operators treat NULL."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, the `COALESCE` function returns the first non-NULL value and behaves the same across MySQL, PostgreSQL, and SQL Server."
+        "value": "Another common technique is to limit the amount of data processed at once. Use the WHERE clause to filter data and SELECT only the columns you need rather than using SELECT *."
       },
       {
         "type": "code",
-        "value": "-- Using COALESCE to handle NULL values\nSELECT id, COALESCE(phone, 'No phone provided') AS contact_phone FROM customers;"
+        "value": "SELECT FirstName, LastName, Email FROM Customers WHERE Country = 'USA';"
       },
       {
         "type": "paragraph",
-        "value": "### NULL and Sorting Behavior"
-      },
-      {
-        "type": "paragraph",
-        "value": "When sorting NULL values, the order varies by database:"
+        "value": "If your query still takes too long, consider breaking it into smaller batches. This approach processes limited rows repeatedly, reducing resource consumption and avoiding timeouts."
       },
       {
         "type": "code",
-        "value": "-- In PostgreSQL, NULLs sort first by default when ASC\nSELECT name FROM employees ORDER BY department ASC;\n\n-- To sort NULLs last in PostgreSQL\nSELECT name FROM employees ORDER BY department ASC NULLS LAST;\n\n-- MySQL places NULLs first when ASC; no NULLS LAST option (available from 8.0 with tricks)\n\n-- SQL Server places NULLs last by default when ASC\nSELECT name FROM employees ORDER BY department ASC;"
+        "value": "DECLARE @BatchSize INT = 1000;\nDECLARE @LastId INT = 0;\n\nWHILE (1=1)\nBEGIN\n    WITH CTE AS (\n        SELECT TOP (@BatchSize) * FROM Orders WHERE OrderId > @LastId ORDER BY OrderId\n    )\n    UPDATE CTE SET OrderStatus = 'Processed';\n\n    SET @LastId = (SELECT MAX(OrderId) FROM CTE);\n    IF @@ROWCOUNT < @BatchSize BREAK;\nEND"
       },
       {
         "type": "paragraph",
-        "value": "### NULL in UNIQUE Constraints"
+        "value": "Additionally, increasing the SQL Server command timeout setting can help during heavy operations, but it’s best used as a last resort after query optimization."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Increase timeout in application connection string\nServer=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;Connection Timeout=120;"
       },
       {
         "type": "paragraph",
-        "value": "In SQL Server and PostgreSQL, NULLs are treated as distinct values in unique constraints, so multiple NULLs are allowed. In contrast, MySQL treats multiple NULLs as duplicates in unique indexes in some storage engines, which can cause errors."
+        "value": "Finally, regularly updating statistics and rebuilding indexes keep your database optimized for query execution, helping to reduce the chance of timeouts."
+      },
+      {
+        "type": "code",
+        "value": "EXEC sp_updatestats;\nALTER INDEX ALL ON Customers REBUILD;"
       },
       {
         "type": "paragraph",
-        "value": "### Common NULL-Related Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Trying to find rows with `= NULL` instead of `IS NULL`.\n2. Using functions or calculations that do not handle NULL, causing unexpected NULL results.\n3. Unique constraint violations due to unexpected NULL handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "To avoid errors and unexpected results:\n- Always use `IS NULL` or `IS NOT NULL` to check for NULL.\n- Use `COALESCE` to provide default values when NULLs may exist.\n- Be aware of NULL sorting differences if ordering is important.\n- Understand your DBMS's behavior with NULLs in unique constraints.\n\nWith these guidelines, you can better work with NULLs and create more reliable SQL queries across different database systems."
+        "value": "By applying these beginner-friendly techniques—proper indexing, filtering data, batching operations, adjusting timeouts, and maintaining your database—you can handle large-scale data in SQL Server more efficiently and avoid frustrating timeout errors."
       }
     ]
   }

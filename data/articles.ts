@@ -49184,5 +49184,430 @@ export const articles = [
         "value": "To avoid errors and unexpected results:\n- Always use `IS NULL` or `IS NOT NULL` to check for NULL.\n- Use `COALESCE` to provide default values when NULLs may exist.\n- Be aware of NULL sorting differences if ordering is important.\n- Understand your DBMS's behavior with NULLs in unique constraints.\n\nWith these guidelines, you can better work with NULLs and create more reliable SQL queries across different database systems."
       }
     ]
+  },
+  {
+    "slug": "building-your-first-interactive-to-do-list-app-with-javascript",
+    "title": "Building Your First Interactive To-Do List App with JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple and interactive to-do list app using JavaScript, HTML, and CSS. Perfect for beginners looking to practice JavaScript basics.",
+    "videoUrl": "https://www.youtube.com/watch?v=G0jO8kUrg-I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Creating a to-do list app is a great way to practice JavaScript, HTML, and CSS fundamentals. In this tutorial, you'll build a simple interactive to-do list that allows users to add tasks, mark them as done, and remove tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating the basic HTML structure for our to-do list app."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>To-Do List App</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      margin: 50px auto;\n      max-width: 400px;\n      padding: 20px;\n      background-color: #f9f9f9;\n    }\n    h1 {\n      text-align: center;\n    }\n    input[type=\"text\"] {\n      width: 70%;\n      padding: 10px;\n      margin-right: 10px;\n      font-size: 16px;\n    }\n    button {\n      padding: 10px 15px;\n      font-size: 16px;\n      cursor: pointer;\n    }\n    ul {\n      list-style-type: none;\n      padding-left: 0;\n      margin-top: 20px;\n    }\n    li {\n      background-color: #fff;\n      padding: 12px;\n      margin-bottom: 10px;\n      border-radius: 4px;\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n    }\n    li.completed {\n      text-decoration: line-through;\n      color: gray;\n    }\n    .remove-btn {\n      background-color: transparent;\n      border: none;\n      color: #c00;\n      font-weight: bold;\n      cursor: pointer;\n    }\n  </style>\n</head>\n<body>\n  <h1>My To-Do List</h1>\n  <input type=\"text\" id=\"taskInput\" placeholder=\"Add a new task...\" />\n  <button id=\"addBtn\">Add</button>\n  <ul id=\"taskList\"></ul>\n  <script src=\"app.js\"></script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this HTML, we have a text input where users can type their tasks, an Add button, and an unordered list to display tasks. Now let's write the JavaScript to add interactivity."
+      },
+      {
+        "type": "paragraph",
+        "value": "The JavaScript will do the following:\n- Listen for clicks on the Add button\n- Create a new list item with the task entered\n- Allow users to mark tasks as completed by clicking on them\n- Add a remove button to delete tasks"
+      },
+      {
+        "type": "code",
+        "value": "const taskInput = document.getElementById('taskInput');\nconst addBtn = document.getElementById('addBtn');\nconst taskList = document.getElementById('taskList');\n\n// Function to add a new task\nfunction addTask() {\n  const taskText = taskInput.value.trim();\n  if (taskText === '') {\n    alert('Please enter a task!');\n    return;\n  }\n\n  // Create list item\n  const li = document.createElement('li');\n  li.textContent = taskText;\n\n  // Toggle completion on click\n  li.addEventListener('click', () => {\n    li.classList.toggle('completed');\n  });\n\n  // Create remove button\n  const removeBtn = document.createElement('button');\n  removeBtn.textContent = 'X';\n  removeBtn.className = 'remove-btn';\n\n  // Remove task on button click\n  removeBtn.addEventListener('click', (e) => {\n    e.stopPropagation(); // Prevent li click event\n    taskList.removeChild(li);\n  });\n\n  li.appendChild(removeBtn);\n  taskList.appendChild(li);\n  taskInput.value = '';\n  taskInput.focus();\n}\n\n// Add task on button click\naddBtn.addEventListener('click', addTask);\n\n// Add task on pressing Enter key\ntaskInput.addEventListener('keydown', (e) => {\n  if (e.key === 'Enter') {\n    addTask();\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's what happens in the JavaScript code:\n- We grab references to input, button, and task list elements.\n- The addTask function checks if the input is empty. If not, it creates a new <li> element.\n- Clicking on the task toggles its 'completed' state, visually crossing it out.\n- A remove button is created inside each task to allow deleting it.\n- The button click and pressing Enter key both call addTask to add a new task."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple app is a good stepping stone to learning about DOM manipulation and event handling in JavaScript. You can expand it further by saving tasks to local storage or adding task priorities. But for now, enjoy your fully functional to-do list!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-error-boundaries-in-react-handle-ui-crashes-gracefully",
+    "title": "Mastering Error Boundaries in React: A Cool Trick to Handle UI Crashes Gracefully",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use React error boundaries to catch UI errors and prevent your app from crashing, improving user experience in a beginner-friendly way.",
+    "videoUrl": "https://www.youtube.com/watch?v=_FuDMEgIy7I",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building React applications, sometimes parts of your UI might break due to bugs or unexpected errors. Without proper handling, these errors can cause the entire app to crash or show a blank screen, which frustrates users. This is where Error Boundaries come in—a helpful React feature that lets you catch errors in your UI components and show a fallback interface instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "Error Boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. They help you handle UI crashes gracefully and improve the overall user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple error boundary component step-by-step."
+      },
+      {
+        "type": "code",
+        "value": "import React from 'react';\n\nclass ErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false };\n  }\n\n  static getDerivedStateFromError(error) {\n    // Update state so the next render shows the fallback UI.\n    return { hasError: true };\n  }\n\n  componentDidCatch(error, errorInfo) {\n    // You can also log the error to an error reporting service\n    console.error('Error caught by ErrorBoundary:', error, errorInfo);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      // Customize your fallback UI\n      return <h1>Oops! Something went wrong.</h1>;\n    }\n\n    return this.props.children;\n  }\n}\n\nexport default ErrorBoundary;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This `ErrorBoundary` component catches any errors in its child components. It updates its state when an error occurs, then shows a fallback UI message instead of crashing the entire app."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's see how you use this `ErrorBoundary` in your app. Wrap any components that might throw errors with the `ErrorBoundary` component."
+      },
+      {
+        "type": "code",
+        "value": "import React from 'react';\nimport ErrorBoundary from './ErrorBoundary';\n\nfunction BuggyComponent() {\n  // This component throws an error to simulate a crash\n  throw new Error('I crashed!');\n  return <div>This will never render.</div>;\n}\n\nfunction App() {\n  return (\n    <div>\n      <ErrorBoundary>\n        <BuggyComponent />\n      </ErrorBoundary>\n      <p>Other parts of the app are still working fine.</p>\n    </div>\n  );\n}\n\nexport default App;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `BuggyComponent` will throw an error, but instead of crashing the entire app, the `ErrorBoundary` gracefully catches it and shows the fallback UI. Meanwhile, other parts of your app continue to work as expected."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key points to remember:\n\n- Error boundaries catch errors only in the components below them in the tree.\n- They do not catch errors inside event handlers, async code, or server-side rendering.\n- You must use a class component to create an error boundary (as of React 18).\n\nUsing error boundaries is a simple but powerful way to keep your React app robust and user-friendly, even when unexpected errors happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try integrating error boundaries into your projects to master this cool trick of handling UI crashes gracefully!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-advanced-type-inference-to-prevent-subtle-runtime-errors",
+    "title": "Mastering TypeScript's Advanced Type Inference to Prevent Subtle Runtime Errors",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's advanced type inference features to catch subtle runtime errors early and write more reliable code.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful tool for JavaScript developers because it helps catch errors before they even run your code. One of TypeScript's most helpful features is its type inference system, which can often determine variable types automatically. However, understanding how advanced type inference works can prevent subtle runtime errors that are hard to debug. In this article, we'll explore some key concepts and practical examples to help beginners master TypeScript's type inference and write safer code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example to illustrate basic type inference. When you declare a variable and initialize it, TypeScript automatically infers the type based on the assigned value."
+      },
+      {
+        "type": "code",
+        "value": "let message = \"Hello, TypeScript!\"; // TypeScript infers that 'message' is a string\n\nmessage = 123; // Error: Type 'number' is not assignable to type 'string'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, TypeScript inferred that `message` is a string, so trying to assign a number to it results in a compile-time error, preventing a runtime error later. But things become trickier when working with functions and generics."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a function that returns the first element of an array. If the array is empty, it returns `undefined`. TypeScript can infer the return type based on the input."
+      },
+      {
+        "type": "code",
+        "value": "function getFirst<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst names = [\"Alice\", \"Bob\"];\nconst firstName = getFirst(names); // Type inferred: string | undefined\n\nconst empty: number[] = [];\nconst firstNumber = getFirst(empty); // Type inferred: number | undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, TypeScript intelligently infers the type of the returned value as either the array element type or `undefined` if the array is empty. This helps you handle potential `undefined`s correctly, avoiding subtle runtime crashes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced inference also shines with discriminated unions, which allow safe handling of multiple object types. Here’s an example:"
+      },
+      {
+        "type": "code",
+        "value": "type Shape =\n  | { kind: \"circle\"; radius: number }\n  | { kind: \"square\"; sideLength: number };\n\nfunction area(shape: Shape): number {\n  switch (shape.kind) {\n    case \"circle\":\n      return Math.PI * shape.radius ** 2;\n    case \"square\":\n      return shape.sideLength ** 2;\n  }\n}\n\nconst myCircle: Shape = { kind: \"circle\", radius: 10 };\nconsole.log(area(myCircle)); // 314.159... "
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript uses the `kind` property to narrow down the type inside the switch statement, ensuring you access only the relevant properties. This prevents runtime errors from accessing nonexistent properties."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another subtle pitfall stems from the `any` type, which disables inference and type checks. Avoiding `any` when possible is key to leveraging TypeScript’s power. Instead, opt for `unknown` when you want to accept any value but still enforce type checks."
+      },
+      {
+        "type": "code",
+        "value": "function processValue(value: unknown) {\n  if (typeof value === \"string\") {\n    // TypeScript knows 'value' is string here\n    console.log(value.toUpperCase());\n  } else {\n    console.log(\"Not a string\");\n  }\n}\n\nprocessValue(\"hello\");\nprocessValue(123);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `unknown` forces you to check the type before using it, preventing errors like calling string methods on a number."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, mastering TypeScript’s advanced type inference involves understanding how it infers types in different contexts, such as variables, generics, and unions. Writing explicit type guards and avoiding `any` helps catch bugs early. With these tools, your TypeScript applications will be safer and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start practicing these patterns today, and you’ll find fewer surprises in your runtime behavior!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-asyncio-vs-threads-for-concurrent-web-scraping",
+    "title": "Comparing Python's Asyncio vs Threads for Concurrent Web Scraping",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of concurrent web scraping in Python by comparing asyncio and threading, with beginner-friendly examples and explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=Ii7x4mpIhIs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping often involves making multiple requests to fetch data from different web pages. Doing this sequentially can be slow, so using concurrency can speed things up. In Python, two popular ways to achieve concurrency are using threads and asyncio. This tutorial explains both approaches in a beginner-friendly way and shows simple examples for web scraping."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Threads: Python's Threading Module\nThreads allow your program to run several operations seemingly at the same time. Python's `threading` module lets you create threads easily. However, due to the Global Interpreter Lock (GIL), CPU-bound tasks are not truly parallel. For I/O-bound tasks like web scraping (which mostly wait for network responses), threads can improve performance by working concurrently while waiting."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a simple threaded example that fetches multiple URLs concurrently."
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport requests\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nresponses = []\n\n# Function to fetch a URL\n\ndef fetch(url):\n    print(f\"Starting {url}\")\n    response = requests.get(url)\n    print(f\"Done {url} with status {response.status_code}\")\n    responses.append(response.text)\n\n# List to keep track of threads\nthreads = []\n\nfor url in urls:\n    thread = threading.Thread(target=fetch, args=(url,))\n    thread.start()\n    threads.append(thread)\n\n# Wait for all threads to complete\nfor thread in threads:\n    thread.join()\n\nprint(f\"Fetched {len(responses)} pages.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code creates a thread for each URL and fetches them in parallel. Notice how the delays in URLs simulate waiting times. Threads help utilize waiting time to start other requests. But `requests` library is synchronous and blocking, so each thread blocks while waiting for its request."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Asyncio: Python's Asynchronous IO\n`asyncio` is a library for writing concurrent code using the async/await syntax. It is especially efficient for I/O-bound tasks because it uses a single thread but can switch between tasks while waiting for I/O operations, avoiding blocking."
+      },
+      {
+        "type": "paragraph",
+        "value": "To use asyncio with web requests, an async HTTP client like `aiohttp` is needed instead of `requests`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how you can fetch multiple URLs concurrently using asyncio and aiohttp."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport aiohttp\n\nurls = [\n    'https://httpbin.org/delay/2',\n    'https://httpbin.org/delay/3',\n    'https://httpbin.org/delay/1'\n]\n\nasync def fetch(session, url):\n    print(f\"Starting {url}\")\n    async with session.get(url) as response:\n        text = await response.text()\n        print(f\"Done {url} with status {response.status}\")\n        return text\n\nasync def main():\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch(session, url) for url in urls]\n        responses = await asyncio.gather(*tasks)\n        print(f\"Fetched {len(responses)} pages.\")\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `fetch` function is asynchronous. When it awaits network I/O, the event loop switches to other tasks. This makes the code efficient and easy to manage without threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences:\n- **Threads** run code in parallel with OS threads, which is great for blocking I/O but can cause overhead.\n- **Asyncio** uses a single thread and runs multiple tasks cooperatively, which is more lightweight but requires async-compatible libraries.\n- For beginners, threading might be easier to start with since it uses familiar synchronous code, but asyncio offers better scalability for many concurrent network operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nFor concurrent web scraping, both threading and asyncio can improve speed over sequential scraping. If you want simple, quick concurrency and are already comfortable with synchronous code, try threading. If you want efficient handling of many connections and don't mind learning async/await syntax, asyncio plus aiohttp is a powerful choice."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to always respect website terms of service and avoid overwhelming servers with too many requests."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-exception-handling-approaches-in-python-best-practices-for-robust-code",
+    "title": "Comparing Exception Handling Approaches in Python: Best Practices for Robust Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn beginner-friendly best practices for handling exceptions in Python. Understand different approaches and how to write robust, error-resistant code.",
+    "videoUrl": "https://www.youtube.com/watch?v=pUBR-ofQtAQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Exception handling is a crucial part of writing robust Python programs. It helps your code gracefully handle unexpected errors without crashing. In this article, we'll compare common approaches to exception handling in Python and explore best practices you can use to make your code more reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most basic way to handle exceptions is by using a try/except block. This allows you to catch errors that occur in a block of code and respond to them. Let's see a simple example of catching a specific exception:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input('Enter a number: '))\n    print(f'You entered: {number}')\nexcept ValueError:\n    print('Oops! That was not a valid number.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, if the user inputs something that can't be converted to an integer, Python raises a ValueError. The except block catches it and prints a friendly message. Catching specific exceptions like this is important because it prevents you from hiding other unexpected problems."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, beginners use a general except statement that catches all exceptions without specifying the error type. For example:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # some code\n    pass\nexcept:\n    print('Something went wrong!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "While this looks convenient, it is considered a bad practice because it catches every possible exception, including system-exiting ones like KeyboardInterrupt or MemoryError. This can make debugging very difficult and may hide important issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "A better option is to catch multiple specific exceptions if needed. You can handle different errors in one block like this:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    value = int(input('Enter a number: '))\n    result = 10 / value\n    print(f'Result is {result}')\nexcept ValueError:\n    print('Please enter a valid integer.')\nexcept ZeroDivisionError:\n    print('Cannot divide by zero.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, you respond precisely to each type of error, making your program more user-friendly and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use the else and finally blocks to further control flow:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    value = int(input('Enter a number: '))\nexcept ValueError:\n    print('Invalid input!')\nelse:\n    print(f'You entered {value}, which is valid.')\nfinally:\n    print('This runs no matter what.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "The else block runs only if no exceptions were raised, and the finally block runs no matter what — even if an exception was raised or not. This is useful for clean-up actions like closing files or releasing resources."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize best practices for beginners:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Catch specific exceptions instead of a general except.\n2. Use multiple except blocks for different errors.\n3. Avoid leaving except blocks empty or with vague messages.\n4. Use else for code that should run only if no exceptions occur.\n5. Use finally to clean up resources regardless of errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these guidelines, your Python code will handle errors more gracefully and be easier to read and maintain."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-for-enhanced-query-performance",
+    "title": "Mastering SQL Window Functions for Enhanced Query Performance",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to write efficient, powerful queries with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=i_1UlpjRYRA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are a powerful tool that allow you to perform calculations across a set of rows related to the current row without collapsing the result set. They are extremely useful for advanced data analysis and can significantly enhance query performance by reducing the need for subqueries and joins."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore the basics of SQL window functions, understand when to use them, and walk through practical examples using common window functions such as ROW_NUMBER(), RANK(), and SUM()."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Window Function? \nA window function performs a calculation across a set of table rows that are somehow related to the current row. Unlike aggregate functions, window functions do not group rows into a single output row — they return a value for every row in the dataset."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Syntax\nMost window functions use the following syntax:\n\n\nfunction_name() OVER (\n  PARTITION BY column1, column2, ...\n  ORDER BY column3\n  ROWS BETWEEN frame_start AND frame_end\n)\n\n\n- **PARTITION BY** divides the result set into partitions to which the function is applied independently.\n- **ORDER BY** defines the order of rows in each partition.\n- **ROWS BETWEEN** specifies the window frame relative to the current row."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Dataset\nWe'll use a sample sales table to demonstrate window functions:\n\nsql\nCREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(100),\n  sales_date DATE,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', '2023-01-01', 500.00),\n(2, 'Bob', '2023-01-01', 300.00),\n(3, 'Alice', '2023-01-02', 700.00),\n(4, 'Alice', '2023-01-03', 600.00),\n(5, 'Bob', '2023-01-02', 1000.00);\n\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. ROW_NUMBER() - Assign Unique Row Numbers\nThis function assigns a unique number to each row within a partition, ordered by a specified column."
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, salesperson, sales_date, amount,\n       ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sales_date) AS row_num\nFROM sales;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query numbers sales for each salesperson ordered by sales date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. RANK() - Assign Ranking with Gaps\nRANK() assigns ranks with ties receiving the same rank and gaps in ranks after ties."
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, salesperson, amount,\n       RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS sales_rank\nFROM sales;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This ranks sales amounts per salesperson from highest to lowest."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. SUM() - Running Total\nUsing SUM() as a window function allows us to calculate running totals."
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, salesperson, sales_date, amount,\n       SUM(amount) OVER (PARTITION BY salesperson ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the running total is calculated for each salesperson ordered by sales date, showing cumulative sales over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Window Functions?\n- They keep detailed rows available instead of aggregating.\n- Improve query readability and maintainability.\n- Generally perform better compared to self-joins or subqueries for similar tasks.\n\nStart experimenting with these functions by replacing your common aggregation queries to see the performance and clarity benefits!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-server-performance-handling-large-scale-data-without-timeouts",
+    "title": "Optimizing SQL Server Performance: Handling Large-Scale Data Without Timeouts",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to prevent SQL Server command timeouts when working with large datasets by optimizing queries and using practical techniques.",
+    "videoUrl": "https://www.youtube.com/watch?v=7V1ooqV6Jz4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large-scale data in SQL Server, you may encounter command timeout errors due to long-running queries. These timeouts happen when SQL Server takes too long to return results, disrupting your applications. Fortunately, there are practical ways to optimize your queries and database settings to prevent these timeouts."
+      },
+      {
+        "type": "paragraph",
+        "value": "A key reason for long-running queries is inefficient data retrieval. To improve performance, always ensure your queries use indexes effectively. Indexes speed up searches by allowing SQL Server to quickly find relevant rows instead of scanning the whole table."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_lastname ON Customers(LastName);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common technique is to limit the amount of data processed at once. Use the WHERE clause to filter data and SELECT only the columns you need rather than using SELECT *."
+      },
+      {
+        "type": "code",
+        "value": "SELECT FirstName, LastName, Email FROM Customers WHERE Country = 'USA';"
+      },
+      {
+        "type": "paragraph",
+        "value": "If your query still takes too long, consider breaking it into smaller batches. This approach processes limited rows repeatedly, reducing resource consumption and avoiding timeouts."
+      },
+      {
+        "type": "code",
+        "value": "DECLARE @BatchSize INT = 1000;\nDECLARE @LastId INT = 0;\n\nWHILE (1=1)\nBEGIN\n    WITH CTE AS (\n        SELECT TOP (@BatchSize) * FROM Orders WHERE OrderId > @LastId ORDER BY OrderId\n    )\n    UPDATE CTE SET OrderStatus = 'Processed';\n\n    SET @LastId = (SELECT MAX(OrderId) FROM CTE);\n    IF @@ROWCOUNT < @BatchSize BREAK;\nEND"
+      },
+      {
+        "type": "paragraph",
+        "value": "Additionally, increasing the SQL Server command timeout setting can help during heavy operations, but it’s best used as a last resort after query optimization."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Increase timeout in application connection string\nServer=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;Connection Timeout=120;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, regularly updating statistics and rebuilding indexes keep your database optimized for query execution, helping to reduce the chance of timeouts."
+      },
+      {
+        "type": "code",
+        "value": "EXEC sp_updatestats;\nALTER INDEX ALL ON Customers REBUILD;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these beginner-friendly techniques—proper indexing, filtering data, batching operations, adjusting timeouts, and maintaining your database—you can handle large-scale data in SQL Server more efficiently and avoid frustrating timeout errors."
+      }
+    ]
   }
 ];
