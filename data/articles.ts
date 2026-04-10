@@ -50645,5 +50645,489 @@ export const articles = [
         "value": "By following these practices, you will reduce bugs and ensure accurate time data handling no matter where your users are."
       }
     ]
+  },
+  {
+    "slug": "build-dynamic-user-interfaces-javascript-dom",
+    "title": "How to Build Dynamic User Interfaces with JavaScript and the DOM API",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to create interactive and dynamic user interfaces using JavaScript and the DOM API, perfect for beginners eager to enhance their web development skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=NO5kUNxGIu0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Creating dynamic user interfaces (UIs) is a fundamental skill in web development. With JavaScript and the Document Object Model (DOM) API, you can change the content, structure, and style of your web pages on the fly without needing to reload the page. This tutorial is a beginner-friendly guide to building dynamic UIs using plain JavaScript and the DOM."
+      },
+      {
+        "type": "paragraph",
+        "value": "The DOM is a programming interface for web documents. It represents the page so your scripts can change the document structure, style, and content. Let's start with a simple example: adding new elements dynamically when a user clicks a button."
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Dynamic UI Demo</title>\n</head>\n<body>\n  <h1>My Dynamic List</h1>\n  <ul id=\"item-list\">\n    <li>Item 1</li>\n    <li>Item 2</li>\n  </ul>\n  <button id=\"add-button\">Add Item</button>\n\n  <script>\n    const addButton = document.getElementById('add-button');\n    const itemList = document.getElementById('item-list');\n    let itemCount = 2;\n\n    addButton.addEventListener('click', () => {\n      itemCount++;\n      const newItem = document.createElement('li');\n      newItem.textContent = `Item ${itemCount}`;\n      itemList.appendChild(newItem);\n    });\n  </script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we start with an unordered list (ul) with two list items (li). When the button is clicked, the script creates a new li element, sets its text, and appends it to the list. This way, the list grows dynamically with user interaction."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down some key DOM methods used here:\n- `document.getElementById()` retrieves an element by its ID.\n- `document.createElement()` creates a new HTML element.\n- `element.appendChild()` adds a new child element.\n- `element.textContent` sets or gets the text inside an element.\n- `element.addEventListener()` attaches an event listener to respond to user actions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Beyond adding elements, you can also change styles dynamically. For example, toggle the background color of a list item when clicked:"
+      },
+      {
+        "type": "code",
+        "value": "itemList.addEventListener('click', (event) => {\n  if(event.target.tagName === 'LI') {\n    const li = event.target;\n    if(li.style.backgroundColor === 'yellow') {\n      li.style.backgroundColor = '';\n    } else {\n      li.style.backgroundColor = 'yellow';\n    }\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, clicking on any list item toggles its background color. This shows how easily you can manipulate styles and respond to events dynamically."
+      },
+      {
+        "type": "paragraph",
+        "value": "Dynamic UIs don’t require complex frameworks to get started. With just JavaScript and the DOM API, you can create interactive web pages that respond to user input, update content, and enhance the user experience. Experiment with creating, modifying, and deleting elements to build dynamic interfaces."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to keep your code readable and organized. Use functions to encapsulate repeated behavior, and always test your dynamic changes to ensure your UI remains user-friendly and accessible."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-asynchronous-error-propagation-in-complex-javascript-applications",
+    "title": "Mastering Asynchronous Error Propagation in Complex JavaScript Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle and propagate errors effectively in asynchronous JavaScript code to build more reliable and maintainable applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In modern JavaScript applications, especially those that involve network requests, file operations, or timers, asynchronous code is very common. Handling errors properly in asynchronous workflows is crucial to ensure your app behaves correctly and provides meaningful feedback when something goes wrong."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore how errors propagate in asynchronous JavaScript using callbacks, promises, and async/await. We will also cover best practices to make your error handling clean and manageable."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Callback-Based Error Handling\nIn traditional callback patterns, the convention is to pass an error as the first argument to the callback. This approach is sometimes called the \"error-first callback.\" Here's an example:"
+      },
+      {
+        "type": "code",
+        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    const error = null;\n    const data = { id: 1, name: 'Alice' };\n    // Simulate error by setting error to an Error instance\n    // const error = new Error('Failed to fetch data');\n    callback(error, data);\n  }, 1000);\n}\n\nfetchData((err, data) => {\n  if (err) {\n    console.error('Error:', err.message);\n    return;\n  }\n  console.log('Data:', data);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern works, but it can quickly become hard to manage, especially if you have multiple layers of async calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Promises and Error Propagation\nPromises were introduced to make asynchronous code easier to read and handle errors more naturally. When a promise encounters an error (rejects), it automatically propagates down the `.catch()` chain."
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve({ id: 1, name: 'Alice' });\n      } else {\n        reject(new Error('Failed to fetch data'));\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(data => {\n    console.log('Data:', data);\n    // Simulate another async operation\n    return new Promise((resolve, reject) => {\n      setTimeout(() => reject(new Error('Secondary error')), 500);\n    });\n  })\n  .catch(err => {\n    // This catch will handle errors from fetchData and the secondary async operation\n    console.error('Error caught:', err.message);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "With promises, as you can see, errors bubble up until they are caught in a `.catch()` block. This makes it easier to write cleaner error handling logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Async/Await Syntax\nAsync/await builds on promises and allows you to write asynchronous code that looks synchronous. Error handling is done with try/catch blocks, which many find intuitive."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  // This simulates a function that returns a promise\n  return new Promise((resolve, reject) => {\n    setTimeout(() => reject(new Error('Fetch error')), 1000);\n  });\n}\n\nasync function main() {\n  try {\n    const data = await fetchData();\n    console.log('Data:', data);\n  } catch (err) {\n    console.error('Caught error:', err.message);\n  }\n}\n\nmain();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using async/await with try/catch gives you clear, linear code flow and powerful error handling for deeply nested async calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Asynchronous Error Propagation"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always handle promise rejections — either with `.catch()` or inside an async function's try/catch.\n2. Use async/await for cleaner and more readable code.\n3. Avoid mixing callbacks and promises; stick to one style per codebase.\n4. Bubble errors up to a centralized place for logging or user notifications.\n5. Add meaningful error messages and context to aid debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering error propagation in asynchronous JavaScript takes practice, but adopting promises and async/await patterns will dramatically improve your ability to write robust, maintainable applications."
+      }
+    ]
+  },
+  {
+    "slug": "maximizing-typescript-performance-with-advanced-memoization-techniques",
+    "title": "Maximizing TypeScript Performance with Advanced Memoization Techniques",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to speed up your TypeScript applications by using advanced memoization techniques to cache expensive function calls effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qwb-Za6cBws",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memoization is a powerful technique that can significantly improve the performance of your TypeScript applications. It works by caching the result of expensive function calls and returning the cached result when the same inputs occur again, avoiding unnecessary computations."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll cover the basics of memoization and then introduce advanced techniques such as handling multiple arguments, deep comparison, and leveraging TypeScript's strong typing to create safe and efficient memoized functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Suppose we have a slow function that computes the nth Fibonacci number recursively:"
+      },
+      {
+        "type": "code",
+        "value": "function fibonacci(n: number): number {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is very inefficient for larger n because it recalculates the same values many times. Memoization can help by storing results for each input."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple memoization function for a single-argument function:"
+      },
+      {
+        "type": "code",
+        "value": "function memoize<T extends (arg: any) => any>(fn: T): T {\n  const cache = new Map<any, ReturnType<T>>();\n  return ((arg: any) => {\n    if (cache.has(arg)) {\n      return cache.get(arg)!;\n    }\n    const result = fn(arg);\n    cache.set(arg, result);\n    return result;\n  }) as T;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's apply this to our Fibonacci function:"
+      },
+      {
+        "type": "code",
+        "value": "const memoizedFibonacci = memoize(fibonacci);\n\nconsole.log(memoizedFibonacci(40));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, the function runs much faster when you call it multiple times with the same input because it reuses the cached result. However, this simple memoize function only works for functions with one argument and uses strict equality, which may not work well for objects or multiple parameters."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle multiple arguments, we can serialize the arguments as a key to use in the cache:"
+      },
+      {
+        "type": "code",
+        "value": "function memoizeMultiArgs<T extends (...args: any[]) => any>(fn: T): T {\n  const cache = new Map<string, ReturnType<T>>();\n  return ((...args: any[]) => {\n    const key = JSON.stringify(args);\n    if (cache.has(key)) {\n      return cache.get(key)!;\n    }\n    const result = fn(...args);\n    cache.set(key, result);\n    return result;\n  }) as T;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This works nicely but has limitations: JSON.stringify can be slow for large objects and won't handle functions or cyclical references. For better performance and deep comparison, you can use more advanced techniques like custom hashing or WeakMaps for object arguments."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of memoizing functions with object arguments using WeakMap:"
+      },
+      {
+        "type": "code",
+        "value": "function memoizeObjectArgs<T extends (...args: any[]) => any>(fn: T): T {\n  const rootCache = new WeakMap<object, any>();\n  return function memoized(...args: any[]): any {\n    let currentCache = rootCache;\n\n    for (let i = 0; i < args.length - 1; i++) {\n      const arg = args[i];\n      if (typeof arg !== 'object' || arg === null) {\n        // fallback for primitive values, use Map instead or serialize\n        throw new Error('memoizeObjectArgs supports only object arguments');\n      }\n      if (!currentCache.has(arg)) {\n        currentCache.set(arg, new WeakMap());\n      }\n      currentCache = currentCache.get(arg);\n    }\n\n    // Last argument cache\n    const lastArg = args[args.length - 1];\n    if (currentCache.has(lastArg)) {\n      return currentCache.get(lastArg);\n    }\n\n    const result = fn(...args);\n    currentCache.set(lastArg, result);\n    return result;\n  } as T;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach uses nested WeakMaps to cache results keyed by object references and is ideal when your function arguments are objects that don’t change reference often."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, remember that memoization is great for pure, deterministic functions that don't have side effects and always return the same result given the same input. Avoid memoizing functions with random outputs, side effects, or where inputs change frequently."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, these advanced memoization techniques can help you optimize your TypeScript code by reducing expensive recalculations. Choose the right memoization strategy based on your function’s arguments and usage patterns."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-utility-types-for-error-handling",
+    "title": "TypeScript Utility Types You Didn’t Know You Could Leverage for Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Discover how TypeScript’s built-in utility types can simplify and improve error handling in your applications with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=v86ggw3LoW0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of writing robust TypeScript applications. While many developers focus on try-catch blocks or custom error classes, TypeScript offers several powerful utility types that can help you handle errors more effectively and elegantly at the type level. In this article, we'll explore some of these utility types and show you practical ways to leverage them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the most common challenges is representing a function that can either return a valid result or an error object. Traditionally, this is done using union types like `T | Error`. TypeScript utility types can improve this pattern, ensuring safer and clearer handling of success and error types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by exploring how the `ReturnType` and `Exclude` utility types can help in error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "`ReturnType` extracts the return type of a function, which can be useful when you want to handle different outcomes of that function. Suppose you have a function that returns either a `User` object or a `CustomError` type:"
+      },
+      {
+        "type": "code",
+        "value": "type User = {\n  id: number;\n  name: string;\n};\n\ntype CustomError = {\n  message: string;\n  code: number;\n};\n\nfunction fetchUser(id: number): User | CustomError {\n  if (id === 1) {\n    return { id: 1, name: \"Alice\" };\n  } else {\n    return { message: \"User not found\", code: 404 };\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "We can capture the return type using `ReturnType<typeof fetchUser>` and use `Exclude` to narrow down to errors or success types."
+      },
+      {
+        "type": "code",
+        "value": "type FetchUserReturn = ReturnType<typeof fetchUser>;\n\n// To get the success type (User) only:\ntype Success = Exclude<FetchUserReturn, CustomError>;\n\n// To get the error type only:\ntype Failure = Extract<FetchUserReturn, CustomError>;\n\n// Usage example\nfunction handleResult(result: FetchUserReturn) {\n  if (\"message\" in result) {\n    // result is inferred as CustomError\n    console.error(`Error: ${result.message} (code: ${result.code})`);\n  } else {\n    // result is inferred as User\n    console.log(`User fetched: ${result.name}`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another handy utility type for error handling is `Partial<T>`. It allows you to represent objects where some fields might be missing, which is useful for partial error data or recovery states."
+      },
+      {
+        "type": "code",
+        "value": "type ErrorDetails = {\n  message: string;\n  code: number;\n  stack?: string;\n};\n\n// Sometimes you might receive only part of the error information\nconst partialError: Partial<ErrorDetails> = {\n  message: \"Something went wrong\"\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "`Required<T>` works oppositely by making all fields required, which can be useful in validation phases where you want to ensure all error information is present."
+      },
+      {
+        "type": "code",
+        "value": "function logCompleteError(error: Required<ErrorDetails>) {\n  console.error(`Error: ${error.message}, Code: ${error.code}, Stack: ${error.stack}`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, consider `Record<K, T>` for structuring collections of errors by keys, for example, mapping error codes to messages dynamically."
+      },
+      {
+        "type": "code",
+        "value": "const errorMessages: Record<number, string> = {\n  404: \"Not Found\",\n  500: \"Internal Server Error\",\n  401: \"Unauthorized\"\n};\n\nfunction getErrorMessage(code: number): string {\n  return errorMessages[code] || \"Unknown error\";\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using TypeScript’s utility types improves the safety and clarity of your error handling logic, catching mistakes early through static typing. As you grow your TypeScript skills, try combining these utilities to create robust error handling solutions that make your code more predictable and maintainable."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-metaclasses-advanced-guide-dynamic-class-creation",
+    "title": "Mastering Python Metaclasses: An Advanced Guide to Dynamic Class Creation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how Python metaclasses work and how to use them to create dynamic, customizable classes. This beginner-friendly tutorial covers metaclass basics with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=g-qRKZD3FgE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is known for its flexibility and powerful features. One of the most advanced and interesting features is metaclasses. If you've worked with classes, you might wonder how classes themselves are created and controlled. Metaclasses allow you to customize class creation and are a powerful tool for advanced Python programming. This tutorial will introduce you to metaclasses in a beginner-friendly way."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Metaclass?\n\nIn Python, everything is an object—including classes. Just as objects are instances of classes, classes are instances of metaclasses. Simply put, a metaclass is the \"class of a class\" that defines how a class behaves. Normally, Python uses `type` as the default metaclass to create all classes. But you can create your own metaclass to customize class creation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Metaclasses?\n\nMetaclasses are useful when you want to:\n- Control or modify a class at the time it's created\n- Register classes automatically\n- Enforce rules or constraints on classes\n- Implement APIs or frameworks that require dynamic class behavior"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Basic Metaclass Example\nLet's start with a simple example of a metaclass that prints a message when a new class is created."
+      },
+      {
+        "type": "code",
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\n# When you run this, it prints:\n# Creating class MyClass"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `MyMeta` is a metaclass inheriting from `type`. The `__new__` method is called when a class is created. By printing inside `__new__`, you see when the class `MyClass` is created."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understanding `__new__` and `__init__` in Metaclasses\nThe metaclass's `__new__` method creates the class object, and `__init__` initializes it. You can override them to customize class creation."
+      },
+      {
+        "type": "code",
+        "value": "class VerboseMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"__new__ for {name}\")\n        return super().__new__(cls, name, bases, dct)\n\n    def __init__(cls, name, bases, dct):\n        print(f\"__init__ for {name}\")\n        super().__init__(name, bases, dct)\n\nclass Demo(metaclass=VerboseMeta):\n    pass\n\n# Output:\n# __new__ for Demo\n# __init__ for Demo"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Case: Automatically Adding Methods\nLet's say you want every class to have a `hello()` method that prints a greeting. You can add it in the metaclass."
+      },
+      {
+        "type": "code",
+        "value": "def hello_method(self):\n    print(f\"Hello from {self.__class__.__name__}!\")\n\nclass AutoHelloMeta(type):\n    def __new__(cls, name, bases, dct):\n        if 'hello' not in dct:\n            dct['hello'] = hello_method\n        return super().__new__(cls, name, bases, dct)\n\nclass Person(metaclass=AutoHelloMeta):\n    pass\n\np = Person()\np.hello()  # Output: Hello from Person!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Metaclasses in Python control how classes are created.\n- They are defined by inheriting from `type`.\n- The `__new__` and `__init__` methods of metaclasses create and initialize classes.\n- Metaclasses let you modify or add class attributes and methods dynamically.\n\nThough powerful, metaclasses are an advanced feature — use them sparingly and when necessary."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding metaclasses, you unlock the ability to create highly dynamic and flexible Python programs that adapt or extend Python’s behavior itself."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-pythons-exception-chaining-for-cleaner-debugging",
+    "title": "Harnessing Python's Exception Chaining for Cleaner Debugging",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's exception chaining feature to write clearer error handling code and simplify debugging.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing programs, errors happen. Handling these errors properly is crucial to make debugging easier. In Python, exception chaining is a powerful feature that helps you keep track of the original error when a new exception is raised. This makes understanding the root cause of an error much simpler."
+      },
+      {
+        "type": "paragraph",
+        "value": "Exception chaining occurs when you raise a new exception during an error but want to keep the context of the original error. Python supports this by using the `raise ... from ...` syntax. Let's see how this works with an example."
+      },
+      {
+        "type": "code",
+        "value": "def divide(x, y):\n    try:\n        result = x / y\n    except ZeroDivisionError as e:\n        # Raise a new exception but keep original context\n        raise ValueError('Invalid inputs for division') from e\n    return result\n\ntry:\n    divide(10, 0)\nexcept ValueError as err:\n    print('Caught an error:', err)\n    # The original ZeroDivisionError is still shown in the traceback"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, when dividing by zero, a `ZeroDivisionError` is raised inside the `divide` function. Instead of letting it go uncaught, we catch it and raise a `ValueError` to give a clearer message for this specific function. Using `raise ... from` keeps the original `ZeroDivisionError` attached to the new `ValueError`. This helps anyone debugging the code to trace the error chain easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "Why does this matter? Without exception chaining, the original low-level error could be lost, making it harder to find and fix bugs. Chaining offers a clear error history, improving code readability and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, whenever you want to re-raise an exception with a new error type or message but keep the original cause visible, use the `raise ... from ...` syntax. This simple technique can make your debugging experience smoother and your code cleaner."
+      }
+    ]
+  },
+  {
+    "slug": "handling-recursive-queries-edge-cases-hierarchical-data-sql",
+    "title": "Handling Recursive Queries and Edge Cases in Hierarchical Data with SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to write recursive SQL queries to traverse hierarchical data and handle common edge cases like cycles and missing parents with easy-to-understand examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=2mC8GMSORaE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Hierarchical data is commonly used to represent relationships like organizational charts, file directories, or category trees. SQL provides a powerful feature called Common Table Expressions (CTEs), specifically recursive CTEs, to query such hierarchical structures efficiently. In this tutorial, you will learn how to write recursive SQL queries to fetch hierarchical data, along with practical tips to handle edge cases such as cyclic references and missing parents."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by considering a simple table called `employees`, which contains an `id`, a `name`, and a `manager_id`. The `manager_id` references another employee in the same table, creating a hierarchy where each employee reports to their manager."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE employees (\n    id INT PRIMARY KEY,\n    name VARCHAR(100),\n    manager_id INT NULL\n);\n\nINSERT INTO employees (id, name, manager_id) VALUES\n(1, 'Alice', NULL),  -- CEO\n(2, 'Bob', 1),       -- Bob reports to Alice\n(3, 'Charlie', 2),   -- Charlie reports to Bob\n(4, 'Diana', 2),     -- Diana reports to Bob\n(5, 'Eve', 3);       -- Eve reports to Charlie"
+      },
+      {
+        "type": "paragraph",
+        "value": "To get the full hierarchy starting from the CEO (Alice), you can write a recursive CTE that begins with the root employee and recursively adds all direct reports."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    -- Anchor member: start with the CEO (manager_id IS NULL)\n    SELECT id, name, manager_id, 0 AS level\n    FROM employees\n    WHERE manager_id IS NULL\n    \n    UNION ALL\n    \n    -- Recursive member: get employees who report to the current level\n    SELECT e.id, e.name, e.manager_id, eh.level + 1\n    FROM employees e\n    INNER JOIN EmployeeHierarchy eh ON e.manager_id = eh.id\n)\nSELECT * FROM EmployeeHierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query produces the entire employee hierarchy with a `level` column indicating how deep each employee is in the tree. However, in real-world data, you might face some edge cases that can cause problems with recursive queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common edge case is a **cycle** in the data. For example, if an employee mistakenly has themselves or one of their descendants as their manager, the recursive query could loop indefinitely. To prevent this, tracking visited nodes and stopping recursion when a cycle is detected is important."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    SELECT id, name, manager_id, 0 AS level, ARRAY[id] AS path\n    FROM employees\n    WHERE manager_id IS NULL\n\n    UNION ALL\n\n    SELECT e.id, e.name, e.manager_id, eh.level + 1, path || e.id\n    FROM employees e\n    JOIN EmployeeHierarchy eh ON e.manager_id = eh.id\n    WHERE NOT e.id = ANY(path)  -- Prevent cycles by checking if id already in path\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we add a `path` array that keeps track of all visited employee IDs in the current recursion branch. The `WHERE NOT e.id = ANY(path)` condition stops the recursion if a cycle is detected."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case is having employees with **missing parents** where `manager_id` references a non-existent employee. This can cause your recursive query to miss those employees. To find these, you can run a simple query checking for orphans."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees\nWHERE manager_id IS NOT NULL\n  AND manager_id NOT IN (SELECT id FROM employees);"
+      },
+      {
+        "type": "paragraph",
+        "value": "If your data contains such orphans, you might want to either clean the data or adjust your queries to include them. For example, starting the recursion from all employees with missing or null managers ensures you don't miss any part of the hierarchy."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    SELECT id, name, manager_id, 0 AS level, ARRAY[id] AS path\n    FROM employees\n    WHERE manager_id IS NULL OR manager_id NOT IN (SELECT id FROM employees)\n\n    UNION ALL\n\n    SELECT e.id, e.name, e.manager_id, eh.level + 1, path || e.id\n    FROM employees e\n    JOIN EmployeeHierarchy eh ON e.manager_id = eh.id\n    WHERE NOT e.id = ANY(path)\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, recursive CTEs in SQL are powerful for handling hierarchical data. Always consider edge cases like cycles and missing parents to make your queries robust and reliable."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-by-understanding-execution-plans",
+    "title": "Optimizing SQL Queries by Understanding Execution Plans in Depth",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize your SQL queries by interpreting and understanding execution plans in detail. This beginner-friendly guide will help you spot common errors and improve query performance effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, writing a query that retrieves the right data is only the first step. To ensure your queries run efficiently, you need to understand how the database executes them. This is where execution plans come in. An execution plan shows how the database engine processes your SQL query, step by step. Understanding this plan helps you identify errors and bottlenecks that slow down your queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can generate an execution plan in most SQL databases using commands such as `EXPLAIN` or `EXPLAIN PLAN`. The output will show the order of operations, the use of indexes, joins, scans, and other details. Analyzing these details can help you catch errors like missing indexes or inefficient joins, which impact query speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say you have a query like this:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE customer_id = 10;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can look at the execution plan to see if the database is using an index on `customer_id`. An index can greatly speed up lookups. Here’s how to view an execution plan in PostgreSQL:"
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN ANALYZE SELECT * FROM orders WHERE customer_id = 10;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The plan might show a sequential scan if there’s no index, which means the database checks every row. That’s slow! You can fix this by creating an index:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Then, run your `EXPLAIN` command again to verify that the query now uses an index scan instead of a sequential scan."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors that hurt query performance include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Missing indexes on frequently queried columns\n- Using SELECT * instead of selecting only needed columns\n- Inefficient joins without proper join conditions\n- Functions applied on indexed columns in WHERE clauses preventing index use"
+      },
+      {
+        "type": "paragraph",
+        "value": "By regularly checking execution plans and fixing common issues, you’ll write faster, more efficient SQL queries. Practice interpreting these plans and experimenting with different indexing or query structures to see what improves performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding execution plans might seem complex at first, but it quickly becomes an essential skill in writing high-quality SQL once you start using it regularly."
+      }
+    ]
   }
 ];

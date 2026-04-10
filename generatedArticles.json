@@ -1,613 +1,485 @@
 [
   {
-    "slug": "build-scalable-data-models-javascript-real-time",
-    "title": "How to Build Scalable Data Models in JavaScript for Real-Time Applications",
+    "slug": "build-dynamic-user-interfaces-javascript-dom",
+    "title": "How to Build Dynamic User Interfaces with JavaScript and the DOM API",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to design scalable and efficient data models in JavaScript to power real-time applications that handle dynamic data smoothly.",
-    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "description": "Learn how to create interactive and dynamic user interfaces using JavaScript and the DOM API, perfect for beginners eager to enhance their web development skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=NO5kUNxGIu0",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time applications like chat apps, dashboards, and live updates require data models that can efficiently manage frequent and rapid data changes. In this tutorial, you’ll learn how to build scalable data models in JavaScript that are flexible, easy to maintain, and optimized for real-time operations."
+        "value": "Creating dynamic user interfaces (UIs) is a fundamental skill in web development. With JavaScript and the Document Object Model (DOM) API, you can change the content, structure, and style of your web pages on the fly without needing to reload the page. This tutorial is a beginner-friendly guide to building dynamic UIs using plain JavaScript and the DOM."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Understand the Importance of Scalability in Real-Time Apps\nReal-time apps often handle multiple simultaneous users and data streams. Your data model needs to process, update, and transmit data without lag or bottlenecks. Start with a structure that supports quick reads and writes."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 2: Use Immutable Data Structures\nImmutable data helps avoid unintended side-effects when your data updates. JavaScript’s objects and arrays can be copied rather than mutated, supporting predictable state updates."
+        "value": "The DOM is a programming interface for web documents. It represents the page so your scripts can change the document structure, style, and content. Let's start with a simple example: adding new elements dynamically when a user clicks a button."
       },
       {
         "type": "code",
-        "value": "const oldState = { users: ['Alice', 'Bob'] };\nconst newState = { ...oldState, users: [...oldState.users, 'Charlie'] };\nconsole.log(newState); // { users: ['Alice', 'Bob', 'Charlie'] }"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Dynamic UI Demo</title>\n</head>\n<body>\n  <h1>My Dynamic List</h1>\n  <ul id=\"item-list\">\n    <li>Item 1</li>\n    <li>Item 2</li>\n  </ul>\n  <button id=\"add-button\">Add Item</button>\n\n  <script>\n    const addButton = document.getElementById('add-button');\n    const itemList = document.getElementById('item-list');\n    let itemCount = 2;\n\n    addButton.addEventListener('click', () => {\n      itemCount++;\n      const newItem = document.createElement('li');\n      newItem.textContent = `Item ${itemCount}`;\n      itemList.appendChild(newItem);\n    });\n  </script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Normalize Your Data\nNormalize data by storing entities in dictionaries (objects) indexed by unique IDs. This reduces data redundancy and simplifies updates."
+        "value": "In this example, we start with an unordered list (ul) with two list items (li). When the button is clicked, the script creates a new li element, sets its text, and appends it to the list. This way, the list grows dynamically with user interaction."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down some key DOM methods used here:\n- `document.getElementById()` retrieves an element by its ID.\n- `document.createElement()` creates a new HTML element.\n- `element.appendChild()` adds a new child element.\n- `element.textContent` sets or gets the text inside an element.\n- `element.addEventListener()` attaches an event listener to respond to user actions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Beyond adding elements, you can also change styles dynamically. For example, toggle the background color of a list item when clicked:"
       },
       {
         "type": "code",
-        "value": "const messages = {\n  'msg1': { id: 'msg1', userId: 'user1', content: 'Hello!' },\n  'msg2': { id: 'msg2', userId: 'user2', content: 'Hi!' }\n};\n\nconst users = {\n  'user1': { id: 'user1', name: 'Alice' },\n  'user2': { id: 'user2', name: 'Bob' }\n};"
+        "value": "itemList.addEventListener('click', (event) => {\n  if(event.target.tagName === 'LI') {\n    const li = event.target;\n    if(li.style.backgroundColor === 'yellow') {\n      li.style.backgroundColor = '';\n    } else {\n      li.style.backgroundColor = 'yellow';\n    }\n  }\n});"
       },
       {
         "type": "paragraph",
-        "value": "This way, when you need to update a user’s name, you modify it in one place without updating multiple message objects."
+        "value": "Here, clicking on any list item toggles its background color. This shows how easily you can manipulate styles and respond to events dynamically."
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Use Event-Driven Updates\nReal-time apps benefit from event-driven data changes where components subscribe to updates. Create a simple event emitter to manage data changes."
-      },
-      {
-        "type": "code",
-        "value": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n  on(event, listener) {\n    (this.events[event] = this.events[event] || []).push(listener);\n  }\n  emit(event, data) {\n    (this.events[event] || []).forEach(listener => listener(data));\n  }\n}\n\nconst dataEvents = new EventEmitter();\n\ndataEvents.on('userUpdate', (user) => {\n  console.log('User updated:', user);\n});\n\ndataEvents.emit('userUpdate', { id: 'user1', name: 'Alice Smith' });"
+        "value": "Dynamic UIs don’t require complex frameworks to get started. With just JavaScript and the DOM API, you can create interactive web pages that respond to user input, update content, and enhance the user experience. Experiment with creating, modifying, and deleting elements to build dynamic interfaces."
       },
       {
         "type": "paragraph",
-        "value": "### Step 5: Handle Large Data with Pagination or Windowing\nAvoid loading all data at once in real-time views. Use pagination or virtual scrolling to keep your app responsive."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nBy normalizing data, using immutable updates, and an event-driven approach, you can build scalable data models in JavaScript that keep your real-time applications performing smoothly as they grow."
+        "value": "Remember to keep your code readable and organized. Use functions to encapsulate repeated behavior, and always test your dynamic changes to ensure your UI remains user-friendly and accessible."
       }
     ]
   },
   {
-    "slug": "understanding-javascript-event-loop-beginners-async-errors",
-    "title": "Understanding JavaScript Event Loop: A Beginner's Guide to Async Errors",
+    "slug": "mastering-asynchronous-error-propagation-in-complex-javascript-applications",
+    "title": "Mastering Asynchronous Error Propagation in Complex JavaScript Applications",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how JavaScript's event loop works and how it affects handling asynchronous errors, with easy examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=eiC58R16hb8",
+    "description": "Learn how to handle and propagate errors effectively in asynchronous JavaScript code to build more reliable and maintainable applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a single-threaded language, meaning it can only execute one task at a time. However, modern web applications often perform asynchronous tasks like fetching data or reading files without blocking the main thread. This is possible thanks to the event loop. Understanding the event loop is crucial, especially when dealing with errors in asynchronous code."
+        "value": "In modern JavaScript applications, especially those that involve network requests, file operations, or timers, asynchronous code is very common. Handling errors properly in asynchronous workflows is crucial to ensure your app behaves correctly and provides meaningful feedback when something goes wrong."
       },
       {
         "type": "paragraph",
-        "value": "The event loop continuously checks the call stack and the task queues (microtask and macrotask queues). When the call stack is empty, it takes the first task from the queues and pushes it onto the stack for execution. This behavior impacts how and when errors from asynchronous operations are caught."
+        "value": "Let's explore how errors propagate in asynchronous JavaScript using callbacks, promises, and async/await. We will also cover best practices to make your error handling clean and manageable."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at an example where an asynchronous error occurs inside a setTimeout callback:"
+        "value": "### Callback-Based Error Handling\nIn traditional callback patterns, the convention is to pass an error as the first argument to the callback. This approach is sometimes called the \"error-first callback.\" Here's an example:"
       },
       {
         "type": "code",
-        "value": "setTimeout(() => {\n  // This error is asynchronous\n  throw new Error('Async error inside setTimeout');\n}, 1000);\n\n// This will not catch the async error\ntry {\n  setTimeout(() => {\n    throw new Error('Async error inside setTimeout');\n  }, 1000);\n} catch (err) {\n  console.log('Caught error:', err);\n}"
+        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    const error = null;\n    const data = { id: 1, name: 'Alice' };\n    // Simulate error by setting error to an Error instance\n    // const error = new Error('Failed to fetch data');\n    callback(error, data);\n  }, 1000);\n}\n\nfetchData((err, data) => {\n  if (err) {\n    console.error('Error:', err.message);\n    return;\n  }\n  console.log('Data:', data);\n});"
       },
       {
         "type": "paragraph",
-        "value": "In this code, the try-catch block won’t catch the error thrown inside setTimeout because the callback runs later, after the try-catch block is already done. This is a common pitfall for beginners learning asynchronous JavaScript."
+        "value": "This pattern works, but it can quickly become hard to manage, especially if you have multiple layers of async calls."
       },
       {
         "type": "paragraph",
-        "value": "To properly handle asynchronous errors, you can use event listeners, promises, or Async/Await syntax with try-catch. Here's how to catch errors using a Promise:"
+        "value": "### Promises and Error Propagation\nPromises were introduced to make asynchronous code easier to read and handle errors more naturally. When a promise encounters an error (rejects), it automatically propagates down the `.catch()` chain."
       },
       {
         "type": "code",
-        "value": "function asyncOperation() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Error inside promise'));\n    }, 1000);\n  });\n}\n\nasyncOperation()\n  .catch(err => {\n    console.log('Caught async error:', err.message);\n  });"
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve({ id: 1, name: 'Alice' });\n      } else {\n        reject(new Error('Failed to fetch data'));\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(data => {\n    console.log('Data:', data);\n    // Simulate another async operation\n    return new Promise((resolve, reject) => {\n      setTimeout(() => reject(new Error('Secondary error')), 500);\n    });\n  })\n  .catch(err => {\n    // This catch will handle errors from fetchData and the secondary async operation\n    console.error('Error caught:', err.message);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "This example shows that errors inside asynchronous operations can be caught by attaching a .catch() to the promise. You can also use Async/Await with try-catch for cleaner syntax:"
+        "value": "With promises, as you can see, errors bubble up until they are caught in a `.catch()` block. This makes it easier to write cleaner error handling logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Async/Await Syntax\nAsync/await builds on promises and allows you to write asynchronous code that looks synchronous. Error handling is done with try/catch blocks, which many find intuitive."
       },
       {
         "type": "code",
-        "value": "async function runAsync() {\n  try {\n    await asyncOperation();\n  } catch(err) {\n    console.log('Caught async error with await:', err.message);\n  }\n}\n\nrunAsync();"
+        "value": "async function fetchData() {\n  // This simulates a function that returns a promise\n  return new Promise((resolve, reject) => {\n    setTimeout(() => reject(new Error('Fetch error')), 1000);\n  });\n}\n\nasync function main() {\n  try {\n    const data = await fetchData();\n    console.log('Data:', data);\n  } catch (err) {\n    console.error('Caught error:', err.message);\n  }\n}\n\nmain();"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, the key points for beginners are: JavaScript’s event loop defers asynchronous callbacks so try-catch blocks outside these callbacks won’t catch errors; use Promises and Async/Await with proper error handling to catch async errors effectively."
+        "value": "Using async/await with try/catch gives you clear, linear code flow and powerful error handling for deeply nested async calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Asynchronous Error Propagation"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always handle promise rejections — either with `.catch()` or inside an async function's try/catch.\n2. Use async/await for cleaner and more readable code.\n3. Avoid mixing callbacks and promises; stick to one style per codebase.\n4. Bubble errors up to a centralized place for logging or user notifications.\n5. Add meaningful error messages and context to aid debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering error propagation in asynchronous JavaScript takes practice, but adopting promises and async/await patterns will dramatically improve your ability to write robust, maintainable applications."
       }
     ]
   },
   {
-    "slug": "designing-scalable-data-models-typescript-large-scale-apps",
-    "title": "Designing Scalable Data Models in TypeScript for Large-Scale Applications",
+    "slug": "maximizing-typescript-performance-with-advanced-memoization-techniques",
+    "title": "Maximizing TypeScript Performance with Advanced Memoization Techniques",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to design scalable and maintainable data models in TypeScript to manage complexity and performance in large-scale applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=Dl-BdxNRUqs",
+    "description": "Learn how to speed up your TypeScript applications by using advanced memoization techniques to cache expensive function calls effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qwb-Za6cBws",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building large-scale applications in TypeScript, designing scalable and maintainable data models is crucial. Good data models help manage complexity, ensure data consistency, and improve performance. In this article, we'll explore practical strategies to design scalable TypeScript interfaces and classes that grow with your application."
+        "value": "Memoization is a powerful technique that can significantly improve the performance of your TypeScript applications. It works by caching the result of expensive function calls and returning the cached result when the same inputs occur again, avoiding unnecessary computations."
       },
       {
         "type": "paragraph",
-        "value": "### Understand Your Data Structure and Domain"
+        "value": "In this tutorial, we'll cover the basics of memoization and then introduce advanced techniques such as handling multiple arguments, deep comparison, and leveraging TypeScript's strong typing to create safe and efficient memoized functions."
       },
       {
         "type": "paragraph",
-        "value": "Before writing any code, analyze your application's core entities and relationships. Identify key data points, how entities interact, and potential future requirements. This upfront understanding will guide your model design to be flexible and extensible."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Use Interfaces and Types for Clear Contracts"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript interfaces and types help define clear contracts for your data structures. Use interfaces to model entities with properties, and types for unions or composite structures."
+        "value": "Let's start with a simple example. Suppose we have a slow function that computes the nth Fibonacci number recursively:"
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: string;\n  name: string;\n  email: string;\n  role: UserRole;\n}\n\ntype UserRole = 'admin' | 'editor' | 'viewer';"
+        "value": "function fibonacci(n: number): number {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Modularize Your Models"
+        "value": "This is very inefficient for larger n because it recalculates the same values many times. Memoization can help by storing results for each input."
       },
       {
         "type": "paragraph",
-        "value": "Break down large models into smaller, reusable components. This modular approach reduces duplication and makes it easier to update or extend specific parts without affecting others."
+        "value": "Here's a simple memoization function for a single-argument function:"
       },
       {
         "type": "code",
-        "value": "interface Address {\n  street: string;\n  city: string;\n  zipCode: string;\n}\n\ninterface User {\n  id: string;\n  name: string;\n  email: string;\n  address?: Address; // Optional nested object\n}"
+        "value": "function memoize<T extends (arg: any) => any>(fn: T): T {\n  const cache = new Map<any, ReturnType<T>>();\n  return ((arg: any) => {\n    if (cache.has(arg)) {\n      return cache.get(arg)!;\n    }\n    const result = fn(arg);\n    cache.set(arg, result);\n    return result;\n  }) as T;\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Use Utility Types to Manage Optional and Read-Only Fields"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript provides utility types like `Partial`, `Readonly`, and `Pick` to create flexible variants of your models without redefining them."
+        "value": "Let's apply this to our Fibonacci function:"
       },
       {
         "type": "code",
-        "value": "type UserUpdate = Partial<User>; // All fields optional for update scenarios\n\ntype ReadonlyUser = Readonly<User>; // Immutable user data"
+        "value": "const memoizedFibonacci = memoize(fibonacci);\n\nconsole.log(memoizedFibonacci(40));"
       },
       {
         "type": "paragraph",
-        "value": "### Define Classes for Complex Behavior"
+        "value": "Now, the function runs much faster when you call it multiple times with the same input because it reuses the cached result. However, this simple memoize function only works for functions with one argument and uses strict equality, which may not work well for objects or multiple parameters."
       },
       {
         "type": "paragraph",
-        "value": "While interfaces describe shape, classes allow you to add methods and logic to your data models. This is useful when your entities need behavior, such as validation or computed properties."
+        "value": "To handle multiple arguments, we can serialize the arguments as a key to use in the cache:"
       },
       {
         "type": "code",
-        "value": "class UserModel {\n  constructor(\n    public id: string,\n    public name: string,\n    public email: string,\n    public role: UserRole\n  ) {}\n\n  isAdmin(): boolean {\n    return this.role === 'admin';\n  }\n}"
+        "value": "function memoizeMultiArgs<T extends (...args: any[]) => any>(fn: T): T {\n  const cache = new Map<string, ReturnType<T>>();\n  return ((...args: any[]) => {\n    const key = JSON.stringify(args);\n    if (cache.has(key)) {\n      return cache.get(key)!;\n    }\n    const result = fn(...args);\n    cache.set(key, result);\n    return result;\n  }) as T;\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Optimize with Discriminated Unions for Variant Data"
+        "value": "This works nicely but has limitations: JSON.stringify can be slow for large objects and won't handle functions or cyclical references. For better performance and deep comparison, you can use more advanced techniques like custom hashing or WeakMaps for object arguments."
       },
       {
         "type": "paragraph",
-        "value": "For entities that have variants differing by type, use discriminated unions to clearly define each variant and handle them safely."
+        "value": "Here's an example of memoizing functions with object arguments using WeakMap:"
       },
       {
         "type": "code",
-        "value": "interface AdminUser {\n  type: 'admin';\n  id: string;\n  permissions: string[];\n}\n\ninterface RegularUser {\n  type: 'regular';\n  id: string;\n  profileComplete: boolean;\n}\n\ntype User = AdminUser | RegularUser;\n\nfunction getUserInfo(user: User) {\n  if (user.type === 'admin') {\n    return `Admin with permissions: ${user.permissions.join(', ')}`;\n  } else {\n    return `Regular user completed profile? ${user.profileComplete}`;\n  }\n}"
+        "value": "function memoizeObjectArgs<T extends (...args: any[]) => any>(fn: T): T {\n  const rootCache = new WeakMap<object, any>();\n  return function memoized(...args: any[]): any {\n    let currentCache = rootCache;\n\n    for (let i = 0; i < args.length - 1; i++) {\n      const arg = args[i];\n      if (typeof arg !== 'object' || arg === null) {\n        // fallback for primitive values, use Map instead or serialize\n        throw new Error('memoizeObjectArgs supports only object arguments');\n      }\n      if (!currentCache.has(arg)) {\n        currentCache.set(arg, new WeakMap());\n      }\n      currentCache = currentCache.get(arg);\n    }\n\n    // Last argument cache\n    const lastArg = args[args.length - 1];\n    if (currentCache.has(lastArg)) {\n      return currentCache.get(lastArg);\n    }\n\n    const result = fn(...args);\n    currentCache.set(lastArg, result);\n    return result;\n  } as T;\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "This approach uses nested WeakMaps to cache results keyed by object references and is ideal when your function arguments are objects that don’t change reference often."
       },
       {
         "type": "paragraph",
-        "value": "Designing scalable data models in TypeScript involves understanding your data domain, defining clear interfaces, modularizing your models, leveraging utility types, incorporating classes for behavior, and using discriminated unions for variant data. By following these practices, you can build large-scale applications that are easier to maintain and extend."
+        "value": "Finally, remember that memoization is great for pure, deterministic functions that don't have side effects and always return the same result given the same input. Avoid memoizing functions with random outputs, side effects, or where inputs change frequently."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, these advanced memoization techniques can help you optimize your TypeScript code by reducing expensive recalculations. Choose the right memoization strategy based on your function’s arguments and usage patterns."
       }
     ]
   },
   {
-    "slug": "comparing-typescripts-type-narrowing-techniques-for-safer-code",
-    "title": "Comparing TypeScript's Type Narrowing Techniques for Safer Code",
+    "slug": "typescript-utility-types-for-error-handling",
+    "title": "TypeScript Utility Types You Didn’t Know You Could Leverage for Error Handling",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how TypeScript's type narrowing techniques help you write safer code by reducing errors and improving type checks. This beginner-friendly guide explains different narrowing methods with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=l37xh8Cu8G0",
+    "description": "Discover how TypeScript’s built-in utility types can simplify and improve error handling in your applications with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=v86ggw3LoW0",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. One of TypeScript's key features is type narrowing, where the compiler refines variable types based on runtime checks. This helps catch errors early and ensures safer, more predictable code. In this article, we'll explore common type narrowing techniques with simple examples to help you understand how to write safer TypeScript code."
+        "value": "Error handling is a crucial part of writing robust TypeScript applications. While many developers focus on try-catch blocks or custom error classes, TypeScript offers several powerful utility types that can help you handle errors more effectively and elegantly at the type level. In this article, we'll explore some of these utility types and show you practical ways to leverage them."
       },
       {
         "type": "paragraph",
-        "value": "### 1. typeof Narrowing\nTypeScript can narrow types based on the `typeof` operator, which works well for primitive types like `string`, `number`, and `boolean`."
+        "value": "One of the most common challenges is representing a function that can either return a valid result or an error object. Traditionally, this is done using union types like `T | Error`. TypeScript utility types can improve this pattern, ensuring safer and clearer handling of success and error types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by exploring how the `ReturnType` and `Exclude` utility types can help in error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "`ReturnType` extracts the return type of a function, which can be useful when you want to handle different outcomes of that function. Suppose you have a function that returns either a `User` object or a `CustomError` type:"
       },
       {
         "type": "code",
-        "value": "function printValue(value: string | number) {\n  if (typeof value === 'string') {\n    console.log('String value:', value.toUpperCase());\n  } else {\n    console.log('Number value:', value.toFixed(2));\n  }\n}\n\nprintValue('hello'); // String value: HELLO\nprintValue(3.1415);  // Number value: 3.14"
+        "value": "type User = {\n  id: number;\n  name: string;\n};\n\ntype CustomError = {\n  message: string;\n  code: number;\n};\n\nfunction fetchUser(id: number): User | CustomError {\n  if (id === 1) {\n    return { id: 1, name: \"Alice\" };\n  } else {\n    return { message: \"User not found\", code: 404 };\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, TypeScript knows inside the `if` block that `value` is a `string` and in the `else` block it must be a `number`. This prevents errors like trying to call a string method on a number."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. instanceof Narrowing\nYou can narrow types with the `instanceof` operator, useful when working with classes or built-in objects."
+        "value": "We can capture the return type using `ReturnType<typeof fetchUser>` and use `Exclude` to narrow down to errors or success types."
       },
       {
         "type": "code",
-        "value": "class Dog {\n  bark() {\n    console.log('Woof!');\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log('Meow!');\n  }\n}\n\nfunction speak(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark(); // TypeScript knows 'animal' is Dog\n  } else {\n    animal.meow(); // TypeScript knows 'animal' is Cat\n  }\n}\n\nspeak(new Dog());\nspeak(new Cat());"
+        "value": "type FetchUserReturn = ReturnType<typeof fetchUser>;\n\n// To get the success type (User) only:\ntype Success = Exclude<FetchUserReturn, CustomError>;\n\n// To get the error type only:\ntype Failure = Extract<FetchUserReturn, CustomError>;\n\n// Usage example\nfunction handleResult(result: FetchUserReturn) {\n  if (\"message\" in result) {\n    // result is inferred as CustomError\n    console.error(`Error: ${result.message} (code: ${result.code})`);\n  } else {\n    // result is inferred as User\n    console.log(`User fetched: ${result.name}`);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Since the types are narrowed to either `Dog` or `Cat`, you can safely access the class-specific methods without errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Equality Narrowing\nComparing a variable to a literal or another variable can narrow union types."
+        "value": "Another handy utility type for error handling is `Partial<T>`. It allows you to represent objects where some fields might be missing, which is useful for partial error data or recovery states."
       },
       {
         "type": "code",
-        "value": "function checkStatus(status: 'success' | 'error' | 'loading') {\n  if (status === 'success') {\n    console.log('Data loaded successfully!');\n  } else if (status === 'error') {\n    console.log('Error loading data.');\n  } else {\n    console.log('Loading...');\n  }\n}\n\ncheckStatus('success');"
+        "value": "type ErrorDetails = {\n  message: string;\n  code: number;\n  stack?: string;\n};\n\n// Sometimes you might receive only part of the error information\nconst partialError: Partial<ErrorDetails> = {\n  message: \"Something went wrong\"\n};"
       },
       {
         "type": "paragraph",
-        "value": "The equality checks narrow type based on the matched literal, ensuring your code only handles the possible cases you specify."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. in Operator Narrowing\nThe `in` operator checks for keys in objects to help narrow down types when dealing with unions of object shapes."
+        "value": "`Required<T>` works oppositely by making all fields required, which can be useful in validation phases where you want to ensure all error information is present."
       },
       {
         "type": "code",
-        "value": "type Square = { kind: 'square'; size: number };\ntype Rectangle = { kind: 'rectangle'; width: number; height: number };\n\ntype Shape = Square | Rectangle;\n\nfunction area(shape: Shape) {\n  if ('size' in shape) {\n    return shape.size * shape.size;\n  } else {\n    return shape.width * shape.height;\n  }\n}\n\nconsole.log(area({ kind: 'square', size: 5 }));    // 25\nconsole.log(area({ kind: 'rectangle', width: 4, height: 6 })); // 24"
+        "value": "function logCompleteError(error: Required<ErrorDetails>) {\n  console.error(`Error: ${error.message}, Code: ${error.code}, Stack: ${error.stack}`);\n}"
       },
       {
         "type": "paragraph",
-        "value": "The use of `'size' in shape` lets TypeScript narrow that `shape` is a `Square` and access `size` safely."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 5. Custom Type Guards\nYou can write your own functions to narrow types by returning a type predicate."
+        "value": "Lastly, consider `Record<K, T>` for structuring collections of errors by keys, for example, mapping error codes to messages dynamically."
       },
       {
         "type": "code",
-        "value": "interface Fish {\n  swim(): void;\n}\n\ninterface Bird {\n  fly(): void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();\n  } else {\n    pet.fly();\n  }\n}"
+        "value": "const errorMessages: Record<number, string> = {\n  404: \"Not Found\",\n  500: \"Internal Server Error\",\n  401: \"Unauthorized\"\n};\n\nfunction getErrorMessage(code: number): string {\n  return errorMessages[code] || \"Unknown error\";\n}"
       },
       {
         "type": "paragraph",
-        "value": "The function `isFish` is a user-defined type guard. It returns a boolean, but more importantly, tells TypeScript that the checked object should now be treated as a `Fish` inside the `if` block."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nType narrowing is essential for writing safe TypeScript code. Using built-in keywords like `typeof`, `instanceof`, `in`, equality checks, and custom type guards, you can help the compiler understand exactly what types your code is working with at different points, avoiding runtime errors and improving code clarity. Try these techniques in your next TypeScript project!"
+        "value": "Using TypeScript’s utility types improves the safety and clarity of your error handling logic, catching mistakes early through static typing. As you grow your TypeScript skills, try combining these utilities to create robust error handling solutions that make your code more predictable and maintainable."
       }
     ]
   },
   {
-    "slug": "mastering-python-metaclasses-deep-dive-into-dynamic-class-creation",
-    "title": "Mastering Python Metaclasses: Deep Dive into Dynamic Class Creation",
+    "slug": "mastering-python-metaclasses-advanced-guide-dynamic-class-creation",
+    "title": "Mastering Python Metaclasses: An Advanced Guide to Dynamic Class Creation",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the basics of Python metaclasses and how they allow dynamic class creation for more powerful and flexible code design.",
-    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
+    "description": "Learn how Python metaclasses work and how to use them to create dynamic, customizable classes. This beginner-friendly tutorial covers metaclass basics with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=g-qRKZD3FgE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python is a powerful and flexible language, and one of its more advanced features is metaclasses. They allow developers to control the creation of classes dynamically. If you've worked with classes and inheritance, metaclasses take this a step further by giving you control over the actual class itself."
+        "value": "Python is known for its flexibility and powerful features. One of the most advanced and interesting features is metaclasses. If you've worked with classes, you might wonder how classes themselves are created and controlled. Metaclasses allow you to customize class creation and are a powerful tool for advanced Python programming. This tutorial will introduce you to metaclasses in a beginner-friendly way."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll break down metaclasses into beginner-friendly concepts. You'll learn what metaclasses are, why you might use them, and see simple examples to start mastering this topic."
+        "value": "### What is a Metaclass?\n\nIn Python, everything is an object—including classes. Just as objects are instances of classes, classes are instances of metaclasses. Simply put, a metaclass is the \"class of a class\" that defines how a class behaves. Normally, Python uses `type` as the default metaclass to create all classes. But you can create your own metaclass to customize class creation."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Metaclass?"
+        "value": "### Why Use Metaclasses?\n\nMetaclasses are useful when you want to:\n- Control or modify a class at the time it's created\n- Register classes automatically\n- Enforce rules or constraints on classes\n- Implement APIs or frameworks that require dynamic class behavior"
       },
       {
         "type": "paragraph",
-        "value": "In Python, everything is an object, even classes themselves. Normally, when you create a class, Python uses a default metaclass called `type` to create that class object. A metaclass is just a 'class of a class' – it defines how classes are constructed."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, when you write `class MyClass: pass`, Python internally does something like `MyClass = type('MyClass', (), {})`. Here, `type` is the metaclass. You can create your own metaclass by inheriting from `type` and overriding its methods."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why Use Metaclasses?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Metaclasses allow you to automatically modify or enforce rules on classes when they are created. Use cases include:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Enforcing coding standards on classes\n- Automatically adding class attributes or methods\n- Registering classes for plugins or frameworks\n- Creating singleton classes or immutable classes dynamically\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Creating a Simple Metaclass"
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's create a metaclass that prints a message whenever a class using it is created."
+        "value": "### Basic Metaclass Example\nLet's start with a simple example of a metaclass that prints a message when a new class is created."
       },
       {
         "type": "code",
-        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\n# When you run this, it will print \"Creating class MyClass\""
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\n# When you run this, it prints:\n# Creating class MyClass"
       },
       {
         "type": "paragraph",
-        "value": "Here, `MyMeta` inherits from `type`. We override the `__new__` method, which is called when a new class is created. Inside, we print a message, and then call the original `__new__` method to actually create the class."
+        "value": "Here, `MyMeta` is a metaclass inheriting from `type`. The `__new__` method is called when a class is created. By printing inside `__new__`, you see when the class `MyClass` is created."
       },
       {
         "type": "paragraph",
-        "value": "### Automatically Adding Attributes to Classes"
-      },
-      {
-        "type": "paragraph",
-        "value": "Metaclasses can modify the class dictionary before the class is created. Let's add a timestamp attribute to every class using our metaclass."
+        "value": "### Understanding `__new__` and `__init__` in Metaclasses\nThe metaclass's `__new__` method creates the class object, and `__init__` initializes it. You can override them to customize class creation."
       },
       {
         "type": "code",
-        "value": "import datetime\n\nclass TimestampMeta(type):\n    def __new__(cls, name, bases, dct):\n        dct['created_at'] = datetime.datetime.now()\n        return super().__new__(cls, name, bases, dct)\n\nclass Event(metaclass=TimestampMeta):\n    pass\n\nprint(Event.created_at)"
+        "value": "class VerboseMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"__new__ for {name}\")\n        return super().__new__(cls, name, bases, dct)\n\n    def __init__(cls, name, bases, dct):\n        print(f\"__init__ for {name}\")\n        super().__init__(name, bases, dct)\n\nclass Demo(metaclass=VerboseMeta):\n    pass\n\n# Output:\n# __new__ for Demo\n# __init__ for Demo"
       },
       {
         "type": "paragraph",
-        "value": "In this example, every class that uses `TimestampMeta` will have a `created_at` attribute set to the current date and time when the class was created."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Dynamic Class Creation Without class keyword"
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember, the built-in `type` can actually create classes dynamically without the class statement. Let’s create a class dynamically."
+        "value": "### Practical Use Case: Automatically Adding Methods\nLet's say you want every class to have a `hello()` method that prints a greeting. You can add it in the metaclass."
       },
       {
         "type": "code",
-        "value": "MyDynamicClass = type('MyDynamicClass', (object,), {'greet': lambda self: 'Hello!'})\n\nobj = MyDynamicClass()\nprint(obj.greet())  # Output: Hello!"
+        "value": "def hello_method(self):\n    print(f\"Hello from {self.__class__.__name__}!\")\n\nclass AutoHelloMeta(type):\n    def __new__(cls, name, bases, dct):\n        if 'hello' not in dct:\n            dct['hello'] = hello_method\n        return super().__new__(cls, name, bases, dct)\n\nclass Person(metaclass=AutoHelloMeta):\n    pass\n\np = Person()\np.hello()  # Output: Hello from Person!"
       },
       {
         "type": "paragraph",
-        "value": "Here `type` takes three arguments: the class name, a tuple of base classes, and a dictionary containing attributes or methods. This is exactly what metaclasses do internally."
+        "value": "### Summary\n- Metaclasses in Python control how classes are created.\n- They are defined by inheriting from `type`.\n- The `__new__` and `__init__` methods of metaclasses create and initialize classes.\n- Metaclasses let you modify or add class attributes and methods dynamically.\n\nThough powerful, metaclasses are an advanced feature — use them sparingly and when necessary."
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
-      },
-      {
-        "type": "paragraph",
-        "value": "Metaclasses may seem complex at first, but they are just a way to customize how classes are created. By modifying or extending metaclasses, you can build powerful tools, enforce rules, and write more flexible code."
-      },
-      {
-        "type": "paragraph",
-        "value": "To master them, start experimenting with your own metaclasses. Override methods like `__new__` and `__init__` in a metaclass and see how class creation changes. With time, you'll better understand this fascinating part of Python."
+        "value": "By understanding metaclasses, you unlock the ability to create highly dynamic and flexible Python programs that adapt or extend Python’s behavior itself."
       }
     ]
   },
   {
-    "slug": "optimizing-python-code-performance-by-profiling-memory-usage-efficiently",
-    "title": "Optimizing Python Code Performance by Profiling Memory Usage Efficiently",
+    "slug": "harnessing-pythons-exception-chaining-for-cleaner-debugging",
+    "title": "Harnessing Python's Exception Chaining for Cleaner Debugging",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to optimize your Python programs by profiling memory usage effectively. This beginner-friendly guide teaches you tools and tips to detect and fix memory issues.",
-    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
+    "description": "Learn how to use Python's exception chaining feature to write clearer error handling code and simplify debugging.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with Python, optimizing your code's performance often means understanding how much memory it uses. Excessive memory consumption can slow down your program or cause it to crash. In this beginner-friendly guide, we will explore how to profile memory usage efficiently to find and fix memory issues in your Python code."
+        "value": "When writing programs, errors happen. Handling these errors properly is crucial to make debugging easier. In Python, exception chaining is a powerful feature that helps you keep track of the original error when a new exception is raised. This makes understanding the root cause of an error much simpler."
       },
       {
         "type": "paragraph",
-        "value": "Profiling memory usage means measuring how much memory your program consumes over time. Python doesn't have built-in memory profilers, but libraries like `memory_profiler` make this task easier. Let's see how to use it."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, install the `memory_profiler` module by running the following command in your terminal or command prompt:"
+        "value": "Exception chaining occurs when you raise a new exception during an error but want to keep the context of the original error. Python supports this by using the `raise ... from ...` syntax. Let's see how this works with an example."
       },
       {
         "type": "code",
-        "value": "pip install memory_profiler"
+        "value": "def divide(x, y):\n    try:\n        result = x / y\n    except ZeroDivisionError as e:\n        # Raise a new exception but keep original context\n        raise ValueError('Invalid inputs for division') from e\n    return result\n\ntry:\n    divide(10, 0)\nexcept ValueError as err:\n    print('Caught an error:', err)\n    # The original ZeroDivisionError is still shown in the traceback"
       },
       {
         "type": "paragraph",
-        "value": "Now, you can add a simple decorator `@profile` to functions you want to monitor. Here is an example program that creates a list and squares its elements:"
-      },
-      {
-        "type": "code",
-        "value": "from memory_profiler import profile\n\n@profile\ndef square_numbers(n):\n    result = []\n    for i in range(n):\n        result.append(i ** 2)\n    return result\n\nif __name__ == \"__main__\":\n    squares = square_numbers(100000)"
+        "value": "In this example, when dividing by zero, a `ZeroDivisionError` is raised inside the `divide` function. Instead of letting it go uncaught, we catch it and raise a `ValueError` to give a clearer message for this specific function. Using `raise ... from` keeps the original `ZeroDivisionError` attached to the new `ValueError`. This helps anyone debugging the code to trace the error chain easily."
       },
       {
         "type": "paragraph",
-        "value": "To run the memory profiler, execute your script using the command below in the terminal. It will show line-by-line memory usage:"
-      },
-      {
-        "type": "code",
-        "value": "python -m memory_profiler your_script.py"
+        "value": "Why does this matter? Without exception chaining, the original low-level error could be lost, making it harder to find and fix bugs. Chaining offers a clear error history, improving code readability and maintainability."
       },
       {
         "type": "paragraph",
-        "value": "You'll see output showing how memory usage changes as each line runs. Carefully analyze these results to identify lines where memory usage spikes. In the example above, the list `result` consumes significant memory because it stores many squared numbers."
-      },
-      {
-        "type": "paragraph",
-        "value": "If your program uses too much memory, consider alternatives such as using generator expressions or processing items in chunks instead of storing them all at once. For example, using a generator saves memory by yielding values one at a time:"
-      },
-      {
-        "type": "code",
-        "value": "def square_numbers_gen(n):\n    for i in range(n):\n        yield i ** 2\n\nif __name__ == \"__main__\":\n    for square in square_numbers_gen(100000):\n        pass  # Process each item without storing all at once"
-      },
-      {
-        "type": "paragraph",
-        "value": "Besides `memory_profiler`, you can also check out tools like `tracemalloc` (built-in Python module) to trace memory allocations or `objgraph` to visualize object references. But for beginners, `memory_profiler` provides an easy and efficient way to start profiling memory."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, efficiently profiling your Python program's memory usage allows you to spot bottlenecks and optimize your code's performance. Start by installing `memory_profiler`, add `@profile` decorators, analyze the detailed line-by-line memory consumption, and refactor your code to reduce peak memory usage. This simple workflow can dramatically improve your Python application's speed and stability."
+        "value": "In summary, whenever you want to re-raise an exception with a new error type or message but keep the original cause visible, use the `raise ... from ...` syntax. This simple technique can make your debugging experience smoother and your code cleaner."
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-for-complex-data-analysis-in-sql",
-    "title": "Mastering Window Functions for Complex Data Analysis in SQL",
+    "slug": "handling-recursive-queries-edge-cases-hierarchical-data-sql",
+    "title": "Handling Recursive Queries and Edge Cases in Hierarchical Data with SQL",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform advanced data analysis easily. This beginner-friendly guide covers the basics of window functions with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn how to write recursive SQL queries to traverse hierarchical data and handle common edge cases like cycles and missing parents with easy-to-understand examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=2mC8GMSORaE",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are powerful tools that let you perform complex calculations across a set of table rows related to the current row. Unlike aggregate functions that reduce results, window functions maintain the detail while adding analytical insight, making them perfect for detailed data analysis."
+        "value": "Hierarchical data is commonly used to represent relationships like organizational charts, file directories, or category trees. SQL provides a powerful feature called Common Table Expressions (CTEs), specifically recursive CTEs, to query such hierarchical structures efficiently. In this tutorial, you will learn how to write recursive SQL queries to fetch hierarchical data, along with practical tips to handle edge cases such as cyclic references and missing parents."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we’ll introduce the basics of window functions and demonstrate how to use them with simple examples. We'll cover functions like ROW_NUMBER(), RANK(), SUM(), and AVG(), and explain how to use the OVER() clause for running totals, rankings, and moving averages."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by understanding the syntax of a window function: you call an aggregate or ranking function followed by OVER(), which defines the window or subset of rows the function will consider."
+        "value": "Let's start by considering a simple table called `employees`, which contains an `id`, a `name`, and a `manager_id`. The `manager_id` references another employee in the same table, creating a hierarchy where each employee reports to their manager."
       },
       {
         "type": "code",
-        "value": "SELECT column1,\n       ROW_NUMBER() OVER (ORDER BY column2) AS row_num\nFROM your_table;"
+        "value": "CREATE TABLE employees (\n    id INT PRIMARY KEY,\n    name VARCHAR(100),\n    manager_id INT NULL\n);\n\nINSERT INTO employees (id, name, manager_id) VALUES\n(1, 'Alice', NULL),  -- CEO\n(2, 'Bob', 1),       -- Bob reports to Alice\n(3, 'Charlie', 2),   -- Charlie reports to Bob\n(4, 'Diana', 2),     -- Diana reports to Bob\n(5, 'Eve', 3);       -- Eve reports to Charlie"
       },
       {
         "type": "paragraph",
-        "value": "This example assigns a unique row number to each row based on the order of column2. ROW_NUMBER() is great for pagination or indexing rows based on a specific column."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also partition data into groups using PARTITION BY inside the OVER() clause. This lets you restart the numbering or calculation within each group."
+        "value": "To get the full hierarchy starting from the CEO (Alice), you can write a recursive CTE that begins with the root employee and recursively adds all direct reports."
       },
       {
         "type": "code",
-        "value": "SELECT employee_id, department_id,\n       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank_within_dept\nFROM employees;"
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    -- Anchor member: start with the CEO (manager_id IS NULL)\n    SELECT id, name, manager_id, 0 AS level\n    FROM employees\n    WHERE manager_id IS NULL\n    \n    UNION ALL\n    \n    -- Recursive member: get employees who report to the current level\n    SELECT e.id, e.name, e.manager_id, eh.level + 1\n    FROM employees e\n    INNER JOIN EmployeeHierarchy eh ON e.manager_id = eh.id\n)\nSELECT * FROM EmployeeHierarchy;\n"
       },
       {
         "type": "paragraph",
-        "value": "In this example, employees are ranked within their department based on salary, with the highest salary getting rank 1. RANK() handles ties by assigning the same rank to equal values."
+        "value": "This query produces the entire employee hierarchy with a `level` column indicating how deep each employee is in the tree. However, in real-world data, you might face some edge cases that can cause problems with recursive queries."
       },
       {
         "type": "paragraph",
-        "value": "Window functions can also calculate running totals — cumulative sums up to the current row — which are often used in financial or time-series data."
+        "value": "One common edge case is a **cycle** in the data. For example, if an employee mistakenly has themselves or one of their descendants as their manager, the recursive query could loop indefinitely. To prevent this, tracking visited nodes and stopping recursion when a cycle is detected is important."
       },
       {
         "type": "code",
-        "value": "SELECT order_id, order_date, amount,\n       SUM(amount) OVER (ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM orders;"
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    SELECT id, name, manager_id, 0 AS level, ARRAY[id] AS path\n    FROM employees\n    WHERE manager_id IS NULL\n\n    UNION ALL\n\n    SELECT e.id, e.name, e.manager_id, eh.level + 1, path || e.id\n    FROM employees e\n    JOIN EmployeeHierarchy eh ON e.manager_id = eh.id\n    WHERE NOT e.id = ANY(path)  -- Prevent cycles by checking if id already in path\n)\nSELECT * FROM EmployeeHierarchy;"
       },
       {
         "type": "paragraph",
-        "value": "This query computes the running total of order amounts ordered by date. The frame clause ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW defines the rows included in the sum (from the first row up to the current row)."
+        "value": "In this example, we add a `path` array that keeps track of all visited employee IDs in the current recursion branch. The `WHERE NOT e.id = ANY(path)` condition stops the recursion if a cycle is detected."
       },
       {
         "type": "paragraph",
-        "value": "Finally, window functions can compute moving averages to smooth trends in your data."
+        "value": "Another edge case is having employees with **missing parents** where `manager_id` references a non-existent employee. This can cause your recursive query to miss those employees. To find these, you can run a simple query checking for orphans."
       },
       {
         "type": "code",
-        "value": "SELECT date,\n       AVG(sales) OVER (ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg_3_days\nFROM daily_sales;"
+        "value": "SELECT *\nFROM employees\nWHERE manager_id IS NOT NULL\n  AND manager_id NOT IN (SELECT id FROM employees);"
       },
       {
         "type": "paragraph",
-        "value": "This calculates a 3-day moving average of sales, looking at the current day and two previous days."
+        "value": "If your data contains such orphans, you might want to either clean the data or adjust your queries to include them. For example, starting the recursion from all employees with missing or null managers ensures you don't miss any part of the hierarchy."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    SELECT id, name, manager_id, 0 AS level, ARRAY[id] AS path\n    FROM employees\n    WHERE manager_id IS NULL OR manager_id NOT IN (SELECT id FROM employees)\n\n    UNION ALL\n\n    SELECT e.id, e.name, e.manager_id, eh.level + 1, path || e.id\n    FROM employees e\n    JOIN EmployeeHierarchy eh ON e.manager_id = eh.id\n    WHERE NOT e.id = ANY(path)\n)\nSELECT * FROM EmployeeHierarchy;"
       },
       {
         "type": "paragraph",
-        "value": "Window functions are supported by most modern SQL databases (e.g., PostgreSQL, MySQL 8+, SQL Server, Oracle). They dramatically simplify complex analytical queries by avoiding self-joins or subqueries."
-      },
-      {
-        "type": "paragraph",
-        "value": "To recap, the key points when using window functions are:\n- Use OVER() to specify how to partition and order rows.\n- Choose the right function (ROW_NUMBER(), RANK(), SUM(), AVG(), etc.) based on your analytical needs.\n- Use frame clauses (e.g., ROWS BETWEEN) to control which rows the function applies to.\n\nTry applying these examples to your data to quickly enhance analysis and reporting capabilities."
+        "value": "In summary, recursive CTEs in SQL are powerful for handling hierarchical data. Always consider edge cases like cycles and missing parents to make your queries robust and reliable."
       }
     ]
   },
   {
-    "slug": "handling-timezone-edge-cases-in-sql-queries-for-global-applications",
-    "title": "Handling Timezone Edge Cases in SQL Queries for Global Applications",
+    "slug": "optimizing-sql-queries-by-understanding-execution-plans",
+    "title": "Optimizing SQL Queries by Understanding Execution Plans in Depth",
     "language": "sql",
     "type": "errors",
-    "description": "A beginner-friendly guide on handling timezone edge cases in SQL queries to ensure accurate time data processing in global applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=-5wpm-gesOY",
+    "description": "Learn how to optimize your SQL queries by interpreting and understanding execution plans in detail. This beginner-friendly guide will help you spot common errors and improve query performance effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building global applications, handling date and time values correctly in SQL queries is crucial. Different users around the world operate in different timezones, which can cause errors if not managed properly. Timezone-related bugs often arise from incorrect assumptions about the time values stored or queried in your database."
+        "value": "When working with SQL databases, writing a query that retrieves the right data is only the first step. To ensure your queries run efficiently, you need to understand how the database executes them. This is where execution plans come in. An execution plan shows how the database engine processes your SQL query, step by step. Understanding this plan helps you identify errors and bottlenecks that slow down your queries."
       },
       {
         "type": "paragraph",
-        "value": "This article explains common timezone edge cases, why they matter, and practical tips to write SQL queries that reduce errors related to timezone differences."
+        "value": "You can generate an execution plan in most SQL databases using commands such as `EXPLAIN` or `EXPLAIN PLAN`. The output will show the order of operations, the use of indexes, joins, scans, and other details. Analyzing these details can help you catch errors like missing indexes or inefficient joins, which impact query speed."
       },
       {
         "type": "paragraph",
-        "value": "### Why Timezones Cause Issues in SQL Queries"
-      },
-      {
-        "type": "paragraph",
-        "value": "Databases store dates and times in various ways: some as local timestamps without timezone information (e.g., `TIMESTAMP` in MySQL), others as UTC timestamps (e.g., `TIMESTAMPTZ` in PostgreSQL). When you query data, if you do not account for the timezone, you can get data that appears shifted in time, causing wrong query results, especially around daylight saving changes or for users querying from multiple timezones."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Edge Cases"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Daylight Saving Time (DST) Changes**: Times may jump forward or backward an hour, causing overlaps or gaps."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Missing or Incorrect Timezone Info**: Storing timestamps without any timezone context leads to ambiguity."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Comparing Local Times Instead of UTC**: Mixing timezones during query conditions can produce incorrect results."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices for Handling Timezones in SQL"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Store all timestamps in UTC**: This avoids confusion and makes sure your timestamps are consistent across users."
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Use timezone-aware types**: For example, PostgreSQL's `TIMESTAMPTZ` keeps timezone info and helps convert times automatically."
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Convert times in queries as needed**: When showing data to users, convert UTC to the user's local timezone."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 1: Converting UTC to Local Time in PostgreSQL"
+        "value": "Let's say you have a query like this:"
       },
       {
         "type": "code",
-        "value": "SELECT event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS local_event_time\nFROM events;"
+        "value": "SELECT * FROM orders WHERE customer_id = 10;"
       },
       {
         "type": "paragraph",
-        "value": "This query converts `event_time` stored in UTC to New York time, accounting for daylight saving automatically."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 2: Using UTC for Date Range Queries"
+        "value": "You can look at the execution plan to see if the database is using an index on `customer_id`. An index can greatly speed up lookups. Here’s how to view an execution plan in PostgreSQL:"
       },
       {
         "type": "code",
-        "value": "-- Suppose you want events from '2024-06-01' to '2024-06-02' in user's timezone\n-- Convert the date range boundaries to UTC first\nSELECT *\nFROM events\nWHERE event_time >= (TIMESTAMP '2024-06-01 00:00:00' AT TIME ZONE 'America/Los_Angeles') AT TIME ZONE 'UTC'\n  AND event_time < (TIMESTAMP '2024-06-02 00:00:00' AT TIME ZONE 'America/Los_Angeles') AT TIME ZONE 'UTC';"
+        "value": "EXPLAIN ANALYZE SELECT * FROM orders WHERE customer_id = 10;"
       },
       {
         "type": "paragraph",
-        "value": "This helps avoid errors when filtering events by date across timezones."
+        "value": "The plan might show a sequential scan if there’s no index, which means the database checks every row. That’s slow! You can fix this by creating an index:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
       },
       {
         "type": "paragraph",
-        "value": "### Final Tips"
+        "value": "Then, run your `EXPLAIN` command again to verify that the query now uses an index scan instead of a sequential scan."
       },
       {
         "type": "paragraph",
-        "value": "- Always clarify how your database stores timestamps."
+        "value": "Common errors that hurt query performance include:"
       },
       {
         "type": "paragraph",
-        "value": "- Test queries around daylight saving transition dates."
+        "value": "- Missing indexes on frequently queried columns\n- Using SELECT * instead of selecting only needed columns\n- Inefficient joins without proper join conditions\n- Functions applied on indexed columns in WHERE clauses preventing index use"
       },
       {
         "type": "paragraph",
-        "value": "- Use timezone-aware functions offered by your SQL dialect rather than manual adjustments."
+        "value": "By regularly checking execution plans and fixing common issues, you’ll write faster, more efficient SQL queries. Practice interpreting these plans and experimenting with different indexing or query structures to see what improves performance."
       },
       {
         "type": "paragraph",
-        "value": "By following these practices, you will reduce bugs and ensure accurate time data handling no matter where your users are."
+        "value": "Understanding execution plans might seem complex at first, but it quickly becomes an essential skill in writing high-quality SQL once you start using it regularly."
       }
     ]
   }
