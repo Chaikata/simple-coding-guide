@@ -6856,5 +6856,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-filtering-unique-usernames-from-an-array",
+    "title": "Fix the Bug in Filtering Unique Usernames from an Array",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "The provided JavaScript function is supposed to return an array of unique usernames from a list of user objects. However, it currently returns duplicates. Your task is to debug and fix the code to ensure it returns only unique usernames.",
+    "prompt": "You are given a function getUniqueUsernames that accepts an array of user objects, each having a 'username' property. The function is meant to return an array of unique usernames. However, the current implementation has a bug and returns duplicate usernames. Identify and fix the bug so that the function correctly returns an array with no duplicates.",
+    "guidance": [
+      "Examine how the existing code checks for duplicates and why it might be failing.",
+      "Consider using JavaScript data structures or methods better suited for uniqueness checks.",
+      "Test your function on inputs that have repeated usernames to ensure duplicates are removed."
+    ],
+    "hints": [
+      "Check how the indexOf method is used and if it properly detects duplicates.",
+      "Think about using a Set or an object to track seen usernames more effectively."
+    ],
+    "starterCode": "function getUniqueUsernames(users) {\n  const unique = [];\n  users.forEach(function(user) {\n    if (unique.indexOf(user.username) !== -1) {\n      unique.push(user.username);\n    }\n  });\n  return unique;\n}",
+    "expectedOutput": "getUniqueUsernames([{username: 'alice'}, {username: 'bob'}, {username: 'alice'}, {username: 'carol'}]) // ['alice', 'bob', 'carol']",
+    "concepts": [
+      "arrays",
+      "loops",
+      "conditionals",
+      "data structures",
+      "array methods"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "write-a-sql-function-to-calculate-total-sales-by-product",
+    "title": "Write a SQL Function to Calculate Total Sales by Product",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Create a SQL function that calculates the total sales amount for a given product ID from a sales table.",
+    "prompt": "Write a SQL function named get_total_sales that accepts a product_id (integer) as input and returns the total sales amount (sum of quantity * price) for that product from the sales table. The sales table schema is: sales(sale_id INT, product_id INT, quantity INT, price DECIMAL). If the product has no sales, the function should return 0.",
+    "guidance": [
+      "Use SUM() aggregation to calculate total sales.",
+      "Handle the case where no rows exist for the given product by returning 0 instead of NULL."
+    ],
+    "hints": [
+      "Consider using COALESCE or IFNULL to handle NULL results from SUM().",
+      "Make sure your function accepts an input parameter for product_id.",
+      "Use a simple SELECT statement inside the function to get the sum."
+    ],
+    "starterCode": "CREATE OR REPLACE FUNCTION get_total_sales(prod_id INT) RETURNS DECIMAL AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "For product_id = 101, if the sales are (2 units at $10) and (3 units at $15), expected output is 65.0",
+    "concepts": [
+      "SQL functions",
+      "aggregation with SUM",
+      "handling NULL with COALESCE"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-legacy-inventory-management-code-for-efficiency-and-readability",
+    "title": "Refactor Legacy Inventory Management Code for Efficiency and Readability",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve an inefficient, hard-to-read inventory management function written in C++ by refactoring it to use modern C++ features, enhance performance, and maintain identical behavior.",
+    "prompt": "You are given a legacy function that manages inventory updates in a warehouse system. The function is overly complex, uses inefficient looping, and is hard to maintain. Refactor the function to improve its readability, reduce complexity, optimize performance where possible, and utilize modern C++ best practices, including standard library algorithms and proper use of const correctness. Your refactored function should produce the exact same output and side effects as the original.",
+    "guidance": [
+      "Preserve the original function’s behavior and output after refactoring.",
+      "Focus on simplifying nested loops and conditionals without changing logic.",
+      "Leverage C++ STL containers and algorithms to replace manual iterations.",
+      "Improve variable naming and code structure for better maintainability."
+    ],
+    "hints": [
+      "Consider using std::unordered_map or std::map to optimize lookup operations.",
+      "Use range-based for loops and const references to avoid unnecessary copies.",
+      "Extract smaller helper functions if certain blocks perform distinct subtasks."
+    ],
+    "starterCode": "\n#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Item {\n    std::string name;\n    int quantity;\n};\n\n// Legacy function: updates inventory quantities based on shipments and removals\nvoid updateInventory(std::vector<Item>& inventory, \n                     const std::vector<Item>& shipments, \n                     const std::vector<Item>& removals) {\n    // Increase quantities for shipments\n    for (size_t i = 0; i < shipments.size(); ++i) {\n        bool found = false;\n        for (size_t j = 0; j < inventory.size(); ++j) {\n            if (inventory[j].name == shipments[i].name) {\n                inventory[j].quantity = inventory[j].quantity + shipments[i].quantity;\n                found = true;\n            }\n        }\n        if (!found) {\n            Item newItem;\n            newItem.name = shipments[i].name;\n            newItem.quantity = shipments[i].quantity;\n            inventory.push_back(newItem);\n        }\n    }\n    // Decrease quantities for removals\n    for (size_t i = 0; i < removals.size(); ++i) {\n        for (size_t j = 0; j < inventory.size(); ++j) {\n            if (inventory[j].name == removals[i].name) {\n                inventory[j].quantity = inventory[j].quantity - removals[i].quantity;\n                if (inventory[j].quantity < 0) {\n                    inventory[j].quantity = 0;\n                }\n            }\n        }\n    }\n}\n\nint main() {\n    std::vector<Item> inventory = { {\"apple\", 10}, {\"banana\", 5} };\n    std::vector<Item> shipments = { {\"orange\", 7}, {\"apple\", 3} };\n    std::vector<Item> removals = { {\"banana\", 2}, {\"apple\", 15} };\n\n    updateInventory(inventory, shipments, removals);\n\n    for (const auto& item : inventory) {\n        std::cout << item.name << \": \" << item.quantity << std::endl;\n    }\n    return 0;\n}\n",
+    "expectedOutput": "apple: 0\nbanana: 3\norange: 7",
+    "concepts": [
+      "code refactoring",
+      "C++ STL algorithms",
+      "performance optimization",
+      "code readability"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-basic-employee-directory-table-and-query",
+    "title": "Create a Basic Employee Directory Table and Query",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a simple employee directory table and write a query to retrieve filtered information about employees, practicing basic SQL data modeling and SELECT queries.",
+    "prompt": "You are tasked with creating a simple employee directory. Start by creating a table named 'employees' with the following columns: employee_id (integer), first_name (text), last_name (text), department (text), and salary (integer). After creating and inserting sample data (3-5 rows), write a query to select all employees from the 'Sales' department whose salary is greater than 50000.",
+    "guidance": [
+      "Define the table schema with appropriate data types.",
+      "Insert sample data into the table.",
+      "Write a SELECT query with WHERE conditions to filter by department and salary."
+    ],
+    "hints": [
+      "Use CREATE TABLE syntax with specified columns.",
+      "Use INSERT INTO to add multiple rows of employees.",
+      "Use WHERE clause with multiple conditions combined with AND."
+    ],
+    "starterCode": "CREATE TABLE employees (\n  employee_id INT,\n  first_name TEXT,\n  last_name TEXT,\n  department TEXT,\n  salary INT\n);\n\nINSERT INTO employees VALUES\n(1, 'John', 'Doe', 'Sales', 60000),\n(2, 'Jane', 'Smith', 'Marketing', 45000),\n(3, 'Emily', 'Jones', 'Sales', 52000),\n(4, 'Michael', 'Brown', 'Engineering', 70000),\n(5, 'Anne', 'Clark', 'Sales', 48000);\n\n-- Write your SELECT query below to find sales employees with salary > 50000\n",
+    "expectedOutput": "employee_id | first_name | last_name | department | salary\n------------|------------|-----------|------------|-------\n1           | John       | Doe       | Sales      | 60000\n3           | Emily      | Jones     | Sales      | 52000",
+    "concepts": [
+      "CREATE TABLE",
+      "INSERT INTO",
+      "SELECT",
+      "WHERE clause"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-off-by-one-error-in-list-processing-function",
+    "title": "Fix the Off-By-One Error in List Processing Function",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a Python function designed to process a list of numbers and return a transformed list. The current implementation has an off-by-one error causing incorrect output.",
+    "prompt": "The function `transform_numbers` is intended to return a new list where each element is the sum of the current element and the next element in the original list. However, the implementation has a bug causing it to skip the last element or produce an incorrect result. Your task is to fix the bug while keeping the intended logic intact.\n\nExample: For input [1, 2, 3, 4], the expected output is [3, 5, 7] because:\n- 1 + 2 = 3\n- 2 + 3 = 5\n- 3 + 4 = 7\n\nFix the code provided so that it works correctly for any list of integers with length >= 2.",
+    "guidance": [
+      "Check the loop boundaries and index usage carefully to identify where the off-by-one error occurs.",
+      "Make sure you do not access indexes out of range when summing elements."
+    ],
+    "hints": [
+      "Remember that list indexes in Python start at 0 and go up to len(list)-1.",
+      "Try printing indexes inside the loop to understand which elements are being accessed."
+    ],
+    "starterCode": "def transform_numbers(nums):\n    result = []\n    for i in range(len(nums)):\n        result.append(nums[i] + nums[i+1])\n    return result",
+    "expectedOutput": "[3, 5, 7]",
+    "concepts": [
+      "list indexing",
+      "loops",
+      "off-by-one error",
+      "debugging"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-the-optimized-lru-cache-implementation",
+    "title": "Fix the Bug in the Optimized LRU Cache Implementation",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the subtle bug in the provided Least Recently Used (LRU) cache implementation which causes it to fail under certain eviction conditions. The solution must maintain O(1) time complexity for get and put operations while correctly managing the cache size and order.",
+    "prompt": "You are given a Python class implementing an LRU cache using a dictionary and a doubly linked list. The goal is to store key-value pairs with constant time retrieval and eviction based on the least recently used policy. However, the current implementation has a bug that results in incorrect eviction behavior once the cache reaches its capacity. Your task is to identify and fix the bug so that the cache evicts the correct item when full and maintains the correct internal state.",
+    "guidance": [
+      "Pay close attention to the eviction logic when the cache size exceeds capacity.",
+      "Examine how the doubly linked list nodes are updated during get and put operations.",
+      "Verify that all pointers (prev and next) are correctly set during insertions and removals."
+    ],
+    "hints": [
+      "Check if the tail node is always correctly identified before removal.",
+      "Look for any off-by-one errors or incorrect pointer assignments in the eviction process.",
+      "Consider if the cache size is updated appropriately after node removal."
+    ],
+    "starterCode": "class Node:\n    def __init__(self, key, val):\n        self.key = key\n        self.val = val\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.cache = dict()  # key -> node\n        self.head = Node(0, 0)\n        self.tail = Node(0, 0)\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def _remove(self, node):\n        prev = node.prev\n        next = node.next\n        prev.next = next\n        next.prev = prev\n\n    def _add(self, node):\n        node.prev = self.head\n        node.next = self.head.next\n        self.head.next.prev = node\n        self.head.next = node\n\n    def get(self, key):\n        if key in self.cache:\n            node = self.cache[key]\n            self._remove(node)\n            self._add(node)\n            return node.val\n        return -1\n\n    def put(self, key, value):\n        if key in self.cache:\n            self._remove(self.cache[key])\n        node = Node(key, value)\n        self._add(node)\n        self.cache[key] = node\n        if len(self.cache) > self.capacity:\n            node_to_remove = self.tail.prev\n            self._remove(node_to_remove)\n            # Bug here: missing deletion from cache dictionary\n",
+    "expectedOutput": "After fixing, the code should pass these operations:\nlru = LRUCache(2)\nlru.put(1, 1)  # cache is {1=1}\nlru.put(2, 2)  # cache is {1=1, 2=2}\nlru.get(1)     # returns 1\nlru.put(3, 3)  # evicts key 2, cache is {1=1, 3=3}\nlru.get(2)     # returns -1 (not found)\nlru.put(4, 4)  # evicts key 1, cache is {4=4, 3=3}\nlru.get(1)     # returns -1 (not found)\nlru.get(3)     # returns 3\nlru.get(4)     # returns 4",
+    "concepts": [
+      "data structures",
+      "linked list",
+      "hash map",
+      "cache eviction",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];

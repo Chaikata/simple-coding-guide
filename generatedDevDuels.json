@@ -1,179 +1,174 @@
 [
   {
-    "slug": "advanced-todo-list-with-tag-filtering-and-persistent-storage",
-    "title": "Advanced ToDo List with Tag Filtering and Persistent Storage",
+    "slug": "fix-the-bug-in-filtering-unique-usernames-from-an-array",
+    "title": "Fix the Bug in Filtering Unique Usernames from an Array",
     "language": "javascript",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build an advanced ToDo List application in JavaScript that supports task creation, dynamic filtering by tags, completion toggling, and persists data across sessions using localStorage.",
-    "prompt": "Create a function named `createAdvancedTodoList` that initializes a ToDo list manager object with the following capabilities:\n\n1. Add tasks with mandatory title and optional tags (array of strings).\n2. Mark tasks as completed or uncompleted.\n3. Filter tasks by one or multiple tags, returning all tasks that match any of the provided tags.\n4. Retrieve all tasks, optionally filtered by completion status.\n5. Persist tasks to localStorage automatically after any modification.\n6. Load persisted tasks from localStorage when initialized.\n\nYour solution should focus on writing clean, efficient code and managing state properly. You should expose methods such as `addTask(title, tags)`, `toggleComplete(taskId)`, `filterByTags(tagsArray)`, and `getTasks(filter)`. Each task should have a unique ID, title, tags array, and completion boolean.\n\nDo not build UI elements; focus solely on the JavaScript logic with proper data persistence.",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "The provided JavaScript function is supposed to return an array of unique usernames from a list of user objects. However, it currently returns duplicates. Your task is to debug and fix the code to ensure it returns only unique usernames.",
+    "prompt": "You are given a function getUniqueUsernames that accepts an array of user objects, each having a 'username' property. The function is meant to return an array of unique usernames. However, the current implementation has a bug and returns duplicate usernames. Identify and fix the bug so that the function correctly returns an array with no duplicates.",
     "guidance": [
-      "Use an internal array to represent the list of tasks and maintain their state.",
-      "Implement a unique ID generator for tasks to track them reliably during updates.",
-      "Use JSON.stringify and JSON.parse for saving and loading tasks from localStorage.",
-      "Design your filter functions to support flexible combination of tags and completion status."
+      "Examine how the existing code checks for duplicates and why it might be failing.",
+      "Consider using JavaScript data structures or methods better suited for uniqueness checks.",
+      "Test your function on inputs that have repeated usernames to ensure duplicates are removed."
     ],
     "hints": [
-      "Leverage the Date.now() method or an incrementing counter to generate unique IDs.",
-      "Remember to stringify complex objects before saving them in localStorage.",
-      "Consider using Array.prototype.filter and Array.prototype.some for efficient tag matching."
+      "Check how the indexOf method is used and if it properly detects duplicates.",
+      "Think about using a Set or an object to track seen usernames more effectively."
     ],
-    "starterCode": "function createAdvancedTodoList() {\n  const STORAGE_KEY = 'advanced_todo_tasks';\n  let tasks = [];\n\n  // Load tasks from localStorage or initialize empty\n  function loadTasks() {\n    const saved = localStorage.getItem(STORAGE_KEY);\n    tasks = saved ? JSON.parse(saved) : [];\n  }\n\n  // Save tasks to localStorage\n  function saveTasks() {\n    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));\n  }\n\n  // Implement the methods below...\n\n  return {\n    addTask(title, tags) {\n      // TODO\n    },\n    toggleComplete(taskId) {\n      // TODO\n    },\n    filterByTags(tags) {\n      // TODO\n    },\n    getTasks(filter) {\n      // TODO\n    }\n  };\n}\n\n// Example usage:\n// const todo = createAdvancedTodoList();\n// todo.addTask('Learn JavaScript', ['programming', 'js']);",
-    "expectedOutput": "After adding tasks and toggling completion, calls to getTasks() and filterByTags() should return arrays of task objects matching the criteria with properties: { id, title, tags, completed }.\n\nExample:\n[\n  { id: 1, title: 'Learn JavaScript', tags: ['programming', 'js'], completed: false },\n  { id: 2, title: 'Write blog post', tags: ['writing'], completed: true }\n]",
+    "starterCode": "function getUniqueUsernames(users) {\n  const unique = [];\n  users.forEach(function(user) {\n    if (unique.indexOf(user.username) !== -1) {\n      unique.push(user.username);\n    }\n  });\n  return unique;\n}",
+    "expectedOutput": "getUniqueUsernames([{username: 'alice'}, {username: 'bob'}, {username: 'alice'}, {username: 'carol'}]) // ['alice', 'bob', 'carol']",
     "concepts": [
-      "JavaScript closures",
-      "localStorage API",
-      "Array methods (filter, some)",
-      "Data persistence",
-      "State management"
+      "arrays",
+      "loops",
+      "conditionals",
+      "data structures",
+      "array methods"
     ],
-    "estimatedTime": "45 minutes",
-    "isFeatured": false
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   },
   {
-    "slug": "refactor-sql-query-for-improved-performance-using-index-friendly-joins",
-    "title": "Refactor SQL Query for Improved Performance Using Index-Friendly Joins",
+    "slug": "write-a-sql-function-to-calculate-total-sales-by-product",
+    "title": "Write a SQL Function to Calculate Total Sales by Product",
     "language": "sql",
-    "difficulty": "intermediate",
-    "category": "optimization",
-    "description": "You are given a SQL query that fetches customer orders with detailed product information, but the current query is slow and inefficient. Refactor the query to optimize performance while keeping the same result set.",
-    "prompt": "The provided query joins three tables: customers, orders, and products to show customer_name, order_id, product_name, and order_date. However, it uses nested subqueries and non-sargable where clauses, leading to poor performance. Refactor the given query to improve readability and optimize execution without changing the output. Explain your improvements.",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Create a SQL function that calculates the total sales amount for a given product ID from a sales table.",
+    "prompt": "Write a SQL function named get_total_sales that accepts a product_id (integer) as input and returns the total sales amount (sum of quantity * price) for that product from the sales table. The sales table schema is: sales(sale_id INT, product_id INT, quantity INT, price DECIMAL). If the product has no sales, the function should return 0.",
     "guidance": [
-      "Replace subqueries used in the FROM or WHERE clauses with explicit JOIN statements.",
-      "Eliminate non-sargable expressions in WHERE clauses to leverage indexing effectively.",
-      "Use table aliases consistently for readability and shorter code.",
-      "Preserve the same output columns and filtering conditions."
+      "Use SUM() aggregation to calculate total sales.",
+      "Handle the case where no rows exist for the given product by returning 0 instead of NULL."
     ],
     "hints": [
-      "Look for subqueries that can be flattened into JOINs to improve query planner choices.",
-      "Avoid using functions or calculations directly on indexed columns in WHERE conditions.",
-      "Check the join types carefully to maintain the logical data relationship."
+      "Consider using COALESCE or IFNULL to handle NULL results from SUM().",
+      "Make sure your function accepts an input parameter for product_id.",
+      "Use a simple SELECT statement inside the function to get the sum."
     ],
-    "starterCode": "SELECT c.customer_name, o.order_id, p.product_name, o.order_date\nFROM customers c\nWHERE c.customer_id IN (\n  SELECT o.customer_id\n  FROM orders o\n  WHERE o.order_id IN (\n    SELECT order_id\n    FROM order_items oi\n    WHERE oi.product_id IN (\n      SELECT product_id\n      FROM products p\n      WHERE p.category = 'Electronics'\n    )\n  )\n)",
-    "expectedOutput": "A list of customer names with their order IDs, product names for products in 'Electronics' category, and the order dates, matching the original logic but returned in a more efficient and readable way.",
+    "starterCode": "CREATE OR REPLACE FUNCTION get_total_sales(prod_id INT) RETURNS DECIMAL AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "For product_id = 101, if the sales are (2 units at $10) and (3 units at $15), expected output is 65.0",
     "concepts": [
-      "SQL JOIN optimization",
-      "Query refactoring",
-      "Index utilization"
+      "SQL functions",
+      "aggregation with SUM",
+      "handling NULL with COALESCE"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-memory-leak-and-logic-errors-in-a-multi-threaded-task-scheduler",
-    "title": "Fix Memory Leak and Logic Errors in a Multi-threaded Task Scheduler",
+    "slug": "refactor-legacy-inventory-management-code-for-efficiency-and-readability",
+    "title": "Refactor Legacy Inventory Management Code for Efficiency and Readability",
     "language": "cpp",
     "difficulty": "advanced",
-    "category": "debugging",
-    "description": "You are given a flawed C++ implementation of a simple multi-threaded task scheduler that manages and executes tasks concurrently. The code contains memory leaks, race conditions, and logic errors that cause incorrect task execution and resource cleanup issues. Your job is to identify and fix the bugs to produce a robust, leak-free, and correctly functioning scheduler.",
-    "prompt": "The provided code implements a TaskScheduler class that allows scheduling and executing tasks concurrently using std::thread. The implementation should allow adding tasks and then start execution, waiting for all tasks to finish. However, there are multiple issues including memory leaks, race conditions, and incorrect handling of thread lifecycle causing crashes or undefined behavior. Fix the bugs so that the scheduler can safely execute all tasks concurrently and clean up all resources properly.",
+    "category": "code-quality",
+    "description": "Improve an inefficient, hard-to-read inventory management function written in C++ by refactoring it to use modern C++ features, enhance performance, and maintain identical behavior.",
+    "prompt": "You are given a legacy function that manages inventory updates in a warehouse system. The function is overly complex, uses inefficient looping, and is hard to maintain. Refactor the function to improve its readability, reduce complexity, optimize performance where possible, and utilize modern C++ best practices, including standard library algorithms and proper use of const correctness. Your refactored function should produce the exact same output and side effects as the original.",
     "guidance": [
-      "Carefully review how std::thread objects are created, stored, and joined to prevent detached threads or dangling resources.",
-      "Investigate potential data races on shared containers used to store tasks and threads; consider applying appropriate synchronization or safer data structures.",
-      "Use smart pointers or containers to ensure automatic cleanup of dynamically allocated memory and prevent leaks."
+      "Preserve the original function’s behavior and output after refactoring.",
+      "Focus on simplifying nested loops and conditionals without changing logic.",
+      "Leverage C++ STL containers and algorithms to replace manual iterations.",
+      "Improve variable naming and code structure for better maintainability."
     ],
     "hints": [
-      "Avoid storing threads as raw pointers and consider using joinable checks before joining threads.",
-      "Make sure no task is lost or overwritten in the container due to multi-threaded access or invalid iterators.",
-      "Check whether the vector holding threads is growing unexpectedly or if threads are joined multiple times."
+      "Consider using std::unordered_map or std::map to optimize lookup operations.",
+      "Use range-based for loops and const references to avoid unnecessary copies.",
+      "Extract smaller helper functions if certain blocks perform distinct subtasks."
     ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <thread>\n#include <functional>\n\nclass TaskScheduler {\nprivate:\n    std::vector<std::thread*> threads;\n    std::vector<std::function<void()>> tasks;\n\npublic:\n    void addTask(std::function<void()> task) {\n        tasks.push_back(task);\n    }\n\n    void run() {\n        for (auto& task : tasks) {\n            std::thread* t = new std::thread(task);\n            threads.push_back(t);\n        }\n\n        for (auto& t : threads) {\n            t->join();\n            // Missing delete on t\n        }\n    }\n\n    ~TaskScheduler() {\n        // Destructor is empty, leading to potential leaks\n    }\n};\n\nint main() {\n    TaskScheduler scheduler;\n    for (int i = 0; i < 5; ++i) {\n        scheduler.addTask([i]() { std::cout << \"Task \" << i << \" executed\" << std::endl; });\n    }\n    scheduler.run();\n    return 0;\n}",
-    "expectedOutput": "Task 0 executed\nTask 1 executed\nTask 2 executed\nTask 3 executed\nTask 4 executed",
+    "starterCode": "\n#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Item {\n    std::string name;\n    int quantity;\n};\n\n// Legacy function: updates inventory quantities based on shipments and removals\nvoid updateInventory(std::vector<Item>& inventory, \n                     const std::vector<Item>& shipments, \n                     const std::vector<Item>& removals) {\n    // Increase quantities for shipments\n    for (size_t i = 0; i < shipments.size(); ++i) {\n        bool found = false;\n        for (size_t j = 0; j < inventory.size(); ++j) {\n            if (inventory[j].name == shipments[i].name) {\n                inventory[j].quantity = inventory[j].quantity + shipments[i].quantity;\n                found = true;\n            }\n        }\n        if (!found) {\n            Item newItem;\n            newItem.name = shipments[i].name;\n            newItem.quantity = shipments[i].quantity;\n            inventory.push_back(newItem);\n        }\n    }\n    // Decrease quantities for removals\n    for (size_t i = 0; i < removals.size(); ++i) {\n        for (size_t j = 0; j < inventory.size(); ++j) {\n            if (inventory[j].name == removals[i].name) {\n                inventory[j].quantity = inventory[j].quantity - removals[i].quantity;\n                if (inventory[j].quantity < 0) {\n                    inventory[j].quantity = 0;\n                }\n            }\n        }\n    }\n}\n\nint main() {\n    std::vector<Item> inventory = { {\"apple\", 10}, {\"banana\", 5} };\n    std::vector<Item> shipments = { {\"orange\", 7}, {\"apple\", 3} };\n    std::vector<Item> removals = { {\"banana\", 2}, {\"apple\", 15} };\n\n    updateInventory(inventory, shipments, removals);\n\n    for (const auto& item : inventory) {\n        std::cout << item.name << \": \" << item.quantity << std::endl;\n    }\n    return 0;\n}\n",
+    "expectedOutput": "apple: 0\nbanana: 3\norange: 7",
     "concepts": [
-      "memory management",
-      "multithreading",
-      "resource cleanup",
-      "std::thread",
-      "synchronization"
+      "code refactoring",
+      "C++ STL algorithms",
+      "performance optimization",
+      "code readability"
     ],
-    "estimatedTime": "20 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "build-a-dynamic-kanban-board-with-drag-and-drop-in-javascript",
-    "title": "Build a Dynamic Kanban Board with Drag-and-Drop in JavaScript",
-    "language": "javascript",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Create a fully functional Kanban board application that supports adding, moving, and editing tasks across multiple columns using native JavaScript and the Drag-and-Drop API.",
-    "prompt": "Build a Kanban board app with at least three columns (e.g., To Do, In Progress, Done). Users should be able to add new tasks, edit existing tasks inline, and move tasks between columns using drag-and-drop functionality. The board's state should persist in localStorage, so refreshing the page retains the current tasks and their column positions.",
-    "guidance": [
-      "Structure your application using modular functions or ES6 classes to manage the board and tasks cleanly.",
-      "Utilize the HTML5 Drag and Drop API for intuitive task moving with proper drag event handling.",
-      "Implement localStorage to save and retrieve tasks and their states on page load.",
-      "Ensure accessibility by allowing keyboard navigation and providing clear visual feedback during dragging."
-    ],
-    "hints": [
-      "Use data attributes to track task ids and their current column during drag events.",
-      "Debounce or throttle save operations to localStorage to optimize performance during frequent updates.",
-      "Use event delegation for handling clicks and edits within dynamically created task elements."
-    ],
-    "starterCode": "class KanbanBoard {\n  constructor(containerId) {\n    this.container = document.getElementById(containerId);\n    this.columns = ['To Do', 'In Progress', 'Done'];\n    this.tasks = {};\n    this.loadTasks();\n    this.render();\n    this.addEventListeners();\n  }\n\n  loadTasks() {\n    const saved = localStorage.getItem('kanbanTasks');\n    this.tasks = saved ? JSON.parse(saved) : {\n      'To Do': [],\n      'In Progress': [],\n      'Done': []\n    };\n  }\n\n  saveTasks() {\n    localStorage.setItem('kanbanTasks', JSON.stringify(this.tasks));\n  }\n\n  render() {\n    this.container.innerHTML = '';\n    this.columns.forEach(column => {\n      const colDiv = document.createElement('div');\n      colDiv.className = 'column';\n      colDiv.dataset.column = column;\n      colDiv.innerHTML = `<h2>${column}</h2><div class='task-list'></div><button>Add Task</button>`;\n      this.container.appendChild(colDiv);\n      const taskList = colDiv.querySelector('.task-list');\n      this.tasks[column].forEach(task => {\n        const taskEl = document.createElement('div');\n        taskEl.className = 'task';\n        taskEl.textContent = task.text;\n        taskEl.draggable = true;\n        taskEl.dataset.id = task.id;\n        taskList.appendChild(taskEl);\n      });\n    });\n  }\n\n  addEventListeners() {\n    // Implement drag, drop, add and edit logic here\n  }\n}\n\n// Usage\n// const board = new KanbanBoard('kanbanContainer');",
-    "expectedOutput": "A dynamic Kanban board with three columns. Users can add new tasks to any column by clicking 'Add Task', edit tasks inline by clicking on the task text, and drag tasks between columns. The state remains consistent after refreshing the page.",
-    "concepts": [
-      "Drag and Drop API",
-      "localStorage persistence",
-      "DOM manipulation",
-      "Event handling",
-      "Data structures"
-    ],
-    "estimatedTime": "60 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "predict-output-for-recursive-state-machine-with-complex-memoization",
-    "title": "Predict Output for Recursive State Machine with Complex Memoization",
-    "language": "python",
-    "difficulty": "advanced",
-    "category": "logic",
-    "description": "Analyze a recursive function that behaves like a state machine with memoization to predict the final output of given input values.",
-    "prompt": "Given the Python function below, predict the exact output when the function `state_machine(10)` is called and its return value is printed. Explain your reasoning regarding the recursion, memoization, and state transitions made by the function.",
-    "guidance": [
-      "Carefully track the recursive calls and the memoization cache to understand repeated calls.",
-      "Observe how the state changes based on conditions and how values are combined in recursion.",
-      "Consider edge cases of the input values and how base cases influence the recursion outcome."
-    ],
-    "hints": [
-      "Focus on how the cache dictionary stores results and prevents re-computation.",
-      "Examine the conditions that change the state and how that affects recursive depth and return values."
-    ],
-    "starterCode": "def state_machine(n, state=0, cache={}):\n    if (n, state) in cache:\n        return cache[(n, state)]\n    if n == 0:\n        return 1 if state == 0 else 0\n    if state == 0:\n        result = state_machine(n - 1, 0, cache) + 2 * state_machine(n - 1, 1, cache)\n    elif state == 1:\n        result = 3 * state_machine(n - 1, 0, cache) + state_machine(n - 1, 2, cache)\n    else:\n        result = state_machine(n - 1, 2, cache) + state_machine(n - 1, 0, cache)\n    cache[(n, state)] = result\n    return result\n\nprint(state_machine(10))",
-    "expectedOutput": "6831",
-    "concepts": [
-      "recursion",
-      "memoization",
-      "state machine",
-      "dynamic programming"
-    ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "refactor-a-simple-temperature-converter-function",
-    "title": "Refactor a Simple Temperature Converter Function",
-    "language": "python",
+    "slug": "create-a-basic-employee-directory-table-and-query",
+    "title": "Create a Basic Employee Directory Table and Query",
+    "language": "sql",
     "difficulty": "beginner",
-    "category": "code-quality",
-    "description": "Improve the readability and efficiency of a basic Python function that converts temperatures from Celsius to Fahrenheit.",
-    "prompt": "You are given a function that converts temperatures from Celsius to Fahrenheit, but the code is written in a messy way with unnecessary variables and redundant steps. Your task is to refactor the function to make it cleaner, simpler, and easier to understand, while keeping the same behavior and output.",
+    "category": "data-modeling",
+    "description": "Build a simple employee directory table and write a query to retrieve filtered information about employees, practicing basic SQL data modeling and SELECT queries.",
+    "prompt": "You are tasked with creating a simple employee directory. Start by creating a table named 'employees' with the following columns: employee_id (integer), first_name (text), last_name (text), department (text), and salary (integer). After creating and inserting sample data (3-5 rows), write a query to select all employees from the 'Sales' department whose salary is greater than 50000.",
     "guidance": [
-      "Remove any unnecessary intermediate variables to simplify the code.",
-      "Use meaningful variable names or streamline expressions directly.",
-      "Ensure the returned value is accurate and the function still works correctly."
+      "Define the table schema with appropriate data types.",
+      "Insert sample data into the table.",
+      "Write a SELECT query with WHERE conditions to filter by department and salary."
     ],
     "hints": [
-      "Remember the formula: Fahrenheit = Celsius * 9/5 + 32.",
-      "You can return the expression directly without storing it in a separate variable first.",
-      "Avoid redundant prints or unused variables to keep the function concise."
+      "Use CREATE TABLE syntax with specified columns.",
+      "Use INSERT INTO to add multiple rows of employees.",
+      "Use WHERE clause with multiple conditions combined with AND."
     ],
-    "starterCode": "def celsius_to_fahrenheit(c):\n    temperature_in_fahrenheit = 0\n    temperature_in_fahrenheit = c * (9 / 5)\n    temperature_in_fahrenheit = temperature_in_fahrenheit + 32\n    return temperature_in_fahrenheit",
-    "expectedOutput": "celsius_to_fahrenheit(0)  # 32.0\ncelsius_to_fahrenheit(100)  # 212.0\ncelsius_to_fahrenheit(-40)  # -40.0",
+    "starterCode": "CREATE TABLE employees (\n  employee_id INT,\n  first_name TEXT,\n  last_name TEXT,\n  department TEXT,\n  salary INT\n);\n\nINSERT INTO employees VALUES\n(1, 'John', 'Doe', 'Sales', 60000),\n(2, 'Jane', 'Smith', 'Marketing', 45000),\n(3, 'Emily', 'Jones', 'Sales', 52000),\n(4, 'Michael', 'Brown', 'Engineering', 70000),\n(5, 'Anne', 'Clark', 'Sales', 48000);\n\n-- Write your SELECT query below to find sales employees with salary > 50000\n",
+    "expectedOutput": "employee_id | first_name | last_name | department | salary\n------------|------------|-----------|------------|-------\n1           | John       | Doe       | Sales      | 60000\n3           | Emily      | Jones     | Sales      | 52000",
     "concepts": [
-      "function refactoring",
-      "basic arithmetic operations",
-      "return statements"
+      "CREATE TABLE",
+      "INSERT INTO",
+      "SELECT",
+      "WHERE clause"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "fix-the-off-by-one-error-in-list-processing-function",
+    "title": "Fix the Off-By-One Error in List Processing Function",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a Python function designed to process a list of numbers and return a transformed list. The current implementation has an off-by-one error causing incorrect output.",
+    "prompt": "The function `transform_numbers` is intended to return a new list where each element is the sum of the current element and the next element in the original list. However, the implementation has a bug causing it to skip the last element or produce an incorrect result. Your task is to fix the bug while keeping the intended logic intact.\n\nExample: For input [1, 2, 3, 4], the expected output is [3, 5, 7] because:\n- 1 + 2 = 3\n- 2 + 3 = 5\n- 3 + 4 = 7\n\nFix the code provided so that it works correctly for any list of integers with length >= 2.",
+    "guidance": [
+      "Check the loop boundaries and index usage carefully to identify where the off-by-one error occurs.",
+      "Make sure you do not access indexes out of range when summing elements."
+    ],
+    "hints": [
+      "Remember that list indexes in Python start at 0 and go up to len(list)-1.",
+      "Try printing indexes inside the loop to understand which elements are being accessed."
+    ],
+    "starterCode": "def transform_numbers(nums):\n    result = []\n    for i in range(len(nums)):\n        result.append(nums[i] + nums[i+1])\n    return result",
+    "expectedOutput": "[3, 5, 7]",
+    "concepts": [
+      "list indexing",
+      "loops",
+      "off-by-one error",
+      "debugging"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-the-optimized-lru-cache-implementation",
+    "title": "Fix the Bug in the Optimized LRU Cache Implementation",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the subtle bug in the provided Least Recently Used (LRU) cache implementation which causes it to fail under certain eviction conditions. The solution must maintain O(1) time complexity for get and put operations while correctly managing the cache size and order.",
+    "prompt": "You are given a Python class implementing an LRU cache using a dictionary and a doubly linked list. The goal is to store key-value pairs with constant time retrieval and eviction based on the least recently used policy. However, the current implementation has a bug that results in incorrect eviction behavior once the cache reaches its capacity. Your task is to identify and fix the bug so that the cache evicts the correct item when full and maintains the correct internal state.",
+    "guidance": [
+      "Pay close attention to the eviction logic when the cache size exceeds capacity.",
+      "Examine how the doubly linked list nodes are updated during get and put operations.",
+      "Verify that all pointers (prev and next) are correctly set during insertions and removals."
+    ],
+    "hints": [
+      "Check if the tail node is always correctly identified before removal.",
+      "Look for any off-by-one errors or incorrect pointer assignments in the eviction process.",
+      "Consider if the cache size is updated appropriately after node removal."
+    ],
+    "starterCode": "class Node:\n    def __init__(self, key, val):\n        self.key = key\n        self.val = val\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.cache = dict()  # key -> node\n        self.head = Node(0, 0)\n        self.tail = Node(0, 0)\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def _remove(self, node):\n        prev = node.prev\n        next = node.next\n        prev.next = next\n        next.prev = prev\n\n    def _add(self, node):\n        node.prev = self.head\n        node.next = self.head.next\n        self.head.next.prev = node\n        self.head.next = node\n\n    def get(self, key):\n        if key in self.cache:\n            node = self.cache[key]\n            self._remove(node)\n            self._add(node)\n            return node.val\n        return -1\n\n    def put(self, key, value):\n        if key in self.cache:\n            self._remove(self.cache[key])\n        node = Node(key, value)\n        self._add(node)\n        self.cache[key] = node\n        if len(self.cache) > self.capacity:\n            node_to_remove = self.tail.prev\n            self._remove(node_to_remove)\n            # Bug here: missing deletion from cache dictionary\n",
+    "expectedOutput": "After fixing, the code should pass these operations:\nlru = LRUCache(2)\nlru.put(1, 1)  # cache is {1=1}\nlru.put(2, 2)  # cache is {1=1, 2=2}\nlru.get(1)     # returns 1\nlru.put(3, 3)  # evicts key 2, cache is {1=1, 3=3}\nlru.get(2)     # returns -1 (not found)\nlru.put(4, 4)  # evicts key 1, cache is {4=4, 3=3}\nlru.get(1)     # returns -1 (not found)\nlru.get(3)     # returns 3\nlru.get(4)     # returns 4",
+    "concepts": [
+      "data structures",
+      "linked list",
+      "hash map",
+      "cache eviction",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ]
