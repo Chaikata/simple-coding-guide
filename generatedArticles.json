@@ -1,149 +1,187 @@
 [
   {
-    "slug": "building-real-time-chat-application-websockets-javascript",
-    "title": "Building a Real-Time Chat Application with WebSockets in JavaScript",
+    "slug": "build-scalable-data-models-javascript-real-time",
+    "title": "How to Build Scalable Data Models in JavaScript for Real-Time Applications",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build a simple real-time chat application using WebSockets in JavaScript. This beginner-friendly tutorial walks you through setting up a WebSocket server and creating a client to send and receive messages instantly.",
-    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
+    "description": "Learn how to design scalable and efficient data models in JavaScript to power real-time applications that handle dynamic data smoothly.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
     "content": [
       {
         "type": "paragraph",
-        "value": "In today's connected world, real-time communication is essential for many applications. One of the best ways to achieve real-time updates in web applications is through WebSockets. They allow two-way communication between a client and server, enabling instant message exchange without the need for constant client requests. This tutorial will guide you step-by-step to build a simple real-time chat application using JavaScript and WebSockets."
+        "value": "Real-time applications like chat apps, dashboards, and live updates require data models that can efficiently manage frequent and rapid data changes. In this tutorial, you’ll learn how to build scalable data models in JavaScript that are flexible, easy to maintain, and optimized for real-time operations."
       },
       {
         "type": "paragraph",
-        "value": "We will create two parts: a WebSocket server running with Node.js and a client-side HTML page that communicates with the server. Before you begin, make sure you have Node.js installed on your computer."
+        "value": "### Step 1: Understand the Importance of Scalability in Real-Time Apps\nReal-time apps often handle multiple simultaneous users and data streams. Your data model needs to process, update, and transmit data without lag or bottlenecks. Start with a structure that supports quick reads and writes."
       },
       {
         "type": "paragraph",
-        "value": "First, let's create the WebSocket server. We will use the popular `ws` library for WebSocket support in Node.js. Open your terminal and create a new project folder, then run:"
+        "value": "### Step 2: Use Immutable Data Structures\nImmutable data helps avoid unintended side-effects when your data updates. JavaScript’s objects and arrays can be copied rather than mutated, supporting predictable state updates."
       },
       {
         "type": "code",
-        "value": "npm init -y\nnpm install ws"
+        "value": "const oldState = { users: ['Alice', 'Bob'] };\nconst newState = { ...oldState, users: [...oldState.users, 'Charlie'] };\nconsole.log(newState); // { users: ['Alice', 'Bob', 'Charlie'] }"
       },
       {
         "type": "paragraph",
-        "value": "Next, create a file called `server.js` in your project folder and add the following code:"
+        "value": "### Step 3: Normalize Your Data\nNormalize data by storing entities in dictionaries (objects) indexed by unique IDs. This reduces data redundancy and simplifies updates."
       },
       {
         "type": "code",
-        "value": "const WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', ws => {\n  console.log('A new client connected');\n\n  ws.on('message', message => {\n    console.log(`Received: ${message}`);\n\n    // Broadcast the message to all connected clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.send('Welcome to the chat!');\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+        "value": "const messages = {\n  'msg1': { id: 'msg1', userId: 'user1', content: 'Hello!' },\n  'msg2': { id: 'msg2', userId: 'user2', content: 'Hi!' }\n};\n\nconst users = {\n  'user1': { id: 'user1', name: 'Alice' },\n  'user2': { id: 'user2', name: 'Bob' }\n};"
       },
       {
         "type": "paragraph",
-        "value": "This server listens on port 8080. When a client connects, it welcomes the user, and every time it receives a message from a client, it broadcasts the message to all other connected clients."
+        "value": "This way, when you need to update a user’s name, you modify it in one place without updating multiple message objects."
       },
       {
         "type": "paragraph",
-        "value": "Now, let's build the client side. Create an `index.html` file in the same folder with the following content:"
+        "value": "### Step 4: Use Event-Driven Updates\nReal-time apps benefit from event-driven data changes where components subscribe to updates. Create a simple event emitter to manage data changes."
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  <title>Real-Time Chat</title>\n  <style>\n    body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; }\n    #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }\n    #input { width: 80%; padding: 10px; }\n    #send { padding: 10px; }\n  </style>\n</head>\n<body>\n  <h1>Real-Time Chat Application</h1>\n  <div id=\"messages\"></div>\n  <input id=\"input\" type=\"text\" placeholder=\"Type a message...\" />\n  <button id=\"send\">Send</button>\n\n  <script>\n    const ws = new WebSocket('ws://localhost:8080');\n    const messages = document.getElementById('messages');\n    const input = document.getElementById('input');\n    const sendButton = document.getElementById('send');\n\n    // Display messages\n    ws.onmessage = event => {\n      const message = document.createElement('div');\n      message.textContent = event.data;\n      messages.appendChild(message);\n      messages.scrollTop = messages.scrollHeight;\n    };\n\n    // Send message function\n    function sendMessage() {\n      const text = input.value.trim();\n      if (text !== '') {\n        ws.send(text);\n        input.value = '';\n      }\n    }\n\n    sendButton.addEventListener('click', sendMessage);\n\n    // Enable sending message by pressing Enter\n    input.addEventListener('keypress', event => {\n      if (event.key === 'Enter') {\n        sendMessage();\n      }\n    });\n\n    ws.onopen = () => {\n      console.log('Connected to the WebSocket server');\n    };\n\n    ws.onerror = error => {\n      console.error('WebSocket error:', error);\n    };\n\n    ws.onclose = () => {\n      console.log('WebSocket connection closed');\n    };\n  </script>\n</body>\n</html>"
+        "value": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n  on(event, listener) {\n    (this.events[event] = this.events[event] || []).push(listener);\n  }\n  emit(event, data) {\n    (this.events[event] || []).forEach(listener => listener(data));\n  }\n}\n\nconst dataEvents = new EventEmitter();\n\ndataEvents.on('userUpdate', (user) => {\n  console.log('User updated:', user);\n});\n\ndataEvents.emit('userUpdate', { id: 'user1', name: 'Alice Smith' });"
       },
       {
         "type": "paragraph",
-        "value": "This simple HTML page sets up a WebSocket connection to the server. You can type messages into the input box and send them. All messages received from the server will be displayed in the messages area, enabling real-time chat."
+        "value": "### Step 5: Handle Large Data with Pagination or Windowing\nAvoid loading all data at once in real-time views. Use pagination or virtual scrolling to keep your app responsive."
       },
       {
         "type": "paragraph",
-        "value": "To test your chat app, follow these steps:\n1. Run the WebSocket server by executing `node server.js` in your terminal.\n2. Open the `index.html` file in multiple browser tabs or windows.\n3. Send messages from any tab and see them appear instantly in all other tabs.\n\nThis demonstrates a basic real-time communication app using WebSockets in JavaScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "Feel free to enhance this application further by adding usernames, message timestamps, or improving the user interface. WebSockets provide a powerful way to build responsive and interactive applications with real-time data flow."
+        "value": "### Conclusion\nBy normalizing data, using immutable updates, and an event-driven approach, you can build scalable data models in JavaScript that keep your real-time applications performing smoothly as they grow."
       }
     ]
   },
   {
-    "slug": "mastering-asynchronous-error-handling-in-javascript-promises",
-    "title": "Mastering Asynchronous Error Handling in JavaScript Promises: Beyond Try/Catch",
+    "slug": "understanding-javascript-event-loop-beginners-async-errors",
+    "title": "Understanding JavaScript Event Loop: A Beginner's Guide to Async Errors",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to effectively handle errors in JavaScript promises beyond simple try/catch, using best practices for robust asynchronous code.",
-    "videoUrl": "https://www.youtube.com/watch?v=wlTKcthuNnY",
+    "description": "Learn how JavaScript's event loop works and how it affects handling asynchronous errors, with easy examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=eiC58R16hb8",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript promises are a powerful way to handle asynchronous operations, but managing errors can sometimes be tricky, especially for beginners. While many developers start by using try/catch with async/await, there are other strategies to master asynchronous error handling that make your code cleaner and more reliable."
+        "value": "JavaScript is a single-threaded language, meaning it can only execute one task at a time. However, modern web applications often perform asynchronous tasks like fetching data or reading files without blocking the main thread. This is possible thanks to the event loop. Understanding the event loop is crucial, especially when dealing with errors in asynchronous code."
       },
       {
         "type": "paragraph",
-        "value": "Let's explore how promise error handling works, common pitfalls, and the best practices to catch errors both inside promises and in async functions."
+        "value": "The event loop continuously checks the call stack and the task queues (microtask and macrotask queues). When the call stack is empty, it takes the first task from the queues and pushes it onto the stack for execution. This behavior impacts how and when errors from asynchronous operations are caught."
       },
       {
         "type": "paragraph",
-        "value": "At its core, a Promise represents a value that will be available in the future. Errors in promises don't behave exactly like synchronous errors, so it's important to understand how they propagate."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple promise that rejects (throws an error):"
+        "value": "Let's look at an example where an asynchronous error occurs inside a setTimeout callback:"
       },
       {
         "type": "code",
-        "value": "const failingPromise = new Promise((resolve, reject) => {\n  reject(new Error('Something went wrong!'));\n});"
+        "value": "setTimeout(() => {\n  // This error is asynchronous\n  throw new Error('Async error inside setTimeout');\n}, 1000);\n\n// This will not catch the async error\ntry {\n  setTimeout(() => {\n    throw new Error('Async error inside setTimeout');\n  }, 1000);\n} catch (err) {\n  console.log('Caught error:', err);\n}"
       },
       {
         "type": "paragraph",
-        "value": "If you try to handle this using a try/catch block without awaiting, the catch block won't catch the error:"
+        "value": "In this code, the try-catch block won’t catch the error thrown inside setTimeout because the callback runs later, after the try-catch block is already done. This is a common pitfall for beginners learning asynchronous JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "To properly handle asynchronous errors, you can use event listeners, promises, or Async/Await syntax with try-catch. Here's how to catch errors using a Promise:"
       },
       {
         "type": "code",
-        "value": "try {\n  failingPromise;\n} catch (error) {\n  console.log('Caught error:', error); // This will NOT run\n}"
+        "value": "function asyncOperation() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Error inside promise'));\n    }, 1000);\n  });\n}\n\nasyncOperation()\n  .catch(err => {\n    console.log('Caught async error:', err.message);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "This is because the error is asynchronous and the promise is not awaited. Instead, you should either use `.catch()` on the promise or use async/await with try/catch."
-      },
-      {
-        "type": "paragraph",
-        "value": "Handling the error using `.catch()`:"
+        "value": "This example shows that errors inside asynchronous operations can be caught by attaching a .catch() to the promise. You can also use Async/Await with try-catch for cleaner syntax:"
       },
       {
         "type": "code",
-        "value": "failingPromise\n  .then(result => console.log(result))\n  .catch(err => console.log('Caught with .catch():', err.message));"
+        "value": "async function runAsync() {\n  try {\n    await asyncOperation();\n  } catch(err) {\n    console.log('Caught async error with await:', err.message);\n  }\n}\n\nrunAsync();"
       },
       {
         "type": "paragraph",
-        "value": "Or, with async/await and try/catch:"
+        "value": "To summarize, the key points for beginners are: JavaScript’s event loop defers asynchronous callbacks so try-catch blocks outside these callbacks won’t catch errors; use Promises and Async/Await with proper error handling to catch async errors effectively."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-data-models-typescript-large-scale-apps",
+    "title": "Designing Scalable Data Models in TypeScript for Large-Scale Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and maintainable data models in TypeScript to manage complexity and performance in large-scale applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=Dl-BdxNRUqs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building large-scale applications in TypeScript, designing scalable and maintainable data models is crucial. Good data models help manage complexity, ensure data consistency, and improve performance. In this article, we'll explore practical strategies to design scalable TypeScript interfaces and classes that grow with your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understand Your Data Structure and Domain"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before writing any code, analyze your application's core entities and relationships. Identify key data points, how entities interact, and potential future requirements. This upfront understanding will guide your model design to be flexible and extensible."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Interfaces and Types for Clear Contracts"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript interfaces and types help define clear contracts for your data structures. Use interfaces to model entities with properties, and types for unions or composite structures."
       },
       {
         "type": "code",
-        "value": "async function handleAsync() {\n  try {\n    const result = await failingPromise;\n    console.log(result);\n  } catch (error) {\n    console.log('Caught with try/catch:', error.message);\n  }\n}\nhandleAsync();"
+        "value": "interface User {\n  id: string;\n  name: string;\n  email: string;\n  role: UserRole;\n}\n\ntype UserRole = 'admin' | 'editor' | 'viewer';"
       },
       {
         "type": "paragraph",
-        "value": "### Why go beyond try/catch?"
+        "value": "### Modularize Your Models"
       },
       {
         "type": "paragraph",
-        "value": "Even though try/catch looks clean, sometimes you need more nuanced error handling on promises that haven't been awaited yet, or when chaining multiple promises."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, when chaining promises, placing a single `.catch()` at the end can catch errors from the entire chain:"
+        "value": "Break down large models into smaller, reusable components. This modular approach reduces duplication and makes it easier to update or extend specific parts without affecting others."
       },
       {
         "type": "code",
-        "value": "fetch('https://jsonplaceholder.typicode.com/posts/1')\n  .then(response => response.json())\n  .then(data => {\n    if (!data.title) throw new Error('Title missing');\n    console.log('Post title:', data.title);\n  })\n  .catch(error => console.error('Error in promise chain:', error.message));"
+        "value": "interface Address {\n  street: string;\n  city: string;\n  zipCode: string;\n}\n\ninterface User {\n  id: string;\n  name: string;\n  email: string;\n  address?: Address; // Optional nested object\n}"
       },
       {
         "type": "paragraph",
-        "value": "But if you wanted to handle errors at each step differently, you could add `.catch()` after a specific stage, like this:"
+        "value": "### Use Utility Types to Manage Optional and Read-Only Fields"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript provides utility types like `Partial`, `Readonly`, and `Pick` to create flexible variants of your models without redefining them."
       },
       {
         "type": "code",
-        "value": "fetch('https://jsonplaceholder.typicode.com/posts/1')\n  .then(response => {\n    if (!response.ok) throw new Error('Network response was not ok');\n    return response.json();\n  })\n  .catch(error => console.error('Fetch error:', error.message))\n  .then(data => {\n    if (data && !data.title) throw new Error('Title missing');\n    return data;\n  })\n  .catch(error => console.error('Data processing error:', error.message));"
+        "value": "type UserUpdate = Partial<User>; // All fields optional for update scenarios\n\ntype ReadonlyUser = Readonly<User>; // Immutable user data"
       },
       {
         "type": "paragraph",
-        "value": "### Tips for mastering asynchronous error handling:"
+        "value": "### Define Classes for Complex Behavior"
       },
       {
         "type": "paragraph",
-        "value": "1. Always return or await promises so you can catch their errors.\n2. Use `.catch()` for handling errors immediately after promises when you don't use async/await.\n3. Use try/catch inside async functions for a synchronous feel.\n4. Chain `.catch()` judiciously to pinpoint errors in complex workflows.\n5. Avoid unhandled promise rejections by always catching errors."
+        "value": "While interfaces describe shape, classes allow you to add methods and logic to your data models. This is useful when your entities need behavior, such as validation or computed properties."
+      },
+      {
+        "type": "code",
+        "value": "class UserModel {\n  constructor(\n    public id: string,\n    public name: string,\n    public email: string,\n    public role: UserRole\n  ) {}\n\n  isAdmin(): boolean {\n    return this.role === 'admin';\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Optimize with Discriminated Unions for Variant Data"
+      },
+      {
+        "type": "paragraph",
+        "value": "For entities that have variants differing by type, use discriminated unions to clearly define each variant and handle them safely."
+      },
+      {
+        "type": "code",
+        "value": "interface AdminUser {\n  type: 'admin';\n  id: string;\n  permissions: string[];\n}\n\ninterface RegularUser {\n  type: 'regular';\n  id: string;\n  profileComplete: boolean;\n}\n\ntype User = AdminUser | RegularUser;\n\nfunction getUserInfo(user: User) {\n  if (user.type === 'admin') {\n    return `Admin with permissions: ${user.permissions.join(', ')}`;\n  } else {\n    return `Regular user completed profile? ${user.profileComplete}`;\n  }\n}"
       },
       {
         "type": "paragraph",
@@ -151,387 +189,425 @@
       },
       {
         "type": "paragraph",
-        "value": "To effectively handle asynchronous errors in JavaScript, understand how promise error propagation works. While try/catch works great with async/await, `.catch()` on promises is essential for catching errors in non-async code or promise chains. Combining both approaches thoughtfully results in robust, readable, and maintainable asynchronous JavaScript."
+        "value": "Designing scalable data models in TypeScript involves understanding your data domain, defining clear interfaces, modularizing your models, leveraging utility types, incorporating classes for behavior, and using discriminated unions for variant data. By following these practices, you can build large-scale applications that are easier to maintain and extend."
       }
     ]
   },
   {
-    "slug": "building-scalable-data-models-typescript",
-    "title": "Building Scalable Data Models in TypeScript for Modern Web Applications",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to create scalable and maintainable data models in TypeScript to build robust modern web applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=tj5VW2xJsqU",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "As modern web applications grow, managing data efficiently becomes essential. TypeScript's type system helps create clear and scalable data models that simplify development and reduce bugs. In this tutorial, we'll learn how to build scalable data models using TypeScript by leveraging interfaces, types, and classes."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by defining a simple data model for a user in an application. We will use TypeScript's interface to describe the shape of user objects."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  isActive: boolean;\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "This interface defines the structure our user data must follow. It helps TypeScript catch errors if we try to use any object that doesn't fit this pattern."
-      },
-      {
-        "type": "paragraph",
-        "value": "For scalable applications, data models can become more complex. We often need to reuse and extend them. TypeScript allows you to extend interfaces which is great for such cases."
-      },
-      {
-        "type": "code",
-        "value": "interface AdminUser extends User {\n  adminSince: Date;\n  permissions: string[];\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, AdminUser extends User adding additional properties specific to admins. This keeps your models clean and manageable."
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes you want stricter control over how data is created and managed. Classes in TypeScript let you implement logic along with your data structures."
-      },
-      {
-        "type": "code",
-        "value": "class UserModel implements User {\n  constructor(\n    public id: number,\n    public name: string,\n    public email: string,\n    public isActive: boolean = true\n  ) {}\n\n  deactivate() {\n    this.isActive = false;\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, UserModel implements the User interface and adds a method to deactivate a user. This makes your data model more than just data — it can hold behaviors too."
-      },
-      {
-        "type": "paragraph",
-        "value": "To structure larger apps, consider grouping related models and interfaces into modules or folders. Also use utility types like Partial<T>, Omit<T, K>, and Pick<T, K> to manipulate models efficiently."
-      },
-      {
-        "type": "code",
-        "value": "type UserPreview = Pick<User, 'id' | 'name'>;\n\nfunction printUserPreview(user: UserPreview) {\n  console.log(`User: ${user.name} (ID: ${user.id})`);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, UserPreview only contains some fields from User. This is useful when you only need part of the data, improving clarity and performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, building scalable data models in TypeScript involves:\n- Using interfaces to define clear data shapes\n- Extending interfaces for reuse and specialization\n- Leveraging classes for data with logic\n- Utilizing utility types for flexible models\n- Organizing models for maintainability"
-      },
-      {
-        "type": "paragraph",
-        "value": "With these principles, you'll be able to build robust data models that scale gracefully as your application grows."
-      }
-    ]
-  },
-  {
-    "slug": "advanced-typescript-error-handling-patterns-for-scalable-applications",
-    "title": "Advanced TypeScript Error Handling Patterns for Scalable Applications",
+    "slug": "comparing-typescripts-type-narrowing-techniques-for-safer-code",
+    "title": "Comparing TypeScript's Type Narrowing Techniques for Safer Code",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn practical and advanced TypeScript error handling techniques to build scalable and maintainable applications with clear, robust, and type-safe error management.",
-    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "description": "Learn how TypeScript's type narrowing techniques help you write safer code by reducing errors and improving type checks. This beginner-friendly guide explains different narrowing methods with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=l37xh8Cu8G0",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is a crucial part of building scalable applications, and TypeScript can help by adding strong type safety to your error management. In this article, we'll explore advanced error handling patterns that are beginner-friendly yet very effective for building maintainable codebases."
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. One of TypeScript's key features is type narrowing, where the compiler refines variable types based on runtime checks. This helps catch errors early and ensures safer, more predictable code. In this article, we'll explore common type narrowing techniques with simple examples to help you understand how to write safer TypeScript code."
       },
       {
         "type": "paragraph",
-        "value": "A common pattern is using custom error classes instead of throwing generic errors. This makes debugging easier and allows TypeScript to understand error types better."
+        "value": "### 1. typeof Narrowing\nTypeScript can narrow types based on the `typeof` operator, which works well for primitive types like `string`, `number`, and `boolean`."
       },
       {
         "type": "code",
-        "value": "class AppError extends Error {\n  public readonly code: number;\n\n  constructor(message: string, code: number) {\n    super(message);\n    this.code = code;\n    this.name = this.constructor.name;\n\n    // Maintains proper stack trace for where error was thrown (only in V8 engines)\n    if (Error.captureStackTrace) {\n      Error.captureStackTrace(this, this.constructor);\n    }\n  }\n}"
+        "value": "function printValue(value: string | number) {\n  if (typeof value === 'string') {\n    console.log('String value:', value.toUpperCase());\n  } else {\n    console.log('Number value:', value.toFixed(2));\n  }\n}\n\nprintValue('hello'); // String value: HELLO\nprintValue(3.1415);  // Number value: 3.14"
       },
       {
         "type": "paragraph",
-        "value": "Using this class, you can throw errors with specific codes, which can help you categorize errors easily later on."
+        "value": "Here, TypeScript knows inside the `if` block that `value` is a `string` and in the `else` block it must be a `number`. This prevents errors like trying to call a string method on a number."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. instanceof Narrowing\nYou can narrow types with the `instanceof` operator, useful when working with classes or built-in objects."
       },
       {
         "type": "code",
-        "value": "function fetchData(url: string): Promise<string> {\n  return new Promise((resolve, reject) => {\n    if (!url.startsWith('https://')) {\n      reject(new AppError('URL must start with https://', 400));\n      return;\n    }\n\n    // Simulate fetching data\n    setTimeout(() => {\n      resolve('Data from ' + url);\n    }, 1000);\n  });\n}"
+        "value": "class Dog {\n  bark() {\n    console.log('Woof!');\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log('Meow!');\n  }\n}\n\nfunction speak(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark(); // TypeScript knows 'animal' is Dog\n  } else {\n    animal.meow(); // TypeScript knows 'animal' is Cat\n  }\n}\n\nspeak(new Dog());\nspeak(new Cat());"
       },
       {
         "type": "paragraph",
-        "value": "When consuming functions that might throw errors, use `try-catch` blocks cautiously. Always narrow the possible error types using TypeScript's `instanceof` guard to handle different error shapes correctly."
+        "value": "Since the types are narrowed to either `Dog` or `Cat`, you can safely access the class-specific methods without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Equality Narrowing\nComparing a variable to a literal or another variable can narrow union types."
       },
       {
         "type": "code",
-        "value": "async function getData() {\n  try {\n    const data = await fetchData('http://example.com');\n    console.log(data);\n  } catch (error) {\n    if (error instanceof AppError) {\n      console.error(`App error (${error.code}): ${error.message}`);\n    } else if (error instanceof Error) {\n      console.error(`General error: ${error.message}`);\n    } else {\n      console.error('Unknown error', error);\n    }\n  }\n}"
+        "value": "function checkStatus(status: 'success' | 'error' | 'loading') {\n  if (status === 'success') {\n    console.log('Data loaded successfully!');\n  } else if (status === 'error') {\n    console.log('Error loading data.');\n  } else {\n    console.log('Loading...');\n  }\n}\n\ncheckStatus('success');"
       },
       {
         "type": "paragraph",
-        "value": "Another useful pattern for scalable applications is creating a unified error response object when working with APIs. This object explicitly defines error data, which helps frontend and backend developers handle errors in a consistent way."
+        "value": "The equality checks narrow type based on the matched literal, ensuring your code only handles the possible cases you specify."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. in Operator Narrowing\nThe `in` operator checks for keys in objects to help narrow down types when dealing with unions of object shapes."
       },
       {
         "type": "code",
-        "value": "interface ApiError {\n  message: string;\n  statusCode: number;\n  details?: any;\n}\n\nfunction createApiError(message: string, statusCode: number, details?: any): ApiError {\n  return { message, statusCode, details };\n}"
+        "value": "type Square = { kind: 'square'; size: number };\ntype Rectangle = { kind: 'rectangle'; width: number; height: number };\n\ntype Shape = Square | Rectangle;\n\nfunction area(shape: Shape) {\n  if ('size' in shape) {\n    return shape.size * shape.size;\n  } else {\n    return shape.width * shape.height;\n  }\n}\n\nconsole.log(area({ kind: 'square', size: 5 }));    // 25\nconsole.log(area({ kind: 'rectangle', width: 4, height: 6 })); // 24"
       },
       {
         "type": "paragraph",
-        "value": "This way, instead of throwing raw errors, you return structured error objects, making it easier to serialize and handle them across services."
+        "value": "The use of `'size' in shape` lets TypeScript narrow that `shape` is a `Square` and access `size` safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Custom Type Guards\nYou can write your own functions to narrow types by returning a type predicate."
       },
       {
         "type": "code",
-        "value": "async function fetchUser(id: string): Promise<{ name: string } | ApiError> {\n  if (id === '0') {\n    return createApiError('User not found', 404);\n  }\n\n  return { name: 'John Doe' };\n}\n\nasync function main() {\n  const result = await fetchUser('0');\n  if ('statusCode' in result) {\n    console.error(`Error ${result.statusCode}: ${result.message}`);\n  } else {\n    console.log('User:', result.name);\n  }\n}"
+        "value": "interface Fish {\n  swim(): void;\n}\n\ninterface Bird {\n  fly(): void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();\n  } else {\n    pet.fly();\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Finally, TypeScript’s union types and discriminated unions allow you to model complex error states cleanly and safely."
-      },
-      {
-        "type": "code",
-        "value": "type NetworkError = { type: 'NETWORK_ERROR'; message: string };\ntype ValidationError = { type: 'VALIDATION_ERROR'; message: string; field: string };\ntype AppErrors = NetworkError | ValidationError;\n\nfunction handleError(error: AppErrors) {\n  switch (error.type) {\n    case 'NETWORK_ERROR':\n      console.error('Network problem:', error.message);\n      break;\n    case 'VALIDATION_ERROR':\n      console.error(`Validation failed on ${error.field}: ${error.message}`);\n      break;\n  }\n}"
+        "value": "The function `isFish` is a user-defined type guard. It returns a boolean, but more importantly, tells TypeScript that the checked object should now be treated as a `Fish` inside the `if` block."
       },
       {
         "type": "paragraph",
-        "value": "In summary, advanced TypeScript error handling is about clarity and safety. Use custom errors with classes, unify error return types for APIs, and take advantage of TypeScript’s type system to distinguish errors. This leads to more maintainable and scalable applications."
+        "value": "### Summary\nType narrowing is essential for writing safe TypeScript code. Using built-in keywords like `typeof`, `instanceof`, `in`, equality checks, and custom type guards, you can help the compiler understand exactly what types your code is working with at different points, avoiding runtime errors and improving code clarity. Try these techniques in your next TypeScript project!"
       }
     ]
   },
   {
-    "slug": "mastering-python-asyncio-writing-high-performance-concurrent-code",
-    "title": "Mastering Python's Asyncio: Writing High-Performance Concurrent Code",
+    "slug": "mastering-python-metaclasses-deep-dive-into-dynamic-class-creation",
+    "title": "Mastering Python Metaclasses: Deep Dive into Dynamic Class Creation",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python's asyncio module to write efficient and high-performance concurrent code even as a beginner.",
-    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "description": "Learn the basics of Python metaclasses and how they allow dynamic class creation for more powerful and flexible code design.",
+    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
     "content": [
       {
         "type": "paragraph",
-        "value": "Concurrency is crucial for improving the performance of modern programs, especially when dealing with I/O-bound tasks like networking or file reading. Python's asyncio module provides a powerful framework to write concurrent code using the async/await syntax, which is both readable and efficient. In this tutorial, we'll explore the basics of asyncio and how you can leverage it to write high-performance code even if you're just getting started with Python."
+        "value": "Python is a powerful and flexible language, and one of its more advanced features is metaclasses. They allow developers to control the creation of classes dynamically. If you've worked with classes and inheritance, metaclasses take this a step further by giving you control over the actual class itself."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand the key concepts: Asyncio allows you to run multiple tasks seemingly at the same time by switching between them when they're waiting for something like network data. This is different from multithreading because it doesn't involve starting new threads, thus avoiding a lot of complexity and overhead."
+        "value": "In this tutorial, we'll break down metaclasses into beginner-friendly concepts. You'll learn what metaclasses are, why you might use them, and see simple examples to start mastering this topic."
       },
       {
         "type": "paragraph",
-        "value": "To begin, you need to define functions using the 'async def' syntax. These are called coroutines and are special functions that can pause and resume their execution. You also use 'await' to wait for an async operation to complete."
+        "value": "### What is a Metaclass?"
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, everything is an object, even classes themselves. Normally, when you create a class, Python uses a default metaclass called `type` to create that class object. A metaclass is just a 'class of a class' – it defines how classes are constructed."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, when you write `class MyClass: pass`, Python internally does something like `MyClass = type('MyClass', (), {})`. Here, `type` is the metaclass. You can create your own metaclass by inheriting from `type` and overriding its methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Metaclasses?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses allow you to automatically modify or enforce rules on classes when they are created. Use cases include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Enforcing coding standards on classes\n- Automatically adding class attributes or methods\n- Registering classes for plugins or frameworks\n- Creating singleton classes or immutable classes dynamically\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Metaclass"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a metaclass that prints a message whenever a class using it is created."
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def say_hello():\n    print('Hello')\n    await asyncio.sleep(1)  # Simulates an I/O operation\n    print('World')\n\nasyncio.run(say_hello())"
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\n# When you run this, it will print \"Creating class MyClass\""
       },
       {
         "type": "paragraph",
-        "value": "In this example, the 'say_hello' coroutine prints 'Hello', waits asynchronously for one second, then prints 'World'. Using \"await asyncio.sleep(1)\" simulates an I/O-bound operation without blocking the entire program."
+        "value": "Here, `MyMeta` inherits from `type`. We override the `__new__` method, which is called when a new class is created. Inside, we print a message, and then call the original `__new__` method to actually create the class."
       },
       {
         "type": "paragraph",
-        "value": "Now, let's see how to run multiple coroutines concurrently using asyncio.gather(). This allows tasks to run in a non-blocking way and take advantage of time spent waiting."
+        "value": "### Automatically Adding Attributes to Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses can modify the class dictionary before the class is created. Let's add a timestamp attribute to every class using our metaclass."
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def fetch_data(id):\n    print(f'Start fetching data {id}')\n    await asyncio.sleep(2)  # Simulating a network call\n    print(f'Finished fetching data {id}')\n    return f'data-{id}'\n\nasync def main():\n    tasks = [fetch_data(i) for i in range(3)]\n    results = await asyncio.gather(*tasks)\n    print('Results:', results)\n\nasyncio.run(main())"
+        "value": "import datetime\n\nclass TimestampMeta(type):\n    def __new__(cls, name, bases, dct):\n        dct['created_at'] = datetime.datetime.now()\n        return super().__new__(cls, name, bases, dct)\n\nclass Event(metaclass=TimestampMeta):\n    pass\n\nprint(Event.created_at)"
       },
       {
         "type": "paragraph",
-        "value": "In the above code, three fetch_data tasks are started concurrently. Instead of waiting 6 seconds serially (2 seconds each), all run together, completing in about 2 seconds total. This pattern is common in applications that perform network requests or I/O operations."
+        "value": "In this example, every class that uses `TimestampMeta` will have a `created_at` attribute set to the current date and time when the class was created."
       },
       {
         "type": "paragraph",
-        "value": "A few practical tips for writing asyncio code effectively:\n- Avoid blocking calls like time.sleep(); use await asyncio.sleep() instead.\n- Make sure your I/O operations support asynchronous methods.\n- Use asyncio.run() to execute the main async function from a synchronous context.\n- Handle exceptions inside coroutines as usual using try-except blocks."
+        "value": "### Dynamic Class Creation Without class keyword"
       },
       {
         "type": "paragraph",
-        "value": "By mastering asyncio, you can write high-performance applications without the complexity of threads. Whether it's web scraping, networking, or server-side applications, learning asyncio will significantly boost your Python concurrency skills."
+        "value": "Remember, the built-in `type` can actually create classes dynamically without the class statement. Let’s create a class dynamically."
+      },
+      {
+        "type": "code",
+        "value": "MyDynamicClass = type('MyDynamicClass', (object,), {'greet': lambda self: 'Hello!'})\n\nobj = MyDynamicClass()\nprint(obj.greet())  # Output: Hello!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here `type` takes three arguments: the class name, a tuple of base classes, and a dictionary containing attributes or methods. This is exactly what metaclasses do internally."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses may seem complex at first, but they are just a way to customize how classes are created. By modifying or extending metaclasses, you can build powerful tools, enforce rules, and write more flexible code."
+      },
+      {
+        "type": "paragraph",
+        "value": "To master them, start experimenting with your own metaclasses. Override methods like `__new__` and `__init__` in a metaclass and see how class creation changes. With time, you'll better understand this fascinating part of Python."
       }
     ]
   },
   {
-    "slug": "understanding-python-tracebacks-step-by-step-beginners-guide",
-    "title": "Understanding Python Tracebacks: A Step-by-Step Beginner's Guide",
+    "slug": "optimizing-python-code-performance-by-profiling-memory-usage-efficiently",
+    "title": "Optimizing Python Code Performance by Profiling Memory Usage Efficiently",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to read and understand Python tracebacks to debug your code effectively with this step-by-step beginner-friendly guide.",
-    "videoUrl": "https://www.youtube.com/watch?v=15RB1TqjK7c",
+    "description": "Learn how to optimize your Python programs by profiling memory usage effectively. This beginner-friendly guide teaches you tools and tips to detect and fix memory issues.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you're learning Python, encountering errors can be frustrating. However, Python provides a helpful tool called a \"traceback\" that tells you exactly where and why your program failed. Understanding tracebacks is an essential skill for debugging and improving your coding journey."
+        "value": "When working with Python, optimizing your code's performance often means understanding how much memory it uses. Excessive memory consumption can slow down your program or cause it to crash. In this beginner-friendly guide, we will explore how to profile memory usage efficiently to find and fix memory issues in your Python code."
       },
       {
         "type": "paragraph",
-        "value": "A traceback is a report containing information about the sequence of calls that led to an error. Let's look at a simple example to understand what a traceback looks like."
+        "value": "Profiling memory usage means measuring how much memory your program consumes over time. Python doesn't have built-in memory profilers, but libraries like `memory_profiler` make this task easier. Let's see how to use it."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, install the `memory_profiler` module by running the following command in your terminal or command prompt:"
       },
       {
         "type": "code",
-        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(10, 0)\nprint(result)"
+        "value": "pip install memory_profiler"
       },
       {
         "type": "paragraph",
-        "value": "If you run this code, you'll see an error message with a traceback that might look like this:"
+        "value": "Now, you can add a simple decorator `@profile` to functions you want to monitor. Here is an example program that creates a list and squares its elements:"
       },
       {
         "type": "code",
-        "value": "Traceback (most recent call last):\n  File \"example.py\", line 5, in <module>\n    result = divide(10, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
+        "value": "from memory_profiler import profile\n\n@profile\ndef square_numbers(n):\n    result = []\n    for i in range(n):\n        result.append(i ** 2)\n    return result\n\nif __name__ == \"__main__\":\n    squares = square_numbers(100000)"
       },
       {
         "type": "paragraph",
-        "value": "Let's break down this traceback step-by-step:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- The first line \"Traceback (most recent call last):\" means Python is showing you the latest error.\n- The next lines show the call stack, starting from the point where the program crashed. It tells you the file name, line number, and function names.\n- Finally, the last line shows the actual error type and message: \"ZeroDivisionError: division by zero.\""
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's how you can use this information:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Locate the error:** Check the filename and line number. In our example, the error is on line 2 inside the `divide` function.\n2. **Understand the error type:** \"ZeroDivisionError\" means you tried to divide a number by zero, which is not allowed.\n3. **Fix the problem:** Modify the code to handle or avoid dividing by zero."
+        "value": "To run the memory profiler, execute your script using the command below in the terminal. It will show line-by-line memory usage:"
       },
       {
         "type": "code",
-        "value": "def divide(a, b):\n    if b == 0:\n        return \"Cannot divide by zero!\"\n    else:\n        return a / b\n\nresult = divide(10, 0)\nprint(result)"
+        "value": "python -m memory_profiler your_script.py"
       },
       {
         "type": "paragraph",
-        "value": "This code now avoids the error by checking if `b` is zero before dividing."
+        "value": "You'll see output showing how memory usage changes as each line runs. Carefully analyze these results to identify lines where memory usage spikes. In the example above, the list `result` consumes significant memory because it stores many squared numbers."
       },
       {
         "type": "paragraph",
-        "value": "Tracebacks can sometimes be longer, especially when functions call other functions. Here's an example:"
+        "value": "If your program uses too much memory, consider alternatives such as using generator expressions or processing items in chunks instead of storing them all at once. For example, using a generator saves memory by yielding values one at a time:"
       },
       {
         "type": "code",
-        "value": "def add_numbers(a, b):\n    return a + b\n\ndef calculate():\n    x = 5\n    y = '10'\n    return add_numbers(x, y)\n\nprint(calculate())"
+        "value": "def square_numbers_gen(n):\n    for i in range(n):\n        yield i ** 2\n\nif __name__ == \"__main__\":\n    for square in square_numbers_gen(100000):\n        pass  # Process each item without storing all at once"
       },
       {
         "type": "paragraph",
-        "value": "Running this will produce a traceback like this:"
-      },
-      {
-        "type": "code",
-        "value": "Traceback (most recent call last):\n  File \"example.py\", line 9, in <module>\n    print(calculate())\n  File \"example.py\", line 7, in calculate\n    return add_numbers(x, y)\n  File \"example.py\", line 2, in add_numbers\n    return a + b\nTypeError: unsupported operand type(s) for +: 'int' and 'str'"
+        "value": "Besides `memory_profiler`, you can also check out tools like `tracemalloc` (built-in Python module) to trace memory allocations or `objgraph` to visualize object references. But for beginners, `memory_profiler` provides an easy and efficient way to start profiling memory."
       },
       {
         "type": "paragraph",
-        "value": "Here the error occurred in the `add_numbers` function when trying to add an integer and a string, which is not allowed. The traceback helps you trace the flow: `print(calculate())` calls `calculate()`, which calls `add_numbers(x, y)` where the error happens."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, whenever you see a Python error trace, follow these steps:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Read the traceback from the bottom up to find the error type and message.\n2. Locate the file and line number where the error occurred.\n3. Review the code at those lines to understand why the error happened.\n4. Fix the issue and re-run your program."
-      },
-      {
-        "type": "paragraph",
-        "value": "With regular practice, reading tracebacks will become easier, transforming errors into learning opportunities!"
+        "value": "In summary, efficiently profiling your Python program's memory usage allows you to spot bottlenecks and optimize your code's performance. Start by installing `memory_profiler`, add `@profile` decorators, analyze the detailed line-by-line memory consumption, and refactor your code to reduce peak memory usage. This simple workflow can dramatically improve your Python application's speed and stability."
       }
     ]
   },
   {
-    "slug": "mastering-recursive-ctes-practical-sql-tricks-for-hierarchical-data",
-    "title": "Mastering Recursive CTEs: Practical SQL Tricks for Hierarchical Data",
+    "slug": "mastering-window-functions-for-complex-data-analysis-in-sql",
+    "title": "Mastering Window Functions for Complex Data Analysis in SQL",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use recursive Common Table Expressions (CTEs) to handle hierarchical data in SQL with ease. This beginner-friendly guide includes practical examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis easily. This beginner-friendly guide covers the basics of window functions with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with hierarchical data in SQL—such as organizational charts, category trees, or folder structures—you need a way to query data that references itself. Recursive Common Table Expressions (CTEs) offer a powerful and elegant solution to this problem. This tutorial will guide you through the basics of recursive CTEs, with practical examples that are perfect for beginners."
+        "value": "SQL window functions are powerful tools that let you perform complex calculations across a set of table rows related to the current row. Unlike aggregate functions that reduce results, window functions maintain the detail while adding analytical insight, making them perfect for detailed data analysis."
       },
       {
         "type": "paragraph",
-        "value": "A recursive CTE is a CTE that references itself to perform repeated operations, typically used to traverse hierarchical data. It consists of two parts: the anchor member and the recursive member. The anchor member defines the starting point, and the recursive member joins back to the CTE to iterate through related rows."
+        "value": "In this tutorial, we’ll introduce the basics of window functions and demonstrate how to use them with simple examples. We'll cover functions like ROW_NUMBER(), RANK(), SUM(), and AVG(), and explain how to use the OVER() clause for running totals, rankings, and moving averages."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a simple example. Imagine you have an `employees` table with the following columns: `employee_id`, `employee_name`, and `manager_id`. The `manager_id` column points to the employee's manager, creating a hierarchy."
+        "value": "Let's start by understanding the syntax of a window function: you call an aggregate or ranking function followed by OVER(), which defines the window or subset of rows the function will consider."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  employee_name VARCHAR(100),\n  manager_id INT NULL\n);\n\nINSERT INTO employees (employee_id, employee_name, manager_id) VALUES\n(1, 'Alice', NULL),\n(2, 'Bob', 1),\n(3, 'Charlie', 1),\n(4, 'David', 2),\n(5, 'Eva', 2);"
+        "value": "SELECT column1,\n       ROW_NUMBER() OVER (ORDER BY column2) AS row_num\nFROM your_table;"
       },
       {
         "type": "paragraph",
-        "value": "Suppose you want to find the full organizational hierarchy starting from Alice, tracing all employees under her management. Here's how to do it using a recursive CTE:"
+        "value": "This example assigns a unique row number to each row based on the order of column2. ROW_NUMBER() is great for pagination or indexing rows based on a specific column."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also partition data into groups using PARTITION BY inside the OVER() clause. This lets you restart the numbering or calculation within each group."
       },
       {
         "type": "code",
-        "value": "WITH RECURSIVE employee_hierarchy AS (\n  -- Anchor member: start with the top-level employee (Alice)\n  SELECT employee_id, employee_name, manager_id, 0 AS level\n  FROM employees\n  WHERE employee_name = 'Alice'\n\n  UNION ALL\n\n  -- Recursive member: get employees managed by the ones found in the previous iteration\n  SELECT e.employee_id, e.employee_name, e.manager_id, eh.level + 1\n  FROM employees e\n  INNER JOIN employee_hierarchy eh ON e.manager_id = eh.employee_id\n)\nSELECT * FROM employee_hierarchy\nORDER BY level;"
+        "value": "SELECT employee_id, department_id,\n       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank_within_dept\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Here’s what this SQL code does:\n- The anchor member selects the root employee, Alice, who has no manager.\n- The recursive member joins the `employees` table back to the recursive CTE to find employees where `manager_id` matches the `employee_id` in the current hierarchy.\n- The query continuously repeats until no more employees are found under the hierarchy.\n\nThe result lists all employees under Alice, with the `level` column indicating how many steps down the hierarchy each employee is."
+        "value": "In this example, employees are ranked within their department based on salary, with the highest salary getting rank 1. RANK() handles ties by assigning the same rank to equal values."
       },
       {
         "type": "paragraph",
-        "value": "Recursive CTEs can also be used for other hierarchical data, like categories or folder paths. Here’s a general structure to follow when writing recursive CTEs:\n\n1. Define the anchor member as the base case.\n2. Write the recursive member that joins back to the CTE.\n3. Use UNION ALL to combine results.\n4. Select from the recursive CTE to get your hierarchy."
+        "value": "Window functions can also calculate running totals — cumulative sums up to the current row — which are often used in financial or time-series data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date, amount,\n       SUM(amount) OVER (ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM orders;"
       },
       {
         "type": "paragraph",
-        "value": "Remember a few key points when using recursive CTEs:\n- Most SQL databases limit recursion depth to prevent infinite loops (e.g., 100 iterations by default).\n- Always include a termination condition by ensuring the recursive member will eventually fail to find more rows.\n- You can add columns like `level` or `path` to track the hierarchy or create breadcrumbs."
+        "value": "This query computes the running total of order amounts ordered by date. The frame clause ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW defines the rows included in the sum (from the first row up to the current row)."
       },
       {
         "type": "paragraph",
-        "value": "To sum up, recursive CTEs provide an easy and readable way to work with hierarchical data in SQL. Understanding their structure and use cases will greatly expand your ability to handle complex queries. Try adapting the example in this article to your own hierarchical data and watch your SQL skills grow!"
+        "value": "Finally, window functions can compute moving averages to smooth trends in your data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT date,\n       AVG(sales) OVER (ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg_3_days\nFROM daily_sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This calculates a 3-day moving average of sales, looking at the current day and two previous days."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions are supported by most modern SQL databases (e.g., PostgreSQL, MySQL 8+, SQL Server, Oracle). They dramatically simplify complex analytical queries by avoiding self-joins or subqueries."
+      },
+      {
+        "type": "paragraph",
+        "value": "To recap, the key points when using window functions are:\n- Use OVER() to specify how to partition and order rows.\n- Choose the right function (ROW_NUMBER(), RANK(), SUM(), AVG(), etc.) based on your analytical needs.\n- Use frame clauses (e.g., ROWS BETWEEN) to control which rows the function applies to.\n\nTry applying these examples to your data to quickly enhance analysis and reporting capabilities."
       }
     ]
   },
   {
-    "slug": "understanding-sql-execution-plan-anomalies-advanced-diagnostics-and-optimization",
-    "title": "Understanding SQL Execution Plan Anomalies: Advanced Diagnostics and Optimization",
+    "slug": "handling-timezone-edge-cases-in-sql-queries-for-global-applications",
+    "title": "Handling Timezone Edge Cases in SQL Queries for Global Applications",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to identify and fix SQL execution plan anomalies with advanced diagnostics to optimize query performance for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=FjIbs4i9aZ8",
+    "description": "A beginner-friendly guide on handling timezone edge cases in SQL queries to ensure accurate time data processing in global applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=-5wpm-gesOY",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL execution plans show how the database engine processes a query. They are essential for understanding query performance and diagnosing issues. Sometimes, execution plans behave unexpectedly, causing slow queries or higher resource consumption—these are called execution plan anomalies."
+        "value": "When building global applications, handling date and time values correctly in SQL queries is crucial. Different users around the world operate in different timezones, which can cause errors if not managed properly. Timezone-related bugs often arise from incorrect assumptions about the time values stored or queried in your database."
       },
       {
         "type": "paragraph",
-        "value": "Common execution plan anomalies include missing indexes, incorrect statistics, parameter sniffing problems, and outdated plans. Detecting these requires a good grasp of how the database optimizer works and how to interpret execution plans."
+        "value": "This article explains common timezone edge cases, why they matter, and practical tips to write SQL queries that reduce errors related to timezone differences."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by getting the execution plan of a query using SQL Server's `EXPLAIN` or Oracle’s `EXPLAIN PLAN`."
+        "value": "### Why Timezones Cause Issues in SQL Queries"
+      },
+      {
+        "type": "paragraph",
+        "value": "Databases store dates and times in various ways: some as local timestamps without timezone information (e.g., `TIMESTAMP` in MySQL), others as UTC timestamps (e.g., `TIMESTAMPTZ` in PostgreSQL). When you query data, if you do not account for the timezone, you can get data that appears shifted in time, causing wrong query results, especially around daylight saving changes or for users querying from multiple timezones."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Edge Cases"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Daylight Saving Time (DST) Changes**: Times may jump forward or backward an hour, causing overlaps or gaps."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Missing or Incorrect Timezone Info**: Storing timestamps without any timezone context leads to ambiguity."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Comparing Local Times Instead of UTC**: Mixing timezones during query conditions can produce incorrect results."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Handling Timezones in SQL"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Store all timestamps in UTC**: This avoids confusion and makes sure your timestamps are consistent across users."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Use timezone-aware types**: For example, PostgreSQL's `TIMESTAMPTZ` keeps timezone info and helps convert times automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Convert times in queries as needed**: When showing data to users, convert UTC to the user's local timezone."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Converting UTC to Local Time in PostgreSQL"
       },
       {
         "type": "code",
-        "value": "-- SQL Server example to display execution plan\nSET STATISTICS PROFILE ON;\n\nSELECT * FROM Orders WHERE CustomerID = 'ALFKI';\n\nSET STATISTICS PROFILE OFF;"
+        "value": "SELECT event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS local_event_time\nFROM events;"
       },
       {
         "type": "paragraph",
-        "value": "Look for operators such as Index Scan vs Index Seek. An Index Scan might mean no efficient index is being used, leading to slow performance."
+        "value": "This query converts `event_time` stored in UTC to New York time, accounting for daylight saving automatically."
       },
       {
         "type": "paragraph",
-        "value": "Check if statistics are outdated as they guide the optimizer in choosing plans. You can update statistics with:"
+        "value": "### Example 2: Using UTC for Date Range Queries"
       },
       {
         "type": "code",
-        "value": "UPDATE STATISTICS Orders;"
+        "value": "-- Suppose you want events from '2024-06-01' to '2024-06-02' in user's timezone\n-- Convert the date range boundaries to UTC first\nSELECT *\nFROM events\nWHERE event_time >= (TIMESTAMP '2024-06-01 00:00:00' AT TIME ZONE 'America/Los_Angeles') AT TIME ZONE 'UTC'\n  AND event_time < (TIMESTAMP '2024-06-02 00:00:00' AT TIME ZONE 'America/Los_Angeles') AT TIME ZONE 'UTC';"
       },
       {
         "type": "paragraph",
-        "value": "Parameter sniffing is a common anomaly where SQL Server uses parameter values from the first query execution to compile the plan, which may not be optimal for later executions with different parameters."
+        "value": "This helps avoid errors when filtering events by date across timezones."
       },
       {
         "type": "paragraph",
-        "value": "To detect parameter sniffing issues, compare execution plans with different parameter values or use the `OPTION (RECOMPILE)` hint to force plan recompilation."
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM Orders WHERE CustomerID = @CustomerID\nOPTION (RECOMPILE);"
+        "value": "### Final Tips"
       },
       {
         "type": "paragraph",
-        "value": "Finally, consider using the Query Store (in SQL Server) or Automatic Workload Repository (in Oracle) to capture and analyze plan changes over time."
+        "value": "- Always clarify how your database stores timestamps."
       },
       {
         "type": "paragraph",
-        "value": "In summary, diagnosing execution plan anomalies involves: Reviewing the plan for scans or expensive operations, updating statistics, handling parameter sniffing, and monitoring plan stability over time. These practices help optimize query performance effectively even for beginners."
+        "value": "- Test queries around daylight saving transition dates."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use timezone-aware functions offered by your SQL dialect rather than manual adjustments."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these practices, you will reduce bugs and ensure accurate time data handling no matter where your users are."
       }
     ]
   }

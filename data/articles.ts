@@ -50087,5 +50087,563 @@ export const articles = [
         "value": "In summary, diagnosing execution plan anomalies involves: Reviewing the plan for scans or expensive operations, updating statistics, handling parameter sniffing, and monitoring plan stability over time. These practices help optimize query performance effectively even for beginners."
       }
     ]
+  },
+  {
+    "slug": "understanding-javascript-event-loop-beginners-async-errors",
+    "title": "Understanding JavaScript Event Loop: A Beginner's Guide to Async Errors",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how JavaScript's event loop works and how it affects handling asynchronous errors, with easy examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=eiC58R16hb8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a single-threaded language, meaning it can only execute one task at a time. However, modern web applications often perform asynchronous tasks like fetching data or reading files without blocking the main thread. This is possible thanks to the event loop. Understanding the event loop is crucial, especially when dealing with errors in asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The event loop continuously checks the call stack and the task queues (microtask and macrotask queues). When the call stack is empty, it takes the first task from the queues and pushes it onto the stack for execution. This behavior impacts how and when errors from asynchronous operations are caught."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example where an asynchronous error occurs inside a setTimeout callback:"
+      },
+      {
+        "type": "code",
+        "value": "setTimeout(() => {\n  // This error is asynchronous\n  throw new Error('Async error inside setTimeout');\n}, 1000);\n\n// This will not catch the async error\ntry {\n  setTimeout(() => {\n    throw new Error('Async error inside setTimeout');\n  }, 1000);\n} catch (err) {\n  console.log('Caught error:', err);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, the try-catch block won’t catch the error thrown inside setTimeout because the callback runs later, after the try-catch block is already done. This is a common pitfall for beginners learning asynchronous JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "To properly handle asynchronous errors, you can use event listeners, promises, or Async/Await syntax with try-catch. Here's how to catch errors using a Promise:"
+      },
+      {
+        "type": "code",
+        "value": "function asyncOperation() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Error inside promise'));\n    }, 1000);\n  });\n}\n\nasyncOperation()\n  .catch(err => {\n    console.log('Caught async error:', err.message);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows that errors inside asynchronous operations can be caught by attaching a .catch() to the promise. You can also use Async/Await with try-catch for cleaner syntax:"
+      },
+      {
+        "type": "code",
+        "value": "async function runAsync() {\n  try {\n    await asyncOperation();\n  } catch(err) {\n    console.log('Caught async error with await:', err.message);\n  }\n}\n\nrunAsync();"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, the key points for beginners are: JavaScript’s event loop defers asynchronous callbacks so try-catch blocks outside these callbacks won’t catch errors; use Promises and Async/Await with proper error handling to catch async errors effectively."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-data-models-typescript-large-scale-apps",
+    "title": "Designing Scalable Data Models in TypeScript for Large-Scale Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and maintainable data models in TypeScript to manage complexity and performance in large-scale applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=Dl-BdxNRUqs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building large-scale applications in TypeScript, designing scalable and maintainable data models is crucial. Good data models help manage complexity, ensure data consistency, and improve performance. In this article, we'll explore practical strategies to design scalable TypeScript interfaces and classes that grow with your application."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Understand Your Data Structure and Domain"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before writing any code, analyze your application's core entities and relationships. Identify key data points, how entities interact, and potential future requirements. This upfront understanding will guide your model design to be flexible and extensible."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Interfaces and Types for Clear Contracts"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript interfaces and types help define clear contracts for your data structures. Use interfaces to model entities with properties, and types for unions or composite structures."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: string;\n  name: string;\n  email: string;\n  role: UserRole;\n}\n\ntype UserRole = 'admin' | 'editor' | 'viewer';"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Modularize Your Models"
+      },
+      {
+        "type": "paragraph",
+        "value": "Break down large models into smaller, reusable components. This modular approach reduces duplication and makes it easier to update or extend specific parts without affecting others."
+      },
+      {
+        "type": "code",
+        "value": "interface Address {\n  street: string;\n  city: string;\n  zipCode: string;\n}\n\ninterface User {\n  id: string;\n  name: string;\n  email: string;\n  address?: Address; // Optional nested object\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Utility Types to Manage Optional and Read-Only Fields"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript provides utility types like `Partial`, `Readonly`, and `Pick` to create flexible variants of your models without redefining them."
+      },
+      {
+        "type": "code",
+        "value": "type UserUpdate = Partial<User>; // All fields optional for update scenarios\n\ntype ReadonlyUser = Readonly<User>; // Immutable user data"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Define Classes for Complex Behavior"
+      },
+      {
+        "type": "paragraph",
+        "value": "While interfaces describe shape, classes allow you to add methods and logic to your data models. This is useful when your entities need behavior, such as validation or computed properties."
+      },
+      {
+        "type": "code",
+        "value": "class UserModel {\n  constructor(\n    public id: string,\n    public name: string,\n    public email: string,\n    public role: UserRole\n  ) {}\n\n  isAdmin(): boolean {\n    return this.role === 'admin';\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Optimize with Discriminated Unions for Variant Data"
+      },
+      {
+        "type": "paragraph",
+        "value": "For entities that have variants differing by type, use discriminated unions to clearly define each variant and handle them safely."
+      },
+      {
+        "type": "code",
+        "value": "interface AdminUser {\n  type: 'admin';\n  id: string;\n  permissions: string[];\n}\n\ninterface RegularUser {\n  type: 'regular';\n  id: string;\n  profileComplete: boolean;\n}\n\ntype User = AdminUser | RegularUser;\n\nfunction getUserInfo(user: User) {\n  if (user.type === 'admin') {\n    return `Admin with permissions: ${user.permissions.join(', ')}`;\n  } else {\n    return `Regular user completed profile? ${user.profileComplete}`;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Designing scalable data models in TypeScript involves understanding your data domain, defining clear interfaces, modularizing your models, leveraging utility types, incorporating classes for behavior, and using discriminated unions for variant data. By following these practices, you can build large-scale applications that are easier to maintain and extend."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescripts-type-narrowing-techniques-for-safer-code",
+    "title": "Comparing TypeScript's Type Narrowing Techniques for Safer Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's type narrowing techniques help you write safer code by reducing errors and improving type checks. This beginner-friendly guide explains different narrowing methods with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=l37xh8Cu8G0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that builds on JavaScript by adding static types. One of TypeScript's key features is type narrowing, where the compiler refines variable types based on runtime checks. This helps catch errors early and ensures safer, more predictable code. In this article, we'll explore common type narrowing techniques with simple examples to help you understand how to write safer TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. typeof Narrowing\nTypeScript can narrow types based on the `typeof` operator, which works well for primitive types like `string`, `number`, and `boolean`."
+      },
+      {
+        "type": "code",
+        "value": "function printValue(value: string | number) {\n  if (typeof value === 'string') {\n    console.log('String value:', value.toUpperCase());\n  } else {\n    console.log('Number value:', value.toFixed(2));\n  }\n}\n\nprintValue('hello'); // String value: HELLO\nprintValue(3.1415);  // Number value: 3.14"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, TypeScript knows inside the `if` block that `value` is a `string` and in the `else` block it must be a `number`. This prevents errors like trying to call a string method on a number."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. instanceof Narrowing\nYou can narrow types with the `instanceof` operator, useful when working with classes or built-in objects."
+      },
+      {
+        "type": "code",
+        "value": "class Dog {\n  bark() {\n    console.log('Woof!');\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log('Meow!');\n  }\n}\n\nfunction speak(animal: Dog | Cat) {\n  if (animal instanceof Dog) {\n    animal.bark(); // TypeScript knows 'animal' is Dog\n  } else {\n    animal.meow(); // TypeScript knows 'animal' is Cat\n  }\n}\n\nspeak(new Dog());\nspeak(new Cat());"
+      },
+      {
+        "type": "paragraph",
+        "value": "Since the types are narrowed to either `Dog` or `Cat`, you can safely access the class-specific methods without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Equality Narrowing\nComparing a variable to a literal or another variable can narrow union types."
+      },
+      {
+        "type": "code",
+        "value": "function checkStatus(status: 'success' | 'error' | 'loading') {\n  if (status === 'success') {\n    console.log('Data loaded successfully!');\n  } else if (status === 'error') {\n    console.log('Error loading data.');\n  } else {\n    console.log('Loading...');\n  }\n}\n\ncheckStatus('success');"
+      },
+      {
+        "type": "paragraph",
+        "value": "The equality checks narrow type based on the matched literal, ensuring your code only handles the possible cases you specify."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. in Operator Narrowing\nThe `in` operator checks for keys in objects to help narrow down types when dealing with unions of object shapes."
+      },
+      {
+        "type": "code",
+        "value": "type Square = { kind: 'square'; size: number };\ntype Rectangle = { kind: 'rectangle'; width: number; height: number };\n\ntype Shape = Square | Rectangle;\n\nfunction area(shape: Shape) {\n  if ('size' in shape) {\n    return shape.size * shape.size;\n  } else {\n    return shape.width * shape.height;\n  }\n}\n\nconsole.log(area({ kind: 'square', size: 5 }));    // 25\nconsole.log(area({ kind: 'rectangle', width: 4, height: 6 })); // 24"
+      },
+      {
+        "type": "paragraph",
+        "value": "The use of `'size' in shape` lets TypeScript narrow that `shape` is a `Square` and access `size` safely."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Custom Type Guards\nYou can write your own functions to narrow types by returning a type predicate."
+      },
+      {
+        "type": "code",
+        "value": "interface Fish {\n  swim(): void;\n}\n\ninterface Bird {\n  fly(): void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();\n  } else {\n    pet.fly();\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The function `isFish` is a user-defined type guard. It returns a boolean, but more importantly, tells TypeScript that the checked object should now be treated as a `Fish` inside the `if` block."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nType narrowing is essential for writing safe TypeScript code. Using built-in keywords like `typeof`, `instanceof`, `in`, equality checks, and custom type guards, you can help the compiler understand exactly what types your code is working with at different points, avoiding runtime errors and improving code clarity. Try these techniques in your next TypeScript project!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-metaclasses-deep-dive-into-dynamic-class-creation",
+    "title": "Mastering Python Metaclasses: Deep Dive into Dynamic Class Creation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics of Python metaclasses and how they allow dynamic class creation for more powerful and flexible code design.",
+    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python is a powerful and flexible language, and one of its more advanced features is metaclasses. They allow developers to control the creation of classes dynamically. If you've worked with classes and inheritance, metaclasses take this a step further by giving you control over the actual class itself."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll break down metaclasses into beginner-friendly concepts. You'll learn what metaclasses are, why you might use them, and see simple examples to start mastering this topic."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Metaclass?"
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, everything is an object, even classes themselves. Normally, when you create a class, Python uses a default metaclass called `type` to create that class object. A metaclass is just a 'class of a class' – it defines how classes are constructed."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, when you write `class MyClass: pass`, Python internally does something like `MyClass = type('MyClass', (), {})`. Here, `type` is the metaclass. You can create your own metaclass by inheriting from `type` and overriding its methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Metaclasses?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses allow you to automatically modify or enforce rules on classes when they are created. Use cases include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Enforcing coding standards on classes\n- Automatically adding class attributes or methods\n- Registering classes for plugins or frameworks\n- Creating singleton classes or immutable classes dynamically\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Metaclass"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a metaclass that prints a message whenever a class using it is created."
+      },
+      {
+        "type": "code",
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\n# When you run this, it will print \"Creating class MyClass\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `MyMeta` inherits from `type`. We override the `__new__` method, which is called when a new class is created. Inside, we print a message, and then call the original `__new__` method to actually create the class."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Automatically Adding Attributes to Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses can modify the class dictionary before the class is created. Let's add a timestamp attribute to every class using our metaclass."
+      },
+      {
+        "type": "code",
+        "value": "import datetime\n\nclass TimestampMeta(type):\n    def __new__(cls, name, bases, dct):\n        dct['created_at'] = datetime.datetime.now()\n        return super().__new__(cls, name, bases, dct)\n\nclass Event(metaclass=TimestampMeta):\n    pass\n\nprint(Event.created_at)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, every class that uses `TimestampMeta` will have a `created_at` attribute set to the current date and time when the class was created."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Dynamic Class Creation Without class keyword"
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, the built-in `type` can actually create classes dynamically without the class statement. Let’s create a class dynamically."
+      },
+      {
+        "type": "code",
+        "value": "MyDynamicClass = type('MyDynamicClass', (object,), {'greet': lambda self: 'Hello!'})\n\nobj = MyDynamicClass()\nprint(obj.greet())  # Output: Hello!"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here `type` takes three arguments: the class name, a tuple of base classes, and a dictionary containing attributes or methods. This is exactly what metaclasses do internally."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Metaclasses may seem complex at first, but they are just a way to customize how classes are created. By modifying or extending metaclasses, you can build powerful tools, enforce rules, and write more flexible code."
+      },
+      {
+        "type": "paragraph",
+        "value": "To master them, start experimenting with your own metaclasses. Override methods like `__new__` and `__init__` in a metaclass and see how class creation changes. With time, you'll better understand this fascinating part of Python."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-performance-by-profiling-memory-usage-efficiently",
+    "title": "Optimizing Python Code Performance by Profiling Memory Usage Efficiently",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to optimize your Python programs by profiling memory usage effectively. This beginner-friendly guide teaches you tools and tips to detect and fix memory issues.",
+    "videoUrl": "https://www.youtube.com/watch?v=uWEIaF0PNGg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with Python, optimizing your code's performance often means understanding how much memory it uses. Excessive memory consumption can slow down your program or cause it to crash. In this beginner-friendly guide, we will explore how to profile memory usage efficiently to find and fix memory issues in your Python code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Profiling memory usage means measuring how much memory your program consumes over time. Python doesn't have built-in memory profilers, but libraries like `memory_profiler` make this task easier. Let's see how to use it."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, install the `memory_profiler` module by running the following command in your terminal or command prompt:"
+      },
+      {
+        "type": "code",
+        "value": "pip install memory_profiler"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, you can add a simple decorator `@profile` to functions you want to monitor. Here is an example program that creates a list and squares its elements:"
+      },
+      {
+        "type": "code",
+        "value": "from memory_profiler import profile\n\n@profile\ndef square_numbers(n):\n    result = []\n    for i in range(n):\n        result.append(i ** 2)\n    return result\n\nif __name__ == \"__main__\":\n    squares = square_numbers(100000)"
+      },
+      {
+        "type": "paragraph",
+        "value": "To run the memory profiler, execute your script using the command below in the terminal. It will show line-by-line memory usage:"
+      },
+      {
+        "type": "code",
+        "value": "python -m memory_profiler your_script.py"
+      },
+      {
+        "type": "paragraph",
+        "value": "You'll see output showing how memory usage changes as each line runs. Carefully analyze these results to identify lines where memory usage spikes. In the example above, the list `result` consumes significant memory because it stores many squared numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "If your program uses too much memory, consider alternatives such as using generator expressions or processing items in chunks instead of storing them all at once. For example, using a generator saves memory by yielding values one at a time:"
+      },
+      {
+        "type": "code",
+        "value": "def square_numbers_gen(n):\n    for i in range(n):\n        yield i ** 2\n\nif __name__ == \"__main__\":\n    for square in square_numbers_gen(100000):\n        pass  # Process each item without storing all at once"
+      },
+      {
+        "type": "paragraph",
+        "value": "Besides `memory_profiler`, you can also check out tools like `tracemalloc` (built-in Python module) to trace memory allocations or `objgraph` to visualize object references. But for beginners, `memory_profiler` provides an easy and efficient way to start profiling memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, efficiently profiling your Python program's memory usage allows you to spot bottlenecks and optimize your code's performance. Start by installing `memory_profiler`, add `@profile` decorators, analyze the detailed line-by-line memory consumption, and refactor your code to reduce peak memory usage. This simple workflow can dramatically improve your Python application's speed and stability."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-for-complex-data-analysis-in-sql",
+    "title": "Mastering Window Functions for Complex Data Analysis in SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis easily. This beginner-friendly guide covers the basics of window functions with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools that let you perform complex calculations across a set of table rows related to the current row. Unlike aggregate functions that reduce results, window functions maintain the detail while adding analytical insight, making them perfect for detailed data analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we’ll introduce the basics of window functions and demonstrate how to use them with simple examples. We'll cover functions like ROW_NUMBER(), RANK(), SUM(), and AVG(), and explain how to use the OVER() clause for running totals, rankings, and moving averages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding the syntax of a window function: you call an aggregate or ranking function followed by OVER(), which defines the window or subset of rows the function will consider."
+      },
+      {
+        "type": "code",
+        "value": "SELECT column1,\n       ROW_NUMBER() OVER (ORDER BY column2) AS row_num\nFROM your_table;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example assigns a unique row number to each row based on the order of column2. ROW_NUMBER() is great for pagination or indexing rows based on a specific column."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also partition data into groups using PARTITION BY inside the OVER() clause. This lets you restart the numbering or calculation within each group."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, department_id,\n       RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank_within_dept\nFROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, employees are ranked within their department based on salary, with the highest salary getting rank 1. RANK() handles ties by assigning the same rank to equal values."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions can also calculate running totals — cumulative sums up to the current row — which are often used in financial or time-series data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date, amount,\n       SUM(amount) OVER (ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM orders;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query computes the running total of order amounts ordered by date. The frame clause ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW defines the rows included in the sum (from the first row up to the current row)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, window functions can compute moving averages to smooth trends in your data."
+      },
+      {
+        "type": "code",
+        "value": "SELECT date,\n       AVG(sales) OVER (ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg_3_days\nFROM daily_sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This calculates a 3-day moving average of sales, looking at the current day and two previous days."
+      },
+      {
+        "type": "paragraph",
+        "value": "Window functions are supported by most modern SQL databases (e.g., PostgreSQL, MySQL 8+, SQL Server, Oracle). They dramatically simplify complex analytical queries by avoiding self-joins or subqueries."
+      },
+      {
+        "type": "paragraph",
+        "value": "To recap, the key points when using window functions are:\n- Use OVER() to specify how to partition and order rows.\n- Choose the right function (ROW_NUMBER(), RANK(), SUM(), AVG(), etc.) based on your analytical needs.\n- Use frame clauses (e.g., ROWS BETWEEN) to control which rows the function applies to.\n\nTry applying these examples to your data to quickly enhance analysis and reporting capabilities."
+      }
+    ]
+  },
+  {
+    "slug": "handling-timezone-edge-cases-in-sql-queries-for-global-applications",
+    "title": "Handling Timezone Edge Cases in SQL Queries for Global Applications",
+    "language": "sql",
+    "type": "errors",
+    "description": "A beginner-friendly guide on handling timezone edge cases in SQL queries to ensure accurate time data processing in global applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=-5wpm-gesOY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building global applications, handling date and time values correctly in SQL queries is crucial. Different users around the world operate in different timezones, which can cause errors if not managed properly. Timezone-related bugs often arise from incorrect assumptions about the time values stored or queried in your database."
+      },
+      {
+        "type": "paragraph",
+        "value": "This article explains common timezone edge cases, why they matter, and practical tips to write SQL queries that reduce errors related to timezone differences."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Timezones Cause Issues in SQL Queries"
+      },
+      {
+        "type": "paragraph",
+        "value": "Databases store dates and times in various ways: some as local timestamps without timezone information (e.g., `TIMESTAMP` in MySQL), others as UTC timestamps (e.g., `TIMESTAMPTZ` in PostgreSQL). When you query data, if you do not account for the timezone, you can get data that appears shifted in time, causing wrong query results, especially around daylight saving changes or for users querying from multiple timezones."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Edge Cases"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Daylight Saving Time (DST) Changes**: Times may jump forward or backward an hour, causing overlaps or gaps."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Missing or Incorrect Timezone Info**: Storing timestamps without any timezone context leads to ambiguity."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Comparing Local Times Instead of UTC**: Mixing timezones during query conditions can produce incorrect results."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Handling Timezones in SQL"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Store all timestamps in UTC**: This avoids confusion and makes sure your timestamps are consistent across users."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Use timezone-aware types**: For example, PostgreSQL's `TIMESTAMPTZ` keeps timezone info and helps convert times automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Convert times in queries as needed**: When showing data to users, convert UTC to the user's local timezone."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Converting UTC to Local Time in PostgreSQL"
+      },
+      {
+        "type": "code",
+        "value": "SELECT event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' AS local_event_time\nFROM events;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query converts `event_time` stored in UTC to New York time, accounting for daylight saving automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Using UTC for Date Range Queries"
+      },
+      {
+        "type": "code",
+        "value": "-- Suppose you want events from '2024-06-01' to '2024-06-02' in user's timezone\n-- Convert the date range boundaries to UTC first\nSELECT *\nFROM events\nWHERE event_time >= (TIMESTAMP '2024-06-01 00:00:00' AT TIME ZONE 'America/Los_Angeles') AT TIME ZONE 'UTC'\n  AND event_time < (TIMESTAMP '2024-06-02 00:00:00' AT TIME ZONE 'America/Los_Angeles') AT TIME ZONE 'UTC';"
+      },
+      {
+        "type": "paragraph",
+        "value": "This helps avoid errors when filtering events by date across timezones."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Tips"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always clarify how your database stores timestamps."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Test queries around daylight saving transition dates."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use timezone-aware functions offered by your SQL dialect rather than manual adjustments."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these practices, you will reduce bugs and ensure accurate time data handling no matter where your users are."
+      }
+    ]
   }
 ];
