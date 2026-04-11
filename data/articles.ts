@@ -51617,5 +51617,411 @@ export const articles = [
         "value": "By applying these indexing strategies thoughtfully and avoiding common mistakes, beginners can greatly optimize their SQL queries and improve overall database performance."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-symbol-type-edge-cases-and-practical-uses",
+    "title": "Mastering JavaScript Symbol Type: Edge Cases and Practical Uses",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript's Symbol type effectively, including edge cases and practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=UnYevznrnVI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript's Symbol type is a unique and powerful feature introduced in ES6. Symbols are unique identifiers, often used to add hidden properties to objects or to avoid property name collisions. In this tutorial, we'll explore the basics of Symbols, some edge cases you might encounter, and practical use cases to help you master this important concept."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Symbol is created using the Symbol() function and is guaranteed to be unique. Unlike strings or numbers, two Symbols with the same description are never equal."
+      },
+      {
+        "type": "code",
+        "value": "const sym1 = Symbol('id');\nconst sym2 = Symbol('id');\nconsole.log(sym1 === sym2); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though both symbols have the description 'id', they are unique. This uniqueness makes Symbols perfect for keys in objects when you want to avoid accidental overwriting of properties."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a practical example:"
+      },
+      {
+        "type": "code",
+        "value": "const user = {};\nconst id = Symbol('id');\n\nuser[id] = 123;\n\nconsole.log(user[id]); // 123\nconsole.log(user.id); // undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we add a Symbol-keyed property to an object. Notice that accessing user.id returns undefined because the Symbol key is not the same as the string 'id'."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Edge Case: Symbols are not enumerable by default"
+      },
+      {
+        "type": "paragraph",
+        "value": "One important thing to remember is that Symbol properties do not show up in normal object property enumerations like for...in loops or Object.keys()."
+      },
+      {
+        "type": "code",
+        "value": "const sym = Symbol('secret');\nconst obj = {\n  [sym]: 'hidden value',\n  visible: 'shown value'\n};\n\nfor (let key in obj) {\n  console.log(key); // only 'visible' is logged\n}\n\nconsole.log(Object.keys(obj)); // [ 'visible' ]"
+      },
+      {
+        "type": "paragraph",
+        "value": "To list Symbol properties, use Object.getOwnPropertySymbols():"
+      },
+      {
+        "type": "code",
+        "value": "const syms = Object.getOwnPropertySymbols(obj);\nconsole.log(syms); // [ Symbol(secret) ]\nconsole.log(obj[syms[0]]); // 'hidden value'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use: Defining Constants"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use Symbols to define constant values for things like event types or states to avoid collisions and mistakes."
+      },
+      {
+        "type": "code",
+        "value": "const STATUS = {\n  LOADING: Symbol('loading'),\n  SUCCESS: Symbol('success'),\n  ERROR: Symbol('error')\n};\n\nfunction handleStatus(status) {\n  switch(status) {\n    case STATUS.LOADING:\n      console.log('Loading...');\n      break;\n    case STATUS.SUCCESS:\n      console.log('Loaded successfully!');\n      break;\n    case STATUS.ERROR:\n      console.log('An error occurred.');\n      break;\n  }\n}\n\nhandleStatus(STATUS.LOADING);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Because each Symbol is unique, you can be sure your status codes won't conflict with other variables or strings."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Bonus: Global Symbol Registry"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to reuse the same Symbol across different parts of your code. JavaScript provides a global symbol registry accessed with Symbol.for() and Symbol.keyFor(). This lets you create or retrieve Symbols by a key."
+      },
+      {
+        "type": "code",
+        "value": "const globalSym1 = Symbol.for('app.event');\nconst globalSym2 = Symbol.for('app.event');\n\nconsole.log(globalSym1 === globalSym2); // true\nconsole.log(Symbol.keyFor(globalSym1)); // 'app.event'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the global registry simplifies communication between different scripts or modules by sharing Symbols via a known key."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Symbols are a unique primitive in JavaScript, ideal for defining non-conflicting property keys, constants, and hidden object properties. Keep in mind their edge cases such as non-enumerability and how to access them using Object.getOwnPropertySymbols. Use the global symbol registry when symbols need to be shared. With these tips, you’re ready to start using Symbols effectively in your projects!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-async-stack-traces-javascript-faster-debugging",
+    "title": "Mastering Async Stack Traces in JavaScript for Faster Debugging",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to understand and use async stack traces in JavaScript to debug faster and more effectively, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=EIGjHtXBHss",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging JavaScript code that uses asynchronous functions can be challenging because the stack trace often doesn't show the original call chain clearly. Async stack traces help you see where your error originated, even across asynchronous boundaries like promises and async/await."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explain what async stack traces are, why they matter, and how you can use them to fix bugs faster in your JavaScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a stack trace?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A stack trace is a report that shows the active functions at a point in time during a program's execution — usually when an error occurs. It helps you track down where the error happened."
+      },
+      {
+        "type": "paragraph",
+        "value": "Normally, with synchronous functions, the stack trace clearly shows the path of function calls. But with asynchronous functions (like those using promises or async/await), the stack trace can be incomplete or confusing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why async stack traces matter"
+      },
+      {
+        "type": "paragraph",
+        "value": "Modern JavaScript heavily relies on asynchronous code for things like network requests, timers, or reading files. If an error happens inside an asynchronous function, a regular stack trace might only show the immediate function where the error was detected, not the code that triggered it."
+      },
+      {
+        "type": "paragraph",
+        "value": "Async stack traces improve this by connecting the dots between async calls, showing you a clearer path to the source of your error."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example of a confusing stack trace"
+      },
+      {
+        "type": "code",
+        "value": "function delay(time) {\n  return new Promise(resolve => setTimeout(resolve, time));\n}\n\nasync function fetchData() {\n  await delay(100);\n  throw new Error('Oops!');\n}\n\nasync function start() {\n  try {\n    await fetchData();\n  } catch (error) {\n    console.error(error.stack);\n  }\n}\n\nstart();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In many environments, the stack trace will point to the error inside fetchData but won’t clearly show that start() called it, making it harder to understand the exact flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to get better async stack traces"
+      },
+      {
+        "type": "paragraph",
+        "value": "Most modern browsers and Node.js already provide improved async stack traces, especially when you use async/await instead of plain promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, the above code often produces a stack trace showing the async call hierarchy, helping you see both start() and fetchData() in the trace."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips to improve debugging async errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use async/await instead of mixing callbacks and promises. Async/await keeps code cleaner and stack traces easier to follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Keep your error handling close to the asynchronous code using try/catch around awaits."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use developer tools with good async stack trace support, like Chrome DevTools or the latest Node.js versions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example with clear async stack trace"
+      },
+      {
+        "type": "code",
+        "value": "async function step1() {\n  return step2();\n}\n\nasync function step2() {\n  await new Promise(r => setTimeout(r, 10));\n  throw new Error('Problem in step2');\n}\n\nasync function run() {\n  try {\n    await step1();\n  } catch (e) {\n    console.error(e.stack);\n  }\n}\n\nrun();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running this code in a modern environment will print a stack trace showing both run → step1 → step2 calls, making it easier to figure out where the error originated and which functions were involved."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding async stack traces is essential for debugging modern JavaScript applications efficiently. Using async/await, handling errors properly, and leveraging developer tools will make fixing bugs faster and less painful."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing writing asynchronous code with proper error handling, and soon you will master reading async stack traces like a pro!"
+      }
+    ]
+  },
+  {
+    "slug": "python-stock-market-data-visualizer-matplotlib",
+    "title": "Creating a Python-Based Stock Market Data Visualizer Using Matplotlib",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build a simple and effective stock market data visualizer in Python using Matplotlib, perfect for beginners interested in financial data visualization.",
+    "videoUrl": "https://www.youtube.com/watch?v=m_kkCd7oXKA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Visualizing stock market data can help you understand trends and make better investment decisions. In this tutorial, we'll create a beginner-friendly Python program to visualize stock prices using the popular Matplotlib library. We'll fetch data, process it, and display it in an easy-to-read plot."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, you need to install two packages: `yfinance` to fetch stock data and `matplotlib` for plotting. You can install them using pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install yfinance matplotlib"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's create a Python script that downloads historical stock data and visualizes the closing price over time."
+      },
+      {
+        "type": "code",
+        "value": "import yfinance as yf\nimport matplotlib.pyplot as plt\n\n# Define the stock ticker symbol and period\nticker = \"AAPL\"  # Apple Inc.\nperiod = \"6mo\"   # Last 6 months\n\n# Download historical data\nstock_data = yf.download(ticker, period=period)\n\n# Check if data is not empty\nif stock_data.empty:\n    print(f\"No data found for ticker {ticker}.\")\nelse:\n    # Plot the closing price\n    plt.figure(figsize=(10, 5))\n    plt.plot(stock_data.index, stock_data[\"Close\"], label=\"Close Price\")\n    plt.title(f\"{ticker} Stock Closing Prices - Last 6 Months\")\n    plt.xlabel(\"Date\")\n    plt.ylabel(\"Price (USD)\")\n    plt.legend()\n    plt.grid(True)\n    plt.show()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down the script:\n- We import `yfinance` and `matplotlib.pyplot`.\n- Set the ticker symbol to 'AAPL' (Apple Inc.) and period to 6 months.\n- Use `yf.download()` to get historical stock data.\n- Check if data is available.\n- Plot the closing prices using Matplotlib and display the graph."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can change the `ticker` variable to analyze different companies (e.g., \"MSFT\" for Microsoft, \"TSLA\" for Tesla). Also, adjusting the `period` (e.g., \"1mo\", \"1y\") lets you explore different time frames."
+      },
+      {
+        "type": "paragraph",
+        "value": "This basic visualizer helps you get familiar with financial data and simple plotting in Python. From here, you can enhance the visualizer by adding other metrics like volume, moving averages, or multiple stocks comparison."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-exceptions-beginners-error-handling",
+    "title": "Understanding Python Exceptions: A Beginner's Guide to Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the basics of Python exceptions and how to handle errors gracefully with beginner-friendly examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=NIWwJbo-9_8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you start writing Python programs, you might encounter errors that stop your code from running. These errors are called exceptions. Understanding how to handle exceptions is important because it helps your program run smoothly, even when something unexpected happens."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, exceptions are raised when the program runs into an error. For example, trying to divide by zero or accessing a file that doesn't exist will raise an exception. Without proper handling, your program will crash. Let's see how you can catch and handle these errors."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input(\"Enter a number to divide 10 by: \"))\n    result = 10 / number\n    print(f\"Result is {result}\")\nexcept ZeroDivisionError:\n    print(\"Error: You can't divide by zero!\")\nexcept ValueError:\n    print(\"Error: That was not a valid number!\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, the try block contains code that might raise exceptions. If the user enters zero, a ZeroDivisionError occurs. If the input is not a number, a ValueError is raised. The except blocks catch these errors and print friendly messages instead of crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use a general except block to catch any kind of exception, but it is better to handle specific exceptions when possible:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    file = open('example.txt', 'r')\n    content = file.read()\n    print(content)\n    file.close()\nexcept FileNotFoundError:\n    print(\"Error: The file was not found.\")\nexcept Exception as e:\n    print(f\"An unexpected error occurred: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the code tries to open a file called \"example.txt\". If the file is missing, a FileNotFoundError is raised and handled with a clear message. The general Exception block catches any other error, printing a useful message with the error details."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, you can use the else and finally blocks with try-except to make your code more robust:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input(\"Enter a number: \"))\n    result = 10 / number\nexcept ZeroDivisionError:\n    print(\"Can't divide by zero.\")\nexcept ValueError:\n    print(\"Invalid input; please enter a number.\")\nelse:\n    print(f\"Success! The result is {result}\")\nfinally:\n    print(\"This always runs, no matter what.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "The else block runs if no exceptions occur, while the finally block runs regardless of what happens, which is perfect for cleanup tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "By using try, except, else, and finally, you can handle errors gracefully and make your Python programs more user-friendly and reliable."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-null-handling-differences-across-popular-sql-databases",
+    "title": "Comparing NULL Handling Differences Across Popular SQL Databases",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how NULL values are handled differently across popular SQL databases like MySQL, PostgreSQL, and SQL Server, and avoid common errors with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Handling NULL values in SQL can be tricky, especially when switching between different database systems. Although NULL represents missing or unknown data, the way various SQL databases treat NULLs can lead to unexpected results or errors if you're not careful. In this article, we'll explore how popular SQL databases like MySQL, PostgreSQL, and SQL Server differ in NULL handling and how to write queries that work reliably across systems."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to understand that NULL is not the same as an empty string or zero. It is an unknown or missing value. This means standard equality operators (=, !=) do not work as expected with NULLs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider the following example, which attempts to check if a column contains NULL using the equality operator:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query will not return any rows in any popular SQL database because `= NULL` does not work. Instead, you must use the `IS NULL` predicate to test for NULL values:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's look at some important differences across databases when dealing with NULLs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Comparison Operators and NULL Behavior"
+      },
+      {
+        "type": "paragraph",
+        "value": "In general, operations like `=`, `<>`, `<`, `>` involving NULL will result in UNKNOWN, which functions like FALSE in WHERE clauses. However, some databases handle this logic subtly differently."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, in PostgreSQL and SQL Server, the following query returns zero rows:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id <> 5;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This is because if `manager_id` is NULL, the condition `manager_id <> 5` evaluates to UNKNOWN and the row is excluded. In MySQL, `NULL <> 5` also evaluates to NULL, which behaves similarly by excluding rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. NULL Handling in GROUP BY and ORDER BY"
+      },
+      {
+        "type": "paragraph",
+        "value": "In GROUP BY clauses, NULLs are treated as equal values across all major databases, so all rows with NULL in the grouping column fall under the same group."
+      },
+      {
+        "type": "paragraph",
+        "value": "When sorting results (ORDER BY), some databases place NULLs first, while others place them last. For instance, PostgreSQL places NULLs last by default when sorting ascending, while Oracle places NULLs first."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can explicitly control NULL sorting in PostgreSQL and Oracle using `NULLS FIRST` or `NULLS LAST`, but this syntax is not supported in all databases."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees ORDER BY manager_id ASC NULLS FIRST;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Functions and NULL"
+      },
+      {
+        "type": "paragraph",
+        "value": "Functions like `COALESCE()` work consistently across popular databases and are very useful for handling NULL values. `COALESCE()` returns the first non-NULL argument."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, COALESCE(manager_id, 0) AS manager_id_fixed FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In contrast, other functions like `NVL()` are only available in Oracle, so prefer `COALESCE()` for cross-DB compatibility."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary Tips for Working with NULLs Across SQL Databases"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always use `IS NULL` and `IS NOT NULL` to test for NULL values, never `= NULL` or `<> NULL`.\n- Use `COALESCE()` to provide default values when NULLs might cause issues.\n- Be aware of how NULLs sort by default in your database and use explicit `NULLS FIRST`/`LAST` if supported.\n- Remember that NULL comparisons result in UNKNOWN, excluding rows from WHERE clause results.\n- Test queries in your specific SQL environment since syntax support and behavior can differ slightly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding NULL handling nuances can save you from unexpected bugs and errors in your SQL queries. Keep these differences in mind when writing or porting SQL code to different database systems."
+      }
+    ]
   }
 ];

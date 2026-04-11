@@ -1,199 +1,91 @@
 [
   {
-    "slug": "mastering-javascript-closures-cleaner-code-better-memory-management",
-    "title": "Mastering JavaScript Closures for Cleaner Code and Better Memory Management",
+    "slug": "mastering-javascript-symbol-type-edge-cases-and-practical-uses",
+    "title": "Mastering JavaScript Symbol Type: Edge Cases and Practical Uses",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how JavaScript closures work and how they can help you write cleaner code and improve memory management in your applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=qikxEIxsXco",
+    "description": "Learn how to use JavaScript's Symbol type effectively, including edge cases and practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=UnYevznrnVI",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript closures are a powerful concept that every developer should understand. Closures allow a function to remember and access variables from its outer scope even after that outer function has finished executing. This capability can lead to cleaner, more modular code and better control over memory."
+        "value": "JavaScript's Symbol type is a unique and powerful feature introduced in ES6. Symbols are unique identifiers, often used to add hidden properties to objects or to avoid property name collisions. In this tutorial, we'll explore the basics of Symbols, some edge cases you might encounter, and practical use cases to help you master this important concept."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by understanding what a closure is with a simple example."
+        "value": "A Symbol is created using the Symbol() function and is guaranteed to be unique. Unlike strings or numbers, two Symbols with the same description are never equal."
       },
       {
         "type": "code",
-        "value": "function outer() {\n  const message = 'Hello from closure!';\n  function inner() {\n    console.log(message);\n  }\n  return inner;\n}\n\nconst myClosure = outer();\nmyClosure(); // Output: Hello from closure!"
+        "value": "const sym1 = Symbol('id');\nconst sym2 = Symbol('id');\nconsole.log(sym1 === sym2); // false"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, the function `inner` forms a closure. Even after the `outer` function has returned, `inner` still remembers the variable `message` and can access it. This is because `inner` maintains a reference to its lexical environment—the scope where it was created."
+        "value": "Even though both symbols have the description 'id', they are unique. This uniqueness makes Symbols perfect for keys in objects when you want to avoid accidental overwriting of properties."
       },
       {
         "type": "paragraph",
-        "value": "Closures are useful for creating private variables and encapsulating state. For example:"
+        "value": "Let's see a practical example:"
       },
       {
         "type": "code",
-        "value": "function createCounter() {\n  let count = 0;\n  return {\n    increment() {\n      count++;\n      console.log(count);\n    },\n    decrement() {\n      count--;\n      console.log(count);\n    }\n  };\n}\n\nconst counter = createCounter();\ncounter.increment(); // 1\ncounter.increment(); // 2\ncounter.decrement(); // 1"
+        "value": "const user = {};\nconst id = Symbol('id');\n\nuser[id] = 123;\n\nconsole.log(user[id]); // 123\nconsole.log(user.id); // undefined"
       },
       {
         "type": "paragraph",
-        "value": "Here, the variable `count` is private and can't be accessed directly from outside the returned object. It can only be changed through the `increment` and `decrement` methods, which form closures over `count`."
+        "value": "In this example, we add a Symbol-keyed property to an object. Notice that accessing user.id returns undefined because the Symbol key is not the same as the string 'id'."
       },
       {
         "type": "paragraph",
-        "value": "Closures also help with better memory management. Since variables in closures live as long as the function using them remains reachable, JavaScript can efficiently keep data alive only when necessary. This allows you to avoid polluting the global namespace and reduces the risk of memory leaks."
+        "value": "### Edge Case: Symbols are not enumerable by default"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, closures are essential for:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Keeping variables private and protected from the outside code.\n- Preserving state between function calls.\n- Creating factory functions and reusable helpers.\n- Helping JavaScript engines optimize memory usage."
-      },
-      {
-        "type": "paragraph",
-        "value": "When writing your JavaScript code, start looking for opportunities to encapsulate data using closures. This practice will lead to cleaner, more modular code and efficient memory use."
-      },
-      {
-        "type": "paragraph",
-        "value": "Happy coding!"
-      }
-    ]
-  },
-  {
-    "slug": "mastering-asynchronous-stack-traces-for-debugging-complex-javascript-errors",
-    "title": "Mastering Asynchronous Stack Traces for Debugging Complex JavaScript Errors",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn how to understand and use asynchronous stack traces in JavaScript to debug complex errors effectively, even in promises and async/await code.",
-    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Debugging JavaScript errors can become tricky when working with asynchronous code, such as promises or async/await. Traditional stack traces sometimes lose context across async boundaries, making it harder to pinpoint the source of an error. This article explains how asynchronous stack traces work and provides simple strategies to master them for more effective debugging."
-      },
-      {
-        "type": "paragraph",
-        "value": "When you run synchronous code and an error happens, the stack trace clearly shows the sequence of function calls that led to the problem. However, with asynchronous code, the call chain breaks because the error might occur in a separate task or event loop turn. Modern JavaScript engines and browsers attempt to preserve asynchronous stack traces, but they might still appear fragmented or partial."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's see an example of a common mistake with promises and how the stack trace looks:"
+        "value": "One important thing to remember is that Symbol properties do not show up in normal object property enumerations like for...in loops or Object.keys()."
       },
       {
         "type": "code",
-        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Failed to fetch data'));\n    }, 100);\n  });\n}\n\nfunction processData() {\n  fetchData()\n    .then(data => console.log(data))\n    .catch(error => console.error(error));\n}\n\nprocessData();"
+        "value": "const sym = Symbol('secret');\nconst obj = {\n  [sym]: 'hidden value',\n  visible: 'shown value'\n};\n\nfor (let key in obj) {\n  console.log(key); // only 'visible' is logged\n}\n\nconsole.log(Object.keys(obj)); // [ 'visible' ]"
       },
       {
         "type": "paragraph",
-        "value": "Here, if `fetchData` fails, the error will be caught in the `.catch()` method. The asynchronous stack trace may only show the location inside the setTimeout callback, not where `fetchData` was originally called. To improve this, you can use `async/await` syntax, which generally produces clearer stack traces."
+        "value": "To list Symbol properties, use Object.getOwnPropertySymbols():"
       },
       {
         "type": "code",
-        "value": "async function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Failed to fetch data'));\n    }, 100);\n  });\n}\n\nasync function processData() {\n  try {\n    const data = await fetchData();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nprocessData();"
+        "value": "const syms = Object.getOwnPropertySymbols(obj);\nconsole.log(syms); // [ Symbol(secret) ]\nconsole.log(obj[syms[0]]); // 'hidden value'"
       },
       {
         "type": "paragraph",
-        "value": "Using async/await, the stack trace more clearly links back through the asynchronous calls, making debugging easier. However, in some environments, stack traces might still look incomplete. Here are some practical tips to get better asynchronous stack traces:"
+        "value": "### Practical Use: Defining Constants"
       },
       {
         "type": "paragraph",
-        "value": "1. **Use Latest JavaScript Engines:** Modern browsers like Chrome, Firefox, and Node.js have improved async stacks. Always use up-to-date versions.\n\n2. **Enable Source Maps:** If you use transpilers like Babel or TypeScript, source maps help map errors to your original code.\n\n3. **Avoid Swallowing Errors:** Always handle rejected promises properly with `.catch()` or try/catch with async/await.\n\n4. **Use Debugging Tools:** Developer tools in browsers and IDEs provide enhanced async stack trace visualization.\n\n5. **Add Manual Stack Trace Captures:** You can create an error at a point you want to track and attach it for better context."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's an example of manually capturing a stack trace before an async operation to give more insight:"
+        "value": "You can use Symbols to define constant values for things like event types or states to avoid collisions and mistakes."
       },
       {
         "type": "code",
-        "value": "function betterFetchData() {\n  const originalError = new Error('Call stack at fetch start');\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const error = new Error('Failed to fetch data');\n      // Combine the original stack and error stack\n      error.stack += '\\nCaused By: ' + originalError.stack;\n      reject(error);\n    }, 100);\n  });\n}\n\nasync function test() {\n  try {\n    await betterFetchData();\n  } catch (err) {\n    console.error(err);\n  }\n}\n\ntest();"
+        "value": "const STATUS = {\n  LOADING: Symbol('loading'),\n  SUCCESS: Symbol('success'),\n  ERROR: Symbol('error')\n};\n\nfunction handleStatus(status) {\n  switch(status) {\n    case STATUS.LOADING:\n      console.log('Loading...');\n      break;\n    case STATUS.SUCCESS:\n      console.log('Loaded successfully!');\n      break;\n    case STATUS.ERROR:\n      console.log('An error occurred.');\n      break;\n  }\n}\n\nhandleStatus(STATUS.LOADING);"
       },
       {
         "type": "paragraph",
-        "value": "This approach gives you more context about where the async operation was initiated. To summarize, mastering asynchronous stack traces involves understanding how async code works, writing clean promise and async/await code, and leveraging modern tooling and techniques to get clearer error information."
+        "value": "Because each Symbol is unique, you can be sure your status codes won't conflict with other variables or strings."
       },
       {
         "type": "paragraph",
-        "value": "With these tips, you can debug complex JavaScript errors more effectively and write more reliable asynchronous programs."
-      }
-    ]
-  },
-  {
-    "slug": "typescript-vs-javascript-practical-comparison-modern-web-development",
-    "title": "TypeScript vs JavaScript: A Practical Comparison for Modern Web Development",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Explore the key differences between TypeScript and JavaScript with practical examples to help beginner developers choose the right language for modern web development.",
-    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "JavaScript is the backbone of web development and is supported by all browsers, used to create dynamic and interactive websites. TypeScript, on the other hand, is a superset of JavaScript — adding static typing and other features to make code more reliable and maintainable. In this article, we'll compare TypeScript and JavaScript in practical terms and show how TypeScript can help beginners write safer code without losing the flexibility of JavaScript."
+        "value": "### Bonus: Global Symbol Registry"
       },
       {
         "type": "paragraph",
-        "value": "### What is JavaScript?"
-      },
-      {
-        "type": "paragraph",
-        "value": "JavaScript is a scripting language that runs natively in browsers. It lets you manipulate the DOM, handle events, and create interactive web applications. JavaScript is dynamically typed, meaning variable types are determined at runtime."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple example of a JavaScript function that adds two numbers:"
+        "value": "Sometimes you want to reuse the same Symbol across different parts of your code. JavaScript provides a global symbol registry accessed with Symbol.for() and Symbol.keyFor(). This lets you create or retrieve Symbols by a key."
       },
       {
         "type": "code",
-        "value": "function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(5, 3));  // Output: 8\nconsole.log(add('5', '3'));  // Output: 53 (string concatenation)"
+        "value": "const globalSym1 = Symbol.for('app.event');\nconst globalSym2 = Symbol.for('app.event');\n\nconsole.log(globalSym1 === globalSym2); // true\nconsole.log(Symbol.keyFor(globalSym1)); // 'app.event'"
       },
       {
         "type": "paragraph",
-        "value": "Notice how JavaScript allows adding both numbers and strings without any errors, which can sometimes lead to unexpected bugs."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is TypeScript?"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript builds on JavaScript by introducing static types. This means you specify the types of variables, function parameters, and return types. TypeScript helps catch type-related errors during development rather than at runtime, making your code safer and easier to maintain."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's rewrite the add function in TypeScript:"
-      },
-      {
-        "type": "code",
-        "value": "function add(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(add(5, 3));  // Output: 8\n// console.log(add('5', '3'));  // Error: Argument of type 'string' is not assignable to parameter of type 'number'"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, TypeScript will show an error if you try to pass a string instead of a number, preventing bugs early."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Key Differences"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Typing:** JavaScript is dynamically typed, TypeScript is statically typed (supports type annotations).\n- **Compilation:** JavaScript runs directly in browsers; TypeScript is compiled to JavaScript before running.\n- **Tooling:** TypeScript offers better autocompletion and error checking in code editors.\n- **Learning curve:** JavaScript is simpler to start; TypeScript requires understanding of types but improves code quality."
-      },
-      {
-        "type": "paragraph",
-        "value": "### When to Use TypeScript?"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you're working on larger projects or collaborating with others, TypeScript helps maintain code quality and reduces bugs. For simple scripts or quickly prototyping, JavaScript can be fine."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Setting Up a Simple TypeScript Project"
-      },
-      {
-        "type": "paragraph",
-        "value": "To try TypeScript, you can install it using npm:"
-      },
-      {
-        "type": "code",
-        "value": "npm install -g typescript\n\n// Create a file named add.ts\n// Compile it with:\ntsc add.ts\n\n// Run the output JavaScript file with:\nnode add.js"
+        "value": "Using the global registry simplifies communication between different scripts or modules by sharing Symbols via a known key."
       },
       {
         "type": "paragraph",
@@ -201,289 +93,493 @@
       },
       {
         "type": "paragraph",
-        "value": "TypeScript enhances JavaScript by adding static types, improving reliability and developer experience. For modern web development, learning TypeScript alongside JavaScript is a great investment, especially for building scalable applications."
+        "value": "Symbols are a unique primitive in JavaScript, ideal for defining non-conflicting property keys, constants, and hidden object properties. Keep in mind their edge cases such as non-enumerability and how to access them using Object.getOwnPropertySymbols. Use the global symbol registry when symbols need to be shared. With these tips, you’re ready to start using Symbols effectively in your projects!"
       }
     ]
   },
   {
-    "slug": "how-typescript-enhances-data-model-integrity-in-complex-applications",
-    "title": "How TypeScript Enhances Data Model Integrity in Complex Applications",
+    "slug": "mastering-async-stack-traces-javascript-faster-debugging",
+    "title": "Mastering Async Stack Traces in JavaScript for Faster Debugging",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to understand and use async stack traces in JavaScript to debug faster and more effectively, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=EIGjHtXBHss",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging JavaScript code that uses asynchronous functions can be challenging because the stack trace often doesn't show the original call chain clearly. Async stack traces help you see where your error originated, even across asynchronous boundaries like promises and async/await."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explain what async stack traces are, why they matter, and how you can use them to fix bugs faster in your JavaScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a stack trace?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A stack trace is a report that shows the active functions at a point in time during a program's execution — usually when an error occurs. It helps you track down where the error happened."
+      },
+      {
+        "type": "paragraph",
+        "value": "Normally, with synchronous functions, the stack trace clearly shows the path of function calls. But with asynchronous functions (like those using promises or async/await), the stack trace can be incomplete or confusing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why async stack traces matter"
+      },
+      {
+        "type": "paragraph",
+        "value": "Modern JavaScript heavily relies on asynchronous code for things like network requests, timers, or reading files. If an error happens inside an asynchronous function, a regular stack trace might only show the immediate function where the error was detected, not the code that triggered it."
+      },
+      {
+        "type": "paragraph",
+        "value": "Async stack traces improve this by connecting the dots between async calls, showing you a clearer path to the source of your error."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example of a confusing stack trace"
+      },
+      {
+        "type": "code",
+        "value": "function delay(time) {\n  return new Promise(resolve => setTimeout(resolve, time));\n}\n\nasync function fetchData() {\n  await delay(100);\n  throw new Error('Oops!');\n}\n\nasync function start() {\n  try {\n    await fetchData();\n  } catch (error) {\n    console.error(error.stack);\n  }\n}\n\nstart();"
+      },
+      {
+        "type": "paragraph",
+        "value": "In many environments, the stack trace will point to the error inside fetchData but won’t clearly show that start() called it, making it harder to understand the exact flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to get better async stack traces"
+      },
+      {
+        "type": "paragraph",
+        "value": "Most modern browsers and Node.js already provide improved async stack traces, especially when you use async/await instead of plain promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, the above code often produces a stack trace showing the async call hierarchy, helping you see both start() and fetchData() in the trace."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips to improve debugging async errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use async/await instead of mixing callbacks and promises. Async/await keeps code cleaner and stack traces easier to follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Keep your error handling close to the asynchronous code using try/catch around awaits."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use developer tools with good async stack trace support, like Chrome DevTools or the latest Node.js versions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example with clear async stack trace"
+      },
+      {
+        "type": "code",
+        "value": "async function step1() {\n  return step2();\n}\n\nasync function step2() {\n  await new Promise(r => setTimeout(r, 10));\n  throw new Error('Problem in step2');\n}\n\nasync function run() {\n  try {\n    await step1();\n  } catch (e) {\n    console.error(e.stack);\n  }\n}\n\nrun();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running this code in a modern environment will print a stack trace showing both run → step1 → step2 calls, making it easier to figure out where the error originated and which functions were involved."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding async stack traces is essential for debugging modern JavaScript applications efficiently. Using async/await, handling errors properly, and leveraging developer tools will make fixing bugs faster and less painful."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing writing asynchronous code with proper error handling, and soon you will master reading async stack traces like a pro!"
+      }
+    ]
+  },
+  {
+    "slug": "building-real-time-chat-app-with-typescript-websocket",
+    "title": "Building a Real-Time Chat Application with TypeScript and WebSocket",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create a simple real-time chat application using TypeScript and WebSocket with a step-by-step approach suitable for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time chat applications are popular in online communication, gaming, and collaboration platforms. In this tutorial, we will build a basic real-time chat app using TypeScript and WebSocket, which enables two-way communication between the client and server. By the end, you'll understand how to set up a WebSocket server, connect clients, and exchange messages instantly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What You Need Before Starting\n- Node.js installed on your computer\n- Basic knowledge of TypeScript\n- A code editor like VS Code"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Setting Up the WebSocket Server\nFirst, let's create a simple WebSocket server using the popular `ws` library. This server will listen for client connections and broadcast messages to all connected clients."
+      },
+      {
+        "type": "code",
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst PORT = 8080;\nconst wss = new WebSocketServer({ port: PORT });\n\nwss.on('connection', (ws: WebSocket) => {\n  console.log('Client connected');\n\n  ws.on('message', (message: string) => {\n    console.log(`Received message: ${message}`);\n\n    // Broadcast message to all clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log(`WebSocket server started on ws://localhost:${PORT}`);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To run the server, create a file called `server.ts` with the above code, install the `ws` package (`npm install ws`), and compile/run using `ts-node server.ts` or compile with `tsc` and run with `node`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Creating the Client\nNow let's create a simple client that connects to the WebSocket server and allows sending and receiving messages."
+      },
+      {
+        "type": "code",
+        "value": "const socket = new WebSocket('ws://localhost:8080');\n\nsocket.onopen = () => {\n  console.log('Connected to the server');\n  socket.send('Hello Server!');\n};\n\nsocket.onmessage = (event) => {\n  console.log('New message:', event.data);\n};\n\nsocket.onclose = () => {\n  console.log('Disconnected from the server');\n};\n\nsocket.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can run this code in any TypeScript-enabled front-end environment like a browser or a framework. This example simply connects, sends a hello message, and logs all messages it receives."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Enhancing the Chat Application\nTo make the chat more interactive, let's add basic HTML and use prompt dialogs for message input. Below is an example of how to create a minimal UI in the browser:"
+      },
+      {
+        "type": "code",
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n</head>\n<body>\n  <h2>Real-Time Chat</h2>\n  <div id=\"chat\" style=\"border:1px solid #ccc; padding:10px; height:300px; overflow-y:auto;\"></div>\n  <input id=\"messageInput\" type=\"text\" placeholder=\"Type your message here...\" style=\"width:80%;\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script type=\"module\">\n    const chat = document.getElementById('chat');\n    const input = document.getElementById('messageInput');\n    const button = document.getElementById('sendBtn');\n\n    const socket = new WebSocket('ws://localhost:8080');\n\n    socket.onopen = () => {\n      appendMessage('Connected to server');\n    };\n\n    socket.onmessage = (event) => {\n      appendMessage(`Server: ${event.data}`);\n    };\n\n    socket.onclose = () => {\n      appendMessage('Disconnected from server');\n    };\n\n    button.onclick = () => {\n      if (input.value) {\n        socket.send(input.value);\n        appendMessage(`You: ${input.value}`);\n        input.value = '';\n      }\n    };\n\n    function appendMessage(message: string) {\n      if (chat) {\n        const msgElem = document.createElement('div');\n        msgElem.textContent = message;\n        chat.appendChild(msgElem);\n        chat.scrollTop = chat.scrollHeight;\n      }\n    }\n  </script>\n</body>\n</html>"
+      },
+      {
+        "type": "paragraph",
+        "value": "Save this HTML file and open it in your browser. Make sure your WebSocket server is running locally on port 8080. You can now type messages and see them appear in the chat window. Messages will also arrive from other connected clients."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Thoughts\nIn this tutorial, you've learned to build a basic real-time chat app using TypeScript with a WebSocket server and client. This foundation can be expanded with user authentication, persistent message storage, and more advanced UI features. WebSockets offer an efficient way to enable instant communication in web applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-error-handling-with-custom-error-classes",
+    "title": "Mastering TypeScript Error Handling with Custom Error Classes",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how TypeScript helps maintain data model integrity in complex apps by preventing common mistakes and catching errors early through static typing.",
-    "videoUrl": "https://www.youtube.com/watch?v=r3Y6uDvgyNk",
+    "description": "Learn how to improve error handling in TypeScript by creating and using custom error classes. This beginner-friendly guide helps you write cleaner and more maintainable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=xdQkEn3mx1k",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working on complex applications, managing and maintaining data integrity is crucial. Incorrect data types or unexpected values can cause runtime errors that are often hard to debug. TypeScript, a superset of JavaScript, introduces static typing that helps catch these errors during development rather than at runtime."
+        "value": "Error handling is an essential part of writing robust applications. In TypeScript, the built-in Error class helps capture runtime errors, but sometimes it's not enough. Custom error classes allow you to define more specific error types, making your error handling clearer and easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "In JavaScript, data models are easy to define but can lead to bugs if the data shape is not consistent. TypeScript allows you to define clear interfaces and types, which act like contracts for your data, preventing common mistakes such as missing properties or wrong data types."
+        "value": "In this article, we'll learn how to create custom error classes in TypeScript and use them effectively in our code."
       },
       {
         "type": "paragraph",
-        "value": "Here is an example of defining a user data model using TypeScript interfaces and how it enhances integrity:"
+        "value": "Let's begin by creating a simple custom error class. It extends the built-in Error class and adds a custom message and name."
       },
       {
         "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  isActive: boolean;\n}\n\nfunction createUser(user: User) {\n  console.log(`Creating user ${user.name} with email: ${user.email}`);\n}\n\nconst newUser = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com',\n  isActive: true\n};\n\ncreateUser(newUser);"
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);  // Pass the message to the Error constructor\n    this.name = \"ValidationError\";  // Set the error name\n    Object.setPrototypeOf(this, ValidationError.prototype); // Fix prototype chain\n  }\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "In this example, if you accidentally forget to include the `email` property or provide the wrong type (for example, a number instead of a string), TypeScript will immediately show an error, preventing the code from compiling. This proactive error detection prevents bugs that could break your application later."
+        "value": "The line `Object.setPrototypeOf` helps fix a TypeScript/JavaScript quirk when extending built-in classes. It ensures that `instanceof` checks work correctly."
       },
       {
         "type": "paragraph",
-        "value": "TypeScript also supports union types, optional properties, and readonly fields to give you even more control over your data models. For example, you can make a property optional by adding a question mark `?` or mark some properties as immutable using `readonly`."
+        "value": "Now, let’s see how we might use this custom error in a function that validates user input."
       },
       {
         "type": "code",
-        "value": "interface Product {\n  readonly id: string;\n  name: string;\n  description?: string; // Optional property\n}\n\nconst product: Product = {\n  id: 'p123',\n  name: 'Gaming Mouse'\n};\n\n// product.id = 'p456'; // Error: Cannot assign to 'id' because it is a read-only property."
+        "value": "function validateUsername(username: string) {\n  if (username.length < 3) {\n    throw new ValidationError(\"Username must be at least 3 characters long.\");\n  }\n  return true;\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "Leveraging these features in TypeScript helps enforce consistent data structures throughout your app, leading to fewer bugs and more maintainable code. As your application grows in complexity, TypeScript becomes a powerful tool to safeguard your data integrity and improve overall code quality."
+        "value": "When calling this function, you can catch the specific ValidationError to handle it differently from other errors."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  validateUsername('Jo');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation failed:', error.message);\n  } else {\n    console.error('Unexpected error:', error);\n  }\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using custom error classes helps you clearly identify and respond to different error types in your applications. You can create multiple custom error classes tailored to your application's needs, improving debugging and error management."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering error handling with custom error classes in TypeScript leads to cleaner and more maintainable code that handles edge cases gracefully."
       }
     ]
   },
   {
-    "slug": "handling-edge-cases-in-python-date-and-time-manipulations",
-    "title": "Handling Edge Cases in Python Date and Time Manipulations",
+    "slug": "python-stock-market-data-visualizer-matplotlib",
+    "title": "Creating a Python-Based Stock Market Data Visualizer Using Matplotlib",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to handle common edge cases in Python date and time manipulations with practical examples. Perfect for beginners working with datetime.",
-    "videoUrl": "https://www.youtube.com/watch?v=IZDWaFrzaMo",
+    "description": "Learn how to build a simple and effective stock market data visualizer in Python using Matplotlib, perfect for beginners interested in financial data visualization.",
+    "videoUrl": "https://www.youtube.com/watch?v=m_kkCd7oXKA",
     "content": [
       {
         "type": "paragraph",
-        "value": "Working with dates and times in Python is common but can be tricky when you encounter edge cases such as daylight saving time changes, leap years, or timezone differences. In this tutorial, we'll explore practical examples to handle these situations with Python's built-in modules."
+        "value": "Visualizing stock market data can help you understand trends and make better investment decisions. In this tutorial, we'll create a beginner-friendly Python program to visualize stock prices using the popular Matplotlib library. We'll fetch data, process it, and display it in an easy-to-read plot."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by importing the essential modules:"
+        "value": "First, you need to install two packages: `yfinance` to fetch stock data and `matplotlib` for plotting. You can install them using pip:"
       },
       {
         "type": "code",
-        "value": "from datetime import datetime, timedelta, timezone\nimport pytz"
+        "value": "pip install yfinance matplotlib"
       },
       {
         "type": "paragraph",
-        "value": "### Edge Case 1: Leap Years\nPython's datetime handles leap years correctly, but you should be careful when adding days around February 29."
+        "value": "Now, let's create a Python script that downloads historical stock data and visualizes the closing price over time."
       },
       {
         "type": "code",
-        "value": "date = datetime(2020, 2, 28)\nday_after = date + timedelta(days=1)\nprint(day_after)  # Outputs 2020-02-29\n\nnext_day = day_after + timedelta(days=1)\nprint(next_day)  # Outputs 2020-03-01"
+        "value": "import yfinance as yf\nimport matplotlib.pyplot as plt\n\n# Define the stock ticker symbol and period\nticker = \"AAPL\"  # Apple Inc.\nperiod = \"6mo\"   # Last 6 months\n\n# Download historical data\nstock_data = yf.download(ticker, period=period)\n\n# Check if data is not empty\nif stock_data.empty:\n    print(f\"No data found for ticker {ticker}.\")\nelse:\n    # Plot the closing price\n    plt.figure(figsize=(10, 5))\n    plt.plot(stock_data.index, stock_data[\"Close\"], label=\"Close Price\")\n    plt.title(f\"{ticker} Stock Closing Prices - Last 6 Months\")\n    plt.xlabel(\"Date\")\n    plt.ylabel(\"Price (USD)\")\n    plt.legend()\n    plt.grid(True)\n    plt.show()"
       },
       {
         "type": "paragraph",
-        "value": "Here, adding one day to February 28, 2020, correctly results in February 29 because 2020 is a leap year."
+        "value": "Let's break down the script:\n- We import `yfinance` and `matplotlib.pyplot`.\n- Set the ticker symbol to 'AAPL' (Apple Inc.) and period to 6 months.\n- Use `yf.download()` to get historical stock data.\n- Check if data is available.\n- Plot the closing prices using Matplotlib and display the graph."
       },
       {
         "type": "paragraph",
-        "value": "### Edge Case 2: Daylight Saving Time (DST) Transitions\nThis can be tricky when clocks move forward or backward. Use `pytz` for timezone-aware datetime to handle this."
-      },
-      {
-        "type": "code",
-        "value": "eastern = pytz.timezone('US/Eastern')\n\n# A time just before the DST change in 2023 (March 12, 2:00 AM)\ndt = eastern.localize(datetime(2023, 3, 12, 1, 30))  # 1:30 AM EST\n\n# Add one hour, which crosses DST forward\nnext_hour = dt + timedelta(hours=1)\nnext_hour_local = eastern.normalize(next_hour)  # Adjusts for DST\n\nprint(\"Original:\", dt)\nprint(\"After 1 hour:\", next_hour_local)"
+        "value": "You can change the `ticker` variable to analyze different companies (e.g., \"MSFT\" for Microsoft, \"TSLA\" for Tesla). Also, adjusting the `period` (e.g., \"1mo\", \"1y\") lets you explore different time frames."
       },
       {
         "type": "paragraph",
-        "value": "Notice how adding one hour jumps from 1:30 AM EST to 3:30 AM EDT, skipping 2:30 AM due to the clock moving forward."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Edge Case 3: Timezone Differences\nAlways use timezone-aware datetime to avoid confusion during timezone conversions."
-      },
-      {
-        "type": "code",
-        "value": "# Current UTC time\nnow_utc = datetime.now(timezone.utc)\n# Convert to Japan timezone\ntokyo_tz = pytz.timezone('Asia/Tokyo')\nnow_tokyo = now_utc.astimezone(tokyo_tz)\n\nprint(\"UTC Time:\", now_utc)\nprint(\"Tokyo Time:\", now_tokyo)"
-      },
-      {
-        "type": "paragraph",
-        "value": "By converting times with timezones, you prevent errors when scheduling across timezones."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Final Tips\n- Always prefer timezone-aware datetime objects.\n- Use the `pytz` library for robust timezone and DST handling.\n- Watch out for leap years, adding days/months around Feb 29.\n- Test datetime code during DST changes."
-      },
-      {
-        "type": "paragraph",
-        "value": "With these strategies, your Python programs will handle date and time edge cases more reliably and predictably!"
+        "value": "This basic visualizer helps you get familiar with financial data and simple plotting in Python. From here, you can enhance the visualizer by adding other metrics like volume, moving averages, or multiple stocks comparison."
       }
     ]
   },
   {
-    "slug": "understanding-python-typeerror-common-causes-and-practical-debugging",
-    "title": "Understanding Python's TypeError: Common Causes and Practical Debugging Techniques",
+    "slug": "understanding-python-exceptions-beginners-error-handling",
+    "title": "Understanding Python Exceptions: A Beginner's Guide to Error Handling",
     "language": "python",
     "type": "errors",
-    "description": "Learn what Python's TypeError means, explore its common causes, and discover practical tips to debug and fix it with beginner-friendly examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=lV1e9U46oVw",
+    "description": "Learn the basics of Python exceptions and how to handle errors gracefully with beginner-friendly examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=NIWwJbo-9_8",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python's TypeError is a common mistake that often confuses beginners. It occurs when an operation or function is applied to an object of an inappropriate type. Understanding why and when this error happens will help you debug your code more efficiently."
+        "value": "When you start writing Python programs, you might encounter errors that stop your code from running. These errors are called exceptions. Understanding how to handle exceptions is important because it helps your program run smoothly, even when something unexpected happens."
       },
       {
         "type": "paragraph",
-        "value": "One typical example is trying to add a number and a string, which Python cannot do because they are different types of data."
+        "value": "In Python, exceptions are raised when the program runs into an error. For example, trying to divide by zero or accessing a file that doesn't exist will raise an exception. Without proper handling, your program will crash. Let's see how you can catch and handle these errors."
       },
       {
         "type": "code",
-        "value": "number = 5\ntext = \"hello\"\n\nresult = number + text  # This will raise a TypeError"
+        "value": "try:\n    number = int(input(\"Enter a number to divide 10 by: \"))\n    result = 10 / number\n    print(f\"Result is {result}\")\nexcept ZeroDivisionError:\n    print(\"Error: You can't divide by zero!\")\nexcept ValueError:\n    print(\"Error: That was not a valid number!\")"
       },
       {
         "type": "paragraph",
-        "value": "The error message will look like this:\n\nTypeError: unsupported operand type(s) for +: 'int' and 'str'\n\nThis means Python doesn't know how to add an integer (`int`) and a string (`str`)."
+        "value": "In the code above, the try block contains code that might raise exceptions. If the user enters zero, a ZeroDivisionError occurs. If the input is not a number, a ValueError is raised. The except blocks catch these errors and print friendly messages instead of crashing."
       },
       {
         "type": "paragraph",
-        "value": "Another common cause is calling a function with arguments of the wrong type. For example, if a function expects a list, but you pass it a number, you'll get a TypeError."
+        "value": "You can also use a general except block to catch any kind of exception, but it is better to handle specific exceptions when possible:"
       },
       {
         "type": "code",
-        "value": "def print_first_element(collection):\n    print(collection[0])\n\nprint_first_element(123)  # TypeError because 'int' is not subscriptable"
+        "value": "try:\n    file = open('example.txt', 'r')\n    content = file.read()\n    print(content)\n    file.close()\nexcept FileNotFoundError:\n    print(\"Error: The file was not found.\")\nexcept Exception as e:\n    print(f\"An unexpected error occurred: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "The error here is because integers don't support indexing like lists or strings do."
+        "value": "In this example, the code tries to open a file called \"example.txt\". If the file is missing, a FileNotFoundError is raised and handled with a clear message. The general Exception block catches any other error, printing a useful message with the error details."
       },
       {
         "type": "paragraph",
-        "value": "### Practical Debugging Tips\n\n1. **Read the error message carefully**: It tells you what operation failed and which types were involved.\n\n2. **Check the variable types**: Use the `type()` function to verify what data type your variables are holding.\n\n3. **Convert types explicitly**: If combining different types makes sense, convert them first using functions like `str()`, `int()`, or `float()`.\n\n4. **Use print statements**: Print variables before the error occurs to inspect their values and types."
+        "value": "Finally, you can use the else and finally blocks with try-except to make your code more robust:"
       },
       {
         "type": "code",
-        "value": "number = 5\ntext = \"hello\"\n\n# Convert number to string before concatenation\nresult = str(number) + text\nprint(result)  # Output: 5hello"
+        "value": "try:\n    number = int(input(\"Enter a number: \"))\n    result = 10 / number\nexcept ZeroDivisionError:\n    print(\"Can't divide by zero.\")\nexcept ValueError:\n    print(\"Invalid input; please enter a number.\")\nelse:\n    print(f\"Success! The result is {result}\")\nfinally:\n    print(\"This always runs, no matter what.\")"
       },
       {
         "type": "paragraph",
-        "value": "By converting `number` to a string first, Python can concatenate the two strings without errors."
+        "value": "The else block runs if no exceptions occur, while the finally block runs regardless of what happens, which is perfect for cleanup tasks."
       },
       {
         "type": "paragraph",
-        "value": "In summary, a TypeError means you're mixing data types in a way Python doesn't allow. Always check your data types and convert them appropriately to avoid this error. With practice, you'll quickly recognize and fix these issues."
+        "value": "By using try, except, else, and finally, you can handle errors gracefully and make your Python programs more user-friendly and reliable."
       }
     ]
   },
   {
-    "slug": "building-scalable-ecommerce-inventory-management-system-sql",
-    "title": "Building a Scalable E-Commerce Inventory Management System Using SQL",
+    "slug": "mastering-window-functions-in-sql-for-advanced-data-analysis",
+    "title": "Mastering Window Functions in SQL for Advanced Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to create a scalable and efficient inventory management system for e-commerce using SQL with easy-to-follow examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=9GVqKuTVANE",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis, including running totals, ranking, and moving averages, with easy-to-follow examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Managing inventory is crucial for any e-commerce platform. A well-structured SQL database can help you track products, stock levels, and sales effectively. This tutorial will guide you through building a scalable inventory management system using SQL, tailored for beginners."
+        "value": "Window functions are powerful tools in SQL that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not reduce the number of rows returned. This tutorial introduces beginner-friendly concepts and examples to help you master window functions for advanced data analysis."
       },
       {
         "type": "paragraph",
-        "value": "We'll focus on core concepts like designing tables for products, categories, stock, and orders. You'll also learn how to handle stock updates reliably to prevent errors such as overselling."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by creating the main tables to store product and inventory information."
+        "value": "Let's start with the basic syntax of a window function. It typically includes the function name, an OVER() clause, and optionally partitioning and ordering instructions. Here's the general form:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Categories (\n  category_id INT PRIMARY KEY AUTO_INCREMENT,\n  category_name VARCHAR(100) NOT NULL UNIQUE\n);\n\nCREATE TABLE Products (\n  product_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_name VARCHAR(255) NOT NULL,\n  category_id INT,\n  price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),\n  description TEXT,\n  FOREIGN KEY (category_id) REFERENCES Categories(category_id)\n);\n\nCREATE TABLE Inventory (\n  inventory_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_id INT NOT NULL,\n  quantity INT NOT NULL CHECK (quantity >= 0),\n  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);"
+        "value": "FUNCTION_NAME(column) OVER (PARTITION BY column ORDER BY column)\n-- Example functions: ROW_NUMBER(), RANK(), SUM(), AVG()"
       },
       {
         "type": "paragraph",
-        "value": "Here, we created three tables: Categories, Products, and Inventory. Categories categorize products. Products table stores product details including price and category reference. Inventory keeps track of quantity available and updates the timestamp automatically."
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, to record sales and update inventory after purchases, create an Orders table and a mechanism to deduct stock safely."
+        "value": "### Example Dataset\nSuppose we have a `sales` table tracking sales transactions:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Orders (\n  order_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_id INT NOT NULL,\n  quantity INT NOT NULL CHECK (quantity > 0),\n  order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);"
+        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(50),\n  sale_date DATE,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', '2024-01-01', 100),\n(2, 'Bob', '2024-01-01', 150),\n(3, 'Alice', '2024-01-02', 200),\n(4, 'Bob', '2024-01-03', 50),\n(5, 'Alice', '2024-01-03', 300);"
       },
       {
         "type": "paragraph",
-        "value": "When a customer places an order, you insert the order record and update the inventory quantity by subtracting the ordered amount. You must ensure the stock does not go negative to prevent overselling."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is an example SQL transaction to handle an order safely:"
+        "value": "### 1. ROW_NUMBER() - Assigning Row Numbers\nThis function assigns a unique sequential number to rows within a partition. For example, let's rank sales transactions by date for each salesperson:"
       },
       {
         "type": "code",
-        "value": "START TRANSACTION;\n\n-- Check available stock\nSELECT quantity FROM Inventory WHERE product_id = 1 FOR UPDATE;\n\n-- Suppose available quantity is enough, insert the order\nINSERT INTO Orders (product_id, quantity) VALUES (1, 3);\n\n-- Update inventory\nUPDATE Inventory SET quantity = quantity - 3 WHERE product_id = 1 AND quantity >= 3;\n\n-- Check if the update affected a row (stock was sufficient)\n-- If not, rollback the transaction\n\nCOMMIT;"
+        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS sale_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "Using transactions and locking (FOR UPDATE) ensures you handle concurrency correctly, avoiding race conditions where multiple orders reduce stock below zero."
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, to keep the system scalable, consider indexing frequently searched columns like product_name and category_id, and archiving old orders."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example of adding indexes:"
+        "value": "### 2. RANK() - Handling Ties\nThe `RANK()` function assigns ranks to rows within a partition with gaps in ranking when ties occur. This is useful when you want to rank sales amounts per salesperson:"
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_product_name ON Products(product_name);\nCREATE INDEX idx_category_id ON Products(category_id);"
+        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS rank_amount\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "With this simple but scalable design, you can build a strong foundation for your e-commerce inventory system. As you grow, more features like detailed order items, user management, and reporting can be added."
+        "value": "### 3. SUM() - Running Totals\nCompute a running total of sales amounts for each salesperson ordered by date:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. AVG() - Moving Averages\nCalculate the 2-day moving average of sales amount per salesperson:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  AVG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nWindow functions can dramatically simplify complex queries that require ranking, running totals, or averages without grouping and losing detail. Experiment with these examples on your datasets to unlock advanced data insights with minimal effort."
       }
     ]
   },
   {
-    "slug": "optimizing-query-performance-with-advanced-indexing-strategies-sql",
-    "title": "Optimizing Query Performance with Advanced Indexing Strategies in SQL",
+    "slug": "comparing-null-handling-differences-across-popular-sql-databases",
+    "title": "Comparing NULL Handling Differences Across Popular SQL Databases",
     "language": "sql",
     "type": "errors",
-    "description": "Learn beginner-friendly techniques to speed up your SQL queries using advanced indexing strategies, and avoid common indexing errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how NULL values are handled differently across popular SQL databases like MySQL, PostgreSQL, and SQL Server, and avoid common errors with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with large databases, slow query performance is a common problem. One of the best ways to speed up SQL queries is by using indexes. Indexes are special data structures that help the database find rows faster without scanning the entire table. However, incorrect use of indexes can lead to errors or little improvement in speed. This article explains advanced indexing strategies that beginners can apply to optimize query performance."
+        "value": "Handling NULL values in SQL can be tricky, especially when switching between different database systems. Although NULL represents missing or unknown data, the way various SQL databases treat NULLs can lead to unexpected results or errors if you're not careful. In this article, we'll explore how popular SQL databases like MySQL, PostgreSQL, and SQL Server differ in NULL handling and how to write queries that work reliably across systems."
       },
       {
         "type": "paragraph",
-        "value": "A common beginner error is creating too many indexes or indexing the wrong columns. Indexes take up additional space and slow down write operations like INSERT, UPDATE, or DELETE. Therefore, it's important to index columns that are frequently used in WHERE clauses, JOIN conditions, or ORDER BY statements."
+        "value": "First, it's important to understand that NULL is not the same as an empty string or zero. It is an unknown or missing value. This means standard equality operators (=, !=) do not work as expected with NULLs."
       },
       {
         "type": "paragraph",
-        "value": "One advanced strategy is using composite indexes, which index multiple columns together. For example, if you frequently run queries filtering by both `last_name` and `first_name`, creating a composite index on `(last_name, first_name)` can drastically increase speed."
+        "value": "Consider the following example, which attempts to check if a column contains NULL using the equality operator:"
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_name ON employees (last_name, first_name);"
+        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
       },
       {
         "type": "paragraph",
-        "value": "Another advanced technique involves using partial indexes, which index only a subset of rows based on a condition. This helps when you query specific filtered data often. For example, indexing only active users in a user table can improve query speed for active members."
+        "value": "This query will not return any rows in any popular SQL database because `= NULL` does not work. Instead, you must use the `IS NULL` predicate to test for NULL values:"
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_active_users ON users (last_login_date) WHERE status = 'active';"
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "Sometimes queries use pattern matching with `LIKE`. To optimize these, you can use indexes that support pattern searching, like a trigram index in PostgreSQL, or full-text indexes in other systems. However, be careful with wildcard placement, as leading wildcards (e.g., '%abc') prevent index use."
+        "value": "Now, let's look at some important differences across databases when dealing with NULLs."
       },
       {
         "type": "paragraph",
-        "value": "Finally, always analyze your query plans with `EXPLAIN` before and after adding indexes to ensure the database uses the indexes correctly and that performance improves."
+        "value": "### 1. Comparison Operators and NULL Behavior"
+      },
+      {
+        "type": "paragraph",
+        "value": "In general, operations like `=`, `<>`, `<`, `>` involving NULL will result in UNKNOWN, which functions like FALSE in WHERE clauses. However, some databases handle this logic subtly differently."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, in PostgreSQL and SQL Server, the following query returns zero rows:"
       },
       {
         "type": "code",
-        "value": "EXPLAIN SELECT * FROM employees WHERE last_name = 'Smith' AND first_name = 'John';"
+        "value": "SELECT * FROM employees WHERE manager_id <> 5;"
       },
       {
         "type": "paragraph",
-        "value": "By applying these indexing strategies thoughtfully and avoiding common mistakes, beginners can greatly optimize their SQL queries and improve overall database performance."
+        "value": "This is because if `manager_id` is NULL, the condition `manager_id <> 5` evaluates to UNKNOWN and the row is excluded. In MySQL, `NULL <> 5` also evaluates to NULL, which behaves similarly by excluding rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. NULL Handling in GROUP BY and ORDER BY"
+      },
+      {
+        "type": "paragraph",
+        "value": "In GROUP BY clauses, NULLs are treated as equal values across all major databases, so all rows with NULL in the grouping column fall under the same group."
+      },
+      {
+        "type": "paragraph",
+        "value": "When sorting results (ORDER BY), some databases place NULLs first, while others place them last. For instance, PostgreSQL places NULLs last by default when sorting ascending, while Oracle places NULLs first."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can explicitly control NULL sorting in PostgreSQL and Oracle using `NULLS FIRST` or `NULLS LAST`, but this syntax is not supported in all databases."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees ORDER BY manager_id ASC NULLS FIRST;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Functions and NULL"
+      },
+      {
+        "type": "paragraph",
+        "value": "Functions like `COALESCE()` work consistently across popular databases and are very useful for handling NULL values. `COALESCE()` returns the first non-NULL argument."
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_id, COALESCE(manager_id, 0) AS manager_id_fixed FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In contrast, other functions like `NVL()` are only available in Oracle, so prefer `COALESCE()` for cross-DB compatibility."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary Tips for Working with NULLs Across SQL Databases"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Always use `IS NULL` and `IS NOT NULL` to test for NULL values, never `= NULL` or `<> NULL`.\n- Use `COALESCE()` to provide default values when NULLs might cause issues.\n- Be aware of how NULLs sort by default in your database and use explicit `NULLS FIRST`/`LAST` if supported.\n- Remember that NULL comparisons result in UNKNOWN, excluding rows from WHERE clause results.\n- Test queries in your specific SQL environment since syntax support and behavior can differ slightly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding NULL handling nuances can save you from unexpected bugs and errors in your SQL queries. Keep these differences in mind when writing or porting SQL code to different database systems."
       }
     ]
   }
