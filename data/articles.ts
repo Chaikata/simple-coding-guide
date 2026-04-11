@@ -51129,5 +51129,493 @@ export const articles = [
         "value": "Understanding execution plans might seem complex at first, but it quickly becomes an essential skill in writing high-quality SQL once you start using it regularly."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-closures-cleaner-code-better-memory-management",
+    "title": "Mastering JavaScript Closures for Cleaner Code and Better Memory Management",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how JavaScript closures work and how they can help you write cleaner code and improve memory management in your applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=qikxEIxsXco",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript closures are a powerful concept that every developer should understand. Closures allow a function to remember and access variables from its outer scope even after that outer function has finished executing. This capability can lead to cleaner, more modular code and better control over memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by understanding what a closure is with a simple example."
+      },
+      {
+        "type": "code",
+        "value": "function outer() {\n  const message = 'Hello from closure!';\n  function inner() {\n    console.log(message);\n  }\n  return inner;\n}\n\nconst myClosure = outer();\nmyClosure(); // Output: Hello from closure!"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the function `inner` forms a closure. Even after the `outer` function has returned, `inner` still remembers the variable `message` and can access it. This is because `inner` maintains a reference to its lexical environment—the scope where it was created."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are useful for creating private variables and encapsulating state. For example:"
+      },
+      {
+        "type": "code",
+        "value": "function createCounter() {\n  let count = 0;\n  return {\n    increment() {\n      count++;\n      console.log(count);\n    },\n    decrement() {\n      count--;\n      console.log(count);\n    }\n  };\n}\n\nconst counter = createCounter();\ncounter.increment(); // 1\ncounter.increment(); // 2\ncounter.decrement(); // 1"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the variable `count` is private and can't be accessed directly from outside the returned object. It can only be changed through the `increment` and `decrement` methods, which form closures over `count`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures also help with better memory management. Since variables in closures live as long as the function using them remains reachable, JavaScript can efficiently keep data alive only when necessary. This allows you to avoid polluting the global namespace and reduces the risk of memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, closures are essential for:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Keeping variables private and protected from the outside code.\n- Preserving state between function calls.\n- Creating factory functions and reusable helpers.\n- Helping JavaScript engines optimize memory usage."
+      },
+      {
+        "type": "paragraph",
+        "value": "When writing your JavaScript code, start looking for opportunities to encapsulate data using closures. This practice will lead to cleaner, more modular code and efficient memory use."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-asynchronous-stack-traces-for-debugging-complex-javascript-errors",
+    "title": "Mastering Asynchronous Stack Traces for Debugging Complex JavaScript Errors",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to understand and use asynchronous stack traces in JavaScript to debug complex errors effectively, even in promises and async/await code.",
+    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging JavaScript errors can become tricky when working with asynchronous code, such as promises or async/await. Traditional stack traces sometimes lose context across async boundaries, making it harder to pinpoint the source of an error. This article explains how asynchronous stack traces work and provides simple strategies to master them for more effective debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "When you run synchronous code and an error happens, the stack trace clearly shows the sequence of function calls that led to the problem. However, with asynchronous code, the call chain breaks because the error might occur in a separate task or event loop turn. Modern JavaScript engines and browsers attempt to preserve asynchronous stack traces, but they might still appear fragmented or partial."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see an example of a common mistake with promises and how the stack trace looks:"
+      },
+      {
+        "type": "code",
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Failed to fetch data'));\n    }, 100);\n  });\n}\n\nfunction processData() {\n  fetchData()\n    .then(data => console.log(data))\n    .catch(error => console.error(error));\n}\n\nprocessData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, if `fetchData` fails, the error will be caught in the `.catch()` method. The asynchronous stack trace may only show the location inside the setTimeout callback, not where `fetchData` was originally called. To improve this, you can use `async/await` syntax, which generally produces clearer stack traces."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Failed to fetch data'));\n    }, 100);\n  });\n}\n\nasync function processData() {\n  try {\n    const data = await fetchData();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nprocessData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using async/await, the stack trace more clearly links back through the asynchronous calls, making debugging easier. However, in some environments, stack traces might still look incomplete. Here are some practical tips to get better asynchronous stack traces:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use Latest JavaScript Engines:** Modern browsers like Chrome, Firefox, and Node.js have improved async stacks. Always use up-to-date versions.\n\n2. **Enable Source Maps:** If you use transpilers like Babel or TypeScript, source maps help map errors to your original code.\n\n3. **Avoid Swallowing Errors:** Always handle rejected promises properly with `.catch()` or try/catch with async/await.\n\n4. **Use Debugging Tools:** Developer tools in browsers and IDEs provide enhanced async stack trace visualization.\n\n5. **Add Manual Stack Trace Captures:** You can create an error at a point you want to track and attach it for better context."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of manually capturing a stack trace before an async operation to give more insight:"
+      },
+      {
+        "type": "code",
+        "value": "function betterFetchData() {\n  const originalError = new Error('Call stack at fetch start');\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const error = new Error('Failed to fetch data');\n      // Combine the original stack and error stack\n      error.stack += '\\nCaused By: ' + originalError.stack;\n      reject(error);\n    }, 100);\n  });\n}\n\nasync function test() {\n  try {\n    await betterFetchData();\n  } catch (err) {\n    console.error(err);\n  }\n}\n\ntest();"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach gives you more context about where the async operation was initiated. To summarize, mastering asynchronous stack traces involves understanding how async code works, writing clean promise and async/await code, and leveraging modern tooling and techniques to get clearer error information."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these tips, you can debug complex JavaScript errors more effectively and write more reliable asynchronous programs."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-vs-javascript-practical-comparison-modern-web-development",
+    "title": "TypeScript vs JavaScript: A Practical Comparison for Modern Web Development",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore the key differences between TypeScript and JavaScript with practical examples to help beginner developers choose the right language for modern web development.",
+    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is the backbone of web development and is supported by all browsers, used to create dynamic and interactive websites. TypeScript, on the other hand, is a superset of JavaScript — adding static typing and other features to make code more reliable and maintainable. In this article, we'll compare TypeScript and JavaScript in practical terms and show how TypeScript can help beginners write safer code without losing the flexibility of JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is JavaScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a scripting language that runs natively in browsers. It lets you manipulate the DOM, handle events, and create interactive web applications. JavaScript is dynamically typed, meaning variable types are determined at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example of a JavaScript function that adds two numbers:"
+      },
+      {
+        "type": "code",
+        "value": "function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(5, 3));  // Output: 8\nconsole.log(add('5', '3'));  // Output: 53 (string concatenation)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how JavaScript allows adding both numbers and strings without any errors, which can sometimes lead to unexpected bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript builds on JavaScript by introducing static types. This means you specify the types of variables, function parameters, and return types. TypeScript helps catch type-related errors during development rather than at runtime, making your code safer and easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's rewrite the add function in TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "function add(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(add(5, 3));  // Output: 8\n// console.log(add('5', '3'));  // Error: Argument of type 'string' is not assignable to parameter of type 'number'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, TypeScript will show an error if you try to pass a string instead of a number, preventing bugs early."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Typing:** JavaScript is dynamically typed, TypeScript is statically typed (supports type annotations).\n- **Compilation:** JavaScript runs directly in browsers; TypeScript is compiled to JavaScript before running.\n- **Tooling:** TypeScript offers better autocompletion and error checking in code editors.\n- **Learning curve:** JavaScript is simpler to start; TypeScript requires understanding of types but improves code quality."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use TypeScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you're working on larger projects or collaborating with others, TypeScript helps maintain code quality and reduces bugs. For simple scripts or quickly prototyping, JavaScript can be fine."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Setting Up a Simple TypeScript Project"
+      },
+      {
+        "type": "paragraph",
+        "value": "To try TypeScript, you can install it using npm:"
+      },
+      {
+        "type": "code",
+        "value": "npm install -g typescript\n\n// Create a file named add.ts\n// Compile it with:\ntsc add.ts\n\n// Run the output JavaScript file with:\nnode add.js"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript enhances JavaScript by adding static types, improving reliability and developer experience. For modern web development, learning TypeScript alongside JavaScript is a great investment, especially for building scalable applications."
+      }
+    ]
+  },
+  {
+    "slug": "how-typescript-enhances-data-model-integrity-in-complex-applications",
+    "title": "How TypeScript Enhances Data Model Integrity in Complex Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript helps maintain data model integrity in complex apps by preventing common mistakes and catching errors early through static typing.",
+    "videoUrl": "https://www.youtube.com/watch?v=r3Y6uDvgyNk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working on complex applications, managing and maintaining data integrity is crucial. Incorrect data types or unexpected values can cause runtime errors that are often hard to debug. TypeScript, a superset of JavaScript, introduces static typing that helps catch these errors during development rather than at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, data models are easy to define but can lead to bugs if the data shape is not consistent. TypeScript allows you to define clear interfaces and types, which act like contracts for your data, preventing common mistakes such as missing properties or wrong data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of defining a user data model using TypeScript interfaces and how it enhances integrity:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  isActive: boolean;\n}\n\nfunction createUser(user: User) {\n  console.log(`Creating user ${user.name} with email: ${user.email}`);\n}\n\nconst newUser = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com',\n  isActive: true\n};\n\ncreateUser(newUser);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, if you accidentally forget to include the `email` property or provide the wrong type (for example, a number instead of a string), TypeScript will immediately show an error, preventing the code from compiling. This proactive error detection prevents bugs that could break your application later."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript also supports union types, optional properties, and readonly fields to give you even more control over your data models. For example, you can make a property optional by adding a question mark `?` or mark some properties as immutable using `readonly`."
+      },
+      {
+        "type": "code",
+        "value": "interface Product {\n  readonly id: string;\n  name: string;\n  description?: string; // Optional property\n}\n\nconst product: Product = {\n  id: 'p123',\n  name: 'Gaming Mouse'\n};\n\n// product.id = 'p456'; // Error: Cannot assign to 'id' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "Leveraging these features in TypeScript helps enforce consistent data structures throughout your app, leading to fewer bugs and more maintainable code. As your application grows in complexity, TypeScript becomes a powerful tool to safeguard your data integrity and improve overall code quality."
+      }
+    ]
+  },
+  {
+    "slug": "handling-edge-cases-in-python-date-and-time-manipulations",
+    "title": "Handling Edge Cases in Python Date and Time Manipulations",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to handle common edge cases in Python date and time manipulations with practical examples. Perfect for beginners working with datetime.",
+    "videoUrl": "https://www.youtube.com/watch?v=IZDWaFrzaMo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in Python is common but can be tricky when you encounter edge cases such as daylight saving time changes, leap years, or timezone differences. In this tutorial, we'll explore practical examples to handle these situations with Python's built-in modules."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by importing the essential modules:"
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime, timedelta, timezone\nimport pytz"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Edge Case 1: Leap Years\nPython's datetime handles leap years correctly, but you should be careful when adding days around February 29."
+      },
+      {
+        "type": "code",
+        "value": "date = datetime(2020, 2, 28)\nday_after = date + timedelta(days=1)\nprint(day_after)  # Outputs 2020-02-29\n\nnext_day = day_after + timedelta(days=1)\nprint(next_day)  # Outputs 2020-03-01"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, adding one day to February 28, 2020, correctly results in February 29 because 2020 is a leap year."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Edge Case 2: Daylight Saving Time (DST) Transitions\nThis can be tricky when clocks move forward or backward. Use `pytz` for timezone-aware datetime to handle this."
+      },
+      {
+        "type": "code",
+        "value": "eastern = pytz.timezone('US/Eastern')\n\n# A time just before the DST change in 2023 (March 12, 2:00 AM)\ndt = eastern.localize(datetime(2023, 3, 12, 1, 30))  # 1:30 AM EST\n\n# Add one hour, which crosses DST forward\nnext_hour = dt + timedelta(hours=1)\nnext_hour_local = eastern.normalize(next_hour)  # Adjusts for DST\n\nprint(\"Original:\", dt)\nprint(\"After 1 hour:\", next_hour_local)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice how adding one hour jumps from 1:30 AM EST to 3:30 AM EDT, skipping 2:30 AM due to the clock moving forward."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Edge Case 3: Timezone Differences\nAlways use timezone-aware datetime to avoid confusion during timezone conversions."
+      },
+      {
+        "type": "code",
+        "value": "# Current UTC time\nnow_utc = datetime.now(timezone.utc)\n# Convert to Japan timezone\ntokyo_tz = pytz.timezone('Asia/Tokyo')\nnow_tokyo = now_utc.astimezone(tokyo_tz)\n\nprint(\"UTC Time:\", now_utc)\nprint(\"Tokyo Time:\", now_tokyo)"
+      },
+      {
+        "type": "paragraph",
+        "value": "By converting times with timezones, you prevent errors when scheduling across timezones."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Tips\n- Always prefer timezone-aware datetime objects.\n- Use the `pytz` library for robust timezone and DST handling.\n- Watch out for leap years, adding days/months around Feb 29.\n- Test datetime code during DST changes."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these strategies, your Python programs will handle date and time edge cases more reliably and predictably!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-typeerror-common-causes-and-practical-debugging",
+    "title": "Understanding Python's TypeError: Common Causes and Practical Debugging Techniques",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what Python's TypeError means, explore its common causes, and discover practical tips to debug and fix it with beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=lV1e9U46oVw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's TypeError is a common mistake that often confuses beginners. It occurs when an operation or function is applied to an object of an inappropriate type. Understanding why and when this error happens will help you debug your code more efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "One typical example is trying to add a number and a string, which Python cannot do because they are different types of data."
+      },
+      {
+        "type": "code",
+        "value": "number = 5\ntext = \"hello\"\n\nresult = number + text  # This will raise a TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error message will look like this:\n\nTypeError: unsupported operand type(s) for +: 'int' and 'str'\n\nThis means Python doesn't know how to add an integer (`int`) and a string (`str`)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common cause is calling a function with arguments of the wrong type. For example, if a function expects a list, but you pass it a number, you'll get a TypeError."
+      },
+      {
+        "type": "code",
+        "value": "def print_first_element(collection):\n    print(collection[0])\n\nprint_first_element(123)  # TypeError because 'int' is not subscriptable"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error here is because integers don't support indexing like lists or strings do."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Debugging Tips\n\n1. **Read the error message carefully**: It tells you what operation failed and which types were involved.\n\n2. **Check the variable types**: Use the `type()` function to verify what data type your variables are holding.\n\n3. **Convert types explicitly**: If combining different types makes sense, convert them first using functions like `str()`, `int()`, or `float()`.\n\n4. **Use print statements**: Print variables before the error occurs to inspect their values and types."
+      },
+      {
+        "type": "code",
+        "value": "number = 5\ntext = \"hello\"\n\n# Convert number to string before concatenation\nresult = str(number) + text\nprint(result)  # Output: 5hello"
+      },
+      {
+        "type": "paragraph",
+        "value": "By converting `number` to a string first, Python can concatenate the two strings without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, a TypeError means you're mixing data types in a way Python doesn't allow. Always check your data types and convert them appropriately to avoid this error. With practice, you'll quickly recognize and fix these issues."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-ecommerce-inventory-management-system-sql",
+    "title": "Building a Scalable E-Commerce Inventory Management System Using SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create a scalable and efficient inventory management system for e-commerce using SQL with easy-to-follow examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=9GVqKuTVANE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Managing inventory is crucial for any e-commerce platform. A well-structured SQL database can help you track products, stock levels, and sales effectively. This tutorial will guide you through building a scalable inventory management system using SQL, tailored for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "We'll focus on core concepts like designing tables for products, categories, stock, and orders. You'll also learn how to handle stock updates reliably to prevent errors such as overselling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating the main tables to store product and inventory information."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Categories (\n  category_id INT PRIMARY KEY AUTO_INCREMENT,\n  category_name VARCHAR(100) NOT NULL UNIQUE\n);\n\nCREATE TABLE Products (\n  product_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_name VARCHAR(255) NOT NULL,\n  category_id INT,\n  price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),\n  description TEXT,\n  FOREIGN KEY (category_id) REFERENCES Categories(category_id)\n);\n\nCREATE TABLE Inventory (\n  inventory_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_id INT NOT NULL,\n  quantity INT NOT NULL CHECK (quantity >= 0),\n  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, we created three tables: Categories, Products, and Inventory. Categories categorize products. Products table stores product details including price and category reference. Inventory keeps track of quantity available and updates the timestamp automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, to record sales and update inventory after purchases, create an Orders table and a mechanism to deduct stock safely."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Orders (\n  order_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_id INT NOT NULL,\n  quantity INT NOT NULL CHECK (quantity > 0),\n  order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "When a customer places an order, you insert the order record and update the inventory quantity by subtracting the ordered amount. You must ensure the stock does not go negative to prevent overselling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example SQL transaction to handle an order safely:"
+      },
+      {
+        "type": "code",
+        "value": "START TRANSACTION;\n\n-- Check available stock\nSELECT quantity FROM Inventory WHERE product_id = 1 FOR UPDATE;\n\n-- Suppose available quantity is enough, insert the order\nINSERT INTO Orders (product_id, quantity) VALUES (1, 3);\n\n-- Update inventory\nUPDATE Inventory SET quantity = quantity - 3 WHERE product_id = 1 AND quantity >= 3;\n\n-- Check if the update affected a row (stock was sufficient)\n-- If not, rollback the transaction\n\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using transactions and locking (FOR UPDATE) ensures you handle concurrency correctly, avoiding race conditions where multiple orders reduce stock below zero."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, to keep the system scalable, consider indexing frequently searched columns like product_name and category_id, and archiving old orders."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of adding indexes:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_product_name ON Products(product_name);\nCREATE INDEX idx_category_id ON Products(category_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "With this simple but scalable design, you can build a strong foundation for your e-commerce inventory system. As you grow, more features like detailed order items, user management, and reporting can be added."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-query-performance-with-advanced-indexing-strategies-sql",
+    "title": "Optimizing Query Performance with Advanced Indexing Strategies in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn beginner-friendly techniques to speed up your SQL queries using advanced indexing strategies, and avoid common indexing errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large databases, slow query performance is a common problem. One of the best ways to speed up SQL queries is by using indexes. Indexes are special data structures that help the database find rows faster without scanning the entire table. However, incorrect use of indexes can lead to errors or little improvement in speed. This article explains advanced indexing strategies that beginners can apply to optimize query performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common beginner error is creating too many indexes or indexing the wrong columns. Indexes take up additional space and slow down write operations like INSERT, UPDATE, or DELETE. Therefore, it's important to index columns that are frequently used in WHERE clauses, JOIN conditions, or ORDER BY statements."
+      },
+      {
+        "type": "paragraph",
+        "value": "One advanced strategy is using composite indexes, which index multiple columns together. For example, if you frequently run queries filtering by both `last_name` and `first_name`, creating a composite index on `(last_name, first_name)` can drastically increase speed."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_name ON employees (last_name, first_name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another advanced technique involves using partial indexes, which index only a subset of rows based on a condition. This helps when you query specific filtered data often. For example, indexing only active users in a user table can improve query speed for active members."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_active_users ON users (last_login_date) WHERE status = 'active';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes queries use pattern matching with `LIKE`. To optimize these, you can use indexes that support pattern searching, like a trigram index in PostgreSQL, or full-text indexes in other systems. However, be careful with wildcard placement, as leading wildcards (e.g., '%abc') prevent index use."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, always analyze your query plans with `EXPLAIN` before and after adding indexes to ensure the database uses the indexes correctly and that performance improves."
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT * FROM employees WHERE last_name = 'Smith' AND first_name = 'John';"
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these indexing strategies thoughtfully and avoiding common mistakes, beginners can greatly optimize their SQL queries and improve overall database performance."
+      }
+    ]
   }
 ];
