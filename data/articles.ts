@@ -52473,5 +52473,487 @@ export const articles = [
         "value": "By following these practical steps—examining execution plans, adding indexes, updating statistics, addressing parameter sniffing, simplifying queries, and monitoring resources—beginners can effectively diagnose and fix SQL query optimization anomalies."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-proxies-for-powerful-runtime-object-manipulation",
+    "title": "Mastering JavaScript Proxies for Powerful Runtime Object Manipulation",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript Proxies to dynamically control and customize the behavior of objects at runtime with simple, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript Proxies offer a unique and powerful way to intercept and redefine fundamental operations on objects, such as property access, assignment, enumeration, and more. This tutorial introduces you to the basics of Proxies, helping you master runtime object manipulation with practical, easy-to-understand code examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy is created with two parameters: the target object you want to wrap, and a handler object that defines traps. Traps are methods that intercept operations on the target. Let’s start by creating a simple Proxy that logs access to object properties."
+      },
+      {
+        "type": "code",
+        "value": "const target = { message: \"Hello, world!\" };\n\nconst handler = {\n  get(obj, prop) {\n    console.log(`Property '${prop}' was accessed.`);\n    return obj[prop];\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nconsole.log(proxy.message); // Logs access and then the message"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the above example, whenever a property is accessed on the proxy, the 'get' trap runs, logging a message and then returning the original value. This simple pattern can be expanded to add validation, computed properties, or even security checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s see how a Proxy can help in validating object properties before they are set. Suppose you want to prevent non-numeric values from being assigned to certain numeric properties."
+      },
+      {
+        "type": "code",
+        "value": "const user = { age: 25 };\n\nconst validator = {\n  set(obj, prop, value) {\n    if (prop === 'age') {\n      if (!Number.isInteger(value) || value < 0) {\n        throw new TypeError('Age must be a positive integer');\n      }\n    }\n    obj[prop] = value;\n    return true; // Indicate success\n  }\n};\n\nconst proxyUser = new Proxy(user, validator);\n\nproxyUser.age = 30;  // Works fine\n// proxyUser.age = -5; // Throws error\n// proxyUser.age = 'old'; // Throws error"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the 'set' trap validates data before allowing the assignment. If the value doesn’t meet criteria, an error is thrown, preventing invalid states in your object."
+      },
+      {
+        "type": "paragraph",
+        "value": "Proxies can also help in creating default values for missing properties, avoiding the need to check for undefined everywhere."
+      },
+      {
+        "type": "code",
+        "value": "const defaults = {\n  name: 'Guest',\n  score: 0\n};\n\nconst withDefaults = new Proxy({}, {\n  get(obj, prop) {\n    return prop in obj ? obj[prop] : defaults[prop];\n  }\n});\n\nconsole.log(withDefaults.name); // 'Guest'\nwithDefaults.name = 'Alex';\nconsole.log(withDefaults.name); // 'Alex'"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, when a property is not set on the object, the Proxy returns a default value from another object. This can greatly simplify your code by centralizing default logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, JavaScript Proxies are incredibly useful for runtime object manipulation. They allow you to customize how objects behave without changing their core implementation. Whether you need logging, validation, default values, or complex computed behaviors, Proxies provide a flexible toolset."
+      },
+      {
+        "type": "paragraph",
+        "value": "Experiment with Proxies by wrapping your objects and defining different traps like 'get', 'set', 'deleteProperty', and more. With this powerful technique in your toolkit, you can write cleaner and more robust JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-hoisting-how-it-affects-your-code-execution",
+    "title": "Understanding JavaScript Hoisting: How It Affects Your Code Execution",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what JavaScript hoisting is, how it impacts your code execution, and how to avoid common hoisting-related errors in beginner-friendly terms.",
+    "videoUrl": "https://www.youtube.com/watch?v=EvfRXyKa_GI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript hoisting is a behavior where variable and function declarations are moved to the top of their containing scope during the compilation phase before the code runs. This can sometimes lead to unexpected results, especially for beginners. Understanding hoisting helps you write cleaner and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, both variable declarations (using var, let, and const) and function declarations are hoisted, but they behave differently. Let's explore how each works."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's look at function hoisting. When you declare a function with the function keyword, JavaScript hoists the entire function, so you can call it before the line where it appears in the code."
+      },
+      {
+        "type": "code",
+        "value": "// Function hoisting example\nsayHello(); // Outputs: Hello!\n\nfunction sayHello() {\n  console.log('Hello!');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, calling sayHello() before the function declaration works perfectly because the function is hoisted."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's examine variable hoisting with var. Variable declarations using var are hoisted, but only the declaration, not the assignment. This means the variable exists before its declaration line but is initialized with undefined."
+      },
+      {
+        "type": "code",
+        "value": "console.log(number); // Outputs: undefined\nvar number = 5;\nconsole.log(number); // Outputs: 5"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the variable number is hoisted, so the first console.log does not throw an error. Instead, it prints undefined since the assignment (number = 5) happens later in the code."
+      },
+      {
+        "type": "paragraph",
+        "value": "However, variables declared with let and const behave differently. They are hoisted but are in a \"temporal dead zone\" until their declaration is reached, meaning accessing them before declaration causes a ReferenceError."
+      },
+      {
+        "type": "code",
+        "value": "console.log(myVar); // Throws ReferenceError: Cannot access 'myVar' before initialization\nlet myVar = 10;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid errors or confusion, it’s best practice to always declare variables at the top of their scope and initialize them before using."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding hoisting clarifies why some variables appear as undefined and why some errors occur when accessing variables before declaration. Keep these rules in mind to write more predictable JavaScript code!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescript-union-vs-intersection-types",
+    "title": "Comparing TypeScript Union vs Intersection Types: When and How to Use Each Safely",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn the differences between TypeScript union and intersection types, with practical examples and tips to use each safely and avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=sebNBBYCvUM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript provides powerful tools to create flexible types, and two of the most important are union and intersection types. As a beginner, understanding when and how to use each can help you write safer and more readable code. This article will explain the differences with simple examples and common mistakes to avoid."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Union Types?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A union type allows a variable to hold a value that can be one of multiple types. Think of it as an \"OR\" operation. You use the pipe (`|`) symbol to define unions."
+      },
+      {
+        "type": "code",
+        "value": "type StringOrNumber = string | number;\n\nlet value: StringOrNumber;\nvalue = 'hello';  // ✅ valid\nvalue = 42;       // ✅ valid\n// value = true;  // ❌ Error: Type 'boolean' is not assignable to type 'string | number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Union types are useful when you want to allow multiple possible types but don’t require all properties to exist at once."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Intersection Types?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Intersection types combine multiple types into one. Instead of \"OR\", think of it as an \"AND\" operation. The ampersand (`&`) symbol creates intersections."
+      },
+      {
+        "type": "code",
+        "value": "type Person = {\n  name: string;\n};\n\ntype Employee = {\n  employeeId: number;\n};\n\ntype EmployeePerson = Person & Employee;\n\nlet emp: EmployeePerson = {\n  name: 'Alice',   // required by Person\n  employeeId: 123 // required by Employee\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Intersection types require the variable to satisfy all combined types, meaning it must have all properties from each type."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Union Types"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use union types if your variable can be one type OR another. This is common for function parameters that accept multiple types or API responses that can vary."
+      },
+      {
+        "type": "code",
+        "value": "function printId(id: number | string) {\n  if (typeof id === 'string') {\n    console.log('ID as string:', id.toUpperCase());\n  } else {\n    console.log('ID as number:', id.toFixed(2));\n  }\n}\n\nprintId('abc');\nprintId(101);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The type guard (`typeof`) lets TypeScript safely narrow down the union type and prevent errors like calling a string method on a number."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Intersection Types"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use intersection types when you want to merge multiple types into one, ensuring the value has all the properties from each. This is helpful in extending interfaces or mixing traits."
+      },
+      {
+        "type": "code",
+        "value": "type Drivable = {\n  drive: () => void;\n};\n\ntype Flyable = {\n  fly: () => void;\n};\n\n// A vehicle that can both drive and fly\n\ntype FlyingCar = Drivable & Flyable;\n\nconst myCar: FlyingCar = {\n  drive: () => console.log('Driving'),\n  fly: () => console.log('Flying')\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Errors and How to Avoid Them"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Assigning incompatible types to unions:** A union only accepts the specified types. Assigning anything outside those will cause errors."
+      },
+      {
+        "type": "code",
+        "value": "type AorB = 'a' | 'b';\n// let c: AorB = 'c'; // Error: Type '\"c\"' is not assignable to type '\"a\" | \"b\"'."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Mistaking intersection for union:** Intersection requires *all* properties, so missing one will cause an error."
+      },
+      {
+        "type": "code",
+        "value": "type T1 = { a: number } & { b: string };\n\n// let obj: T1 = { a: 10 }; // Error: Property 'b' is missing\n\nlet obj: T1 = { a: 10, b: 'hello' }; // Correct"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Not using type guards with unions:** Calling properties that exist only in some union members will cause errors unless checked."
+      },
+      {
+        "type": "code",
+        "value": "type Fish = { swim: () => void };\ntype Bird = { fly: () => void };\n\nfunction move(animal: Fish | Bird) {\n  // animal.swim(); // ❌ Error: Property 'swim' does not exist on type 'Fish | Bird'.\n\n  if ('swim' in animal) {\n    animal.swim(); // ✅ Safe\n  } else {\n    animal.fly();\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "• Use **union types (`|`)** when a variable can be this type OR that type.\n\n• Use **intersection types (`&`)** when a variable should have combined properties from multiple types.\n\n• Always use **type guards** to safely access members of union types.\n\n\nMastering these concepts will help you avoid type errors and write robust TypeScript code as you build larger projects."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-context-managers-for-cleaner-and-safer-resource-handling",
+    "title": "Mastering Python Context Managers for Cleaner and Safer Resource Handling",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how Python context managers help you write cleaner, safer code by managing resources like files efficiently and automatically.",
+    "videoUrl": "https://www.youtube.com/watch?v=-aKFBoZpiqA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with resources such as files, database connections, or network connections in Python, it’s important to ensure they are properly opened and closed. Otherwise, you might run into problems like memory leaks or corrupted files. Python’s context managers simplify this by automatically handling resource setup and cleanup using the `with` statement."
+      },
+      {
+        "type": "paragraph",
+        "value": "A context manager is a Python object that defines two special methods: `__enter__()` and `__exit__()`. When you use the `with` statement, Python calls `__enter__()` at the start, and `__exit__()` at the end (even if an error occurs), making your code cleaner and safer."
+      },
+      {
+        "type": "paragraph",
+        "value": "The most common example is working with files. Instead of manually opening and closing a file, you can use a context manager like this:"
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'r') as file:\n    content = file.read()\n    print(content)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `open()` returns a context manager that automatically closes the file after the `with` block finishes. This reduces the chance of forgetting to close the file."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to create your own context manager, you can do so by defining a class with `__enter__()` and `__exit__()` methods. Here's a simple example that prints messages when entering and exiting the context:"
+      },
+      {
+        "type": "code",
+        "value": "class MyContextManager:\n    def __enter__(self):\n        print('Starting')\n        return self\n    def __exit__(self, exc_type, exc_value, traceback):\n        print('Exiting')\n        # Return False to propagate exceptions, True to suppress\n        return False\n\nwith MyContextManager() as manager:\n    print('Inside the context')"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create context managers easily using the `contextlib` module's `@contextmanager` decorator. This lets you write a generator function that yields control to the block inside the `with` statement. Here's an example:"
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef managed_resource():\n    print('Acquire resource')\n    yield\n    print('Release resource')\n\nwith managed_resource():\n    print('Using resource')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the code before the `yield` runs at the start of the `with` block, and the code after `yield` runs at the end, even if an exception is raised inside the block."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering context managers will help you write Python programs that are both cleaner and more robust by ensuring resources are properly handled without cluttering your code with manual cleanup."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try creating your own context managers when you need to manage resources and see how they can simplify your code and prevent bugs related to resource management."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-type-errors-in-python-common-causes-and-how-to-avoid-them",
+    "title": "Understanding Type Errors in Python: Common Causes and How to Avoid Them",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what type errors are in Python, common reasons they occur, and simple tips to avoid them in your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=JG1livF44_E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're starting to learn Python, one common error you'll encounter is a TypeError. This error happens when you try to perform an operation on a data type that isn’t compatible with that operation. Understanding why TypeErrors happen helps you fix your code faster and write better programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "One frequent cause of a TypeError is trying to combine different data types incorrectly. For example, if you try to add a number (integer or float) and a string, Python won’t know how to handle it."
+      },
+      {
+        "type": "code",
+        "value": "num = 10\ntext = \"5\"\nresult = num + text  # This will raise a TypeError\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid this, you can convert the string into a number using the int() or float() functions, depending on your data. For example:"
+      },
+      {
+        "type": "code",
+        "value": "num = 10\ntext = \"5\"\nresult = num + int(text)  # Now it works and result is 15\nprint(result)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common situation is using the wrong type of data in functions. Suppose a function expects a list, but you accidentally give it a string instead."
+      },
+      {
+        "type": "code",
+        "value": "def print_first_item(items):\n    print(items[0])\n\nprint_first_item(\"hello\")  # Works but might not be what you want\nprint_first_item(123)      # Raises TypeError\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, an integer doesn’t support indexing (using [0]), so Python raises a TypeError. Always check your data types before using them in your functions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some tips to avoid TypeErrors in Python:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Be aware of data types:** Know whether your variables are strings, integers, lists, etc. Use the `type()` function to check if unsure."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Convert types explicitly:** Use conversion functions like `int()`, `float()`, `str()`, or `list()` when combining or working with multiple types."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Write clear functions:** Define what types your functions expect and check inputs before working with them."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use error handling:** Wrap code in try-except blocks to catch TypeErrors and handle them gracefully."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 + \"5\"\nexcept TypeError:\n    print(\"TypeError caught: Cannot add int and str directly.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding what causes TypeErrors and using these tips, you can reduce errors and make your Python code more reliable and easier to debug."
+      }
+    ]
+  },
+  {
+    "slug": "sql-vs-nosql-when-to-choose-each-for-your-application",
+    "title": "SQL vs NoSQL: When to Choose Each for Your Application",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the key differences between SQL and NoSQL databases, and understand when to choose each for your application's data needs.",
+    "videoUrl": "https://www.youtube.com/watch?v=_Ss42Vb1SU4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building an application, one of the most important decisions is choosing the right type of database. Two popular options are SQL and NoSQL databases. This article will break down what each type means, their differences, and when to use one over the other."
+      },
+      {
+        "type": "paragraph",
+        "value": "SQL databases, also known as relational databases, organize data into tables and use Structured Query Language (SQL) to query data. They are well-suited for complex queries and transactional applications where data integrity is crucial."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE age > 18;"
+      },
+      {
+        "type": "paragraph",
+        "value": "NoSQL databases, on the other hand, are non-relational and store data in various formats like documents, key-value pairs, or graphs. They are designed to handle large volumes of unstructured data and scale easily with high traffic."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of inserting a document in a NoSQL database like MongoDB based on JSON format:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"name\": \"Alice\",\n  \"age\": 30,\n  \"interests\": [\"reading\", \"gaming\"]\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "When to choose SQL?"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Your data is structured and consistent.\n- You require complex joins and queries.\n- Transactions need to be ACID compliant (ensuring reliability).\n- Examples: Banking systems, inventory management, CRM applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "When to choose NoSQL?"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Your data is unstructured or constantly changing.\n- You want horizontal scalability with big data.\n- Schema flexibility is important.\n- Examples: Social networks, real-time analytics, content management systems."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the choice between SQL and NoSQL depends on your application's needs around data structure, scalability, and consistency. Many modern applications even use both types where appropriate."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-using-execution-plan-insights",
+    "title": "Optimizing SQL Query Performance Using Execution Plan Insights",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve the performance of your SQL queries by understanding and analyzing execution plans. This beginner-friendly guide covers common issues and practical tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When dealing with large databases, SQL query performance can sometimes be slow due to inefficient query execution. One of the most valuable tools for optimizing SQL queries is analyzing the execution plan, which shows how the database engine processes your query step by step."
+      },
+      {
+        "type": "paragraph",
+        "value": "Execution plans often indicate performance bottlenecks such as full table scans, improper joins, or missing indexes. As a beginner, you can learn to identify these issues and take corrective actions to enhance query efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "To begin, let's look at how to retrieve the execution plan in SQL Server using the `EXPLAIN` or `SHOW PLAN` commands (syntax may vary depending on your SQL database):"
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT * FROM Orders WHERE CustomerID = 'ALFKI';"
+      },
+      {
+        "type": "paragraph",
+        "value": "The output will display operations like table scans, index seeks, and joins. Here are some key things to look for:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Table Scan**: This means the database reads the entire table, which can be slow on large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Index Seek**: This is faster, indicating the query uses an index to directly find rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you notice a table scan on a column frequently used in WHERE clauses, this often suggests a missing index. Here's how you can add an index:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customerid ON Orders(CustomerID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After adding the index, rerun the execution plan to check if the query now uses an index seek instead of a table scan."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common mistake is using functions on indexed columns in the WHERE clause, which can prevent index usage. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders WHERE YEAR(OrderDate) = 2023;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query might cause a table scan even if there is an index on OrderDate. Instead, rewrite it like this to allow index usage:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders WHERE OrderDate >= '2023-01-01' AND OrderDate < '2024-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, by regularly checking execution plans, avoiding table scans through proper indexing, and writing sargable queries (queries that allow the use of indexes), you can significantly improve your SQL query performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Taking the time to understand and interpret execution plans is a valuable skill that will help you fix common SQL errors and optimize your database queries effectively."
+      }
+    ]
   }
 ];
