@@ -1,172 +1,176 @@
 [
   {
-    "slug": "fix-the-bug-in-filtering-unique-usernames-from-an-array",
-    "title": "Fix the Bug in Filtering Unique Usernames from an Array",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "The provided JavaScript function is supposed to return an array of unique usernames from a list of user objects. However, it currently returns duplicates. Your task is to debug and fix the code to ensure it returns only unique usernames.",
-    "prompt": "You are given a function getUniqueUsernames that accepts an array of user objects, each having a 'username' property. The function is meant to return an array of unique usernames. However, the current implementation has a bug and returns duplicate usernames. Identify and fix the bug so that the function correctly returns an array with no duplicates.",
-    "guidance": [
-      "Examine how the existing code checks for duplicates and why it might be failing.",
-      "Consider using JavaScript data structures or methods better suited for uniqueness checks.",
-      "Test your function on inputs that have repeated usernames to ensure duplicates are removed."
-    ],
-    "hints": [
-      "Check how the indexOf method is used and if it properly detects duplicates.",
-      "Think about using a Set or an object to track seen usernames more effectively."
-    ],
-    "starterCode": "function getUniqueUsernames(users) {\n  const unique = [];\n  users.forEach(function(user) {\n    if (unique.indexOf(user.username) !== -1) {\n      unique.push(user.username);\n    }\n  });\n  return unique;\n}",
-    "expectedOutput": "getUniqueUsernames([{username: 'alice'}, {username: 'bob'}, {username: 'alice'}, {username: 'carol'}]) // ['alice', 'bob', 'carol']",
-    "concepts": [
-      "arrays",
-      "loops",
-      "conditionals",
-      "data structures",
-      "array methods"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "write-a-sql-function-to-calculate-total-sales-by-product",
-    "title": "Write a SQL Function to Calculate Total Sales by Product",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "queries",
-    "description": "Create a SQL function that calculates the total sales amount for a given product ID from a sales table.",
-    "prompt": "Write a SQL function named get_total_sales that accepts a product_id (integer) as input and returns the total sales amount (sum of quantity * price) for that product from the sales table. The sales table schema is: sales(sale_id INT, product_id INT, quantity INT, price DECIMAL). If the product has no sales, the function should return 0.",
-    "guidance": [
-      "Use SUM() aggregation to calculate total sales.",
-      "Handle the case where no rows exist for the given product by returning 0 instead of NULL."
-    ],
-    "hints": [
-      "Consider using COALESCE or IFNULL to handle NULL results from SUM().",
-      "Make sure your function accepts an input parameter for product_id.",
-      "Use a simple SELECT statement inside the function to get the sum."
-    ],
-    "starterCode": "CREATE OR REPLACE FUNCTION get_total_sales(prod_id INT) RETURNS DECIMAL AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
-    "expectedOutput": "For product_id = 101, if the sales are (2 units at $10) and (3 units at $15), expected output is 65.0",
-    "concepts": [
-      "SQL functions",
-      "aggregation with SUM",
-      "handling NULL with COALESCE"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "refactor-legacy-inventory-management-code-for-efficiency-and-readability",
-    "title": "Refactor Legacy Inventory Management Code for Efficiency and Readability",
+    "slug": "fix-the-bug-in-the-multithreaded-singleton-logger-implementation",
+    "title": "Fix the Bug in the Multithreaded Singleton Logger Implementation",
     "language": "cpp",
     "difficulty": "advanced",
-    "category": "code-quality",
-    "description": "Improve an inefficient, hard-to-read inventory management function written in C++ by refactoring it to use modern C++ features, enhance performance, and maintain identical behavior.",
-    "prompt": "You are given a legacy function that manages inventory updates in a warehouse system. The function is overly complex, uses inefficient looping, and is hard to maintain. Refactor the function to improve its readability, reduce complexity, optimize performance where possible, and utilize modern C++ best practices, including standard library algorithms and proper use of const correctness. Your refactored function should produce the exact same output and side effects as the original.",
+    "category": "debugging",
+    "description": "Identify and fix the concurrency bug in a classic thread-safe Singleton Logger class in C++. The provided code attempts lazy initialization with double-checked locking but contains subtle issues that may cause race conditions or undefined behavior in a multithreaded environment.",
+    "prompt": "The following C++ code implements a Singleton Logger intended to be thread-safe using double-checked locking. However, the current implementation can fail when accessed concurrently by multiple threads. Your task is to identify and fix the concurrency issues in this code so that the singleton instance is correctly initialized exactly once, without data races or undefined behavior. You must preserve lazy initialization and avoid any unnecessary locking after the instance is created.",
     "guidance": [
-      "Preserve the original function’s behavior and output after refactoring.",
-      "Focus on simplifying nested loops and conditionals without changing logic.",
-      "Leverage C++ STL containers and algorithms to replace manual iterations.",
-      "Improve variable naming and code structure for better maintainability."
+      "Review the double-checked locking pattern and understand why naive implementations can fail.",
+      "Check for memory visibility issues caused by improper usage of concurrency primitives.",
+      "Consider using std::atomic or C++11 features to safely publish the singleton instance."
     ],
     "hints": [
-      "Consider using std::unordered_map or std::map to optimize lookup operations.",
-      "Use range-based for loops and const references to avoid unnecessary copies.",
-      "Extract smaller helper functions if certain blocks perform distinct subtasks."
+      "The instance pointer needs to be atomic or protected to prevent reading torn or stale values.",
+      "Using std::call_once with a std::once_flag is a simpler and safer way to implement thread-safe initialization.",
+      "Without proper memory ordering or synchronization, other threads might see a partially constructed object."
     ],
-    "starterCode": "\n#include <iostream>\n#include <vector>\n#include <string>\n\nstruct Item {\n    std::string name;\n    int quantity;\n};\n\n// Legacy function: updates inventory quantities based on shipments and removals\nvoid updateInventory(std::vector<Item>& inventory, \n                     const std::vector<Item>& shipments, \n                     const std::vector<Item>& removals) {\n    // Increase quantities for shipments\n    for (size_t i = 0; i < shipments.size(); ++i) {\n        bool found = false;\n        for (size_t j = 0; j < inventory.size(); ++j) {\n            if (inventory[j].name == shipments[i].name) {\n                inventory[j].quantity = inventory[j].quantity + shipments[i].quantity;\n                found = true;\n            }\n        }\n        if (!found) {\n            Item newItem;\n            newItem.name = shipments[i].name;\n            newItem.quantity = shipments[i].quantity;\n            inventory.push_back(newItem);\n        }\n    }\n    // Decrease quantities for removals\n    for (size_t i = 0; i < removals.size(); ++i) {\n        for (size_t j = 0; j < inventory.size(); ++j) {\n            if (inventory[j].name == removals[i].name) {\n                inventory[j].quantity = inventory[j].quantity - removals[i].quantity;\n                if (inventory[j].quantity < 0) {\n                    inventory[j].quantity = 0;\n                }\n            }\n        }\n    }\n}\n\nint main() {\n    std::vector<Item> inventory = { {\"apple\", 10}, {\"banana\", 5} };\n    std::vector<Item> shipments = { {\"orange\", 7}, {\"apple\", 3} };\n    std::vector<Item> removals = { {\"banana\", 2}, {\"apple\", 15} };\n\n    updateInventory(inventory, shipments, removals);\n\n    for (const auto& item : inventory) {\n        std::cout << item.name << \": \" << item.quantity << std::endl;\n    }\n    return 0;\n}\n",
-    "expectedOutput": "apple: 0\nbanana: 3\norange: 7",
+    "starterCode": "#include <iostream>\n#include <mutex>\n\nclass Logger {\nprivate:\n    static Logger* instance;\n    static std::mutex mtx;\n    Logger() { std::cout << \"Logger initialized\" << std::endl; }\n    ~Logger() {}\n\npublic:\n    Logger(const Logger&) = delete;\n    Logger& operator=(const Logger&) = delete;\n\n    static Logger* getInstance() {\n        if (instance == nullptr) {\n            std::lock_guard<std::mutex> lock(mtx);\n            if (instance == nullptr) {\n                instance = new Logger();\n            }\n        }\n        return instance;\n    }\n\n    void log(const std::string& message) {\n        std::cout << message << std::endl;\n    }\n};\n\nLogger* Logger::instance = nullptr;\nstd::mutex Logger::mtx;\n\nint main() {\n    Logger* logger1 = Logger::getInstance();\n    logger1->log(\"First log message.\");\n\n    Logger* logger2 = Logger::getInstance();\n    logger2->log(\"Second log message.\");\n\n    std::cout << \"Instances equal: \" << (logger1 == logger2 ? \"true\" : \"false\") << std::endl;\n    return 0;\n}\n",
+    "expectedOutput": "Logger initialized\nFirst log message.\nSecond log message.\nInstances equal: true",
     "concepts": [
-      "code refactoring",
-      "C++ STL algorithms",
-      "performance optimization",
-      "code readability"
+      "thread safety",
+      "singleton pattern",
+      "double-checked locking",
+      "C++11 concurrency"
     ],
     "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "develop-a-high-performance-concurrent-web-crawler-in-c",
+    "title": "Develop a High-Performance Concurrent Web Crawler in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build an advanced mini-project that involves designing and implementing a multithreaded web crawler in C++ capable of efficiently scanning and indexing web pages with rate limiting and duplicate URL detection.",
+    "prompt": "Create a C++ program that takes a seed URL and crawls the web pages connected through hyperlinks up to a specified depth. Your crawler must support concurrency to speed up retrieval, avoid revisiting the same URL multiple times, and respect a rate limit of requests per domain to prevent server overload. Collected URLs and their page titles should be stored in a thread-safe data structure and printed out once crawling finishes.\n\nRequirements:\n1. Accept a seed URL and crawl depth as input.\n2. Use multiple threads to fetch pages concurrently.\n3. Implement a mechanism to detect and skip duplicate URLs.\n4. Enforce per-domain rate limiting (e.g. max 1 request per second per domain).\n5. Extract the page title (from the <title> HTML tag) for indexing with the URL.\n6. Ensure all shared data structures are safely accessed in a concurrent environment.\n7. Output all collected URLs with their titles in any order after crawling completes.",
+    "guidance": [
+      "Use a thread-safe queue or work-stealing queue to manage URLs to visit across threads.",
+      "Implement a hash set or map with mutex protection or concurrent containers to track visited URLs and avoid duplicates.",
+      "Use a timer or timestamp map to enforce rate limiting per domain before making HTTP requests.",
+      "Leverage an HTTP client library such as libcurl or boost::asio with async calls for fetching page content."
+    ],
+    "hints": [
+      "Parsing HTML can be simplified by searching for <title> tags with string manipulation or a lightweight HTML parser like Gumbo or pugixml.",
+      "Domain extraction from URLs can be performed by parsing the URL string or using existing URL parsing utilities.",
+      "Synchronization primitives like std::mutex, std::shared_mutex, or atomic flags will help manage concurrent access."
+    ],
+    "starterCode": "#include <iostream>\n#include <string>\n#include <thread>\n#include <queue>\n#include <unordered_set>\n#include <mutex>\n#include <condition_variable>\n// You may include additional libraries such as libcurl, regex, or parsers\n\nint main() {\n    std::cout << \"Enter seed URL and crawl depth:\\n\";\n    std::string seedUrl;\n    int maxDepth;\n    std::cin >> seedUrl >> maxDepth;\n\n    // TODO: Initialize shared structures for URLs, visited set, synchronization primitives\n    // TODO: Start worker threads to process URLs concurrently\n    // TODO: Crawl pages, apply rate limiting, extract titles, and collect results\n\n    // TODO: Print all collected URLs with their titles\n    return 0;\n}\n",
+    "expectedOutput": "URL: http://example.com\nTitle: Example Domain\nURL: http://example.com/about\nTitle: About Example\n... (all crawled URLs with extracted titles)",
+    "concepts": [
+      "multithreading",
+      "concurrency",
+      "network programming",
+      "data structures",
+      "rate limiting"
+    ],
+    "estimatedTime": "120 minutes",
     "isFeatured": false
   },
   {
-    "slug": "create-a-basic-employee-directory-table-and-query",
-    "title": "Create a Basic Employee Directory Table and Query",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "data-modeling",
-    "description": "Build a simple employee directory table and write a query to retrieve filtered information about employees, practicing basic SQL data modeling and SELECT queries.",
-    "prompt": "You are tasked with creating a simple employee directory. Start by creating a table named 'employees' with the following columns: employee_id (integer), first_name (text), last_name (text), department (text), and salary (integer). After creating and inserting sample data (3-5 rows), write a query to select all employees from the 'Sales' department whose salary is greater than 50000.",
-    "guidance": [
-      "Define the table schema with appropriate data types.",
-      "Insert sample data into the table.",
-      "Write a SELECT query with WHERE conditions to filter by department and salary."
-    ],
-    "hints": [
-      "Use CREATE TABLE syntax with specified columns.",
-      "Use INSERT INTO to add multiple rows of employees.",
-      "Use WHERE clause with multiple conditions combined with AND."
-    ],
-    "starterCode": "CREATE TABLE employees (\n  employee_id INT,\n  first_name TEXT,\n  last_name TEXT,\n  department TEXT,\n  salary INT\n);\n\nINSERT INTO employees VALUES\n(1, 'John', 'Doe', 'Sales', 60000),\n(2, 'Jane', 'Smith', 'Marketing', 45000),\n(3, 'Emily', 'Jones', 'Sales', 52000),\n(4, 'Michael', 'Brown', 'Engineering', 70000),\n(5, 'Anne', 'Clark', 'Sales', 48000);\n\n-- Write your SELECT query below to find sales employees with salary > 50000\n",
-    "expectedOutput": "employee_id | first_name | last_name | department | salary\n------------|------------|-----------|------------|-------\n1           | John       | Doe       | Sales      | 60000\n3           | Emily      | Jones     | Sales      | 52000",
-    "concepts": [
-      "CREATE TABLE",
-      "INSERT INTO",
-      "SELECT",
-      "WHERE clause"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "fix-the-off-by-one-error-in-list-processing-function",
-    "title": "Fix the Off-By-One Error in List Processing Function",
-    "language": "python",
-    "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "Identify and fix the bug in a Python function designed to process a list of numbers and return a transformed list. The current implementation has an off-by-one error causing incorrect output.",
-    "prompt": "The function `transform_numbers` is intended to return a new list where each element is the sum of the current element and the next element in the original list. However, the implementation has a bug causing it to skip the last element or produce an incorrect result. Your task is to fix the bug while keeping the intended logic intact.\n\nExample: For input [1, 2, 3, 4], the expected output is [3, 5, 7] because:\n- 1 + 2 = 3\n- 2 + 3 = 5\n- 3 + 4 = 7\n\nFix the code provided so that it works correctly for any list of integers with length >= 2.",
-    "guidance": [
-      "Check the loop boundaries and index usage carefully to identify where the off-by-one error occurs.",
-      "Make sure you do not access indexes out of range when summing elements."
-    ],
-    "hints": [
-      "Remember that list indexes in Python start at 0 and go up to len(list)-1.",
-      "Try printing indexes inside the loop to understand which elements are being accessed."
-    ],
-    "starterCode": "def transform_numbers(nums):\n    result = []\n    for i in range(len(nums)):\n        result.append(nums[i] + nums[i+1])\n    return result",
-    "expectedOutput": "[3, 5, 7]",
-    "concepts": [
-      "list indexing",
-      "loops",
-      "off-by-one error",
-      "debugging"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "fix-the-bug-in-the-optimized-lru-cache-implementation",
-    "title": "Fix the Bug in the Optimized LRU Cache Implementation",
+    "slug": "build-a-scalable-url-shortener-service-in-python",
+    "title": "Build a Scalable URL Shortener Service in Python",
     "language": "python",
     "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Identify and fix the subtle bug in the provided Least Recently Used (LRU) cache implementation which causes it to fail under certain eviction conditions. The solution must maintain O(1) time complexity for get and put operations while correctly managing the cache size and order.",
-    "prompt": "You are given a Python class implementing an LRU cache using a dictionary and a doubly linked list. The goal is to store key-value pairs with constant time retrieval and eviction based on the least recently used policy. However, the current implementation has a bug that results in incorrect eviction behavior once the cache reaches its capacity. Your task is to identify and fix the bug so that the cache evicts the correct item when full and maintains the correct internal state.",
+    "category": "mini-projects",
+    "description": "Create a mini-project to develop a URL shortener service that generates unique short URLs, supports custom aliases, and includes analytics features such as click tracking and expiration dates.",
+    "prompt": "Create a Python-based URL shortener service that supports the following features: 1) Generating unique shortened URLs from original long URLs; 2) Allow users to specify custom aliases for the shortened URLs where possible; 3) Store all URL mappings and track the number of times each short URL is accessed; 4) Implement optional expiration dates after which the shortened URLs become inactive; 5) Provide functions to resolve shortened URLs back to their original URLs and retrieve click statistics. Your implementation should optimize for scalability and handle potential collision in alias generation gracefully.",
     "guidance": [
-      "Pay close attention to the eviction logic when the cache size exceeds capacity.",
-      "Examine how the doubly linked list nodes are updated during get and put operations.",
-      "Verify that all pointers (prev and next) are correctly set during insertions and removals."
+      "Use hashing or base encoding techniques to generate compact and unique short codes.",
+      "Maintain a persistent mapping (in-memory dictionary or file/db-based for persistence) between short codes and original URLs, along with metadata such as click counts and expiration.",
+      "Ensure thread-safe operations if you simulate concurrent accesses or updates.",
+      "Implement clean error handling for cases such as alias conflicts, expired links, or non-existent short URLs."
     ],
     "hints": [
-      "Check if the tail node is always correctly identified before removal.",
-      "Look for any off-by-one errors or incorrect pointer assignments in the eviction process.",
-      "Consider if the cache size is updated appropriately after node removal."
+      "Consider using base62 encoding (alphanumeric characters) for compact URL code generation.",
+      "For custom aliases, check if the alias already exists before creating a new short URL.",
+      "Store timestamps to manage expiration and periodically clean up expired URLs from storage."
     ],
-    "starterCode": "class Node:\n    def __init__(self, key, val):\n        self.key = key\n        self.val = val\n        self.prev = None\n        self.next = None\n\nclass LRUCache:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.cache = dict()  # key -> node\n        self.head = Node(0, 0)\n        self.tail = Node(0, 0)\n        self.head.next = self.tail\n        self.tail.prev = self.head\n\n    def _remove(self, node):\n        prev = node.prev\n        next = node.next\n        prev.next = next\n        next.prev = prev\n\n    def _add(self, node):\n        node.prev = self.head\n        node.next = self.head.next\n        self.head.next.prev = node\n        self.head.next = node\n\n    def get(self, key):\n        if key in self.cache:\n            node = self.cache[key]\n            self._remove(node)\n            self._add(node)\n            return node.val\n        return -1\n\n    def put(self, key, value):\n        if key in self.cache:\n            self._remove(self.cache[key])\n        node = Node(key, value)\n        self._add(node)\n        self.cache[key] = node\n        if len(self.cache) > self.capacity:\n            node_to_remove = self.tail.prev\n            self._remove(node_to_remove)\n            # Bug here: missing deletion from cache dictionary\n",
-    "expectedOutput": "After fixing, the code should pass these operations:\nlru = LRUCache(2)\nlru.put(1, 1)  # cache is {1=1}\nlru.put(2, 2)  # cache is {1=1, 2=2}\nlru.get(1)     # returns 1\nlru.put(3, 3)  # evicts key 2, cache is {1=1, 3=3}\nlru.get(2)     # returns -1 (not found)\nlru.put(4, 4)  # evicts key 1, cache is {4=4, 3=3}\nlru.get(1)     # returns -1 (not found)\nlru.get(3)     # returns 3\nlru.get(4)     # returns 4",
+    "starterCode": "import time\n\nclass URLShortener:\n    def __init__(self):\n        self.url_map = {}\n        self.clicks = {}\n        self.expirations = {}\n        self.counter = 1\n        self.alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'\n\n    def _encode(self, num):\n        # encode integer to base62 string\n        if num == 0:\n            return self.alphabet[0]\n        arr = []\n        base = len(self.alphabet)\n        while num:\n            num, rem = divmod(num, base)\n            arr.append(self.alphabet[rem])\n        arr.reverse()\n        return ''.join(arr)\n\n    def shorten(self, original_url, custom_alias=None, expire_in_seconds=None):\n        pass  # Implement this\n\n    def resolve(self, short_url):\n        pass  # Implement this\n\n    def get_clicks(self, short_url):\n        pass  # Implement this\n\n    def _is_expired(self, short_url):\n        pass  # Implement this",
+    "expectedOutput": "short_url = shortener.shorten('https://www.example.com/some/long/path')\nprint(short_url)  # e.g. \"b9\"\nprint(shortener.resolve(short_url))  # 'https://www.example.com/some/long/path'\nprint(shortener.get_clicks(short_url))  # 1 after resolve call\n\ncustom_short = shortener.shorten('https://www.example.org', custom_alias='exOrg')\nprint(custom_short)  # 'exOrg'\nprint(shortener.resolve('exOrg'))  # 'https://www.example.org'",
     "concepts": [
-      "data structures",
-      "linked list",
-      "hash map",
-      "cache eviction",
-      "debugging"
+      "Hashing and encoding techniques",
+      "Data structures and mappings",
+      "State management and persistence",
+      "Concurrency and collision handling"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-repetitive-sql-query-using-aliases-and-simplified-where-clause",
+    "title": "Refactor a Repetitive SQL Query Using Aliases and Simplified WHERE Clause",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Optimize a beginner-level SQL query by refactoring repetitive conditions and using table aliases for clarity. The query fetches all employees from the 'employees' table who belong to certain departments and have a salary above a threshold.",
+    "prompt": "Below is a SQL query that returns employees from the 'employees' table who work in either the 'Sales' or 'Marketing' department and earn more than 50000. The query is correct but overly repetitive and hard to read. Your task is to refactor this query to improve readability and maintain the same output without changing its behavior.",
+    "guidance": [
+      "Use table aliases to shorten table names and improve readability.",
+      "Combine the department conditions using the IN clause instead of multiple OR statements.",
+      "Keep the same condition on salary to filter employees earning above 50000."
+    ],
+    "hints": [
+      "Consider replacing OR conditions on the same column with the IN operator.",
+      "Assign a short alias like `e` to the 'employees' table to reduce repetition."
+    ],
+    "starterCode": "SELECT employees.id, employees.name, employees.department, employees.salary\nFROM employees\nWHERE employees.department = 'Sales'\n   OR employees.department = 'Marketing'\n  AND employees.salary > 50000;",
+    "expectedOutput": "A result set listing employees working in 'Sales' or 'Marketing' departments earning more than 50000, identical to the original query.",
+    "concepts": [
+      "SQL SELECT statement",
+      "WHERE clause conditions",
+      "Table aliases",
+      "IN operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-messy-javascript-array-processing-function",
+    "title": "Refactor Messy JavaScript Array Processing Function",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Clean up and improve the readability and efficiency of a JavaScript function that processes an array of user objects. The function currently contains redundant code, unclear variable names, and inefficient looping that you need to refactor without changing its output.",
+    "prompt": "You are given a function that takes an array of user objects and returns an array of usernames for users who are active and over 18 years old. The existing code works correctly but is cluttered and inefficient. Refactor the function to make it more readable, concise, and performant without altering the output.\n\nUsers array example:\n[\n  { username: 'alice', age: 22, isActive: true },\n  { username: 'bob', age: 17, isActive: true },\n  { username: 'carol', age: 19, isActive: false }\n]\n\nRefactor the code provided in starterCode to achieve the same result in a cleaner way.",
+    "guidance": [
+      "Use array higher-order functions like filter and map to simplify the code.",
+      "Improve variable naming for clarity and follow JavaScript conventions.",
+      "Remove unnecessary variables and redundant checks."
+    ],
+    "hints": [
+      "Think about chaining array methods to avoid intermediate steps.",
+      "Avoid using traditional for loops when array methods can express the logic more declaratively.",
+      "Remember to keep the function's output unchanged after refactoring."
+    ],
+    "starterCode": "function getActiveAdultUsernames(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    let user = users[i];\n    if (user.isActive === true) {\n      if (user.age > 18) {\n        result.push(user.username);\n      }\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "getActiveAdultUsernames([{ username: 'alice', age: 22, isActive: true }, { username: 'bob', age: 17, isActive: true }, { username: 'carol', age: 19, isActive: false }]) // ['alice']",
+    "concepts": [
+      "array methods",
+      "code refactoring",
+      "variable naming",
+      "conditional logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-bug-in-sql-query-aggregating-monthly-sales-with-incorrect-joins",
+    "title": "Fix Bug in SQL Query Aggregating Monthly Sales with Incorrect Joins",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are provided with a buggy SQL query that attempts to calculate the total monthly sales per product category. The query currently returns incorrect totals due to join and aggregation mistakes. Your task is to identify and fix these bugs so the query outputs the correct aggregated sales for each category per month.",
+    "prompt": "The provided query is supposed to return total sales amount per product category grouped by month. However, it currently returns wrong totals because of incorrect JOIN conditions and aggregation placement. Fix the query so that it accurately sums sales amounts for each category by month.\n\nTables:\n- sales(sale_id, product_id, sale_date, quantity, unit_price)\n- products(product_id, category_id, product_name)\n- categories(category_id, category_name)\n\nFix the bugs in the query below:\n\nSELECT\n  c.category_name,\n  EXTRACT(YEAR FROM s.sale_date) AS sale_year,\n  EXTRACT(MONTH FROM s.sale_date) AS sale_month,\n  SUM(s.quantity) * s.unit_price AS total_sales\nFROM sales s\nLEFT JOIN products p ON s.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, sale_year, sale_month\nORDER BY sale_year, sale_month, c.category_name;",
+    "guidance": [
+      "Check the JOIN conditions and ensure they correctly link the tables without causing multiplication of rows.",
+      "Review the aggregation logic, especially how the total sales calculation is written within the SUM function.",
+      "Make sure the GROUP BY clause includes all non-aggregated selected columns or expressions."
+    ],
+    "hints": [
+      "Multiply quantity and unit_price before applying the SUM, not after.",
+      "Use INNER JOIN consistently if you want to exclude records without matching products or categories.",
+      "Alias the EXTRACT expressions in SELECT and use those aliases in GROUP BY for clarity."
+    ],
+    "starterCode": "SELECT\n  c.category_name,\n  EXTRACT(YEAR FROM s.sale_date) AS sale_year,\n  EXTRACT(MONTH FROM s.sale_date) AS sale_month,\n  SUM(s.quantity) * s.unit_price AS total_sales\nFROM sales s\nLEFT JOIN products p ON s.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, sale_year, sale_month\nORDER BY sale_year, sale_month, c.category_name;",
+    "expectedOutput": "category_name | sale_year | sale_month | total_sales\n---------------------------------------------------\nElectronics    | 2023      | 5          | 12500.00\nHome & Garden | 2023      | 5          | 8400.50\nToys          | 2023      | 5          | 4700.00\n... (and so on for each category and month)",
+    "concepts": [
+      "SQL JOINs",
+      "Aggregation functions",
+      "GROUP BY usage",
+      "Query debugging"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false

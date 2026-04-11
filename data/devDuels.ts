@@ -7028,5 +7028,181 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-bug-in-the-multithreaded-singleton-logger-implementation",
+    "title": "Fix the Bug in the Multithreaded Singleton Logger Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the concurrency bug in a classic thread-safe Singleton Logger class in C++. The provided code attempts lazy initialization with double-checked locking but contains subtle issues that may cause race conditions or undefined behavior in a multithreaded environment.",
+    "prompt": "The following C++ code implements a Singleton Logger intended to be thread-safe using double-checked locking. However, the current implementation can fail when accessed concurrently by multiple threads. Your task is to identify and fix the concurrency issues in this code so that the singleton instance is correctly initialized exactly once, without data races or undefined behavior. You must preserve lazy initialization and avoid any unnecessary locking after the instance is created.",
+    "guidance": [
+      "Review the double-checked locking pattern and understand why naive implementations can fail.",
+      "Check for memory visibility issues caused by improper usage of concurrency primitives.",
+      "Consider using std::atomic or C++11 features to safely publish the singleton instance."
+    ],
+    "hints": [
+      "The instance pointer needs to be atomic or protected to prevent reading torn or stale values.",
+      "Using std::call_once with a std::once_flag is a simpler and safer way to implement thread-safe initialization.",
+      "Without proper memory ordering or synchronization, other threads might see a partially constructed object."
+    ],
+    "starterCode": "#include <iostream>\n#include <mutex>\n\nclass Logger {\nprivate:\n    static Logger* instance;\n    static std::mutex mtx;\n    Logger() { std::cout << \"Logger initialized\" << std::endl; }\n    ~Logger() {}\n\npublic:\n    Logger(const Logger&) = delete;\n    Logger& operator=(const Logger&) = delete;\n\n    static Logger* getInstance() {\n        if (instance == nullptr) {\n            std::lock_guard<std::mutex> lock(mtx);\n            if (instance == nullptr) {\n                instance = new Logger();\n            }\n        }\n        return instance;\n    }\n\n    void log(const std::string& message) {\n        std::cout << message << std::endl;\n    }\n};\n\nLogger* Logger::instance = nullptr;\nstd::mutex Logger::mtx;\n\nint main() {\n    Logger* logger1 = Logger::getInstance();\n    logger1->log(\"First log message.\");\n\n    Logger* logger2 = Logger::getInstance();\n    logger2->log(\"Second log message.\");\n\n    std::cout << \"Instances equal: \" << (logger1 == logger2 ? \"true\" : \"false\") << std::endl;\n    return 0;\n}\n",
+    "expectedOutput": "Logger initialized\nFirst log message.\nSecond log message.\nInstances equal: true",
+    "concepts": [
+      "thread safety",
+      "singleton pattern",
+      "double-checked locking",
+      "C++11 concurrency"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "develop-a-high-performance-concurrent-web-crawler-in-c",
+    "title": "Develop a High-Performance Concurrent Web Crawler in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build an advanced mini-project that involves designing and implementing a multithreaded web crawler in C++ capable of efficiently scanning and indexing web pages with rate limiting and duplicate URL detection.",
+    "prompt": "Create a C++ program that takes a seed URL and crawls the web pages connected through hyperlinks up to a specified depth. Your crawler must support concurrency to speed up retrieval, avoid revisiting the same URL multiple times, and respect a rate limit of requests per domain to prevent server overload. Collected URLs and their page titles should be stored in a thread-safe data structure and printed out once crawling finishes.\n\nRequirements:\n1. Accept a seed URL and crawl depth as input.\n2. Use multiple threads to fetch pages concurrently.\n3. Implement a mechanism to detect and skip duplicate URLs.\n4. Enforce per-domain rate limiting (e.g. max 1 request per second per domain).\n5. Extract the page title (from the <title> HTML tag) for indexing with the URL.\n6. Ensure all shared data structures are safely accessed in a concurrent environment.\n7. Output all collected URLs with their titles in any order after crawling completes.",
+    "guidance": [
+      "Use a thread-safe queue or work-stealing queue to manage URLs to visit across threads.",
+      "Implement a hash set or map with mutex protection or concurrent containers to track visited URLs and avoid duplicates.",
+      "Use a timer or timestamp map to enforce rate limiting per domain before making HTTP requests.",
+      "Leverage an HTTP client library such as libcurl or boost::asio with async calls for fetching page content."
+    ],
+    "hints": [
+      "Parsing HTML can be simplified by searching for <title> tags with string manipulation or a lightweight HTML parser like Gumbo or pugixml.",
+      "Domain extraction from URLs can be performed by parsing the URL string or using existing URL parsing utilities.",
+      "Synchronization primitives like std::mutex, std::shared_mutex, or atomic flags will help manage concurrent access."
+    ],
+    "starterCode": "#include <iostream>\n#include <string>\n#include <thread>\n#include <queue>\n#include <unordered_set>\n#include <mutex>\n#include <condition_variable>\n// You may include additional libraries such as libcurl, regex, or parsers\n\nint main() {\n    std::cout << \"Enter seed URL and crawl depth:\\n\";\n    std::string seedUrl;\n    int maxDepth;\n    std::cin >> seedUrl >> maxDepth;\n\n    // TODO: Initialize shared structures for URLs, visited set, synchronization primitives\n    // TODO: Start worker threads to process URLs concurrently\n    // TODO: Crawl pages, apply rate limiting, extract titles, and collect results\n\n    // TODO: Print all collected URLs with their titles\n    return 0;\n}\n",
+    "expectedOutput": "URL: http://example.com\nTitle: Example Domain\nURL: http://example.com/about\nTitle: About Example\n... (all crawled URLs with extracted titles)",
+    "concepts": [
+      "multithreading",
+      "concurrency",
+      "network programming",
+      "data structures",
+      "rate limiting"
+    ],
+    "estimatedTime": "120 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-scalable-url-shortener-service-in-python",
+    "title": "Build a Scalable URL Shortener Service in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a mini-project to develop a URL shortener service that generates unique short URLs, supports custom aliases, and includes analytics features such as click tracking and expiration dates.",
+    "prompt": "Create a Python-based URL shortener service that supports the following features: 1) Generating unique shortened URLs from original long URLs; 2) Allow users to specify custom aliases for the shortened URLs where possible; 3) Store all URL mappings and track the number of times each short URL is accessed; 4) Implement optional expiration dates after which the shortened URLs become inactive; 5) Provide functions to resolve shortened URLs back to their original URLs and retrieve click statistics. Your implementation should optimize for scalability and handle potential collision in alias generation gracefully.",
+    "guidance": [
+      "Use hashing or base encoding techniques to generate compact and unique short codes.",
+      "Maintain a persistent mapping (in-memory dictionary or file/db-based for persistence) between short codes and original URLs, along with metadata such as click counts and expiration.",
+      "Ensure thread-safe operations if you simulate concurrent accesses or updates.",
+      "Implement clean error handling for cases such as alias conflicts, expired links, or non-existent short URLs."
+    ],
+    "hints": [
+      "Consider using base62 encoding (alphanumeric characters) for compact URL code generation.",
+      "For custom aliases, check if the alias already exists before creating a new short URL.",
+      "Store timestamps to manage expiration and periodically clean up expired URLs from storage."
+    ],
+    "starterCode": "import time\n\nclass URLShortener:\n    def __init__(self):\n        self.url_map = {}\n        self.clicks = {}\n        self.expirations = {}\n        self.counter = 1\n        self.alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'\n\n    def _encode(self, num):\n        # encode integer to base62 string\n        if num == 0:\n            return self.alphabet[0]\n        arr = []\n        base = len(self.alphabet)\n        while num:\n            num, rem = divmod(num, base)\n            arr.append(self.alphabet[rem])\n        arr.reverse()\n        return ''.join(arr)\n\n    def shorten(self, original_url, custom_alias=None, expire_in_seconds=None):\n        pass  # Implement this\n\n    def resolve(self, short_url):\n        pass  # Implement this\n\n    def get_clicks(self, short_url):\n        pass  # Implement this\n\n    def _is_expired(self, short_url):\n        pass  # Implement this",
+    "expectedOutput": "short_url = shortener.shorten('https://www.example.com/some/long/path')\nprint(short_url)  # e.g. \"b9\"\nprint(shortener.resolve(short_url))  # 'https://www.example.com/some/long/path'\nprint(shortener.get_clicks(short_url))  # 1 after resolve call\n\ncustom_short = shortener.shorten('https://www.example.org', custom_alias='exOrg')\nprint(custom_short)  # 'exOrg'\nprint(shortener.resolve('exOrg'))  # 'https://www.example.org'",
+    "concepts": [
+      "Hashing and encoding techniques",
+      "Data structures and mappings",
+      "State management and persistence",
+      "Concurrency and collision handling"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-repetitive-sql-query-using-aliases-and-simplified-where-clause",
+    "title": "Refactor a Repetitive SQL Query Using Aliases and Simplified WHERE Clause",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Optimize a beginner-level SQL query by refactoring repetitive conditions and using table aliases for clarity. The query fetches all employees from the 'employees' table who belong to certain departments and have a salary above a threshold.",
+    "prompt": "Below is a SQL query that returns employees from the 'employees' table who work in either the 'Sales' or 'Marketing' department and earn more than 50000. The query is correct but overly repetitive and hard to read. Your task is to refactor this query to improve readability and maintain the same output without changing its behavior.",
+    "guidance": [
+      "Use table aliases to shorten table names and improve readability.",
+      "Combine the department conditions using the IN clause instead of multiple OR statements.",
+      "Keep the same condition on salary to filter employees earning above 50000."
+    ],
+    "hints": [
+      "Consider replacing OR conditions on the same column with the IN operator.",
+      "Assign a short alias like `e` to the 'employees' table to reduce repetition."
+    ],
+    "starterCode": "SELECT employees.id, employees.name, employees.department, employees.salary\nFROM employees\nWHERE employees.department = 'Sales'\n   OR employees.department = 'Marketing'\n  AND employees.salary > 50000;",
+    "expectedOutput": "A result set listing employees working in 'Sales' or 'Marketing' departments earning more than 50000, identical to the original query.",
+    "concepts": [
+      "SQL SELECT statement",
+      "WHERE clause conditions",
+      "Table aliases",
+      "IN operator"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-messy-javascript-array-processing-function",
+    "title": "Refactor Messy JavaScript Array Processing Function",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Clean up and improve the readability and efficiency of a JavaScript function that processes an array of user objects. The function currently contains redundant code, unclear variable names, and inefficient looping that you need to refactor without changing its output.",
+    "prompt": "You are given a function that takes an array of user objects and returns an array of usernames for users who are active and over 18 years old. The existing code works correctly but is cluttered and inefficient. Refactor the function to make it more readable, concise, and performant without altering the output.\n\nUsers array example:\n[\n  { username: 'alice', age: 22, isActive: true },\n  { username: 'bob', age: 17, isActive: true },\n  { username: 'carol', age: 19, isActive: false }\n]\n\nRefactor the code provided in starterCode to achieve the same result in a cleaner way.",
+    "guidance": [
+      "Use array higher-order functions like filter and map to simplify the code.",
+      "Improve variable naming for clarity and follow JavaScript conventions.",
+      "Remove unnecessary variables and redundant checks."
+    ],
+    "hints": [
+      "Think about chaining array methods to avoid intermediate steps.",
+      "Avoid using traditional for loops when array methods can express the logic more declaratively.",
+      "Remember to keep the function's output unchanged after refactoring."
+    ],
+    "starterCode": "function getActiveAdultUsernames(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    let user = users[i];\n    if (user.isActive === true) {\n      if (user.age > 18) {\n        result.push(user.username);\n      }\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "getActiveAdultUsernames([{ username: 'alice', age: 22, isActive: true }, { username: 'bob', age: 17, isActive: true }, { username: 'carol', age: 19, isActive: false }]) // ['alice']",
+    "concepts": [
+      "array methods",
+      "code refactoring",
+      "variable naming",
+      "conditional logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-bug-in-sql-query-aggregating-monthly-sales-with-incorrect-joins",
+    "title": "Fix Bug in SQL Query Aggregating Monthly Sales with Incorrect Joins",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are provided with a buggy SQL query that attempts to calculate the total monthly sales per product category. The query currently returns incorrect totals due to join and aggregation mistakes. Your task is to identify and fix these bugs so the query outputs the correct aggregated sales for each category per month.",
+    "prompt": "The provided query is supposed to return total sales amount per product category grouped by month. However, it currently returns wrong totals because of incorrect JOIN conditions and aggregation placement. Fix the query so that it accurately sums sales amounts for each category by month.\n\nTables:\n- sales(sale_id, product_id, sale_date, quantity, unit_price)\n- products(product_id, category_id, product_name)\n- categories(category_id, category_name)\n\nFix the bugs in the query below:\n\nSELECT\n  c.category_name,\n  EXTRACT(YEAR FROM s.sale_date) AS sale_year,\n  EXTRACT(MONTH FROM s.sale_date) AS sale_month,\n  SUM(s.quantity) * s.unit_price AS total_sales\nFROM sales s\nLEFT JOIN products p ON s.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, sale_year, sale_month\nORDER BY sale_year, sale_month, c.category_name;",
+    "guidance": [
+      "Check the JOIN conditions and ensure they correctly link the tables without causing multiplication of rows.",
+      "Review the aggregation logic, especially how the total sales calculation is written within the SUM function.",
+      "Make sure the GROUP BY clause includes all non-aggregated selected columns or expressions."
+    ],
+    "hints": [
+      "Multiply quantity and unit_price before applying the SUM, not after.",
+      "Use INNER JOIN consistently if you want to exclude records without matching products or categories.",
+      "Alias the EXTRACT expressions in SELECT and use those aliases in GROUP BY for clarity."
+    ],
+    "starterCode": "SELECT\n  c.category_name,\n  EXTRACT(YEAR FROM s.sale_date) AS sale_year,\n  EXTRACT(MONTH FROM s.sale_date) AS sale_month,\n  SUM(s.quantity) * s.unit_price AS total_sales\nFROM sales s\nLEFT JOIN products p ON s.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, sale_year, sale_month\nORDER BY sale_year, sale_month, c.category_name;",
+    "expectedOutput": "category_name | sale_year | sale_month | total_sales\n---------------------------------------------------\nElectronics    | 2023      | 5          | 12500.00\nHome & Garden | 2023      | 5          | 8400.50\nToys          | 2023      | 5          | 4700.00\n... (and so on for each category and month)",
+    "concepts": [
+      "SQL JOINs",
+      "Aggregation functions",
+      "GROUP BY usage",
+      "Query debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
