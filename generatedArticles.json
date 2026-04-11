@@ -1,585 +1,513 @@
 [
   {
-    "slug": "mastering-javascript-symbol-type-edge-cases-and-practical-uses",
-    "title": "Mastering JavaScript Symbol Type: Edge Cases and Practical Uses",
+    "slug": "building-scalable-data-models-javascript-real-time-apps",
+    "title": "Building Scalable Data Models in JavaScript for Real-Time Applications",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to use JavaScript's Symbol type effectively, including edge cases and practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=UnYevznrnVI",
+    "description": "Learn how to design scalable and efficient data models in JavaScript for real-time applications, making your apps faster and more reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript's Symbol type is a unique and powerful feature introduced in ES6. Symbols are unique identifiers, often used to add hidden properties to objects or to avoid property name collisions. In this tutorial, we'll explore the basics of Symbols, some edge cases you might encounter, and practical use cases to help you master this important concept."
+        "value": "Real-time applications, such as chat apps or live dashboards, require fast and efficient handling of data. Building scalable data models in JavaScript helps keep your app responsive as the number of users and data grows. In this tutorial, we'll explore simple steps to create scalable, maintainable data structures using JavaScript."
       },
       {
         "type": "paragraph",
-        "value": "A Symbol is created using the Symbol() function and is guaranteed to be unique. Unlike strings or numbers, two Symbols with the same description are never equal."
+        "value": "### Why focus on scalable data models?\nA scalable data model organizes your data so that it can grow without slowing down your app. Poor data structures cause slow lookups, inefficient updates, and bugs. Using the right models in JavaScript ensures your app stays fast, and adding new features becomes easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Use Objects and Arrays Wisely\nJavaScript offers two main structures to hold collections: arrays and objects. Arrays are ordered and good for lists, while objects store key-value pairs and enable fast lookups by keys."
       },
       {
         "type": "code",
-        "value": "const sym1 = Symbol('id');\nconst sym2 = Symbol('id');\nconsole.log(sym1 === sym2); // false"
+        "value": "// Using arrays for ordered lists\ntconst messages = [\n  { id: 1, text: \"Hello!\", user: \"Alice\" },\n  { id: 2, text: \"Hi!\", user: \"Bob\" }\n];\n\n// Using objects for quick access by id\nconst users = {\n  alice: { id: \"alice\", name: \"Alice\", online: true },\n  bob: { id: \"bob\", name: \"Bob\", online: false }\n};"
       },
       {
         "type": "paragraph",
-        "value": "Even though both symbols have the description 'id', they are unique. This uniqueness makes Symbols perfect for keys in objects when you want to avoid accidental overwriting of properties."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's see a practical example:"
+        "value": "### Step 2: Normalize Your Data\nNormalization means separating nested data into flat structures, similar to relational databases. This approach prevents data duplication and simplifies updates."
       },
       {
         "type": "code",
-        "value": "const user = {};\nconst id = Symbol('id');\n\nuser[id] = 123;\n\nconsole.log(user[id]); // 123\nconsole.log(user.id); // undefined"
+        "value": "// Bad practice: nested messages inside user\nconst user = {\n  id: \"alice\",\n  name: \"Alice\",\n  messages: [\n    { id: 1, text: \"Hello!\" },\n    { id: 3, text: \"Are you there?\" }\n  ]\n};\n\n// Good practice: separate users and messages\nconst users = {\n  alice: { id: \"alice\", name: \"Alice\" },\n  bob: { id: \"bob\", name: \"Bob\" }\n};\n\nconst messages = {\n  1: { id: 1, text: \"Hello!\", userId: \"alice\" },\n  2: { id: 2, text: \"Hi!\", userId: \"bob\" },\n  3: { id: 3, text: \"Are you there?\", userId: \"alice\" }\n};"
       },
       {
         "type": "paragraph",
-        "value": "In this example, we add a Symbol-keyed property to an object. Notice that accessing user.id returns undefined because the Symbol key is not the same as the string 'id'."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Edge Case: Symbols are not enumerable by default"
-      },
-      {
-        "type": "paragraph",
-        "value": "One important thing to remember is that Symbol properties do not show up in normal object property enumerations like for...in loops or Object.keys()."
+        "value": "### Step 3: Use Immutable Updates\nIn real-time apps, state changes frequently. Using immutable updates means creating new versions of your data instead of modifying existing ones. This pattern helps prevent bugs and works well with frameworks and libraries."
       },
       {
         "type": "code",
-        "value": "const sym = Symbol('secret');\nconst obj = {\n  [sym]: 'hidden value',\n  visible: 'shown value'\n};\n\nfor (let key in obj) {\n  console.log(key); // only 'visible' is logged\n}\n\nconsole.log(Object.keys(obj)); // [ 'visible' ]"
+        "value": "// Instead of modifying directly\nmessages[2].text = \"Hi there!\";\n\n// Create a new object with updated message\nconst updatedMessages = {\n  ...messages,\n  2: { ...messages[2], text: \"Hi there!\" }\n};"
       },
       {
         "type": "paragraph",
-        "value": "To list Symbol properties, use Object.getOwnPropertySymbols():"
+        "value": "### Step 4: Structure Data for Easy Access\nDesign your data so you can quickly access what you need, for example, storing user IDs in messages to get sender info quickly without deep nesting."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Use Classes or Factory Functions for Complex Models\nFor more complex data, use JavaScript classes or factory functions to encapsulate behaviors and improve maintainability."
       },
       {
         "type": "code",
-        "value": "const syms = Object.getOwnPropertySymbols(obj);\nconsole.log(syms); // [ Symbol(secret) ]\nconsole.log(obj[syms[0]]); // 'hidden value'"
+        "value": "class Message {\n  constructor(id, text, userId) {\n    this.id = id;\n    this.text = text;\n    this.userId = userId;\n    this.timestamp = Date.now();\n  }\n\n  edit(newText) {\n    this.text = newText;\n  }\n}\n\n// Creating a new message\nconst newMessage = new Message(4, \"Hello world!\", \"alice\");"
       },
       {
         "type": "paragraph",
-        "value": "### Practical Use: Defining Constants"
+        "value": "### Summary\nBuilding scalable data models involves using the right data structures, normalizing your data, updating immutably, and structuring your models for easy, fast access. These simple steps will help you create robust real-time applications in JavaScript."
       },
       {
         "type": "paragraph",
-        "value": "You can use Symbols to define constant values for things like event types or states to avoid collisions and mistakes."
-      },
-      {
-        "type": "code",
-        "value": "const STATUS = {\n  LOADING: Symbol('loading'),\n  SUCCESS: Symbol('success'),\n  ERROR: Symbol('error')\n};\n\nfunction handleStatus(status) {\n  switch(status) {\n    case STATUS.LOADING:\n      console.log('Loading...');\n      break;\n    case STATUS.SUCCESS:\n      console.log('Loaded successfully!');\n      break;\n    case STATUS.ERROR:\n      console.log('An error occurred.');\n      break;\n  }\n}\n\nhandleStatus(STATUS.LOADING);"
-      },
-      {
-        "type": "paragraph",
-        "value": "Because each Symbol is unique, you can be sure your status codes won't conflict with other variables or strings."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Bonus: Global Symbol Registry"
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes you want to reuse the same Symbol across different parts of your code. JavaScript provides a global symbol registry accessed with Symbol.for() and Symbol.keyFor(). This lets you create or retrieve Symbols by a key."
-      },
-      {
-        "type": "code",
-        "value": "const globalSym1 = Symbol.for('app.event');\nconst globalSym2 = Symbol.for('app.event');\n\nconsole.log(globalSym1 === globalSym2); // true\nconsole.log(Symbol.keyFor(globalSym1)); // 'app.event'"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using the global registry simplifies communication between different scripts or modules by sharing Symbols via a known key."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Symbols are a unique primitive in JavaScript, ideal for defining non-conflicting property keys, constants, and hidden object properties. Keep in mind their edge cases such as non-enumerability and how to access them using Object.getOwnPropertySymbols. Use the global symbol registry when symbols need to be shared. With these tips, you’re ready to start using Symbols effectively in your projects!"
+        "value": "Start by organizing your data clearly and keep performance in mind. With scalable models, your app will be easier to develop and maintain as it grows."
       }
     ]
   },
   {
-    "slug": "mastering-async-stack-traces-javascript-faster-debugging",
-    "title": "Mastering Async Stack Traces in JavaScript for Faster Debugging",
+    "slug": "mastering-javascript-error-handling-using-custom-error-classes",
+    "title": "Mastering JavaScript Error Handling Using Custom Error Classes",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to understand and use async stack traces in JavaScript to debug faster and more effectively, perfect for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=EIGjHtXBHss",
+    "description": "Learn how to improve your JavaScript error handling by creating and using custom error classes, making your code easier to debug and maintain.",
+    "videoUrl": "https://www.youtube.com/watch?v=cVo186hyYsM",
     "content": [
       {
         "type": "paragraph",
-        "value": "Debugging JavaScript code that uses asynchronous functions can be challenging because the stack trace often doesn't show the original call chain clearly. Async stack traces help you see where your error originated, even across asynchronous boundaries like promises and async/await."
+        "value": "Error handling is an essential part of writing robust JavaScript code. It helps you catch mistakes, handle exceptions gracefully, and provide clear feedback to users or developers. While JavaScript comes with built-in error types like Error, TypeError, and ReferenceError, you can create your own custom error classes to better describe specific problems in your application."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explain what async stack traces are, why they matter, and how you can use them to fix bugs faster in your JavaScript code."
+        "value": "Custom error classes extend the built-in Error class and allow you to differentiate between error types in a more meaningful way. This makes debugging easier and your code cleaner. Let's learn how to create and use these custom errors step-by-step."
       },
       {
         "type": "paragraph",
-        "value": "### What is a stack trace?"
-      },
-      {
-        "type": "paragraph",
-        "value": "A stack trace is a report that shows the active functions at a point in time during a program's execution — usually when an error occurs. It helps you track down where the error happened."
-      },
-      {
-        "type": "paragraph",
-        "value": "Normally, with synchronous functions, the stack trace clearly shows the path of function calls. But with asynchronous functions (like those using promises or async/await), the stack trace can be incomplete or confusing."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why async stack traces matter"
-      },
-      {
-        "type": "paragraph",
-        "value": "Modern JavaScript heavily relies on asynchronous code for things like network requests, timers, or reading files. If an error happens inside an asynchronous function, a regular stack trace might only show the immediate function where the error was detected, not the code that triggered it."
-      },
-      {
-        "type": "paragraph",
-        "value": "Async stack traces improve this by connecting the dots between async calls, showing you a clearer path to the source of your error."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example of a confusing stack trace"
+        "value": "### Creating a Custom Error Class\nTo create a custom error, define a new class that extends `Error`. You should call the `super` function with a message to set the error message. Also, to keep the prototype chain intact, set the prototype explicitly (this is especially important in older JavaScript environments)."
       },
       {
         "type": "code",
-        "value": "function delay(time) {\n  return new Promise(resolve => setTimeout(resolve, time));\n}\n\nasync function fetchData() {\n  await delay(100);\n  throw new Error('Oops!');\n}\n\nasync function start() {\n  try {\n    await fetchData();\n  } catch (error) {\n    console.error(error.stack);\n  }\n}\n\nstart();"
+        "value": "class ValidationError extends Error {\n  constructor(message) {\n    super(message);\n    this.name = 'ValidationError';\n    if (Error.captureStackTrace) {\n      Error.captureStackTrace(this, ValidationError);\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In many environments, the stack trace will point to the error inside fetchData but won’t clearly show that start() called it, making it harder to understand the exact flow."
+        "value": "In this example, `ValidationError` is a custom error type. We set the `name` property so that when the error is logged, it shows `ValidationError` instead of the generic `Error`. The `captureStackTrace` method helps create a cleaner traceback."
       },
       {
         "type": "paragraph",
-        "value": "### How to get better async stack traces"
-      },
-      {
-        "type": "paragraph",
-        "value": "Most modern browsers and Node.js already provide improved async stack traces, especially when you use async/await instead of plain promises."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, the above code often produces a stack trace showing the async call hierarchy, helping you see both start() and fetchData() in the trace."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Tips to improve debugging async errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use async/await instead of mixing callbacks and promises. Async/await keeps code cleaner and stack traces easier to follow."
-      },
-      {
-        "type": "paragraph",
-        "value": "- Keep your error handling close to the asynchronous code using try/catch around awaits."
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use developer tools with good async stack trace support, like Chrome DevTools or the latest Node.js versions."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example with clear async stack trace"
+        "value": "### Throwing and Catching Custom Errors\nThrow your custom error in your code whenever a specific error condition occurs. Then, use a `try...catch` block to catch and handle the error properly."
       },
       {
         "type": "code",
-        "value": "async function step1() {\n  return step2();\n}\n\nasync function step2() {\n  await new Promise(r => setTimeout(r, 10));\n  throw new Error('Problem in step2');\n}\n\nasync function run() {\n  try {\n    await step1();\n  } catch (e) {\n    console.error(e.stack);\n  }\n}\n\nrun();"
+        "value": "function validateUsername(username) {\n  if (username.length < 3) {\n    throw new ValidationError('Username must be at least 3 characters long.');\n  }\n  return true;\n}\n\ntry {\n  validateUsername('ab');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation failed:', error.message);\n  } else {\n    console.error('Unknown error:', error);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Running this code in a modern environment will print a stack trace showing both run → step1 → step2 calls, making it easier to figure out where the error originated and which functions were involved."
+        "value": "Here, when the username is too short, a `ValidationError` is thrown. The `catch` block detects the error type using `instanceof` and handles it specifically. This targeted handling allows your program to recover gracefully or provide useful feedback."
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "### Benefits of Using Custom Error Classes\n- **Clearer Error Identification:** You can distinguish different types of errors easily.\n- **Improved Debugging:** Error names and stack traces are more meaningful.\n- **Cleaner Code:** Separates error logic according to error types.\n- **Better User Feedback:** Lets you tailor messages based on error type.\n\nCustom errors are especially useful in larger applications where different modules might throw many kinds of exceptions."
       },
       {
         "type": "paragraph",
-        "value": "Understanding async stack traces is essential for debugging modern JavaScript applications efficiently. Using async/await, handling errors properly, and leveraging developer tools will make fixing bugs faster and less painful."
+        "value": "### Summary\nCreating custom error classes in JavaScript is straightforward and powerful. By extending the built-in Error class, you can build descriptive error types tailored to your application’s needs. Throw and catch these errors where appropriate to make debugging easier and your application more reliable."
       },
       {
         "type": "paragraph",
-        "value": "Keep practicing writing asynchronous code with proper error handling, and soon you will master reading async stack traces like a pro!"
+        "value": "Start practicing by creating your own custom errors today and watch your error handling improve dramatically!"
       }
     ]
   },
   {
-    "slug": "building-real-time-chat-app-with-typescript-websocket",
-    "title": "Building a Real-Time Chat Application with TypeScript and WebSocket",
+    "slug": "mastering-typescript-generics-advanced-patterns-and-real-world-use-cases",
+    "title": "Mastering TypeScript Generics: Advanced Patterns and Real-World Use Cases",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to create a simple real-time chat application using TypeScript and WebSocket with a step-by-step approach suitable for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
+    "description": "Learn how to use TypeScript generics to write flexible, reusable code with advanced patterns and real-world examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time chat applications are popular in online communication, gaming, and collaboration platforms. In this tutorial, we will build a basic real-time chat app using TypeScript and WebSocket, which enables two-way communication between the client and server. By the end, you'll understand how to set up a WebSocket server, connect clients, and exchange messages instantly."
+        "value": "TypeScript generics allow you to create reusable components that work with a variety of types instead of a single one. This makes your functions, classes, and interfaces more flexible and type-safe. In this tutorial, we will explore advanced generics patterns along with real-world use cases that are beginner-friendly."
       },
       {
         "type": "paragraph",
-        "value": "### What You Need Before Starting\n- Node.js installed on your computer\n- Basic knowledge of TypeScript\n- A code editor like VS Code"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 1: Setting Up the WebSocket Server\nFirst, let's create a simple WebSocket server using the popular `ws` library. This server will listen for client connections and broadcast messages to all connected clients."
+        "value": "### What are Generics? \nGenerics provide a way to tell TypeScript what type a value will be while writing code that works with multiple types. Think of it like a placeholder that gets filled when you use the component."
       },
       {
         "type": "code",
-        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst PORT = 8080;\nconst wss = new WebSocketServer({ port: PORT });\n\nwss.on('connection', (ws: WebSocket) => {\n  console.log('Client connected');\n\n  ws.on('message', (message: string) => {\n    console.log(`Received message: ${message}`);\n\n    // Broadcast message to all clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log(`WebSocket server started on ws://localhost:${PORT}`);"
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst output1 = identity<string>(\"hello\"); // output1 is string\nconst output2 = identity<number>(123); // output2 is number"
       },
       {
         "type": "paragraph",
-        "value": "To run the server, create a file called `server.ts` with the above code, install the `ws` package (`npm install ws`), and compile/run using `ts-node server.ts` or compile with `tsc` and run with `node`."
+        "value": "The `<T>` syntax defines a generic type parameter. When you call the function, you specify which type `T` should be, or TypeScript can infer it."
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Creating the Client\nNow let's create a simple client that connects to the WebSocket server and allows sending and receiving messages."
+        "value": "### Advanced Generic Patterns"
+      },
+      {
+        "type": "paragraph",
+        "value": "#### 1. Generic Constraints\nSometimes you want to restrict the kinds of types that can be passed to a generic. Use `extends` keyword to constrain the type parameter."
       },
       {
         "type": "code",
-        "value": "const socket = new WebSocket('ws://localhost:8080');\n\nsocket.onopen = () => {\n  console.log('Connected to the server');\n  socket.send('Hello Server!');\n};\n\nsocket.onmessage = (event) => {\n  console.log('New message:', event.data);\n};\n\nsocket.onclose = () => {\n  console.log('Disconnected from the server');\n};\n\nsocket.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};"
+        "value": "interface Lengthwise {\n  length: number;\n}\n\nfunction loggingIdentity<T extends Lengthwise>(arg: T): T {\n  console.log(arg.length); // Now TypeScript knows 'arg' has a length property\n  return arg;\n}\n\nloggingIdentity([1, 2, 3]); // OK\nloggingIdentity('hello');   // OK\n// loggingIdentity(10);    // Error: number doesn't have a length property"
       },
       {
         "type": "paragraph",
-        "value": "You can run this code in any TypeScript-enabled front-end environment like a browser or a framework. This example simply connects, sends a hello message, and logs all messages it receives."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 3: Enhancing the Chat Application\nTo make the chat more interactive, let's add basic HTML and use prompt dialogs for message input. Below is an example of how to create a minimal UI in the browser:"
+        "value": "#### 2. Using Multiple Generic Parameters\nYou can define more than one generic type to connect the relationships between your inputs and outputs."
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n</head>\n<body>\n  <h2>Real-Time Chat</h2>\n  <div id=\"chat\" style=\"border:1px solid #ccc; padding:10px; height:300px; overflow-y:auto;\"></div>\n  <input id=\"messageInput\" type=\"text\" placeholder=\"Type your message here...\" style=\"width:80%;\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script type=\"module\">\n    const chat = document.getElementById('chat');\n    const input = document.getElementById('messageInput');\n    const button = document.getElementById('sendBtn');\n\n    const socket = new WebSocket('ws://localhost:8080');\n\n    socket.onopen = () => {\n      appendMessage('Connected to server');\n    };\n\n    socket.onmessage = (event) => {\n      appendMessage(`Server: ${event.data}`);\n    };\n\n    socket.onclose = () => {\n      appendMessage('Disconnected from server');\n    };\n\n    button.onclick = () => {\n      if (input.value) {\n        socket.send(input.value);\n        appendMessage(`You: ${input.value}`);\n        input.value = '';\n      }\n    };\n\n    function appendMessage(message: string) {\n      if (chat) {\n        const msgElem = document.createElement('div');\n        msgElem.textContent = message;\n        chat.appendChild(msgElem);\n        chat.scrollTop = chat.scrollHeight;\n      }\n    }\n  </script>\n</body>\n</html>"
+        "value": "function merge<T, U>(obj1: T, obj2: U): T & U {\n  return { ...obj1, ...obj2 };\n}\n\nconst mergedObj = merge({ name: 'Alice' }, { age: 30 });\nconsole.log(mergedObj.name); // Alice\nconsole.log(mergedObj.age);  // 30"
       },
       {
         "type": "paragraph",
-        "value": "Save this HTML file and open it in your browser. Make sure your WebSocket server is running locally on port 8080. You can now type messages and see them appear in the chat window. Messages will also arrive from other connected clients."
+        "value": "Here, the function merges two objects, preserving the types of both."
       },
       {
         "type": "paragraph",
-        "value": "### Final Thoughts\nIn this tutorial, you've learned to build a basic real-time chat app using TypeScript with a WebSocket server and client. This foundation can be expanded with user authentication, persistent message storage, and more advanced UI features. WebSockets offer an efficient way to enable instant communication in web applications."
+        "value": "#### 3. Generic Interfaces and Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics aren't limited to functions. Use them to build flexible interfaces and classes."
+      },
+      {
+        "type": "code",
+        "value": "interface KeyValue<K, V> {\n  key: K;\n  value: V;\n}\n\nconst kv1: KeyValue<number, string> = { key: 1, value: 'apple' };\n\nclass DataHolder<T> {\n  private data: T[] = [];\n  add(item: T) {\n    this.data.push(item);\n  }\n  getItems(): T[] {\n    return this.data;\n  }\n}\n\nconst numberHolder = new DataHolder<number>();\nnumberHolder.add(10);\nnumberHolder.add(20);\nconsole.log(numberHolder.getItems());"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Real-World Use Cases"
+      },
+      {
+        "type": "paragraph",
+        "value": "#### 1. Creating a Generic API Response Handler\nYou can use generics to define the shape of data you expect from an API, improving type safety when working with fetch or axios."
+      },
+      {
+        "type": "code",
+        "value": "interface ApiResponse<T> {\n  status: number;\n  payload: T;\n}\n\nfunction fetchData<T>(url: string): Promise<ApiResponse<T>> {\n  return fetch(url)\n    .then(response => response.json())\n    .then(data => ({ status: 200, payload: data }));\n}\n\ninterface User {\n  id: number;\n  name: string;\n}\n\nfetchData<User>('/api/user/1').then(response => {\n  console.log(response.payload.name); // TypeScript knows payload is User\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "#### 2. Strongly Typed State Management\nGenerics help you create scalable and type-safe state management solutions."
+      },
+      {
+        "type": "code",
+        "value": "type StateListener<T> = (state: T) => void;\n\nclass StateManager<T> {\n  private state: T;\n  private listeners: StateListener<T>[] = [];\n\n  constructor(initialState: T) {\n    this.state = initialState;\n  }\n\n  subscribe(listener: StateListener<T>) {\n    this.listeners.push(listener);\n  }\n\n  setState(newState: T) {\n    this.state = newState;\n    this.listeners.forEach(listener => listener(newState));\n  }\n\n  getState(): T {\n    return this.state;\n  }\n}\n\nconst numberState = new StateManager<number>(0);\nnumberState.subscribe(state => console.log('Number state:', state));\nnumberState.setState(42);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nGenerics empower TypeScript developers to write flexible, reusable, and type-safe code. By mastering constraints, multiple type parameters, and generic interfaces/classes, you can build scalable and maintainable applications. Experiment with these patterns in your projects to improve your coding efficiency and type safety."
       }
     ]
   },
   {
-    "slug": "mastering-typescript-error-handling-with-custom-error-classes",
-    "title": "Mastering TypeScript Error Handling with Custom Error Classes",
+    "slug": "typescript-error-handling-strategies-for-scalable-system-design",
+    "title": "TypeScript Error Handling Strategies for Scalable System Design",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to improve error handling in TypeScript by creating and using custom error classes. This beginner-friendly guide helps you write cleaner and more maintainable code.",
-    "videoUrl": "https://www.youtube.com/watch?v=xdQkEn3mx1k",
+    "description": "Learn beginner-friendly TypeScript error handling strategies that help build scalable and maintainable system designs.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is an essential part of writing robust applications. In TypeScript, the built-in Error class helps capture runtime errors, but sometimes it's not enough. Custom error classes allow you to define more specific error types, making your error handling clearer and easier to maintain."
+        "value": "Error handling is a crucial part of building scalable and reliable applications. In TypeScript, handling errors efficiently helps prevent crashes and improves maintainability. This article introduces beginner-friendly error handling strategies with practical code examples, so you can design better systems that gracefully deal with failures."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll learn how to create custom error classes in TypeScript and use them effectively in our code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's begin by creating a simple custom error class. It extends the built-in Error class and adds a custom message and name."
+        "value": "### 1. Using try/catch Blocks\nThe simplest way to handle errors in TypeScript is by using try/catch blocks. You wrap code that might throw an error inside try, and catch allows you to handle or log the error gracefully."
       },
       {
         "type": "code",
-        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);  // Pass the message to the Error constructor\n    this.name = \"ValidationError\";  // Set the error name\n    Object.setPrototypeOf(this, ValidationError.prototype); // Fix prototype chain\n  }\n}\n"
+        "value": "function parseJson(input: string): object | null {\n  try {\n    return JSON.parse(input);\n  } catch (error) {\n    console.error('Failed to parse JSON:', error);\n    return null;\n  }\n}\n\nconst data = parseJson('{\"name\":\"TypeScript\"}');\nconsole.log(data);"
       },
       {
         "type": "paragraph",
-        "value": "The line `Object.setPrototypeOf` helps fix a TypeScript/JavaScript quirk when extending built-in classes. It ensures that `instanceof` checks work correctly."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let’s see how we might use this custom error in a function that validates user input."
+        "value": "### 2. Using Result Types Instead of Throwing Errors\nThrowing errors works, but can sometimes make error tracking complicated in bigger systems. An alternative is to use \"Result\" types, which return either a success or error value explicitly."
       },
       {
         "type": "code",
-        "value": "function validateUsername(username: string) {\n  if (username.length < 3) {\n    throw new ValidationError(\"Username must be at least 3 characters long.\");\n  }\n  return true;\n}\n"
+        "value": "type Result<T> = { success: true; value: T } | { success: false; error: string };\n\nfunction safeDivide(a: number, b: number): Result<number> {\n  if (b === 0) {\n    return { success: false, error: \"Division by zero\" };\n  }\n  return { success: true, value: a / b };\n}\n\nconst result = safeDivide(10, 0);\nif (result.success) {\n  console.log('Result:', result.value);\n} else {\n  console.error('Error:', result.error);\n}"
       },
       {
         "type": "paragraph",
-        "value": "When calling this function, you can catch the specific ValidationError to handle it differently from other errors."
+        "value": "### 3. Creating Custom Error Classes\nFor larger systems, defining custom error classes helps identify specific problems and handle them differently based on error types."
       },
       {
         "type": "code",
-        "value": "try {\n  validateUsername('Jo');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation failed:', error.message);\n  } else {\n    console.error('Unexpected error:', error);\n  }\n}\n"
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction validateAge(age: number) {\n  if (age < 0 || age > 150) {\n    throw new ValidationError('Age must be between 0 and 150.');\n  }\n  return true;\n}\n\ntry {\n  validateAge(-5);\n} catch (err) {\n  if (err instanceof ValidationError) {\n    console.warn('Validation failed:', err.message);\n  } else {\n    console.error('Unknown error:', err);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Using custom error classes helps you clearly identify and respond to different error types in your applications. You can create multiple custom error classes tailored to your application's needs, improving debugging and error management."
+        "value": "### 4. Using Async/Await with Proper Error Handling\nWhen dealing with asynchronous operations, always handle errors by using try/catch blocks around await calls or by handling promise rejections."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData(url: string) {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Fetch error:', error);\n    return null;\n  }\n}\n\nfetchData('https://api.example.com/data');"
       },
       {
         "type": "paragraph",
-        "value": "In summary, mastering error handling with custom error classes in TypeScript leads to cleaner and more maintainable code that handles edge cases gracefully."
+        "value": "### Summary\nBy applying these beginner-friendly error handling strategies—try/catch blocks, Result types, custom errors, and proper async handling—you improve application robustness and scalability. These patterns help pinpoint and manage errors effectively, leading to cleaner and more maintainable TypeScript code."
       }
     ]
   },
   {
-    "slug": "python-stock-market-data-visualizer-matplotlib",
-    "title": "Creating a Python-Based Stock Market Data Visualizer Using Matplotlib",
+    "slug": "designing-scalable-microservices-with-python-and-grpc",
+    "title": "Designing Scalable Microservices with Python and gRPC: A Step-by-Step Guide",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to build a simple and effective stock market data visualizer in Python using Matplotlib, perfect for beginners interested in financial data visualization.",
-    "videoUrl": "https://www.youtube.com/watch?v=m_kkCd7oXKA",
+    "description": "Learn how to design scalable microservices using Python and gRPC with this beginner-friendly, step-by-step tutorial covering installation, service definition, and communication.",
+    "videoUrl": "https://www.youtube.com/watch?v=hVrwuMnCtok",
     "content": [
       {
         "type": "paragraph",
-        "value": "Visualizing stock market data can help you understand trends and make better investment decisions. In this tutorial, we'll create a beginner-friendly Python program to visualize stock prices using the popular Matplotlib library. We'll fetch data, process it, and display it in an easy-to-read plot."
+        "value": "Microservices have become a popular architectural style for building scalable and maintainable applications. Using Python with gRPC is an excellent way to create fast and efficient microservices. gRPC is a high-performance, open-source RPC framework that uses Protocol Buffers as its interface definition language. This tutorial will guide you through designing simple yet scalable microservices using Python and gRPC."
       },
       {
         "type": "paragraph",
-        "value": "First, you need to install two packages: `yfinance` to fetch stock data and `matplotlib` for plotting. You can install them using pip:"
+        "value": "### Step 1: Install necessary packages\nFirst, you need to install gRPC tools and protobuf compiler. Run the following command in your terminal:"
       },
       {
         "type": "code",
-        "value": "pip install yfinance matplotlib"
+        "value": "pip install grpcio grpcio-tools"
       },
       {
         "type": "paragraph",
-        "value": "Now, let's create a Python script that downloads historical stock data and visualizes the closing price over time."
+        "value": "### Step 2: Define your service using Protocol Buffers\nCreate a file named `helloworld.proto`. This file will describe the service and the messages exchanged between client and server."
       },
       {
         "type": "code",
-        "value": "import yfinance as yf\nimport matplotlib.pyplot as plt\n\n# Define the stock ticker symbol and period\nticker = \"AAPL\"  # Apple Inc.\nperiod = \"6mo\"   # Last 6 months\n\n# Download historical data\nstock_data = yf.download(ticker, period=period)\n\n# Check if data is not empty\nif stock_data.empty:\n    print(f\"No data found for ticker {ticker}.\")\nelse:\n    # Plot the closing price\n    plt.figure(figsize=(10, 5))\n    plt.plot(stock_data.index, stock_data[\"Close\"], label=\"Close Price\")\n    plt.title(f\"{ticker} Stock Closing Prices - Last 6 Months\")\n    plt.xlabel(\"Date\")\n    plt.ylabel(\"Price (USD)\")\n    plt.legend()\n    plt.grid(True)\n    plt.show()"
+        "value": "syntax = \"proto3\";\n\npackage helloworld;\n\nservice Greeter {\n  rpc SayHello (HelloRequest) returns (HelloReply) {}\n}\n\nmessage HelloRequest {\n  string name = 1;\n}\n\nmessage HelloReply {\n  string message = 1;\n}"
       },
       {
         "type": "paragraph",
-        "value": "Let's break down the script:\n- We import `yfinance` and `matplotlib.pyplot`.\n- Set the ticker symbol to 'AAPL' (Apple Inc.) and period to 6 months.\n- Use `yf.download()` to get historical stock data.\n- Check if data is available.\n- Plot the closing prices using Matplotlib and display the graph."
+        "value": "### Step 3: Generate Python code from the `.proto` file\nUse the following command to generate Python classes for your service and messages:"
+      },
+      {
+        "type": "code",
+        "value": "python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. helloworld.proto"
       },
       {
         "type": "paragraph",
-        "value": "You can change the `ticker` variable to analyze different companies (e.g., \"MSFT\" for Microsoft, \"TSLA\" for Tesla). Also, adjusting the `period` (e.g., \"1mo\", \"1y\") lets you explore different time frames."
+        "value": "This creates two files: `helloworld_pb2.py` (message classes) and `helloworld_pb2_grpc.py` (service classes)."
       },
       {
         "type": "paragraph",
-        "value": "This basic visualizer helps you get familiar with financial data and simple plotting in Python. From here, you can enhance the visualizer by adding other metrics like volume, moving averages, or multiple stocks comparison."
+        "value": "### Step 4: Implement the gRPC server\nCreate a file named `server.py`. This server will implement the Greeter service and handle incoming requests."
+      },
+      {
+        "type": "code",
+        "value": "from concurrent import futures\nimport grpc\nimport helloworld_pb2\nimport helloworld_pb2_grpc\n\nclass Greeter(helloworld_pb2_grpc.GreeterServicer):\n    def SayHello(self, request, context):\n        return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)\n\ndef serve():\n    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))\n    helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)\n    server.add_insecure_port('[::]:50051')\n    server.start()\n    print('Server started on port 50051')\n    server.wait_for_termination()\n\nif __name__ == '__main__':\n    serve()"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Implement the gRPC client\nCreate a file named `client.py`. This client will communicate with the server using the Greeter service."
+      },
+      {
+        "type": "code",
+        "value": "import grpc\nimport helloworld_pb2\nimport helloworld_pb2_grpc\n\ndef run():\n    with grpc.insecure_channel('localhost:50051') as channel:\n        stub = helloworld_pb2_grpc.GreeterStub(channel)\n        response = stub.SayHello(helloworld_pb2.HelloRequest(name='World'))\n        print('Greeter client received:', response.message)\n\nif __name__ == '__main__':\n    run()"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Run and test your microservice\nStart the server first by running:\n\nbash\npython server.py\n\n\nThen, run the client in another terminal:\n\nbash\npython client.py\n\n\nYou should see the message `Greeter client received: Hello, World!` printed out."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices for Scalability\n- Use thread pools or asynchronous gRPC servers to handle many requests concurrently.\n- Split your application into smaller microservices with clear responsibilities.\n- Use service discovery and load balancing for distributed microservices.\n- Implement retries and error handling to make your services more robust.\n\nBy following these steps and best practices, you can start building scalable microservices with Python and gRPC efficiently."
       }
     ]
   },
   {
-    "slug": "understanding-python-exceptions-beginners-error-handling",
-    "title": "Understanding Python Exceptions: A Beginner's Guide to Error Handling",
+    "slug": "understanding-python-tracebacks-a-beginners-guide-to-debugging",
+    "title": "Understanding Python Tracebacks: A Beginner's Guide to Debugging",
     "language": "python",
     "type": "errors",
-    "description": "Learn the basics of Python exceptions and how to handle errors gracefully with beginner-friendly examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=NIWwJbo-9_8",
+    "description": "Learn how to read and understand Python tracebacks to debug your code effectively. A beginner-friendly introduction to error messages and fixing issues.",
+    "videoUrl": "https://www.youtube.com/watch?v=ASz9WPpqUNg",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you start writing Python programs, you might encounter errors that stop your code from running. These errors are called exceptions. Understanding how to handle exceptions is important because it helps your program run smoothly, even when something unexpected happens."
+        "value": "When you're learning Python, encountering errors is part of the journey. One of the most helpful tools for debugging in Python is the traceback. A traceback is a report showing the sequence of function calls that led to the error. Understanding how to read tracebacks can save you time and frustration by helping you identify exactly where your code went wrong."
       },
       {
         "type": "paragraph",
-        "value": "In Python, exceptions are raised when the program runs into an error. For example, trying to divide by zero or accessing a file that doesn't exist will raise an exception. Without proper handling, your program will crash. Let's see how you can catch and handle these errors."
+        "value": "Let's look at a simple example that generates an error and examine its traceback."
       },
       {
         "type": "code",
-        "value": "try:\n    number = int(input(\"Enter a number to divide 10 by: \"))\n    result = 10 / number\n    print(f\"Result is {result}\")\nexcept ZeroDivisionError:\n    print(\"Error: You can't divide by zero!\")\nexcept ValueError:\n    print(\"Error: That was not a valid number!\")"
+        "value": "def divide(a, b):\n    return a / b\n\nresult = divide(5, 0)"
       },
       {
         "type": "paragraph",
-        "value": "In the code above, the try block contains code that might raise exceptions. If the user enters zero, a ZeroDivisionError occurs. If the input is not a number, a ValueError is raised. The except blocks catch these errors and print friendly messages instead of crashing."
+        "value": "Running this code will give an error, because dividing by zero is not allowed in Python."
       },
       {
         "type": "paragraph",
-        "value": "You can also use a general except block to catch any kind of exception, but it is better to handle specific exceptions when possible:"
+        "value": "The traceback might look like this:"
       },
       {
         "type": "code",
-        "value": "try:\n    file = open('example.txt', 'r')\n    content = file.read()\n    print(content)\n    file.close()\nexcept FileNotFoundError:\n    print(\"Error: The file was not found.\")\nexcept Exception as e:\n    print(f\"An unexpected error occurred: {e}\")"
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 4, in <module>\n    result = divide(5, 0)\n  File \"example.py\", line 2, in divide\n    return a / b\nZeroDivisionError: division by zero"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the code tries to open a file called \"example.txt\". If the file is missing, a FileNotFoundError is raised and handled with a clear message. The general Exception block catches any other error, printing a useful message with the error details."
+        "value": "Let's break down the traceback message:"
       },
       {
         "type": "paragraph",
-        "value": "Finally, you can use the else and finally blocks with try-except to make your code more robust:"
+        "value": "- The first line tells you this is a traceback of the most recent call last.\n- Next lines show where the error happened: the file name (example.py), the line number, and the exact code line.\n- The last line tells you the type of error (ZeroDivisionError) and a brief description (division by zero)."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, you need to make sure that the second parameter (the divisor) is not zero. Here's an improved version:"
       },
       {
         "type": "code",
-        "value": "try:\n    number = int(input(\"Enter a number: \"))\n    result = 10 / number\nexcept ZeroDivisionError:\n    print(\"Can't divide by zero.\")\nexcept ValueError:\n    print(\"Invalid input; please enter a number.\")\nelse:\n    print(f\"Success! The result is {result}\")\nfinally:\n    print(\"This always runs, no matter what.\")"
+        "value": "def divide(a, b):\n    if b == 0:\n        return \"Error: Cannot divide by zero.\"\n    return a / b\n\nresult = divide(5, 0)\nprint(result)"
       },
       {
         "type": "paragraph",
-        "value": "The else block runs if no exceptions occur, while the finally block runs regardless of what happens, which is perfect for cleanup tasks."
+        "value": "With this check, you avoid the error and provide a helpful message instead."
       },
       {
         "type": "paragraph",
-        "value": "By using try, except, else, and finally, you can handle errors gracefully and make your Python programs more user-friendly and reliable."
+        "value": "In summary, when you see a traceback:\n- Look at the last line first to understand the type of error.\n- Check the preceding lines to find where in your code the error occurred.\n- Use this information to fix the problem."
+      },
+      {
+        "type": "paragraph",
+        "value": "Getting comfortable with tracebacks is an essential step in learning Python and becoming a better programmer."
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-in-sql-for-advanced-data-analysis",
-    "title": "Mastering Window Functions in SQL for Advanced Data Analysis",
+    "slug": "beginners-guide-to-sql-window-functions",
+    "title": "A Beginner’s Guide to SQL Window Functions with Practical Examples",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform advanced data analysis, including running totals, ranking, and moving averages, with easy-to-follow examples.",
+    "description": "Learn the basics of SQL window functions with easy-to-understand explanations and practical examples to enhance your data analysis skills.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions are powerful tools in SQL that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions, window functions do not reduce the number of rows returned. This tutorial introduces beginner-friendly concepts and examples to help you master window functions for advanced data analysis."
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across a set of table rows related to the current row without grouping the data. These functions are useful for tasks like running totals, ranking, moving averages, and more. This beginner-friendly guide will introduce you to some common window functions with practical SQL examples."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with the basic syntax of a window function. It typically includes the function name, an OVER() clause, and optionally partitioning and ordering instructions. Here's the general form:"
+        "value": "Unlike aggregate functions that collapse multiple rows into a single result, window functions perform calculations across a 'window' of rows while retaining the individual row details."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s start with a simple example. Suppose we have a sales table with columns: salesperson, sale_date, and amount."
       },
       {
         "type": "code",
-        "value": "FUNCTION_NAME(column) OVER (PARTITION BY column ORDER BY column)\n-- Example functions: ROW_NUMBER(), RANK(), SUM(), AVG()"
+        "value": "CREATE TABLE sales (\n  salesperson VARCHAR(50),\n  sale_date DATE,\n  amount INT\n);\n\nINSERT INTO sales (salesperson, sale_date, amount) VALUES\n('Alice', '2024-01-01', 100),\n('Alice', '2024-01-02', 150),\n('Bob', '2024-01-01', 200),\n('Bob', '2024-01-03', 50),\n('Alice', '2024-01-03', 200);"
       },
       {
         "type": "paragraph",
-        "value": "### Example Dataset\nSuppose we have a `sales` table tracking sales transactions:"
+        "value": "### Example 1: Using ROW_NUMBER() to Assign Unique Row Numbers\nROW_NUMBER() assigns a unique number to each row within the partition of a result set, ordered by specified columns."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(50),\n  sale_date DATE,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', '2024-01-01', 100),\n(2, 'Bob', '2024-01-01', 150),\n(3, 'Alice', '2024-01-02', 200),\n(4, 'Bob', '2024-01-03', 50),\n(5, 'Alice', '2024-01-03', 300);"
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS sale_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### 1. ROW_NUMBER() - Assigning Row Numbers\nThis function assigns a unique sequential number to rows within a partition. For example, let's rank sales transactions by date for each salesperson:"
+        "value": "This query assigns a \"sale_rank\" to each sale by the salesperson, ordered by the sale_date."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Calculating Running Total with SUM() OVER()\nYou can compute a cumulative sum of sales amounts for each salesperson ordered by date."
       },
       {
         "type": "code",
-        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY sale_date) AS sale_rank\nFROM sales;"
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### 2. RANK() - Handling Ties\nThe `RANK()` function assigns ranks to rows within a partition with gaps in ranking when ties occur. This is useful when you want to rank sales amounts per salesperson:"
+        "value": "The running_total column shows the cumulative sum of sales amounts up to the current sale for each salesperson."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Using RANK() to Show Tied Rankings\nRANK() works similar to ROW_NUMBER() but assigns the same rank to identical values with gaps in ranking numbers."
       },
       {
         "type": "code",
-        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS rank_amount\nFROM sales;"
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  RANK() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS amount_rank\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### 3. SUM() - Running Totals\nCompute a running total of sales amounts for each salesperson ordered by date:"
+        "value": "This query ranks each sale by amount in descending order for each salesperson. Sales with the same amount get the same rank."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 4: Getting Previous Row Value with LAG()\nLAG() lets you access previous rows without using self-joins."
       },
       {
         "type": "code",
-        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+        "value": "SELECT\n  salesperson,\n  sale_date,\n  amount,\n  LAG(amount, 1, 0) OVER (PARTITION BY salesperson ORDER BY sale_date) AS previous_amount\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### 4. AVG() - Moving Averages\nCalculate the 2-day moving average of sales amount per salesperson:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT \n  salesperson, \n  sale_date, \n  amount, \n  AVG(amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) AS moving_avg\nFROM sales;"
+        "value": "Here, previous_amount shows the amount from the previous sale of the same salesperson, or 0 if there is no previous sale."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nWindow functions can dramatically simplify complex queries that require ranking, running totals, or averages without grouping and losing detail. Experiment with these examples on your datasets to unlock advanced data insights with minimal effort."
+        "value": "### Wrap-Up\nWindow functions greatly enhance SQL's ability to perform complex calculations while preserving row-level detail. Practice using ROW_NUMBER(), RANK(), SUM() OVER(), and LAG() to better analyze your data."
       }
     ]
   },
   {
-    "slug": "comparing-null-handling-differences-across-popular-sql-databases",
-    "title": "Comparing NULL Handling Differences Across Popular SQL Databases",
+    "slug": "advanced-techniques-for-diagnosing-and-resolving-sql-query-optimization-anomalies",
+    "title": "Advanced Techniques for Diagnosing and Resolving SQL Query Optimization Anomalies",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how NULL values are handled differently across popular SQL databases like MySQL, PostgreSQL, and SQL Server, and avoid common errors with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "description": "Learn practical, beginner-friendly methods to identify and fix SQL query optimization issues, improving database performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=abA2xhkDhoQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "Handling NULL values in SQL can be tricky, especially when switching between different database systems. Although NULL represents missing or unknown data, the way various SQL databases treat NULLs can lead to unexpected results or errors if you're not careful. In this article, we'll explore how popular SQL databases like MySQL, PostgreSQL, and SQL Server differ in NULL handling and how to write queries that work reliably across systems."
+        "value": "SQL queries sometimes behave unexpectedly slow despite being well-written. These anomalies in query optimization can be frustrating and affect application performance. This article guides beginners through advanced yet easy-to-understand techniques to diagnose and resolve such issues."
       },
       {
         "type": "paragraph",
-        "value": "First, it's important to understand that NULL is not the same as an empty string or zero. It is an unknown or missing value. This means standard equality operators (=, !=) do not work as expected with NULLs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Consider the following example, which attempts to check if a column contains NULL using the equality operator:"
+        "value": "First, understand the query execution plan. Most SQL databases provide an EXPLAIN or EXPLAIN ANALYZE command that shows how the query will be executed or was executed. This reveals if indexes are used or if the query performs full table scans."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
+        "value": "EXPLAIN ANALYZE\nSELECT * FROM orders WHERE customer_id = 123;"
       },
       {
         "type": "paragraph",
-        "value": "This query will not return any rows in any popular SQL database because `= NULL` does not work. Instead, you must use the `IS NULL` predicate to test for NULL values:"
+        "value": "Look for any sequential scans or large number of rows being processed. These can indicate missing or ineffective indexes. Creating an index on columns in the WHERE clause often improves performance:"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
       },
       {
         "type": "paragraph",
-        "value": "Now, let's look at some important differences across databases when dealing with NULLs."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Comparison Operators and NULL Behavior"
-      },
-      {
-        "type": "paragraph",
-        "value": "In general, operations like `=`, `<>`, `<`, `>` involving NULL will result in UNKNOWN, which functions like FALSE in WHERE clauses. However, some databases handle this logic subtly differently."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, in PostgreSQL and SQL Server, the following query returns zero rows:"
+        "value": "Another common cause of anomalies is outdated statistics. SQL optimizers depend on statistics to choose the best plan. Running commands to update statistics ensures the optimizer has accurate data."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE manager_id <> 5;"
+        "value": "ANALYZE orders;"
       },
       {
         "type": "paragraph",
-        "value": "This is because if `manager_id` is NULL, the condition `manager_id <> 5` evaluates to UNKNOWN and the row is excluded. In MySQL, `NULL <> 5` also evaluates to NULL, which behaves similarly by excluding rows."
+        "value": "Check for parameter sniffing problems, where SQL Server reuses a query plan optimized for specific parameters but performs poorly with others. Using query hints or forcing parameterization can sometimes help."
       },
       {
         "type": "paragraph",
-        "value": "### 2. NULL Handling in GROUP BY and ORDER BY"
+        "value": "Also, consider rewriting complex queries that have many joins or subqueries. Breaking them into simpler steps or using temporary tables can make execution plans more efficient."
       },
       {
         "type": "paragraph",
-        "value": "In GROUP BY clauses, NULLs are treated as equal values across all major databases, so all rows with NULL in the grouping column fall under the same group."
+        "value": "Finally, monitor server resource usage and locks that can indirectly affect query performance. Sometimes the query is fine, but contention or CPU limits cause delays."
       },
       {
         "type": "paragraph",
-        "value": "When sorting results (ORDER BY), some databases place NULLs first, while others place them last. For instance, PostgreSQL places NULLs last by default when sorting ascending, while Oracle places NULLs first."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can explicitly control NULL sorting in PostgreSQL and Oracle using `NULLS FIRST` or `NULLS LAST`, but this syntax is not supported in all databases."
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM employees ORDER BY manager_id ASC NULLS FIRST;"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Functions and NULL"
-      },
-      {
-        "type": "paragraph",
-        "value": "Functions like `COALESCE()` work consistently across popular databases and are very useful for handling NULL values. `COALESCE()` returns the first non-NULL argument."
-      },
-      {
-        "type": "code",
-        "value": "SELECT employee_id, COALESCE(manager_id, 0) AS manager_id_fixed FROM employees;"
-      },
-      {
-        "type": "paragraph",
-        "value": "In contrast, other functions like `NVL()` are only available in Oracle, so prefer `COALESCE()` for cross-DB compatibility."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary Tips for Working with NULLs Across SQL Databases"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Always use `IS NULL` and `IS NOT NULL` to test for NULL values, never `= NULL` or `<> NULL`.\n- Use `COALESCE()` to provide default values when NULLs might cause issues.\n- Be aware of how NULLs sort by default in your database and use explicit `NULLS FIRST`/`LAST` if supported.\n- Remember that NULL comparisons result in UNKNOWN, excluding rows from WHERE clause results.\n- Test queries in your specific SQL environment since syntax support and behavior can differ slightly."
-      },
-      {
-        "type": "paragraph",
-        "value": "Understanding NULL handling nuances can save you from unexpected bugs and errors in your SQL queries. Keep these differences in mind when writing or porting SQL code to different database systems."
+        "value": "By following these practical steps—examining execution plans, adding indexes, updating statistics, addressing parameter sniffing, simplifying queries, and monitoring resources—beginners can effectively diagnose and fix SQL query optimization anomalies."
       }
     ]
   }
