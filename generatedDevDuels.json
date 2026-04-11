@@ -1,178 +1,175 @@
 [
   {
-    "slug": "fix-the-bug-in-the-multithreaded-singleton-logger-implementation",
-    "title": "Fix the Bug in the Multithreaded Singleton Logger Implementation",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Identify and fix the concurrency bug in a classic thread-safe Singleton Logger class in C++. The provided code attempts lazy initialization with double-checked locking but contains subtle issues that may cause race conditions or undefined behavior in a multithreaded environment.",
-    "prompt": "The following C++ code implements a Singleton Logger intended to be thread-safe using double-checked locking. However, the current implementation can fail when accessed concurrently by multiple threads. Your task is to identify and fix the concurrency issues in this code so that the singleton instance is correctly initialized exactly once, without data races or undefined behavior. You must preserve lazy initialization and avoid any unnecessary locking after the instance is created.",
+    "slug": "build-a-sql-function-to-find-top-customers-by-total-spend",
+    "title": "Build a SQL Function to Find Top Customers by Total Spend",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "queries",
+    "description": "Create a SQL scalar function that calculates the top N customers based on their total purchase amount from sales data.",
+    "prompt": "Write a SQL function called get_top_customers that accepts one integer parameter 'top_n'. This function should return a result set of the top 'top_n' customers sorted by their total spending in descending order. The function will use two tables: 'customers' (with columns customer_id, name) and 'orders' (with columns order_id, customer_id, order_amount). Your function should join these tables and aggregate the total spent by each customer.",
     "guidance": [
-      "Review the double-checked locking pattern and understand why naive implementations can fail.",
-      "Check for memory visibility issues caused by improper usage of concurrency primitives.",
-      "Consider using std::atomic or C++11 features to safely publish the singleton instance."
+      "Use JOIN to combine the customers and orders tables.",
+      "Aggregate order_amount using SUM grouped by customer_id.",
+      "Order the results by the total spending in descending order and limit to 'top_n'."
     ],
     "hints": [
-      "The instance pointer needs to be atomic or protected to prevent reading torn or stale values.",
-      "Using std::call_once with a std::once_flag is a simpler and safer way to implement thread-safe initialization.",
-      "Without proper memory ordering or synchronization, other threads might see a partially constructed object."
+      "Remember to use GROUP BY customer_id in your query to calculate sums correctly.",
+      "Use ORDER BY and LIMIT clauses to restrict output to the top N customers.",
+      "Consider using appropriate window functions if your SQL dialect supports them."
     ],
-    "starterCode": "#include <iostream>\n#include <mutex>\n\nclass Logger {\nprivate:\n    static Logger* instance;\n    static std::mutex mtx;\n    Logger() { std::cout << \"Logger initialized\" << std::endl; }\n    ~Logger() {}\n\npublic:\n    Logger(const Logger&) = delete;\n    Logger& operator=(const Logger&) = delete;\n\n    static Logger* getInstance() {\n        if (instance == nullptr) {\n            std::lock_guard<std::mutex> lock(mtx);\n            if (instance == nullptr) {\n                instance = new Logger();\n            }\n        }\n        return instance;\n    }\n\n    void log(const std::string& message) {\n        std::cout << message << std::endl;\n    }\n};\n\nLogger* Logger::instance = nullptr;\nstd::mutex Logger::mtx;\n\nint main() {\n    Logger* logger1 = Logger::getInstance();\n    logger1->log(\"First log message.\");\n\n    Logger* logger2 = Logger::getInstance();\n    logger2->log(\"Second log message.\");\n\n    std::cout << \"Instances equal: \" << (logger1 == logger2 ? \"true\" : \"false\") << std::endl;\n    return 0;\n}\n",
-    "expectedOutput": "Logger initialized\nFirst log message.\nSecond log message.\nInstances equal: true",
+    "starterCode": "CREATE FUNCTION get_top_customers(top_n INT)\nRETURNS TABLE(\n   customer_id INT,\n   customer_name VARCHAR(255),\n   total_spent DECIMAL(10,2)\n)\nAS\nRETURN (\n   -- Fill your query here\n);",
+    "expectedOutput": "A table listing customer_id, customer_name, and total_spent for the top N customers by total spending, ordered descending by total_spent.",
     "concepts": [
-      "thread safety",
-      "singleton pattern",
-      "double-checked locking",
-      "C++11 concurrency"
+      "JOIN",
+      "GROUP BY",
+      "AGGREGATION",
+      "FUNCTION CREATION"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
   },
   {
-    "slug": "develop-a-high-performance-concurrent-web-crawler-in-c",
-    "title": "Develop a High-Performance Concurrent Web Crawler in C++",
-    "language": "cpp",
+    "slug": "design-and-query-a-scalable-e-commerce-order-management-schema",
+    "title": "Design and Query a Scalable E-commerce Order Management Schema",
+    "language": "sql",
     "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build an advanced mini-project that involves designing and implementing a multithreaded web crawler in C++ capable of efficiently scanning and indexing web pages with rate limiting and duplicate URL detection.",
-    "prompt": "Create a C++ program that takes a seed URL and crawls the web pages connected through hyperlinks up to a specified depth. Your crawler must support concurrency to speed up retrieval, avoid revisiting the same URL multiple times, and respect a rate limit of requests per domain to prevent server overload. Collected URLs and their page titles should be stored in a thread-safe data structure and printed out once crawling finishes.\n\nRequirements:\n1. Accept a seed URL and crawl depth as input.\n2. Use multiple threads to fetch pages concurrently.\n3. Implement a mechanism to detect and skip duplicate URLs.\n4. Enforce per-domain rate limiting (e.g. max 1 request per second per domain).\n5. Extract the page title (from the <title> HTML tag) for indexing with the URL.\n6. Ensure all shared data structures are safely accessed in a concurrent environment.\n7. Output all collected URLs with their titles in any order after crawling completes.",
+    "category": "data-modeling",
+    "description": "Build a normalized SQL schema to efficiently model orders, customers, products, and payments for a growing e-commerce system. Write an optimized SQL query to report monthly revenue per product category, including handling edge cases such as refunds and partial payments.",
+    "prompt": "You are tasked with designing a robust, normalized SQL schema to support a large e-commerce platform's order management system. The data model should include tables for customers, products (grouped by categories), orders, order items, and payments (which may involve multiple partial payments and refunds). After creating the schema, write an optimized SQL query that returns total monthly revenue aggregated by product category, accounting for refunds and partial payments in the calculation. Your schema should support scalability and flexibility for additions such as new payment methods or promotions.\n\nRequirements:\n1. Create SQL tables with appropriate keys and constraints reflecting the entities and their relationships.\n2. Ensure that an order can contain multiple products, and payments can be partial or refunds.\n3. Write an SQL query that outputs, for each month and each product category, the net revenue (payments minus refunds) generated.\n\nProvide the CREATE TABLE statements followed by the query to retrieve the monthly revenue by product category.",
     "guidance": [
-      "Use a thread-safe queue or work-stealing queue to manage URLs to visit across threads.",
-      "Implement a hash set or map with mutex protection or concurrent containers to track visited URLs and avoid duplicates.",
-      "Use a timer or timestamp map to enforce rate limiting per domain before making HTTP requests.",
-      "Leverage an HTTP client library such as libcurl or boost::asio with async calls for fetching page content."
+      "Focus first on designing a normalized and scalable schema representing entities and their relationships with primary and foreign keys.",
+      "Consider how to model payments separately to allow multiple partial payments and refunds for one order.",
+      "In your query, use appropriate JOINs and aggregation to calculate monthly revenue grouped by product category, carefully subtracting refunds."
     ],
     "hints": [
-      "Parsing HTML can be simplified by searching for <title> tags with string manipulation or a lightweight HTML parser like Gumbo or pugixml.",
-      "Domain extraction from URLs can be performed by parsing the URL string or using existing URL parsing utilities.",
-      "Synchronization primitives like std::mutex, std::shared_mutex, or atomic flags will help manage concurrent access."
+      "A linking table is necessary between orders and products to model order items with quantities and prices.",
+      "Use a payment type or status field to distinguish refunds from standard payments.",
+      "Leverage date functions to group revenues by month in your final aggregation query."
     ],
-    "starterCode": "#include <iostream>\n#include <string>\n#include <thread>\n#include <queue>\n#include <unordered_set>\n#include <mutex>\n#include <condition_variable>\n// You may include additional libraries such as libcurl, regex, or parsers\n\nint main() {\n    std::cout << \"Enter seed URL and crawl depth:\\n\";\n    std::string seedUrl;\n    int maxDepth;\n    std::cin >> seedUrl >> maxDepth;\n\n    // TODO: Initialize shared structures for URLs, visited set, synchronization primitives\n    // TODO: Start worker threads to process URLs concurrently\n    // TODO: Crawl pages, apply rate limiting, extract titles, and collect results\n\n    // TODO: Print all collected URLs with their titles\n    return 0;\n}\n",
-    "expectedOutput": "URL: http://example.com\nTitle: Example Domain\nURL: http://example.com/about\nTitle: About Example\n... (all crawled URLs with extracted titles)",
+    "starterCode": "/* Create tables skeleton */\nCREATE TABLE Customers (\n    customer_id INT PRIMARY KEY,\n    name VARCHAR(100),\n    email VARCHAR(100) UNIQUE\n);\n\nCREATE TABLE Categories (\n    category_id INT PRIMARY KEY,\n    category_name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Products (\n    product_id INT PRIMARY KEY,\n    product_name VARCHAR(100),\n    category_id INT,\n    price DECIMAL(10, 2),\n    FOREIGN KEY (category_id) REFERENCES Categories(category_id)\n);\n\nCREATE TABLE Orders (\n    order_id INT PRIMARY KEY,\n    customer_id INT,\n    order_date DATE,\n    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)\n);\n\nCREATE TABLE OrderItems (\n    order_item_id INT PRIMARY KEY,\n    order_id INT,\n    product_id INT,\n    quantity INT,\n    item_price DECIMAL(10, 2),\n    FOREIGN KEY (order_id) REFERENCES Orders(order_id),\n    FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);\n\nCREATE TABLE Payments (\n    payment_id INT PRIMARY KEY,\n    order_id INT,\n    payment_date DATE,\n    amount DECIMAL(10, 2),\n    payment_type VARCHAR(50), -- e.g., 'payment', 'refund'\n    FOREIGN KEY (order_id) REFERENCES Orders(order_id)\n);\n\n/* Write query here */",
+    "expectedOutput": "month     | category_name | net_revenue\n----------------------------------------\n2024-01   | Electronics   | 150000.00\n2024-01   | Apparel       | 92500.50\n2024-02   | Books         | 18000.75\n... (and so on for each month/category available)",
     "concepts": [
-      "multithreading",
-      "concurrency",
-      "network programming",
-      "data structures",
-      "rate limiting"
+      "database normalization",
+      "complex data modeling",
+      "SQL joins and aggregations",
+      "handling partial payments and refunds"
     ],
-    "estimatedTime": "120 minutes",
+    "estimatedTime": "60 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-a-scalable-url-shortener-service-in-python",
-    "title": "Build a Scalable URL Shortener Service in Python",
-    "language": "python",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Create a mini-project to develop a URL shortener service that generates unique short URLs, supports custom aliases, and includes analytics features such as click tracking and expiration dates.",
-    "prompt": "Create a Python-based URL shortener service that supports the following features: 1) Generating unique shortened URLs from original long URLs; 2) Allow users to specify custom aliases for the shortened URLs where possible; 3) Store all URL mappings and track the number of times each short URL is accessed; 4) Implement optional expiration dates after which the shortened URLs become inactive; 5) Provide functions to resolve shortened URLs back to their original URLs and retrieve click statistics. Your implementation should optimize for scalability and handle potential collision in alias generation gracefully.",
-    "guidance": [
-      "Use hashing or base encoding techniques to generate compact and unique short codes.",
-      "Maintain a persistent mapping (in-memory dictionary or file/db-based for persistence) between short codes and original URLs, along with metadata such as click counts and expiration.",
-      "Ensure thread-safe operations if you simulate concurrent accesses or updates.",
-      "Implement clean error handling for cases such as alias conflicts, expired links, or non-existent short URLs."
-    ],
-    "hints": [
-      "Consider using base62 encoding (alphanumeric characters) for compact URL code generation.",
-      "For custom aliases, check if the alias already exists before creating a new short URL.",
-      "Store timestamps to manage expiration and periodically clean up expired URLs from storage."
-    ],
-    "starterCode": "import time\n\nclass URLShortener:\n    def __init__(self):\n        self.url_map = {}\n        self.clicks = {}\n        self.expirations = {}\n        self.counter = 1\n        self.alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'\n\n    def _encode(self, num):\n        # encode integer to base62 string\n        if num == 0:\n            return self.alphabet[0]\n        arr = []\n        base = len(self.alphabet)\n        while num:\n            num, rem = divmod(num, base)\n            arr.append(self.alphabet[rem])\n        arr.reverse()\n        return ''.join(arr)\n\n    def shorten(self, original_url, custom_alias=None, expire_in_seconds=None):\n        pass  # Implement this\n\n    def resolve(self, short_url):\n        pass  # Implement this\n\n    def get_clicks(self, short_url):\n        pass  # Implement this\n\n    def _is_expired(self, short_url):\n        pass  # Implement this",
-    "expectedOutput": "short_url = shortener.shorten('https://www.example.com/some/long/path')\nprint(short_url)  # e.g. \"b9\"\nprint(shortener.resolve(short_url))  # 'https://www.example.com/some/long/path'\nprint(shortener.get_clicks(short_url))  # 1 after resolve call\n\ncustom_short = shortener.shorten('https://www.example.org', custom_alias='exOrg')\nprint(custom_short)  # 'exOrg'\nprint(shortener.resolve('exOrg'))  # 'https://www.example.org'",
-    "concepts": [
-      "Hashing and encoding techniques",
-      "Data structures and mappings",
-      "State management and persistence",
-      "Concurrency and collision handling"
-    ],
-    "estimatedTime": "90 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-a-repetitive-sql-query-using-aliases-and-simplified-where-clause",
-    "title": "Refactor a Repetitive SQL Query Using Aliases and Simplified WHERE Clause",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "optimization",
-    "description": "Optimize a beginner-level SQL query by refactoring repetitive conditions and using table aliases for clarity. The query fetches all employees from the 'employees' table who belong to certain departments and have a salary above a threshold.",
-    "prompt": "Below is a SQL query that returns employees from the 'employees' table who work in either the 'Sales' or 'Marketing' department and earn more than 50000. The query is correct but overly repetitive and hard to read. Your task is to refactor this query to improve readability and maintain the same output without changing its behavior.",
-    "guidance": [
-      "Use table aliases to shorten table names and improve readability.",
-      "Combine the department conditions using the IN clause instead of multiple OR statements.",
-      "Keep the same condition on salary to filter employees earning above 50000."
-    ],
-    "hints": [
-      "Consider replacing OR conditions on the same column with the IN operator.",
-      "Assign a short alias like `e` to the 'employees' table to reduce repetition."
-    ],
-    "starterCode": "SELECT employees.id, employees.name, employees.department, employees.salary\nFROM employees\nWHERE employees.department = 'Sales'\n   OR employees.department = 'Marketing'\n  AND employees.salary > 50000;",
-    "expectedOutput": "A result set listing employees working in 'Sales' or 'Marketing' departments earning more than 50000, identical to the original query.",
-    "concepts": [
-      "SQL SELECT statement",
-      "WHERE clause conditions",
-      "Table aliases",
-      "IN operator"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-messy-javascript-array-processing-function",
-    "title": "Refactor Messy JavaScript Array Processing Function",
-    "language": "javascript",
+    "slug": "create-a-function-to-merge-two-sorted-arrays-without-duplicates",
+    "title": "Create a Function to Merge Two Sorted Arrays Without Duplicates",
+    "language": "cpp",
     "difficulty": "intermediate",
-    "category": "code-quality",
-    "description": "Clean up and improve the readability and efficiency of a JavaScript function that processes an array of user objects. The function currently contains redundant code, unclear variable names, and inefficient looping that you need to refactor without changing its output.",
-    "prompt": "You are given a function that takes an array of user objects and returns an array of usernames for users who are active and over 18 years old. The existing code works correctly but is cluttered and inefficient. Refactor the function to make it more readable, concise, and performant without altering the output.\n\nUsers array example:\n[\n  { username: 'alice', age: 22, isActive: true },\n  { username: 'bob', age: 17, isActive: true },\n  { username: 'carol', age: 19, isActive: false }\n]\n\nRefactor the code provided in starterCode to achieve the same result in a cleaner way.",
+    "category": "functions",
+    "description": "Build a C++ function that takes two sorted integer arrays and returns a new sorted array containing all unique elements from both arrays, effectively merging them without duplicates.",
+    "prompt": "Write a function named mergeSortedUnique that accepts two vectors of integers (both sorted in ascending order) and returns a single vector sorted in ascending order containing all unique elements from both input vectors. The output vector should not contain any duplicate elements even if duplicates exist in the input arrays. You can only use standard C++ libraries.",
     "guidance": [
-      "Use array higher-order functions like filter and map to simplify the code.",
-      "Improve variable naming for clarity and follow JavaScript conventions.",
-      "Remove unnecessary variables and redundant checks."
+      "Iterate through both vectors simultaneously with two indices to merge them efficiently given they are sorted.",
+      "Avoid adding duplicates to the resulting vector by comparing the current element with the last element inserted.",
+      "Handle cases when one array is exhausted before the other."
     ],
     "hints": [
-      "Think about chaining array methods to avoid intermediate steps.",
-      "Avoid using traditional for loops when array methods can express the logic more declaratively.",
-      "Remember to keep the function's output unchanged after refactoring."
+      "Use two pointers or indices to traverse the arrays and compare elements.",
+      "Remember to check if the merged vector is empty before pushing elements to avoid out-of-range errors.",
+      "Consider edge cases like empty input vectors."
     ],
-    "starterCode": "function getActiveAdultUsernames(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    let user = users[i];\n    if (user.isActive === true) {\n      if (user.age > 18) {\n        result.push(user.username);\n      }\n    }\n  }\n  return result;\n}",
-    "expectedOutput": "getActiveAdultUsernames([{ username: 'alice', age: 22, isActive: true }, { username: 'bob', age: 17, isActive: true }, { username: 'carol', age: 19, isActive: false }]) // ['alice']",
+    "starterCode": "std::vector<int> mergeSortedUnique(const std::vector<int>& arr1, const std::vector<int>& arr2) {\n    std::vector<int> result;\n    // Your code here\n    return result;\n}",
+    "expectedOutput": "[1, 2, 3, 4, 5, 6, 7, 8]",
     "concepts": [
-      "array methods",
-      "code refactoring",
-      "variable naming",
+      "vectors",
+      "two-pointer technique",
+      "arrays",
       "conditional logic"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
   },
   {
-    "slug": "fix-bug-in-sql-query-aggregating-monthly-sales-with-incorrect-joins",
-    "title": "Fix Bug in SQL Query Aggregating Monthly Sales with Incorrect Joins",
-    "language": "sql",
+    "slug": "fix-the-memory-leak-in-a-recursive-fibonacci-with-memoization",
+    "title": "Fix the Memory Leak in a Recursive Fibonacci with Memoization",
+    "language": "python",
     "difficulty": "advanced",
     "category": "debugging",
-    "description": "You are provided with a buggy SQL query that attempts to calculate the total monthly sales per product category. The query currently returns incorrect totals due to join and aggregation mistakes. Your task is to identify and fix these bugs so the query outputs the correct aggregated sales for each category per month.",
-    "prompt": "The provided query is supposed to return total sales amount per product category grouped by month. However, it currently returns wrong totals because of incorrect JOIN conditions and aggregation placement. Fix the query so that it accurately sums sales amounts for each category by month.\n\nTables:\n- sales(sale_id, product_id, sale_date, quantity, unit_price)\n- products(product_id, category_id, product_name)\n- categories(category_id, category_name)\n\nFix the bugs in the query below:\n\nSELECT\n  c.category_name,\n  EXTRACT(YEAR FROM s.sale_date) AS sale_year,\n  EXTRACT(MONTH FROM s.sale_date) AS sale_month,\n  SUM(s.quantity) * s.unit_price AS total_sales\nFROM sales s\nLEFT JOIN products p ON s.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, sale_year, sale_month\nORDER BY sale_year, sale_month, c.category_name;",
+    "description": "Identify and fix the bug in a recursive Fibonacci function that uses memoization but causes unintended memory growth or incorrect results due to faulty cache handling.",
+    "prompt": "You're given a Python function that computes the nth Fibonacci number using recursion and memoization with a dictionary cache. However, the current implementation has a bug that causes either a memory leak or incorrect caching leading to wrong outputs for larger inputs. Fix the code so that the function correctly computes the Fibonacci numbers efficiently without causing excess memory use or incorrect caching.",
     "guidance": [
-      "Check the JOIN conditions and ensure they correctly link the tables without causing multiplication of rows.",
-      "Review the aggregation logic, especially how the total sales calculation is written within the SUM function.",
-      "Make sure the GROUP BY clause includes all non-aggregated selected columns or expressions."
+      "Analyze how the cache dictionary is initialized and used in the recursive calls.",
+      "Ensure the cache does not reset during recursion causing unnecessary recomputation or memory misuse.",
+      "Validate that the base cases and recursive conditions are handled correctly so the function terminates as expected."
     ],
     "hints": [
-      "Multiply quantity and unit_price before applying the SUM, not after.",
-      "Use INNER JOIN consistently if you want to exclude records without matching products or categories.",
-      "Alias the EXTRACT expressions in SELECT and use those aliases in GROUP BY for clarity."
+      "Check if the cache dictionary is being re-created inside the recursive function call.",
+      "Consider passing the cache dictionary as a default argument or using a helper function to maintain state.",
+      "Verify the function returns the memoized value correctly and stores it after computation."
     ],
-    "starterCode": "SELECT\n  c.category_name,\n  EXTRACT(YEAR FROM s.sale_date) AS sale_year,\n  EXTRACT(MONTH FROM s.sale_date) AS sale_month,\n  SUM(s.quantity) * s.unit_price AS total_sales\nFROM sales s\nLEFT JOIN products p ON s.product_id = p.product_id\nJOIN categories c ON p.category_id = c.category_id\nGROUP BY c.category_name, sale_year, sale_month\nORDER BY sale_year, sale_month, c.category_name;",
-    "expectedOutput": "category_name | sale_year | sale_month | total_sales\n---------------------------------------------------\nElectronics    | 2023      | 5          | 12500.00\nHome & Garden | 2023      | 5          | 8400.50\nToys          | 2023      | 5          | 4700.00\n... (and so on for each category and month)",
+    "starterCode": "def fibonacci(n, cache={}):\n    if n in cache:\n        return cache[n]\n    if n <= 1:\n        return n\n    cache = {}  # Bug: reinitializing cache inside recursion\n    cache[n] = fibonacci(n-1, cache) + fibonacci(n-2, cache)\n    return cache[n]",
+    "expectedOutput": "fibonacci(10) should return 55\nfibonacci(20) should return 6765",
     "concepts": [
-      "SQL JOINs",
-      "Aggregation functions",
-      "GROUP BY usage",
-      "Query debugging"
+      "recursion",
+      "memoization",
+      "mutable default arguments",
+      "debugging"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-calculate-average-salary-by-department",
+    "title": "Create a Function to Calculate Average Salary by Department",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Write an SQL function that calculates the average salary for a given department from an employee table.",
+    "prompt": "You have an Employees table with columns: EmployeeID, Department, and Salary. Write an SQL function named CalculateAvgSalary that takes a department name as input and returns the average salary of all employees in that department.",
+    "guidance": [
+      "Use the CREATE FUNCTION syntax supported by your SQL dialect.",
+      "Ensure the function accepts a department name as a parameter.",
+      "Use an aggregation query with AVG() to calculate the average salary.",
+      "Return the calculated average salary from the function."
+    ],
+    "hints": [
+      "You can use a SELECT statement inside the function to compute the average salary.",
+      "Use the WHERE clause to filter employees by the input department.",
+      "Remember to specify the return type for your function (e.g., FLOAT or DECIMAL)."
+    ],
+    "starterCode": "CREATE FUNCTION CalculateAvgSalary(dept_name VARCHAR) RETURNS FLOAT AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "If you call CalculateAvgSalary('Sales'), it should return the average salary of all employees in the Sales department.",
+    "concepts": [
+      "CREATE FUNCTION",
+      "AVG aggregate function",
+      "WHERE clause"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-function-to-calculate-factorial-more-cleanly",
+    "title": "Refactor a Function to Calculate Factorial More Cleanly",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the clarity and simplicity of a provided factorial function without changing its behavior. Practice writing clean and readable Python code.",
+    "prompt": "You are given a function that calculates the factorial of a number using a while loop and extra variables. Refactor the function to make it cleaner and more Pythonic, maintaining the same output, but removing unnecessary variables and improving readability. The function should return the factorial of the given non-negative integer.",
+    "guidance": [
+      "Keep the same functionality of computing the factorial.",
+      "Simplify variable usage and consider using a for loop if it improves readability.",
+      "Make sure the function is easy to understand at a glance."
+    ],
+    "hints": [
+      "Factorials can be computed cleanly using a for loop running from 1 up to the number.",
+      "Try to name variables descriptively or reduce them to just what is necessary."
+    ],
+    "starterCode": "def factorial(n):\n    if n == 0:\n        return 1\n    result = 1\n    i = 1\n    while i <= n:\n        result = result * i\n        i = i + 1\n    return result",
+    "expectedOutput": "factorial(5) returns 120",
+    "concepts": [
+      "functions",
+      "loops",
+      "variables",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ]

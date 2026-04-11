@@ -7204,5 +7204,178 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-a-sql-function-to-find-top-customers-by-total-spend",
+    "title": "Build a SQL Function to Find Top Customers by Total Spend",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "queries",
+    "description": "Create a SQL scalar function that calculates the top N customers based on their total purchase amount from sales data.",
+    "prompt": "Write a SQL function called get_top_customers that accepts one integer parameter 'top_n'. This function should return a result set of the top 'top_n' customers sorted by their total spending in descending order. The function will use two tables: 'customers' (with columns customer_id, name) and 'orders' (with columns order_id, customer_id, order_amount). Your function should join these tables and aggregate the total spent by each customer.",
+    "guidance": [
+      "Use JOIN to combine the customers and orders tables.",
+      "Aggregate order_amount using SUM grouped by customer_id.",
+      "Order the results by the total spending in descending order and limit to 'top_n'."
+    ],
+    "hints": [
+      "Remember to use GROUP BY customer_id in your query to calculate sums correctly.",
+      "Use ORDER BY and LIMIT clauses to restrict output to the top N customers.",
+      "Consider using appropriate window functions if your SQL dialect supports them."
+    ],
+    "starterCode": "CREATE FUNCTION get_top_customers(top_n INT)\nRETURNS TABLE(\n   customer_id INT,\n   customer_name VARCHAR(255),\n   total_spent DECIMAL(10,2)\n)\nAS\nRETURN (\n   -- Fill your query here\n);",
+    "expectedOutput": "A table listing customer_id, customer_name, and total_spent for the top N customers by total spending, ordered descending by total_spent.",
+    "concepts": [
+      "JOIN",
+      "GROUP BY",
+      "AGGREGATION",
+      "FUNCTION CREATION"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "design-and-query-a-scalable-e-commerce-order-management-schema",
+    "title": "Design and Query a Scalable E-commerce Order Management Schema",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "data-modeling",
+    "description": "Build a normalized SQL schema to efficiently model orders, customers, products, and payments for a growing e-commerce system. Write an optimized SQL query to report monthly revenue per product category, including handling edge cases such as refunds and partial payments.",
+    "prompt": "You are tasked with designing a robust, normalized SQL schema to support a large e-commerce platform's order management system. The data model should include tables for customers, products (grouped by categories), orders, order items, and payments (which may involve multiple partial payments and refunds). After creating the schema, write an optimized SQL query that returns total monthly revenue aggregated by product category, accounting for refunds and partial payments in the calculation. Your schema should support scalability and flexibility for additions such as new payment methods or promotions.\n\nRequirements:\n1. Create SQL tables with appropriate keys and constraints reflecting the entities and their relationships.\n2. Ensure that an order can contain multiple products, and payments can be partial or refunds.\n3. Write an SQL query that outputs, for each month and each product category, the net revenue (payments minus refunds) generated.\n\nProvide the CREATE TABLE statements followed by the query to retrieve the monthly revenue by product category.",
+    "guidance": [
+      "Focus first on designing a normalized and scalable schema representing entities and their relationships with primary and foreign keys.",
+      "Consider how to model payments separately to allow multiple partial payments and refunds for one order.",
+      "In your query, use appropriate JOINs and aggregation to calculate monthly revenue grouped by product category, carefully subtracting refunds."
+    ],
+    "hints": [
+      "A linking table is necessary between orders and products to model order items with quantities and prices.",
+      "Use a payment type or status field to distinguish refunds from standard payments.",
+      "Leverage date functions to group revenues by month in your final aggregation query."
+    ],
+    "starterCode": "/* Create tables skeleton */\nCREATE TABLE Customers (\n    customer_id INT PRIMARY KEY,\n    name VARCHAR(100),\n    email VARCHAR(100) UNIQUE\n);\n\nCREATE TABLE Categories (\n    category_id INT PRIMARY KEY,\n    category_name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Products (\n    product_id INT PRIMARY KEY,\n    product_name VARCHAR(100),\n    category_id INT,\n    price DECIMAL(10, 2),\n    FOREIGN KEY (category_id) REFERENCES Categories(category_id)\n);\n\nCREATE TABLE Orders (\n    order_id INT PRIMARY KEY,\n    customer_id INT,\n    order_date DATE,\n    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)\n);\n\nCREATE TABLE OrderItems (\n    order_item_id INT PRIMARY KEY,\n    order_id INT,\n    product_id INT,\n    quantity INT,\n    item_price DECIMAL(10, 2),\n    FOREIGN KEY (order_id) REFERENCES Orders(order_id),\n    FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);\n\nCREATE TABLE Payments (\n    payment_id INT PRIMARY KEY,\n    order_id INT,\n    payment_date DATE,\n    amount DECIMAL(10, 2),\n    payment_type VARCHAR(50), -- e.g., 'payment', 'refund'\n    FOREIGN KEY (order_id) REFERENCES Orders(order_id)\n);\n\n/* Write query here */",
+    "expectedOutput": "month     | category_name | net_revenue\n----------------------------------------\n2024-01   | Electronics   | 150000.00\n2024-01   | Apparel       | 92500.50\n2024-02   | Books         | 18000.75\n... (and so on for each month/category available)",
+    "concepts": [
+      "database normalization",
+      "complex data modeling",
+      "SQL joins and aggregations",
+      "handling partial payments and refunds"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-merge-two-sorted-arrays-without-duplicates",
+    "title": "Create a Function to Merge Two Sorted Arrays Without Duplicates",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Build a C++ function that takes two sorted integer arrays and returns a new sorted array containing all unique elements from both arrays, effectively merging them without duplicates.",
+    "prompt": "Write a function named mergeSortedUnique that accepts two vectors of integers (both sorted in ascending order) and returns a single vector sorted in ascending order containing all unique elements from both input vectors. The output vector should not contain any duplicate elements even if duplicates exist in the input arrays. You can only use standard C++ libraries.",
+    "guidance": [
+      "Iterate through both vectors simultaneously with two indices to merge them efficiently given they are sorted.",
+      "Avoid adding duplicates to the resulting vector by comparing the current element with the last element inserted.",
+      "Handle cases when one array is exhausted before the other."
+    ],
+    "hints": [
+      "Use two pointers or indices to traverse the arrays and compare elements.",
+      "Remember to check if the merged vector is empty before pushing elements to avoid out-of-range errors.",
+      "Consider edge cases like empty input vectors."
+    ],
+    "starterCode": "std::vector<int> mergeSortedUnique(const std::vector<int>& arr1, const std::vector<int>& arr2) {\n    std::vector<int> result;\n    // Your code here\n    return result;\n}",
+    "expectedOutput": "[1, 2, 3, 4, 5, 6, 7, 8]",
+    "concepts": [
+      "vectors",
+      "two-pointer technique",
+      "arrays",
+      "conditional logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-memory-leak-in-a-recursive-fibonacci-with-memoization",
+    "title": "Fix the Memory Leak in a Recursive Fibonacci with Memoization",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a recursive Fibonacci function that uses memoization but causes unintended memory growth or incorrect results due to faulty cache handling.",
+    "prompt": "You're given a Python function that computes the nth Fibonacci number using recursion and memoization with a dictionary cache. However, the current implementation has a bug that causes either a memory leak or incorrect caching leading to wrong outputs for larger inputs. Fix the code so that the function correctly computes the Fibonacci numbers efficiently without causing excess memory use or incorrect caching.",
+    "guidance": [
+      "Analyze how the cache dictionary is initialized and used in the recursive calls.",
+      "Ensure the cache does not reset during recursion causing unnecessary recomputation or memory misuse.",
+      "Validate that the base cases and recursive conditions are handled correctly so the function terminates as expected."
+    ],
+    "hints": [
+      "Check if the cache dictionary is being re-created inside the recursive function call.",
+      "Consider passing the cache dictionary as a default argument or using a helper function to maintain state.",
+      "Verify the function returns the memoized value correctly and stores it after computation."
+    ],
+    "starterCode": "def fibonacci(n, cache={}):\n    if n in cache:\n        return cache[n]\n    if n <= 1:\n        return n\n    cache = {}  # Bug: reinitializing cache inside recursion\n    cache[n] = fibonacci(n-1, cache) + fibonacci(n-2, cache)\n    return cache[n]",
+    "expectedOutput": "fibonacci(10) should return 55\nfibonacci(20) should return 6765",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "mutable default arguments",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-calculate-average-salary-by-department",
+    "title": "Create a Function to Calculate Average Salary by Department",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Write an SQL function that calculates the average salary for a given department from an employee table.",
+    "prompt": "You have an Employees table with columns: EmployeeID, Department, and Salary. Write an SQL function named CalculateAvgSalary that takes a department name as input and returns the average salary of all employees in that department.",
+    "guidance": [
+      "Use the CREATE FUNCTION syntax supported by your SQL dialect.",
+      "Ensure the function accepts a department name as a parameter.",
+      "Use an aggregation query with AVG() to calculate the average salary.",
+      "Return the calculated average salary from the function."
+    ],
+    "hints": [
+      "You can use a SELECT statement inside the function to compute the average salary.",
+      "Use the WHERE clause to filter employees by the input department.",
+      "Remember to specify the return type for your function (e.g., FLOAT or DECIMAL)."
+    ],
+    "starterCode": "CREATE FUNCTION CalculateAvgSalary(dept_name VARCHAR) RETURNS FLOAT AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "If you call CalculateAvgSalary('Sales'), it should return the average salary of all employees in the Sales department.",
+    "concepts": [
+      "CREATE FUNCTION",
+      "AVG aggregate function",
+      "WHERE clause"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-function-to-calculate-factorial-more-cleanly",
+    "title": "Refactor a Function to Calculate Factorial More Cleanly",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the clarity and simplicity of a provided factorial function without changing its behavior. Practice writing clean and readable Python code.",
+    "prompt": "You are given a function that calculates the factorial of a number using a while loop and extra variables. Refactor the function to make it cleaner and more Pythonic, maintaining the same output, but removing unnecessary variables and improving readability. The function should return the factorial of the given non-negative integer.",
+    "guidance": [
+      "Keep the same functionality of computing the factorial.",
+      "Simplify variable usage and consider using a for loop if it improves readability.",
+      "Make sure the function is easy to understand at a glance."
+    ],
+    "hints": [
+      "Factorials can be computed cleanly using a for loop running from 1 up to the number.",
+      "Try to name variables descriptively or reduce them to just what is necessary."
+    ],
+    "starterCode": "def factorial(n):\n    if n == 0:\n        return 1\n    result = 1\n    i = 1\n    while i <= n:\n        result = result * i\n        i = i + 1\n    return result",
+    "expectedOutput": "factorial(5) returns 120",
+    "concepts": [
+      "functions",
+      "loops",
+      "variables",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
