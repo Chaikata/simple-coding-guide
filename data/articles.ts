@@ -54269,5 +54269,360 @@ export const articles = [
         "value": "By understanding where NULLs come from in SQL joins and applying these practical tips, you can avoid unexpected data loss and produce more reliable, meaningful results. Always test joins carefully in smaller datasets before applying them to large production tables."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-event-loop-for-performance-optimization",
+    "title": "Mastering JavaScript Event Loop for Performance Optimization",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how JavaScript's event loop works and how to leverage it to optimize the performance of your web applications with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=eu_tByRZ7p0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a single-threaded language, meaning it executes code one line at a time in a specific order. However, it can handle asynchronous operations efficiently with the help of the event loop. Understanding the event loop is crucial to optimize your application's performance, especially when working with tasks like API calls, animations, and timers."
+      },
+      {
+        "type": "paragraph",
+        "value": "The event loop manages two main queues: the call stack and the task queue (or callback queue). When JavaScript runs, it executes functions on the call stack. If a function triggers an asynchronous operation, the callback goes to the task queue. Only when the call stack is empty does the event loop push the callback from the task queue back onto the call stack for execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example demonstrating how the event loop works with asynchronous code:"
+      },
+      {
+        "type": "code",
+        "value": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('Timeout callback');\n}, 0);\n\nconsole.log('End');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Even though the timeout is set to 0 milliseconds, the callback inside `setTimeout` will always run after the synchronous code. The output will be:\n\nStart\nEnd\nTimeout callback\n\nThis happens because the synchronous `console.log('End')` runs before the event loop processes the task queue."
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize performance, avoid blocking the main thread with long-running synchronous tasks. Instead, break them into smaller chunks using techniques like `setTimeout` or `requestIdleCallback`, allowing the browser to remain responsive."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, processing a large array synchronously can freeze the UI. Here's how to split the task:"
+      },
+      {
+        "type": "code",
+        "value": "const bigArray = new Array(100000).fill(0);\nlet index = 0;\n\nfunction processChunk() {\n  const chunkSize = 1000;\n  const end = Math.min(index + chunkSize, bigArray.length);\n\n  for (; index < end; index++) {\n    // Process each item (dummy operation here)\n    bigArray[index] = bigArray[index] + 1;\n  }\n\n  if(index < bigArray.length) {\n    // Schedule next chunk without blocking\n    setTimeout(processChunk, 0);\n  } else {\n    console.log('Processing complete!');\n  }\n}\n\nprocessChunk();"
+      },
+      {
+        "type": "paragraph",
+        "value": "By chunking the processing and scheduling each chunk asynchronously, the browser can handle user interactions and rendering between chunks, improving overall performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful concept is leveraging Promises and `async/await` which internally use microtasks that have a higher priority than tasks scheduled by `setTimeout`."
+      },
+      {
+        "type": "code",
+        "value": "console.log('Script start');\n\nPromise.resolve().then(() => {\n  console.log('Promise callback');\n});\n\nsetTimeout(() => {\n  console.log('setTimeout callback');\n}, 0);\n\nconsole.log('Script end');"
+      },
+      {
+        "type": "paragraph",
+        "value": "The output order will be:\n\nScript start\nScript end\nPromise callback\nsetTimeout callback\n\nThis shows that promise callbacks run before timeout callbacks, because microtasks (promise handlers) run before the event loop processes tasks from the task queue."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering the event loop allows you to write efficient JavaScript by managing asynchronous tasks effectively. Use microtasks for quick operations, chunk large synchronous tasks to prevent blocking, and always be mindful of how callbacks are scheduled."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-javascript-proxy-to-debug-complex-state-mutations",
+    "title": "Harnessing JavaScript Proxy to Debug Complex State Mutations",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to use JavaScript Proxy to track and debug complex state changes easily, making your debugging process simpler and more effective.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging complex state mutations in JavaScript can be challenging, especially when dealing with deeply nested objects or unexpected changes in your application state. Fortunately, JavaScript’s Proxy object provides a powerful way to intercept and track changes to an object’s properties, helping you identify when and how state mutations happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy allows you to wrap an object and define custom behavior for fundamental operations like getting, setting, or deleting properties. This can be extremely useful for debugging because you can log or handle these operations every time your state changes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore a simple example where we use a Proxy to watch changes on a state object and log mutations to the console."
+      },
+      {
+        "type": "code",
+        "value": "const state = {\n  count: 0,\n  user: {\n    name: 'Alice',\n    age: 25\n  }\n};\n\nconst handler = {\n  set(target, property, value) {\n    console.log(`Property '${property}' changed from ${target[property]} to ${value}`);\n    target[property] = value;\n    return true; // indicates success\n  }\n};\n\nconst proxyState = new Proxy(state, handler);\n\nproxyState.count = 1;          // Logs: Property 'count' changed from 0 to 1\nproxyState.user.name = 'Bob';  // Does NOT log because nested object is not proxied"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the top-level properties are trapped by the Proxy. However, changes to nested objects inside `user` are not logged because the Proxy only intercepts operations on the object it wraps directly. To debug deeply nested mutations, you need to recursively apply the Proxy to nested objects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an enhanced version that automatically wraps nested objects with proxies, enabling you to track mutations at any depth."
+      },
+      {
+        "type": "code",
+        "value": "function createDeepProxy(object, handler) {\n  const proxy = new Proxy(object, {\n    get(target, property, receiver) {\n      const value = Reflect.get(target, property, receiver);\n      if (value && typeof value === 'object') {\n        return createDeepProxy(value, handler);\n      }\n      return value;\n    },\n    set(target, property, value, receiver) {\n      console.log(`Property '${property.toString()}' changed from ${target[property]} to ${value}`);\n      return Reflect.set(target, property, value, receiver);\n    }\n  });\n  return proxy;\n}\n\nconst deepState = {\n  count: 0,\n  user: {\n    name: 'Alice',\n    age: 25\n  }\n};\n\nconst proxyDeepState = createDeepProxy(deepState);\n\nproxyDeepState.count = 5;             // Logs: Property 'count' changed from 0 to 5\nproxyDeepState.user.name = 'Charlie'; // Logs: Property 'name' changed from Alice to Charlie"
+      },
+      {
+        "type": "paragraph",
+        "value": "This recursive approach allows you to detect mutations anywhere in your state object, which is very helpful when developing applications with complex data structures."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, JavaScript Proxies provide an easy yet powerful way to debug complex state mutations by intercepting property changes. Wrap your state object in a Proxy (potentially using recursive proxies for nested objects) to log or handle mutations effectively. This technique can save time and reduce bugs by providing visibility into how your application state evolves."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-typescript-type-system-to-prevent-performance-bottlenecks",
+    "title": "Leveraging TypeScript’s Type System to Prevent Performance Bottlenecks in Large-Scale Applications",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript’s type system to catch common coding errors early and prevent performance issues in large-scale applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=D9q5wnX2_DY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working on large-scale TypeScript applications, performance bottlenecks can often arise from subtle bugs or inefficient code paths. Luckily, TypeScript’s powerful type system helps developers catch many of these issues at compile time before they reach production. In this article, we’ll explore practical ways to use the type system to avoid common errors that could slow down your app."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common source of performance problems is dealing with unexpected data types that cause unnecessary runtime checks or complex type coercions. By explicitly defining types for your functions and variables, TypeScript ensures you handle only the expected data shapes and avoids costly errors."
+      },
+      {
+        "type": "code",
+        "value": "function calculateDiscount(price: number, discountPercent: number): number {\n  return price - (price * discountPercent) / 100;\n}\n\n// TypeScript will warn if incorrect types are passed\ncalculateDiscount(100, '20'); // Error: Argument of type '\"20\"' is not assignable to parameter of type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another technique is employing union types and type guards to handle varying data structures safely and efficiently. Instead of using generic 'any' types that disable TypeScript’s checks, union types let you define all expected inputs and write safe branching logic."
+      },
+      {
+        "type": "code",
+        "value": "type User = { id: number; name: string };\ntype Admin = { id: number; name: string; permissions: string[] };\n\nfunction getUserName(user: User | Admin): string {\n  if ('permissions' in user) {\n    // This is an Admin\n    return `Admin: ${user.name}`;\n  }\n  return user.name;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using these type definitions not only helps avoid runtime type errors but can also improve performance by reducing unnecessary checks during code execution."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, leveraging TypeScript’s readonly types and immutability patterns can prevent unintended side effects that degrade app responsiveness. Marking objects or arrays as readonly signals to the compiler and developers that these values should not be changed after creation, lowering bugs related to state changes."
+      },
+      {
+        "type": "code",
+        "value": "type Config = {\n  readonly apiUrl: string;\n  readonly retryAttempts: number;\n};\n\nconst config: Config = {\n  apiUrl: \"https://api.example.com\",\n  retryAttempts: 3\n};\n\n// config.apiUrl = \"https://malicious.com\"; // Error: Cannot assign to 'apiUrl' because it is a read-only property."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, TypeScript’s type system can be a strong ally in preventing common errors that lead to performance bottlenecks. By strictly typing your data, using union types and type guards, and leveraging immutability with readonly properties, you can write safer and more performant large-scale applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start adopting these patterns today to catch errors early, reduce debugging time, and ensure your TypeScript code runs efficiently in production!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-asyncio-advanced-patterns-for-concurrent-programming",
+    "title": "Mastering Python's AsyncIO: Advanced Patterns for Concurrent Programming",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to harness Python's AsyncIO with advanced, beginner-friendly patterns for efficient concurrent programming and better application performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=oAkLSJNr5zY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's AsyncIO library provides a fantastic way to write concurrent code using the async/await syntax, making programs faster and more efficient, especially when handling I/O-bound tasks. While beginners often start with simple examples, mastering advanced patterns can greatly improve your applications' responsiveness and scalability. In this tutorial, we'll explore these patterns step-by-step, helping you build a strong foundation in asynchronous programming with Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's briefly recap the basics — AsyncIO uses an event loop to run asynchronous tasks concurrently. Functions defined with `async def` return coroutines, which you run using `await`. This lets your program do other work while waiting for operations like network requests or file I/O to complete."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's dive into some more advanced patterns."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Using `asyncio.gather()` for Concurrent Task Execution\n`asyncio.gather()` is useful for running multiple async tasks concurrently and collecting their results. This pattern helps you efficiently launch multiple I/O tasks without waiting for each individually."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def fetch_data(x):\n    await asyncio.sleep(1)  # Simulate I/O operation\n    return f\"Data {x}\"\n\nasync def main():\n    tasks = [fetch_data(i) for i in range(3)]\n    results = await asyncio.gather(*tasks)\n    print(results)\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Using `asyncio.Semaphore` to Limit Concurrency\nSometimes, you want to avoid overwhelming resources. For example, limiting the number of simultaneous HTTP requests to a server. `asyncio.Semaphore` ensures only a fixed number of tasks run concurrently."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def limited_fetch(sem, x):\n    async with sem:\n        print(f\"Starting task {x}\")\n        await asyncio.sleep(1)  # Simulate I/O-bound work\n        print(f\"Finished task {x}\")\n\nasync def main():\n    semaphore = asyncio.Semaphore(2)  # Limit to 2 concurrent tasks\n    tasks = [limited_fetch(semaphore, i) for i in range(5)]\n    await asyncio.gather(*tasks)\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Using `asyncio.Queue` for Producer-Consumer Patterns\nAsync queues allow safe communication between producer and consumer tasks, supporting complex workflows like data processing pipelines."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def producer(queue):\n    for i in range(5):\n        await asyncio.sleep(0.5)  # Simulate producing an item\n        await queue.put(f\"item-{i}\")\n        print(f\"Produced item-{i}\")\n    await queue.put(None)  # Signal the consumer to stop\n\nasync def consumer(queue):\n    while True:\n        item = await queue.get()\n        if item is None:\n            break\n        print(f\"Consumed {item}\")\n        await asyncio.sleep(1)  # Simulate processing\n\nasync def main():\n    queue = asyncio.Queue()\n    await asyncio.gather(producer(queue), consumer(queue))\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Handling Timeouts with `asyncio.wait_for()`\nTo prevent tasks from running indefinitely, use `asyncio.wait_for()` to impose timeouts and handle slow operations gracefully."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def long_task():\n    await asyncio.sleep(5)  # Simulate a long-running task\n    return \"Completed\"\n\nasync def main():\n    try:\n        result = await asyncio.wait_for(long_task(), timeout=2)\n        print(result)\n    except asyncio.TimeoutError:\n        print(\"Task timed out!\")\n\nasyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nMastering AsyncIO's advanced patterns — like concurrent execution with `gather()`, controlling concurrency with semaphores, coordinating tasks with queues, and handling timeouts — can transform how you build efficient, scalable Python applications. Start experimenting with these examples to unlock the full power of AsyncIO and boost your programs' performance."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-hierarchies-custom-error-handling",
+    "title": "Mastering Python Exception Hierarchies: A Practical Guide to Custom Error Handling",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to understand Python's exception hierarchy and create custom error classes for better error handling in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=Vv10qcdusdU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When programming in Python, handling errors gracefully is crucial for building robust applications. Understanding Python’s exception hierarchy helps you manage errors more effectively and create custom exceptions suited to your needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python exceptions are organized in a hierarchy, with the base class `BaseException` at the top. Most user-defined errors inherit from the built-in `Exception` class, which itself inherits from `BaseException`. This structure allows you to catch broad categories of errors or very specific ones."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple visualization of the exception hierarchy relevant to most use cases:"
+      },
+      {
+        "type": "code",
+        "value": "BaseException\n  ├── SystemExit\n  ├── KeyboardInterrupt\n  └── Exception\n       ├── ValueError\n       ├── TypeError\n       ├── IndexError\n       └── ... (and many others)"
+      },
+      {
+        "type": "paragraph",
+        "value": "You typically catch exceptions by specifying the type in a `try-except` block. Catching a general exception can be done like this:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    number = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"Oops! That was not a valid number.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "But sometimes, built-in exceptions are not enough to communicate specific problems in your application. This is when custom exceptions come into play. You can create your own by subclassing `Exception`."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, suppose you are building a banking app and want to signal when an invalid transaction occurs:"
+      },
+      {
+        "type": "code",
+        "value": "class InvalidTransactionError(Exception):\n    def __init__(self, message):\n        super().__init__(message)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, use this custom error in your code to handle specific cases:"
+      },
+      {
+        "type": "code",
+        "value": "def withdraw(amount, balance):\n    if amount > balance:\n        raise InvalidTransactionError(\"Insufficient funds for withdrawal.\")\n    return balance - amount\n\ntry:\n    new_balance = withdraw(150, 100)\nexcept InvalidTransactionError as e:\n    print(f\"Transaction failed: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach helps you write clearer, more maintainable code by making error handling specific and expressive."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember these best practices when working with custom exceptions:\n- Always inherit from `Exception`, not directly from `BaseException`, unless you have a very specific reason.\n- Provide informative error messages when raising exceptions.\n- Use custom exceptions to handle domain-specific error cases.\n- Catch exceptions as specifically as possible to avoid masking bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering Python’s exception hierarchy and creating your own error classes, you can make your programs more resilient and easier to debug."
+      }
+    ]
+  },
+  {
+    "slug": "handling-null-comparisons-in-complex-sql-queries",
+    "title": "Handling NULL Comparisons in Complex SQL Queries: Best Practices and Pitfalls",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to correctly handle NULL comparisons in complex SQL queries with best practices and common pitfalls to avoid.",
+    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In SQL, handling NULL values can be tricky, especially in complex queries involving multiple comparisons and joins. NULL represents an unknown or missing value, and it behaves differently than other data types when compared using standard operators like = or <>. Understanding how NULL works is essential to avoid bugs and incorrect query results."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common pitfall is assuming that NULL = NULL will return true. In SQL, NULL compared to anything—even NULL—using = or <> will result in NULL (which behaves like false in conditional expressions). This means NULL values require special handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Use the IS NULL and IS NOT NULL operators to check for NULL values rather than using equality comparisons:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees\nWHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "When writing complex WHERE clauses or JOIN conditions that involve nullable columns, always explicit check for NULL if it matters to your logic. For example, if you want to find records where two nullable columns match or both are NULL, a common pattern looks like this:"
+      },
+      {
+        "type": "code",
+        "value": "WHERE (a.column = b.column OR (a.column IS NULL AND b.column IS NULL))"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern ensures that the comparison treats two NULLs as equal, which is not the default behavior with =."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another approach is using the functions COALESCE or NULLIF. COALESCE returns the first non-NULL value in its arguments, allowing you to convert NULLs to a specific value for comparison:"
+      },
+      {
+        "type": "code",
+        "value": "WHERE COALESCE(a.column, 'default') = COALESCE(b.column, 'default')"
+      },
+      {
+        "type": "paragraph",
+        "value": "However, be careful with COALESCE because substituting NULL for a default value can cause logical errors if that value is actually valid data."
+      },
+      {
+        "type": "paragraph",
+        "value": "When joining tables with nullable columns, make sure to handle NULLs explicitly in your ON clause if equality matters. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM table1 t1\nJOIN table2 t2\nON (t1.key = t2.key OR (t1.key IS NULL AND t2.key IS NULL))"
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, indexing and performance may be affected when you include NULL checks in your conditions, so test your queries in real scenarios."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the best practices for handling NULL comparisons in SQL are:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Never use = or <> to compare NULL values directly.\n2. Use IS NULL or IS NOT NULL to check for NULL.\n3. Use explicit logic to treat NULLs as equal when needed (e.g., using OR with IS NULL).\n4. Consider COALESCE or NULLIF cautiously.\n5. Test complex queries involving NULLs thoroughly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering NULL handling helps you write more predictable and error-free SQL queries, especially in complex scenarios involving multiple tables and conditional logic."
+      }
+    ]
   }
 ];
