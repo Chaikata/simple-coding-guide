@@ -53889,5 +53889,385 @@ export const articles = [
         "value": "Mastering recursive CTEs for complex hierarchical queries requires attention to recursion termination, column consistency, and correct join logic. By carefully structuring your anchor and recursive queries and using helpful techniques like recursion limits and path tracking, you can build robust queries that handle even complex data trees without errors."
       }
     ]
+  },
+  {
+    "slug": "comparing-javascript-promises-vs-async-await",
+    "title": "Comparing JavaScript Promises vs Async/Await: Practical Use Cases and Performance",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between JavaScript Promises and Async/Await with practical examples and performance insights, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=8gs86SY-d7Y",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is famous for its asynchronous capabilities, and two popular ways to handle asynchronous code are Promises and Async/Await. If you're new to JavaScript, understanding these concepts is essential for writing clean and efficient asynchronous code."
+      },
+      {
+        "type": "paragraph",
+        "value": "This tutorial will cover the basics of both Promises and Async/Await, show practical use cases, and discuss performance differences to help you decide which method to use."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Promises?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Promise is an object representing the eventual completion or failure of an asynchronous operation. It has three states: pending, fulfilled, or rejected. Promises allow chaining and managing async tasks more gracefully than callbacks."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true; // Simulate success or failure\n      if (success) {\n        resolve('Data received!');\n      } else {\n        reject('Error occurred');\n      }\n    }, 1000);\n  });\n};\n\nfetchData()\n  .then(data => console.log(data))\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Async/Await?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is syntax built on top of Promises that makes asynchronous code look and behave more like synchronous code, improving readability and reducing the complexity of chaining `.then()` calls."
+      },
+      {
+        "type": "code",
+        "value": "const fetchDataAsync = () => {\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve('Data received!');\n    }, 1000);\n  });\n};\n\nasync function getData() {\n  try {\n    const data = await fetchDataAsync();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Cases"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Simple Asynchronous Task**: Promises work well when you have straightforward async operations with success and error handlers."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Sequential Async Operations**: Async/Await shines when you need to run asynchronous tasks one after another, making the code easier to read and maintain."
+      },
+      {
+        "type": "code",
+        "value": "async function sequentialTasks() {\n  const first = await fetchDataAsync();\n  console.log('First:', first);\n\n  const second = await fetchDataAsync();\n  console.log('Second:', second);\n}\n\nsequentialTasks();"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Parallel Async Operations**: Both Promises and Async/Await can handle parallel operations. With Promises, you can use `Promise.all`."
+      },
+      {
+        "type": "code",
+        "value": "Promise.all([fetchDataAsync(), fetchDataAsync()])\n  .then(results => {\n    console.log('Results:', results);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "With Async/Await, you can await `Promise.all` as well."
+      },
+      {
+        "type": "code",
+        "value": "async function parallelTasks() {\n  try {\n    const results = await Promise.all([fetchDataAsync(), fetchDataAsync()]);\n    console.log('Results:', results);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nparallelTasks();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Performance Considerations"
+      },
+      {
+        "type": "paragraph",
+        "value": "Both Promises and Async/Await have similar performance since Async/Await is syntactic sugar built on Promises. The difference in speed is minimal and usually not noticeable in most applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "The main factor impacting performance is how you handle asynchronous tasks (e.g., sequential vs parallel) rather than which syntax you choose."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use Promises if you prefer chaining `.then()` and `.catch()` or when working in environments that do not support Async/Await.\n- Use Async/Await for cleaner, more readable code especially when performing several asynchronous operations sequentially.\n- For parallel asynchronous operations, use `Promise.all` with either syntax.\n- Performance differences are minimal; focus on code readability and maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "With this understanding, you can confidently choose between Promises and Async/Await based on your project needs and coding style preferences."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-custom-error-classes-in-javascript-enhance-debugging-with-style",
+    "title": "Mastering Custom Error Classes in JavaScript: Enhance Debugging with Style",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to create and use custom error classes in JavaScript to make debugging easier, clearer, and more effective for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=4yWpMz1__-Q",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with JavaScript, errors are inevitable. However, understanding what went wrong can be much easier if you use custom error classes. Custom errors let you create meaningful, descriptive error messages tailored to your app's needs. This guide will walk you through how to create, throw, and handle custom errors in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript provides a built-in Error class, and the best way to make your own errors is by extending this class. This helps your errors behave like standard JavaScript errors while allowing you to add your own properties or messages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by defining a simple custom error class called ValidationError:"
+      },
+      {
+        "type": "code",
+        "value": "class ValidationError extends Error {\n  constructor(message) {\n    super(message); // Call the parent class constructor\n    this.name = 'ValidationError'; // Set error name to your class name\n  }\n}\n\n// Example usage\nfunction validateUsername(username) {\n  if (username.length < 5) {\n    throw new ValidationError('Username must be at least 5 characters long.');\n  }\n  return true;\n}\n\ntry {\n  validateUsername('abc');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation failed:', error.message);\n  } else {\n    console.error('Unexpected error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the ValidationError class extends the built-in Error class. When you throw a ValidationError, the name property helps identify what type of error it is. Inside the try-catch block, you can check if the error is an instance of ValidationError and handle it accordingly."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also add extra properties to your custom errors to provide more information about what happened. Here's how you might add an error code:"
+      },
+      {
+        "type": "code",
+        "value": "class ValidationError extends Error {\n  constructor(message, code) {\n    super(message);\n    this.name = 'ValidationError';\n    this.code = code; // Custom error code\n  }\n}\n\ntry {\n  throw new ValidationError('Invalid email format.', 'E_INVALID_EMAIL');\n} catch (error) {\n  console.error(`${error.name} (${error.code}): ${error.message}`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Custom error classes improve debugging by making error logs clearer and more specific. When your errors include meaningful messages and additional data like codes or context, you and your team can quickly understand and fix problems."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, using custom errors consistently in your project can help create cleaner, more maintainable code. Start by identifying common error cases in your application and create dedicated error classes for them."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering custom error classes in JavaScript involves:\n1. Extending the built-in Error class.\n2. Setting a clear name property.\n3. Adding any extra useful properties.\n4. Throwing and catching errors thoughtfully.\n\nWith these steps, debugging becomes simpler and your code more robust."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-generics-for-high-performance-web-apps",
+    "title": "Mastering TypeScript Generics for High-Performance Web Apps",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to build flexible, reusable, and efficient code for high-performance web applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that adds static types to JavaScript, helping developers catch errors early. One of its most valuable features is generics, which enable you to write flexible and reusable components while maintaining type safety. This tutorial introduces you to TypeScript generics, helping you master their use to build high-performance web apps."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics allow you to define functions, classes, and interfaces that work with many types instead of a single type. This removes the need for duplicated code and provides strong typing for better tooling support and fewer bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example: a function that takes an array and returns the first element."
+      },
+      {
+        "type": "code",
+        "value": "function firstElement(arr: any[]): any {\n  return arr[0];\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This works, but the return type is `any`, so you lose type safety. Here's how to improve it with generics:"
+      },
+      {
+        "type": "code",
+        "value": "function firstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst num = firstElement([1, 2, 3]); // Type is number\nconst str = firstElement(['a', 'b', 'c']); // Type is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `T` is a generic type parameter representing the type inside the array. The function returns an element of type `T`, preserving type information and ensuring type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can also be used with interfaces and classes. Imagine building a reusable data container:"
+      },
+      {
+        "type": "code",
+        "value": "interface Container<T> {\n  value: T;\n  getValue: () => T;\n}\n\nclass DataContainer<T> implements Container<T> {\n  constructor(public value: T) {}\n\n  getValue() {\n    return this.value;\n  }\n}\n\nconst stringContainer = new DataContainer<string>(\"Hello!\");\nconsole.log(stringContainer.getValue()); // \"Hello!\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `DataContainer` can store any value type and still provide type-safe access to it."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics also support constraints. Sometimes you want `T` to have certain properties or methods. For example, suppose you want a function that prints the length of any object that has a `.length` property:"
+      },
+      {
+        "type": "code",
+        "value": "function printLength<T extends { length: number }>(item: T): void {\n  console.log(item.length);\n}\n\nprintLength('Hello'); // Works, prints 5\nprintLength([1, 2, 3]); // Works, prints 3\n// printLength(123); // Error: number doesn't have length"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using generics with constraints ensures your function remains flexible while restricting input to types where `.length` makes sense."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, generics boost performance by allowing you to reuse optimized, strongly-typed functions and classes instead of using loosely typed or duplicated code. This leads to cleaner, more maintainable, and faster web applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "To recap, mastering TypeScript generics involves:\n- Defining generic functions, classes, and interfaces\n- Preserving type information with generic parameters\n- Using constraints to enforce type requirements\n- Leveraging generics to write flexible, reusable, and type-safe code"
+      },
+      {
+        "type": "paragraph",
+        "value": "Start incorporating generics in your TypeScript projects today to enhance code quality and create high-performance web apps with confidence."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-python-real-time-analytics",
+    "title": "Building Scalable Data Models in Python for Real-Time Analytics",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create scalable and efficient data models in Python designed specifically for real-time analytics applications. This beginner-friendly guide covers essential concepts and practical coding examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=EmxXYzX6iEs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Real-time analytics is crucial for many modern applications, from monitoring social media trends to tracking financial transactions. The key to success in real-time analytics lies in building data models that are both scalable and efficient. This tutorial walks you through the basics of creating such models in Python, focusing on practical steps that even beginners can follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before diving into the code, let's understand what makes a data model scalable. Scalability means your data model can handle increasing volumes of data without significant drops in performance. For real-time analytics, this typically involves processing streaming data quickly and allowing fast queries and updates."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by building a simple scalable data model using Python dictionaries and collections from the standard library. We'll simulate real-time data events and aggregate them efficiently."
+      },
+      {
+        "type": "code",
+        "value": "from collections import defaultdict\n\nclass RealTimeAnalyticsModel:\n    def __init__(self):\n        # Using defaultdict to automatically handle missing keys\n        self.event_counts = defaultdict(int)\n\n    def process_event(self, event_type):\n        \"\"\"Process a new event by incrementing its count.\"\"\"\n        self.event_counts[event_type] += 1\n\n    def get_event_count(self, event_type):\n        \"\"\"Retrieve the count of a specific event type.\"\"\"\n        return self.event_counts[event_type]\n\n    def get_all_counts(self):\n        \"\"\"Get counts of all event types.\"\"\"\n        return dict(self.event_counts)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we use a class called `RealTimeAnalyticsModel` which keeps a count of different event types. The `defaultdict` helps us manage the counts without needing to check if a key exists every time we process an event."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's simulate some events and see how the model works:"
+      },
+      {
+        "type": "code",
+        "value": "if __name__ == \"__main__\":\n    analytics = RealTimeAnalyticsModel()\n\n    # Simulate processing a stream of events\n    events = [\"click\", \"view\", \"click\", \"purchase\", \"view\", \"click\"]\n\n    for event in events:\n        analytics.process_event(event)\n\n    print(\"Event counts:\", analytics.get_all_counts())"
+      },
+      {
+        "type": "paragraph",
+        "value": "Output:\n\n\nEvent counts: {'click': 3, 'view': 2, 'purchase': 1}\n\n\nThis simple model is efficient and can scale well for many event types, especially when combined with streaming data sources like Kafka or RabbitMQ."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more scalability, especially with large datasets or high throughput, you can integrate this model with data processing frameworks like Apache Spark or use NoSQL databases to store your counts. However, this basic design is a great starting point to understand how efficiently aggregating data helps real-time analytics."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, building scalable data models for real-time analytics in Python involves using appropriate data structures and keeping operations simple and fast. Starting with basic structures like dictionaries and progressing to more complex systems as needed will help you build robust real-time analytics applications."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-common-table-expressions-ctes-for-complex-sql-queries",
+    "title": "Mastering Common Table Expressions (CTEs) for Complex SQL Queries",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use Common Table Expressions (CTEs) to write clear and efficient complex SQL queries, perfect for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=K1WeoKxLZ5o",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, writing complex queries can quickly become difficult to read and maintain. This is where Common Table Expressions (CTEs) come in handy. CTEs help break down complicated queries into simpler, reusable parts. In this tutorial, you'll learn what CTEs are, how to write them, and practical examples to master their use."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Common Table Expression is a named temporary result set that you can reference within a SELECT, INSERT, UPDATE, or DELETE statement. Essentially, it allows you to create a temporary view that exists only for the duration of the query."
+      },
+      {
+        "type": "code",
+        "value": "-- Basic syntax of a Common Table Expression (CTE)\nWITH cte_name AS (\n    SELECT column1, column2\n    FROM table_name\n    WHERE condition\n)\nSELECT * FROM cte_name;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down the syntax:\n- `WITH` keyword introduces the CTE.\n- `cte_name` is the name you assign to this temporary result set.\n- Inside the parentheses, you write a standard SQL query.\n- Finally, you query from the CTE as if it were a normal table."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using CTEs improves query readability by separating subqueries or complex logic. Here's an example using a sales database to find top-performing employees."
+      },
+      {
+        "type": "code",
+        "value": "-- Example: Find employees with total sales over 5000\nWITH total_sales AS (\n    SELECT employee_id, SUM(sale_amount) AS sales_sum\n    FROM sales\n    GROUP BY employee_id\n)\nSELECT e.employee_id, e.employee_name, t.sales_sum\nFROM employees e\nJOIN total_sales t ON e.employee_id = t.employee_id\nWHERE t.sales_sum > 5000;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example:\n- The CTE `total_sales` calculates total sales per employee.\n- The main query joins the CTE with the `employees` table to list employee details.\n- We filter to show only employees with sales over 5000."
+      },
+      {
+        "type": "paragraph",
+        "value": "CTEs can also be recursive, which is useful for hierarchical data like organizational charts or category trees. Here’s a simple example that demonstrates a recursive CTE to list an employee hierarchy."
+      },
+      {
+        "type": "code",
+        "value": "-- Recursive CTE to find employee hierarchy\nWITH RECURSIVE employee_hierarchy AS (\n    SELECT employee_id, manager_id, employee_name, 1 AS level\n    FROM employees\n    WHERE manager_id IS NULL  -- Top-level manager\n    UNION ALL\n    SELECT e.employee_id, e.manager_id, e.employee_name, h.level + 1\n    FROM employees e\n    INNER JOIN employee_hierarchy h ON e.manager_id = h.employee_id\n)\nSELECT * FROM employee_hierarchy ORDER BY level, employee_name;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here:\n- The base case selects top-level managers with no manager above them.\n- The recursive part joins employees with their managers from the CTE.\n- `level` indicates the depth in the hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Using CTEs\n- Use meaningful names for your CTEs to improve code readability.\n- You can define multiple CTEs by separating them with commas after a single WITH keyword.\n- Avoid overusing CTEs in very large queries, as performance depends on the database engine.\n\n### Summary\nCTEs are a powerful feature in SQL that help simplify complex queries by breaking them into manageable parts. They improve readability and maintainability, making your SQL code cleaner and easier to debug. Practice using CTEs with different examples, and you'll quickly gain mastery over complex SQL tasks."
+      }
+    ]
+  },
+  {
+    "slug": "handling-unexpected-nulls-in-complex-sql-joins-without-data-loss",
+    "title": "Handling Unexpected NULLs in Complex SQL Joins Without Data Loss",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to manage unexpected NULL values in complex SQL joins effectively, preserving data integrity and avoiding unintentional data loss in your queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=inmzS_XgijM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL joins, especially with multiple tables, unexpected NULL values can appear in your results. These NULLs might cause confusion or lead to data loss if not handled correctly. This article explains why NULLs emerge during joins and how to manage them without losing important data."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand why NULL values occur in SQL joins. When you join tables using a LEFT JOIN or RIGHT JOIN, rows from one table may not have matching rows in the other, resulting in NULL for the unmatched columns. INNER JOIN only returns rows with matching values, so it naturally excludes NULLs from non-matching rows. However, in complex scenarios, you want to keep all data but handle NULLs thoughtfully."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle unexpected NULLs without data loss, consider these common techniques:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use COALESCE to replace NULLs with default values. This function returns the first non-NULL value from the list you provide."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  customers.id,\n  customers.name,\n  COALESCE(orders.order_date, 'No Orders') AS order_date\nFROM customers\nLEFT JOIN orders ON customers.id = orders.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Check your JOIN conditions carefully to ensure they match the intended logic. Incorrect or incomplete join conditions can create too many NULLs or unintended duplicates."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  a.id,\n  b.value\nFROM tableA a\nLEFT JOIN tableB b ON a.id = b.a_id\nWHERE b.status = 'active' OR b.status IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. When working with multiple joins, use parentheses or Common Table Expressions (CTEs) to control join order and visibility of NULLs."
+      },
+      {
+        "type": "code",
+        "value": "WITH joined_data AS (\n  SELECT a.id, b.value, c.details\n  FROM a\n  LEFT JOIN b ON a.id = b.a_id\n  LEFT JOIN c ON b.id = c.b_id\n)\nSELECT * FROM joined_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Use IS NULL and IS NOT NULL checks in your WHERE or ON clauses to explicitly filter or include NULLs as needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding where NULLs come from in SQL joins and applying these practical tips, you can avoid unexpected data loss and produce more reliable, meaningful results. Always test joins carefully in smaller datasets before applying them to large production tables."
+      }
+    ]
   }
 ];
