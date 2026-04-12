@@ -1,175 +1,174 @@
 [
   {
-    "slug": "build-a-sql-function-to-find-top-customers-by-total-spend",
-    "title": "Build a SQL Function to Find Top Customers by Total Spend",
+    "slug": "fix-the-bug-in-sql-query-filtering-customers-by-age",
+    "title": "Fix the Bug in SQL Query Filtering Customers by Age",
     "language": "sql",
-    "difficulty": "intermediate",
-    "category": "queries",
-    "description": "Create a SQL scalar function that calculates the top N customers based on their total purchase amount from sales data.",
-    "prompt": "Write a SQL function called get_top_customers that accepts one integer parameter 'top_n'. This function should return a result set of the top 'top_n' customers sorted by their total spending in descending order. The function will use two tables: 'customers' (with columns customer_id, name) and 'orders' (with columns order_id, customer_id, order_amount). Your function should join these tables and aggregate the total spent by each customer.",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A beginner-level debugging challenge where you must identify and fix the error in a SQL query that aims to select customers age 18 and older.",
+    "prompt": "You are given a SQL query that is supposed to return all customers aged 18 or older from a Customers table. However, the query is not returning the correct results. Find and fix the bug in the query so that it correctly filters for customers whose age is at least 18.",
     "guidance": [
-      "Use JOIN to combine the customers and orders tables.",
-      "Aggregate order_amount using SUM grouped by customer_id.",
-      "Order the results by the total spending in descending order and limit to 'top_n'."
+      "Check the WHERE clause for any syntax or logical errors.",
+      "Verify the comparison operator used for filtering by age."
     ],
     "hints": [
-      "Remember to use GROUP BY customer_id in your query to calculate sums correctly.",
-      "Use ORDER BY and LIMIT clauses to restrict output to the top N customers.",
-      "Consider using appropriate window functions if your SQL dialect supports them."
+      "Make sure the comparison operator in the WHERE clause filters customers with age >= 18.",
+      "Remember that the column name should match exactly and the condition should filter out younger customers."
     ],
-    "starterCode": "CREATE FUNCTION get_top_customers(top_n INT)\nRETURNS TABLE(\n   customer_id INT,\n   customer_name VARCHAR(255),\n   total_spent DECIMAL(10,2)\n)\nAS\nRETURN (\n   -- Fill your query here\n);",
-    "expectedOutput": "A table listing customer_id, customer_name, and total_spent for the top N customers by total spending, ordered descending by total_spent.",
+    "starterCode": "SELECT * FROM Customers WHERE age > 18;",
+    "expectedOutput": "Returns all rows where age is 18 or older (inclusive), not just greater than 18.",
     "concepts": [
-      "JOIN",
-      "GROUP BY",
-      "AGGREGATION",
-      "FUNCTION CREATION"
+      "WHERE clause",
+      "Comparison operators",
+      "Basic SELECT filtering"
     ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "design-and-query-a-scalable-e-commerce-order-management-schema",
-    "title": "Design and Query a Scalable E-commerce Order Management Schema",
-    "language": "sql",
-    "difficulty": "advanced",
-    "category": "data-modeling",
-    "description": "Build a normalized SQL schema to efficiently model orders, customers, products, and payments for a growing e-commerce system. Write an optimized SQL query to report monthly revenue per product category, including handling edge cases such as refunds and partial payments.",
-    "prompt": "You are tasked with designing a robust, normalized SQL schema to support a large e-commerce platform's order management system. The data model should include tables for customers, products (grouped by categories), orders, order items, and payments (which may involve multiple partial payments and refunds). After creating the schema, write an optimized SQL query that returns total monthly revenue aggregated by product category, accounting for refunds and partial payments in the calculation. Your schema should support scalability and flexibility for additions such as new payment methods or promotions.\n\nRequirements:\n1. Create SQL tables with appropriate keys and constraints reflecting the entities and their relationships.\n2. Ensure that an order can contain multiple products, and payments can be partial or refunds.\n3. Write an SQL query that outputs, for each month and each product category, the net revenue (payments minus refunds) generated.\n\nProvide the CREATE TABLE statements followed by the query to retrieve the monthly revenue by product category.",
-    "guidance": [
-      "Focus first on designing a normalized and scalable schema representing entities and their relationships with primary and foreign keys.",
-      "Consider how to model payments separately to allow multiple partial payments and refunds for one order.",
-      "In your query, use appropriate JOINs and aggregation to calculate monthly revenue grouped by product category, carefully subtracting refunds."
-    ],
-    "hints": [
-      "A linking table is necessary between orders and products to model order items with quantities and prices.",
-      "Use a payment type or status field to distinguish refunds from standard payments.",
-      "Leverage date functions to group revenues by month in your final aggregation query."
-    ],
-    "starterCode": "/* Create tables skeleton */\nCREATE TABLE Customers (\n    customer_id INT PRIMARY KEY,\n    name VARCHAR(100),\n    email VARCHAR(100) UNIQUE\n);\n\nCREATE TABLE Categories (\n    category_id INT PRIMARY KEY,\n    category_name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Products (\n    product_id INT PRIMARY KEY,\n    product_name VARCHAR(100),\n    category_id INT,\n    price DECIMAL(10, 2),\n    FOREIGN KEY (category_id) REFERENCES Categories(category_id)\n);\n\nCREATE TABLE Orders (\n    order_id INT PRIMARY KEY,\n    customer_id INT,\n    order_date DATE,\n    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)\n);\n\nCREATE TABLE OrderItems (\n    order_item_id INT PRIMARY KEY,\n    order_id INT,\n    product_id INT,\n    quantity INT,\n    item_price DECIMAL(10, 2),\n    FOREIGN KEY (order_id) REFERENCES Orders(order_id),\n    FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);\n\nCREATE TABLE Payments (\n    payment_id INT PRIMARY KEY,\n    order_id INT,\n    payment_date DATE,\n    amount DECIMAL(10, 2),\n    payment_type VARCHAR(50), -- e.g., 'payment', 'refund'\n    FOREIGN KEY (order_id) REFERENCES Orders(order_id)\n);\n\n/* Write query here */",
-    "expectedOutput": "month     | category_name | net_revenue\n----------------------------------------\n2024-01   | Electronics   | 150000.00\n2024-01   | Apparel       | 92500.50\n2024-02   | Books         | 18000.75\n... (and so on for each month/category available)",
-    "concepts": [
-      "database normalization",
-      "complex data modeling",
-      "SQL joins and aggregations",
-      "handling partial payments and refunds"
-    ],
-    "estimatedTime": "60 minutes",
+    "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "create-a-function-to-merge-two-sorted-arrays-without-duplicates",
-    "title": "Create a Function to Merge Two Sorted Arrays Without Duplicates",
-    "language": "cpp",
+    "slug": "build-a-weather-dashboard-with-dynamic-city-search",
+    "title": "Build a Weather Dashboard with Dynamic City Search",
+    "language": "javascript",
     "difficulty": "intermediate",
-    "category": "functions",
-    "description": "Build a C++ function that takes two sorted integer arrays and returns a new sorted array containing all unique elements from both arrays, effectively merging them without duplicates.",
-    "prompt": "Write a function named mergeSortedUnique that accepts two vectors of integers (both sorted in ascending order) and returns a single vector sorted in ascending order containing all unique elements from both input vectors. The output vector should not contain any duplicate elements even if duplicates exist in the input arrays. You can only use standard C++ libraries.",
+    "category": "mini-projects",
+    "description": "Create a small weather dashboard application in JavaScript that fetches and displays weather data for cities searched by the user, using a public weather API.",
+    "prompt": "Build a weather dashboard function in JavaScript that accepts a city name as input, fetches current weather data from a public API (like OpenWeatherMap), and returns an object containing the city name, temperature (in Celsius), weather condition description, and an icon URL. Ensure your function handles errors gracefully for invalid city names or API issues. Structure your code to allow easy extension for additional features like a 5-day forecast in the future.",
     "guidance": [
-      "Iterate through both vectors simultaneously with two indices to merge them efficiently given they are sorted.",
-      "Avoid adding duplicates to the resulting vector by comparing the current element with the last element inserted.",
-      "Handle cases when one array is exhausted before the other."
+      "Use fetch() to call the weather API asynchronously and parse the JSON response.",
+      "Extract the relevant data fields: city name, temperature in Celsius, weather description, and icon code.",
+      "Convert temperature from Kelvin to Celsius if necessary.",
+      "Implement basic error handling for invalid inputs or network errors."
     ],
     "hints": [
-      "Use two pointers or indices to traverse the arrays and compare elements.",
-      "Remember to check if the merged vector is empty before pushing elements to avoid out-of-range errors.",
-      "Consider edge cases like empty input vectors."
+      "OpenWeatherMap API's current weather endpoint is https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_key}.",
+      "You can convert temperature: Celsius = Kelvin - 273.15.",
+      "Check if the API response includes a 'cod' field that signals an error when the city is invalid."
     ],
-    "starterCode": "std::vector<int> mergeSortedUnique(const std::vector<int>& arr1, const std::vector<int>& arr2) {\n    std::vector<int> result;\n    // Your code here\n    return result;\n}",
-    "expectedOutput": "[1, 2, 3, 4, 5, 6, 7, 8]",
+    "starterCode": "async function getWeatherForCity(city) {\n  const apiKey = 'YOUR_API_KEY';\n  // Your code here\n}",
+    "expectedOutput": "getWeatherForCity('London') should return an object like:\n{\n  city: 'London',\n  temperature: 15.0, // degrees Celsius\n  description: 'light rain',\n  iconUrl: 'http://openweathermap.org/img/wn/10d@2x.png'\n}",
     "concepts": [
-      "vectors",
-      "two-pointer technique",
-      "arrays",
-      "conditional logic"
+      "API consumption",
+      "asynchronous JavaScript",
+      "error handling",
+      "data transformation"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
   },
   {
-    "slug": "fix-the-memory-leak-in-a-recursive-fibonacci-with-memoization",
-    "title": "Fix the Memory Leak in a Recursive Fibonacci with Memoization",
-    "language": "python",
+    "slug": "refactor-and-optimize-a-complex-customer-sales-ranking-query",
+    "title": "Refactor and Optimize a Complex Customer Sales Ranking Query",
+    "language": "sql",
     "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Identify and fix the bug in a recursive Fibonacci function that uses memoization but causes unintended memory growth or incorrect results due to faulty cache handling.",
-    "prompt": "You're given a Python function that computes the nth Fibonacci number using recursion and memoization with a dictionary cache. However, the current implementation has a bug that causes either a memory leak or incorrect caching leading to wrong outputs for larger inputs. Fix the code so that the function correctly computes the Fibonacci numbers efficiently without causing excess memory use or incorrect caching.",
+    "category": "optimization",
+    "description": "Improve an existing SQL query that ranks customers by total sales across multiple regions, enhancing its readability and performance without changing the result.",
+    "prompt": "Given the following SQL query that calculates each customer's total sales across different regions, ranks them, and filters the top 10, refactor it to optimize performance and readability while returning the exact same result set. Your refactor should reduce redundant subqueries and improve indexing utilization.\n\nThe original query is provided below.\n\n-- Original Query\nSELECT\n  c.customer_id,\n  c.customer_name,\n  SUM(o.amount) AS total_sales,\n  RANK() OVER (ORDER BY SUM(o.amount) DESC) AS sales_rank\nFROM\n  customers c\nJOIN\n  orders o ON c.customer_id = o.customer_id\nJOIN\n  (\n    SELECT region_id FROM regions WHERE region_name IN ('North', 'East', 'West')\n  ) r ON o.region_id = r.region_id\nGROUP BY\n  c.customer_id,\n  c.customer_name\nHAVING\n  SUM(o.amount) > (SELECT AVG(total_amount) FROM (\n    SELECT SUM(amount) AS total_amount\n    FROM orders\n    GROUP BY customer_id\n  ) AS sub)\nORDER BY\n  sales_rank\nLIMIT 10;",
     "guidance": [
-      "Analyze how the cache dictionary is initialized and used in the recursive calls.",
-      "Ensure the cache does not reset during recursion causing unnecessary recomputation or memory misuse.",
-      "Validate that the base cases and recursive conditions are handled correctly so the function terminates as expected."
+      "Focus on minimizing nested subqueries that can be expressed as joins or common table expressions (CTEs) for clarity.",
+      "Make sure window functions and aggregates are computed just once without redundant recalculations.",
+      "Ensure the final output columns and ordering remain unchanged after refactoring."
     ],
     "hints": [
-      "Check if the cache dictionary is being re-created inside the recursive function call.",
-      "Consider passing the cache dictionary as a default argument or using a helper function to maintain state.",
-      "Verify the function returns the memoized value correctly and stores it after computation."
+      "Try using a CTE for the average total sales per customer instead of an inline subquery in HAVING.",
+      "Consider pre-aggregating orders before joining to customers to reduce the join data scanned.",
+      "Window functions can sometimes be applied after filtering to optimize performance."
     ],
-    "starterCode": "def fibonacci(n, cache={}):\n    if n in cache:\n        return cache[n]\n    if n <= 1:\n        return n\n    cache = {}  # Bug: reinitializing cache inside recursion\n    cache[n] = fibonacci(n-1, cache) + fibonacci(n-2, cache)\n    return cache[n]",
-    "expectedOutput": "fibonacci(10) should return 55\nfibonacci(20) should return 6765",
+    "starterCode": "SELECT\n  c.customer_id,\n  c.customer_name,\n  SUM(o.amount) AS total_sales,\n  RANK() OVER (ORDER BY SUM(o.amount) DESC) AS sales_rank\nFROM\n  customers c\nJOIN\n  orders o ON c.customer_id = o.customer_id\nJOIN\n  (\n    SELECT region_id FROM regions WHERE region_name IN ('North', 'East', 'West')\n  ) r ON o.region_id = r.region_id\nGROUP BY\n  c.customer_id,\n  c.customer_name\nHAVING\n  SUM(o.amount) > (SELECT AVG(total_amount) FROM (\n    SELECT SUM(amount) AS total_amount\n    FROM orders\n    GROUP BY customer_id\n  ) AS sub)\nORDER BY\n  sales_rank\nLIMIT 10;",
+    "expectedOutput": "Returns top 10 customers ranked by total sales amount (filtered by regions 'North', 'East', and 'West') whose total sales exceed the average total sales of all customers. Columns: customer_id, customer_name, total_sales, sales_rank ordered ascending by sales_rank.",
+    "concepts": [
+      "SQL optimization",
+      "CTE usage",
+      "Window functions",
+      "Aggregate functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-sql-query-for-efficient-employee-sales-aggregation",
+    "title": "Refactor a SQL Query for Efficient Employee Sales Aggregation",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Improve a provided SQL query that calculates total sales per employee by refactoring it for better readability and optimization, while preserving its original behavior and output.",
+    "prompt": "Given the following SQL query that calculates total sales amount per employee from sales and employees tables, refactor the query to improve readability and optimize performance without changing the output results.\n\nYour refactored query should:\n- Avoid unnecessary subqueries or joins\n- Use proper aggregation and filtering clauses\n- Maintain the original output (employee_id, employee_name, total_sales)\n\nTables:\n- employees(employee_id, employee_name)\n- sales(sale_id, employee_id, sale_amount)\n\nOriginal query:\n\nSELECT e.employee_id, e.employee_name, (\n  SELECT SUM(sale_amount) \n  FROM sales s \n  WHERE s.employee_id = e.employee_id\n) AS total_sales\nFROM employees e\nWHERE e.employee_id IN (\n  SELECT DISTINCT employee_id FROM sales\n)\nORDER BY total_sales DESC;",
+    "guidance": [
+      "Consider rewriting the query using JOIN and GROUP BY to reduce nested subqueries.",
+      "Ensure that employees without sales are excluded in the refactored query.",
+      "Focus on simplifying the query structure while preserving the original result set."
+    ],
+    "hints": [
+      "Use an INNER JOIN between employees and sales tables to directly access sales per employee.",
+      "Aggregate sales amounts using GROUP BY employee_id and employee_name.",
+      "Ordering by aggregated sales amount in descending order helps verify the refactored query outputs remain consistent."
+    ],
+    "starterCode": "SELECT e.employee_id, e.employee_name, (\n  SELECT SUM(sale_amount) \n  FROM sales s \n  WHERE s.employee_id = e.employee_id\n) AS total_sales\nFROM employees e\nWHERE e.employee_id IN (\n  SELECT DISTINCT employee_id FROM sales\n)\nORDER BY total_sales DESC;",
+    "expectedOutput": "Columns: employee_id | employee_name | total_sales\nRows: One row per employee who has at least one sale, sorted by total_sales descending",
+    "concepts": [
+      "SQL JOIN",
+      "Aggregation",
+      "Subquery refactoring",
+      "Query optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-memoized-recursive-fibonacci-function-with-performance-tracking",
+    "title": "Build a Memoized Recursive Fibonacci Function with Performance Tracking",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a Python function to compute Fibonacci numbers using memoization to optimize recursive calls. Additionally, implement performance tracking to count how many times the function is called and how many cache hits occur.",
+    "prompt": "Write a Python function named fibonacci(n) that returns the nth Fibonacci number. Use memoization to optimize the recursive calls. Additionally, implement internal tracking mechanisms inside your function or via helper structures to count the total number of function calls made and the number of times a cached value was returned instead of performing a full recursion. Your function should expose two additional attributes: call_count and cache_hits, which track these metrics respectively.\n\nFor example, calling fibonacci(10) should return 55, and the attributes fibonacci.call_count and fibonacci.cache_hits should reflect the optimization achieved.\n\nRequirements:\n- Use plain recursion combined with memoization (caching previously computed results).\n- Track the total number of fibonacci function calls, including cache lookups.\n- Track the number of cache hits where a cached result is reused.\n- Expose call_count and cache_hits as attributes accessible as fibonacci.call_count and fibonacci.cache_hits.\n\nImplement efficient and clean code to achieve this.",
+    "guidance": [
+      "Use a dictionary to cache computed Fibonacci values and check it before performing recursive calls.",
+      "Increment call_count each time the fibonacci function is called.",
+      "Increment cache_hits each time you return a cached value without recursion."
+    ],
+    "hints": [
+      "Consider defining the call_count and cache_hits attributes on the function object itself.",
+      "Make sure to handle the base cases of Fibonacci (n=0 returns 0, n=1 returns 1) properly.",
+      "Try wrapping your recursive function inside another function or use Python function attributes for tracking."
+    ],
+    "starterCode": "def fibonacci(n):\n    # Initialize cache and counters on the first call if needed\n    if not hasattr(fibonacci, 'cache'):\n        fibonacci.cache = {0: 0, 1: 1}\n        fibonacci.call_count = 0\n        fibonacci.cache_hits = 0\n    fibonacci.call_count += 1\n    if n in fibonacci.cache:\n        fibonacci.cache_hits += 1\n        return fibonacci.cache[n]\n    result = fibonacci(n-1) + fibonacci(n-2)\n    fibonacci.cache[n] = result\n    return result",
+    "expectedOutput": "fibonacci(10) == 55\nfibonacci.call_count > 0\nfibonacci.cache_hits > 0",
     "concepts": [
       "recursion",
       "memoization",
-      "mutable default arguments",
-      "debugging"
+      "function attributes",
+      "performance tracking"
     ],
     "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "create-a-function-to-calculate-average-salary-by-department",
-    "title": "Create a Function to Calculate Average Salary by Department",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "queries",
-    "description": "Write an SQL function that calculates the average salary for a given department from an employee table.",
-    "prompt": "You have an Employees table with columns: EmployeeID, Department, and Salary. Write an SQL function named CalculateAvgSalary that takes a department name as input and returns the average salary of all employees in that department.",
-    "guidance": [
-      "Use the CREATE FUNCTION syntax supported by your SQL dialect.",
-      "Ensure the function accepts a department name as a parameter.",
-      "Use an aggregation query with AVG() to calculate the average salary.",
-      "Return the calculated average salary from the function."
-    ],
-    "hints": [
-      "You can use a SELECT statement inside the function to compute the average salary.",
-      "Use the WHERE clause to filter employees by the input department.",
-      "Remember to specify the return type for your function (e.g., FLOAT or DECIMAL)."
-    ],
-    "starterCode": "CREATE FUNCTION CalculateAvgSalary(dept_name VARCHAR) RETURNS FLOAT AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
-    "expectedOutput": "If you call CalculateAvgSalary('Sales'), it should return the average salary of all employees in the Sales department.",
-    "concepts": [
-      "CREATE FUNCTION",
-      "AVG aggregate function",
-      "WHERE clause"
-    ],
-    "estimatedTime": "10 minutes",
     "isFeatured": true
   },
   {
-    "slug": "refactor-a-function-to-calculate-factorial-more-cleanly",
-    "title": "Refactor a Function to Calculate Factorial More Cleanly",
-    "language": "python",
-    "difficulty": "beginner",
+    "slug": "refactor-messy-array-processing-function-for-clarity-and-efficiency",
+    "title": "Refactor Messy Array Processing Function for Clarity and Efficiency",
+    "language": "javascript",
+    "difficulty": "intermediate",
     "category": "code-quality",
-    "description": "Improve the clarity and simplicity of a provided factorial function without changing its behavior. Practice writing clean and readable Python code.",
-    "prompt": "You are given a function that calculates the factorial of a number using a while loop and extra variables. Refactor the function to make it cleaner and more Pythonic, maintaining the same output, but removing unnecessary variables and improving readability. The function should return the factorial of the given non-negative integer.",
+    "description": "Improve the readability, efficiency, and overall code quality of a JavaScript function that processes arrays without changing its behavior.",
+    "prompt": "You are given a JavaScript function that takes an array of user objects and returns an array of usernames in uppercase, but the original function is messy and inefficient. Refactor the function to improve readability and performance without changing its output or behavior.",
     "guidance": [
-      "Keep the same functionality of computing the factorial.",
-      "Simplify variable usage and consider using a for loop if it improves readability.",
-      "Make sure the function is easy to understand at a glance."
+      "Focus on simplifying nested loops and conditional checks.",
+      "Use array methods such as map and filter to make the code more declarative.",
+      "Keep the function output and behavior exactly the same."
     ],
     "hints": [
-      "Factorials can be computed cleanly using a for loop running from 1 up to the number.",
-      "Try to name variables descriptively or reduce them to just what is necessary."
+      "Consider using chaining of array methods to avoid intermediate variables.",
+      "Avoid using unnecessary temporary arrays or variables.",
+      "Make use of modern ES6+ syntax like arrow functions."
     ],
-    "starterCode": "def factorial(n):\n    if n == 0:\n        return 1\n    result = 1\n    i = 1\n    while i <= n:\n        result = result * i\n        i = i + 1\n    return result",
-    "expectedOutput": "factorial(5) returns 120",
+    "starterCode": "function getUppercaseUsernames(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i] && users[i].name) {\n      let name = users[i].name;\n      let upperName = \"\";\n      for (let j = 0; j < name.length; j++) {\n        upperName += name[j].toUpperCase();\n      }\n      result.push(upperName);\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "For input [{name: 'alice'}, {name: 'Bob'}, {name: 'charlie'}], the function returns ['ALICE', 'BOB', 'CHARLIE']",
     "concepts": [
-      "functions",
-      "loops",
-      "variables",
-      "code readability"
+      "array methods",
+      "refactoring",
+      "code readability",
+      "ES6 features"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": true
+    "isFeatured": false
   }
 ]

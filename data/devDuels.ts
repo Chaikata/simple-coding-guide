@@ -7377,5 +7377,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-sql-query-filtering-customers-by-age",
+    "title": "Fix the Bug in SQL Query Filtering Customers by Age",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A beginner-level debugging challenge where you must identify and fix the error in a SQL query that aims to select customers age 18 and older.",
+    "prompt": "You are given a SQL query that is supposed to return all customers aged 18 or older from a Customers table. However, the query is not returning the correct results. Find and fix the bug in the query so that it correctly filters for customers whose age is at least 18.",
+    "guidance": [
+      "Check the WHERE clause for any syntax or logical errors.",
+      "Verify the comparison operator used for filtering by age."
+    ],
+    "hints": [
+      "Make sure the comparison operator in the WHERE clause filters customers with age >= 18.",
+      "Remember that the column name should match exactly and the condition should filter out younger customers."
+    ],
+    "starterCode": "SELECT * FROM Customers WHERE age > 18;",
+    "expectedOutput": "Returns all rows where age is 18 or older (inclusive), not just greater than 18.",
+    "concepts": [
+      "WHERE clause",
+      "Comparison operators",
+      "Basic SELECT filtering"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-weather-dashboard-with-dynamic-city-search",
+    "title": "Build a Weather Dashboard with Dynamic City Search",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a small weather dashboard application in JavaScript that fetches and displays weather data for cities searched by the user, using a public weather API.",
+    "prompt": "Build a weather dashboard function in JavaScript that accepts a city name as input, fetches current weather data from a public API (like OpenWeatherMap), and returns an object containing the city name, temperature (in Celsius), weather condition description, and an icon URL. Ensure your function handles errors gracefully for invalid city names or API issues. Structure your code to allow easy extension for additional features like a 5-day forecast in the future.",
+    "guidance": [
+      "Use fetch() to call the weather API asynchronously and parse the JSON response.",
+      "Extract the relevant data fields: city name, temperature in Celsius, weather description, and icon code.",
+      "Convert temperature from Kelvin to Celsius if necessary.",
+      "Implement basic error handling for invalid inputs or network errors."
+    ],
+    "hints": [
+      "OpenWeatherMap API's current weather endpoint is https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_key}.",
+      "You can convert temperature: Celsius = Kelvin - 273.15.",
+      "Check if the API response includes a 'cod' field that signals an error when the city is invalid."
+    ],
+    "starterCode": "async function getWeatherForCity(city) {\n  const apiKey = 'YOUR_API_KEY';\n  // Your code here\n}",
+    "expectedOutput": "getWeatherForCity('London') should return an object like:\n{\n  city: 'London',\n  temperature: 15.0, // degrees Celsius\n  description: 'light rain',\n  iconUrl: 'http://openweathermap.org/img/wn/10d@2x.png'\n}",
+    "concepts": [
+      "API consumption",
+      "asynchronous JavaScript",
+      "error handling",
+      "data transformation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-optimize-a-complex-customer-sales-ranking-query",
+    "title": "Refactor and Optimize a Complex Customer Sales Ranking Query",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "optimization",
+    "description": "Improve an existing SQL query that ranks customers by total sales across multiple regions, enhancing its readability and performance without changing the result.",
+    "prompt": "Given the following SQL query that calculates each customer's total sales across different regions, ranks them, and filters the top 10, refactor it to optimize performance and readability while returning the exact same result set. Your refactor should reduce redundant subqueries and improve indexing utilization.\n\nThe original query is provided below.\n\n-- Original Query\nSELECT\n  c.customer_id,\n  c.customer_name,\n  SUM(o.amount) AS total_sales,\n  RANK() OVER (ORDER BY SUM(o.amount) DESC) AS sales_rank\nFROM\n  customers c\nJOIN\n  orders o ON c.customer_id = o.customer_id\nJOIN\n  (\n    SELECT region_id FROM regions WHERE region_name IN ('North', 'East', 'West')\n  ) r ON o.region_id = r.region_id\nGROUP BY\n  c.customer_id,\n  c.customer_name\nHAVING\n  SUM(o.amount) > (SELECT AVG(total_amount) FROM (\n    SELECT SUM(amount) AS total_amount\n    FROM orders\n    GROUP BY customer_id\n  ) AS sub)\nORDER BY\n  sales_rank\nLIMIT 10;",
+    "guidance": [
+      "Focus on minimizing nested subqueries that can be expressed as joins or common table expressions (CTEs) for clarity.",
+      "Make sure window functions and aggregates are computed just once without redundant recalculations.",
+      "Ensure the final output columns and ordering remain unchanged after refactoring."
+    ],
+    "hints": [
+      "Try using a CTE for the average total sales per customer instead of an inline subquery in HAVING.",
+      "Consider pre-aggregating orders before joining to customers to reduce the join data scanned.",
+      "Window functions can sometimes be applied after filtering to optimize performance."
+    ],
+    "starterCode": "SELECT\n  c.customer_id,\n  c.customer_name,\n  SUM(o.amount) AS total_sales,\n  RANK() OVER (ORDER BY SUM(o.amount) DESC) AS sales_rank\nFROM\n  customers c\nJOIN\n  orders o ON c.customer_id = o.customer_id\nJOIN\n  (\n    SELECT region_id FROM regions WHERE region_name IN ('North', 'East', 'West')\n  ) r ON o.region_id = r.region_id\nGROUP BY\n  c.customer_id,\n  c.customer_name\nHAVING\n  SUM(o.amount) > (SELECT AVG(total_amount) FROM (\n    SELECT SUM(amount) AS total_amount\n    FROM orders\n    GROUP BY customer_id\n  ) AS sub)\nORDER BY\n  sales_rank\nLIMIT 10;",
+    "expectedOutput": "Returns top 10 customers ranked by total sales amount (filtered by regions 'North', 'East', and 'West') whose total sales exceed the average total sales of all customers. Columns: customer_id, customer_name, total_sales, sales_rank ordered ascending by sales_rank.",
+    "concepts": [
+      "SQL optimization",
+      "CTE usage",
+      "Window functions",
+      "Aggregate functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-sql-query-for-efficient-employee-sales-aggregation",
+    "title": "Refactor a SQL Query for Efficient Employee Sales Aggregation",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Improve a provided SQL query that calculates total sales per employee by refactoring it for better readability and optimization, while preserving its original behavior and output.",
+    "prompt": "Given the following SQL query that calculates total sales amount per employee from sales and employees tables, refactor the query to improve readability and optimize performance without changing the output results.\n\nYour refactored query should:\n- Avoid unnecessary subqueries or joins\n- Use proper aggregation and filtering clauses\n- Maintain the original output (employee_id, employee_name, total_sales)\n\nTables:\n- employees(employee_id, employee_name)\n- sales(sale_id, employee_id, sale_amount)\n\nOriginal query:\n\nSELECT e.employee_id, e.employee_name, (\n  SELECT SUM(sale_amount) \n  FROM sales s \n  WHERE s.employee_id = e.employee_id\n) AS total_sales\nFROM employees e\nWHERE e.employee_id IN (\n  SELECT DISTINCT employee_id FROM sales\n)\nORDER BY total_sales DESC;",
+    "guidance": [
+      "Consider rewriting the query using JOIN and GROUP BY to reduce nested subqueries.",
+      "Ensure that employees without sales are excluded in the refactored query.",
+      "Focus on simplifying the query structure while preserving the original result set."
+    ],
+    "hints": [
+      "Use an INNER JOIN between employees and sales tables to directly access sales per employee.",
+      "Aggregate sales amounts using GROUP BY employee_id and employee_name.",
+      "Ordering by aggregated sales amount in descending order helps verify the refactored query outputs remain consistent."
+    ],
+    "starterCode": "SELECT e.employee_id, e.employee_name, (\n  SELECT SUM(sale_amount) \n  FROM sales s \n  WHERE s.employee_id = e.employee_id\n) AS total_sales\nFROM employees e\nWHERE e.employee_id IN (\n  SELECT DISTINCT employee_id FROM sales\n)\nORDER BY total_sales DESC;",
+    "expectedOutput": "Columns: employee_id | employee_name | total_sales\nRows: One row per employee who has at least one sale, sorted by total_sales descending",
+    "concepts": [
+      "SQL JOIN",
+      "Aggregation",
+      "Subquery refactoring",
+      "Query optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-memoized-recursive-fibonacci-function-with-performance-tracking",
+    "title": "Build a Memoized Recursive Fibonacci Function with Performance Tracking",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a Python function to compute Fibonacci numbers using memoization to optimize recursive calls. Additionally, implement performance tracking to count how many times the function is called and how many cache hits occur.",
+    "prompt": "Write a Python function named fibonacci(n) that returns the nth Fibonacci number. Use memoization to optimize the recursive calls. Additionally, implement internal tracking mechanisms inside your function or via helper structures to count the total number of function calls made and the number of times a cached value was returned instead of performing a full recursion. Your function should expose two additional attributes: call_count and cache_hits, which track these metrics respectively.\n\nFor example, calling fibonacci(10) should return 55, and the attributes fibonacci.call_count and fibonacci.cache_hits should reflect the optimization achieved.\n\nRequirements:\n- Use plain recursion combined with memoization (caching previously computed results).\n- Track the total number of fibonacci function calls, including cache lookups.\n- Track the number of cache hits where a cached result is reused.\n- Expose call_count and cache_hits as attributes accessible as fibonacci.call_count and fibonacci.cache_hits.\n\nImplement efficient and clean code to achieve this.",
+    "guidance": [
+      "Use a dictionary to cache computed Fibonacci values and check it before performing recursive calls.",
+      "Increment call_count each time the fibonacci function is called.",
+      "Increment cache_hits each time you return a cached value without recursion."
+    ],
+    "hints": [
+      "Consider defining the call_count and cache_hits attributes on the function object itself.",
+      "Make sure to handle the base cases of Fibonacci (n=0 returns 0, n=1 returns 1) properly.",
+      "Try wrapping your recursive function inside another function or use Python function attributes for tracking."
+    ],
+    "starterCode": "def fibonacci(n):\n    # Initialize cache and counters on the first call if needed\n    if not hasattr(fibonacci, 'cache'):\n        fibonacci.cache = {0: 0, 1: 1}\n        fibonacci.call_count = 0\n        fibonacci.cache_hits = 0\n    fibonacci.call_count += 1\n    if n in fibonacci.cache:\n        fibonacci.cache_hits += 1\n        return fibonacci.cache[n]\n    result = fibonacci(n-1) + fibonacci(n-2)\n    fibonacci.cache[n] = result\n    return result",
+    "expectedOutput": "fibonacci(10) == 55\nfibonacci.call_count > 0\nfibonacci.cache_hits > 0",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "function attributes",
+      "performance tracking"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-messy-array-processing-function-for-clarity-and-efficiency",
+    "title": "Refactor Messy Array Processing Function for Clarity and Efficiency",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability, efficiency, and overall code quality of a JavaScript function that processes arrays without changing its behavior.",
+    "prompt": "You are given a JavaScript function that takes an array of user objects and returns an array of usernames in uppercase, but the original function is messy and inefficient. Refactor the function to improve readability and performance without changing its output or behavior.",
+    "guidance": [
+      "Focus on simplifying nested loops and conditional checks.",
+      "Use array methods such as map and filter to make the code more declarative.",
+      "Keep the function output and behavior exactly the same."
+    ],
+    "hints": [
+      "Consider using chaining of array methods to avoid intermediate variables.",
+      "Avoid using unnecessary temporary arrays or variables.",
+      "Make use of modern ES6+ syntax like arrow functions."
+    ],
+    "starterCode": "function getUppercaseUsernames(users) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i] && users[i].name) {\n      let name = users[i].name;\n      let upperName = \"\";\n      for (let j = 0; j < name.length; j++) {\n        upperName += name[j].toUpperCase();\n      }\n      result.push(upperName);\n    }\n  }\n  return result;\n}",
+    "expectedOutput": "For input [{name: 'alice'}, {name: 'Bob'}, {name: 'charlie'}], the function returns ['ALICE', 'BOB', 'CHARLIE']",
+    "concepts": [
+      "array methods",
+      "refactoring",
+      "code readability",
+      "ES6 features"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
