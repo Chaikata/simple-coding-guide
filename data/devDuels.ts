@@ -7893,5 +7893,181 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "30 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "advanced-task-scheduler-build-a-priority-based-task-manager-in-python",
+    "title": "Advanced Task Scheduler: Build a Priority-based Task Manager in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a Python mini-project that manages a list of tasks with start times, durations, and priorities, optimizing scheduling to avoid conflicts based on priority and timing.",
+    "prompt": "You are tasked with creating an advanced task scheduler that manages tasks with start times, durations, and priorities. Build a Python function named schedule_tasks(tasks) where tasks is a list of dictionaries, each dictionary containing 'id' (unique int), 'start' (ISO 8601 datetime string), 'duration' (minutes, int), and 'priority' (int, higher means more important). The function must return a schedule list of task ids sorted by actual execution order, ensuring that tasks do not overlap in execution timelines. If tasks overlap, the task with lower priority should be delayed until the conflicting task is finished. Tasks must run sequentially with no gaps unless forced by conflicts. Adjust start times accordingly to resolve overlaps based on priority. Your final output must be a list of task ids in the order they will execute, respecting all constraints.",
+    "guidance": [
+      "Parse and convert ISO 8601 datetime strings to Python datetime objects for accurate time calculations.",
+      "Sort initial tasks by start time and priority to manage execution order and conflict resolution.",
+      "Iteratively adjust conflicting tasks' start times so no two tasks overlap, always delaying lower-priority tasks.",
+      "Return only the ordered list of task ids reflecting the final execution order after resolving all overlaps."
+    ],
+    "hints": [
+      "Use the datetime module to handle time calculations and comparisons.",
+      "Think about simulating the schedule timeline, updating start times as you iterate through tasks.",
+      "Consider a greedy approach: always schedule the highest priority task available at the earliest possible time."
+    ],
+    "starterCode": "from datetime import datetime, timedelta\n\ndef schedule_tasks(tasks):\n    # Your code here\n    pass\n\n# Example task format\n# tasks = [\n#     {'id': 1, 'start': '2024-06-01T09:00:00', 'duration': 60, 'priority': 2},\n#     {'id': 2, 'start': '2024-06-01T09:30:00', 'duration': 45, 'priority': 3},\n#     {'id': 3, 'start': '2024-06-01T10:00:00', 'duration': 30, 'priority': 1}\n# ]",
+    "expectedOutput": "[2, 1, 3]",
+    "concepts": [
+      "datetime manipulation",
+      "task scheduling",
+      "priority queue",
+      "conflict resolution"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-optimize-deeply-nested-array-and-object-processing-in-javascript",
+    "title": "Refactor and Optimize Deeply Nested Array and Object Processing in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve the readability, maintainability, and performance of a complex function that processes deeply nested arrays and objects without changing its behavior.",
+    "prompt": "You are given a function that processes an array of user data objects containing nested properties for user activities, preferences, and metadata. The function is currently deeply nested, hard to read, and inefficient. Your task is to refactor this function to improve code clarity, reduce nesting depth, remove redundant computations, and optimize performance, while ensuring it produces the exact same output for any input. The function aggregates and returns a summary report object including counts, filtered data arrays, and derived metrics.",
+    "guidance": [
+      "Break down large blocks of nested conditionals into smaller, reusable helper functions.",
+      "Use early returns to decrease nesting and improve clarity.",
+      "Avoid unnecessary iterations or recalculations by caching interim results.",
+      "Use modern JavaScript features such as destructuring, map(), filter(), and reduce() for cleaner data transformations."
+    ],
+    "hints": [
+      "Extract complex conditional checks and data transformations into well-named functions.",
+      "Leverage Array.prototype.reduce() to accumulate results efficiently without multiple passes.",
+      "Consider immutability and avoid side effects to keep logic predictable and easier to test."
+    ],
+    "starterCode": "function generateUserReport(users) {\n  const report = { activeUsers: 0, premiumUsers: 0, recentLogins: [], preferencesSummary: {} };\n  for (let i = 0; i < users.length; i++) {\n    const user = users[i];\n    if (user && user.profile) {\n      if (user.status === 'active') {\n        report.activeUsers++;\n      }\n      if (user.subscription && user.subscription.type === 'premium') {\n        report.premiumUsers++;\n      }\n      if (user.activity && user.activity.loginDates) {\n        for (let j = 0; j < user.activity.loginDates.length; j++) {\n          const loginDate = user.activity.loginDates[j];\n          if (new Date(loginDate) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {\n            report.recentLogins.push(user.id);\n            break;\n          }\n        }\n      }\n      if (user.preferences) {\n        for (const key in user.preferences) {\n          if (user.preferences.hasOwnProperty(key)) {\n            if (!report.preferencesSummary[key]) {\n              report.preferencesSummary[key] = new Set();\n            }\n            report.preferencesSummary[key].add(user.preferences[key]);\n          }\n        }\n      }\n    }\n  }\n  for (const key in report.preferencesSummary) {\n    if (report.preferencesSummary.hasOwnProperty(key)) {\n      report.preferencesSummary[key] = Array.from(report.preferencesSummary[key]);\n    }\n  }\n  return report;\n}",
+    "expectedOutput": "For an input array users, the output will be an object with these properties: activeUsers (number), premiumUsers (number), recentLogins (array of user IDs who logged in within last 7 days), and preferencesSummary (object mapping preference keys to arrays of unique values).",
+    "concepts": [
+      "code refactoring",
+      "array iteration and transformation",
+      "nested object handling",
+      "performance optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-memoized-recursive-function-to-calculate-large-fibonacci-numbers",
+    "title": "Build a Memoized Recursive Function to Calculate Large Fibonacci Numbers",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Implement an efficient recursive function in C++ that computes the nth Fibonacci number leveraging memoization to optimize overlapping subproblems, capable of handling large input values.",
+    "prompt": "Create a function `long long fib(int n)` that returns the nth Fibonacci number (0-indexed: fib(0) = 0, fib(1) = 1). The function must use recursion with memoization to handle inputs up to at least n = 90 efficiently. Avoid recomputation by caching intermediate results.",
+    "guidance": [
+      "Use a static or external container like `std::unordered_map` or `std::vector` to store previously computed Fibonacci values.",
+      "Implement the base cases for n=0 and n=1 explicitly in the recursive function.",
+      "Make sure the function runs efficiently for large n by avoiding redundant recursive calls."
+    ],
+    "hints": [
+      "Consider passing the memoization container as a static variable inside the function to preserve data across calls.",
+      "Use `long long` as the return type to safely store Fibonacci numbers up to fib(90).",
+      "Test edge cases like fib(0), fib(1), and fib(90) to ensure correctness and performance."
+    ],
+    "starterCode": "long long fib(int n) {\n    // Your code here\n}",
+    "expectedOutput": "fib(10) = 55\nfib(50) = 12586269025\nfib(90) = 2880067194370816120",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dynamic programming",
+      "optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "simple-budget-tracker-mini-project",
+    "title": "Simple Budget Tracker Mini Project",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a basic budget tracker that lets users add income, add expenses, and get their current balance. This beginner-friendly mini project practices using functions, variables, conditionals, and loops.",
+    "prompt": "Build a Python function called `budget_tracker` that repeatedly allows a user to add an income or expense entry. The function should take no arguments and run a simple interactive loop, prompting the user to input 'income' or 'expense', then ask for the amount (a positive number). Keep a running total of income and expenses separately. When the user types 'quit', the function should print the total income, total expenses, and the current balance (income minus expenses) and then exit.",
+    "guidance": [
+      "Use a while loop to keep asking the user for input until they type 'quit'.",
+      "Use variables to store the total income and total expenses.",
+      "Make sure to convert input amounts to floats for calculation.",
+      "Add simple input validation to ensure amount entered is a positive number."
+    ],
+    "hints": [
+      "You can use the input() function to get user input and float() to convert strings to numbers.",
+      "Use if-elif-else statements to handle the different user commands ('income', 'expense', 'quit').",
+      "Keep your code organized by updating the totals inside the loop based on the user’s action."
+    ],
+    "starterCode": "def budget_tracker():\n    income_total = 0.0\n    expense_total = 0.0\n    while True:\n        action = input(\"Enter 'income', 'expense', or 'quit': \")\n        # Your code here\n",
+    "expectedOutput": "Enter 'income', 'expense', or 'quit': income\nEnter amount: 1000\nEnter 'income', 'expense', or 'quit': expense\nEnter amount: 300\nEnter 'income', 'expense', or 'quit': quit\nTotal Income: 1000.0\nTotal Expenses: 300.0\nCurrent Balance: 700.0",
+    "concepts": [
+      "loops",
+      "conditionals",
+      "input/output",
+      "variables"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "design-and-query-an-employee-shift-scheduling-system",
+    "title": "Design and Query an Employee Shift Scheduling System",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "data-modeling",
+    "description": "Create a normalized SQL data model and implement complex queries to manage and analyze employee shift schedules for a medium-sized company.",
+    "prompt": "You have been tasked with designing a relational database schema to manage employee shift schedules for a company. The system should track employees, departments, shifts, and the assignments of employees to shifts across multiple days. After designing the schema, write SQL queries to fetch detailed scheduling reports.\n\nRequirements:\n1. Design tables to represent employees, departments, shifts (with start and end times), and shift assignments (which employee works which shift on which day).\n2. The schema should be normalized to at least 3NF to avoid redundancy.\n3. Populate the tables with sample data for at least 5 employees, 2 departments, 3 different shifts per day, and shift assignments covering one week.\n4. Write a query to list each employee's total scheduled hours per week.\n5. Write a query to find employees who have overlapping shifts in the same day (which should not happen).\n6. Write a query to output a weekly schedule grid that shows days as columns and employees as rows with shift names filled in.\n\nSubmit the SQL statements for table creation, sample data insertion, and the three requested queries.",
+    "guidance": [
+      "Focus on designing separate tables for Employees, Departments, Shifts, and ShiftAssignments, with appropriate foreign keys.",
+      "Make sure the shift time fields use an efficient and consistent time representation (e.g., TIME or DATETIME data types).",
+      "Approach the queries by considering joins and aggregate functions, and use window functions or self-joins for overlap detection."
+    ],
+    "hints": [
+      "Use composite unique constraints on ShiftAssignments to avoid duplicate assignments for the same employee and shift on the same day.",
+      "To detect overlapping shifts, consider comparing shift time intervals for the same employee on the same day using self-joins.",
+      "For the weekly schedule grid, pivot data by using conditional aggregation or CASE statements."
+    ],
+    "starterCode": "-- Create tables\nCREATE TABLE Departments (\n  dept_id INT PRIMARY KEY,\n  name VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE Employees (\n  emp_id INT PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  dept_id INT NOT NULL,\n  FOREIGN KEY (dept_id) REFERENCES Departments(dept_id)\n);\n\nCREATE TABLE Shifts (\n  shift_id INT PRIMARY KEY,\n  shift_name VARCHAR(50),\n  start_time TIME NOT NULL,\n  end_time TIME NOT NULL\n);\n\n-- Note: You will need to create a ShiftAssignments table and write the requested queries based on your schema design.",
+    "expectedOutput": "-- Example output for total scheduled hours per employee per week\n| emp_id | name         | total_hours |\n|--------|--------------|-------------|\n| 1      | Alice Smith  | 40          |\n| 2      | Bob Johnson  | 35          |\n| 3      | Carol Lee    | 30          |\n\n-- For overlap detection, output should list employees and days where overlap exists\n| emp_id | name         | date       | overlapping_shifts |\n|--------|--------------|------------|--------------------|\n| 3      | Carol Lee    | 2024-06-15 | Morning, Afternoon  |\n\n-- Weekly schedule grid with employees as rows and days as columns filled with shift names\n| emp_id | name        | Mon       | Tue       | Wed       | Thu       | Fri       | Sat       | Sun       |\n|--------|-------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|\n| 1      | Alice Smith | Morning   | Morning   | Morning   | Morning   | Morning   | Off       | Off       |",
+    "concepts": [
+      "Database normalization",
+      "Complex SQL queries",
+      "Time interval overlap detection",
+      "Pivoting data in SQL"
+    ],
+    "estimatedTime": "40 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-nested-closures-and-asynchronous-execution-in-javascript",
+    "title": "Predict the Output of Nested Closures and Asynchronous Execution in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze a complex JavaScript function involving nested closures, asynchronous setTimeout calls, and variable shadowing to predict the exact console output sequence and values.",
+    "prompt": "Examine the following JavaScript code snippet. Predict the exact output printed to the console when this code runs. Explain the sequence and reasoning for each output line, considering closures, variable scope, and asynchronous execution.",
+    "guidance": [
+      "Pay close attention to variable scopes, especially how let and var behave in closures.",
+      "Analyze how setTimeout callbacks capture variables and when they execute relative to the main thread.",
+      "Consider how the loop variables are captured by the closures inside the asynchronous callbacks."
+    ],
+    "hints": [
+      "Remember that 'var' has function scope and 'let' has block scope, affecting closure capture.",
+      "setTimeout callbacks queued with zero delay still run after the synchronous code completes.",
+      "Think about how changes to loop variables affect closures differently for var vs let."
+    ],
+    "starterCode": "function trickyClosure() {\n  for (var i = 0; i < 3; i++) {\n    setTimeout(function() {\n      console.log('var loop i:', i);\n    }, 0);\n  }\n\n  for (let j = 0; j < 3; j++) {\n    setTimeout(function() {\n      console.log('let loop j:', j);\n    }, 0);\n  }\n\n  (function() {\n    for (var k = 0; k < 3; k++) {\n      setTimeout(function() {\n        console.log('IIFE var k:', k);\n      }, k * 10);\n    }\n  })();\n}\n\ntrickyClosure();",
+    "expectedOutput": "var loop i: 3\nvar loop i: 3\nvar loop i: 3\nlet loop j: 0\nlet loop j: 1\nlet loop j: 2\nIIFE var k: 3\nIIFE var k: 3\nIIFE var k: 3",
+    "concepts": [
+      "closures",
+      "variable scope",
+      "asynchronous execution"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
