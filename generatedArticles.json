@@ -1,257 +1,67 @@
 [
   {
-    "slug": "building-scalable-data-models-in-javascript-for-real-time-applications",
-    "title": "Building Scalable Data Models in JavaScript for Real-Time Applications",
+    "slug": "mastering-javascript-closures-with-real-world-examples",
+    "title": "Mastering JavaScript Closures with Real-World Examples",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to design scalable and efficient data models in JavaScript to power real-time applications with ease.",
-    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "description": "Learn JavaScript closures step-by-step with beginner-friendly explanations and practical examples to enhance your coding skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time applications like chat apps, dashboards, and collaborative tools require data models that can handle rapid updates and multiple users simultaneously. In this beginner-friendly tutorial, you'll learn how to build scalable data models in JavaScript that stay efficient as your app grows."
+        "value": "JavaScript closures are a fundamental concept that every developer should understand. In simple terms, a closure gives you access to an outer function’s scope from an inner function, even after the outer function has finished executing. This tutorial will guide you through closures with real-world examples so you can start using them confidently."
       },
       {
         "type": "paragraph",
-        "value": "The key to scalable data modeling is structuring your data for quick updates, easy retrieval, and minimal conflicts. We'll start by discussing how to organize data and then implement a simple example to demonstrate these principles."
+        "value": "### What Is a Closure?"
       },
       {
         "type": "paragraph",
-        "value": "1. Use Plain Objects and Arrays: JavaScript objects and arrays are fast and flexible for storing dynamic data."
+        "value": "When a function is defined inside another function, the inner function has access to the variables and parameters of the outer function. This is because JavaScript functions form closures that 'close over' the variables of their parent environment."
       },
       {
         "type": "paragraph",
-        "value": "2. Normalize Data: Avoid deeply nested objects. Instead, break data into flat structures referenced by unique IDs. This simplifies updates."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. Immutable Updates: Use methods that don't mutate the original data. This helps avoid bugs and makes tracking changes easier."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's say we are building a simple chat app data model that stores users and messages."
+        "value": "Here's a basic example:"
       },
       {
         "type": "code",
-        "value": "// Initial normalized state\ntconst state = {\n  users: {\n    byId: {\n      'user1': { id: 'user1', name: 'Alice' },\n      'user2': { id: 'user2', name: 'Bob' }\n    },\n    allIds: ['user1', 'user2']\n  },\n  messages: {\n    byId: {\n      'msg1': { id: 'msg1', senderId: 'user1', content: 'Hello Bob!' }\n    },\n    allIds: ['msg1']\n  }\n};"
+        "value": "function outer() {\n  let count = 0; // variable in the outer function\n  function inner() {\n    count++;\n    console.log(count);\n  }\n  return inner; // return the inner function\n}\n\nconst myCounter = outer();\nmyCounter(); // Output: 1\nmyCounter(); // Output: 2\nmyCounter(); // Output: 3"
       },
       {
         "type": "paragraph",
-        "value": "Here, `users` and `messages` are stored in separate objects with two parts each: `byId` for quick lookup by unique IDs, and `allIds` which keeps the order of entries."
+        "value": "Even though the outer function has finished running, the inner function still remembers the variable `count`. This is the power of closures!"
       },
       {
         "type": "paragraph",
-        "value": "To add a message without mutating the original state, use this approach:"
+        "value": "### Real-World Example: Creating a Private Counter"
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures can help create private variables that can't be accessed directly from outside the function, a pattern often used to protect data."
       },
       {
         "type": "code",
-        "value": "function addMessage(state, newMessage) {\n  return {\n    ...state,\n    messages: {\n      byId: {\n        ...state.messages.byId,\n        [newMessage.id]: newMessage\n      },\n      allIds: [...state.messages.allIds, newMessage.id]\n    }\n  };\n}\n\nconst newMsg = { id: 'msg2', senderId: 'user2', content: 'Hi Alice!' };\nconst newState = addMessage(state, newMsg);\nconsole.log(newState.messages.allIds); // ['msg1', 'msg2']"
+        "value": "function createCounter() {\n  let count = 0;\n  return {\n    increment() {\n      count++;\n      return count;\n    },\n    decrement() {\n      count--;\n      return count;\n    },\n    getCount() {\n      return count;\n    }\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter.increment()); // 1\nconsole.log(counter.increment()); // 2\nconsole.log(counter.decrement()); // 1\nconsole.log(counter.getCount());  // 1"
       },
       {
         "type": "paragraph",
-        "value": "This pattern ensures you don't directly change the original objects, reducing bugs especially in apps handling many real-time events."
+        "value": "Notice that the `count` variable can only be changed by the methods `increment`, `decrement`, and `getCount`. This encapsulation is possible because of closures."
       },
       {
         "type": "paragraph",
-        "value": "Scaling this model to hundreds or thousands of users and messages stays efficient because lookups and updates operate on flat structures."
+        "value": "### Common Use Case: Function Factories"
       },
       {
         "type": "paragraph",
-        "value": "In summary, for scalable real-time data modeling in JavaScript:\n- Normalize your data.\n- Use immutable update patterns.\n- Keep your state flat.\n- Use IDs to relate entities.\nFollowing these steps will help you build fast, maintainable applications that grow smoothly."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-javascript-memory-leaks",
-    "title": "Mastering JavaScript Memory Leaks: Identifying and Optimizing Hidden Performance Sappers",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn how to detect and fix JavaScript memory leaks with practical tips to optimize your app's performance and avoid hidden bottlenecks.",
-    "videoUrl": "",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Memory leaks in JavaScript occur when your application holds onto memory it no longer needs, causing performance issues and sometimes crashes. As a beginner, understanding how to identify and fix these leaks is crucial for building efficient web apps."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this article, we'll explore common causes of memory leaks, show you how to detect them, and demonstrate practical ways to optimize your code. Let's start with understanding what causes memory leaks in JavaScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Causes of Memory Leaks\n- Global variables that are never released\n- Closures that keep referencing unused objects\n- Forgotten timers or event listeners\n- Detached DOM nodes still referenced in JavaScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Event Listeners Causing Memory Leaks"
+        "value": "Closures are great for creating function factories, which are functions that generate other functions configured with specific data."
       },
       {
         "type": "code",
-        "value": "function addClickListener() {\n  const button = document.getElementById('myButton');\n  button.addEventListener('click', () => {\n    console.log('Button clicked!');\n  });\n}\n\n// If you call addClickListener multiple times without removing the old listeners, they pile up and can leak memory."
+        "value": "function multiplyBy(factor) {\n  return function(number) {\n    return number * factor;\n  };\n}\n\nconst multiplyByTwo = multiplyBy(2);\nconst multiplyByFive = multiplyBy(5);\n\nconsole.log(multiplyByTwo(3)); // 6\nconsole.log(multiplyByFive(3)); // 15"
       },
       {
         "type": "paragraph",
-        "value": "### How to Fix This Leak\nAlways clean up event listeners when they are no longer needed:"
-      },
-      {
-        "type": "code",
-        "value": "function addClickListener() {\n  const button = document.getElementById('myButton');\n  function handleClick() {\n    console.log('Button clicked!');\n  }\n  button.addEventListener('click', handleClick);\n\n  // Return a cleanup function to remove the listener when done\n  return () => {\n    button.removeEventListener('click', handleClick);\n  };\n}\n\nconst cleanup = addClickListener();\n// Later in your code, call cleanup() to prevent leaks"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Detecting Memory Leaks\nModern browsers offer developer tools to monitor memory usage. In Chrome DevTools, you can use the \"Performance\" or \"Memory\" tab to take heap snapshots and track down leaks."
-      },
-      {
-        "type": "paragraph",
-        "value": "A simple way to check for leaks is to perform repetitive user actions in your app and watch if the memory grows without going down after garbage collection."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Optimizing Memory Usage Tips\n- Avoid creating unnecessary global variables.\n- Clean up timers with clearInterval/clearTimeout when no longer needed.\n- Nullify references to DOM nodes if you remove them from the document.\n- Be mindful with closures; if they capture large objects, make sure those objects aren’t needed forever."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nMemory leaks may seem complex at first, but with some practice and attention to detail, you can master identifying and fixing them. Always profile your application’s memory usage and clean up resources properly to keep your app fast and responsive."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start implementing these best practices today to optimize your JavaScript code and ensure a smooth user experience!"
-      }
-    ]
-  },
-  {
-    "slug": "leveraging-typescript-advanced-types-for-robust-data-modeling",
-    "title": "Leveraging TypeScript Advanced Types for Robust Data Modeling",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to use TypeScript’s advanced types like union, intersection, mapped types, and conditional types to build more reliable and scalable data models.",
-    "videoUrl": "https://www.youtube.com/watch?v=hHt3F5mL7Tc",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful tool for building reliable applications by adding static types to JavaScript. While beginners often use basic types like strings and numbers, TypeScript also offers advanced types that help create robust and flexible data models. In this tutorial, you’ll learn how to leverage union types, intersections, mapped types, and conditional types to build smarter and safer TypeScript code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Union Types\nUnion types allow a variable to be one of multiple types. This is useful for data that can have different forms."
-      },
-      {
-        "type": "code",
-        "value": "type ID = number | string;\n\nfunction printId(id: ID) {\n  if (typeof id === \"string\") {\n    console.log(`ID is a string: ${id.toUpperCase()}`);\n  } else {\n    console.log(`ID is a number: ${id}`);\n  }\n}\n\nprintId(\"abc123\"); // ID is a string: ABC123\nprintId(101);      // ID is a number: 101"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Intersection Types\nIntersection types let you combine multiple types into one. This comes in handy when you want an object that meets several type requirements simultaneously."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  name: string;\n  age: number;\n}\n\ninterface Employee {\n  employeeId: number;\n}\n\ntype EmployeeUser = User & Employee;\n\nconst user: EmployeeUser = {\n  name: \"Alice\",\n  age: 28,\n  employeeId: 1024\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Mapped Types\nMapped types help you transform existing types into new types. For example, you can make all properties in an interface optional or readonly."
-      },
-      {
-        "type": "code",
-        "value": "interface Task {\n  title: string;\n  completed: boolean;\n}\n\ntype OptionalTask = {\n  [P in keyof Task]?: Task[P];\n};\n\nconst task1: OptionalTask = { title: \"Learn TypeScript\" };"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conditional Types\nConditional types allow you to select one of two types based on a condition. This is very useful for creating flexible and reusable type logic."
-      },
-      {
-        "type": "code",
-        "value": "type IsString<T> = T extends string ? \"Yes\" : \"No\";\n\ntype Test1 = IsString<string>; // \"Yes\"\ntype Test2 = IsString<number>; // \"No\""
-      },
-      {
-        "type": "paragraph",
-        "value": "### Putting It All Together\nLet's create a generic function that updates an object, but only allows keys present on the original object. This uses generics, keyof, and mapped types."
-      },
-      {
-        "type": "code",
-        "value": "function updateObject<T>(obj: T, updates: Partial<T>): T {\n  return { ...obj, ...updates };\n}\n\nconst userProfile = {\n  name: \"John\",\n  age: 30\n};\n\nconst updatedProfile = updateObject(userProfile, { age: 31 });\nconsole.log(updatedProfile); // { name: \"John\", age: 31 }"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nUsing TypeScript's advanced types like union, intersection, mapped, and conditional types offers powerful tools to model your data more robustly. These features help reduce bugs and write clearer, more maintainable code. Start experimenting with these types today to improve your TypeScript skills!"
-      }
-    ]
-  },
-  {
-    "slug": "designing-scalable-error-handling-systems-in-typescript",
-    "title": "Designing Scalable Error Handling Systems in TypeScript for Large-Scale Applications",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to build scalable and maintainable error handling systems in TypeScript for your large-scale applications to improve reliability and developer experience.",
-    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Error handling is a crucial part of any application, especially large-scale ones. Properly managing errors makes your application more robust and easier to maintain. In TypeScript, thanks to static typing and advanced language features, you can create scalable error handling systems that provide clear and consistent error information across your codebase."
-      },
-      {
-        "type": "paragraph",
-        "value": "This article guides you through designing a scalable error handling approach using custom error classes, error codes, and utility functions to standardize error creation and handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why use custom error classes?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Instead of using the generic `Error` class directly, custom error classes help you communicate the specific error types and make it easier to handle them accordingly. Custom errors also carry additional metadata, like codes, to improve error categorization and logging."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start by creating a base error class that extends the native `Error` class and adds an error code."
-      },
-      {
-        "type": "code",
-        "value": "class AppError extends Error {\n  public readonly code: string;\n  public readonly details?: any;\n\n  constructor(code: string, message: string, details?: any) {\n    super(message);\n    this.code = code;\n    this.details = details;\n    // Set the prototype explicitly.\n    Object.setPrototypeOf(this, AppError.prototype);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Our `AppError` class has a `code` which is a string representing the type of error, a message for human-readable information, and optional `details` for additional context."
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, define some specific error types by extending `AppError`. This keeps your errors organized and easy to identify."
-      },
-      {
-        "type": "code",
-        "value": "class NotFoundError extends AppError {\n  constructor(message = \"Resource not found\", details?: any) {\n    super(\"NOT_FOUND\", message, details);\n    Object.setPrototypeOf(this, NotFoundError.prototype);\n  }\n}\n\nclass ValidationError extends AppError {\n  constructor(message = \"Validation failed\", details?: any) {\n    super(\"VALIDATION_ERROR\", message, details);\n    Object.setPrototypeOf(this, ValidationError.prototype);\n  }\n}\n\nclass DatabaseError extends AppError {\n  constructor(message = \"Database error occurred\", details?: any) {\n    super(\"DATABASE_ERROR\", message, details);\n    Object.setPrototypeOf(this, DatabaseError.prototype);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "With specific error classes, you can handle them more precisely in your application logic or API responses."
-      },
-      {
-        "type": "paragraph",
-        "value": "To improve scalability, create a centralized error factory or utility function to create errors consistently throughout your app."
-      },
-      {
-        "type": "code",
-        "value": "function createError(type: string, message?: string, details?: any): AppError {\n  switch (type) {\n    case \"NOT_FOUND\":\n      return new NotFoundError(message, details);\n    case \"VALIDATION_ERROR\":\n      return new ValidationError(message, details);\n    case \"DATABASE_ERROR\":\n      return new DatabaseError(message, details);\n    default:\n      return new AppError(\"UNKNOWN_ERROR\", message || \"An unknown error occurred\", details);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "This factory makes it easy to create errors based on types, keeping your error creation logic in one place."
-      },
-      {
-        "type": "paragraph",
-        "value": "In your application, when an error occurs, throw one of these errors with meaningful messages and details. Here's an example of error handling in a service function:"
-      },
-      {
-        "type": "code",
-        "value": "async function getUserById(id: string) {\n  try {\n    const user = await database.findUser(id);\n    if (!user) {\n      throw createError(\"NOT_FOUND\", `User with ID ${id} not found`);\n    }\n    return user;\n  } catch (err) {\n    if (err instanceof AppError) {\n      // Handle app-specific errors\n      console.error(`Error Code: ${err.code}`, err.message);\n      throw err;\n    }\n    // Handle unexpected errors\n    console.error(\"Unexpected error\", err);\n    throw createError(\"UNKNOWN_ERROR\", \"Unexpected error occurred\");\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Benefits of this approach"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Readability:** Custom classes clarify what kind of errors your app deals with.\n- **Consistency:** Centralized creation and codes make it easier to handle errors, especially in API responses.\n- **Extensibility:** Adding new error types is simple and doesn’t require refactoring existing code.\n- **Type Safety:** TypeScript helps catch errors early and provides autocompletion."
+        "value": "Here, the inner function remembers the `factor` from the outer function and multiplies any number by it."
       },
       {
         "type": "paragraph",
@@ -259,299 +69,561 @@
       },
       {
         "type": "paragraph",
-        "value": "By using custom error classes extended from a base class, incorporating error codes, and centralizing error creation, you can build scalable and maintainable error handling systems in TypeScript that are perfect for large-scale applications. This helps create a robust developer experience and makes your app more resilient to errors."
+        "value": "Closures help you keep variables safe and access the outer function’s scope even after it returns. They're useful in creating private data, function factories, and many other practical scenarios."
+      },
+      {
+        "type": "paragraph",
+        "value": "Practice creating closures and getting comfortable with how they preserve state — it’s a powerful tool in your JavaScript skill set!"
       }
     ]
   },
   {
-    "slug": "mastering-python-decorators-enhance-your-functions-like-a-pro",
-    "title": "Mastering Python Decorators: Enhance Your Functions Like a Pro",
-    "language": "python",
-    "type": "tutorials",
-    "description": "Learn how to use Python decorators to make your functions more powerful and reusable. This beginner-friendly guide explains decorators with clear examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=U-G-mSd4KAE",
+    "slug": "handling-unexpected-null-and-undefined-values-in-complex-javascript-objects",
+    "title": "Handling Unexpected Null and Undefined Values in Complex JavaScript Objects",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to safely handle unexpected null and undefined values within complex JavaScript objects to prevent runtime errors and write more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=mkKAWzmurM8",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python decorators are a powerful tool that allow you to modify the behavior of functions or methods without changing their code. If you're new to Python or programming in general, decorators might seem confusing at first. But once you understand them, you can write cleaner, more reusable, and more expressive code."
+        "value": "When working with complex JavaScript objects, you might encounter situations where properties can be null or undefined. These unexpected values often cause runtime errors if not handled properly. This article will guide you through beginner-friendly techniques to safely access nested properties and avoid common mistakes."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll learn what decorators are, why they are useful, and how to create and apply them to your functions step-by-step."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What Is a Decorator?\nA decorator is simply a function that takes another function as input and returns a new function with some added functionality. Think of it as wrapping your original function inside another function to extend its behavior."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple example with a decorator that prints messages before and after a function runs:"
+        "value": "Imagine you have an object like this:"
       },
       {
         "type": "code",
-        "value": "def my_decorator(func):\n    def wrapper():\n        print(\"Before calling the function\")\n        func()\n        print(\"After calling the function\")\n    return wrapper\n\n# Use the decorator to enhance this function\ndef say_hello():\n    print(\"Hello!\")\n\n# Manually decorate the function\ndecorated_function = my_decorator(say_hello)\ndecorated_function()"
+        "value": "const user = {\n  name: 'Alice',\n  address: {\n    street: '123 Main St',\n    city: 'Wonderland'\n  }\n};"
       },
       {
         "type": "paragraph",
-        "value": "Output:\nBefore calling the function\nHello!\nAfter calling the function"
+        "value": "Now, if you try to access `user.address.zipCode`, but `zipCode` doesn't exist, you might get `undefined`. If the `address` itself is sometimes missing or null, trying to access `user.address.zipCode` directly will throw an error."
       },
       {
         "type": "paragraph",
-        "value": "### Using the @ Syntax to Decorate Functions\nPython provides a nice shortcut to apply decorators using the @ symbol. Instead of manually assigning the decorated function, you can write:"
+        "value": "To safely access nested properties, you can use the optional chaining operator (`?.`), which checks if each part exists before continuing. Here's how you use it:"
       },
       {
         "type": "code",
-        "value": "@my_decorator\ndef say_hello():\n    print(\"Hello!\")\n\nsay_hello()"
+        "value": "const zipCode = user.address?.zipCode;\nconsole.log(zipCode); // undefined, but no error"
       },
       {
         "type": "paragraph",
-        "value": "This does exactly the same thing as the manual decoration but looks cleaner and is easier to read."
+        "value": "This means if `address` is null or undefined, JavaScript won't try to access `zipCode` and won’t throw an error. Instead, it simply returns `undefined`."
       },
       {
         "type": "paragraph",
-        "value": "### Decorators with Arguments\nSo far, our decorator works with functions that take no arguments. Let's make it more flexible by allowing it to work with functions that take any number of arguments:"
+        "value": "You can also combine this with the nullish coalescing operator (`??`) to provide fallback values when a property is null or undefined. For example:"
       },
       {
         "type": "code",
-        "value": "def my_decorator(func):\n    def wrapper(*args, **kwargs):\n        print(\"Before calling the function\")\n        result = func(*args, **kwargs)\n        print(\"After calling the function\")\n        return result\n    return wrapper\n\n@my_decorator\ndef greet(name):\n    print(f\"Hello, {name}!\")\n\ngreet(\"Alice\")"
+        "value": "const zipCode = user.address?.zipCode ?? 'No zip code provided';\nconsole.log(zipCode); // 'No zip code provided'"
       },
       {
         "type": "paragraph",
-        "value": "Output:\nBefore calling the function\nHello, Alice!\nAfter calling the function"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Real-World Example: Timing a Function\nLet's create a decorator that measures how long a function takes to run. This is useful when you want to optimize your code."
+        "value": "In cases where you want to check several nested properties, optional chaining helps you avoid writing lots of `if` statements. For example:"
       },
       {
         "type": "code",
-        "value": "import time\n\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        start_time = time.time()\n        result = func(*args, **kwargs)\n        end_time = time.time()\n        print(f\"Function '{func.__name__}' took {end_time - start_time:.4f} seconds to run.\")\n        return result\n    return wrapper\n\n@timer\ndef waste_time(num):\n    total = 0\n    for i in range(num):\n        total += i\n    return total\n\nwaste_time(1000000)"
+        "value": "const userCountry = user.address?.country?.name ?? 'Unknown country';\nconsole.log(userCountry); // 'Unknown country'"
       },
       {
         "type": "paragraph",
-        "value": "This code prints how long the `waste_time` function takes to run, letting you monitor performance easily."
+        "value": "If you need to handle arrays or JSON data that might have missing or null fields, always consider these techniques to make your code more robust and less prone to errors."
       },
       {
         "type": "paragraph",
-        "value": "### Summary\n- A decorator is a function that modifies another function.\n- Use `@decorator_name` above a function to decorate it.\n- Use `*args` and `**kwargs` in your wrapper to support any function signature.\n- Decorators help you add reusable functionality like logging, timing, authorization, and more."
+        "value": "In summary, handling unexpected null or undefined values involves:\n- Using optional chaining (`?.`) to safely access nested properties\n- Using nullish coalescing (`??`) to set default values\n- Writing defensive code to anticipate missing data"
       },
       {
         "type": "paragraph",
-        "value": "Mastering decorators will make your Python code more pythonic and professional. Start by experimenting with simple decorators, and soon you'll be applying them to real-world projects!"
+        "value": "By applying these simple practices, you'll reduce runtime errors and have cleaner, more readable code when working with complex JavaScript objects."
       }
     ]
   },
   {
-    "slug": "handling-api-data-validation-errors-python",
-    "title": "Handling API Data Validation Errors in Python: Best Practices for Real-World Projects",
+    "slug": "mastering-advanced-type-guards-in-typescript-for-cleaner-code",
+    "title": "Mastering Advanced Type Guards in TypeScript for Cleaner Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use advanced type guards in TypeScript to write safer, cleaner, and more readable code with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=jewn3kSUhT8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript’s type system helps you catch errors early by providing powerful static typing. One of the core tools to leverage TypeScript effectively is using \"type guards.\" Type guards let you check the type of a variable at runtime, enabling safer and cleaner code. In this tutorial, you’ll learn about advanced type guards beyond the basics, with practical examples you can use right away."
+      },
+      {
+        "type": "paragraph",
+        "value": "## What Are Type Guards?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards are conditional checks that narrow down the type of a variable within a specific code block. For instance, the `typeof` operator is a simple type guard letting TypeScript know what type you’re dealing with in an `if` statement."
+      },
+      {
+        "type": "code",
+        "value": "function example(value: string | number) {\n  if (typeof value === 'string') {\n    // Here TypeScript knows 'value' is a string\n    console.log(value.toUpperCase());\n  } else {\n    // Here 'value' is a number\n    console.log(value.toFixed(2));\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "## Why Use Advanced Type Guards?"
+      },
+      {
+        "type": "paragraph",
+        "value": "While basic type guards like `typeof` and `instanceof` are helpful, advanced type guards let you work with complex types, including custom objects or interfaces. They increase code clarity, reduce errors, and make your code easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Creating Custom Type Guards"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create a custom type guard by writing a function that returns a boolean and has a special return type called a \"type predicate.\" This predicate tells TypeScript exactly what type the variable is if the function returns `true`."
+      },
+      {
+        "type": "code",
+        "value": "interface Fish {\n  swim: () => void;\n}\n\ninterface Bird {\n  fly: () => void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();  // TypeScript knows pet is Fish here\n  } else {\n    pet.fly();   // And here, pet is Bird\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the `isFish` function works as a type guard checking whether a pet is a `Fish`. The `pet is Fish` return type is the key here: it communicates to TypeScript that inside the `if` block, `pet` can be treated specifically as a `Fish`."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Using `in` Operator for Type Guards"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes your types share many fields but differ in a few. The `in` operator checks whether a specific property exists in an object and acts as a type guard."
+      },
+      {
+        "type": "code",
+        "value": "interface Admin {\n  name: string;\n  role: string;\n}\n\ninterface User {\n  name: string;\n  startDate: Date;\n}\n\nfunction isAdmin(account: Admin | User): account is Admin {\n  return 'role' in account;\n}\n\nfunction getInfo(account: Admin | User) {\n  if (isAdmin(account)) {\n    console.log(`Admin role: ${account.role}`);\n  } else {\n    console.log(`User started on: ${account.startDate.toDateString()}`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, checking `'role' in account` helps TypeScript narrow the type of `account` to `Admin` inside the conditional block."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Combining Type Guards with Union Types"
+      },
+      {
+        "type": "paragraph",
+        "value": "When dealing with union types, especially with overlapping fields, advanced type guards help to differentiate properly."
+      },
+      {
+        "type": "code",
+        "value": "type Shape = Circle | Square | Rectangle;\n\ninterface Circle {\n  kind: 'circle';\n  radius: number;\n}\n\ninterface Square {\n  kind: 'square';\n  sideLength: number;\n}\n\ninterface Rectangle {\n  kind: 'rectangle';\n  width: number;\n  height: number;\n}\n\nfunction isCircle(shape: Shape): shape is Circle {\n  return shape.kind === 'circle';\n}\n\nfunction getArea(shape: Shape): number {\n  if (isCircle(shape)) {\n    return Math.PI * shape.radius ** 2;\n  }\n  if (shape.kind === 'square') {\n    return shape.sideLength ** 2;\n  }\n  // shape must be Rectangle here\n  return shape.width * shape.height;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using discriminated unions with a `kind` field alongside custom type guards makes your code safe and easy to extend."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced type guards improve your TypeScript code by letting you precisely and safely narrow types at runtime. Use custom type guard functions, the `in` operator, discriminated unions, and type predicates to write clearer, more robust code that prevents bugs and improves maintainability. Experiment with these techniques to get more comfortable and unlock the full power of TypeScript’s type safety."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-strict-null-checks-for-safer-code",
+    "title": "Mastering TypeScript's Strict Null Checks for Safer Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's strict null checks can help you catch null and undefined errors early, making your code more robust and less error-prone.",
+    "videoUrl": "https://www.youtube.com/watch?v=tKGiAxLXDxk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful superset of JavaScript that adds types to help you catch errors before runtime. One common source of bugs in JavaScript is the unexpected appearance of null or undefined values. To combat this, TypeScript offers a feature called strict null checks. In this article, we’ll explore what strict null checks are, why they matter, and how to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "By default, TypeScript treats null and undefined as assignable to any type, which can lead to runtime errors if you try to access properties or methods on those values. When you enable strict null checks, TypeScript forces you to explicitly check for null or undefined before using those values. This encourages safer, more predictable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Enabling Strict Null Checks\nTo enable strict null checks, add the following to your tsconfig.json file:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This tells the TypeScript compiler to treat null and undefined as separate types and not automatically allow them to be assigned anywhere."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Without Strict Null Checks"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string) {\n  console.log(\"Hello, \" + name.toUpperCase());\n}\n\ngreet(null); // No compile error, but will throw at runtime"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the compiler lets you pass `null` as an argument, but calling `toUpperCase()` on `null` will cause an error at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example With Strict Null Checks"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string | null) {\n  if (name === null) {\n    console.log(\"Hello, guest!\");\n  } else {\n    console.log(\"Hello, \" + name.toUpperCase());\n  }\n}\n\ngreet(null); // Output: Hello, guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "With strict null checks enabled, TypeScript forces you to handle the case where `name` might be `null`. This prevents runtime errors and makes your intent clear."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using the Non-Null Assertion Operator\nSometimes you are sure a value is not null even if TypeScript thinks it might be. You can use the `!` operator to tell TypeScript not to worry:"
+      },
+      {
+        "type": "code",
+        "value": "function printLength(str?: string | null) {\n  console.log(str!.length);\n}\n\nprintLength(\"hello\"); // 5\n// Avoid using this unless you're certain `str` is not null or undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "However, use this operator cautiously because overusing it can lead to runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nStrict null checks are a simple yet powerful way to make your TypeScript code more reliable. By requiring explicit handling of null and undefined values, you reduce runtime errors and write clearer code. Enable strict null checks in your project and start practicing safe null handling today!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-generators-efficient-data-pipelines-for-big-data",
+    "title": "Mastering Python Generators: Efficient Data Pipelines for Big Data",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python generators to build memory-efficient and scalable data pipelines perfect for big data processing in this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=p5SaDwuOsGo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with big data in Python can be challenging due to memory constraints. Loading entire large datasets into memory can slow down your system or even crash it. This is where Python generators shine. Generators allow you to process data one piece at a time, consuming less memory and enabling efficient data pipelines."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore what generators are, how to create them, and how to use them to build efficient data pipelines that handle large datasets seamlessly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Python Generator?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A generator is a special type of iterator that yields items one at a time using the `yield` keyword instead of returning them all at once. This means the generator produces values lazily, which is perfect for big data where you don't want to load everything into memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "def simple_generator():\n    yield 1\n    yield 2\n    yield 3\n\nfor value in simple_generator():\n    print(value)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Each time the `for` loop calls `next()` on the generator, it resumes where it left off, producing the next value."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Generators for Big Data Processing"
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have a huge text file with millions of lines, and you need to process it line by line. Reading all lines at once with `readlines()` could exhaust your memory. Instead, use a generator that reads and processes one line at a time."
+      },
+      {
+        "type": "code",
+        "value": "def read_large_file(file_path):\n    with open(file_path, 'r') as file:\n        for line in file:\n            yield line.strip()"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can now iterate over this generator efficiently without loading the entire file:"
+      },
+      {
+        "type": "code",
+        "value": "for line in read_large_file('big_data.txt'):\n    process(line)  # Replace `process` with your data handling logic"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Building a Data Pipeline with Generators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators can be chained to create a clean, memory-efficient data pipeline. For example, suppose you want to read lines, filter lines containing a keyword, and transform the data."
+      },
+      {
+        "type": "code",
+        "value": "def filter_lines(lines, keyword):\n    for line in lines:\n        if keyword in line:\n            yield line\n\ndef transform_lines(lines):\n    for line in lines:\n        yield line.upper()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use the pipeline like this:"
+      },
+      {
+        "type": "code",
+        "value": "lines = read_large_file('big_data.txt')\nfiltered = filter_lines(lines, 'error')\ntransformed = transform_lines(filtered)\n\nfor line in transformed:\n    print(line)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pipeline reads lines from the file, filters those containing the word \"error\", converts them to uppercase, and prints them—all without loading the entire file or intermediate results into memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using Generators for Big Data"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Memory efficient:** Processes one item at a time.\n- **Lazy evaluation:** Computations occur only when needed.\n- **Composable:** Easy to build modular and reusable pipelines.\n- **Simple syntax:** `yield` keyword makes generator functions easy to write."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators empower you to process large data sets efficiently by yielding data one item at a time. They are perfect for big data pipelines where memory is limited and performance is critical. With generators, you can write clean, readable, and scalable data processing code in Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start using generators today to master efficient data pipelines and handle big data with ease!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-data-integrity-errors-python-data-modeling",
+    "title": "Handling Data Integrity Errors in Python Data Modeling: Best Practices",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to effectively handle API data validation errors in Python with practical techniques and best practices for real-world projects.",
-    "videoUrl": "https://www.youtube.com/watch?v=JVQNywo4AbU",
+    "description": "Learn best practices for handling data integrity errors in Python data modeling. This beginner-friendly guide covers common issues and how to manage them gracefully using exceptions and validation.",
+    "videoUrl": "https://www.youtube.com/watch?v=0-6HSiixzc4",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with APIs in Python, especially in real-world projects, handling data validation errors is essential. APIs often return data that might be incomplete, malformed, or contain unexpected types. Properly validating and managing these errors ensures your application stays robust and user-friendly."
+        "value": "When working with data models in Python, ensuring data integrity is critical. Data integrity errors occur when data does not conform to expected formats, types, or constraints. Properly handling these errors helps maintain consistent and reliable applications. In this article, we'll explore common data integrity errors and best practices for handling them in Python."
       },
       {
         "type": "paragraph",
-        "value": "This article covers beginner-friendly methods for validating API responses and gracefully handling errors using Python. We'll use the popular `requests` library to fetch API data and demonstrate simple validation techniques."
-      },
-      {
-        "type": "paragraph",
-        "value": "First, install the `requests` library if you haven't already by running: `pip install requests`."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a basic example to fetch data from an API and check for common validation issues."
+        "value": "One common source of data integrity issues is input validation. Before saving data or performing operations, always validate the data against expected types, ranges, or formats. For example, if your model expects an integer age, input like a string or negative number should be caught early."
       },
       {
         "type": "code",
-        "value": "import requests\n\nurl = 'https://jsonplaceholder.typicode.com/posts/1'\n\ntry:\n    response = requests.get(url)\n    response.raise_for_status()  # Raises an HTTPError if the response was an error\n    data = response.json()\nexcept requests.exceptions.HTTPError as http_err:\n    print(f'HTTP error occurred: {http_err}')\nexcept requests.exceptions.RequestException as req_err:\n    print(f'Request error: {req_err}')\nexcept ValueError:\n    print('Error parsing JSON response')\nelse:\n    # Basic validation example\n    if 'userId' in data and isinstance(data['userId'], int):\n        print('Valid userId:', data['userId'])\n    else:\n        print('Invalid or missing userId')"
+        "value": "def validate_age(age):\n    if not isinstance(age, int):\n        raise ValueError('Age must be an integer')\n    if age < 0 or age > 120:\n        raise ValueError('Age must be between 0 and 120')\n    return age\n\n# Example usage\ntry:\n    user_age = validate_age('twenty')\nexcept ValueError as e:\n    print(f'Data integrity error: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "In this snippet, we handle three key points: network errors, HTTP errors, and JSON decoding errors. After ensuring the response is valid JSON, we perform a simple check on the `userId` field to confirm it exists and is an integer."
-      },
-      {
-        "type": "paragraph",
-        "value": "For more complex data, manual validation can get cumbersome. That's where libraries such as `pydantic` come in handy. Pydantic simplifies validation by defining data models with expected types and automatically checking them."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's how to use `pydantic` for validating API data (install it via `pip install pydantic`):"
+        "value": "Python provides built-in exceptions like ValueError, TypeError, and AssertionError which are useful for handling data integrity problems. You can also create custom exceptions to represent specific validation failures in complex apps."
       },
       {
         "type": "code",
-        "value": "from pydantic import BaseModel, ValidationError\nimport requests\n\nclass Post(BaseModel):\n    userId: int\n    id: int\n    title: str\n    body: str\n\nurl = 'https://jsonplaceholder.typicode.com/posts/1'\nresponse = requests.get(url)\n\ntry:\n    response.raise_for_status()\n    post = Post.parse_raw(response.text)\n    print('Post object:', post)\nexcept ValidationError as e:\n    print('Data validation error:', e)\nexcept requests.exceptions.RequestException as e:\n    print('Request failed:', e)"
+        "value": "class DataIntegrityError(Exception):\n    pass\n\ndef validate_email(email):\n    if '@' not in email:\n        raise DataIntegrityError('Invalid email address')\n    return email\n\ntry:\n    validate_email('invalid-email')\nexcept DataIntegrityError as e:\n    print(f'Data integrity issue: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "Using Pydantic, you create a model that clearly defines what your data should look like. If the data doesn't conform, you'll get detailed validation errors that help debug issues quickly."
+        "value": "When using data modeling libraries such as Pydantic or SQLAlchemy, they often include validation features that automatically raise errors for invalid data. Handling these errors with try-except blocks allows your program to respond gracefully, perhaps prompting the user to correct the input."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, ValidationError\n\nclass User(BaseModel):\n    name: str\n    age: int\n\ntry:\n    user = User(name='Alice', age='not_an_int')\nexcept ValidationError as e:\n    print('Validation errors:', e)\n"
       },
       {
         "type": "paragraph",
-        "value": "In summary, here are best practices for handling API data validation errors in Python:\n\n1. Always check HTTP response status codes before processing data.\n2. Use try-except blocks to catch network and JSON parsing errors.\n3. Validate critical fields manually or use data validation libraries like Pydantic.\n4. Provide clear error messages or logging to diagnose issues during development and production.\n5. Consider fallback or retry mechanisms if data validation fails consistently."
-      },
-      {
-        "type": "paragraph",
-        "value": "With these strategies, your Python project will be better equipped to handle unexpected API data issues gracefully, leading to a more reliable and maintainable application."
+        "value": "In summary, best practices to handle data integrity errors in Python include:\n- Validating input early and explicitly\n- Using appropriate exceptions to signal issues\n- Catching and handling those exceptions gracefully\n- Leveraging data modeling libraries' automatic validation\n\nFollowing these practices will help you build robust applications where data quality remains intact."
       }
     ]
   },
   {
-    "slug": "advanced-window-functions-for-complex-data-analysis-in-sql",
-    "title": "Advanced Window Functions for Complex Data Analysis in SQL",
+    "slug": "comparing-sql-window-functions-row-number-vs-rank-vs-dense-rank",
+    "title": "Comparing SQL Window Functions: ROW_NUMBER vs RANK vs DENSE_RANK",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use advanced SQL window functions like RANK, LEAD, LAG, and more to perform complex data analysis efficiently and effectively.",
+    "description": "Learn the differences between SQL window functions ROW_NUMBER, RANK, and DENSE_RANK with beginner-friendly examples and explanations.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions in SQL are powerful tools for performing complex calculations across sets of rows related to the current query row without collapsing the result set. While basic window functions such as ROW_NUMBER() are well-known, advanced window functions open up new possibilities for data analysis."
+        "value": "SQL window functions like ROW_NUMBER, RANK, and DENSE_RANK are powerful tools to assign ranking numbers to rows within a partition of your data. Understanding how they differ is key for tasks like pagination, finding top results, or handling ties in rankings. This tutorial breaks down each function with simple examples."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we will explore some advanced window functions including RANK(), DENSE_RANK(), LEAD(), LAG(), and NTILE(), demonstrating how to use them effectively for complex data analysis scenarios."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with RANK() and DENSE_RANK(). Both functions assign ranks to rows within a partition of data, but they handle ties differently."
+        "value": "Let's suppose we have a sales table with the following data:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS salary_rank,\n  DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_salary_rank\nFROM employees;"
+        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(50),\n  region VARCHAR(50),\n  sales_amount INT\n);\n\nINSERT INTO sales VALUES\n(1, 'Alice', 'East', 500),\n(2, 'Bob', 'East', 300),\n(3, 'Carol', 'East', 500),\n(4, 'Dave', 'West', 400),\n(5, 'Eve', 'West', 400),\n(6, 'Frank', 'West', 300);"
       },
       {
         "type": "paragraph",
-        "value": "Here, employees in each department are ranked based on their salary. RANK() leaves gaps when there are ties, whereas DENSE_RANK() does not."
+        "value": "Now, let's see how each window function behaves when ranking salespeople by sales_amount within each region."
       },
       {
         "type": "paragraph",
-        "value": "Next, LEAD() and LAG() let you access data from subsequent or previous rows without joining the table to itself."
+        "value": "### ROW_NUMBER()"
+      },
+      {
+        "type": "paragraph",
+        "value": "ROW_NUMBER assigns a unique sequential number to each row within the partition. Even if there are ties in the sales_amount, the numbers are distinct and no gaps appear."
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  LAG(salary) OVER (PARTITION BY department ORDER BY salary) AS previous_salary,\n  LEAD(salary) OVER (PARTITION BY department ORDER BY salary) AS next_salary\nFROM employees;"
+        "value": "SELECT \n  salesperson,\n  region,\n  sales_amount,\n  ROW_NUMBER() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS row_num\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "The query retrieves the salary of the previous and next employee in each department ordered by their salary. This is useful for comparing rows within a partition."
+        "value": "Result:"
       },
       {
         "type": "paragraph",
-        "value": "Finally, NTILE() divides rows into a specified number of roughly equal groups, which can be useful for percentile analysis."
+        "value": "| salesperson | region | sales_amount | row_num |\n|-------------|--------|--------------|---------|\n| Alice       | East   | 500          | 1       |\n| Carol       | East   | 500          | 2       |\n| Bob         | East   | 300          | 3       |\n| Dave        | West   | 400          | 1       |\n| Eve         | West   | 400          | 2       |\n| Frank       | West   | 300          | 3       |"
+      },
+      {
+        "type": "paragraph",
+        "value": "Note: Alice and Carol both have 500 sales, but get different row numbers (1 and 2)."
+      },
+      {
+        "type": "paragraph",
+        "value": "### RANK()"
+      },
+      {
+        "type": "paragraph",
+        "value": "RANK assigns the same rank to ties but leaves gaps in the numbering. The next rank after a tie will account for how many rows shared the previous rank."
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  NTILE(4) OVER (PARTITION BY department ORDER BY salary) AS quartile\nFROM employees;"
+        "value": "SELECT \n  salesperson,\n  region,\n  sales_amount,\n  RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS rank_num\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "This example divides employees in each department into 4 salary quartiles, helping to identify top or bottom segments."
+        "value": "Result:"
       },
       {
         "type": "paragraph",
-        "value": "By combining these advanced window functions, you can perform sophisticated analyses directly in SQL, improving query efficiency and clarity."
+        "value": "| salesperson | region | sales_amount | rank_num |\n|-------------|--------|--------------|----------|\n| Alice       | East   | 500          | 1        |\n| Carol       | East   | 500          | 1        |\n| Bob         | East   | 300          | 3        |\n| Dave        | West   | 400          | 1        |\n| Eve         | West   | 400          | 1        |\n| Frank       | West   | 300          | 3        |"
       },
       {
         "type": "paragraph",
-        "value": "Try these techniques on your datasets to discover powerful insights without complicated joins or subqueries!"
+        "value": "Notice that Alice and Carol share rank 1, but Bob gets rank 3, skipping 2."
+      },
+      {
+        "type": "paragraph",
+        "value": "### DENSE_RANK()"
+      },
+      {
+        "type": "paragraph",
+        "value": "DENSE_RANK behaves like RANK by assigning the same rank to ties, but it does NOT leave gaps. The ranks increase consecutively regardless of how many ties occur."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson,\n  region,\n  sales_amount,\n  DENSE_RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS dense_rank_num\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Result:"
+      },
+      {
+        "type": "paragraph",
+        "value": "| salesperson | region | sales_amount | dense_rank_num |\n|-------------|--------|--------------|----------------|\n| Alice       | East   | 500          | 1              |\n| Carol       | East   | 500          | 1              |\n| Bob         | East   | 300          | 2              |\n| Dave        | West   | 400          | 1              |\n| Eve         | West   | 400          | 1              |\n| Frank       | West   | 300          | 2              |"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, Alice and Carol share rank 1, and Bob follows as rank 2 without gaps."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **ROW_NUMBER()**: Unique sequential number, no ties, no gaps.\n- **RANK()**: Same rank for ties, gaps in numbering due to ties.\n- **DENSE_RANK()**: Same rank for ties, no gaps in numbering.\n\nChoosing the right function depends on whether you need unique row IDs (ROW_NUMBER) or want to handle ties in rankings with or without gaps (RANK vs DENSE_RANK)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try running these queries in your database to get comfortable with how each window function works!"
       }
     ]
   },
   {
-    "slug": "optimizing-sql-queries-by-understanding-common-logical-errors",
-    "title": "Optimizing SQL Queries by Understanding Common Logical Errors",
+    "slug": "handling-timezone-edge-cases-in-sql-date-and-time-functions",
+    "title": "Handling TIMEZONE Edge Cases in SQL Date and Time Functions",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to optimize your SQL queries by identifying and fixing common logical errors that slow down your database performance.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how to manage timezone-related edge cases in SQL date and time functions with beginner-friendly examples and tips for avoiding common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=dbTaLWKvvaA",
     "content": [
       {
         "type": "paragraph",
-        "value": "Writing efficient SQL queries is essential for building fast and reliable applications. Many beginners struggle with slow queries, often due to logical errors that can be fixed with a bit of understanding. This article covers some common logical mistakes in SQL queries and shows you how to optimize them."
+        "value": "Working with dates and times in SQL can be tricky, especially when dealing with multiple timezones. Timezone differences can cause unexpected results in queries and lead to data inconsistencies. This article explains common timezone edge cases in SQL date and time functions and offers practical solutions you can apply even if you're a beginner."
       },
       {
         "type": "paragraph",
-        "value": "One frequent issue is using SELECT * instead of selecting only the columns you need. This leads to unnecessary data retrieval and slows down your query."
+        "value": "One of the most common problems is storing and comparing timestamps across different timezones. The best practice is to store your timestamps in UTC (Coordinated Universal Time) and convert to local timezones only when displaying results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example where a timestamp is stored in UTC:"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE department = 'Sales';"
+        "value": "CREATE TABLE events (\n  id INT PRIMARY KEY,\n  event_name VARCHAR(100),\n  event_time TIMESTAMP WITH TIME ZONE\n);\n\nINSERT INTO events (id, event_name, event_time) VALUES\n(1, 'Meeting', '2024-06-01 14:00:00+00');"
       },
       {
         "type": "paragraph",
-        "value": "Better practice is to specify only the necessary columns, which reduces the amount of data transferred and processed."
+        "value": "Suppose you want to fetch the event_time in a specific timezone, such as America/New_York. You can use the AT TIME ZONE SQL function to convert the UTC timestamp to the desired timezone:"
       },
       {
         "type": "code",
-        "value": "SELECT employee_id, first_name, last_name FROM employees WHERE department = 'Sales';"
+        "value": "SELECT event_name, event_time AT TIME ZONE 'America/New_York' AS event_time_ny\nFROM events;"
       },
       {
         "type": "paragraph",
-        "value": "Another common error is forgetting to use indexes when filtering data on large tables. Without indexes, the database performs a full table scan, which is slow."
+        "value": "This converts the UTC timestamp to Eastern Time, considering daylight saving automatically where supported by your database."
       },
       {
         "type": "paragraph",
-        "value": "For example, this query might be slow if there's no index on the department column:"
+        "value": "A common edge case is daylight saving time changes, which can cause ambiguous or missing times. For example, the clock might jump from 2:00 AM to 3:00 AM, causing some local times to not exist. Databases handle this differently, but being aware is key. Always try to use TIMESTAMP WITH TIME ZONE types if available, as they store timezone-aware data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case occurs when comparing timestamps without timezones (TIMESTAMP WITHOUT TIME ZONE). Since these do not carry timezone info, comparisons can be misleading if your data comes from systems in different timezones."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how to avoid errors with timestamps without timezone info by explicitly converting them:"
       },
       {
         "type": "code",
-        "value": "SELECT employee_id FROM employees WHERE department = 'Sales';"
+        "value": "SELECT event_name,\n  event_time,\n  event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/Los_Angeles' AS event_time_pst\nFROM events;"
       },
       {
         "type": "paragraph",
-        "value": "To improve performance, create an index on the filtering column:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_department ON employees(department);"
+        "value": "In this example, we treat event_time as UTC first, then convert it to Pacific Time, ensuring the correct offset is applied."
       },
       {
         "type": "paragraph",
-        "value": "Be careful with JOIN operations, especially when joining large tables. Using the wrong type of JOIN or missing JOIN conditions can lead to errors or inefficient queries."
+        "value": "Summary tips for handling timezone edge cases in SQL:"
       },
       {
         "type": "paragraph",
-        "value": "Here’s an example of a query without a proper JOIN condition, which results in a Cartesian product (combining every row of one table with every row of another):"
-      },
-      {
-        "type": "code",
-        "value": "SELECT e.employee_id, d.department_name FROM employees e JOIN departments d;"
+        "value": "1. Always store timestamps in UTC where possible.\n2. Use TIMESTAMP WITH TIME ZONE data types to keep timezone context.\n3. Convert timestamps to local timezones at query time using AT TIME ZONE.\n4. Be mindful of daylight saving time changes around switch hours.\n5. Avoid comparing timestamps without timezone info directly if they come from different zones."
       },
       {
         "type": "paragraph",
-        "value": "Fix this by adding an ON condition that defines how the tables relate:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT e.employee_id, d.department_name FROM employees e JOIN departments d ON e.department_id = d.department_id;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, watch out for using OR in WHERE conditions inefficiently. OR can prevent indexes from being used, slowing down queries."
-      },
-      {
-        "type": "paragraph",
-        "value": "Instead of this:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM orders WHERE status = 'Pending' OR status = 'Processing';"
-      },
-      {
-        "type": "paragraph",
-        "value": "Use the IN operator for better readability and performance:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM orders WHERE status IN ('Pending', 'Processing');"
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding these logical errors and applying the fixes, you can write SQL queries that run faster and use fewer resources."
+        "value": "Following these steps helps you avoid common pitfalls and ensures your date and time data stays trustworthy, no matter the timezone challenges."
       }
     ]
   }

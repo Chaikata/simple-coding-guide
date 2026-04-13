@@ -55117,5 +55117,375 @@ export const articles = [
         "value": "By understanding these logical errors and applying the fixes, you can write SQL queries that run faster and use fewer resources."
       }
     ]
+  },
+  {
+    "slug": "handling-unexpected-null-and-undefined-values-in-complex-javascript-objects",
+    "title": "Handling Unexpected Null and Undefined Values in Complex JavaScript Objects",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to safely handle unexpected null and undefined values within complex JavaScript objects to prevent runtime errors and write more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=mkKAWzmurM8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with complex JavaScript objects, you might encounter situations where properties can be null or undefined. These unexpected values often cause runtime errors if not handled properly. This article will guide you through beginner-friendly techniques to safely access nested properties and avoid common mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have an object like this:"
+      },
+      {
+        "type": "code",
+        "value": "const user = {\n  name: 'Alice',\n  address: {\n    street: '123 Main St',\n    city: 'Wonderland'\n  }\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, if you try to access `user.address.zipCode`, but `zipCode` doesn't exist, you might get `undefined`. If the `address` itself is sometimes missing or null, trying to access `user.address.zipCode` directly will throw an error."
+      },
+      {
+        "type": "paragraph",
+        "value": "To safely access nested properties, you can use the optional chaining operator (`?.`), which checks if each part exists before continuing. Here's how you use it:"
+      },
+      {
+        "type": "code",
+        "value": "const zipCode = user.address?.zipCode;\nconsole.log(zipCode); // undefined, but no error"
+      },
+      {
+        "type": "paragraph",
+        "value": "This means if `address` is null or undefined, JavaScript won't try to access `zipCode` and won’t throw an error. Instead, it simply returns `undefined`."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also combine this with the nullish coalescing operator (`??`) to provide fallback values when a property is null or undefined. For example:"
+      },
+      {
+        "type": "code",
+        "value": "const zipCode = user.address?.zipCode ?? 'No zip code provided';\nconsole.log(zipCode); // 'No zip code provided'"
+      },
+      {
+        "type": "paragraph",
+        "value": "In cases where you want to check several nested properties, optional chaining helps you avoid writing lots of `if` statements. For example:"
+      },
+      {
+        "type": "code",
+        "value": "const userCountry = user.address?.country?.name ?? 'Unknown country';\nconsole.log(userCountry); // 'Unknown country'"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you need to handle arrays or JSON data that might have missing or null fields, always consider these techniques to make your code more robust and less prone to errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, handling unexpected null or undefined values involves:\n- Using optional chaining (`?.`) to safely access nested properties\n- Using nullish coalescing (`??`) to set default values\n- Writing defensive code to anticipate missing data"
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these simple practices, you'll reduce runtime errors and have cleaner, more readable code when working with complex JavaScript objects."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-advanced-type-guards-in-typescript-for-cleaner-code",
+    "title": "Mastering Advanced Type Guards in TypeScript for Cleaner Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use advanced type guards in TypeScript to write safer, cleaner, and more readable code with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=jewn3kSUhT8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript’s type system helps you catch errors early by providing powerful static typing. One of the core tools to leverage TypeScript effectively is using \"type guards.\" Type guards let you check the type of a variable at runtime, enabling safer and cleaner code. In this tutorial, you’ll learn about advanced type guards beyond the basics, with practical examples you can use right away."
+      },
+      {
+        "type": "paragraph",
+        "value": "## What Are Type Guards?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards are conditional checks that narrow down the type of a variable within a specific code block. For instance, the `typeof` operator is a simple type guard letting TypeScript know what type you’re dealing with in an `if` statement."
+      },
+      {
+        "type": "code",
+        "value": "function example(value: string | number) {\n  if (typeof value === 'string') {\n    // Here TypeScript knows 'value' is a string\n    console.log(value.toUpperCase());\n  } else {\n    // Here 'value' is a number\n    console.log(value.toFixed(2));\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "## Why Use Advanced Type Guards?"
+      },
+      {
+        "type": "paragraph",
+        "value": "While basic type guards like `typeof` and `instanceof` are helpful, advanced type guards let you work with complex types, including custom objects or interfaces. They increase code clarity, reduce errors, and make your code easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Creating Custom Type Guards"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create a custom type guard by writing a function that returns a boolean and has a special return type called a \"type predicate.\" This predicate tells TypeScript exactly what type the variable is if the function returns `true`."
+      },
+      {
+        "type": "code",
+        "value": "interface Fish {\n  swim: () => void;\n}\n\ninterface Bird {\n  fly: () => void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();  // TypeScript knows pet is Fish here\n  } else {\n    pet.fly();   // And here, pet is Bird\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the `isFish` function works as a type guard checking whether a pet is a `Fish`. The `pet is Fish` return type is the key here: it communicates to TypeScript that inside the `if` block, `pet` can be treated specifically as a `Fish`."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Using `in` Operator for Type Guards"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes your types share many fields but differ in a few. The `in` operator checks whether a specific property exists in an object and acts as a type guard."
+      },
+      {
+        "type": "code",
+        "value": "interface Admin {\n  name: string;\n  role: string;\n}\n\ninterface User {\n  name: string;\n  startDate: Date;\n}\n\nfunction isAdmin(account: Admin | User): account is Admin {\n  return 'role' in account;\n}\n\nfunction getInfo(account: Admin | User) {\n  if (isAdmin(account)) {\n    console.log(`Admin role: ${account.role}`);\n  } else {\n    console.log(`User started on: ${account.startDate.toDateString()}`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, checking `'role' in account` helps TypeScript narrow the type of `account` to `Admin` inside the conditional block."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Combining Type Guards with Union Types"
+      },
+      {
+        "type": "paragraph",
+        "value": "When dealing with union types, especially with overlapping fields, advanced type guards help to differentiate properly."
+      },
+      {
+        "type": "code",
+        "value": "type Shape = Circle | Square | Rectangle;\n\ninterface Circle {\n  kind: 'circle';\n  radius: number;\n}\n\ninterface Square {\n  kind: 'square';\n  sideLength: number;\n}\n\ninterface Rectangle {\n  kind: 'rectangle';\n  width: number;\n  height: number;\n}\n\nfunction isCircle(shape: Shape): shape is Circle {\n  return shape.kind === 'circle';\n}\n\nfunction getArea(shape: Shape): number {\n  if (isCircle(shape)) {\n    return Math.PI * shape.radius ** 2;\n  }\n  if (shape.kind === 'square') {\n    return shape.sideLength ** 2;\n  }\n  // shape must be Rectangle here\n  return shape.width * shape.height;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using discriminated unions with a `kind` field alongside custom type guards makes your code safe and easy to extend."
+      },
+      {
+        "type": "paragraph",
+        "value": "## Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Advanced type guards improve your TypeScript code by letting you precisely and safely narrow types at runtime. Use custom type guard functions, the `in` operator, discriminated unions, and type predicates to write clearer, more robust code that prevents bugs and improves maintainability. Experiment with these techniques to get more comfortable and unlock the full power of TypeScript’s type safety."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-generators-efficient-data-pipelines-for-big-data",
+    "title": "Mastering Python Generators: Efficient Data Pipelines for Big Data",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python generators to build memory-efficient and scalable data pipelines perfect for big data processing in this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=p5SaDwuOsGo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with big data in Python can be challenging due to memory constraints. Loading entire large datasets into memory can slow down your system or even crash it. This is where Python generators shine. Generators allow you to process data one piece at a time, consuming less memory and enabling efficient data pipelines."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll explore what generators are, how to create them, and how to use them to build efficient data pipelines that handle large datasets seamlessly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Python Generator?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A generator is a special type of iterator that yields items one at a time using the `yield` keyword instead of returning them all at once. This means the generator produces values lazily, which is perfect for big data where you don't want to load everything into memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "def simple_generator():\n    yield 1\n    yield 2\n    yield 3\n\nfor value in simple_generator():\n    print(value)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Each time the `for` loop calls `next()` on the generator, it resumes where it left off, producing the next value."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Generators for Big Data Processing"
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have a huge text file with millions of lines, and you need to process it line by line. Reading all lines at once with `readlines()` could exhaust your memory. Instead, use a generator that reads and processes one line at a time."
+      },
+      {
+        "type": "code",
+        "value": "def read_large_file(file_path):\n    with open(file_path, 'r') as file:\n        for line in file:\n            yield line.strip()"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can now iterate over this generator efficiently without loading the entire file:"
+      },
+      {
+        "type": "code",
+        "value": "for line in read_large_file('big_data.txt'):\n    process(line)  # Replace `process` with your data handling logic"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Building a Data Pipeline with Generators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators can be chained to create a clean, memory-efficient data pipeline. For example, suppose you want to read lines, filter lines containing a keyword, and transform the data."
+      },
+      {
+        "type": "code",
+        "value": "def filter_lines(lines, keyword):\n    for line in lines:\n        if keyword in line:\n            yield line\n\ndef transform_lines(lines):\n    for line in lines:\n        yield line.upper()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use the pipeline like this:"
+      },
+      {
+        "type": "code",
+        "value": "lines = read_large_file('big_data.txt')\nfiltered = filter_lines(lines, 'error')\ntransformed = transform_lines(filtered)\n\nfor line in transformed:\n    print(line)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pipeline reads lines from the file, filters those containing the word \"error\", converts them to uppercase, and prints them—all without loading the entire file or intermediate results into memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using Generators for Big Data"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Memory efficient:** Processes one item at a time.\n- **Lazy evaluation:** Computations occur only when needed.\n- **Composable:** Easy to build modular and reusable pipelines.\n- **Simple syntax:** `yield` keyword makes generator functions easy to write."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generators empower you to process large data sets efficiently by yielding data one item at a time. They are perfect for big data pipelines where memory is limited and performance is critical. With generators, you can write clean, readable, and scalable data processing code in Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start using generators today to master efficient data pipelines and handle big data with ease!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-data-integrity-errors-python-data-modeling",
+    "title": "Handling Data Integrity Errors in Python Data Modeling: Best Practices",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn best practices for handling data integrity errors in Python data modeling. This beginner-friendly guide covers common issues and how to manage them gracefully using exceptions and validation.",
+    "videoUrl": "https://www.youtube.com/watch?v=0-6HSiixzc4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with data models in Python, ensuring data integrity is critical. Data integrity errors occur when data does not conform to expected formats, types, or constraints. Properly handling these errors helps maintain consistent and reliable applications. In this article, we'll explore common data integrity errors and best practices for handling them in Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common source of data integrity issues is input validation. Before saving data or performing operations, always validate the data against expected types, ranges, or formats. For example, if your model expects an integer age, input like a string or negative number should be caught early."
+      },
+      {
+        "type": "code",
+        "value": "def validate_age(age):\n    if not isinstance(age, int):\n        raise ValueError('Age must be an integer')\n    if age < 0 or age > 120:\n        raise ValueError('Age must be between 0 and 120')\n    return age\n\n# Example usage\ntry:\n    user_age = validate_age('twenty')\nexcept ValueError as e:\n    print(f'Data integrity error: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Python provides built-in exceptions like ValueError, TypeError, and AssertionError which are useful for handling data integrity problems. You can also create custom exceptions to represent specific validation failures in complex apps."
+      },
+      {
+        "type": "code",
+        "value": "class DataIntegrityError(Exception):\n    pass\n\ndef validate_email(email):\n    if '@' not in email:\n        raise DataIntegrityError('Invalid email address')\n    return email\n\ntry:\n    validate_email('invalid-email')\nexcept DataIntegrityError as e:\n    print(f'Data integrity issue: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "When using data modeling libraries such as Pydantic or SQLAlchemy, they often include validation features that automatically raise errors for invalid data. Handling these errors with try-except blocks allows your program to respond gracefully, perhaps prompting the user to correct the input."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, ValidationError\n\nclass User(BaseModel):\n    name: str\n    age: int\n\ntry:\n    user = User(name='Alice', age='not_an_int')\nexcept ValidationError as e:\n    print('Validation errors:', e)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, best practices to handle data integrity errors in Python include:\n- Validating input early and explicitly\n- Using appropriate exceptions to signal issues\n- Catching and handling those exceptions gracefully\n- Leveraging data modeling libraries' automatic validation\n\nFollowing these practices will help you build robust applications where data quality remains intact."
+      }
+    ]
+  },
+  {
+    "slug": "handling-timezone-edge-cases-in-sql-date-and-time-functions",
+    "title": "Handling TIMEZONE Edge Cases in SQL Date and Time Functions",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to manage timezone-related edge cases in SQL date and time functions with beginner-friendly examples and tips for avoiding common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=dbTaLWKvvaA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with dates and times in SQL can be tricky, especially when dealing with multiple timezones. Timezone differences can cause unexpected results in queries and lead to data inconsistencies. This article explains common timezone edge cases in SQL date and time functions and offers practical solutions you can apply even if you're a beginner."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the most common problems is storing and comparing timestamps across different timezones. The best practice is to store your timestamps in UTC (Coordinated Universal Time) and convert to local timezones only when displaying results."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example where a timestamp is stored in UTC:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE events (\n  id INT PRIMARY KEY,\n  event_name VARCHAR(100),\n  event_time TIMESTAMP WITH TIME ZONE\n);\n\nINSERT INTO events (id, event_name, event_time) VALUES\n(1, 'Meeting', '2024-06-01 14:00:00+00');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you want to fetch the event_time in a specific timezone, such as America/New_York. You can use the AT TIME ZONE SQL function to convert the UTC timestamp to the desired timezone:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT event_name, event_time AT TIME ZONE 'America/New_York' AS event_time_ny\nFROM events;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This converts the UTC timestamp to Eastern Time, considering daylight saving automatically where supported by your database."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common edge case is daylight saving time changes, which can cause ambiguous or missing times. For example, the clock might jump from 2:00 AM to 3:00 AM, causing some local times to not exist. Databases handle this differently, but being aware is key. Always try to use TIMESTAMP WITH TIME ZONE types if available, as they store timezone-aware data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another edge case occurs when comparing timestamps without timezones (TIMESTAMP WITHOUT TIME ZONE). Since these do not carry timezone info, comparisons can be misleading if your data comes from systems in different timezones."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s how to avoid errors with timestamps without timezone info by explicitly converting them:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT event_name,\n  event_time,\n  event_time AT TIME ZONE 'UTC' AT TIME ZONE 'America/Los_Angeles' AS event_time_pst\nFROM events;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we treat event_time as UTC first, then convert it to Pacific Time, ensuring the correct offset is applied."
+      },
+      {
+        "type": "paragraph",
+        "value": "Summary tips for handling timezone edge cases in SQL:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always store timestamps in UTC where possible.\n2. Use TIMESTAMP WITH TIME ZONE data types to keep timezone context.\n3. Convert timestamps to local timezones at query time using AT TIME ZONE.\n4. Be mindful of daylight saving time changes around switch hours.\n5. Avoid comparing timestamps without timezone info directly if they come from different zones."
+      },
+      {
+        "type": "paragraph",
+        "value": "Following these steps helps you avoid common pitfalls and ensures your date and time data stays trustworthy, no matter the timezone challenges."
+      }
+    ]
   }
 ];
