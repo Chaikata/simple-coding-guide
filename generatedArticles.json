@@ -1,501 +1,557 @@
 [
   {
-    "slug": "mastering-javascript-event-loop-for-performance-optimization",
-    "title": "Mastering JavaScript Event Loop for Performance Optimization",
+    "slug": "building-scalable-data-models-in-javascript-for-real-time-applications",
+    "title": "Building Scalable Data Models in JavaScript for Real-Time Applications",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how JavaScript's event loop works and how to leverage it to optimize the performance of your web applications with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=eu_tByRZ7p0",
+    "description": "Learn how to design scalable and efficient data models in JavaScript to power real-time applications with ease.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a single-threaded language, meaning it executes code one line at a time in a specific order. However, it can handle asynchronous operations efficiently with the help of the event loop. Understanding the event loop is crucial to optimize your application's performance, especially when working with tasks like API calls, animations, and timers."
+        "value": "Real-time applications like chat apps, dashboards, and collaborative tools require data models that can handle rapid updates and multiple users simultaneously. In this beginner-friendly tutorial, you'll learn how to build scalable data models in JavaScript that stay efficient as your app grows."
       },
       {
         "type": "paragraph",
-        "value": "The event loop manages two main queues: the call stack and the task queue (or callback queue). When JavaScript runs, it executes functions on the call stack. If a function triggers an asynchronous operation, the callback goes to the task queue. Only when the call stack is empty does the event loop push the callback from the task queue back onto the call stack for execution."
+        "value": "The key to scalable data modeling is structuring your data for quick updates, easy retrieval, and minimal conflicts. We'll start by discussing how to organize data and then implement a simple example to demonstrate these principles."
       },
       {
         "type": "paragraph",
-        "value": "Here's a simple example demonstrating how the event loop works with asynchronous code:"
+        "value": "1. Use Plain Objects and Arrays: JavaScript objects and arrays are fast and flexible for storing dynamic data."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Normalize Data: Avoid deeply nested objects. Instead, break data into flat structures referenced by unique IDs. This simplifies updates."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Immutable Updates: Use methods that don't mutate the original data. This helps avoid bugs and makes tracking changes easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say we are building a simple chat app data model that stores users and messages."
       },
       {
         "type": "code",
-        "value": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('Timeout callback');\n}, 0);\n\nconsole.log('End');"
+        "value": "// Initial normalized state\ntconst state = {\n  users: {\n    byId: {\n      'user1': { id: 'user1', name: 'Alice' },\n      'user2': { id: 'user2', name: 'Bob' }\n    },\n    allIds: ['user1', 'user2']\n  },\n  messages: {\n    byId: {\n      'msg1': { id: 'msg1', senderId: 'user1', content: 'Hello Bob!' }\n    },\n    allIds: ['msg1']\n  }\n};"
       },
       {
         "type": "paragraph",
-        "value": "Even though the timeout is set to 0 milliseconds, the callback inside `setTimeout` will always run after the synchronous code. The output will be:\n\nStart\nEnd\nTimeout callback\n\nThis happens because the synchronous `console.log('End')` runs before the event loop processes the task queue."
+        "value": "Here, `users` and `messages` are stored in separate objects with two parts each: `byId` for quick lookup by unique IDs, and `allIds` which keeps the order of entries."
       },
       {
         "type": "paragraph",
-        "value": "To optimize performance, avoid blocking the main thread with long-running synchronous tasks. Instead, break them into smaller chunks using techniques like `setTimeout` or `requestIdleCallback`, allowing the browser to remain responsive."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, processing a large array synchronously can freeze the UI. Here's how to split the task:"
+        "value": "To add a message without mutating the original state, use this approach:"
       },
       {
         "type": "code",
-        "value": "const bigArray = new Array(100000).fill(0);\nlet index = 0;\n\nfunction processChunk() {\n  const chunkSize = 1000;\n  const end = Math.min(index + chunkSize, bigArray.length);\n\n  for (; index < end; index++) {\n    // Process each item (dummy operation here)\n    bigArray[index] = bigArray[index] + 1;\n  }\n\n  if(index < bigArray.length) {\n    // Schedule next chunk without blocking\n    setTimeout(processChunk, 0);\n  } else {\n    console.log('Processing complete!');\n  }\n}\n\nprocessChunk();"
+        "value": "function addMessage(state, newMessage) {\n  return {\n    ...state,\n    messages: {\n      byId: {\n        ...state.messages.byId,\n        [newMessage.id]: newMessage\n      },\n      allIds: [...state.messages.allIds, newMessage.id]\n    }\n  };\n}\n\nconst newMsg = { id: 'msg2', senderId: 'user2', content: 'Hi Alice!' };\nconst newState = addMessage(state, newMsg);\nconsole.log(newState.messages.allIds); // ['msg1', 'msg2']"
       },
       {
         "type": "paragraph",
-        "value": "By chunking the processing and scheduling each chunk asynchronously, the browser can handle user interactions and rendering between chunks, improving overall performance."
+        "value": "This pattern ensures you don't directly change the original objects, reducing bugs especially in apps handling many real-time events."
       },
       {
         "type": "paragraph",
-        "value": "Another useful concept is leveraging Promises and `async/await` which internally use microtasks that have a higher priority than tasks scheduled by `setTimeout`."
-      },
-      {
-        "type": "code",
-        "value": "console.log('Script start');\n\nPromise.resolve().then(() => {\n  console.log('Promise callback');\n});\n\nsetTimeout(() => {\n  console.log('setTimeout callback');\n}, 0);\n\nconsole.log('Script end');"
+        "value": "Scaling this model to hundreds or thousands of users and messages stays efficient because lookups and updates operate on flat structures."
       },
       {
         "type": "paragraph",
-        "value": "The output order will be:\n\nScript start\nScript end\nPromise callback\nsetTimeout callback\n\nThis shows that promise callbacks run before timeout callbacks, because microtasks (promise handlers) run before the event loop processes tasks from the task queue."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, mastering the event loop allows you to write efficient JavaScript by managing asynchronous tasks effectively. Use microtasks for quick operations, chunk large synchronous tasks to prevent blocking, and always be mindful of how callbacks are scheduled."
+        "value": "In summary, for scalable real-time data modeling in JavaScript:\n- Normalize your data.\n- Use immutable update patterns.\n- Keep your state flat.\n- Use IDs to relate entities.\nFollowing these steps will help you build fast, maintainable applications that grow smoothly."
       }
     ]
   },
   {
-    "slug": "harnessing-javascript-proxy-to-debug-complex-state-mutations",
-    "title": "Harnessing JavaScript Proxy to Debug Complex State Mutations",
+    "slug": "mastering-javascript-memory-leaks",
+    "title": "Mastering JavaScript Memory Leaks: Identifying and Optimizing Hidden Performance Sappers",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to use JavaScript Proxy to track and debug complex state changes easily, making your debugging process simpler and more effective.",
+    "description": "Learn how to detect and fix JavaScript memory leaks with practical tips to optimize your app's performance and avoid hidden bottlenecks.",
     "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "Debugging complex state mutations in JavaScript can be challenging, especially when dealing with deeply nested objects or unexpected changes in your application state. Fortunately, JavaScript’s Proxy object provides a powerful way to intercept and track changes to an object’s properties, helping you identify when and how state mutations happen."
+        "value": "Memory leaks in JavaScript occur when your application holds onto memory it no longer needs, causing performance issues and sometimes crashes. As a beginner, understanding how to identify and fix these leaks is crucial for building efficient web apps."
       },
       {
         "type": "paragraph",
-        "value": "A Proxy allows you to wrap an object and define custom behavior for fundamental operations like getting, setting, or deleting properties. This can be extremely useful for debugging because you can log or handle these operations every time your state changes."
+        "value": "In this article, we'll explore common causes of memory leaks, show you how to detect them, and demonstrate practical ways to optimize your code. Let's start with understanding what causes memory leaks in JavaScript."
       },
       {
         "type": "paragraph",
-        "value": "Let's explore a simple example where we use a Proxy to watch changes on a state object and log mutations to the console."
+        "value": "### Common Causes of Memory Leaks\n- Global variables that are never released\n- Closures that keep referencing unused objects\n- Forgotten timers or event listeners\n- Detached DOM nodes still referenced in JavaScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Event Listeners Causing Memory Leaks"
       },
       {
         "type": "code",
-        "value": "const state = {\n  count: 0,\n  user: {\n    name: 'Alice',\n    age: 25\n  }\n};\n\nconst handler = {\n  set(target, property, value) {\n    console.log(`Property '${property}' changed from ${target[property]} to ${value}`);\n    target[property] = value;\n    return true; // indicates success\n  }\n};\n\nconst proxyState = new Proxy(state, handler);\n\nproxyState.count = 1;          // Logs: Property 'count' changed from 0 to 1\nproxyState.user.name = 'Bob';  // Does NOT log because nested object is not proxied"
+        "value": "function addClickListener() {\n  const button = document.getElementById('myButton');\n  button.addEventListener('click', () => {\n    console.log('Button clicked!');\n  });\n}\n\n// If you call addClickListener multiple times without removing the old listeners, they pile up and can leak memory."
       },
       {
         "type": "paragraph",
-        "value": "In the example above, the top-level properties are trapped by the Proxy. However, changes to nested objects inside `user` are not logged because the Proxy only intercepts operations on the object it wraps directly. To debug deeply nested mutations, you need to recursively apply the Proxy to nested objects."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's an enhanced version that automatically wraps nested objects with proxies, enabling you to track mutations at any depth."
+        "value": "### How to Fix This Leak\nAlways clean up event listeners when they are no longer needed:"
       },
       {
         "type": "code",
-        "value": "function createDeepProxy(object, handler) {\n  const proxy = new Proxy(object, {\n    get(target, property, receiver) {\n      const value = Reflect.get(target, property, receiver);\n      if (value && typeof value === 'object') {\n        return createDeepProxy(value, handler);\n      }\n      return value;\n    },\n    set(target, property, value, receiver) {\n      console.log(`Property '${property.toString()}' changed from ${target[property]} to ${value}`);\n      return Reflect.set(target, property, value, receiver);\n    }\n  });\n  return proxy;\n}\n\nconst deepState = {\n  count: 0,\n  user: {\n    name: 'Alice',\n    age: 25\n  }\n};\n\nconst proxyDeepState = createDeepProxy(deepState);\n\nproxyDeepState.count = 5;             // Logs: Property 'count' changed from 0 to 5\nproxyDeepState.user.name = 'Charlie'; // Logs: Property 'name' changed from Alice to Charlie"
+        "value": "function addClickListener() {\n  const button = document.getElementById('myButton');\n  function handleClick() {\n    console.log('Button clicked!');\n  }\n  button.addEventListener('click', handleClick);\n\n  // Return a cleanup function to remove the listener when done\n  return () => {\n    button.removeEventListener('click', handleClick);\n  };\n}\n\nconst cleanup = addClickListener();\n// Later in your code, call cleanup() to prevent leaks"
       },
       {
         "type": "paragraph",
-        "value": "This recursive approach allows you to detect mutations anywhere in your state object, which is very helpful when developing applications with complex data structures."
+        "value": "### Detecting Memory Leaks\nModern browsers offer developer tools to monitor memory usage. In Chrome DevTools, you can use the \"Performance\" or \"Memory\" tab to take heap snapshots and track down leaks."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, JavaScript Proxies provide an easy yet powerful way to debug complex state mutations by intercepting property changes. Wrap your state object in a Proxy (potentially using recursive proxies for nested objects) to log or handle mutations effectively. This technique can save time and reduce bugs by providing visibility into how your application state evolves."
+        "value": "A simple way to check for leaks is to perform repetitive user actions in your app and watch if the memory grows without going down after garbage collection."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Optimizing Memory Usage Tips\n- Avoid creating unnecessary global variables.\n- Clean up timers with clearInterval/clearTimeout when no longer needed.\n- Nullify references to DOM nodes if you remove them from the document.\n- Be mindful with closures; if they capture large objects, make sure those objects aren’t needed forever."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nMemory leaks may seem complex at first, but with some practice and attention to detail, you can master identifying and fixing them. Always profile your application’s memory usage and clean up resources properly to keep your app fast and responsive."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start implementing these best practices today to optimize your JavaScript code and ensure a smooth user experience!"
       }
     ]
   },
   {
-    "slug": "mastering-typescript-generics-for-scalable-and-reusable-code",
-    "title": "Mastering TypeScript Generics for Scalable and Reusable Code",
+    "slug": "leveraging-typescript-advanced-types-for-robust-data-modeling",
+    "title": "Leveraging TypeScript Advanced Types for Robust Data Modeling",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use TypeScript generics to write scalable, reusable, and type-safe code with clear examples and beginner-friendly explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
+    "description": "Learn how to use TypeScript’s advanced types like union, intersection, mapped types, and conditional types to build more reliable and scalable data models.",
+    "videoUrl": "https://www.youtube.com/watch?v=hHt3F5mL7Tc",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript generics are a powerful feature that help you create scalable and reusable code components. By using generics, you can write functions, classes, and interfaces that work with any data type while still maintaining type safety. This tutorial will introduce you to the basics of generics and show you how to apply them effectively."
+        "value": "TypeScript is a powerful tool for building reliable applications by adding static types to JavaScript. While beginners often use basic types like strings and numbers, TypeScript also offers advanced types that help create robust and flexible data models. In this tutorial, you’ll learn how to leverage union types, intersections, mapped types, and conditional types to build smarter and safer TypeScript code."
       },
       {
         "type": "paragraph",
-        "value": "Imagine you want to create a function that returns the argument passed to it. You might write it like this:"
+        "value": "### Union Types\nUnion types allow a variable to be one of multiple types. This is useful for data that can have different forms."
       },
       {
         "type": "code",
-        "value": "function identity(arg: any): any {\n  return arg;\n}\n\nconst result = identity(5); // result is of type any"
+        "value": "type ID = number | string;\n\nfunction printId(id: ID) {\n  if (typeof id === \"string\") {\n    console.log(`ID is a string: ${id.toUpperCase()}`);\n  } else {\n    console.log(`ID is a number: ${id}`);\n  }\n}\n\nprintId(\"abc123\"); // ID is a string: ABC123\nprintId(101);      // ID is a number: 101"
       },
       {
         "type": "paragraph",
-        "value": "This works, but you lose type safety because `any` disables all type checks. The return type can be anything, and you can't rely on TypeScript to catch errors. This is where generics come in."
-      },
-      {
-        "type": "paragraph",
-        "value": "Using generics, you can write the same function but keep the type information:"
+        "value": "### Intersection Types\nIntersection types let you combine multiple types into one. This comes in handy when you want an object that meets several type requirements simultaneously."
       },
       {
         "type": "code",
-        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst num = identity<number>(5); // num is of type number\nconst str = identity<string>('hello'); // str is of type string"
+        "value": "interface User {\n  name: string;\n  age: number;\n}\n\ninterface Employee {\n  employeeId: number;\n}\n\ntype EmployeeUser = User & Employee;\n\nconst user: EmployeeUser = {\n  name: \"Alice\",\n  age: 28,\n  employeeId: 1024\n};"
       },
       {
         "type": "paragraph",
-        "value": "Here, `<T>` is a type variable that acts as a placeholder for the type you pass when calling the function. The compiler then ensures that the input `arg` and return value are of the same type."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also use generics with arrays. For example, a function that returns the first element of an array of any type:"
+        "value": "### Mapped Types\nMapped types help you transform existing types into new types. For example, you can make all properties in an interface optional or readonly."
       },
       {
         "type": "code",
-        "value": "function firstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst firstNum = firstElement([1, 2, 3]); // inferred as number\nconst firstStr = firstElement(['a', 'b', 'c']); // inferred as string"
+        "value": "interface Task {\n  title: string;\n  completed: boolean;\n}\n\ntype OptionalTask = {\n  [P in keyof Task]?: Task[P];\n};\n\nconst task1: OptionalTask = { title: \"Learn TypeScript\" };"
       },
       {
         "type": "paragraph",
-        "value": "TypeScript can infer the type argument from the function input, so you usually don’t need to specify it explicitly."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also create generic interfaces and classes. For example, a generic class to represent a container:"
+        "value": "### Conditional Types\nConditional types allow you to select one of two types based on a condition. This is very useful for creating flexible and reusable type logic."
       },
       {
         "type": "code",
-        "value": "class Container<T> {\n  private value: T;\n\n  constructor(value: T) {\n    this.value = value;\n  }\n\n  getValue(): T {\n    return this.value;\n  }\n}\n\nconst numberContainer = new Container<number>(123);\nconsole.log(numberContainer.getValue()); // 123"
+        "value": "type IsString<T> = T extends string ? \"Yes\" : \"No\";\n\ntype Test1 = IsString<string>; // \"Yes\"\ntype Test2 = IsString<number>; // \"No\""
       },
       {
         "type": "paragraph",
-        "value": "Here, `Container` works with any type you provide, making the code reusable and ensuring type safety."
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, you can add constraints to generics to restrict the types that can be used, which improves your code’s robustness. For example, ensuring that a type has a `length` property:"
+        "value": "### Putting It All Together\nLet's create a generic function that updates an object, but only allows keys present on the original object. This uses generics, keyof, and mapped types."
       },
       {
         "type": "code",
-        "value": "interface HasLength {\n  length: number;\n}\n\nfunction logLength<T extends HasLength>(arg: T): T {\n  console.log(arg.length);\n  return arg;\n}\n\nlogLength('hello'); // 5\nlogLength([1, 2, 3]); // 3\n// logLength(10); // Error: number doesn't have a length property"
+        "value": "function updateObject<T>(obj: T, updates: Partial<T>): T {\n  return { ...obj, ...updates };\n}\n\nconst userProfile = {\n  name: \"John\",\n  age: 30\n};\n\nconst updatedProfile = updateObject(userProfile, { age: 31 });\nconsole.log(updatedProfile); // { name: \"John\", age: 31 }"
       },
       {
         "type": "paragraph",
-        "value": "This constraint ensures that the function only accepts types with a `length` property, avoiding runtime errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, mastering TypeScript generics allows you to write flexible, reusable, and type-safe code. By defining generic functions, classes, and interfaces with optional constraints, you can build scalable applications that catch errors early and work well with different data types."
+        "value": "### Summary\nUsing TypeScript's advanced types like union, intersection, mapped, and conditional types offers powerful tools to model your data more robustly. These features help reduce bugs and write clearer, more maintainable code. Start experimenting with these types today to improve your TypeScript skills!"
       }
     ]
   },
   {
-    "slug": "leveraging-typescript-type-system-to-prevent-performance-bottlenecks",
-    "title": "Leveraging TypeScript’s Type System to Prevent Performance Bottlenecks in Large-Scale Applications",
+    "slug": "designing-scalable-error-handling-systems-in-typescript",
+    "title": "Designing Scalable Error Handling Systems in TypeScript for Large-Scale Applications",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript’s type system to catch common coding errors early and prevent performance issues in large-scale applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=D9q5wnX2_DY",
+    "description": "Learn how to build scalable and maintainable error handling systems in TypeScript for your large-scale applications to improve reliability and developer experience.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working on large-scale TypeScript applications, performance bottlenecks can often arise from subtle bugs or inefficient code paths. Luckily, TypeScript’s powerful type system helps developers catch many of these issues at compile time before they reach production. In this article, we’ll explore practical ways to use the type system to avoid common errors that could slow down your app."
+        "value": "Error handling is a crucial part of any application, especially large-scale ones. Properly managing errors makes your application more robust and easier to maintain. In TypeScript, thanks to static typing and advanced language features, you can create scalable error handling systems that provide clear and consistent error information across your codebase."
       },
       {
         "type": "paragraph",
-        "value": "One common source of performance problems is dealing with unexpected data types that cause unnecessary runtime checks or complex type coercions. By explicitly defining types for your functions and variables, TypeScript ensures you handle only the expected data shapes and avoids costly errors."
+        "value": "This article guides you through designing a scalable error handling approach using custom error classes, error codes, and utility functions to standardize error creation and handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why use custom error classes?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of using the generic `Error` class directly, custom error classes help you communicate the specific error types and make it easier to handle them accordingly. Custom errors also carry additional metadata, like codes, to improve error categorization and logging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a base error class that extends the native `Error` class and adds an error code."
       },
       {
         "type": "code",
-        "value": "function calculateDiscount(price: number, discountPercent: number): number {\n  return price - (price * discountPercent) / 100;\n}\n\n// TypeScript will warn if incorrect types are passed\ncalculateDiscount(100, '20'); // Error: Argument of type '\"20\"' is not assignable to parameter of type 'number'."
+        "value": "class AppError extends Error {\n  public readonly code: string;\n  public readonly details?: any;\n\n  constructor(code: string, message: string, details?: any) {\n    super(message);\n    this.code = code;\n    this.details = details;\n    // Set the prototype explicitly.\n    Object.setPrototypeOf(this, AppError.prototype);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Another technique is employing union types and type guards to handle varying data structures safely and efficiently. Instead of using generic 'any' types that disable TypeScript’s checks, union types let you define all expected inputs and write safe branching logic."
+        "value": "Our `AppError` class has a `code` which is a string representing the type of error, a message for human-readable information, and optional `details` for additional context."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, define some specific error types by extending `AppError`. This keeps your errors organized and easy to identify."
       },
       {
         "type": "code",
-        "value": "type User = { id: number; name: string };\ntype Admin = { id: number; name: string; permissions: string[] };\n\nfunction getUserName(user: User | Admin): string {\n  if ('permissions' in user) {\n    // This is an Admin\n    return `Admin: ${user.name}`;\n  }\n  return user.name;\n}"
+        "value": "class NotFoundError extends AppError {\n  constructor(message = \"Resource not found\", details?: any) {\n    super(\"NOT_FOUND\", message, details);\n    Object.setPrototypeOf(this, NotFoundError.prototype);\n  }\n}\n\nclass ValidationError extends AppError {\n  constructor(message = \"Validation failed\", details?: any) {\n    super(\"VALIDATION_ERROR\", message, details);\n    Object.setPrototypeOf(this, ValidationError.prototype);\n  }\n}\n\nclass DatabaseError extends AppError {\n  constructor(message = \"Database error occurred\", details?: any) {\n    super(\"DATABASE_ERROR\", message, details);\n    Object.setPrototypeOf(this, DatabaseError.prototype);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Using these type definitions not only helps avoid runtime type errors but can also improve performance by reducing unnecessary checks during code execution."
+        "value": "With specific error classes, you can handle them more precisely in your application logic or API responses."
       },
       {
         "type": "paragraph",
-        "value": "Lastly, leveraging TypeScript’s readonly types and immutability patterns can prevent unintended side effects that degrade app responsiveness. Marking objects or arrays as readonly signals to the compiler and developers that these values should not be changed after creation, lowering bugs related to state changes."
+        "value": "To improve scalability, create a centralized error factory or utility function to create errors consistently throughout your app."
       },
       {
         "type": "code",
-        "value": "type Config = {\n  readonly apiUrl: string;\n  readonly retryAttempts: number;\n};\n\nconst config: Config = {\n  apiUrl: \"https://api.example.com\",\n  retryAttempts: 3\n};\n\n// config.apiUrl = \"https://malicious.com\"; // Error: Cannot assign to 'apiUrl' because it is a read-only property."
+        "value": "function createError(type: string, message?: string, details?: any): AppError {\n  switch (type) {\n    case \"NOT_FOUND\":\n      return new NotFoundError(message, details);\n    case \"VALIDATION_ERROR\":\n      return new ValidationError(message, details);\n    case \"DATABASE_ERROR\":\n      return new DatabaseError(message, details);\n    default:\n      return new AppError(\"UNKNOWN_ERROR\", message || \"An unknown error occurred\", details);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In summary, TypeScript’s type system can be a strong ally in preventing common errors that lead to performance bottlenecks. By strictly typing your data, using union types and type guards, and leveraging immutability with readonly properties, you can write safer and more performant large-scale applications."
+        "value": "This factory makes it easy to create errors based on types, keeping your error creation logic in one place."
       },
       {
         "type": "paragraph",
-        "value": "Start adopting these patterns today to catch errors early, reduce debugging time, and ensure your TypeScript code runs efficiently in production!"
+        "value": "In your application, when an error occurs, throw one of these errors with meaningful messages and details. Here's an example of error handling in a service function:"
+      },
+      {
+        "type": "code",
+        "value": "async function getUserById(id: string) {\n  try {\n    const user = await database.findUser(id);\n    if (!user) {\n      throw createError(\"NOT_FOUND\", `User with ID ${id} not found`);\n    }\n    return user;\n  } catch (err) {\n    if (err instanceof AppError) {\n      // Handle app-specific errors\n      console.error(`Error Code: ${err.code}`, err.message);\n      throw err;\n    }\n    // Handle unexpected errors\n    console.error(\"Unexpected error\", err);\n    throw createError(\"UNKNOWN_ERROR\", \"Unexpected error occurred\");\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of this approach"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Readability:** Custom classes clarify what kind of errors your app deals with.\n- **Consistency:** Centralized creation and codes make it easier to handle errors, especially in API responses.\n- **Extensibility:** Adding new error types is simple and doesn’t require refactoring existing code.\n- **Type Safety:** TypeScript helps catch errors early and provides autocompletion."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "By using custom error classes extended from a base class, incorporating error codes, and centralizing error creation, you can build scalable and maintainable error handling systems in TypeScript that are perfect for large-scale applications. This helps create a robust developer experience and makes your app more resilient to errors."
       }
     ]
   },
   {
-    "slug": "mastering-python-asyncio-advanced-patterns-for-concurrent-programming",
-    "title": "Mastering Python's AsyncIO: Advanced Patterns for Concurrent Programming",
+    "slug": "mastering-python-decorators-enhance-your-functions-like-a-pro",
+    "title": "Mastering Python Decorators: Enhance Your Functions Like a Pro",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to harness Python's AsyncIO with advanced, beginner-friendly patterns for efficient concurrent programming and better application performance.",
-    "videoUrl": "https://www.youtube.com/watch?v=oAkLSJNr5zY",
+    "description": "Learn how to use Python decorators to make your functions more powerful and reusable. This beginner-friendly guide explains decorators with clear examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=U-G-mSd4KAE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python's AsyncIO library provides a fantastic way to write concurrent code using the async/await syntax, making programs faster and more efficient, especially when handling I/O-bound tasks. While beginners often start with simple examples, mastering advanced patterns can greatly improve your applications' responsiveness and scalability. In this tutorial, we'll explore these patterns step-by-step, helping you build a strong foundation in asynchronous programming with Python."
+        "value": "Python decorators are a powerful tool that allow you to modify the behavior of functions or methods without changing their code. If you're new to Python or programming in general, decorators might seem confusing at first. But once you understand them, you can write cleaner, more reusable, and more expressive code."
       },
       {
         "type": "paragraph",
-        "value": "First, let's briefly recap the basics — AsyncIO uses an event loop to run asynchronous tasks concurrently. Functions defined with `async def` return coroutines, which you run using `await`. This lets your program do other work while waiting for operations like network requests or file I/O to complete."
+        "value": "In this tutorial, we'll learn what decorators are, why they are useful, and how to create and apply them to your functions step-by-step."
       },
       {
         "type": "paragraph",
-        "value": "Now, let's dive into some more advanced patterns."
+        "value": "### What Is a Decorator?\nA decorator is simply a function that takes another function as input and returns a new function with some added functionality. Think of it as wrapping your original function inside another function to extend its behavior."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Using `asyncio.gather()` for Concurrent Task Execution\n`asyncio.gather()` is useful for running multiple async tasks concurrently and collecting their results. This pattern helps you efficiently launch multiple I/O tasks without waiting for each individually."
+        "value": "Here's a simple example with a decorator that prints messages before and after a function runs:"
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def fetch_data(x):\n    await asyncio.sleep(1)  # Simulate I/O operation\n    return f\"Data {x}\"\n\nasync def main():\n    tasks = [fetch_data(i) for i in range(3)]\n    results = await asyncio.gather(*tasks)\n    print(results)\n\nasyncio.run(main())"
+        "value": "def my_decorator(func):\n    def wrapper():\n        print(\"Before calling the function\")\n        func()\n        print(\"After calling the function\")\n    return wrapper\n\n# Use the decorator to enhance this function\ndef say_hello():\n    print(\"Hello!\")\n\n# Manually decorate the function\ndecorated_function = my_decorator(say_hello)\ndecorated_function()"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Using `asyncio.Semaphore` to Limit Concurrency\nSometimes, you want to avoid overwhelming resources. For example, limiting the number of simultaneous HTTP requests to a server. `asyncio.Semaphore` ensures only a fixed number of tasks run concurrently."
+        "value": "Output:\nBefore calling the function\nHello!\nAfter calling the function"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using the @ Syntax to Decorate Functions\nPython provides a nice shortcut to apply decorators using the @ symbol. Instead of manually assigning the decorated function, you can write:"
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def limited_fetch(sem, x):\n    async with sem:\n        print(f\"Starting task {x}\")\n        await asyncio.sleep(1)  # Simulate I/O-bound work\n        print(f\"Finished task {x}\")\n\nasync def main():\n    semaphore = asyncio.Semaphore(2)  # Limit to 2 concurrent tasks\n    tasks = [limited_fetch(semaphore, i) for i in range(5)]\n    await asyncio.gather(*tasks)\n\nasyncio.run(main())"
+        "value": "@my_decorator\ndef say_hello():\n    print(\"Hello!\")\n\nsay_hello()"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Using `asyncio.Queue` for Producer-Consumer Patterns\nAsync queues allow safe communication between producer and consumer tasks, supporting complex workflows like data processing pipelines."
+        "value": "This does exactly the same thing as the manual decoration but looks cleaner and is easier to read."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Decorators with Arguments\nSo far, our decorator works with functions that take no arguments. Let's make it more flexible by allowing it to work with functions that take any number of arguments:"
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def producer(queue):\n    for i in range(5):\n        await asyncio.sleep(0.5)  # Simulate producing an item\n        await queue.put(f\"item-{i}\")\n        print(f\"Produced item-{i}\")\n    await queue.put(None)  # Signal the consumer to stop\n\nasync def consumer(queue):\n    while True:\n        item = await queue.get()\n        if item is None:\n            break\n        print(f\"Consumed {item}\")\n        await asyncio.sleep(1)  # Simulate processing\n\nasync def main():\n    queue = asyncio.Queue()\n    await asyncio.gather(producer(queue), consumer(queue))\n\nasyncio.run(main())"
+        "value": "def my_decorator(func):\n    def wrapper(*args, **kwargs):\n        print(\"Before calling the function\")\n        result = func(*args, **kwargs)\n        print(\"After calling the function\")\n        return result\n    return wrapper\n\n@my_decorator\ndef greet(name):\n    print(f\"Hello, {name}!\")\n\ngreet(\"Alice\")"
       },
       {
         "type": "paragraph",
-        "value": "### 4. Handling Timeouts with `asyncio.wait_for()`\nTo prevent tasks from running indefinitely, use `asyncio.wait_for()` to impose timeouts and handle slow operations gracefully."
+        "value": "Output:\nBefore calling the function\nHello, Alice!\nAfter calling the function"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Real-World Example: Timing a Function\nLet's create a decorator that measures how long a function takes to run. This is useful when you want to optimize your code."
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def long_task():\n    await asyncio.sleep(5)  # Simulate a long-running task\n    return \"Completed\"\n\nasync def main():\n    try:\n        result = await asyncio.wait_for(long_task(), timeout=2)\n        print(result)\n    except asyncio.TimeoutError:\n        print(\"Task timed out!\")\n\nasyncio.run(main())"
+        "value": "import time\n\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        start_time = time.time()\n        result = func(*args, **kwargs)\n        end_time = time.time()\n        print(f\"Function '{func.__name__}' took {end_time - start_time:.4f} seconds to run.\")\n        return result\n    return wrapper\n\n@timer\ndef waste_time(num):\n    total = 0\n    for i in range(num):\n        total += i\n    return total\n\nwaste_time(1000000)"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nMastering AsyncIO's advanced patterns — like concurrent execution with `gather()`, controlling concurrency with semaphores, coordinating tasks with queues, and handling timeouts — can transform how you build efficient, scalable Python applications. Start experimenting with these examples to unlock the full power of AsyncIO and boost your programs' performance."
+        "value": "This code prints how long the `waste_time` function takes to run, letting you monitor performance easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- A decorator is a function that modifies another function.\n- Use `@decorator_name` above a function to decorate it.\n- Use `*args` and `**kwargs` in your wrapper to support any function signature.\n- Decorators help you add reusable functionality like logging, timing, authorization, and more."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering decorators will make your Python code more pythonic and professional. Start by experimenting with simple decorators, and soon you'll be applying them to real-world projects!"
       }
     ]
   },
   {
-    "slug": "mastering-python-exception-hierarchies-custom-error-handling",
-    "title": "Mastering Python Exception Hierarchies: A Practical Guide to Custom Error Handling",
+    "slug": "handling-api-data-validation-errors-python",
+    "title": "Handling API Data Validation Errors in Python: Best Practices for Real-World Projects",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to understand Python's exception hierarchy and create custom error classes for better error handling in your projects.",
-    "videoUrl": "https://www.youtube.com/watch?v=Vv10qcdusdU",
+    "description": "Learn how to effectively handle API data validation errors in Python with practical techniques and best practices for real-world projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=JVQNywo4AbU",
     "content": [
       {
         "type": "paragraph",
-        "value": "When programming in Python, handling errors gracefully is crucial for building robust applications. Understanding Python’s exception hierarchy helps you manage errors more effectively and create custom exceptions suited to your needs."
+        "value": "When working with APIs in Python, especially in real-world projects, handling data validation errors is essential. APIs often return data that might be incomplete, malformed, or contain unexpected types. Properly validating and managing these errors ensures your application stays robust and user-friendly."
       },
       {
         "type": "paragraph",
-        "value": "Python exceptions are organized in a hierarchy, with the base class `BaseException` at the top. Most user-defined errors inherit from the built-in `Exception` class, which itself inherits from `BaseException`. This structure allows you to catch broad categories of errors or very specific ones."
+        "value": "This article covers beginner-friendly methods for validating API responses and gracefully handling errors using Python. We'll use the popular `requests` library to fetch API data and demonstrate simple validation techniques."
       },
       {
         "type": "paragraph",
-        "value": "Here's a simple visualization of the exception hierarchy relevant to most use cases:"
+        "value": "First, install the `requests` library if you haven't already by running: `pip install requests`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example to fetch data from an API and check for common validation issues."
       },
       {
         "type": "code",
-        "value": "BaseException\n  ├── SystemExit\n  ├── KeyboardInterrupt\n  └── Exception\n       ├── ValueError\n       ├── TypeError\n       ├── IndexError\n       └── ... (and many others)"
+        "value": "import requests\n\nurl = 'https://jsonplaceholder.typicode.com/posts/1'\n\ntry:\n    response = requests.get(url)\n    response.raise_for_status()  # Raises an HTTPError if the response was an error\n    data = response.json()\nexcept requests.exceptions.HTTPError as http_err:\n    print(f'HTTP error occurred: {http_err}')\nexcept requests.exceptions.RequestException as req_err:\n    print(f'Request error: {req_err}')\nexcept ValueError:\n    print('Error parsing JSON response')\nelse:\n    # Basic validation example\n    if 'userId' in data and isinstance(data['userId'], int):\n        print('Valid userId:', data['userId'])\n    else:\n        print('Invalid or missing userId')"
       },
       {
         "type": "paragraph",
-        "value": "You typically catch exceptions by specifying the type in a `try-except` block. Catching a general exception can be done like this:"
+        "value": "In this snippet, we handle three key points: network errors, HTTP errors, and JSON decoding errors. After ensuring the response is valid JSON, we perform a simple check on the `userId` field to confirm it exists and is an integer."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more complex data, manual validation can get cumbersome. That's where libraries such as `pydantic` come in handy. Pydantic simplifies validation by defining data models with expected types and automatically checking them."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to use `pydantic` for validating API data (install it via `pip install pydantic`):"
       },
       {
         "type": "code",
-        "value": "try:\n    number = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"Oops! That was not a valid number.\")"
+        "value": "from pydantic import BaseModel, ValidationError\nimport requests\n\nclass Post(BaseModel):\n    userId: int\n    id: int\n    title: str\n    body: str\n\nurl = 'https://jsonplaceholder.typicode.com/posts/1'\nresponse = requests.get(url)\n\ntry:\n    response.raise_for_status()\n    post = Post.parse_raw(response.text)\n    print('Post object:', post)\nexcept ValidationError as e:\n    print('Data validation error:', e)\nexcept requests.exceptions.RequestException as e:\n    print('Request failed:', e)"
       },
       {
         "type": "paragraph",
-        "value": "But sometimes, built-in exceptions are not enough to communicate specific problems in your application. This is when custom exceptions come into play. You can create your own by subclassing `Exception`."
+        "value": "Using Pydantic, you create a model that clearly defines what your data should look like. If the data doesn't conform, you'll get detailed validation errors that help debug issues quickly."
       },
       {
         "type": "paragraph",
-        "value": "For example, suppose you are building a banking app and want to signal when an invalid transaction occurs:"
-      },
-      {
-        "type": "code",
-        "value": "class InvalidTransactionError(Exception):\n    def __init__(self, message):\n        super().__init__(message)"
+        "value": "In summary, here are best practices for handling API data validation errors in Python:\n\n1. Always check HTTP response status codes before processing data.\n2. Use try-except blocks to catch network and JSON parsing errors.\n3. Validate critical fields manually or use data validation libraries like Pydantic.\n4. Provide clear error messages or logging to diagnose issues during development and production.\n5. Consider fallback or retry mechanisms if data validation fails consistently."
       },
       {
         "type": "paragraph",
-        "value": "Now, use this custom error in your code to handle specific cases:"
-      },
-      {
-        "type": "code",
-        "value": "def withdraw(amount, balance):\n    if amount > balance:\n        raise InvalidTransactionError(\"Insufficient funds for withdrawal.\")\n    return balance - amount\n\ntry:\n    new_balance = withdraw(150, 100)\nexcept InvalidTransactionError as e:\n    print(f\"Transaction failed: {e}\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "This approach helps you write clearer, more maintainable code by making error handling specific and expressive."
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember these best practices when working with custom exceptions:\n- Always inherit from `Exception`, not directly from `BaseException`, unless you have a very specific reason.\n- Provide informative error messages when raising exceptions.\n- Use custom exceptions to handle domain-specific error cases.\n- Catch exceptions as specifically as possible to avoid masking bugs."
-      },
-      {
-        "type": "paragraph",
-        "value": "By mastering Python’s exception hierarchy and creating your own error classes, you can make your programs more resilient and easier to debug."
+        "value": "With these strategies, your Python project will be better equipped to handle unexpected API data issues gracefully, leading to a more reliable and maintainable application."
       }
     ]
   },
   {
-    "slug": "designing-scalable-data-models-for-multi-tenant-sql-databases",
-    "title": "Designing Scalable Data Models for Multi-Tenant SQL Databases",
+    "slug": "advanced-window-functions-for-complex-data-analysis-in-sql",
+    "title": "Advanced Window Functions for Complex Data Analysis in SQL",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to design scalable and efficient data models for multi-tenant SQL databases to manage multiple clients in a single database.",
-    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "description": "Learn how to use advanced SQL window functions like RANK, LEAD, LAG, and more to perform complex data analysis efficiently and effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Multi-tenant databases host data for multiple customers (tenants) within a single database instance. Designing scalable data models that handle multiple tenants efficiently is critical for performance, security, and maintainability. In this tutorial, we break down basic concepts and demonstrate how to structure your SQL database for multi-tenancy."
+        "value": "Window functions in SQL are powerful tools for performing complex calculations across sets of rows related to the current query row without collapsing the result set. While basic window functions such as ROW_NUMBER() are well-known, advanced window functions open up new possibilities for data analysis."
       },
       {
         "type": "paragraph",
-        "value": "There are three common approaches to multi-tenant databases:"
+        "value": "In this tutorial, we will explore some advanced window functions including RANK(), DENSE_RANK(), LEAD(), LAG(), and NTILE(), demonstrating how to use them effectively for complex data analysis scenarios."
       },
       {
         "type": "paragraph",
-        "value": "1. Separate databases per tenant — best for strong isolation but high resource cost.\n2. Shared database with separate schemas — isolating data via namespaces.\n3. Shared database and schema with tenant identifier columns — cost-effective and scalable, but requires careful query design."
-      },
-      {
-        "type": "paragraph",
-        "value": "This tutorial focuses on the third approach, using a shared schema with a tenant_id column to separate data."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start by designing your tables with a tenant_id column that identifies the owner of each row. Here is an example for a simple customer and orders table:"
+        "value": "Let's start with RANK() and DENSE_RANK(). Both functions assign ranks to rows within a partition of data, but they handle ties differently."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE tenants (\n    tenant_id INT PRIMARY KEY,\n    tenant_name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE customers (\n    customer_id INT PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    customer_name VARCHAR(100) NOT NULL,\n    email VARCHAR(100),\n    FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id)\n);\n\nCREATE TABLE orders (\n    order_id INT PRIMARY KEY,\n    tenant_id INT NOT NULL,\n    customer_id INT NOT NULL,\n    order_date DATE NOT NULL,\n    FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id),\n    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)\n);"
+        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS salary_rank,\n  DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dense_salary_rank\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Notice that the tenant_id column is added to every table. This enforces tenant-level data separation. When querying or modifying data, always filter by tenant_id to prevent cross-tenant data leakage."
+        "value": "Here, employees in each department are ranked based on their salary. RANK() leaves gaps when there are ties, whereas DENSE_RANK() does not."
       },
       {
         "type": "paragraph",
-        "value": "A sample query to fetch a tenant's customers would look like this:"
+        "value": "Next, LEAD() and LAG() let you access data from subsequent or previous rows without joining the table to itself."
       },
       {
         "type": "code",
-        "value": "SELECT customer_id, customer_name, email\nFROM customers\nWHERE tenant_id = 1;"
+        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  LAG(salary) OVER (PARTITION BY department ORDER BY salary) AS previous_salary,\n  LEAD(salary) OVER (PARTITION BY department ORDER BY salary) AS next_salary\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "To optimize performance, especially with large datasets, add indexes on tenant_id columns. This helps the database quickly filter data by tenant."
+        "value": "The query retrieves the salary of the previous and next employee in each department ordered by their salary. This is useful for comparing rows within a partition."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, NTILE() divides rows into a specified number of roughly equal groups, which can be useful for percentile analysis."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_customers_tenant_id ON customers(tenant_id);\nCREATE INDEX idx_orders_tenant_id ON orders(tenant_id);"
+        "value": "SELECT\n  employee_id,\n  department,\n  salary,\n  NTILE(4) OVER (PARTITION BY department ORDER BY salary) AS quartile\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "For security, ensure your application enforces tenant_id filtering on every query before executing any database operation. Using views or stored procedures that include tenant filtering can help centralize this logic."
+        "value": "This example divides employees in each department into 4 salary quartiles, helping to identify top or bottom segments."
       },
       {
         "type": "paragraph",
-        "value": "In summary, designing a multi-tenant SQL data model involves:\n- Adding a tenant_id column to all relevant tables\n- Using foreign keys and indexes involving tenant_id\n- Always filtering queries by tenant_id to maintain data isolation\n- Planning for scaling by indexing and efficient query design"
+        "value": "By combining these advanced window functions, you can perform sophisticated analyses directly in SQL, improving query efficiency and clarity."
       },
       {
         "type": "paragraph",
-        "value": "With these basics, you can design scalable, secure multi-tenant databases to serve multiple clients efficiently within one SQL database."
+        "value": "Try these techniques on your datasets to discover powerful insights without complicated joins or subqueries!"
       }
     ]
   },
   {
-    "slug": "handling-null-comparisons-in-complex-sql-queries",
-    "title": "Handling NULL Comparisons in Complex SQL Queries: Best Practices and Pitfalls",
+    "slug": "optimizing-sql-queries-by-understanding-common-logical-errors",
+    "title": "Optimizing SQL Queries by Understanding Common Logical Errors",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to correctly handle NULL comparisons in complex SQL queries with best practices and common pitfalls to avoid.",
-    "videoUrl": "https://www.youtube.com/watch?v=vWkfGv7dJzE",
+    "description": "Learn how to optimize your SQL queries by identifying and fixing common logical errors that slow down your database performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "In SQL, handling NULL values can be tricky, especially in complex queries involving multiple comparisons and joins. NULL represents an unknown or missing value, and it behaves differently than other data types when compared using standard operators like = or <>. Understanding how NULL works is essential to avoid bugs and incorrect query results."
+        "value": "Writing efficient SQL queries is essential for building fast and reliable applications. Many beginners struggle with slow queries, often due to logical errors that can be fixed with a bit of understanding. This article covers some common logical mistakes in SQL queries and shows you how to optimize them."
       },
       {
         "type": "paragraph",
-        "value": "One common pitfall is assuming that NULL = NULL will return true. In SQL, NULL compared to anything—even NULL—using = or <> will result in NULL (which behaves like false in conditional expressions). This means NULL values require special handling."
-      },
-      {
-        "type": "paragraph",
-        "value": "Use the IS NULL and IS NOT NULL operators to check for NULL values rather than using equality comparisons:"
+        "value": "One frequent issue is using SELECT * instead of selecting only the columns you need. This leads to unnecessary data retrieval and slows down your query."
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM employees\nWHERE manager_id IS NULL;"
+        "value": "SELECT * FROM employees WHERE department = 'Sales';"
       },
       {
         "type": "paragraph",
-        "value": "When writing complex WHERE clauses or JOIN conditions that involve nullable columns, always explicit check for NULL if it matters to your logic. For example, if you want to find records where two nullable columns match or both are NULL, a common pattern looks like this:"
+        "value": "Better practice is to specify only the necessary columns, which reduces the amount of data transferred and processed."
       },
       {
         "type": "code",
-        "value": "WHERE (a.column = b.column OR (a.column IS NULL AND b.column IS NULL))"
+        "value": "SELECT employee_id, first_name, last_name FROM employees WHERE department = 'Sales';"
       },
       {
         "type": "paragraph",
-        "value": "This pattern ensures that the comparison treats two NULLs as equal, which is not the default behavior with =."
+        "value": "Another common error is forgetting to use indexes when filtering data on large tables. Without indexes, the database performs a full table scan, which is slow."
       },
       {
         "type": "paragraph",
-        "value": "Another approach is using the functions COALESCE or NULLIF. COALESCE returns the first non-NULL value in its arguments, allowing you to convert NULLs to a specific value for comparison:"
+        "value": "For example, this query might be slow if there's no index on the department column:"
       },
       {
         "type": "code",
-        "value": "WHERE COALESCE(a.column, 'default') = COALESCE(b.column, 'default')"
+        "value": "SELECT employee_id FROM employees WHERE department = 'Sales';"
       },
       {
         "type": "paragraph",
-        "value": "However, be careful with COALESCE because substituting NULL for a default value can cause logical errors if that value is actually valid data."
-      },
-      {
-        "type": "paragraph",
-        "value": "When joining tables with nullable columns, make sure to handle NULLs explicitly in your ON clause if equality matters. For example:"
+        "value": "To improve performance, create an index on the filtering column:"
       },
       {
         "type": "code",
-        "value": "SELECT *\nFROM table1 t1\nJOIN table2 t2\nON (t1.key = t2.key OR (t1.key IS NULL AND t2.key IS NULL))"
+        "value": "CREATE INDEX idx_department ON employees(department);"
       },
       {
         "type": "paragraph",
-        "value": "Remember, indexing and performance may be affected when you include NULL checks in your conditions, so test your queries in real scenarios."
+        "value": "Be careful with JOIN operations, especially when joining large tables. Using the wrong type of JOIN or missing JOIN conditions can lead to errors or inefficient queries."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the best practices for handling NULL comparisons in SQL are:"
+        "value": "Here’s an example of a query without a proper JOIN condition, which results in a Cartesian product (combining every row of one table with every row of another):"
+      },
+      {
+        "type": "code",
+        "value": "SELECT e.employee_id, d.department_name FROM employees e JOIN departments d;"
       },
       {
         "type": "paragraph",
-        "value": "1. Never use = or <> to compare NULL values directly.\n2. Use IS NULL or IS NOT NULL to check for NULL.\n3. Use explicit logic to treat NULLs as equal when needed (e.g., using OR with IS NULL).\n4. Consider COALESCE or NULLIF cautiously.\n5. Test complex queries involving NULLs thoroughly."
+        "value": "Fix this by adding an ON condition that defines how the tables relate:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT e.employee_id, d.department_name FROM employees e JOIN departments d ON e.department_id = d.department_id;"
       },
       {
         "type": "paragraph",
-        "value": "Mastering NULL handling helps you write more predictable and error-free SQL queries, especially in complex scenarios involving multiple tables and conditional logic."
+        "value": "Finally, watch out for using OR in WHERE conditions inefficiently. OR can prevent indexes from being used, slowing down queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead of this:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE status = 'Pending' OR status = 'Processing';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use the IN operator for better readability and performance:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE status IN ('Pending', 'Processing');"
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these logical errors and applying the fixes, you can write SQL queries that run faster and use fewer resources."
       }
     ]
   }
