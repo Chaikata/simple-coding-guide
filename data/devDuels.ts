@@ -7719,5 +7719,179 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-memory-leak-and-concurrency-bug-in-thread-safe-cache-implementation",
+    "title": "Fix Memory Leak and Concurrency Bug in Thread-Safe Cache Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Given an incomplete and buggy thread-safe LRU cache implementation in C++, identify and fix issues related to memory leaks, data races, and incorrect cache eviction logic.",
+    "prompt": "You are provided with a broken C++ implementation of a thread-safe LRU cache. The cache is supposed to store a fixed maximum number of key-value pairs, evicting the least recently used element when full. It uses a doubly linked list and a hash map for O(1) access and eviction. However, the current implementation has memory leaks, concurrency bugs, and incorrect eviction behavior.\n\nIdentify and fix the bugs to ensure:\n- No memory leaks occur\n- The cache is safe to access concurrently\n- The LRU eviction logic works correctly under concurrent accesses\n\nYou should only modify the methods inside the Cache class and ensure the class has proper RAII semantics and thread safety.",
+    "guidance": [
+      "Check ownership and deletion of nodes to fix memory leaks.",
+      "Use proper synchronization primitives (e.g. std::mutex) to prevent data races.",
+      "Verify logic that moves accessed nodes to the front and evicts from the tail."
+    ],
+    "hints": [
+      "Consider using std::unique_ptr or ensure you delete nodes when evicted.",
+      "Lock the mutex at the beginning of each public method and unlock at the end.",
+      "Make sure to update both the linked list pointers and the hash map entries when modifying the cache."
+    ],
+    "starterCode": "#include <unordered_map>\n#include <mutex>\n\ntemplate<typename K, typename V>\nclass Cache {\n    struct Node {\n        K key;\n        V value;\n        Node* prev;\n        Node* next;\n        Node(K k, V v) : key(k), value(v), prev(nullptr), next(nullptr) {}\n    };\n\n    std::unordered_map<K, Node*> map;\n    Node* head = nullptr;\n    Node* tail = nullptr;\n    int capacity;\n    int size = 0;\n    std::mutex mtx;\n\n    void removeNode(Node* node) {\n        if (node->prev) node->prev->next = node->next;\n        else head = node->next;\n        if (node->next) node->next->prev = node->prev;\n        else tail = node->prev;\n    }\n\n    void addToFront(Node* node) {\n        node->next = head;\n        node->prev = nullptr;\n        if (head) head->prev = node;\n        head = node;\n        if (!tail) tail = head;\n    }\n\npublic:\n    Cache(int cap) : capacity(cap) {}\n\n    V get(const K& key) {\n        std::lock_guard<std::mutex> lock(mtx);\n        if (map.find(key) == map.end()) return V();\n        Node* node = map[key];\n        removeNode(node);\n        addToFront(node);\n        return node->value;\n    }\n\n    void put(const K& key, const V& value) {\n        std::lock_guard<std::mutex> lock(mtx);\n        if (map.find(key) != map.end()) {\n            Node* node = map[key];\n            node->value = value;\n            removeNode(node);\n            addToFront(node);\n        } else {\n            Node* node = new Node(key, value);\n            if (size == capacity) {\n                map.erase(tail->key);\n                removeNode(tail);\n            } else {\n                size++;\n            }\n            addToFront(node);\n            map[key] = node;\n        }\n    }\n\n    ~Cache() {\n        Node* curr = head;\n        while (curr) {\n            Node* next = curr->next;\n            delete curr;\n            curr = next;\n        }\n    }\n};",
+    "expectedOutput": "Correct cache behavior with no memory leaks under concurrent get and put calls, and LRU eviction policy maintained correctly.",
+    "concepts": [
+      "concurrency",
+      "memory management",
+      "LRU cache",
+      "mutex synchronization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-simple-employees-and-departments-table-with-basic-queries",
+    "title": "Build a Simple Employees and Departments Table with Basic Queries",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Create two related tables, Employees and Departments, and write SQL queries to retrieve basic information such as employee names, their departments, and departments with employee counts.",
+    "prompt": "You are tasked to create a small company database model with two tables: Departments and Employees. First, create the Departments table with columns department_id (integer, primary key) and department_name (text). Then create the Employees table with columns employee_id (integer, primary key), employee_name (text), and department_id (integer) as a foreign key referencing Departments. After creating the tables and inserting some sample data, write SQL queries to:\n\n1. List all employees along with their department names.\n2. Show the count of employees in each department.\n\nWrite all the necessary SQL statements for this mini-project.",
+    "guidance": [
+      "Start by creating the Departments table, then create the Employees table referencing Departments.",
+      "Insert at least 3 department records and 5 employee records with assigned departments.",
+      "Use JOIN operations to combine Employees and Departments data.",
+      "Use GROUP BY to count employees per department."
+    ],
+    "hints": [
+      "Remember to define department_id as the primary key in Departments and as a foreign key in Employees.",
+      "Use INNER JOIN to combine employee and department information.",
+      "Use COUNT() aggregation with GROUP BY department_id to get employee counts."
+    ],
+    "starterCode": "CREATE TABLE Departments (\n  department_id INTEGER PRIMARY KEY,\n  department_name TEXT\n);\n\nCREATE TABLE Employees (\n  employee_id INTEGER PRIMARY KEY,\n  employee_name TEXT,\n  department_id INTEGER,\n  FOREIGN KEY (department_id) REFERENCES Departments(department_id)\n);\n\n-- Insert sample data here\n\n-- Write your queries here",
+    "expectedOutput": "Query 1 Result:\n| employee_name | department_name |\n|---------------|-----------------|\n| Alice         | HR              |\n| Bob           | IT              |\n| Carol         | HR              |\n| Dave          | Finance         |\n| Eve           | IT              |\n\nQuery 2 Result:\n| department_name | employee_count |\n|-----------------|----------------|\n| HR              | 2              |\n| IT              | 2              |\n| Finance         | 1              |",
+    "concepts": [
+      "SQL CREATE TABLE",
+      "FOREIGN KEY constraint",
+      "JOIN",
+      "GROUP BY"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-query-to-find-top-customers-efficiently",
+    "title": "Refactor a Query to Find Top Customers Efficiently",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve an existing SQL query that fetches the top 5 customers based on total purchase amount by refactoring it for better readability and performance.",
+    "prompt": "You are given a SQL query that selects the top 5 customers from the 'orders' table based on their total purchase amounts. However, the current query is repetitive and uses inefficient expressions that can be simplified. Refactor the query to improve its readability and efficiency while keeping the output correct. The final query should return each customer's ID along with their total purchase amount, ordered from highest to lowest total, limited to the top 5.",
+    "guidance": [
+      "Use aggregation functions and group by customer_id to get total purchases per customer.",
+      "Avoid recalculating the same expression multiple times by using aliases.",
+      "Ensure the query remains simple and readable."
+    ],
+    "hints": [
+      "Use SUM() to calculate total purchases per customer.",
+      "Use ORDER BY with the alias for the aggregated column to sort results.",
+      "LIMIT is helpful to restrict the number of rows returned."
+    ],
+    "starterCode": "SELECT customer_id, SUM(amount) AS total_purchase\nFROM orders\nGROUP BY customer_id\nORDER BY SUM(amount) DESC\nLIMIT 5;",
+    "expectedOutput": "A list of 5 customer_id and total_purchase pairs showing the highest spenders.",
+    "concepts": [
+      "SQL aggregation",
+      "GROUP BY clause",
+      "ORDER BY and LIMIT"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-find-the-longest-palindromic-substring",
+    "title": "Create a Function to Find the Longest Palindromic Substring",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Write a Python function that takes a string as input and returns the longest palindromic substring within it. A palindrome reads the same backward as forward. This intermediate challenge helps you practice string manipulation and algorithmic thinking.",
+    "prompt": "Write a function named longest_palindromic_substring that accepts a single string argument and returns the longest substring of that string that is a palindrome. If there are multiple palindromes of the same maximum length, return the first one found. The input string will only contain lowercase alphabets.",
+    "guidance": [
+      "Consider checking all possible substrings for palindrome properties efficiently.",
+      "Try expanding around the center of possible palindromes to reduce complexity.",
+      "Remember to handle edge cases like empty strings or strings with one character."
+    ],
+    "hints": [
+      "A palindrome reads the same backward and forward, so compare characters symmetrically.",
+      "Expanding around each character (and each pair of characters) can help find palindromes without checking every substring.",
+      "Use helper functions to keep your code clean and modular."
+    ],
+    "starterCode": "def longest_palindromic_substring(s):\n    # Your code here\n    pass",
+    "expectedOutput": "longest_palindromic_substring('babad')  # returns 'bab' or 'aba'\nlongest_palindromic_substring('cbbd')   # returns 'bb'\nlongest_palindromic_substring('a')      # returns 'a'\nlongest_palindromic_substring('ac')     # returns 'a' or 'c'",
+    "concepts": [
+      "String manipulation",
+      "Two pointer technique",
+      "Palindrome detection"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-deadlock-bug-in-concurrent-transaction-simulation",
+    "title": "Fix the Deadlock Bug in Concurrent Transaction Simulation",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix a concurrency deadlock bug in a Python simulation of database transactions using locks. The broken code attempts to simulate two concurrent transactions that acquire multiple locks and cause a deadlock, resulting in a hang. Your task is to fix the code to avoid deadlocks while preserving the transactional behavior.",
+    "prompt": "You are given a Python script simulating two concurrent transactions attempting to lock shared resources. The code causes a deadlock because each transaction waits indefinitely for locks held by the other transaction. Your challenge is to fix the deadlock by reordering locks or implementing a proper locking mechanism so that both transactions can complete successfully without deadlocks. You are not allowed to use external concurrency control libraries; instead, fix the logic within the existing threading and locking code.",
+    "guidance": [
+      "Analyze the order in which each transaction acquires locks and identify conflicting sequences that lead to deadlock.",
+      "Consider reordering lock acquisitions or implementing a consistent global lock acquisition order.",
+      "Test the fixed code by running the simulation multiple times to ensure no deadlocks occur."
+    ],
+    "hints": [
+      "Deadlocks often happen when multiple threads acquire multiple locks in different orders.",
+      "A common fix is imposing ordering on lock acquisition, so all threads attempt to acquire locks in the same global order.",
+      "Use try-finally blocks or context managers to ensure locks are always released properly."
+    ],
+    "starterCode": "import threading\n\nlock_a = threading.Lock()\nlock_b = threading.Lock()\n\n\ndef transaction1():\n    print('Transaction 1: Acquiring lock A')\n    lock_a.acquire()\n    print('Transaction 1: Acquired lock A')\n\n    # Simulate work\n    threading.Event().wait(1)\n\n    print('Transaction 1: Acquiring lock B')\n    lock_b.acquire()\n    print('Transaction 1: Acquired lock B')\n\n    print('Transaction 1: Releasing locks')\n    lock_b.release()\n    lock_a.release()\n\n\ndef transaction2():\n    print('Transaction 2: Acquiring lock B')\n    lock_b.acquire()\n    print('Transaction 2: Acquired lock B')\n\n    # Simulate work\n    threading.Event().wait(1)\n\n    print('Transaction 2: Acquiring lock A')\n    lock_a.acquire()\n    print('Transaction 2: Acquired lock A')\n\n    print('Transaction 2: Releasing locks')\n    lock_a.release()\n    lock_b.release()\n\n\nthread1 = threading.Thread(target=transaction1)\nthread2 = threading.Thread(target=transaction2)\n\nthread1.start()\nthread2.start()\n\nthread1.join()\nthread2.join()\n\nprint('Both transactions completed')",
+    "expectedOutput": "Transaction 1: Acquiring lock A\nTransaction 1: Acquired lock A\nTransaction 2: Acquiring lock B\nTransaction 2: Acquired lock B\n// Then either transaction proceeds without deadlock until both complete\nBoth transactions completed",
+    "concepts": [
+      "Concurrency",
+      "Threading",
+      "Locking",
+      "Deadlock Prevention"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "design-and-query-a-normalized-e-commerce-sales-data-model",
+    "title": "Design and Query a Normalized E-Commerce Sales Data Model",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "data-modeling",
+    "description": "Create a relational schema to model an e-commerce sales environment and write advanced SQL queries to retrieve complex insights on sales performance and customer behavior.",
+    "prompt": "You are tasked with designing a normalized data model for an e-commerce platform focusing on sales transactions, customers, products, and order details. Using PostgreSQL, create the necessary tables with proper relationships and constraints. Once your schema is ready, write a SQL query to determine the top 5 customers with the highest total purchase amount in the last quarter, listing their names, total amount spent, and total number of orders.\n\nDetails:\n- Model tables for Customers, Products, Orders, OrderItems.\n- Enforce data integrity with not nulls, primary keys, and foreign keys.\n- Each order can contain multiple products with quantity and price.\n- Calculate total purchase amounts by summing product price * quantity across orders.\n\nDeliverables:\n1. SQL DDL statements creating the schema.\n2. SQL query retrieving the top 5 customers by total spending in the last quarter with their total spent and order counts.",
+    "guidance": [
+      "Normalize data to avoid redundancy, separating entities such as Customers, Products, and Orders into different tables.",
+      "Use appropriate data types for fields such as dates, prices (decimal), and quantities (integer).",
+      "Implement foreign key constraints to enforce the relationships between Orders and Customers, and between OrderItems and Orders/Products.",
+      "Use window functions or aggregation with filtering on dates to calculate totals and ranks efficiently."
+    ],
+    "hints": [
+      "Consider using a composite primary key on OrderItems combining order_id and product_id.",
+      "Use the DATE_TRUNC and CURRENT_DATE functions to determine the last quarter dynamically.",
+      "Aggregate order totals by joining OrderItems with Orders and Customers, then use ORDER BY and LIMIT to identify the top customers."
+    ],
+    "starterCode": "CREATE TABLE Customers (\n  customer_id SERIAL PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  email VARCHAR(100) UNIQUE NOT NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT NOW()\n);\n\nCREATE TABLE Products (\n  product_id SERIAL PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  price DECIMAL(10,2) NOT NULL CHECK (price >= 0)\n);\n\nCREATE TABLE Orders (\n  order_id SERIAL PRIMARY KEY,\n  customer_id INT NOT NULL REFERENCES Customers(customer_id),\n  order_date DATE NOT NULL\n);\n\nCREATE TABLE OrderItems (\n  order_id INT NOT NULL REFERENCES Orders(order_id),\n  product_id INT NOT NULL REFERENCES Products(product_id),\n  quantity INT NOT NULL CHECK (quantity > 0),\n  price DECIMAL(10,2) NOT NULL CHECK (price >= 0),\n  PRIMARY KEY (order_id, product_id)\n);",
+    "expectedOutput": "A query result showing these columns: customer_name, total_amount_spent, total_orders\nFor example:\n| customer_name | total_amount_spent | total_orders |\n|---------------|--------------------|--------------|\n| Alice Smith   | 1450.75            | 12           |\n| Bob Johnson   | 1320.40            | 9            |\n| Carla Evans   | 1275.00            | 8            |\n| Daniel Wu     | 1100.20            | 10           |\n| Emma Brown    | 975.95             | 7            |",
+    "concepts": [
+      "normalized database design",
+      "foreign key constraints",
+      "advanced SQL aggregation",
+      "date filtering with SQL functions"
+    ],
+    "estimatedTime": "30 minutes",
+    "isFeatured": true
   }
 ];

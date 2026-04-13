@@ -1,172 +1,176 @@
 [
   {
-    "slug": "fix-the-bug-in-a-simple-even-number-checker",
-    "title": "Fix the Bug in a Simple Even Number Checker",
+    "slug": "fix-memory-leak-and-concurrency-bug-in-thread-safe-cache-implementation",
+    "title": "Fix Memory Leak and Concurrency Bug in Thread-Safe Cache Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Given an incomplete and buggy thread-safe LRU cache implementation in C++, identify and fix issues related to memory leaks, data races, and incorrect cache eviction logic.",
+    "prompt": "You are provided with a broken C++ implementation of a thread-safe LRU cache. The cache is supposed to store a fixed maximum number of key-value pairs, evicting the least recently used element when full. It uses a doubly linked list and a hash map for O(1) access and eviction. However, the current implementation has memory leaks, concurrency bugs, and incorrect eviction behavior.\n\nIdentify and fix the bugs to ensure:\n- No memory leaks occur\n- The cache is safe to access concurrently\n- The LRU eviction logic works correctly under concurrent accesses\n\nYou should only modify the methods inside the Cache class and ensure the class has proper RAII semantics and thread safety.",
+    "guidance": [
+      "Check ownership and deletion of nodes to fix memory leaks.",
+      "Use proper synchronization primitives (e.g. std::mutex) to prevent data races.",
+      "Verify logic that moves accessed nodes to the front and evicts from the tail."
+    ],
+    "hints": [
+      "Consider using std::unique_ptr or ensure you delete nodes when evicted.",
+      "Lock the mutex at the beginning of each public method and unlock at the end.",
+      "Make sure to update both the linked list pointers and the hash map entries when modifying the cache."
+    ],
+    "starterCode": "#include <unordered_map>\n#include <mutex>\n\ntemplate<typename K, typename V>\nclass Cache {\n    struct Node {\n        K key;\n        V value;\n        Node* prev;\n        Node* next;\n        Node(K k, V v) : key(k), value(v), prev(nullptr), next(nullptr) {}\n    };\n\n    std::unordered_map<K, Node*> map;\n    Node* head = nullptr;\n    Node* tail = nullptr;\n    int capacity;\n    int size = 0;\n    std::mutex mtx;\n\n    void removeNode(Node* node) {\n        if (node->prev) node->prev->next = node->next;\n        else head = node->next;\n        if (node->next) node->next->prev = node->prev;\n        else tail = node->prev;\n    }\n\n    void addToFront(Node* node) {\n        node->next = head;\n        node->prev = nullptr;\n        if (head) head->prev = node;\n        head = node;\n        if (!tail) tail = head;\n    }\n\npublic:\n    Cache(int cap) : capacity(cap) {}\n\n    V get(const K& key) {\n        std::lock_guard<std::mutex> lock(mtx);\n        if (map.find(key) == map.end()) return V();\n        Node* node = map[key];\n        removeNode(node);\n        addToFront(node);\n        return node->value;\n    }\n\n    void put(const K& key, const V& value) {\n        std::lock_guard<std::mutex> lock(mtx);\n        if (map.find(key) != map.end()) {\n            Node* node = map[key];\n            node->value = value;\n            removeNode(node);\n            addToFront(node);\n        } else {\n            Node* node = new Node(key, value);\n            if (size == capacity) {\n                map.erase(tail->key);\n                removeNode(tail);\n            } else {\n                size++;\n            }\n            addToFront(node);\n            map[key] = node;\n        }\n    }\n\n    ~Cache() {\n        Node* curr = head;\n        while (curr) {\n            Node* next = curr->next;\n            delete curr;\n            curr = next;\n        }\n    }\n};",
+    "expectedOutput": "Correct cache behavior with no memory leaks under concurrent get and put calls, and LRU eviction policy maintained correctly.",
+    "concepts": [
+      "concurrency",
+      "memory management",
+      "LRU cache",
+      "mutex synchronization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-simple-employees-and-departments-table-with-basic-queries",
+    "title": "Build a Simple Employees and Departments Table with Basic Queries",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Create two related tables, Employees and Departments, and write SQL queries to retrieve basic information such as employee names, their departments, and departments with employee counts.",
+    "prompt": "You are tasked to create a small company database model with two tables: Departments and Employees. First, create the Departments table with columns department_id (integer, primary key) and department_name (text). Then create the Employees table with columns employee_id (integer, primary key), employee_name (text), and department_id (integer) as a foreign key referencing Departments. After creating the tables and inserting some sample data, write SQL queries to:\n\n1. List all employees along with their department names.\n2. Show the count of employees in each department.\n\nWrite all the necessary SQL statements for this mini-project.",
+    "guidance": [
+      "Start by creating the Departments table, then create the Employees table referencing Departments.",
+      "Insert at least 3 department records and 5 employee records with assigned departments.",
+      "Use JOIN operations to combine Employees and Departments data.",
+      "Use GROUP BY to count employees per department."
+    ],
+    "hints": [
+      "Remember to define department_id as the primary key in Departments and as a foreign key in Employees.",
+      "Use INNER JOIN to combine employee and department information.",
+      "Use COUNT() aggregation with GROUP BY department_id to get employee counts."
+    ],
+    "starterCode": "CREATE TABLE Departments (\n  department_id INTEGER PRIMARY KEY,\n  department_name TEXT\n);\n\nCREATE TABLE Employees (\n  employee_id INTEGER PRIMARY KEY,\n  employee_name TEXT,\n  department_id INTEGER,\n  FOREIGN KEY (department_id) REFERENCES Departments(department_id)\n);\n\n-- Insert sample data here\n\n-- Write your queries here",
+    "expectedOutput": "Query 1 Result:\n| employee_name | department_name |\n|---------------|-----------------|\n| Alice         | HR              |\n| Bob           | IT              |\n| Carol         | HR              |\n| Dave          | Finance         |\n| Eve           | IT              |\n\nQuery 2 Result:\n| department_name | employee_count |\n|-----------------|----------------|\n| HR              | 2              |\n| IT              | 2              |\n| Finance         | 1              |",
+    "concepts": [
+      "SQL CREATE TABLE",
+      "FOREIGN KEY constraint",
+      "JOIN",
+      "GROUP BY"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-query-to-find-top-customers-efficiently",
+    "title": "Refactor a Query to Find Top Customers Efficiently",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve an existing SQL query that fetches the top 5 customers based on total purchase amount by refactoring it for better readability and performance.",
+    "prompt": "You are given a SQL query that selects the top 5 customers from the 'orders' table based on their total purchase amounts. However, the current query is repetitive and uses inefficient expressions that can be simplified. Refactor the query to improve its readability and efficiency while keeping the output correct. The final query should return each customer's ID along with their total purchase amount, ordered from highest to lowest total, limited to the top 5.",
+    "guidance": [
+      "Use aggregation functions and group by customer_id to get total purchases per customer.",
+      "Avoid recalculating the same expression multiple times by using aliases.",
+      "Ensure the query remains simple and readable."
+    ],
+    "hints": [
+      "Use SUM() to calculate total purchases per customer.",
+      "Use ORDER BY with the alias for the aggregated column to sort results.",
+      "LIMIT is helpful to restrict the number of rows returned."
+    ],
+    "starterCode": "SELECT customer_id, SUM(amount) AS total_purchase\nFROM orders\nGROUP BY customer_id\nORDER BY SUM(amount) DESC\nLIMIT 5;",
+    "expectedOutput": "A list of 5 customer_id and total_purchase pairs showing the highest spenders.",
+    "concepts": [
+      "SQL aggregation",
+      "GROUP BY clause",
+      "ORDER BY and LIMIT"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-find-the-longest-palindromic-substring",
+    "title": "Create a Function to Find the Longest Palindromic Substring",
     "language": "python",
-    "difficulty": "beginner",
-    "category": "debugging",
-    "description": "Identify and fix the bug in a Python function that is intended to check if a number is even.",
-    "prompt": "The following Python function is supposed to return True if a number is even and False if it is odd. However, it doesn't work as expected. Find the bug in the code and fix it so that it functions correctly.",
-    "guidance": [
-      "Check the condition used to determine if a number is even.",
-      "Remember how the modulus (%) operator works with even and odd numbers."
-    ],
-    "hints": [
-      "The modulus operator returns the remainder after division.",
-      "An even number divided by 2 has a remainder of 0."
-    ],
-    "starterCode": "def is_even(number):\n    if number % 2 == 1:\n        return True\n    else:\n        return False",
-    "expectedOutput": "is_even(4) -> True\nis_even(7) -> False\nis_even(0) -> True",
-    "concepts": [
-      "modulus operator",
-      "if conditionals",
-      "boolean return values"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-bug-in-c-function-to-find-maximum-product-of-two-elements",
-    "title": "Fix Bug in C++ Function to Find Maximum Product of Two Elements",
-    "language": "cpp",
     "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "The provided C++ function is intended to find the maximum product of any two distinct elements in an integer array. However, it contains logical and implementation bugs that lead to incorrect results or runtime errors. Your task is to identify and fix these bugs to ensure the function works correctly for all valid inputs.",
-    "prompt": "Given a vector of integers, complete the function maxProduct that returns the maximum product of any two distinct elements. The current implementation contains bugs—some related to loop bounds and some related to handling edge cases. Fix the code so it correctly computes the maximum product for any input array with at least two elements.",
+    "category": "functions",
+    "description": "Write a Python function that takes a string as input and returns the longest palindromic substring within it. A palindrome reads the same backward as forward. This intermediate challenge helps you practice string manipulation and algorithmic thinking.",
+    "prompt": "Write a function named longest_palindromic_substring that accepts a single string argument and returns the longest substring of that string that is a palindrome. If there are multiple palindromes of the same maximum length, return the first one found. The input string will only contain lowercase alphabets.",
     "guidance": [
-      "Check the loop boundaries to ensure you are iterating over all pairs of elements without accessing out-of-bound indices.",
-      "Make sure to handle negative numbers correctly since the product could be maximal using two negative values.",
-      "Avoid using the same element twice by ensuring the pair indices are distinct."
+      "Consider checking all possible substrings for palindrome properties efficiently.",
+      "Try expanding around the center of possible palindromes to reduce complexity.",
+      "Remember to handle edge cases like empty strings or strings with one character."
     ],
     "hints": [
-      "Look closely at the conditions in the nested loops and the initialization of the max product variable.",
-      "Consider what happens if the input array contains negative numbers or zeros."
+      "A palindrome reads the same backward and forward, so compare characters symmetrically.",
+      "Expanding around each character (and each pair of characters) can help find palindromes without checking every substring.",
+      "Use helper functions to keep your code clean and modular."
     ],
-    "starterCode": "#include <vector>\n#include <iostream>\nusing namespace std;\n\nint maxProduct(const vector<int>& nums) {\n    int max_prod = INT_MIN;\n    for (int i = 0; i <= nums.size(); ++i) {\n        for (int j = i; j < nums.size(); ++j) {\n            if (i != j && nums[i] * nums[j] > max_prod) {\n                max_prod = nums[i] * nums[j];\n            }\n        }\n    }\n    return max_prod;\n}\n\nint main() {\n    vector<int> nums = {3, -4, 2, -5, 1};\n    cout << maxProduct(nums) << endl;\n    return 0;\n}",
-    "expectedOutput": "-10",
+    "starterCode": "def longest_palindromic_substring(s):\n    # Your code here\n    pass",
+    "expectedOutput": "longest_palindromic_substring('babad')  # returns 'bab' or 'aba'\nlongest_palindromic_substring('cbbd')   # returns 'bb'\nlongest_palindromic_substring('a')      # returns 'a'\nlongest_palindromic_substring('ac')     # returns 'a' or 'c'",
     "concepts": [
-      "nested loops",
-      "array indexing",
-      "edge case handling",
-      "loop boundaries"
+      "String manipulation",
+      "Two pointer technique",
+      "Palindrome detection"
     ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "15 minutes",
     "isFeatured": true
   },
   {
-    "slug": "advanced-mini-project-design-a-custom-event-scheduler-with-recurrence-rules-in-c",
-    "title": "Advanced Mini-Project: Design a Custom Event Scheduler with Recurrence Rules in C++",
-    "language": "cpp",
+    "slug": "fix-the-deadlock-bug-in-concurrent-transaction-simulation",
+    "title": "Fix the Deadlock Bug in Concurrent Transaction Simulation",
+    "language": "python",
     "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build a robust event scheduler application that supports creating, storing, and querying events with complex recurrence rules, such as daily, weekly, or custom intervals. The scheduler should efficiently handle overlapping events and allow users to fetch upcoming events within a date range.",
-    "prompt": "Create a C++ mini-project that implements an Event Scheduler system. The scheduler must allow users to add events with titles, start times, durations, and recurrence rules (e.g., daily, weekly on specific weekdays, or custom intervals). It should store events efficiently and provide a method to query all events happening within a given date/time range, including instances generated by recurrence patterns. Your scheduler should also detect and manage overlapping events, returning all occurrences that fall within the range in chronological order.",
+    "category": "debugging",
+    "description": "Identify and fix a concurrency deadlock bug in a Python simulation of database transactions using locks. The broken code attempts to simulate two concurrent transactions that acquire multiple locks and cause a deadlock, resulting in a hang. Your task is to fix the code to avoid deadlocks while preserving the transactional behavior.",
+    "prompt": "You are given a Python script simulating two concurrent transactions attempting to lock shared resources. The code causes a deadlock because each transaction waits indefinitely for locks held by the other transaction. Your challenge is to fix the deadlock by reordering locks or implementing a proper locking mechanism so that both transactions can complete successfully without deadlocks. You are not allowed to use external concurrency control libraries; instead, fix the logic within the existing threading and locking code.",
     "guidance": [
-      "Define an Event class with attributes for title, start datetime, duration, and recurrence rules.",
-      "Implement logic to generate event occurrences on-demand based on recurrence rules for efficient querying.",
-      "Use an appropriate data structure to store events and optimize event lookup within date ranges.",
-      "Carefully handle edge cases like events spanning midnight, overlapping times, and non-standard recurrence intervals."
+      "Analyze the order in which each transaction acquires locks and identify conflicting sequences that lead to deadlock.",
+      "Consider reordering lock acquisitions or implementing a consistent global lock acquisition order.",
+      "Test the fixed code by running the simulation multiple times to ensure no deadlocks occur."
     ],
     "hints": [
-      "Use C++ chrono library types (std::chrono::system_clock::time_point) for handling dates and times safely.",
-      "Consider building a RecurrenceRule class or struct to encapsulate and parse recurrence logic cleanly.",
-      "Use iterators or generators to produce occurrences lazily instead of precomputing all repeats."
+      "Deadlocks often happen when multiple threads acquire multiple locks in different orders.",
+      "A common fix is imposing ordering on lock acquisition, so all threads attempt to acquire locks in the same global order.",
+      "Use try-finally blocks or context managers to ensure locks are always released properly."
     ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n#include <chrono>\n\n// Define Event class here with necessary fields\n// Define RecurrenceRule class/struct for recurrence logic\n\nclass EventScheduler {\npublic:\n    void addEvent(const std::string& title, /* start time params */, /* duration params */, /* recurrence rule params */) {\n        // Implement adding event\n    }\n\n    std::vector</* Event occurrence struct/type */> getEventsInRange(/* range start */, /* range end */) {\n        // Implement querying events within date/time range\n        return {};\n    }\n};\n\nint main() {\n    EventScheduler scheduler;\n    // Example usage: add a recurring weekly event\n    \n    // Query and print events between two dates\n    return 0;\n}",
-    "expectedOutput": "All event occurrences within the queried date range printed chronologically with title, start time, and duration.",
+    "starterCode": "import threading\n\nlock_a = threading.Lock()\nlock_b = threading.Lock()\n\n\ndef transaction1():\n    print('Transaction 1: Acquiring lock A')\n    lock_a.acquire()\n    print('Transaction 1: Acquired lock A')\n\n    # Simulate work\n    threading.Event().wait(1)\n\n    print('Transaction 1: Acquiring lock B')\n    lock_b.acquire()\n    print('Transaction 1: Acquired lock B')\n\n    print('Transaction 1: Releasing locks')\n    lock_b.release()\n    lock_a.release()\n\n\ndef transaction2():\n    print('Transaction 2: Acquiring lock B')\n    lock_b.acquire()\n    print('Transaction 2: Acquired lock B')\n\n    # Simulate work\n    threading.Event().wait(1)\n\n    print('Transaction 2: Acquiring lock A')\n    lock_a.acquire()\n    print('Transaction 2: Acquired lock A')\n\n    print('Transaction 2: Releasing locks')\n    lock_a.release()\n    lock_b.release()\n\n\nthread1 = threading.Thread(target=transaction1)\nthread2 = threading.Thread(target=transaction2)\n\nthread1.start()\nthread2.start()\n\nthread1.join()\nthread2.join()\n\nprint('Both transactions completed')",
+    "expectedOutput": "Transaction 1: Acquiring lock A\nTransaction 1: Acquired lock A\nTransaction 2: Acquiring lock B\nTransaction 2: Acquired lock B\n// Then either transaction proceeds without deadlock until both complete\nBoth transactions completed",
     "concepts": [
-      "date and time manipulation",
-      "recurrence rule processing",
-      "data structures for event storage",
-      "algorithm optimization",
-      "C++ chrono library"
+      "Concurrency",
+      "Threading",
+      "Locking",
+      "Deadlock Prevention"
     ],
-    "estimatedTime": "90 minutes",
+    "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-the-bug-in-the-function-that-calculates-the-sum-of-an-array",
-    "title": "Fix the Bug in the Function That Calculates the Sum of an Array",
-    "language": "javascript",
-    "difficulty": "beginner",
-    "category": "debugging",
-    "description": "This challenge involves debugging a simple JavaScript function that is intended to sum all numbers in an array but currently returns an incorrect result.",
-    "prompt": "The function sumArray is supposed to take an array of numbers and return their total sum. However, it contains a bug that causes it to return the wrong output. Fix the bug so that the function returns the correct sum of all numbers in the input array.",
-    "guidance": [
-      "Check the loop structure and ensure all elements are being processed.",
-      "Verify the variable used to accumulate the sum is properly initialized and updated."
-    ],
-    "hints": [
-      "Look carefully at the loop condition, it might be off by one.",
-      "Make sure you are adding the numbers to the sum variable, not assigning."
-    ],
-    "starterCode": "function sumArray(arr) {\n  let sum = 0;\n  for (let i = 0; i <= arr.length; i++) {\n    sum = arr[i];\n  }\n  return sum;\n}\n\nconsole.log(sumArray([1, 2, 3, 4]));",
-    "expectedOutput": "10",
-    "concepts": [
-      "loops",
-      "variables",
-      "arrays",
-      "basic debugging"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "build-a-function-to-perform-symbolic-differentiation-of-polynomials-in-c",
-    "title": "Build a Function to Perform Symbolic Differentiation of Polynomials in C++",
-    "language": "cpp",
+    "slug": "design-and-query-a-normalized-e-commerce-sales-data-model",
+    "title": "Design and Query a Normalized E-Commerce Sales Data Model",
+    "language": "sql",
     "difficulty": "advanced",
-    "category": "functions",
-    "description": "Create an advanced C++ function that takes a polynomial expression as a string input and returns its derivative as another string. This function should handle multiple terms, coefficients, exponents, and the variable x correctly, performing symbolic differentiation in standard mathematical notation.",
-    "prompt": "Write a function named `differentiatePolynomial` in C++ that accepts a string representing a polynomial (e.g., \"3x^3 + 5x^2 - 2x + 7\") and returns the derivative as a correctly formatted string (e.g., \"9x^2 + 10x - 2\"). Your function must support: multiple terms with positive and negative coefficients, terms without explicit coefficients (assumed 1), constant terms, and standard polynomial notations including 'x' and exponentiation with '^'. The output should omit terms with a zero coefficient and simplify correctly (e.g., no x^1, just x, and no x^0 terms).",
+    "category": "data-modeling",
+    "description": "Create a relational schema to model an e-commerce sales environment and write advanced SQL queries to retrieve complex insights on sales performance and customer behavior.",
+    "prompt": "You are tasked with designing a normalized data model for an e-commerce platform focusing on sales transactions, customers, products, and order details. Using PostgreSQL, create the necessary tables with proper relationships and constraints. Once your schema is ready, write a SQL query to determine the top 5 customers with the highest total purchase amount in the last quarter, listing their names, total amount spent, and total number of orders.\n\nDetails:\n- Model tables for Customers, Products, Orders, OrderItems.\n- Enforce data integrity with not nulls, primary keys, and foreign keys.\n- Each order can contain multiple products with quantity and price.\n- Calculate total purchase amounts by summing product price * quantity across orders.\n\nDeliverables:\n1. SQL DDL statements creating the schema.\n2. SQL query retrieving the top 5 customers by total spending in the last quarter with their total spent and order counts.",
     "guidance": [
-      "Parse the input string to identify terms, coefficients, variables, and exponents.",
-      "Apply differentiation rules: d/dx [ax^n] = a*n*x^(n-1); constants differentiate to zero.",
-      "Construct the output string by combining differentiated terms, properly formatted.",
-      "Handle special cases such as zero coefficients or missing exponent parts."
+      "Normalize data to avoid redundancy, separating entities such as Customers, Products, and Orders into different tables.",
+      "Use appropriate data types for fields such as dates, prices (decimal), and quantities (integer).",
+      "Implement foreign key constraints to enforce the relationships between Orders and Customers, and between OrderItems and Orders/Products.",
+      "Use window functions or aggregation with filtering on dates to calculate totals and ranks efficiently."
     ],
     "hints": [
-      "Split the polynomial string by '+' and '-' signs while preserving signs to extract individual terms.",
-      "Use string streams or regex to parse coefficients and exponents from each term.",
-      "Remember to omit terms with a zero coefficient and format terms with exponent 1 as just 'x'."
+      "Consider using a composite primary key on OrderItems combining order_id and product_id.",
+      "Use the DATE_TRUNC and CURRENT_DATE functions to determine the last quarter dynamically.",
+      "Aggregate order totals by joining OrderItems with Orders and Customers, then use ORDER BY and LIMIT to identify the top customers."
     ],
-    "starterCode": "#include <string>\n\nstd::string differentiatePolynomial(const std::string& poly) {\n    // Your code goes here\n    return \"\";\n}",
-    "expectedOutput": "For input \"3x^3 + 5x^2 - 2x + 7\", expected output is \"9x^2 + 10x - 2\"",
+    "starterCode": "CREATE TABLE Customers (\n  customer_id SERIAL PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  email VARCHAR(100) UNIQUE NOT NULL,\n  created_at TIMESTAMP NOT NULL DEFAULT NOW()\n);\n\nCREATE TABLE Products (\n  product_id SERIAL PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  price DECIMAL(10,2) NOT NULL CHECK (price >= 0)\n);\n\nCREATE TABLE Orders (\n  order_id SERIAL PRIMARY KEY,\n  customer_id INT NOT NULL REFERENCES Customers(customer_id),\n  order_date DATE NOT NULL\n);\n\nCREATE TABLE OrderItems (\n  order_id INT NOT NULL REFERENCES Orders(order_id),\n  product_id INT NOT NULL REFERENCES Products(product_id),\n  quantity INT NOT NULL CHECK (quantity > 0),\n  price DECIMAL(10,2) NOT NULL CHECK (price >= 0),\n  PRIMARY KEY (order_id, product_id)\n);",
+    "expectedOutput": "A query result showing these columns: customer_name, total_amount_spent, total_orders\nFor example:\n| customer_name | total_amount_spent | total_orders |\n|---------------|--------------------|--------------|\n| Alice Smith   | 1450.75            | 12           |\n| Bob Johnson   | 1320.40            | 9            |\n| Carla Evans   | 1275.00            | 8            |\n| Daniel Wu     | 1100.20            | 10           |\n| Emma Brown    | 975.95             | 7            |",
     "concepts": [
-      "string parsing",
-      "symbolic computation",
-      "polynomial differentiation",
-      "string manipulation"
+      "normalized database design",
+      "foreign key constraints",
+      "advanced SQL aggregation",
+      "date filtering with SQL functions"
     ],
     "estimatedTime": "30 minutes",
     "isFeatured": true
-  },
-  {
-    "slug": "build-a-function-to-group-objects-by-property-in-javascript",
-    "title": "Build a Function to Group Objects by Property in JavaScript",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "functions",
-    "description": "Create a function that takes an array of objects and groups them by a specified property, returning an object where keys are property values and values are arrays of matching objects.",
-    "prompt": "Write a JavaScript function named 'groupBy' that accepts two parameters: an array of objects and a string representing a property key. The function should return an object where each key is a unique value of the specified property from the array, and each corresponding value is an array containing all objects from the original array that share that property value. If the property does not exist in some objects, group those objects under the key 'undefined'.",
-    "guidance": [
-      "Iterate through the array and extract the property value for each object.",
-      "Use an object to aggregate arrays grouped by the property value.",
-      "Handle cases where the property is missing or undefined by grouping under 'undefined'."
-    ],
-    "hints": [
-      "Consider using the array method 'reduce' to accumulate results.",
-      "Use bracket notation to dynamically assign keys to the result object.",
-      "Make sure to initialize arrays for new keys before pushing objects."
-    ],
-    "starterCode": "function groupBy(array, key) {\n  // Your code here\n}",
-    "expectedOutput": "groupBy([{category: 'fruit', name: 'apple'}, {category: 'vegetable', name: 'carrot'}, {category: 'fruit', name: 'banana'}, {name: 'unknown'}], 'category')\n\n// Returns:\n// {\n//   fruit: [ {category: 'fruit', name: 'apple'}, {category: 'fruit', name: 'banana'} ],\n//   vegetable: [ {category: 'vegetable', name: 'carrot'} ],\n//   undefined: [ {name: 'unknown'} ]\n// }",
-    "concepts": [
-      "array methods",
-      "object manipulation",
-      "higher-order functions"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
   }
 ]
