@@ -55995,5 +55995,281 @@ export const articles = [
         "value": "By understanding how indexes are used and using tools like EXPLAIN or usage statistics, you can improve the query performance of your large SQL database significantly."
       }
     ]
+  },
+  {
+    "slug": "comparing-javascript-promises-and-async-await-practical-use-cases",
+    "title": "Comparing JavaScript Promises and Async/Await: Practical Use Cases",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between JavaScript Promises and async/await with practical examples to handle asynchronous code in an easy and beginner-friendly way.",
+    "videoUrl": "https://www.youtube.com/watch?v=TzV-hmsSDEw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a powerful language that allows you to work with asynchronous operations using Promises and async/await. Both help manage tasks like fetching data from an API or reading files without blocking your code. In this tutorial, we'll explore the differences between Promises and async/await, when to use each, and provide practical examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Promises?\nPromises in JavaScript represent operations that haven't completed yet but will in the future. Promises have three states: pending, fulfilled, or rejected. You use `.then()` for successful completion and `.catch()` for errors."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data fetched successfully!');\n      } else {\n        reject('Error fetching data.');\n      }\n    }, 1000);\n  });\n};\n\nfetchData()\n  .then((message) => {\n    console.log(message);\n  })\n  .catch((error) => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `fetchData` returns a Promise. We handle the result with `.then()` and `.catch()`. This pattern works well but can become harder to read when chaining many asynchronous operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Is Async/Await?\nAsync/await is syntax built on top of Promises that allows you to write asynchronous code that looks synchronous, improving readability and error handling. You declare a function with `async` and use `await` to pause execution until the Promise resolves."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data fetched successfully!');\n      } else {\n        reject('Error fetching data.');\n      }\n    }, 1000);\n  });\n};\n\nasync function getData() {\n  try {\n    const message = await fetchData();\n    console.log(message);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `getData` is an async function. The `await` keyword pauses the function until the Promise from `fetchData` resolves. This structure is easier to understand, especially as complexity grows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Case: Multiple Asynchronous Requests\nSuppose you want to fetch user details and their posts from a server."
+      },
+      {
+        "type": "code",
+        "value": "const fetchUser = () => {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve({ id: 1, name: 'Alice' }), 1000);\n  });\n};\n\nconst fetchPosts = (userId) => {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve([\"Post 1\", \"Post 2\"]), 1000);\n  });\n};\n\n// Using Promises\nfetchUser()\n  .then(user => {\n    console.log('User:', user);\n    return fetchPosts(user.id);\n  })\n  .then(posts => {\n    console.log('Posts:', posts);\n  })\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "This Promise chain works but can get complicated when adding more steps or error handling."
+      },
+      {
+        "type": "code",
+        "value": "async function showUserAndPosts() {\n  try {\n    const user = await fetchUser();\n    console.log('User:', user);\n    const posts = await fetchPosts(user.id);\n    console.log('Posts:', posts);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nshowUserAndPosts();"
+      },
+      {
+        "type": "paragraph",
+        "value": "The async/await version looks cleaner and easier to maintain. You handle errors using a standard `try/catch` block."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Promises are a foundational way to handle async operations, using `.then()` and `.catch()`.\n- Async/await is syntax sugar that makes Promises easier to read and debug.\n- For simple cases, Promises are fine.\n- For complex async flows, async/await improves readability and error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try converting your existing Promise chains to async/await to get comfortable with the syntax. Both approaches are important and understanding them will improve your JavaScript skills!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-itertools-7-lesser-known-tips-for-efficient-data-processing",
+    "title": "Mastering Python's itertools: 7 Lesser-Known Tips for Efficient Data Processing",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Discover 7 lesser-known yet powerful tips for using Python's itertools module to make your data processing fast, efficient, and beginner-friendly.",
+    "videoUrl": "https://www.youtube.com/watch?v=mB0EBW-vDSQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's itertools module is a treasure trove for anyone looking to write efficient and clean code when working with iterators. While many beginners know some basic tools like `count` or `cycle`, there are many lesser-known functions and tips that can dramatically improve your data processing tasks. This article will introduce you to 7 practical itertools tips that make handling data easier and faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by importing itertools:"
+      },
+      {
+        "type": "code",
+        "value": "import itertools"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Use `compress` to filter data with a selector\nInstead of filtering elements with a condition, you can use `compress` to filter data using a selector list of booleans. It’s like combining `filter` and a mask."
+      },
+      {
+        "type": "code",
+        "value": "data = ['apple', 'banana', 'cherry', 'date']\nselectors = [True, False, True, False]\nfiltered = list(itertools.compress(data, selectors))\nprint(filtered)  # Output: ['apple', 'cherry']"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. `dropwhile` and `takewhile` for conditional slicing\nThese functions help you take or drop elements from an iterable while a condition is true, which is handy for skipping or slicing parts without needing indices."
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3, 4, 5, 6, 1, 2]\nskip_less_than_4 = list(itertools.dropwhile(lambda x: x < 4, numbers))\ntake_less_than_4 = list(itertools.takewhile(lambda x: x < 4, numbers))\nprint(skip_less_than_4)  # [4, 5, 6, 1, 2]\nprint(take_less_than_4)  # [1, 2, 3]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Efficient chaining with `chain` instead of nested loops\nWhen you have multiple lists or iterables and want to process all elements consecutively, `chain` combines them without creating intermediate lists."
+      },
+      {
+        "type": "code",
+        "value": "a = [1, 2]\nb = ['a', 'b']\nc = [True, False]\nfor item in itertools.chain(a, b, c):\n    print(item)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. `groupby` for grouping adjacent repeated values\n`groupby` groups consecutive elements by a key function. Remember, the data should be sorted by the key for meaningful grouping."
+      },
+      {
+        "type": "code",
+        "value": "data = [('animal', 'dog'), ('animal', 'cat'), ('plant', 'tree'), ('plant', 'flower')]\nfor key, group in itertools.groupby(data, key=lambda x: x[0]):\n    print(key, list(group))"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. `islice` for slicing iterators like lists\nSometimes you need a slice of an iterator. Use `islice` to grab items without converting the entire iterator to a list."
+      },
+      {
+        "type": "code",
+        "value": "numbers = itertools.count(10)  # infinite iterator\nfirst_five = list(itertools.islice(numbers, 5))\nprint(first_five)  # [10, 11, 12, 13, 14]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. `tee` to split one iterator into multiple independent iterators\nIf you want to iterate over the same data multiple times independently, use `tee`. This can save memory compared to making copies of a list."
+      },
+      {
+        "type": "code",
+        "value": "data = iter([1, 2, 3, 4])\na_iter, b_iter = itertools.tee(data, 2)\nprint(list(a_iter))  # [1, 2, 3, 4]\nprint(list(b_iter))  # [1, 2, 3, 4]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 7. Use `starmap` to apply a function to unpacked arguments\nIf your data is a list of tuples, `starmap` applies a function by unpacking each tuple as arguments."
+      },
+      {
+        "type": "code",
+        "value": "pairs = [(2, 3), (4, 5), (6, 7)]\nresult = list(itertools.starmap(lambda x, y: x * y, pairs))\nprint(result)  # [6, 20, 42]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Wrap-up\nThe itertools module offers many powerful tools for iterating, grouping, and processing data efficiently without extra memory overhead. Experiment with these tips to write cleaner and more Pythonic code. As you grow more comfortable, you'll find itertools indispensable in many real-world data tasks."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-sql-window-functions-vs-aggregation-for-data-summarization",
+    "title": "Comparing SQL Window Functions vs Aggregation for Data Summarization",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn the difference between SQL window functions and aggregation methods to summarize data effectively in your queries. This beginner-friendly guide explains when and how to use each technique.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, summarizing data is a common task. Two popular approaches to summarize data are using aggregation functions and window functions. Both have their uses and understanding the difference will help you write more efficient and insightful queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "Aggregation functions group rows and return a single summary value per group, such as total sales per region. On the other hand, window functions compute values across a set of rows related to the current row without collapsing the rows. This means you can keep the original row detail while adding summary information."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's consider a sample sales table to illustrate the difference:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n  id INT,\n  region VARCHAR(50),\n  salesperson VARCHAR(50),\n  amount DECIMAL(10,2)\n);\n\nINSERT INTO sales VALUES\n(1, 'North', 'Alice', 100.00),\n(2, 'North', 'Bob', 150.00),\n(3, 'South', 'Charlie', 200.00),\n(4, 'South', 'Alice', 50.00),\n(5, 'East', 'Bob', 120.00);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Aggregation\nIf you want to get the total sales per region, you would use the `GROUP BY` with aggregation functions like `SUM()`:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT region, SUM(amount) AS total_sales\nFROM sales\nGROUP BY region;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query returns one row per region with the total sales. However, all salesperson details are lost because aggregation collapses rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Window Functions\nIf you want to see each sale but also want to add the total sales per region alongside each row, window functions are the answer:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  id,\n  region,\n  salesperson,\n  amount,\n  SUM(amount) OVER (PARTITION BY region) AS total_region_sales\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `SUM(amount) OVER (PARTITION BY region)` calculates the total sales per region, but unlike aggregation, it does not group or collapse rows. Each sale is still shown individually with the added total information."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Use **aggregation** (`GROUP BY`) when you want to reduce multiple rows into summarized groups.\n- Use **window functions** when you want to keep row-level detail but also add summary calculations.\n\nUnderstanding when to use each will improve your SQL querying skills and allow you to produce more flexible reports."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-under-system-constraints",
+    "title": "Optimizing SQL Query Performance Under System Constraints: A Beginner's Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn practical tips for optimizing SQL queries when dealing with system limits like memory and CPU usage. Improve your query efficiency and avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, you may encounter system constraints such as limited memory, CPU power, or disk I/O speed. These limits can cause your queries to run slowly or fail with errors like \"out of memory\" or \"timeout.\" This article helps beginners understand how to optimize SQL queries for better performance within these constraints."
+      },
+      {
+        "type": "paragraph",
+        "value": "The first step to optimization is to identify the slow or problematic queries. Use monitoring tools or database logs to find queries that take a long time or cause system errors. Once identified, focus on reducing the amount of data processed and improving how the database accesses the data."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common approach is to use indexes wisely. Indexes help the database find records faster without scanning entire tables. However, adding too many indexes can slow down updates or inserts, so balance is key."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example of a poorly optimized query and then optimize it."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE customer_name LIKE '%Smith%';"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this query, the wildcard '%' at the beginning prevents the database from using any indexes on the customer_name column. This causes a full table scan, which is slow, especially if the table is large. To optimize, consider these options:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Avoid leading wildcards if possible."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM orders WHERE customer_name LIKE 'Smith%';"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Create an index on customer_name to speed up lookups."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_name ON orders(customer_name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. If searching with leading wildcards cannot be avoided, consider using full-text search features if your database supports them."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common issue is selecting more columns or rows than necessary. Always select only the columns you need rather than using SELECT *."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date FROM orders WHERE customer_name LIKE 'Smith%';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, use LIMIT to restrict the result size if appropriate. This reduces server load and speeds up the query response."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date FROM orders WHERE customer_name LIKE 'Smith%' LIMIT 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing SQL queries under system constraints involves careful indexing, limiting data processed, avoiding expensive pattern matching, and selecting only the needed data. Monitoring query performance and iteratively improving the queries will lead to better results and fewer system errors."
+      }
+    ]
   }
 ];

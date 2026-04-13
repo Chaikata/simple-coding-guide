@@ -1,509 +1,517 @@
 [
   {
-    "slug": "comparing-async-await-vs-promises-practical-use-cases",
-    "title": "Comparing Async/Await vs Promises: Practical Use Cases in Modern JavaScript",
+    "slug": "comparing-javascript-promises-and-async-await-practical-use-cases",
+    "title": "Comparing JavaScript Promises and Async/Await: Practical Use Cases",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn the differences between Async/Await and Promises in JavaScript with practical examples. Understand when and how to use each for cleaner asynchronous code.",
+    "description": "Learn the differences between JavaScript Promises and async/await with practical examples to handle asynchronous code in an easy and beginner-friendly way.",
+    "videoUrl": "https://www.youtube.com/watch?v=TzV-hmsSDEw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a powerful language that allows you to work with asynchronous operations using Promises and async/await. Both help manage tasks like fetching data from an API or reading files without blocking your code. In this tutorial, we'll explore the differences between Promises and async/await, when to use each, and provide practical examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Promises?\nPromises in JavaScript represent operations that haven't completed yet but will in the future. Promises have three states: pending, fulfilled, or rejected. You use `.then()` for successful completion and `.catch()` for errors."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data fetched successfully!');\n      } else {\n        reject('Error fetching data.');\n      }\n    }, 1000);\n  });\n};\n\nfetchData()\n  .then((message) => {\n    console.log(message);\n  })\n  .catch((error) => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `fetchData` returns a Promise. We handle the result with `.then()` and `.catch()`. This pattern works well but can become harder to read when chaining many asynchronous operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Is Async/Await?\nAsync/await is syntax built on top of Promises that allows you to write asynchronous code that looks synchronous, improving readability and error handling. You declare a function with `async` and use `await` to pause execution until the Promise resolves."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data fetched successfully!');\n      } else {\n        reject('Error fetching data.');\n      }\n    }, 1000);\n  });\n};\n\nasync function getData() {\n  try {\n    const message = await fetchData();\n    console.log(message);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `getData` is an async function. The `await` keyword pauses the function until the Promise from `fetchData` resolves. This structure is easier to understand, especially as complexity grows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Case: Multiple Asynchronous Requests\nSuppose you want to fetch user details and their posts from a server."
+      },
+      {
+        "type": "code",
+        "value": "const fetchUser = () => {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve({ id: 1, name: 'Alice' }), 1000);\n  });\n};\n\nconst fetchPosts = (userId) => {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve([\"Post 1\", \"Post 2\"]), 1000);\n  });\n};\n\n// Using Promises\nfetchUser()\n  .then(user => {\n    console.log('User:', user);\n    return fetchPosts(user.id);\n  })\n  .then(posts => {\n    console.log('Posts:', posts);\n  })\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "This Promise chain works but can get complicated when adding more steps or error handling."
+      },
+      {
+        "type": "code",
+        "value": "async function showUserAndPosts() {\n  try {\n    const user = await fetchUser();\n    console.log('User:', user);\n    const posts = await fetchPosts(user.id);\n    console.log('Posts:', posts);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nshowUserAndPosts();"
+      },
+      {
+        "type": "paragraph",
+        "value": "The async/await version looks cleaner and easier to maintain. You handle errors using a standard `try/catch` block."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Promises are a foundational way to handle async operations, using `.then()` and `.catch()`.\n- Async/await is syntax sugar that makes Promises easier to read and debug.\n- For simple cases, Promises are fine.\n- For complex async flows, async/await improves readability and error handling."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try converting your existing Promise chains to async/await to get comfortable with the syntax. Both approaches are important and understanding them will improve your JavaScript skills!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-asynchronous-error-handling-in-javascript-promises",
+    "title": "Mastering Asynchronous Error Handling in JavaScript Promises",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn the basics of handling errors asynchronously in JavaScript using Promises. This beginner-friendly guide covers how to catch errors effectively and write more reliable code.",
     "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "In modern JavaScript, handling asynchronous operations is essential, especially when working with tasks like fetching data from APIs or reading files. Two popular ways to handle asynchronous code are Promises and Async/Await. Both help us write code that runs asynchronously without getting stuck, but they have different styles and use cases."
+        "value": "JavaScript Promises are a powerful way to handle asynchronous operations. However, dealing with errors properly is crucial to ensure your applications remain stable and easy to debug. In this article, we'll explore how to handle errors in Promises using simple, practical examples."
       },
       {
         "type": "paragraph",
-        "value": "This tutorial will compare Promises and Async/Await, show when to use each, and provide easy-to-understand examples that beginners can follow."
+        "value": "A Promise in JavaScript represents an operation that hasn't completed yet but is expected in the future. When an error happens in an asynchronous operation, the Promise becomes \"rejected.\" Handling this rejection properly keeps your app from crashing silently."
       },
       {
         "type": "paragraph",
-        "value": "### What Are Promises?"
-      },
-      {
-        "type": "paragraph",
-        "value": "A Promise is an object that represents the result of an asynchronous operation. It can be in one of three states: pending, fulfilled (success), or rejected (error). You use `.then()` to handle successful completion and `.catch()` for errors."
+        "value": "Let's start with a simple example of a Promise that simulates fetching data but sometimes fails:"
       },
       {
         "type": "code",
-        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const data = { message: 'Hello from Promise!' };\n      resolve(data);\n      // reject('Error: Something went wrong'); // Uncomment to test error\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(response => {\n    console.log('Data received:', response);\n  })\n  .catch(error => {\n    console.error('Error:', error);\n  });"
+        "value": "function fetchData(shouldFail) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (shouldFail) {\n        reject(new Error('Failed to fetch data!'));\n      } else {\n        resolve('Data fetched successfully');\n      }\n    }, 1000);\n  });\n}"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `fetchData` simulates an asynchronous operation using `setTimeout`. The Promise resolves with some data after 1 second. We handle the response with `.then()` and possible errors with `.catch()`."
+        "value": "In the function fetchData, if shouldFail is true, we reject the Promise with an error. Otherwise, it resolves successfully."
       },
       {
         "type": "paragraph",
-        "value": "### What is Async/Await?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Async/Await is syntactic sugar built on top of Promises. It allows you to write asynchronous code that looks and behaves like synchronous code, making it easier to read and maintain. You mark a function as `async` and use `await` to pause the function until the Promise resolves."
+        "value": "To handle errors, use the `.catch()` method after the `.then()` method. This `.catch()` will run if the Promise is rejected."
       },
       {
         "type": "code",
-        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const data = { message: 'Hello from Async/Await!' };\n      resolve(data);\n    }, 1000);\n  });\n}\n\nasync function getData() {\n  try {\n    const response = await fetchData();\n    console.log('Data received:', response);\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\ngetData();"
+        "value": "fetchData(true)\n  .then(data => {\n    console.log(data);\n  })\n  .catch(error => {\n    console.error('Error caught:', error.message);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "Here, `getData` is an async function that waits for `fetchData()` to complete before logging the response. The `try/catch` block is used to handle errors — it's the equivalent of `.catch()` in Promises."
+        "value": "If the Promise rejects, the error is caught inside `.catch()`, where you can handle it gracefully, like logging an error message or showing a user-friendly notification."
       },
       {
         "type": "paragraph",
-        "value": "### When to Use Promises vs Async/Await?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Promises are great when you want to chain multiple asynchronous operations or when you want to directly work with the `.then()` syntax. However, complex promise chains can become hard to read."
-      },
-      {
-        "type": "paragraph",
-        "value": "Async/Await simplifies asynchronous code, especially when you have multiple asynchronous calls in a row, as it looks more like normal synchronous code and is easier to understand."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Fetching Multiple User Data with Promises"
+        "value": "Another way to handle errors is by using async/await syntax, which makes asynchronous code look synchronous and easier to read."
       },
       {
         "type": "code",
-        "value": "function fetchUser(userId) {\n  return new Promise(resolve => {\n    setTimeout(() => {\n      resolve({ userId, name: `User${userId}` });\n    }, 1000);\n  });\n}\n\nfetchUser(1)\n  .then(user => {\n    console.log('User 1:', user);\n    return fetchUser(2);\n  })\n  .then(user => {\n    console.log('User 2:', user);\n  })\n  .catch(error => {\n    console.error('Error fetching users:', error);\n  });"
+        "value": "async function getData() {\n  try {\n    const result = await fetchData(false);\n    console.log(result);\n  } catch (error) {\n    console.error('Caught error:', error.message);\n  }\n}\n\ngetData();"
       },
       {
         "type": "paragraph",
-        "value": "### Same Example Using Async/Await"
-      },
-      {
-        "type": "code",
-        "value": "async function fetchUsers() {\n  try {\n    const user1 = await fetchUser(1);\n    console.log('User 1:', user1);\n\n    const user2 = await fetchUser(2);\n    console.log('User 2:', user2);\n  } catch (error) {\n    console.error('Error fetching users:', error);\n  }\n}\n\nfetchUsers();"
+        "value": "Inside the async function, you use a try/catch block. If the awaited Promise rejects, the catch block will capture the error, keeping your app from crashing."
       },
       {
         "type": "paragraph",
-        "value": "### Key Takeaways"
+        "value": "In summary, mastering asynchronous error handling with Promises involves using `.catch()` methods or try/catch blocks in async functions. This ensures your code handles failures gracefully and remains maintainable."
       },
       {
         "type": "paragraph",
-        "value": "- Both Promises and Async/Await are used to handle asynchronous operations.\n- Promises use `.then()` and `.catch()`, which can become complex with chained operations.\n- Async/Await allows writing asynchronous code in a synchronous style using `try/catch` for error handling.\n- For simple tasks, Promises work well. For complex sequences or better readability, Async/Await is preferred."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now that you understand how Async/Await and Promises work and their use cases, you can start using them confidently in your JavaScript projects!"
+        "value": "Try practicing these simple patterns on your own, and soon handling async errors will become second nature!"
       }
     ]
   },
   {
-    "slug": "understanding-javascript-scope-errors-a-beginners-guide",
-    "title": "Understanding JavaScript Scope Errors: A Beginner's Guide",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn about common JavaScript scope errors, why they happen, and how to fix them in this easy beginner-friendly guide.",
-    "videoUrl": "https://www.youtube.com/watch?v=pWnJY_Wkde4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "JavaScript scope errors are common for beginners. These errors usually happen when your code tries to access a variable that isn't available in that part of the program. Understanding scope helps you avoid these mistakes and write better code."
-      },
-      {
-        "type": "paragraph",
-        "value": "What is Scope? In JavaScript, scope determines where variables can be accessed or used. There are two main types: global scope and local scope. Global variables can be accessed anywhere in the code, while local variables are only accessible within the function or block they are declared in."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at a simple example:"
-      },
-      {
-        "type": "code",
-        "value": "function greet() {\n  let message = \"Hello!\";\n  console.log(message); // Works fine\n}\ngreet();\nconsole.log(message); // ReferenceError: message is not defined"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, the variable 'message' is defined inside the function 'greet'. Trying to access it outside the function causes a ReferenceError because it's out of scope."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another common error happens when you forget to declare a variable. If you try to use a variable without declaring it, JavaScript might throw a ReferenceError, especially in strict mode."
-      },
-      {
-        "type": "code",
-        "value": "function add() {\n  sum = 5 + 3; // Forgot 'let' or 'var'\n  console.log(sum);\n}\nadd();\nconsole.log(sum); // ReferenceError: sum is not defined"
-      },
-      {
-        "type": "paragraph",
-        "value": "Here, 'sum' is assigned without 'let' or 'var', which can lead to unexpected results or errors depending on your JavaScript environment."
-      },
-      {
-        "type": "paragraph",
-        "value": "To avoid scope errors, always declare your variables with 'let', 'const', or 'var'. Use 'let' and 'const' for block-scoping (inside loops or conditions), and prefer 'const' when you don't plan to reassign the value."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's how block scope works correctly with 'let':"
-      },
-      {
-        "type": "code",
-        "value": "if (true) {\n  let name = 'Alice';\n  console.log(name); // Alice\n}\nconsole.log(name); // ReferenceError: name is not defined"
-      },
-      {
-        "type": "paragraph",
-        "value": "Understanding and respecting scopes in JavaScript helps avoid these common pitfalls and makes your code easier to debug and maintain."
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember, if you see errors like \"ReferenceError: variableName is not defined\", it usually means that variable is not accessible in the current scope."
-      },
-      {
-        "type": "paragraph",
-        "value": "By practicing with small examples and learning how scopes work, you'll get more confident and write cleaner JavaScript code."
-      }
-    ]
-  },
-  {
-    "slug": "typescript-vs-javascript-performance-scalability",
-    "title": "TypeScript vs JavaScript: Deep Dive into Performance and Scalability",
+    "slug": "building-real-time-chat-application-with-typescript-websockets",
+    "title": "Building a Real-Time Chat Application with TypeScript and WebSockets",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Explore how TypeScript and JavaScript compare in terms of performance and scalability, with practical coding examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=zQnBQ4tB3ZA",
+    "description": "Learn how to create a simple real-time chat application using TypeScript and WebSockets, perfect for beginners wanting to understand real-time communication in web apps.",
+    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is the language of the web, running natively in browsers and on servers through Node.js. TypeScript is a superset of JavaScript that adds static types, making code easier to maintain and scale. But how do these two compare when it comes to performance and scalability? In this tutorial, we’ll explore the differences from a beginner-friendly perspective."
+        "value": "In this tutorial, we'll build a basic real-time chat application using TypeScript and WebSockets. WebSockets allow for two-way communication between the client and server, making them ideal for chat apps where messages need to be sent and received instantly. We'll create a simple server using Node.js and a client application with TypeScript that connects via WebSocket."
       },
       {
         "type": "paragraph",
-        "value": "First, understand that TypeScript code compiles down to JavaScript. This means that at runtime—when the code actually runs in a browser or server—only JavaScript exists. Because of this, performance largely depends on the JavaScript generated, not TypeScript itself."
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript helps you catch errors early through static type checking, reducing runtime bugs. This leads to more scalable and maintainable code bases, especially in big projects, but doesn't directly improve how fast code runs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's see a simple example. Here is a JavaScript function that adds two numbers:"
+        "value": "First, let's set up the server. We'll use the 'ws' package, a popular WebSocket library for Node.js. Create a new folder for your project and initialize it with npm."
       },
       {
         "type": "code",
-        "value": "function add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(5, 10));"
+        "value": "npm init -y\nnpm install ws @types/ws typescript ts-node --save-dev"
       },
       {
         "type": "paragraph",
-        "value": "Now the same function written in TypeScript with explicit types:"
+        "value": "Next, create a file called 'server.ts'. This will be our WebSocket server that listens for client connections and broadcasts messages to all connected clients."
       },
       {
         "type": "code",
-        "value": "function add(a: number, b: number): number {\n  return a + b;\n}\n\nconsole.log(add(5, 10));"
+        "value": "import WebSocket, { WebSocketServer } from 'ws';\n\nconst server = new WebSocketServer({ port: 8080 });\n\nserver.on('connection', (socket: WebSocket) => {\n  console.log('A client connected');\n\n  socket.on('message', (message: string) => {\n    // Broadcast the received message to all clients\n    server.clients.forEach(client => {\n      if (client !== socket && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  socket.on('close', () => {\n    console.log('A client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "The TypeScript version helps you avoid passing values that are not numbers, reducing bugs. But after compilation, the JavaScript output looks very similar, so performance is nearly identical."
+        "value": "To run the server, use the command:\n\nbash\nts-node server.ts\n\n\nNow let's work on the client side. We'll create a simple HTML page with embedded TypeScript (compiled to JavaScript) that connects to this WebSocket server."
       },
       {
         "type": "paragraph",
-        "value": "Regarding scalability, TypeScript shines by enabling features like interfaces, enums, and advanced type system capabilities. This makes working on large teams and extensive codebases easier, which is more difficult to manage with plain JavaScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, if you're building a small project or prototype, JavaScript is quick and easy. For larger applications where maintainability, fewer runtime errors, and clear code contracts matter, TypeScript adds significant value. Performance should not be a concern as TypeScript compiles to JavaScript, ensuring runtime speed remains essentially the same."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let's practice by creating a small TypeScript example that leverages interfaces to improve code clarity and scalability:"
+        "value": "Create an 'index.html' file with a basic interface—a text input to type messages, a button to send, and an area to display chat messages."
       },
       {
         "type": "code",
-        "value": "interface Person {\n  name: string;\n  age: number;\n  greet(): void;\n}\n\nconst user: Person = {\n  name: \"Alice\",\n  age: 30,\n  greet() {\n    console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);\n  }\n};\n\nuser.greet();"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n</head>\n<body>\n  <h1>Real-Time Chat</h1>\n  <div id=\"chat\" style=\"border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px;\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type your message here...\" />\n  <button id=\"sendButton\">Send</button>\n\n  <script src=\"client.js\"></script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "This interface enforces that any object typed as a Person must have a name, age, and a greet method. This helps teams understand expected structures and reduces errors during development."
+        "value": "Next, create a 'client.ts' file to handle WebSocket connection and UI updates."
+      },
+      {
+        "type": "code",
+        "value": "const chat = document.getElementById('chat') as HTMLDivElement;\nconst messageInput = document.getElementById('messageInput') as HTMLInputElement;\nconst sendButton = document.getElementById('sendButton') as HTMLButtonElement;\n\nconst ws = new WebSocket('ws://localhost:8080');\n\nws.onopen = () => {\n  appendMessage('System', 'Connected to the chat server.');\n};\n\nws.onmessage = (event) => {\n  appendMessage('Friend', event.data);\n};\n\nws.onclose = () => {\n  appendMessage('System', 'Disconnected from the chat server.');\n};\n\nsendButton.addEventListener('click', () => {\n  const message = messageInput.value.trim();\n  if (message !== '') {\n    ws.send(message);\n    appendMessage('You', message);\n    messageInput.value = '';\n  }\n});\n\nmessageInput.addEventListener('keydown', (event) => {\n  if (event.key === 'Enter') {\n    sendButton.click();\n  }\n});\n\nfunction appendMessage(sender: string, message: string) {\n  const messageElement = document.createElement('div');\n  messageElement.textContent = `${sender}: ${message}`;\n  chat.appendChild(messageElement);\n  chat.scrollTop = chat.scrollHeight;\n}"
       },
       {
         "type": "paragraph",
-        "value": "In conclusion, choose TypeScript for long-term projects and scalability, and JavaScript for quick, simple scripts. Both languages work seamlessly together, and understanding TypeScript can dramatically improve your code quality without sacrificing performance."
+        "value": "To compile your TypeScript client code to JavaScript, run:\n\nbash\ntsc client.ts --outFile client.js\n\n\nMake sure you have TypeScript installed globally (`npm install -g typescript`) or include it as a dev dependency."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now open 'index.html' in your browser (you can just open the file or serve it with a simple HTTP server). You should be able to connect to the WebSocket server, send messages, and see messages sent from other connected clients in real-time."
+      },
+      {
+        "type": "paragraph",
+        "value": "This simple application demonstrates the core concepts of using WebSockets with TypeScript for real-time communication, including:\n- Setting up a WebSocket server\n- Handling multiple client connections\n- Broadcasting messages to all clients\n- Creating a client-side interface to send and receive messages\n\nFrom here, you can enhance the chat app with features like usernames, message timestamps, user list, or persistent message storage."
       }
     ]
   },
   {
-    "slug": "designing-robust-error-handling-systems-in-typescript-for-scalable-applications",
-    "title": "Designing Robust Error Handling Systems in TypeScript for Scalable Applications",
+    "slug": "advanced-typescript-error-handling-patterns-for-scalable-applications",
+    "title": "Advanced TypeScript Error Handling Patterns for Scalable Applications",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to build reliable and maintainable error handling systems in TypeScript to improve the stability and user experience of your scalable applications.",
+    "description": "Learn practical and scalable error handling techniques in TypeScript to write resilient and maintainable applications.",
     "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is a crucial aspect of building scalable applications. In TypeScript, designing a robust error handling system helps you manage unexpected situations gracefully, maintain clean code, and improve the overall stability of your app. This beginner-friendly guide introduces you to practical techniques for handling errors effectively in TypeScript."
+        "value": "Effective error handling is crucial for building scalable and maintainable TypeScript applications. While simple try-catch blocks work for small projects, larger applications benefit from advanced patterns that help manage errors systematically and make your code more robust."
       },
       {
         "type": "paragraph",
-        "value": "### Why Robust Error Handling Matters\nErrors can occur anywhere—network failures, invalid user inputs, or unexpected bug triggers. Without a centralized and thoughtful error handling system, your application might crash, produce confusing messages, or be difficult to maintain."
+        "value": "In this article, we'll explore some advanced error handling patterns in TypeScript, including custom error classes, discriminated unions for error results, and functional error handling with the Either pattern."
       },
       {
         "type": "paragraph",
-        "value": "### Using Custom Error Classes\nTypeScript’s ability to extend built-in classes allows you to create custom error types, giving you better control and clarity."
+        "value": "### 1. Using Custom Error Classes\nCreating custom error classes allows you to classify errors and add additional context. This approach helps you handle specific error types differently."
       },
       {
         "type": "code",
-        "value": "class AppError extends Error {\n  public readonly isOperational: boolean;\n  public readonly statusCode: number;\n\n  constructor(message: string, statusCode = 500, isOperational = true) {\n    super(message);\n    this.statusCode = statusCode;\n    this.isOperational = isOperational;\n    Object.setPrototypeOf(this, new.target.prototype); // Restore prototype chain\n    Error.captureStackTrace(this);\n  }\n}\n\n// Example usage:\nconst dbError = new AppError('Database connection failed', 503);\nconsole.log(dbError.message); // 'Database connection failed'\nconsole.log(dbError.statusCode); // 503"
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nclass DatabaseError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'DatabaseError';\n  }\n}\n\nfunction processUserInput(input: string) {\n  if (input.length === 0) {\n    throw new ValidationError('Input cannot be empty');\n  }\n  // ... other logic\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Centralizing Error Handling Logic\nCreate a single place to handle all errors, such as middleware in Express or a global error handler in other environments. This centralization helps maintain readability and consistency."
+        "value": "Handling these errors can then be done specifically based on the error type:"
       },
       {
         "type": "code",
-        "value": "import express, { Request, Response, NextFunction } from 'express';\nconst app = express();\n\n// Middleware to simulate an error\napp.get('/error', (req: Request, res: Response, next: NextFunction) => {\n  next(new AppError('Something went wrong!', 400));\n});\n\n// Central error handler middleware\napp.use((err: AppError, req: Request, res: Response, next: NextFunction) => {\n  if (err.isOperational) {\n    res.status(err.statusCode).json({ status: 'error', message: err.message });\n  } else {\n    // Programming or unknown error, don't leak details\n    console.error('Unexpected Error:', err);\n    res.status(500).json({ status: 'error', message: 'Internal Server Error' });\n  }\n});"
+        "value": "try {\n  processUserInput('');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation failed:', error.message);\n  } else if (error instanceof DatabaseError) {\n    console.error('Database error:', error.message);\n  } else {\n    console.error('Unknown error:', error);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Handling Asynchronous Errors\nIn TypeScript, many functions work asynchronously and can throw errors inside promises or async/await. Make sure to catch errors properly to avoid unhandled exceptions."
+        "value": "### 2. Using Discriminated Unions for Error Results\nInstead of throwing errors, you can return results with clear success or failure states using discriminated unions. This pattern is useful for avoiding try-catch and making error handling explicit."
       },
       {
         "type": "code",
-        "value": "async function fetchUser(userId: string) {\n  try {\n    const response = await fetch(`https://api.example.com/users/${userId}`);\n    if (!response.ok) {\n      throw new AppError('Failed to fetch user', response.status);\n    }\n    return await response.json();\n  } catch (error) {\n    if (error instanceof AppError) {\n      throw error; // Re-throw known AppErrors\n    }\n    throw new AppError('Unknown error fetching user', 500, false);\n  }\n}"
+        "value": "type Result<T> =\n  | { success: true; value: T }\n  | { success: false; error: string };\n\nfunction divide(a: number, b: number): Result<number> {\n  if (b === 0) {\n    return { success: false, error: 'Cannot divide by zero' };\n  }\n  return { success: true, value: a / b };\n}\n\nconst result = divide(10, 0);\n\nif (result.success) {\n  console.log('Result:', result.value);\n} else {\n  console.error('Error:', result.error);\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Best Practices Summary:\n- Use custom error classes to represent different error kinds.\n- Create centralized error handling middleware or functions.\n- Always handle async errors with try/catch.\n- Distinguish between operational (expected) errors and programmer errors.\n- Log errors internally, but provide user-friendly messages externally."
+        "value": "### 3. Functional Error Handling with the Either Pattern\nBorrowing concepts from functional programming, the Either pattern encapsulates a value that can be a success (Right) or failure (Left). This pattern enables easy chaining and transformation while handling errors."
+      },
+      {
+        "type": "code",
+        "value": "class Left<L> {\n  readonly value: L;\n  constructor(value: L) {\n    this.value = value;\n  }\n  isLeft(): this is Left<L> { return true; }\n  isRight(): this is Right<any> { return false; }\n}\n\nclass Right<R> {\n  readonly value: R;\n  constructor(value: R) {\n    this.value = value;\n  }\n  isLeft(): this is Left<any> { return false; }\n  isRight(): this is Right<R> { return true; }\n}\n\ntype Either<L, R> = Left<L> | Right<R>;\n\nfunction parseNumber(str: string): Either<string, number> {\n  const num = Number(str);\n  if (isNaN(num)) {\n    return new Left('Not a valid number');\n  }\n  return new Right(num);\n}\n\nconst parseResult = parseNumber('123a');\nif (parseResult.isRight()) {\n  console.log('Parsed number:', parseResult.value);\n} else {\n  console.error('Parsing error:', parseResult.value);\n}"
       },
       {
         "type": "paragraph",
-        "value": "By designing your error handling this way, your TypeScript application will be more maintainable, secure, and ready to scale as it grows."
+        "value": "### Summary\nIn this article, we've covered several advanced TypeScript error handling patterns that can help you build scalable applications:\n- Custom error classes for specific error types\n- Discriminated unions for explicit success/failure results\n- The Either pattern for functional error handling\n\nBy adopting these patterns, your error handling becomes more manageable, predictable, and maintainable as your application grows."
       }
     ]
   },
   {
-    "slug": "building-your-first-python-chatbot",
-    "title": "Building Your First Python Chatbot: A Beginner’s Step-by-Step Guide",
+    "slug": "mastering-pythons-itertools-7-lesser-known-tips-for-efficient-data-processing",
+    "title": "Mastering Python's itertools: 7 Lesser-Known Tips for Efficient Data Processing",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to create a simple Python chatbot with this beginner-friendly step-by-step guide. Start coding your first interactive chatbot today!",
-    "videoUrl": "https://www.youtube.com/watch?v=bTMPwUgLZf0",
+    "description": "Discover 7 lesser-known yet powerful tips for using Python's itertools module to make your data processing fast, efficient, and beginner-friendly.",
+    "videoUrl": "https://www.youtube.com/watch?v=mB0EBW-vDSQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "Chatbots are programs designed to simulate human conversation. Building a chatbot can be a fun way to practice your Python skills and understand basic programming concepts like loops, conditionals, and functions. In this guide, we'll create a simple Python chatbot that can respond to user inputs."
+        "value": "Python's itertools module is a treasure trove for anyone looking to write efficient and clean code when working with iterators. While many beginners know some basic tools like `count` or `cycle`, there are many lesser-known functions and tips that can dramatically improve your data processing tasks. This article will introduce you to 7 practical itertools tips that make handling data easier and faster."
       },
       {
         "type": "paragraph",
-        "value": "Step 1: Set up your environment. Make sure you have Python installed on your computer. You can download it from python.org if you haven't already. Open any text editor or an IDE like VS Code or PyCharm to write your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Step 2: Let's start by creating a basic greeting. We will write a program that asks for the user's name and then greets them."
+        "value": "Let's start by importing itertools:"
       },
       {
         "type": "code",
-        "value": "name = input(\"Hello! What's your name? \")\nprint(f\"Nice to meet you, {name}!\")"
+        "value": "import itertools"
       },
       {
         "type": "paragraph",
-        "value": "Step 3: Now, we want the chatbot to keep the conversation going. We can do this using a while loop that will allow the user to type messages and get responses until they choose to exit."
+        "value": "### 1. Use `compress` to filter data with a selector\nInstead of filtering elements with a condition, you can use `compress` to filter data using a selector list of booleans. It’s like combining `filter` and a mask."
       },
       {
         "type": "code",
-        "value": "while True:\n    user_input = input(\"You: \")\n    if user_input.lower() == 'exit':\n        print(\"Chatbot: Goodbye! Have a nice day.\")\n        break\n    else:\n        print(f\"Chatbot: You said '{user_input}'\")"
+        "value": "data = ['apple', 'banana', 'cherry', 'date']\nselectors = [True, False, True, False]\nfiltered = list(itertools.compress(data, selectors))\nprint(filtered)  # Output: ['apple', 'cherry']"
       },
       {
         "type": "paragraph",
-        "value": "Step 4: Adding simple responses. Instead of just repeating what the user says, let's make the chatbot respond to some specific keywords."
+        "value": "### 2. `dropwhile` and `takewhile` for conditional slicing\nThese functions help you take or drop elements from an iterable while a condition is true, which is handy for skipping or slicing parts without needing indices."
       },
       {
         "type": "code",
-        "value": "while True:\n    user_input = input(\"You: \")\n    user_input_lower = user_input.lower()\n    if user_input_lower == 'exit':\n        print(\"Chatbot: Goodbye! Have a nice day.\")\n        break\n    elif 'hello' in user_input_lower or 'hi' in user_input_lower:\n        print(\"Chatbot: Hello there! How can I help you?\")\n    elif 'how are you' in user_input_lower:\n        print(\"Chatbot: I'm just a program, but thanks for asking!\")\n    elif 'help' in user_input_lower:\n        print(\"Chatbot: I can chat with you and respond to greetings. Type 'exit' to quit.\")\n    else:\n        print(\"Chatbot: Sorry, I don't understand that.\")"
+        "value": "numbers = [1, 2, 3, 4, 5, 6, 1, 2]\nskip_less_than_4 = list(itertools.dropwhile(lambda x: x < 4, numbers))\ntake_less_than_4 = list(itertools.takewhile(lambda x: x < 4, numbers))\nprint(skip_less_than_4)  # [4, 5, 6, 1, 2]\nprint(take_less_than_4)  # [1, 2, 3]"
       },
       {
         "type": "paragraph",
-        "value": "Step 5: Run your chatbot! Save your program with a name like chatbot.py and run it using the command line or your IDE. Type messages and see how your chatbot responds. Type 'exit' to stop the program."
+        "value": "### 3. Efficient chaining with `chain` instead of nested loops\nWhen you have multiple lists or iterables and want to process all elements consecutively, `chain` combines them without creating intermediate lists."
+      },
+      {
+        "type": "code",
+        "value": "a = [1, 2]\nb = ['a', 'b']\nc = [True, False]\nfor item in itertools.chain(a, b, c):\n    print(item)"
       },
       {
         "type": "paragraph",
-        "value": "You’ve just built a simple chatbot in Python! This project introduces you to handling user input, conditional statements, and loops in Python. From here, you can expand your chatbot by adding more complex responses, integrating APIs, or even using machine learning libraries."
+        "value": "### 4. `groupby` for grouping adjacent repeated values\n`groupby` groups consecutive elements by a key function. Remember, the data should be sorted by the key for meaningful grouping."
+      },
+      {
+        "type": "code",
+        "value": "data = [('animal', 'dog'), ('animal', 'cat'), ('plant', 'tree'), ('plant', 'flower')]\nfor key, group in itertools.groupby(data, key=lambda x: x[0]):\n    print(key, list(group))"
       },
       {
         "type": "paragraph",
-        "value": "Happy coding!"
+        "value": "### 5. `islice` for slicing iterators like lists\nSometimes you need a slice of an iterator. Use `islice` to grab items without converting the entire iterator to a list."
+      },
+      {
+        "type": "code",
+        "value": "numbers = itertools.count(10)  # infinite iterator\nfirst_five = list(itertools.islice(numbers, 5))\nprint(first_five)  # [10, 11, 12, 13, 14]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. `tee` to split one iterator into multiple independent iterators\nIf you want to iterate over the same data multiple times independently, use `tee`. This can save memory compared to making copies of a list."
+      },
+      {
+        "type": "code",
+        "value": "data = iter([1, 2, 3, 4])\na_iter, b_iter = itertools.tee(data, 2)\nprint(list(a_iter))  # [1, 2, 3, 4]\nprint(list(b_iter))  # [1, 2, 3, 4]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 7. Use `starmap` to apply a function to unpacked arguments\nIf your data is a list of tuples, `starmap` applies a function by unpacking each tuple as arguments."
+      },
+      {
+        "type": "code",
+        "value": "pairs = [(2, 3), (4, 5), (6, 7)]\nresult = list(itertools.starmap(lambda x, y: x * y, pairs))\nprint(result)  # [6, 20, 42]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Wrap-up\nThe itertools module offers many powerful tools for iterating, grouping, and processing data efficiently without extra memory overhead. Experiment with these tips to write cleaner and more Pythonic code. As you grow more comfortable, you'll find itertools indispensable in many real-world data tasks."
       }
     ]
   },
   {
-    "slug": "mastering-pythons-exception-hierarchy-custom-error-classes",
-    "title": "Mastering Python's Exception Hierarchy: A Deep Dive into Custom Error Classes",
+    "slug": "understanding-python-typeerror-vs-valueerror",
+    "title": "Understanding Python's TypeError vs ValueError: When and Why They Occur",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to create and use custom error classes in Python by mastering the exception hierarchy. This beginner-friendly guide simplifies error handling for more readable and maintainable code.",
-    "videoUrl": "https://www.youtube.com/watch?v=IqpOGtaClYg",
+    "description": "Learn the difference between Python's TypeError and ValueError with simple explanations and examples to help beginners identify and fix these common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=K2_aC4FOECU",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python uses exceptions to handle errors that occur during program execution. Understanding Python's built-in exception hierarchy can help you write robust code and debug issues efficiently. In this article, we'll explore how to create custom error classes and fit them into Python’s exception hierarchy for better error handling."
+        "value": "When learning Python, encountering errors is a normal part of the process. Two common errors beginners often face are TypeError and ValueError. Understanding when and why these errors occur can help you debug your code more effectively."
       },
       {
         "type": "paragraph",
-        "value": "At the root of all exceptions is the built-in `BaseException` class. Most users will work directly with `Exception`, which is a subclass of `BaseException`. Built-in errors like `ValueError`, `TypeError`, and `RuntimeError` inherit from `Exception`. Creating custom error classes involves subclassing `Exception` or its subclasses. This makes your errors easier to handle and more descriptive."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is a simple example of a custom error class:"
+        "value": "A TypeError happens when an operation or function is applied to an object of inappropriate type. In other words, you are using the wrong type of value where a specific type is expected."
       },
       {
         "type": "code",
-        "value": "class MyCustomError(Exception):\n    \"\"\"Custom error for specific application exceptions.\"\"\"\n    pass\n\n# Example usage\ndef divide(a, b):\n    if b == 0:\n        raise MyCustomError(\"Cannot divide by zero!\")\n    return a / b\n\ntry:\n    result = divide(10, 0)\nexcept MyCustomError as e:\n    print(f\"Caught an error: {e}\")"
+        "value": "print('hello' + 5)  # Causes TypeError because you can't add a string and an integer"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, `MyCustomError` inherits from `Exception`. Inside our `divide` function, we raise this specific error if someone tries to divide by zero. Catching `MyCustomError` in a `try-except` block allows us to handle this case gracefully."
+        "value": "In the example above, Python cannot add a string ('hello') and an integer (5) together, so it raises a TypeError."
       },
       {
         "type": "paragraph",
-        "value": "Custom error classes can be expanded by overriding methods or adding attributes. For example, you might want to store an error code alongside the message."
+        "value": "On the other hand, a ValueError occurs when a function receives the right type of argument but the value is inappropriate or cannot be processed."
       },
       {
         "type": "code",
-        "value": "class ValidationError(Exception):\n    def __init__(self, message, code):\n        super().__init__(message)\n        self.code = code\n\ntry:\n    raise ValidationError(\"Invalid input\", 1001)\nexcept ValidationError as e:\n    print(f\"Error {e.code}: {e}\")"
+        "value": "int('abc')  # Causes ValueError because 'abc' is not a valid integer literal"
       },
       {
         "type": "paragraph",
-        "value": "This enhanced `ValidationError` includes an error code that can help identify the exact cause of the problem programmatically, making debugging and user feedback more informative."
+        "value": "Here, the int() function expects a string that represents a number, but since 'abc' doesn't represent a valid number, Python raises a ValueError."
       },
       {
         "type": "paragraph",
-        "value": "By mastering the exception hierarchy and designing tailored error classes, you make your Python programs easier to understand and maintain. Remember: always inherit from `Exception` (or its subclasses) unless you specifically need to inherit from `BaseException` for system-exiting exceptions like `KeyboardInterrupt`."
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use TypeError when the data type is incorrect.\n- Use ValueError when the type is right but the value is invalid."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at another example with both errors in one function:"
+      },
+      {
+        "type": "code",
+        "value": "def divide_numbers(a, b):\n    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):\n        raise TypeError('Both inputs must be numbers')\n    if b == 0:\n        raise ValueError('Cannot divide by zero')\n    return a / b\n\n# Example usages\ntry:\n    print(divide_numbers('10', 2))  # Raises TypeError\nexcept Exception as e:\n    print(f'Error: {e}')\n\ntry:\n    print(divide_numbers(10, 0))  # Raises ValueError\nexcept Exception as e:\n    print(f'Error: {e}')\n\nprint(divide_numbers(10, 2))  # Works fine, prints 5.0"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this function, 'divide_numbers', Python raises a TypeError if the inputs are not numbers. It raises a ValueError if the denominator is zero because division by zero is undefined."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these errors, you can write cleaner code and make debugging easier. Remember to check both the data types and the values your functions receive!"
       }
     ]
   },
   {
-    "slug": "building-scalable-inventory-management-system-sql-server",
-    "title": "Building a Scalable Inventory Management System with SQL Server: A Beginner's Guide",
+    "slug": "comparing-sql-window-functions-vs-aggregation-for-data-summarization",
+    "title": "Comparing SQL Window Functions vs Aggregation for Data Summarization",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to create a scalable and efficient inventory management system using SQL Server with this beginner-friendly tutorial. Step-by-step guide for designing tables, writing queries, and managing stock data.",
-    "videoUrl": "https://www.youtube.com/watch?v=kbKty5ZVKMY",
+    "description": "Learn the difference between SQL window functions and aggregation methods to summarize data effectively in your queries. This beginner-friendly guide explains when and how to use each technique.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Inventory management systems are crucial for businesses to track products, manage stock levels, and handle sales and purchases efficiently. Building a scalable system means your database can handle growth without performance issues. This tutorial will guide you through the basics of designing and implementing a simple yet scalable inventory management system using SQL Server."
+        "value": "When working with SQL, summarizing data is a common task. Two popular approaches to summarize data are using aggregation functions and window functions. Both have their uses and understanding the difference will help you write more efficient and insightful queries."
       },
       {
         "type": "paragraph",
-        "value": "First, we will design the core tables needed to handle products, stock, and transactions. The main tables include `Products` to store product details, `Stock` to track current inventory, and `Transactions` to log inventory changes like purchases and sales."
+        "value": "Aggregation functions group rows and return a single summary value per group, such as total sales per region. On the other hand, window functions compute values across a set of rows related to the current row without collapsing the rows. This means you can keep the original row detail while adding summary information."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's consider a sample sales table to illustrate the difference:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Products (\n    ProductID INT IDENTITY(1,1) PRIMARY KEY,\n    ProductName NVARCHAR(100) NOT NULL,\n    Category NVARCHAR(50),\n    Price DECIMAL(10, 2) NOT NULL,\n    CreatedAt DATETIME DEFAULT GETDATE()\n);\n\nCREATE TABLE Stock (\n    StockID INT IDENTITY(1,1) PRIMARY KEY,\n    ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ProductID),\n    Quantity INT NOT NULL DEFAULT 0,\n    UpdatedAt DATETIME DEFAULT GETDATE()\n);\n\nCREATE TABLE Transactions (\n    TransactionID INT IDENTITY(1,1) PRIMARY KEY,\n    ProductID INT NOT NULL FOREIGN KEY REFERENCES Products(ProductID),\n    QuantityChange INT NOT NULL,\n    TransactionType NVARCHAR(50) NOT NULL, -- e.g., 'Purchase', 'Sale'\n    TransactionDate DATETIME DEFAULT GETDATE()\n);"
+        "value": "CREATE TABLE sales (\n  id INT,\n  region VARCHAR(50),\n  salesperson VARCHAR(50),\n  amount DECIMAL(10,2)\n);\n\nINSERT INTO sales VALUES\n(1, 'North', 'Alice', 100.00),\n(2, 'North', 'Bob', 150.00),\n(3, 'South', 'Charlie', 200.00),\n(4, 'South', 'Alice', 50.00),\n(5, 'East', 'Bob', 120.00);"
       },
       {
         "type": "paragraph",
-        "value": "Next, let's add a few sample products and initialize their stock levels. Sample data helps to test queries and verify your setup."
+        "value": "### Using Aggregation\nIf you want to get the total sales per region, you would use the `GROUP BY` with aggregation functions like `SUM()`:"
       },
       {
         "type": "code",
-        "value": "INSERT INTO Products (ProductName, Category, Price) VALUES\n('Wireless Mouse', 'Electronics', 25.99),\n('USB Keyboard', 'Electronics', 45.00),\n('Office Chair', 'Furniture', 150.75);\n\nINSERT INTO Stock (ProductID, Quantity) VALUES\n(1, 100),\n(2, 150),\n(3, 50);"
+        "value": "SELECT region, SUM(amount) AS total_sales\nFROM sales\nGROUP BY region;"
       },
       {
         "type": "paragraph",
-        "value": "To keep the stock quantity accurate, each time a product is sold or restocked, insert a new transaction and update the stock accordingly. Here's how you can create a stored procedure to process transactions safely and keep your data consistent."
+        "value": "This query returns one row per region with the total sales. However, all salesperson details are lost because aggregation collapses rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Window Functions\nIf you want to see each sale but also want to add the total sales per region alongside each row, window functions are the answer:"
       },
       {
         "type": "code",
-        "value": "CREATE PROCEDURE ProcessTransaction\n    @ProductID INT,\n    @QuantityChange INT,\n    @TransactionType NVARCHAR(50)\nAS\nBEGIN\n    BEGIN TRANSACTION;\n    \n    -- Insert transaction record\n    INSERT INTO Transactions (ProductID, QuantityChange, TransactionType) \n    VALUES (@ProductID, @QuantityChange, @TransactionType);\n    \n    -- Update stock quantity\n    UPDATE Stock\n    SET Quantity = Quantity + @QuantityChange,\n        UpdatedAt = GETDATE()\n    WHERE ProductID = @ProductID;\n\n    -- Check for negative stock\n    IF (SELECT Quantity FROM Stock WHERE ProductID = @ProductID) < 0\n    BEGIN\n        ROLLBACK TRANSACTION;\n        RAISERROR ('Insufficient stock for product ID %d.', 16, 1, @ProductID);\n        RETURN;\n    END\n    \n    COMMIT TRANSACTION;\nEND;"
+        "value": "SELECT\n  id,\n  region,\n  salesperson,\n  amount,\n  SUM(amount) OVER (PARTITION BY region) AS total_region_sales\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "You can now use this procedure to record purchases or sales. For example, to record selling 5 wireless mice, run:"
-      },
-      {
-        "type": "code",
-        "value": "EXEC ProcessTransaction @ProductID = 1, @QuantityChange = -5, @TransactionType = 'Sale';"
+        "value": "Here, the `SUM(amount) OVER (PARTITION BY region)` calculates the total sales per region, but unlike aggregation, it does not group or collapse rows. Each sale is still shown individually with the added total information."
       },
       {
         "type": "paragraph",
-        "value": "To check the current inventory for all products along with their details, use this query:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT p.ProductID, p.ProductName, p.Category, p.Price, s.Quantity, s.UpdatedAt\nFROM Products p\nJOIN Stock s ON p.ProductID = s.ProductID;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This simple design helps you track inventory efficiently and prevents negative stock via transaction management. For scalability, consider indexing commonly queried columns like `ProductID` and periodically archiving old transactions. You can also expand the system by adding users, suppliers, or detailed reporting."
-      },
-      {
-        "type": "paragraph",
-        "value": "By mastering these fundamentals in SQL Server, you're on your way to creating robust inventory systems that grow with your business needs."
+        "value": "### Summary\n- Use **aggregation** (`GROUP BY`) when you want to reduce multiple rows into summarized groups.\n- Use **window functions** when you want to keep row-level detail but also add summary calculations.\n\nUnderstanding when to use each will improve your SQL querying skills and allow you to produce more flexible reports."
       }
     ]
   },
   {
-    "slug": "how-to-identify-and-resolve-inefficient-index-usage-in-large-sql-databases",
-    "title": "How to Identify and Resolve Inefficient Index Usage in Large SQL Databases",
+    "slug": "optimizing-sql-query-performance-under-system-constraints",
+    "title": "Optimizing SQL Query Performance Under System Constraints: A Beginner's Guide",
     "language": "sql",
     "type": "errors",
-    "description": "Learn beginner-friendly methods to identify inefficient indexes in large SQL databases and how to optimize them for improved query performance.",
-    "videoUrl": "https://www.youtube.com/watch?v=BIlFTFrEFOI",
+    "description": "Learn practical tips for optimizing SQL queries when dealing with system limits like memory and CPU usage. Improve your query efficiency and avoid common errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "Indexes are essential for speeding up SQL queries in large databases, but inefficient index usage can actually degrade performance. This article will help beginners understand how to identify when indexes are not helping, and how to fix or optimize them to improve your database’s speed."
+        "value": "When working with SQL databases, you may encounter system constraints such as limited memory, CPU power, or disk I/O speed. These limits can cause your queries to run slowly or fail with errors like \"out of memory\" or \"timeout.\" This article helps beginners understand how to optimize SQL queries for better performance within these constraints."
       },
       {
         "type": "paragraph",
-        "value": "First, it’s important to recognize that indexes consume storage and slow down data modification commands like INSERT, UPDATE, and DELETE. Therefore, having too many or poorly designed indexes can hurt your overall performance rather than help it."
+        "value": "The first step to optimization is to identify the slow or problematic queries. Use monitoring tools or database logs to find queries that take a long time or cause system errors. Once identified, focus on reducing the amount of data processed and improving how the database accesses the data."
       },
       {
         "type": "paragraph",
-        "value": "To spot inefficient index usage, start by analyzing your database’s query performance. Most SQL database systems offer ways to explain how queries run and which indexes are used. For example, in MySQL and PostgreSQL, you can use the EXPLAIN statement."
+        "value": "One common approach is to use indexes wisely. Indexes help the database find records faster without scanning entire tables. However, adding too many indexes can slow down updates or inserts, so balance is key."
       },
       {
         "type": "paragraph",
-        "value": "Here’s an example of using EXPLAIN to check index usage in a SELECT query:"
+        "value": "Let's look at an example of a poorly optimized query and then optimize it."
       },
       {
         "type": "code",
-        "value": "EXPLAIN SELECT * FROM orders WHERE customer_id = 1234;"
+        "value": "SELECT * FROM orders WHERE customer_name LIKE '%Smith%';"
       },
       {
         "type": "paragraph",
-        "value": "The output will show if an index is used (usually indicated by 'index' or 'range' in the type column). If the query shows 'ALL' or 'full table scan', it means the index is not being used and the query is scanning the entire table, which is inefficient."
+        "value": "In this query, the wildcard '%' at the beginning prevents the database from using any indexes on the customer_name column. This causes a full table scan, which is slow, especially if the table is large. To optimize, consider these options:"
       },
       {
         "type": "paragraph",
-        "value": "Another way to find inefficient indexes is to check if there are indexes that are never or rarely used. Some database systems have tools or views to show index usage statistics. For example, in SQL Server, you can query the 'sys.dm_db_index_usage_stats' dynamic management view."
+        "value": "1. Avoid leading wildcards if possible."
       },
       {
         "type": "code",
-        "value": "SELECT OBJECT_NAME(object_id), index_id, user_seeks, user_scans, user_lookups, user_updates\nFROM sys.dm_db_index_usage_stats\nWHERE database_id = DB_ID();"
+        "value": "SELECT * FROM orders WHERE customer_name LIKE 'Smith%';"
       },
       {
         "type": "paragraph",
-        "value": "Indexes with very low 'user_seeks' or 'user_scans' but high 'user_updates' may be inefficient because they are maintained during data changes but rarely used in queries."
-      },
-      {
-        "type": "paragraph",
-        "value": "To resolve inefficient index issues, consider the following tips:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. Remove unused indexes to reduce overhead on data modification operations."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. Create composite indexes that match the columns used together frequently in WHERE clauses."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. Avoid indexing columns with low selectivity (many duplicates) as these indexes do not improve filtering performance much."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. Regularly update statistics and rebuild or reorganize fragmented indexes to keep them efficient."
+        "value": "2. Create an index on customer_name to speed up lookups."
       },
       {
         "type": "code",
-        "value": "-- Example: Creating a composite index on (customer_id, order_date) for common query filtering\nCREATE INDEX idx_customer_order_date ON orders(customer_id, order_date);"
+        "value": "CREATE INDEX idx_customer_name ON orders(customer_name);"
       },
       {
         "type": "paragraph",
-        "value": "By understanding how indexes are used and using tools like EXPLAIN or usage statistics, you can improve the query performance of your large SQL database significantly."
+        "value": "3. If searching with leading wildcards cannot be avoided, consider using full-text search features if your database supports them."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common issue is selecting more columns or rows than necessary. Always select only the columns you need rather than using SELECT *."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date FROM orders WHERE customer_name LIKE 'Smith%';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, use LIMIT to restrict the result size if appropriate. This reduces server load and speeds up the query response."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, order_date FROM orders WHERE customer_name LIKE 'Smith%' LIMIT 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, optimizing SQL queries under system constraints involves careful indexing, limiting data processed, avoiding expensive pattern matching, and selecting only the needed data. Monitoring query performance and iteratively improving the queries will lead to better results and fewer system errors."
       }
     ]
   }
