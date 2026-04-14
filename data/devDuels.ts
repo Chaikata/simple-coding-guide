@@ -8069,5 +8069,175 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "refactor-sql-query-to-optimize-select-and-where-clauses",
+    "title": "Refactor SQL Query to Optimize SELECT and WHERE Clauses",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve a given SQL query by refactoring it for better readability and performance while maintaining the same result. This challenge focuses on optimizing basic SELECT and WHERE statements for beginners.",
+    "prompt": "You are given a SQL query that retrieves all employees from the 'employees' table who are in department 'Sales' and have a salary greater than 50000. The query currently uses redundant conditions and inefficient WHERE clause structure. Refactor the query to make it simpler and potentially more efficient without changing its output.",
+    "guidance": [
+      "Identify any redundant or unnecessary parts of the WHERE clause.",
+      "Combine conditions where possible to simplify logical expressions."
+    ],
+    "hints": [
+      "Use AND operator effectively to consolidate conditions.",
+      "Avoid repeating the same filter conditions in multiple places."
+    ],
+    "starterCode": "SELECT * FROM employees WHERE department = 'Sales' AND salary > 50000 AND department = 'Sales';",
+    "expectedOutput": "All rows from 'employees' where department is 'Sales' and salary is greater than 50000, with no duplicates or redundant filters.",
+    "concepts": [
+      "Basic SQL SELECT",
+      "WHERE clause optimization"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-nested-loops-and-conditionals-into-clean-functional-code",
+    "title": "Refactor Nested Loops and Conditionals into Clean Functional Code",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability and maintainability of a JavaScript function that calculates a summary from an array of user objects with nested loops and conditionals, by refactoring it using higher-order array methods and cleaner logic without changing its behavior.",
+    "prompt": "You are given a JavaScript function that calculates the total active users and their average age from an array of user objects. The current implementation uses nested loops and multiple conditionals making it hard to read and maintain. Refactor this function to achieve the same result using cleaner and more functional programming approaches such as array methods (map, filter, reduce), and reduce nesting where possible. Ensure that the output remains unchanged.",
+    "guidance": [
+      "Avoid nested loops and deep conditionals by using filter and reduce appropriately.",
+      "Use descriptive variable names and break down complex expressions for better readability."
+    ],
+    "hints": [
+      "Try chaining array methods like filter followed by reduce instead of explicit loops.",
+      "Calculate sums and counts inside a single reduce pass instead of multiple iterations."
+    ],
+    "starterCode": "function summarizeUsers(users) {\n  let activeCount = 0;\n  let totalAge = 0;\n  for (let i = 0; i < users.length; i++) {\n    if (users[i].isActive) {\n      activeCount++;\n      totalAge += users[i].age;\n    }\n  }\n  let averageAge = 0;\n  if (activeCount > 0) {\n    averageAge = totalAge / activeCount;\n  }\n  return { activeCount, averageAge };\n}",
+    "expectedOutput": "{ activeCount: 3, averageAge: 29.333333333333332 } // when input users: [ {age: 24, isActive: true}, {age: 30, isActive: false}, {age: 35, isActive: true}, {age: 29, isActive: true} ]",
+    "concepts": [
+      "Array methods",
+      "Functional programming",
+      "Code readability",
+      "Refactoring"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "inventory-management-system-for-a-small-store",
+    "title": "Inventory Management System for a Small Store",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Build a simple inventory management mini-project in C++ to track products, stock levels, and sales transactions with multi-step logic and data structures.",
+    "prompt": "Create a C++ program that models an inventory system for a small store. The program should allow adding new products, updating stock quantities, and processing sales by reducing the stock accordingly. Additionally, implement a function to display all products with their current stock, and another to display all sales transactions recorded. Use appropriate data structures to store products and sales, ensuring efficient updates and queries.",
+    "guidance": [
+      "Define a Product struct or class with fields for product ID, name, and stock quantity.",
+      "Use a map or unordered_map to store products keyed by product ID for quick access.",
+      "Maintain a separate vector or list to log sales transactions, storing product ID, quantity sold, and sale timestamp.",
+      "Implement functions for adding/updating products, processing sales (with stock validation), and displaying the inventory and transaction log."
+    ],
+    "hints": [
+      "Use standard library containers like std::unordered_map for product storage to allow O(1) average lookup.",
+      "Before processing a sale, check if enough stock is available; if not, prevent the sale.",
+      "For sale timestamps, you can use a simple integer or a string representing date/time, no need for complex time functions."
+    ],
+    "starterCode": "#include <iostream>\n#include <unordered_map>\n#include <vector>\n#include <string>\n\nstruct Product {\n    int id;\n    std::string name;\n    int stock;\n};\n\nstruct Sale {\n    int productId;\n    int quantity;\n    std::string timestamp;\n};\n\nclass Inventory {\nprivate:\n    std::unordered_map<int, Product> products;\n    std::vector<Sale> salesLog;\n\npublic:\n    // Implement methods here\n    void addOrUpdateProduct(int id, const std::string &name, int quantity);\n    bool processSale(int id, int quantity, const std::string &timestamp);\n    void displayProducts() const;\n    void displaySalesLog() const;\n};\n\nint main() {\n    Inventory store;\n    // Add sample usage here\n    return 0;\n}",
+    "expectedOutput": "Displays the list of products with current stock and logs of sales transactions as processed, e.g.: \nProduct ID: 1, Name: Apple, Stock: 50\nProduct ID: 2, Name: Orange, Stock: 30\n\nSales Log:\nProduct ID: 1, Quantity Sold: 5, Timestamp: 2024-06-10 10:00\nProduct ID: 2, Quantity Sold: 3, Timestamp: 2024-06-10 11:00",
+    "concepts": [
+      "classes and structs",
+      "unordered_map usage",
+      "vector and list management",
+      "multi-step logic"
+    ],
+    "estimatedTime": "30 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-real-time-collaborative-to-do-list-with-optimistic-ui",
+    "title": "Advanced Real-Time Collaborative To-Do List with Optimistic UI",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a sophisticated real-time collaborative to-do list application that supports multiple users adding, updating, and deleting tasks simultaneously, while maintaining a responsive optimistic UI and conflict resolution.",
+    "prompt": "Create a JavaScript function that manages a real-time collaborative to-do list. The function should handle the following features:\n\n- Real-time synchronization of tasks across multiple users via a simulated WebSocket or event emitter.\n- Optimistic UI updates that immediately reflect changes locally before confirmation from the server.\n- Conflict resolution when two users modify the same task simultaneously (latest timestamp wins).\n- Support for adding new tasks, editing task descriptions, marking tasks as complete/incomplete, and deleting tasks.\n- Efficient updates to minimize re-renders or full list re-fetches.\n\nYou should design the architecture and state management of this to-do list so it can be integrated into a front-end application, but the core focus is building the state handler and synchronization logic purely in JavaScript.\n\nWrite a function `createCollaborativeTodoManager()` that returns an object exposing methods:\n- `addTask(description)`\n- `editTask(id, newDescription)`\n- `toggleComplete(id)`\n- `deleteTask(id)`\n- `onRemoteUpdate(update)` - to be called when receiving remote update events.\n\nEach task should have a unique ID, description, completed status, and a lastModified timestamp.\n\nSimulate remote updates by calling `onRemoteUpdate` with task changes from other users. Implement logic to merge them while preserving user experience and data integrity.",
+    "guidance": [
+      "Use an appropriate data structure to store tasks by their unique ID for efficient lookup and updates.",
+      "Implement optimistic updates by applying changes locally and then validating or merging them with remote updates received.",
+      "For conflict resolution, compare the lastModified timestamps to determine the winning update.",
+      "Keep the API methods pure and side-effect free, except for internal state changes, and design for easy integration with UI event handlers."
+    ],
+    "hints": [
+      "Consider using a Map to manage tasks keyed by their unique IDs.",
+      "Use `Date.now()` to generate timestamps for modification tracking.",
+      "For optimistic UI, update the local state immediately, then reconcile with any incoming remote updates in `onRemoteUpdate`."
+    ],
+    "starterCode": "function createCollaborativeTodoManager() {\n  const tasks = new Map();\n\n  function addTask(description) {\n    // TODO: Implement\n  }\n\n  function editTask(id, newDescription) {\n    // TODO: Implement\n  }\n\n  function toggleComplete(id) {\n    // TODO: Implement\n  }\n\n  function deleteTask(id) {\n    // TODO: Implement\n  }\n\n  function onRemoteUpdate(update) {\n    // update: { id, description?, completed?, lastModified }\n    // TODO: Merge update with current task state\n  }\n\n  return { addTask, editTask, toggleComplete, deleteTask, onRemoteUpdate };\n}",
+    "expectedOutput": "After calling addTask('Test task') and then toggleComplete on that task's ID, the local task state should immediately reflect the new completed status. If a remote update arrives with an edited description and newer lastModified timestamp, the local state should update accordingly, overriding the local state if conflict resolution decides the remote is newer.",
+    "concepts": [
+      "Real-time synchronization",
+      "Optimistic UI",
+      "Conflict resolution",
+      "State management"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-bank-account-transaction-tracker",
+    "title": "Simple Bank Account Transaction Tracker",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a basic C++ program that tracks deposits and withdrawals for a single bank account and displays the final balance.",
+    "prompt": "Create a C++ program that allows a user to input a series of transactions to a bank account. Each transaction will either be a deposit or a withdrawal. Your program should keep track of the current balance starting from zero, apply each transaction, and then display the final balance after all transactions have been processed. The program should stop taking input when the user enters 0 as the transaction amount.",
+    "guidance": [
+      "Use a loop to continuously take input until the user enters 0.",
+      "Use conditionals to differentiate between deposits (positive numbers) and withdrawals (negative numbers).",
+      "Keep track of the balance as you process each transaction."
+    ],
+    "hints": [
+      "Remember to initialize the balance variable to zero before starting the loop.",
+      "You can use an integer variable to read the transaction amount from user input.",
+      "Add the transaction amount to the balance to update it after each entry."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int balance = 0;\n    int transaction = -1; // initialize with a non-zero value to start the loop\n\n    // TODO: implement input loop and balance update\n\n    return 0;\n}",
+    "expectedOutput": "Enter a transaction amount (0 to end): 100\nEnter a transaction amount (0 to end): -50\nEnter a transaction amount (0 to end): 25\nEnter a transaction amount (0 to end): 0\nFinal balance: 75",
+    "concepts": [
+      "loops",
+      "conditionals",
+      "variables",
+      "input/output"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-performance-bug-in-recursive-employee-reporting-hierarchy-query",
+    "title": "Fix the Performance Bug in Recursive Employee Reporting Hierarchy Query",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are given a recursive CTE query designed to retrieve the full reporting hierarchy of employees in an organization, but the query runs very slowly and returns incorrect results with duplicated rows. Your task is to identify and fix the bug(s) in the query to ensure it runs efficiently and returns the correct hierarchical employee reporting structure without duplicates.",
+    "prompt": "You have a table `Employees` with columns `EmployeeID`, `ManagerID`, and `EmployeeName`. The goal is to write a recursive SQL query that returns each employee along with their manager's chain using a recursive CTE. The provided query is producing excessive duplicate rows and is very slow. Fix the query so it optimally retrieves the full hierarchy for all employees without duplicates or infinite recursion.",
+    "guidance": [
+      "Check the recursive CTE anchor member and recursive member conditions carefully for correctness.",
+      "Ensure the recursive part correctly joins back to the base table without causing cross joins or duplicates.",
+      "Consider ways to prevent infinite recursion or cycles in the hierarchy."
+    ],
+    "hints": [
+      "Make sure the recursion predicate uses the correct join condition between CTE and Employees.",
+      "Use DISTINCT or proper filtering to avoid duplicates if needed, but aim to eliminate duplicates through the join logic.",
+      "Consider limiting the recursion depth or adding cycle detection columns if your dialect supports them."
+    ],
+    "starterCode": "WITH EmployeeHierarchy AS (\n  SELECT EmployeeID, ManagerID, EmployeeName, CAST(EmployeeName AS VARCHAR(MAX)) AS FullPath\n  FROM Employees\n  WHERE ManagerID IS NULL\n  UNION ALL\n  SELECT e.EmployeeID, e.ManagerID, e.EmployeeName, eh.FullPath + ' > ' + e.EmployeeName\n  FROM Employees e\n  JOIN EmployeeHierarchy eh ON e.EmployeeID = eh.ManagerID\n)\nSELECT * FROM EmployeeHierarchy;",
+    "expectedOutput": "A list of employees with their full management chain in the 'FullPath' column, with no duplicates and complete hierarchy, for example:\n\nEmployeeID | ManagerID | EmployeeName | FullPath\n---------------------------------------------------\n1          | NULL      | Alice        | Alice\n2          | 1         | Bob          | Alice > Bob\n3          | 2         | Carol        | Alice > Bob > Carol",
+    "concepts": [
+      "recursive CTE",
+      "hierarchical queries",
+      "SQL joins",
+      "query optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];

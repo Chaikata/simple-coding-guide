@@ -1,178 +1,172 @@
 [
   {
-    "slug": "advanced-task-scheduler-build-a-priority-based-task-manager-in-python",
-    "title": "Advanced Task Scheduler: Build a Priority-based Task Manager in Python",
-    "language": "python",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Create a Python mini-project that manages a list of tasks with start times, durations, and priorities, optimizing scheduling to avoid conflicts based on priority and timing.",
-    "prompt": "You are tasked with creating an advanced task scheduler that manages tasks with start times, durations, and priorities. Build a Python function named schedule_tasks(tasks) where tasks is a list of dictionaries, each dictionary containing 'id' (unique int), 'start' (ISO 8601 datetime string), 'duration' (minutes, int), and 'priority' (int, higher means more important). The function must return a schedule list of task ids sorted by actual execution order, ensuring that tasks do not overlap in execution timelines. If tasks overlap, the task with lower priority should be delayed until the conflicting task is finished. Tasks must run sequentially with no gaps unless forced by conflicts. Adjust start times accordingly to resolve overlaps based on priority. Your final output must be a list of task ids in the order they will execute, respecting all constraints.",
+    "slug": "refactor-sql-query-to-optimize-select-and-where-clauses",
+    "title": "Refactor SQL Query to Optimize SELECT and WHERE Clauses",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve a given SQL query by refactoring it for better readability and performance while maintaining the same result. This challenge focuses on optimizing basic SELECT and WHERE statements for beginners.",
+    "prompt": "You are given a SQL query that retrieves all employees from the 'employees' table who are in department 'Sales' and have a salary greater than 50000. The query currently uses redundant conditions and inefficient WHERE clause structure. Refactor the query to make it simpler and potentially more efficient without changing its output.",
     "guidance": [
-      "Parse and convert ISO 8601 datetime strings to Python datetime objects for accurate time calculations.",
-      "Sort initial tasks by start time and priority to manage execution order and conflict resolution.",
-      "Iteratively adjust conflicting tasks' start times so no two tasks overlap, always delaying lower-priority tasks.",
-      "Return only the ordered list of task ids reflecting the final execution order after resolving all overlaps."
+      "Identify any redundant or unnecessary parts of the WHERE clause.",
+      "Combine conditions where possible to simplify logical expressions."
     ],
     "hints": [
-      "Use the datetime module to handle time calculations and comparisons.",
-      "Think about simulating the schedule timeline, updating start times as you iterate through tasks.",
-      "Consider a greedy approach: always schedule the highest priority task available at the earliest possible time."
+      "Use AND operator effectively to consolidate conditions.",
+      "Avoid repeating the same filter conditions in multiple places."
     ],
-    "starterCode": "from datetime import datetime, timedelta\n\ndef schedule_tasks(tasks):\n    # Your code here\n    pass\n\n# Example task format\n# tasks = [\n#     {'id': 1, 'start': '2024-06-01T09:00:00', 'duration': 60, 'priority': 2},\n#     {'id': 2, 'start': '2024-06-01T09:30:00', 'duration': 45, 'priority': 3},\n#     {'id': 3, 'start': '2024-06-01T10:00:00', 'duration': 30, 'priority': 1}\n# ]",
-    "expectedOutput": "[2, 1, 3]",
+    "starterCode": "SELECT * FROM employees WHERE department = 'Sales' AND salary > 50000 AND department = 'Sales';",
+    "expectedOutput": "All rows from 'employees' where department is 'Sales' and salary is greater than 50000, with no duplicates or redundant filters.",
     "concepts": [
-      "datetime manipulation",
-      "task scheduling",
-      "priority queue",
-      "conflict resolution"
+      "Basic SQL SELECT",
+      "WHERE clause optimization"
     ],
-    "estimatedTime": "60 minutes",
-    "isFeatured": true
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   },
   {
-    "slug": "refactor-and-optimize-deeply-nested-array-and-object-processing-in-javascript",
-    "title": "Refactor and Optimize Deeply Nested Array and Object Processing in JavaScript",
+    "slug": "refactor-nested-loops-and-conditionals-into-clean-functional-code",
+    "title": "Refactor Nested Loops and Conditionals into Clean Functional Code",
     "language": "javascript",
-    "difficulty": "advanced",
+    "difficulty": "intermediate",
     "category": "code-quality",
-    "description": "Improve the readability, maintainability, and performance of a complex function that processes deeply nested arrays and objects without changing its behavior.",
-    "prompt": "You are given a function that processes an array of user data objects containing nested properties for user activities, preferences, and metadata. The function is currently deeply nested, hard to read, and inefficient. Your task is to refactor this function to improve code clarity, reduce nesting depth, remove redundant computations, and optimize performance, while ensuring it produces the exact same output for any input. The function aggregates and returns a summary report object including counts, filtered data arrays, and derived metrics.",
+    "description": "Improve the readability and maintainability of a JavaScript function that calculates a summary from an array of user objects with nested loops and conditionals, by refactoring it using higher-order array methods and cleaner logic without changing its behavior.",
+    "prompt": "You are given a JavaScript function that calculates the total active users and their average age from an array of user objects. The current implementation uses nested loops and multiple conditionals making it hard to read and maintain. Refactor this function to achieve the same result using cleaner and more functional programming approaches such as array methods (map, filter, reduce), and reduce nesting where possible. Ensure that the output remains unchanged.",
     "guidance": [
-      "Break down large blocks of nested conditionals into smaller, reusable helper functions.",
-      "Use early returns to decrease nesting and improve clarity.",
-      "Avoid unnecessary iterations or recalculations by caching interim results.",
-      "Use modern JavaScript features such as destructuring, map(), filter(), and reduce() for cleaner data transformations."
+      "Avoid nested loops and deep conditionals by using filter and reduce appropriately.",
+      "Use descriptive variable names and break down complex expressions for better readability."
     ],
     "hints": [
-      "Extract complex conditional checks and data transformations into well-named functions.",
-      "Leverage Array.prototype.reduce() to accumulate results efficiently without multiple passes.",
-      "Consider immutability and avoid side effects to keep logic predictable and easier to test."
+      "Try chaining array methods like filter followed by reduce instead of explicit loops.",
+      "Calculate sums and counts inside a single reduce pass instead of multiple iterations."
     ],
-    "starterCode": "function generateUserReport(users) {\n  const report = { activeUsers: 0, premiumUsers: 0, recentLogins: [], preferencesSummary: {} };\n  for (let i = 0; i < users.length; i++) {\n    const user = users[i];\n    if (user && user.profile) {\n      if (user.status === 'active') {\n        report.activeUsers++;\n      }\n      if (user.subscription && user.subscription.type === 'premium') {\n        report.premiumUsers++;\n      }\n      if (user.activity && user.activity.loginDates) {\n        for (let j = 0; j < user.activity.loginDates.length; j++) {\n          const loginDate = user.activity.loginDates[j];\n          if (new Date(loginDate) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {\n            report.recentLogins.push(user.id);\n            break;\n          }\n        }\n      }\n      if (user.preferences) {\n        for (const key in user.preferences) {\n          if (user.preferences.hasOwnProperty(key)) {\n            if (!report.preferencesSummary[key]) {\n              report.preferencesSummary[key] = new Set();\n            }\n            report.preferencesSummary[key].add(user.preferences[key]);\n          }\n        }\n      }\n    }\n  }\n  for (const key in report.preferencesSummary) {\n    if (report.preferencesSummary.hasOwnProperty(key)) {\n      report.preferencesSummary[key] = Array.from(report.preferencesSummary[key]);\n    }\n  }\n  return report;\n}",
-    "expectedOutput": "For an input array users, the output will be an object with these properties: activeUsers (number), premiumUsers (number), recentLogins (array of user IDs who logged in within last 7 days), and preferencesSummary (object mapping preference keys to arrays of unique values).",
+    "starterCode": "function summarizeUsers(users) {\n  let activeCount = 0;\n  let totalAge = 0;\n  for (let i = 0; i < users.length; i++) {\n    if (users[i].isActive) {\n      activeCount++;\n      totalAge += users[i].age;\n    }\n  }\n  let averageAge = 0;\n  if (activeCount > 0) {\n    averageAge = totalAge / activeCount;\n  }\n  return { activeCount, averageAge };\n}",
+    "expectedOutput": "{ activeCount: 3, averageAge: 29.333333333333332 } // when input users: [ {age: 24, isActive: true}, {age: 30, isActive: false}, {age: 35, isActive: true}, {age: 29, isActive: true} ]",
     "concepts": [
-      "code refactoring",
-      "array iteration and transformation",
-      "nested object handling",
-      "performance optimization"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "build-a-memoized-recursive-function-to-calculate-large-fibonacci-numbers",
-    "title": "Build a Memoized Recursive Function to Calculate Large Fibonacci Numbers",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "functions",
-    "description": "Implement an efficient recursive function in C++ that computes the nth Fibonacci number leveraging memoization to optimize overlapping subproblems, capable of handling large input values.",
-    "prompt": "Create a function `long long fib(int n)` that returns the nth Fibonacci number (0-indexed: fib(0) = 0, fib(1) = 1). The function must use recursion with memoization to handle inputs up to at least n = 90 efficiently. Avoid recomputation by caching intermediate results.",
-    "guidance": [
-      "Use a static or external container like `std::unordered_map` or `std::vector` to store previously computed Fibonacci values.",
-      "Implement the base cases for n=0 and n=1 explicitly in the recursive function.",
-      "Make sure the function runs efficiently for large n by avoiding redundant recursive calls."
-    ],
-    "hints": [
-      "Consider passing the memoization container as a static variable inside the function to preserve data across calls.",
-      "Use `long long` as the return type to safely store Fibonacci numbers up to fib(90).",
-      "Test edge cases like fib(0), fib(1), and fib(90) to ensure correctness and performance."
-    ],
-    "starterCode": "long long fib(int n) {\n    // Your code here\n}",
-    "expectedOutput": "fib(10) = 55\nfib(50) = 12586269025\nfib(90) = 2880067194370816120",
-    "concepts": [
-      "recursion",
-      "memoization",
-      "dynamic programming",
-      "optimization"
+      "Array methods",
+      "Functional programming",
+      "Code readability",
+      "Refactoring"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
   },
   {
-    "slug": "simple-budget-tracker-mini-project",
-    "title": "Simple Budget Tracker Mini Project",
-    "language": "python",
-    "difficulty": "beginner",
+    "slug": "inventory-management-system-for-a-small-store",
+    "title": "Inventory Management System for a Small Store",
+    "language": "cpp",
+    "difficulty": "intermediate",
     "category": "mini-projects",
-    "description": "Create a basic budget tracker that lets users add income, add expenses, and get their current balance. This beginner-friendly mini project practices using functions, variables, conditionals, and loops.",
-    "prompt": "Build a Python function called `budget_tracker` that repeatedly allows a user to add an income or expense entry. The function should take no arguments and run a simple interactive loop, prompting the user to input 'income' or 'expense', then ask for the amount (a positive number). Keep a running total of income and expenses separately. When the user types 'quit', the function should print the total income, total expenses, and the current balance (income minus expenses) and then exit.",
+    "description": "Build a simple inventory management mini-project in C++ to track products, stock levels, and sales transactions with multi-step logic and data structures.",
+    "prompt": "Create a C++ program that models an inventory system for a small store. The program should allow adding new products, updating stock quantities, and processing sales by reducing the stock accordingly. Additionally, implement a function to display all products with their current stock, and another to display all sales transactions recorded. Use appropriate data structures to store products and sales, ensuring efficient updates and queries.",
     "guidance": [
-      "Use a while loop to keep asking the user for input until they type 'quit'.",
-      "Use variables to store the total income and total expenses.",
-      "Make sure to convert input amounts to floats for calculation.",
-      "Add simple input validation to ensure amount entered is a positive number."
+      "Define a Product struct or class with fields for product ID, name, and stock quantity.",
+      "Use a map or unordered_map to store products keyed by product ID for quick access.",
+      "Maintain a separate vector or list to log sales transactions, storing product ID, quantity sold, and sale timestamp.",
+      "Implement functions for adding/updating products, processing sales (with stock validation), and displaying the inventory and transaction log."
     ],
     "hints": [
-      "You can use the input() function to get user input and float() to convert strings to numbers.",
-      "Use if-elif-else statements to handle the different user commands ('income', 'expense', 'quit').",
-      "Keep your code organized by updating the totals inside the loop based on the user’s action."
+      "Use standard library containers like std::unordered_map for product storage to allow O(1) average lookup.",
+      "Before processing a sale, check if enough stock is available; if not, prevent the sale.",
+      "For sale timestamps, you can use a simple integer or a string representing date/time, no need for complex time functions."
     ],
-    "starterCode": "def budget_tracker():\n    income_total = 0.0\n    expense_total = 0.0\n    while True:\n        action = input(\"Enter 'income', 'expense', or 'quit': \")\n        # Your code here\n",
-    "expectedOutput": "Enter 'income', 'expense', or 'quit': income\nEnter amount: 1000\nEnter 'income', 'expense', or 'quit': expense\nEnter amount: 300\nEnter 'income', 'expense', or 'quit': quit\nTotal Income: 1000.0\nTotal Expenses: 300.0\nCurrent Balance: 700.0",
+    "starterCode": "#include <iostream>\n#include <unordered_map>\n#include <vector>\n#include <string>\n\nstruct Product {\n    int id;\n    std::string name;\n    int stock;\n};\n\nstruct Sale {\n    int productId;\n    int quantity;\n    std::string timestamp;\n};\n\nclass Inventory {\nprivate:\n    std::unordered_map<int, Product> products;\n    std::vector<Sale> salesLog;\n\npublic:\n    // Implement methods here\n    void addOrUpdateProduct(int id, const std::string &name, int quantity);\n    bool processSale(int id, int quantity, const std::string &timestamp);\n    void displayProducts() const;\n    void displaySalesLog() const;\n};\n\nint main() {\n    Inventory store;\n    // Add sample usage here\n    return 0;\n}",
+    "expectedOutput": "Displays the list of products with current stock and logs of sales transactions as processed, e.g.: \nProduct ID: 1, Name: Apple, Stock: 50\nProduct ID: 2, Name: Orange, Stock: 30\n\nSales Log:\nProduct ID: 1, Quantity Sold: 5, Timestamp: 2024-06-10 10:00\nProduct ID: 2, Quantity Sold: 3, Timestamp: 2024-06-10 11:00",
+    "concepts": [
+      "classes and structs",
+      "unordered_map usage",
+      "vector and list management",
+      "multi-step logic"
+    ],
+    "estimatedTime": "30 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-real-time-collaborative-to-do-list-with-optimistic-ui",
+    "title": "Advanced Real-Time Collaborative To-Do List with Optimistic UI",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a sophisticated real-time collaborative to-do list application that supports multiple users adding, updating, and deleting tasks simultaneously, while maintaining a responsive optimistic UI and conflict resolution.",
+    "prompt": "Create a JavaScript function that manages a real-time collaborative to-do list. The function should handle the following features:\n\n- Real-time synchronization of tasks across multiple users via a simulated WebSocket or event emitter.\n- Optimistic UI updates that immediately reflect changes locally before confirmation from the server.\n- Conflict resolution when two users modify the same task simultaneously (latest timestamp wins).\n- Support for adding new tasks, editing task descriptions, marking tasks as complete/incomplete, and deleting tasks.\n- Efficient updates to minimize re-renders or full list re-fetches.\n\nYou should design the architecture and state management of this to-do list so it can be integrated into a front-end application, but the core focus is building the state handler and synchronization logic purely in JavaScript.\n\nWrite a function `createCollaborativeTodoManager()` that returns an object exposing methods:\n- `addTask(description)`\n- `editTask(id, newDescription)`\n- `toggleComplete(id)`\n- `deleteTask(id)`\n- `onRemoteUpdate(update)` - to be called when receiving remote update events.\n\nEach task should have a unique ID, description, completed status, and a lastModified timestamp.\n\nSimulate remote updates by calling `onRemoteUpdate` with task changes from other users. Implement logic to merge them while preserving user experience and data integrity.",
+    "guidance": [
+      "Use an appropriate data structure to store tasks by their unique ID for efficient lookup and updates.",
+      "Implement optimistic updates by applying changes locally and then validating or merging them with remote updates received.",
+      "For conflict resolution, compare the lastModified timestamps to determine the winning update.",
+      "Keep the API methods pure and side-effect free, except for internal state changes, and design for easy integration with UI event handlers."
+    ],
+    "hints": [
+      "Consider using a Map to manage tasks keyed by their unique IDs.",
+      "Use `Date.now()` to generate timestamps for modification tracking.",
+      "For optimistic UI, update the local state immediately, then reconcile with any incoming remote updates in `onRemoteUpdate`."
+    ],
+    "starterCode": "function createCollaborativeTodoManager() {\n  const tasks = new Map();\n\n  function addTask(description) {\n    // TODO: Implement\n  }\n\n  function editTask(id, newDescription) {\n    // TODO: Implement\n  }\n\n  function toggleComplete(id) {\n    // TODO: Implement\n  }\n\n  function deleteTask(id) {\n    // TODO: Implement\n  }\n\n  function onRemoteUpdate(update) {\n    // update: { id, description?, completed?, lastModified }\n    // TODO: Merge update with current task state\n  }\n\n  return { addTask, editTask, toggleComplete, deleteTask, onRemoteUpdate };\n}",
+    "expectedOutput": "After calling addTask('Test task') and then toggleComplete on that task's ID, the local task state should immediately reflect the new completed status. If a remote update arrives with an edited description and newer lastModified timestamp, the local state should update accordingly, overriding the local state if conflict resolution decides the remote is newer.",
+    "concepts": [
+      "Real-time synchronization",
+      "Optimistic UI",
+      "Conflict resolution",
+      "State management"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-bank-account-transaction-tracker",
+    "title": "Simple Bank Account Transaction Tracker",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a basic C++ program that tracks deposits and withdrawals for a single bank account and displays the final balance.",
+    "prompt": "Create a C++ program that allows a user to input a series of transactions to a bank account. Each transaction will either be a deposit or a withdrawal. Your program should keep track of the current balance starting from zero, apply each transaction, and then display the final balance after all transactions have been processed. The program should stop taking input when the user enters 0 as the transaction amount.",
+    "guidance": [
+      "Use a loop to continuously take input until the user enters 0.",
+      "Use conditionals to differentiate between deposits (positive numbers) and withdrawals (negative numbers).",
+      "Keep track of the balance as you process each transaction."
+    ],
+    "hints": [
+      "Remember to initialize the balance variable to zero before starting the loop.",
+      "You can use an integer variable to read the transaction amount from user input.",
+      "Add the transaction amount to the balance to update it after each entry."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int balance = 0;\n    int transaction = -1; // initialize with a non-zero value to start the loop\n\n    // TODO: implement input loop and balance update\n\n    return 0;\n}",
+    "expectedOutput": "Enter a transaction amount (0 to end): 100\nEnter a transaction amount (0 to end): -50\nEnter a transaction amount (0 to end): 25\nEnter a transaction amount (0 to end): 0\nFinal balance: 75",
     "concepts": [
       "loops",
       "conditionals",
-      "input/output",
-      "variables"
+      "variables",
+      "input/output"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "design-and-query-an-employee-shift-scheduling-system",
-    "title": "Design and Query an Employee Shift Scheduling System",
+    "slug": "fix-the-performance-bug-in-recursive-employee-reporting-hierarchy-query",
+    "title": "Fix the Performance Bug in Recursive Employee Reporting Hierarchy Query",
     "language": "sql",
     "difficulty": "advanced",
-    "category": "data-modeling",
-    "description": "Create a normalized SQL data model and implement complex queries to manage and analyze employee shift schedules for a medium-sized company.",
-    "prompt": "You have been tasked with designing a relational database schema to manage employee shift schedules for a company. The system should track employees, departments, shifts, and the assignments of employees to shifts across multiple days. After designing the schema, write SQL queries to fetch detailed scheduling reports.\n\nRequirements:\n1. Design tables to represent employees, departments, shifts (with start and end times), and shift assignments (which employee works which shift on which day).\n2. The schema should be normalized to at least 3NF to avoid redundancy.\n3. Populate the tables with sample data for at least 5 employees, 2 departments, 3 different shifts per day, and shift assignments covering one week.\n4. Write a query to list each employee's total scheduled hours per week.\n5. Write a query to find employees who have overlapping shifts in the same day (which should not happen).\n6. Write a query to output a weekly schedule grid that shows days as columns and employees as rows with shift names filled in.\n\nSubmit the SQL statements for table creation, sample data insertion, and the three requested queries.",
+    "category": "debugging",
+    "description": "You are given a recursive CTE query designed to retrieve the full reporting hierarchy of employees in an organization, but the query runs very slowly and returns incorrect results with duplicated rows. Your task is to identify and fix the bug(s) in the query to ensure it runs efficiently and returns the correct hierarchical employee reporting structure without duplicates.",
+    "prompt": "You have a table `Employees` with columns `EmployeeID`, `ManagerID`, and `EmployeeName`. The goal is to write a recursive SQL query that returns each employee along with their manager's chain using a recursive CTE. The provided query is producing excessive duplicate rows and is very slow. Fix the query so it optimally retrieves the full hierarchy for all employees without duplicates or infinite recursion.",
     "guidance": [
-      "Focus on designing separate tables for Employees, Departments, Shifts, and ShiftAssignments, with appropriate foreign keys.",
-      "Make sure the shift time fields use an efficient and consistent time representation (e.g., TIME or DATETIME data types).",
-      "Approach the queries by considering joins and aggregate functions, and use window functions or self-joins for overlap detection."
+      "Check the recursive CTE anchor member and recursive member conditions carefully for correctness.",
+      "Ensure the recursive part correctly joins back to the base table without causing cross joins or duplicates.",
+      "Consider ways to prevent infinite recursion or cycles in the hierarchy."
     ],
     "hints": [
-      "Use composite unique constraints on ShiftAssignments to avoid duplicate assignments for the same employee and shift on the same day.",
-      "To detect overlapping shifts, consider comparing shift time intervals for the same employee on the same day using self-joins.",
-      "For the weekly schedule grid, pivot data by using conditional aggregation or CASE statements."
+      "Make sure the recursion predicate uses the correct join condition between CTE and Employees.",
+      "Use DISTINCT or proper filtering to avoid duplicates if needed, but aim to eliminate duplicates through the join logic.",
+      "Consider limiting the recursion depth or adding cycle detection columns if your dialect supports them."
     ],
-    "starterCode": "-- Create tables\nCREATE TABLE Departments (\n  dept_id INT PRIMARY KEY,\n  name VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE Employees (\n  emp_id INT PRIMARY KEY,\n  name VARCHAR(100) NOT NULL,\n  dept_id INT NOT NULL,\n  FOREIGN KEY (dept_id) REFERENCES Departments(dept_id)\n);\n\nCREATE TABLE Shifts (\n  shift_id INT PRIMARY KEY,\n  shift_name VARCHAR(50),\n  start_time TIME NOT NULL,\n  end_time TIME NOT NULL\n);\n\n-- Note: You will need to create a ShiftAssignments table and write the requested queries based on your schema design.",
-    "expectedOutput": "-- Example output for total scheduled hours per employee per week\n| emp_id | name         | total_hours |\n|--------|--------------|-------------|\n| 1      | Alice Smith  | 40          |\n| 2      | Bob Johnson  | 35          |\n| 3      | Carol Lee    | 30          |\n\n-- For overlap detection, output should list employees and days where overlap exists\n| emp_id | name         | date       | overlapping_shifts |\n|--------|--------------|------------|--------------------|\n| 3      | Carol Lee    | 2024-06-15 | Morning, Afternoon  |\n\n-- Weekly schedule grid with employees as rows and days as columns filled with shift names\n| emp_id | name        | Mon       | Tue       | Wed       | Thu       | Fri       | Sat       | Sun       |\n|--------|-------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|\n| 1      | Alice Smith | Morning   | Morning   | Morning   | Morning   | Morning   | Off       | Off       |",
+    "starterCode": "WITH EmployeeHierarchy AS (\n  SELECT EmployeeID, ManagerID, EmployeeName, CAST(EmployeeName AS VARCHAR(MAX)) AS FullPath\n  FROM Employees\n  WHERE ManagerID IS NULL\n  UNION ALL\n  SELECT e.EmployeeID, e.ManagerID, e.EmployeeName, eh.FullPath + ' > ' + e.EmployeeName\n  FROM Employees e\n  JOIN EmployeeHierarchy eh ON e.EmployeeID = eh.ManagerID\n)\nSELECT * FROM EmployeeHierarchy;",
+    "expectedOutput": "A list of employees with their full management chain in the 'FullPath' column, with no duplicates and complete hierarchy, for example:\n\nEmployeeID | ManagerID | EmployeeName | FullPath\n---------------------------------------------------\n1          | NULL      | Alice        | Alice\n2          | 1         | Bob          | Alice > Bob\n3          | 2         | Carol        | Alice > Bob > Carol",
     "concepts": [
-      "Database normalization",
-      "Complex SQL queries",
-      "Time interval overlap detection",
-      "Pivoting data in SQL"
+      "recursive CTE",
+      "hierarchical queries",
+      "SQL joins",
+      "query optimization"
     ],
-    "estimatedTime": "40 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "predict-the-output-of-nested-closures-and-asynchronous-execution-in-javascript",
-    "title": "Predict the Output of Nested Closures and Asynchronous Execution in JavaScript",
-    "language": "javascript",
-    "difficulty": "advanced",
-    "category": "logic",
-    "description": "Analyze a complex JavaScript function involving nested closures, asynchronous setTimeout calls, and variable shadowing to predict the exact console output sequence and values.",
-    "prompt": "Examine the following JavaScript code snippet. Predict the exact output printed to the console when this code runs. Explain the sequence and reasoning for each output line, considering closures, variable scope, and asynchronous execution.",
-    "guidance": [
-      "Pay close attention to variable scopes, especially how let and var behave in closures.",
-      "Analyze how setTimeout callbacks capture variables and when they execute relative to the main thread.",
-      "Consider how the loop variables are captured by the closures inside the asynchronous callbacks."
-    ],
-    "hints": [
-      "Remember that 'var' has function scope and 'let' has block scope, affecting closure capture.",
-      "setTimeout callbacks queued with zero delay still run after the synchronous code completes.",
-      "Think about how changes to loop variables affect closures differently for var vs let."
-    ],
-    "starterCode": "function trickyClosure() {\n  for (var i = 0; i < 3; i++) {\n    setTimeout(function() {\n      console.log('var loop i:', i);\n    }, 0);\n  }\n\n  for (let j = 0; j < 3; j++) {\n    setTimeout(function() {\n      console.log('let loop j:', j);\n    }, 0);\n  }\n\n  (function() {\n    for (var k = 0; k < 3; k++) {\n      setTimeout(function() {\n        console.log('IIFE var k:', k);\n      }, k * 10);\n    }\n  })();\n}\n\ntrickyClosure();",
-    "expectedOutput": "var loop i: 3\nvar loop i: 3\nvar loop i: 3\nlet loop j: 0\nlet loop j: 1\nlet loop j: 2\nIIFE var k: 3\nIIFE var k: 3\nIIFE var k: 3",
-    "concepts": [
-      "closures",
-      "variable scope",
-      "asynchronous execution"
-    ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "15 minutes",
     "isFeatured": false
   }
 ]
