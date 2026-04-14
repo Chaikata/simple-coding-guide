@@ -8239,5 +8239,181 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-rotate-an-array-by-k-steps",
+    "title": "Build a Function to Rotate an Array by k Steps",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a C++ function that rotates the elements of an integer array to the right by k steps. This function should handle cases where k is greater than the array length and work efficiently without using extra space for another array.",
+    "prompt": "Write a function named rotateArray that takes a vector of integers and an integer k, which represents the number of steps to rotate the array to the right. Your function should modify the original vector in place and handle cases where k is greater than the length of the array. The rotation should be done efficiently with minimal extra memory use.",
+    "guidance": [
+      "Consider using the modulo operator to handle cases where k is larger than the vector size.",
+      "Try reversing parts of the array to achieve the rotation instead of shifting elements one by one."
+    ],
+    "hints": [
+      "Rotating an array right by k is equivalent to moving the last k elements to the front.",
+      "You can reverse the entire array, then reverse the first k elements, and finally reverse the remaining elements to get the rotated array."
+    ],
+    "starterCode": "void rotateArray(std::vector<int>& nums, int k) {\n    // Your code here\n}",
+    "expectedOutput": "For example, given nums = {1, 2, 3, 4, 5, 6, 7} and k = 3,\nafter rotateArray(nums, 3), nums should be {5, 6, 7, 1, 2, 3, 4}.",
+    "concepts": [
+      "arrays",
+      "modulo operation",
+      "in-place algorithm"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-efficient-large-scale-matrix-multiplication",
+    "title": "Fix Bug in Efficient Large-Scale Matrix Multiplication",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix a subtle bug in an optimized Python function designed to multiply large matrices efficiently using NumPy, without changing overall approach or reducing performance.",
+    "prompt": "The function below is intended to efficiently multiply two large matrices leveraging NumPy. However, the results it produces are incorrect for some inputs. Your task is to find and fix the bug causing the incorrect output, ensuring the function maintains high performance and handles large inputs correctly.\n\nDo not completely rewrite the algorithm; focus on debugging the existing approach.",
+    "guidance": [
+      "Carefully check the assumptions about the shape and dimensions of the matrices before multiplication.",
+      "Review how you are using NumPy array operations and broadcasting rules that might affect matrix multiplication.",
+      "Validate the result by comparing it against NumPy's built-in matrix multiplication for correctness."
+    ],
+    "hints": [
+      "Check if you are properly using the '@' operator or numpy.dot for multiplying matrices.",
+      "Look closely at how inputs are converted or reshaped prior to operation.",
+      "Remember that matrix multiplication requires the inner dimensions of the two matrices to match."
+    ],
+    "starterCode": "import numpy as np\n\ndef fast_matrix_multiply(A, B):\n    # Intended to multiply two matrices A and B\n    # BUG: sometimes gives incorrect result or errors with large inputs\n    A = np.array(A)\n    B = np.array(B)\n    result = A * B  # Attempt to multiply matrices element-wise (bug here)\n    return result\n\n# Example test case\nA = np.arange(12).reshape(3,4)\nB = np.arange(8).reshape(4,2)\nprint(fast_matrix_multiply(A, B))",
+    "expectedOutput": "[[ 28  31]\n [ 76  89]\n [124 147]]",
+    "concepts": [
+      "matrix multiplication",
+      "numpy operations",
+      "debugging",
+      "array broadcasting"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-an-immutable-deep-merge-function-for-nested-javascript-objects",
+    "title": "Build an Immutable Deep Merge Function for Nested JavaScript Objects",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a robust JavaScript function that performs a deep merge of two objects without mutating either input. The function should recursively merge nested objects and arrays, handling conflicts by favoring values from the second object while preserving original nested structures.",
+    "prompt": "Write a function named 'deepMerge' that takes two arguments, both objects, and returns a new object that deeply merges the properties of the two. The merge should be recursive: for any common keys with object values, merge those sub-objects as well. For arrays, concatenate the arrays. Primitive values in the second object overwrite those in the first. Neither of the input objects should be mutated during this process.",
+    "guidance": [
+      "Use recursion to handle nested objects and arrays during the merge.",
+      "Create and return a new object for the merged result to ensure immutability.",
+      "Ensure array values are concatenated instead of overwritten.",
+      "Handle edge cases such as null values and non-object types properly."
+    ],
+    "hints": [
+      "Check if a property is an array using Array.isArray() and merge accordingly.",
+      "Use typeof to differentiate between primitives and objects but be cautious with null (which typeof reports as 'object').",
+      "Utilize Object.keys or Object.entries for iterating over object properties."
+    ],
+    "starterCode": "function deepMerge(obj1, obj2) {\n  // Implement your deep merge logic here\n}",
+    "expectedOutput": "const a = { x: 1, y: { z: [1, 2] }, w: 'hello' };\nconst b = { y: { z: [3], q: 4 }, w: 'world', v: true };\nconsole.log(deepMerge(a, b));\n// Expected output:\n// { x: 1, y: { z: [1, 2, 3], q: 4 }, w: 'world', v: true }",
+    "concepts": [
+      "recursion",
+      "immutability",
+      "object traversal",
+      "array manipulation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-advanced-multithreaded-bank-account-simulation",
+    "title": "Fix Bug in Advanced Multithreaded Bank Account Simulation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "You are given a broken multithreaded C++ program simulating deposits and withdrawals on a bank account. The code uses mutexes to protect the balance but still produces inconsistent results due to subtle bugs. Your task is to identify and fix these concurrency and logic bugs to ensure the balance always stays correct after concurrent operations.",
+    "prompt": "Given the provided C++ code simulating multiple threads calling deposit and withdraw on a shared BankAccount object, the program sometimes shows incorrect fund totals or crashes due to race conditions or deadlocks. Identify the concurrency bugs and logic errors, fix them so that the final balance is always consistent with the performed operations, and the program runs safely across threads.",
+    "guidance": [
+      "Carefully examine the locking mechanism and ensure the balance updates use correct synchronization.",
+      "Check that the balance does not go negative and that no data races or deadlocks occur.",
+      "Use std::lock_guard or std::unique_lock properly to simplify mutex management.",
+      "Consider potential issues with unlocking mutexes too early or multiple mutexes causing lock order problems."
+    ],
+    "hints": [
+      "Look for places where the mutex is not properly locked or unlocked around balance updates.",
+      "Check if multiple mutexes in different threads can cause deadlock due to inconsistent lock order.",
+      "Consider atomic operations or scoped locks where appropriate."
+    ],
+    "starterCode": "#include <iostream>\n#include <thread>\n#include <mutex>\n#include <vector>\n\nclass BankAccount {\nprivate:\n    int balance;\n    std::mutex m1;\n    std::mutex m2;\npublic:\n    BankAccount() : balance(0) {}\n    void deposit(int amount) {\n        m1.lock();\n        balance += amount;\n        m1.unlock();\n    }\n    bool withdraw(int amount) {\n        m2.lock();\n        if (balance >= amount) {\n            balance -= amount;\n            m2.unlock();\n            return true;\n        } else {\n            m2.unlock();\n            return false;\n        }\n    }\n    int getBalance() {\n        int bal;\n        m1.lock();\n        m2.lock();\n        bal = balance;\n        m2.unlock();\n        m1.unlock();\n        return bal;\n    }\n};\n\nvoid depositFunc(BankAccount& account) {\n    for (int i = 0; i < 1000; i++) {\n        account.deposit(1);\n    }\n}\n\nvoid withdrawFunc(BankAccount& account) {\n    for (int i = 0; i < 1000; i++) {\n        account.withdraw(1);\n    }\n}\n\nint main() {\n    BankAccount account;\n    std::thread t1(depositFunc, std::ref(account));\n    std::thread t2(withdrawFunc, std::ref(account));\n    t1.join();\n    t2.join();\n    std::cout << \"Final balance: \" << account.getBalance() << std::endl;\n    return 0;\n}\n",
+    "expectedOutput": "Final balance: 0",
+    "concepts": [
+      "multithreading",
+      "mutex",
+      "race condition",
+      "concurrency",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-debounced-async-function-executor",
+    "title": "Build a Debounced Async Function Executor",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a reusable JavaScript function that returns a debounced version of an asynchronous function. The debounced function delays invoking the original async function until after a specified wait time has passed since the last time it was invoked, ensuring only the most recent call is executed and preventing race conditions.",
+    "prompt": "Implement a function `debounceAsync(fn, wait)` that takes an asynchronous function `fn` and a delay time in milliseconds `wait`, and returns a new debounced asynchronous function. When this returned function is called multiple times in rapid succession, it should postpone execution until after `wait` milliseconds have passed since the last call. If multiple calls are made, only the last call’s arguments should be used to execute `fn`. Your debounced function should return a Promise that resolves with the result of the executed function call, and all calls before the final one should be resolved or rejected accordingly based on your implementation design (e.g., canceled calls could reject or never resolve). Design the function to avoid common pitfalls such as race conditions and stale data results.",
+    "guidance": [
+      "Use `setTimeout` to implement the delay between function calls.",
+      "Ensure the debounced function returns a Promise that resolves/rejects correctly for each call.",
+      "Consider how to manage multiple rapid calls and what to do with promises from calls that get canceled.",
+      "Implement proper state management to track the latest call arguments and pending promises."
+    ],
+    "hints": [
+      "Store a timer ID and clear it on each call to reset the debounce delay.",
+      "Keep track of resolve and reject functions of all pending promises to handle canceled calls.",
+      "Use closures to maintain internal state between calls."
+    ],
+    "starterCode": "function debounceAsync(fn, wait) {\n  // Your code here\n}",
+    "expectedOutput": "const wait = ms => new Promise(r => setTimeout(r, ms));\n\nconst asyncSquare = async (num) => {\n  await wait(100); // simulate async delay\n  return num * num;\n};\n\nconst debouncedSquare = debounceAsync(asyncSquare, 200);\n\n// Calling multiple times quickly:\nconst p1 = debouncedSquare(2);\nconst p2 = debouncedSquare(3);\nconst p3 = debouncedSquare(4);\n\np3.then(console.log); // Should output 16\n\n// p1 and p2 promises should reject or never resolve based on your design",
+    "concepts": [
+      "debounce",
+      "asynchronous functions",
+      "promises",
+      "closures",
+      "timers"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-sql-function-to-generate-a-recursive-hierarchical-employee-path",
+    "title": "Build a SQL Function to Generate a Recursive Hierarchical Employee Path",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "queries",
+    "description": "Create a SQL function that, given an employee ID, returns the full management chain from the employee up to the top-level manager as a single concatenated string.",
+    "prompt": "You have an employee table structured as (employee_id, employee_name, manager_id), where manager_id references employee_id for that employee's manager. Write a SQL function build_employee_path(employee_id INT) that recursively constructs and returns a string concatenating the employee's name and all their managers' names in order from the employee up to the top-level manager, separated by ' > '. For example, if Alice reports to Bob who reports to Carol, calling build_employee_path for Alice returns 'Alice > Bob > Carol'.",
+    "guidance": [
+      "Use a recursive common table expression (CTE) to walk up the management hierarchy from the given employee.",
+      "Concatenate employee names at each recursion step to build the complete management chain path.",
+      "Handle the base case where the employee has no manager (top-level manager)."
+    ],
+    "hints": [
+      "You can use a recursive CTE with UNION ALL to traverse parent managers.",
+      "Consider string aggregation functions or recursive concatenation within the CTE to build the path.",
+      "Be mindful of potential cycles in the hierarchy and guard against infinite recursion."
+    ],
+    "starterCode": "CREATE OR REPLACE FUNCTION build_employee_path(emp_id INT) RETURNS TEXT AS $$\nWITH RECURSIVE management_path AS (\n    SELECT employee_id, employee_name, manager_id, employee_name::TEXT AS path\n    FROM employees\n    WHERE employee_id = emp_id\n    UNION ALL\n    SELECT e.employee_id, e.employee_name, e.manager_id, mp.path || ' > ' || e.employee_name\n    FROM employees e\n    JOIN management_path mp ON e.employee_id = mp.manager_id\n)\nSELECT path FROM management_path\nWHERE manager_id IS NULL\nLIMIT 1;\n$$ LANGUAGE SQL;",
+    "expectedOutput": "For employee_id = 1 corresponding to Alice, output could be: 'Alice > Bob > Carol'",
+    "concepts": [
+      "recursive CTE",
+      "string concatenation",
+      "hierarchical queries",
+      "SQL functions"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
