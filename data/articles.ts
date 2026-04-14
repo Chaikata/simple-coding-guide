@@ -56709,5 +56709,509 @@ export const articles = [
         "value": "By following these beginner-friendly tips, you can write SQL queries that run faster and avoid common performance pitfalls. Understanding your data, queries, and indexes is the key to effective optimization."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-patterns-in-javascript-beyond-callbacks-and-promises",
+    "title": "Mastering Asynchronous Patterns in JavaScript: Beyond Callbacks and Promises",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to effectively handle asynchronous operations in JavaScript by mastering async/await and advanced patterns beyond traditional callbacks and promises.",
+    "videoUrl": "https://www.youtube.com/watch?v=9JSKWVoKSZ8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Asynchronous programming is essential in JavaScript, especially when dealing with operations like fetching data, reading files, or handling timers. Traditionally, callbacks were used for async tasks, but they often led to nested, hard-to-read code known as \"callback hell.\" Promises improved this but can sometimes still be confusing for beginners. In this tutorial, we’ll explore modern asynchronous patterns, focusing on async/await and how to use them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Understanding Callbacks — The Old Way\nA callback is a function passed as an argument to another function, which gets called once the asynchronous task completes."
+      },
+      {
+        "type": "code",
+        "value": "function fetchDataCallback(callback) {\n  setTimeout(() => {\n    const data = \"Fetched Data\";\n    callback(data);\n  }, 1000);\n}\n\nfetchDataCallback(function(result) {\n  console.log(\"Callback Result:\", result);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, after one second, the callback receives the data. But chaining multiple such callbacks quickly becomes messy."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Promises - Cleaner Than Callbacks\nA Promise represents a value that may be available now, or in the future, or never. Promises help you chain async operations more cleanly than callbacks."
+      },
+      {
+        "type": "code",
+        "value": "function fetchDataPromise() {\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve(\"Fetched Data with Promise\");\n    }, 1000);\n  });\n}\n\nfetchDataPromise()\n  .then(result => console.log(result))\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Async/Await - The Modern Approach\nAsync/await is syntactic sugar built on Promises, making your asynchronous code look and behave like synchronous code. To use it, declare a function as `async` and use the keyword `await` to wait for a Promise to resolve."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchDataAsync() {\n  const result = await fetchDataPromise();\n  console.log(\"Async/Await Result:\", result);\n}\n\nfetchDataAsync();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Error Handling with Async/Await\nWith promises you use `.catch()`. With async/await, use `try/catch` blocks."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithError() {\n  try {\n    const result = await Promise.reject(\"Something went wrong!\");\n    console.log(result);\n  } catch (error) {\n    console.error(\"Caught Error:\", error);\n  }\n}\nfetchWithError();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Running Multiple Async Tasks in Parallel\nInstead of awaiting each task one by one, use `Promise.all()` to run them concurrently and wait for all to complete."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchMultiple() {\n  const promise1 = fetchDataPromise();\n  const promise2 = fetchDataPromise();\n  const results = await Promise.all([promise1, promise2]);\n  console.log(\"Parallel Results:\", results);\n}\nfetchMultiple();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Avoid callback hell by using Promises and async/await.\n- Async/await makes code easier to read and write.\n- Always handle errors with try/catch when using async/await.\n- Use `Promise.all()` to run multiple async tasks in parallel.\n\nMastering these patterns will help you write more efficient, maintainable JavaScript asynchronous code."
+      }
+    ]
+  },
+  {
+    "slug": "handling-memory-leaks-in-javascript-system-design-prevention-and-debugging-techniques",
+    "title": "Handling Memory Leaks in JavaScript System Design: Prevention and Debugging Techniques",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to prevent and debug memory leaks in JavaScript applications with beginner-friendly explanations and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=IkoGmbNJolo",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in JavaScript occur when the program keeps references to objects that are no longer needed, preventing the garbage collector from freeing up memory. Over time, these leaks can cause your application to become slow or crash. In system design, especially in long-running JavaScript applications, handling memory leaks is crucial for performance and stability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common causes of memory leaks in JavaScript include:\n- Unintended global variables\n- Forgotten timers or intervals\n- Detached DOM nodes still referenced in JavaScript\n- Closures that hold on to large objects unintentionally"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some simple prevention techniques followed by debugging methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Avoid Global Variables\nGlobal variables persist as long as your app runs. Use `let`, `const`, or `var` inside functions or modules to avoid polluting the global scope."
+      },
+      {
+        "type": "code",
+        "value": "// Bad: creates a global variable unintentionally\nmessage = 'Hello';\n\n// Good: scoped variable\nlet message = 'Hello';"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Clear Timers & Intervals\nIf you set intervals or timeouts, always clear them when they are no longer needed to prevent memory from being held indefinitely."
+      },
+      {
+        "type": "code",
+        "value": "let intervalId = setInterval(() => {\n  console.log('Running every second');\n}, 1000);\n\n// Later in the code, clear the interval\nclearInterval(intervalId);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Remove Event Listeners When Not Needed\nEvent listeners can keep a reference to DOM elements, causing memory leaks if not removed properly."
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const button = document.getElementById('myButton');\n  function onClick() {\n    console.log('Clicked');\n  }\n  button.addEventListener('click', onClick);\n\n  // When done, remove the listener\n  return () => button.removeEventListener('click', onClick);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Avoid Detached DOM Nodes\nIf you remove a DOM node but still keep references to it in your JavaScript variables, the node cannot be garbage collected."
+      },
+      {
+        "type": "code",
+        "value": "let oldDiv = document.getElementById('oldDiv');\n// Remove from DOM\noldDiv.parentNode.removeChild(oldDiv);\n\n// If you no longer need it, clear reference\noldDiv = null;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Debugging Memory Leaks\nMost modern browsers have developer tools to help identify memory leaks."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Chrome DevTools:\n1. Open the Memory panel.\n2. Use \"Heap snapshot\" to see what objects are taking memory.\n3. Compare snapshots before and after user interactions to identify objects that shouldn't remain.\n4. Use the \"Allocation instrumentation\" to track memory allocation over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Detecting a Leak with Heap Snapshots\nImagine you notice your app is slowing down after repeated operations. You take heap snapshots and discover many detached DOM nodes still in memory. This can lead you to check your event listeners or references to removed nodes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nTo prevent memory leaks in JavaScript:\n- Always declare variables with `let` or `const`.\n- Clear timers and intervals.\n- Remove event listeners when they are no longer needed.\n- Nullify references to detached DOM nodes.\n- Use browser dev tools to monitor memory usage.\n\nBy following these basics, your JavaScript system can avoid common memory pitfalls and run smoothly."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescript-and-javascript-for-large-scale-app-development",
+    "title": "Comparing TypeScript and JavaScript for Large Scale Application Development",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore the differences between TypeScript and JavaScript, and learn why TypeScript can be a better choice for large scale application development.",
+    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When starting a large-scale application, choosing the right programming language can affect your development speed, code quality, and maintainability. JavaScript is the foundation of web development, but TypeScript has become increasingly popular for bigger projects. In this article, we'll compare TypeScript and JavaScript for large scale app development and show practical examples to help you decide."
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a dynamically typed language, meaning variables can hold any type of value at any time. This flexibility is great for quick scripts but can cause bugs in complex projects because errors might only show up at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a superset of JavaScript. It adds static typing, so that types are checked during development before running the code. This helps catch common bugs early and improves editor support with features like auto-completion and refactoring."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example showing the difference:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(5));  // JavaScript: Runtime error, because 5 has no toUpperCase method."
+      },
+      {
+        "type": "paragraph",
+        "value": "The same function in TypeScript with type annotations:"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string): string {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(5));  // TypeScript compilation error: Argument of type 'number' is not assignable to parameter of type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "As you can see, TypeScript can prevent errors before running the app, which is very helpful for large codebases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Other benefits of using TypeScript in big projects include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Better tooling and autocomplete with popular IDEs like VSCode\n- Clearer and self-documenting code using types\n- Easier refactoring of large codebases\n- Improved collaboration because types act as a contract between developers\n- Support for modern JavaScript features and future proposals"
+      },
+      {
+        "type": "paragraph",
+        "value": "However, keep in mind that TypeScript requires an additional compilation step to convert TypeScript code into JavaScript. This can add some setup time but is usually worth it for bigger projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, JavaScript is great for small projects and quick prototyping, but TypeScript's static typing and rich tooling make it a powerful choice for large scale application development."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to start using TypeScript, here is how you can define an interface and a class, which help organize complex code better than plain JavaScript objects:"
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string;  // Optional property\n}\n\nclass UserService {\n  private users: User[] = [];\n\n  addUser(user: User): void {\n    this.users.push(user);\n  }\n\n  getUser(id: number): User | undefined {\n    return this.users.find(user => user.id === id);\n  }\n}\n\nconst userService = new UserService();\nuserService.addUser({ id: 1, name: \"Alice\" });\nconsole.log(userService.getUser(1));"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code defines a clear User interface and a UserService class that manages users with type safety. In JavaScript, you would have to rely on manual checks, which can become hard to maintain in large teams."
+      },
+      {
+        "type": "paragraph",
+        "value": "We hope this guide helps you understand why TypeScript is becoming a popular choice for large scale application development and encourages you to try it in your next project."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescripts-type-narrowing-vs-type-assertions-for-safer-code",
+    "title": "Comparing TypeScript’s Type Narrowing vs Type Assertions for Safer Code",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn the differences between TypeScript’s type narrowing and type assertions to write safer, more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=l37xh8Cu8G0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing TypeScript, ensuring your code handles different types safely is crucial. Two important concepts that help with this are type narrowing and type assertions. Understanding how and when to use each helps you avoid common errors and write more robust code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing is TypeScript’s way of refining a variable’s type based on runtime checks. This helps the compiler understand exactly what type you’re working with at a particular point in your code. On the other hand, type assertions tell TypeScript to treat a value as a specific type, overriding the compiler’s inferred type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing is safer because TypeScript verifies the logic for you, whereas with type assertions, you take responsibility for ensuring the asserted type is correct, or else you risk runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example using both type narrowing and type assertions:"
+      },
+      {
+        "type": "code",
+        "value": "function printLength(value: string | number) {\n  // Type narrowing using typeof check\n  if (typeof value === 'string') {\n    console.log(`String length: ${value.length}`); // Safe access to length\n  } else {\n    // Here TypeScript knows value is number\n    console.log(`Number value: ${value}`);\n  }\n\n  // Using type assertion (less safe):\n  // Telling TypeScript to treat value as string without check\n  // This can cause runtime errors if value is actually a number\n  const str = value as string;\n  console.log(`Asserted string length: ${str.length}`);\n}\n\nprintLength(\"hello\");\nprintLength(42);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, the type narrowing with the `typeof` check allows TypeScript to guarantee that the `.length` property is accessed only on a string, preventing errors. However, the type assertion `value as string` blindly tells TypeScript to treat `value` as a string, which can cause a runtime error when `value` is actually a number."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, prefer type narrowing using conditional checks whenever possible for safer code. Use type assertions sparingly when you are certain about the type but TypeScript cannot infer it correctly. This approach will help you avoid common type-related errors and make your TypeScript code more reliable."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-data-models-in-python-for-ml-projects",
+    "title": "Building Scalable Data Models in Python for Machine Learning Projects",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and maintainable data models in Python to handle growing datasets effectively in machine learning projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=n-8S90vzE5s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When starting machine learning projects, one of the key challenges is managing your data efficiently as the project grows. Scalable data models help you organize, process, and expand your datasets without major rework. In this tutorial, we'll explore simple, beginner-friendly strategies to build scalable data models in Python that can easily handle large datasets."
+      },
+      {
+        "type": "paragraph",
+        "value": "A data model represents how data is structured and related in your system. For machine learning, this typically means organizing your data features, labels, and metadata. Using Python's object-oriented features and popular libraries like pandas, you can create reusable and scalable models."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's begin by defining a basic data model class that holds features and labels, and includes methods for basic preprocessing steps. This keeps your data organized and your code clean."
+      },
+      {
+        "type": "code",
+        "value": "import pandas as pd\n\nclass DataModel:\n    def __init__(self, features: pd.DataFrame, labels: pd.Series):\n        self.features = features\n        self.labels = labels\n\n    def summarize(self):\n        print(\"Features Summary:\")\n        print(self.features.describe())\n        print(\"Labels Distribution:\")\n        print(self.labels.value_counts())\n\n    def normalize_features(self):\n        self.features = (self.features - self.features.mean()) / self.features.std()\n\n    def add_feature(self, name: str, values):\n        self.features[name] = values\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This class lets you encapsulate your dataset and common methods like summarizing and normalizing features. You can extend this model to include other preprocessing steps as you go. Here's how you might use it:"
+      },
+      {
+        "type": "code",
+        "value": "data = {\n    'height': [5.5, 6.0, 5.8, 5.7],\n    'weight': [150, 180, 165, 170]\n}\nlabels = [0, 1, 0, 1]\n\nfeatures = pd.DataFrame(data)\nlabels = pd.Series(labels)\n\nmodel = DataModel(features, labels)\nmodel.summarize()\nmodel.normalize_features()\nprint(model.features)"
+      },
+      {
+        "type": "paragraph",
+        "value": "To make your data model scalable, consider these tips:\n\n1. **Modular Design:** Break your data processing into small, reusable methods inside your class.\n2. **Data Validation:** Add checks to ensure your data inputs match expected formats or ranges.\n3. **Use Pandas Efficiently:** Pandas is optimized for data operations and scales better than native Python lists.\n4. **Lazy Processing:** Process large datasets in chunks to avoid memory overload.\n5. **Extensibility:** Design your class so adding new features or preprocessing is easy.\n\nLet's improve our DataModel by adding a validation method and chunk processing."
+      },
+      {
+        "type": "code",
+        "value": "class DataModel:\n    def __init__(self, features: pd.DataFrame, labels: pd.Series):\n        self.features = features\n        self.labels = labels\n        self.validate_data()\n\n    def validate_data(self):\n        if not isinstance(self.features, pd.DataFrame):\n            raise TypeError(\"Features should be a pandas DataFrame\")\n        if not isinstance(self.labels, pd.Series):\n            raise TypeError(\"Labels should be a pandas Series\")\n        if len(self.features) != len(self.labels):\n            raise ValueError(\"Features and labels must have the same number of rows\")\n\n    def summarize(self):\n        print(\"Features Summary:\")\n        print(self.features.describe())\n        print(\"Labels Distribution:\")\n        print(self.labels.value_counts())\n\n    def normalize_features(self):\n        self.features = (self.features - self.features.mean()) / self.features.std()\n\n    def add_feature(self, name: str, values):\n        self.features[name] = values\n\n    def process_in_chunks(self, chunk_size):\n        for start in range(0, len(self.features), chunk_size):\n            end = start + chunk_size\n            chunk_features = self.features.iloc[start:end]\n            chunk_labels = self.labels.iloc[start:end]\n            print(f\"Processing chunk from {start} to {end}\")\n            # Example processing: normalize each chunk separately\n            norm_chunk = (chunk_features - chunk_features.mean()) / chunk_features.std()\n            print(norm_chunk)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using chunk processing allows your data model to handle large datasets that don't fit into memory at once. This is crucial for scalability in real-world machine learning tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, building scalable data models in Python involves combining object-oriented design with powerful data tools like pandas. Start simple, then expand your model by adding validation, modular methods, and memory-efficient techniques such as chunk processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding, and remember that a well-structured data model lays a strong foundation for any successful machine learning project!"
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-memory-usage-techniques-to-detect-and-resolve-performance-bottlenecks",
+    "title": "Optimizing Python Memory Usage: Techniques to Detect and Resolve Performance Bottlenecks",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn beginner-friendly techniques to detect and fix Python memory usage issues to boost your program’s performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=iJBCteO6mXM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, especially larger ones, you may notice that your program uses a lot of memory or slows down over time. Understanding and optimizing Python's memory usage can help you fix these performance bottlenecks. This article will guide you through beginner-friendly techniques to detect memory issues and resolve them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Memory Usage Matters\nPython manages memory automatically, but sometimes this can lead to inefficient memory usage if your code holds onto objects longer than needed or creates too many temporary objects. This can cause your program to be slow or even crash due to memory exhaustion."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Detecting Memory Usage Problems\nA simple and effective way to check your program's memory usage is by using the built-in `sys` and `tracemalloc` modules."
+      },
+      {
+        "type": "paragraph",
+        "value": "The `tracemalloc` module helps track memory allocations and find where the most memory is used."
+      },
+      {
+        "type": "code",
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code block whose memory you want to check\n\nx = [i * 2 for i in range(100000)]\n\nsnapshot = tracemalloc.take_snapshot()\ntop_stats = snapshot.statistics('lineno')\n\nprint(\"Top 5 memory consuming lines:\")\nfor stat in top_stats[:5]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running the above lets you see which lines use the most memory, helping you locate potential bottlenecks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another handy tool is the `memory_profiler` package which gives a line-by-line report of memory usage. Install it with `pip install memory_profiler` and use the `@profile` decorator to check functions."
+      },
+      {
+        "type": "code",
+        "value": "@profile\ndef create_list():\n    result = []\n    for i in range(100000):\n        result.append(i*2)\n    return result\n\ncreate_list()"
+      },
+      {
+        "type": "paragraph",
+        "value": "Run your script with `python -m memory_profiler your_script.py` and analyze the results to spot memory-heavy parts."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Resolving Common Memory Issues\nOnce you identify heavy memory usage, you can try the following strategies:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Release Unused Objects:** Remove references to large objects that are no longer needed using `del` or by overwriting variables. This allows Python’s garbage collector to free memory."
+      },
+      {
+        "type": "code",
+        "value": "large_list = [0] * 1000000\n# Do something with large_list\n\ndel large_list  # frees memory if no other refs"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Use Generators Instead of Lists:** Generators produce items one at a time and use less memory, unlike lists which store everything in memory."
+      },
+      {
+        "type": "code",
+        "value": "def squares(n):\n    for i in range(n):\n        yield i * i\n\nfor sq in squares(100000):\n    pass  # memory efficient iteration"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Optimize Data Structures:** Use efficient data types, such as `array.array` or `collections.deque` when appropriate, to reduce memory overhead compared to lists."
+      },
+      {
+        "type": "code",
+        "value": "from array import array\n\nnumbers = array('i', range(1000))  # uses less memory than a list"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Avoid Circular References:** Circular references can prevent Python’s garbage collector from releasing memory. Use weak references via the `weakref` module if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. **Profile and Refactor:** Keep profiling your program as you make changes to ensure your optimizations are effective."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nOptimizing memory in Python starts with detecting heavy memory usage using tools like `tracemalloc` and `memory_profiler`. Then, simplify your code to release unused objects, use generators, choose optimized data structures, and avoid circular references. These beginner-friendly techniques will help you improve your program’s performance and memory efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try these techniques in your own projects to build faster and more memory-efficient Python applications!"
+      }
+    ]
+  },
+  {
+    "slug": "scalable-ecommerce-inventory-management-sql",
+    "title": "Building a Scalable E-commerce Inventory Management System with SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create a scalable and efficient e-commerce inventory management system using SQL, tailored for beginners to handle product stock, orders, and updates effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=9GVqKuTVANE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Managing inventory efficiently is crucial for any e-commerce business. A well-designed SQL-based inventory management system can help handle product stock, process orders, and scale as your business grows. This tutorial will walk you through building a scalable system using simple SQL commands, focusing on structure, relationships, and basic operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Design the Database Schema\nFirst, we'll design the tables needed for our inventory system. The key entities include Products, Categories, and Inventory. Additionally, we'll create an Orders table to track product sales."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Categories (\n  category_id INT PRIMARY KEY AUTO_INCREMENT,\n  category_name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Products (\n  product_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_name VARCHAR(100) NOT NULL,\n  category_id INT,\n  price DECIMAL(10, 2) NOT NULL,\n  FOREIGN KEY (category_id) REFERENCES Categories(category_id)\n);\n\nCREATE TABLE Inventory (\n  product_id INT PRIMARY KEY,\n  quantity INT NOT NULL DEFAULT 0,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);\n\nCREATE TABLE Orders (\n  order_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_id INT,\n  quantity INT NOT NULL,\n  order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Insert Sample Data\nLet's add some sample categories, products, and inventory quantities to get started."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Categories (category_name) VALUES ('Electronics'), ('Books'), ('Clothing');\n\nINSERT INTO Products (product_name, category_id, price) VALUES\n('Smartphone', 1, 699.99),\n('Laptop', 1, 1299.99),\n('Novel', 2, 15.99),\n('T-Shirt', 3, 9.99);\n\nINSERT INTO Inventory (product_id, quantity) VALUES\n(1, 100),\n(2, 50),\n(3, 200),\n(4, 150);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Handling Orders and Updating Inventory\nWhen an order is placed, you need to insert a record into the Orders table and reduce the product's available quantity in Inventory."
+      },
+      {
+        "type": "code",
+        "value": "-- Suppose a customer orders 3 Smartphones (product_id=1)\n\nSTART TRANSACTION;\n\nINSERT INTO Orders (product_id, quantity) VALUES (1, 3);\n\nUPDATE Inventory\nSET quantity = quantity - 3\nWHERE product_id = 1 AND quantity >= 3;\n\n-- Check if the update affected a row, otherwise rollback\n-- This prevents selling more than available stock\n\nCOMMIT;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using transactions ensures that the order and inventory update happen atomically. If there isn't enough stock, the inventory update won't proceed, preventing negative stock values."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Querying Inventory Status\nTo check current stock levels and product details, use a simple join query."
+      },
+      {
+        "type": "code",
+        "value": "SELECT p.product_name, c.category_name, i.quantity, p.price\nFROM Products p\nJOIN Inventory i ON p.product_id = i.product_id\nJOIN Categories c ON p.category_id = c.category_id\nORDER BY p.product_name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Scaling Tips\nAs your business grows, consider the following:\n- Indexing key columns (e.g., product_id) for faster lookups.\n- Archiving old orders in a separate table to keep the Orders table performant.\n- Using stored procedures or triggers for complex inventory updates.\n- Separating read and write databases to improve scalability.\n\nThis basic example lays the foundation, making it easier for you to extend functionality as needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following this tutorial, you've learned how to build a straightforward and scalable e-commerce inventory management system using SQL. You can now track products, manage stock levels, process orders safely, and prepare your database for growth."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-null-behavior-in-sql-and-how-it-impacts-your-queries",
+    "title": "Understanding NULL Behavior in SQL and How It Impacts Your Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how NULL values work in SQL, why they can cause unexpected results, and how to handle them correctly in your queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=RKUYYrmv6gw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In SQL, NULL represents a missing or unknown value. It’s not the same as an empty string or zero; NULL means the data is simply not known or does not exist. This concept can sometimes confuse beginners and cause unexpected outcomes in queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the main things to remember about NULL is that it behaves differently in comparisons. For example, NULL is not equal to NULL — instead, any comparison with NULL results in UNKNOWN. This means common operators like =, <>, >, and < will not work as you might expect when dealing with NULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example where NULL impacts query results:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE last_login_date = NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above query will not return any rows even if some users have a NULL `last_login_date`. You should use the `IS NULL` syntax to check for NULL values instead."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE last_login_date IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, to find rows where a column is not NULL, use `IS NOT NULL`:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM users WHERE last_login_date IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common pitfall involves functions and aggregate calculations. For instance, the SUM() function ignores NULL values, which can lead to unexpected results if you aren’t careful."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to replace NULL values with something more meaningful for calculations or display, you can use the `COALESCE()` function. It returns the first non-NULL value from its arguments."
+      },
+      {
+        "type": "code",
+        "value": "SELECT user_id, COALESCE(last_login_date, 'No login') AS display_login FROM users;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding how NULL behaves in SQL is key to writing correct and effective queries. Always use `IS NULL` or `IS NOT NULL` for checking NULLs, and use functions like `COALESCE()` to handle NULL values in expressions."
+      }
+    ]
   }
 ];

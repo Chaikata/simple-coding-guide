@@ -1,501 +1,505 @@
 [
   {
-    "slug": "mastering-javascript-closures-for-cleaner-code",
-    "title": "Mastering JavaScript Closures for Cleaner Code: A Practical Tutorial",
+    "slug": "mastering-asynchronous-patterns-in-javascript-beyond-callbacks-and-promises",
+    "title": "Mastering Asynchronous Patterns in JavaScript: Beyond Callbacks and Promises",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how JavaScript closures work and how to use them to write cleaner, more maintainable code. This step-by-step tutorial is perfect for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
+    "description": "Learn how to effectively handle asynchronous operations in JavaScript by mastering async/await and advanced patterns beyond traditional callbacks and promises.",
+    "videoUrl": "https://www.youtube.com/watch?v=9JSKWVoKSZ8",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript closures are a powerful concept that often confuse beginners. But once you understand them, closures can help you write cleaner and more efficient code. In this tutorial, we'll break down what closures are, how they work, and provide practical examples you can use right away."
+        "value": "Asynchronous programming is essential in JavaScript, especially when dealing with operations like fetching data, reading files, or handling timers. Traditionally, callbacks were used for async tasks, but they often led to nested, hard-to-read code known as \"callback hell.\" Promises improved this but can sometimes still be confusing for beginners. In this tutorial, we’ll explore modern asynchronous patterns, focusing on async/await and how to use them effectively."
       },
       {
         "type": "paragraph",
-        "value": "A closure is created when a function is defined inside another function, and it 'remembers' the variables from its outer function even after the outer function has finished running. This allows you to access and manipulate these variables later."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example:"
+        "value": "### 1. Understanding Callbacks — The Old Way\nA callback is a function passed as an argument to another function, which gets called once the asynchronous task completes."
       },
       {
         "type": "code",
-        "value": "function outer() {\n  let count = 0;\n  function inner() {\n    count++;\n    console.log(count);\n  }\n  return inner;\n}\n\nconst counter = outer();\ncounter(); // Output: 1\ncounter(); // Output: 2\ncounter(); // Output: 3"
+        "value": "function fetchDataCallback(callback) {\n  setTimeout(() => {\n    const data = \"Fetched Data\";\n    callback(data);\n  }, 1000);\n}\n\nfetchDataCallback(function(result) {\n  console.log(\"Callback Result:\", result);\n});"
       },
       {
         "type": "paragraph",
-        "value": "Here's what happens in the code above:\n- The `outer` function has a variable `count` initialized to 0.\n- Inside `outer`, the `inner` function increases `count` by 1 and logs its value.\n- `outer` returns the `inner` function.\n- When we call `outer()`, it returns `inner`, which we store in `counter`.\n- Each call to `counter()` increments and logs the `count` variable.\n\nEven though `outer()` has finished execution, the `inner` function still has access to the `count` variable. This is a closure in action!"
+        "value": "Here, after one second, the callback receives the data. But chaining multiple such callbacks quickly becomes messy."
       },
       {
         "type": "paragraph",
-        "value": "Closures are especially useful for data privacy and creating functions with persistent state. For example, you can use closures to create a simple private counter:"
+        "value": "### 2. Promises - Cleaner Than Callbacks\nA Promise represents a value that may be available now, or in the future, or never. Promises help you chain async operations more cleanly than callbacks."
       },
       {
         "type": "code",
-        "value": "function createCounter() {\n  let count = 0;\n  return {\n    increment() {\n      count++;\n      return count;\n    },\n    decrement() {\n      count--;\n      return count;\n    },\n    getCount() {\n      return count;\n    }\n  };\n}\n\nconst myCounter = createCounter();\nconsole.log(myCounter.increment()); // 1\nconsole.log(myCounter.increment()); // 2\nconsole.log(myCounter.decrement()); // 1\nconsole.log(myCounter.getCount());  // 1"
+        "value": "function fetchDataPromise() {\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve(\"Fetched Data with Promise\");\n    }, 1000);\n  });\n}\n\nfetchDataPromise()\n  .then(result => console.log(result))\n  .catch(error => console.error(error));"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `count` is accessible only through the returned object's methods. It is protected from outside changes, demonstrating how closures help encapsulate data."
+        "value": "### 3. Async/Await - The Modern Approach\nAsync/await is syntactic sugar built on Promises, making your asynchronous code look and behave like synchronous code. To use it, declare a function as `async` and use the keyword `await` to wait for a Promise to resolve."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchDataAsync() {\n  const result = await fetchDataPromise();\n  console.log(\"Async/Await Result:\", result);\n}\n\nfetchDataAsync();"
       },
       {
         "type": "paragraph",
-        "value": "To sum up, closures allow functions to remember their lexical environment, which lets you write cleaner, more modular, and maintainable code. Practice creating closures with different examples, and soon you'll find them indispensable in your JavaScript toolkit."
+        "value": "### 4. Error Handling with Async/Await\nWith promises you use `.catch()`. With async/await, use `try/catch` blocks."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithError() {\n  try {\n    const result = await Promise.reject(\"Something went wrong!\");\n    console.log(result);\n  } catch (error) {\n    console.error(\"Caught Error:\", error);\n  }\n}\nfetchWithError();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Running Multiple Async Tasks in Parallel\nInstead of awaiting each task one by one, use `Promise.all()` to run them concurrently and wait for all to complete."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchMultiple() {\n  const promise1 = fetchDataPromise();\n  const promise2 = fetchDataPromise();\n  const results = await Promise.all([promise1, promise2]);\n  console.log(\"Parallel Results:\", results);\n}\nfetchMultiple();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Avoid callback hell by using Promises and async/await.\n- Async/await makes code easier to read and write.\n- Always handle errors with try/catch when using async/await.\n- Use `Promise.all()` to run multiple async tasks in parallel.\n\nMastering these patterns will help you write more efficient, maintainable JavaScript asynchronous code."
       }
     ]
   },
   {
-    "slug": "understanding-javascript-type-coercion-errors-common-pitfalls-and-how-to-avoid-them",
-    "title": "Understanding JavaScript Type Coercion Errors: Common Pitfalls and How to Avoid Them",
+    "slug": "handling-memory-leaks-in-javascript-system-design-prevention-and-debugging-techniques",
+    "title": "Handling Memory Leaks in JavaScript System Design: Prevention and Debugging Techniques",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how JavaScript type coercion can lead to unexpected errors, common pitfalls beginners face, and practical tips to avoid these confusing issues.",
-    "videoUrl": "https://www.youtube.com/watch?v=9EuhhHCLjDk",
+    "description": "Learn how to prevent and debug memory leaks in JavaScript applications with beginner-friendly explanations and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=IkoGmbNJolo",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible programming language, but this flexibility sometimes causes confusion. One common source of confusion is type coercion. Type coercion happens when JavaScript automatically converts values between different types during operations, which can lead to unexpected results or errors. Understanding how type coercion works helps beginners write better, less error-prone code."
+        "value": "Memory leaks in JavaScript occur when the program keeps references to objects that are no longer needed, preventing the garbage collector from freeing up memory. Over time, these leaks can cause your application to become slow or crash. In system design, especially in long-running JavaScript applications, handling memory leaks is crucial for performance and stability."
       },
       {
         "type": "paragraph",
-        "value": "### What is Type Coercion?\nType coercion is JavaScript's way of converting values from one type to another. For example, if you add a number and a string, JavaScript will convert the number to a string and concatenate them instead of performing arithmetic."
+        "value": "### Common causes of memory leaks in JavaScript include:\n- Unintended global variables\n- Forgotten timers or intervals\n- Detached DOM nodes still referenced in JavaScript\n- Closures that hold on to large objects unintentionally"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some simple prevention techniques followed by debugging methods."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Avoid Global Variables\nGlobal variables persist as long as your app runs. Use `let`, `const`, or `var` inside functions or modules to avoid polluting the global scope."
       },
       {
         "type": "code",
-        "value": "console.log(5 + '5'); // Output: '55' (number 5 is coerced to string '5')"
+        "value": "// Bad: creates a global variable unintentionally\nmessage = 'Hello';\n\n// Good: scoped variable\nlet message = 'Hello';"
       },
       {
         "type": "paragraph",
-        "value": "### Common Pitfall #1: Unexpected String Concatenation\nBeginners might expect `5 + '5'` to equal 10, but JavaScript treats this as string concatenation because one operand is a string."
+        "value": "### 2. Clear Timers & Intervals\nIf you set intervals or timeouts, always clear them when they are no longer needed to prevent memory from being held indefinitely."
       },
       {
         "type": "code",
-        "value": "const result = 5 + '5';\nconsole.log(result); // '55' (string)"
+        "value": "let intervalId = setInterval(() => {\n  console.log('Running every second');\n}, 1000);\n\n// Later in the code, clear the interval\nclearInterval(intervalId);"
       },
       {
         "type": "paragraph",
-        "value": "### Common Pitfall #2: Truthy and Falsy Values\nJavaScript coerces values to boolean in conditions. Some values you might not expect to be falsy (false in boolean context) are actually falsy, like `0`, `''` (empty string), `null`, `undefined`, and `NaN`."
+        "value": "### 3. Remove Event Listeners When Not Needed\nEvent listeners can keep a reference to DOM elements, causing memory leaks if not removed properly."
       },
       {
         "type": "code",
-        "value": "if (0) {\n  console.log('Won\\'t run');\n} else {\n  console.log('0 is falsy');\n}"
+        "value": "function setup() {\n  const button = document.getElementById('myButton');\n  function onClick() {\n    console.log('Clicked');\n  }\n  button.addEventListener('click', onClick);\n\n  // When done, remove the listener\n  return () => button.removeEventListener('click', onClick);\n}"
       },
       {
         "type": "paragraph",
-        "value": "This can lead to bugs if you check a variable without knowing if it can be 0 or an empty string."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Pitfall #3: Using == Instead of ===\nIn JavaScript, `==` compares two values with type coercion, while `===` compares without coercion (strict equality). Using `==` can cause surprising behavior."
+        "value": "### 4. Avoid Detached DOM Nodes\nIf you remove a DOM node but still keep references to it in your JavaScript variables, the node cannot be garbage collected."
       },
       {
         "type": "code",
-        "value": "console.log(0 == false);  // true (because 0 is coerced to false)\nconsole.log(0 === false); // false (different types, no coercion)"
+        "value": "let oldDiv = document.getElementById('oldDiv');\n// Remove from DOM\noldDiv.parentNode.removeChild(oldDiv);\n\n// If you no longer need it, clear reference\noldDiv = null;"
       },
       {
         "type": "paragraph",
-        "value": "### How to Avoid Type Coercion Errors\n1. **Use strict equality (===)** to avoid unintentional type conversion.\n2. **Explicitly convert types** when necessary, for example, using `Number()`, `String()`, or `Boolean()`.\n3. **Check variable types** with `typeof` if unsure.\n4. **Be careful with user input** since it is often a string.\n5. **Write clear, intention-revealing code** rather than relying on JavaScript’s coercion rules."
-      },
-      {
-        "type": "code",
-        "value": "// Explicit conversion example\nconst input = '5';\nconst number = Number(input);\nconsole.log(number + 5); // 10 (correct addition)"
+        "value": "### Debugging Memory Leaks\nMost modern browsers have developer tools to help identify memory leaks."
       },
       {
         "type": "paragraph",
-        "value": "Understanding and respecting JavaScript's type coercion rules will make your code more predictable and easier to debug. Always be mindful of the data types you work with, especially when mixing strings, numbers, and booleans."
+        "value": "In Chrome DevTools:\n1. Open the Memory panel.\n2. Use \"Heap snapshot\" to see what objects are taking memory.\n3. Compare snapshots before and after user interactions to identify objects that shouldn't remain.\n4. Use the \"Allocation instrumentation\" to track memory allocation over time."
       },
       {
         "type": "paragraph",
-        "value": "With practice, you’ll get comfortable handling type coercion and avoid these common pitfalls."
+        "value": "### Example: Detecting a Leak with Heap Snapshots\nImagine you notice your app is slowing down after repeated operations. You take heap snapshots and discover many detached DOM nodes still in memory. This can lead you to check your event listeners or references to removed nodes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nTo prevent memory leaks in JavaScript:\n- Always declare variables with `let` or `const`.\n- Clear timers and intervals.\n- Remove event listeners when they are no longer needed.\n- Nullify references to detached DOM nodes.\n- Use browser dev tools to monitor memory usage.\n\nBy following these basics, your JavaScript system can avoid common memory pitfalls and run smoothly."
       }
     ]
   },
   {
-    "slug": "mastering-lazy-loading-in-typescript-for-enhanced-web-performance",
-    "title": "Mastering Lazy Loading in TypeScript for Enhanced Web Performance",
+    "slug": "comparing-typescript-and-javascript-for-large-scale-app-development",
+    "title": "Comparing TypeScript and JavaScript for Large Scale Application Development",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to use lazy loading in TypeScript to improve your web app's speed and user experience with beginner-friendly examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=CaShN6mCJB0",
+    "description": "Explore the differences between TypeScript and JavaScript, and learn why TypeScript can be a better choice for large scale application development.",
+    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
     "content": [
       {
         "type": "paragraph",
-        "value": "Lazy loading is a powerful technique that helps improve web application performance by loading resources only when they are needed. Instead of loading all components or modules upfront, lazy loading defers this until the user requires them, reducing initial load time."
+        "value": "When starting a large-scale application, choosing the right programming language can affect your development speed, code quality, and maintainability. JavaScript is the foundation of web development, but TypeScript has become increasingly popular for bigger projects. In this article, we'll compare TypeScript and JavaScript for large scale app development and show practical examples to help you decide."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we will explore how to implement lazy loading in a TypeScript project. We will keep things simple so you can quickly grasp the concept, even if you're new to TypeScript or web performance optimization."
+        "value": "JavaScript is a dynamically typed language, meaning variables can hold any type of value at any time. This flexibility is great for quick scripts but can cause bugs in complex projects because errors might only show up at runtime."
       },
       {
         "type": "paragraph",
-        "value": "### What is Lazy Loading?"
+        "value": "TypeScript is a superset of JavaScript. It adds static typing, so that types are checked during development before running the code. This helps catch common bugs early and improves editor support with features like auto-completion and refactoring."
       },
       {
         "type": "paragraph",
-        "value": "Lazy loading means delaying the loading of JavaScript modules or other resources until they are actually needed by the user. For example, you may want to load a heavy component only when the user navigates to a specific page or interacts with a button."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Benefits of Lazy Loading"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Faster initial page load\n- Reduced bandwidth usage\n- Improved user experience\n- Better performance on slower networks or devices"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Lazy Loading With Dynamic Imports in TypeScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript supports dynamic imports, which allows you to load modules asynchronously at runtime using the `import()` function. This is the cornerstone of lazy loading in modern TypeScript apps."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's say you have a module called `HeavyComponent.ts` that exports a function or component you want to load only when needed."
+        "value": "Here's a simple example showing the difference:"
       },
       {
         "type": "code",
-        "value": "export function HeavyComponent() {\n  console.log('Heavy Component Loaded');\n  return \"I'm a heavy component!\";\n}"
+        "value": "function greet(name) {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(5));  // JavaScript: Runtime error, because 5 has no toUpperCase method."
       },
       {
         "type": "paragraph",
-        "value": "Instead of importing this at the top of your file statically, you use a dynamic import where you need it, like inside a function triggered by a user action."
+        "value": "The same function in TypeScript with type annotations:"
       },
       {
         "type": "code",
-        "value": "async function loadHeavyComponent() {\n  const module = await import('./HeavyComponent');\n  const component = module.HeavyComponent();\n  console.log(component);\n}\n\n// Simulating user action\nloadHeavyComponent();"
+        "value": "function greet(name: string): string {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(5));  // TypeScript compilation error: Argument of type 'number' is not assignable to parameter of type 'string'."
       },
       {
         "type": "paragraph",
-        "value": "Here, `import('./HeavyComponent')` returns a promise that resolves with the module. This way, the `HeavyComponent` code is only fetched and executed when `loadHeavyComponent` is called."
+        "value": "As you can see, TypeScript can prevent errors before running the app, which is very helpful for large codebases."
       },
       {
         "type": "paragraph",
-        "value": "### Using Lazy Loading in React with TypeScript"
+        "value": "Other benefits of using TypeScript in big projects include:"
       },
       {
         "type": "paragraph",
-        "value": "If you are using React with TypeScript, lazy loading components is even easier using React's built-in `React.lazy` and `Suspense`."
+        "value": "- Better tooling and autocomplete with popular IDEs like VSCode\n- Clearer and self-documenting code using types\n- Easier refactoring of large codebases\n- Improved collaboration because types act as a contract between developers\n- Support for modern JavaScript features and future proposals"
+      },
+      {
+        "type": "paragraph",
+        "value": "However, keep in mind that TypeScript requires an additional compilation step to convert TypeScript code into JavaScript. This can add some setup time but is usually worth it for bigger projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, JavaScript is great for small projects and quick prototyping, but TypeScript's static typing and rich tooling make it a powerful choice for large scale application development."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to start using TypeScript, here is how you can define an interface and a class, which help organize complex code better than plain JavaScript objects:"
       },
       {
         "type": "code",
-        "value": "import React, { Suspense } from 'react';\n\nconst HeavyComponent = React.lazy(() => import('./HeavyComponent'));\n\nfunction App() {\n  return (\n    <div>\n      <h1>My App</h1>\n      <Suspense fallback={<div>Loading...</div>}>\n        <HeavyComponent />\n      </Suspense>\n    </div>\n  );\n}\n\nexport default App;"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email?: string;  // Optional property\n}\n\nclass UserService {\n  private users: User[] = [];\n\n  addUser(user: User): void {\n    this.users.push(user);\n  }\n\n  getUser(id: number): User | undefined {\n    return this.users.find(user => user.id === id);\n  }\n}\n\nconst userService = new UserService();\nuserService.addUser({ id: 1, name: \"Alice\" });\nconsole.log(userService.getUser(1));"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `HeavyComponent` is only loaded when the `App` component renders it. The `Suspense` component shows a fallback UI until the lazy component finishes loading."
+        "value": "This code defines a clear User interface and a UserService class that manages users with type safety. In JavaScript, you would have to rely on manual checks, which can become hard to maintain in large teams."
       },
       {
         "type": "paragraph",
-        "value": "### Key Points to Remember"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Dynamic imports (`import()`) return a promise that resolves to the module.\n- Use lazy loading to split your code and load large components or libraries only when necessary.\n- For React, use `React.lazy` combined with `Suspense` for easy lazy loading.\n- Lazy loading improves web performance and user experience by reducing initial bundle size."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "Mastering lazy loading in TypeScript is a great way to make your web applications faster and more efficient. Using dynamic imports and React's lazy features where appropriate will help you deliver a smoother user experience, especially for complex apps. Start experimenting with lazy loading today to see immediate benefits!"
+        "value": "We hope this guide helps you understand why TypeScript is becoming a popular choice for large scale application development and encourages you to try it in your next project."
       }
     ]
   },
   {
-    "slug": "mastering-typescripts-strict-null-checks-for-safer-code",
-    "title": "Mastering TypeScript’s Strict Null Checks for Safer Code",
+    "slug": "comparing-typescripts-type-narrowing-vs-type-assertions-for-safer-code",
+    "title": "Comparing TypeScript’s Type Narrowing vs Type Assertions for Safer Code",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript's strict null checks to avoid common pitfalls with null and undefined, making your code safer and easier to maintain.",
-    "videoUrl": "https://www.youtube.com/watch?v=tKGiAxLXDxk",
+    "description": "Learn the differences between TypeScript’s type narrowing and type assertions to write safer, more reliable code.",
+    "videoUrl": "https://www.youtube.com/watch?v=l37xh8Cu8G0",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful superset of JavaScript that helps developers catch errors early. One common source of bugs in JavaScript is dealing with null and undefined values. TypeScript’s strict null checking feature can help you avoid these issues by forcing you to handle these cases explicitly."
+        "value": "When writing TypeScript, ensuring your code handles different types safely is crucial. Two important concepts that help with this are type narrowing and type assertions. Understanding how and when to use each helps you avoid common errors and write more robust code."
       },
       {
         "type": "paragraph",
-        "value": "By default, TypeScript allows variables to be null or undefined. This can lead to runtime errors if you try to access properties or call functions on those nullish values without checking. Enabling strict null checks makes the type system enforce null safety, helping catch potential problems during development."
+        "value": "Type narrowing is TypeScript’s way of refining a variable’s type based on runtime checks. This helps the compiler understand exactly what type you’re working with at a particular point in your code. On the other hand, type assertions tell TypeScript to treat a value as a specific type, overriding the compiler’s inferred type."
       },
       {
         "type": "paragraph",
-        "value": "To enable strict null checks, open your tsconfig.json file and add or set the following option under compilerOptions:"
+        "value": "Type narrowing is safer because TypeScript verifies the logic for you, whereas with type assertions, you take responsibility for ensuring the asserted type is correct, or else you risk runtime errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example using both type narrowing and type assertions:"
       },
       {
         "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
+        "value": "function printLength(value: string | number) {\n  // Type narrowing using typeof check\n  if (typeof value === 'string') {\n    console.log(`String length: ${value.length}`); // Safe access to length\n  } else {\n    // Here TypeScript knows value is number\n    console.log(`Number value: ${value}`);\n  }\n\n  // Using type assertion (less safe):\n  // Telling TypeScript to treat value as string without check\n  // This can cause runtime errors if value is actually a number\n  const str = value as string;\n  console.log(`Asserted string length: ${str.length}`);\n}\n\nprintLength(\"hello\");\nprintLength(42);"
       },
       {
         "type": "paragraph",
-        "value": "With strictNullChecks enabled, variables declared with a type will not accept null or undefined unless you explicitly allow them. Let's look at an example:"
-      },
-      {
-        "type": "code",
-        "value": "function greet(name: string) {\n  console.log(\"Hello, \" + name.toUpperCase());\n}\n\ngreet(null); // Error: Argument of type 'null' is not assignable to parameter of type 'string'."
+        "value": "In the example above, the type narrowing with the `typeof` check allows TypeScript to guarantee that the `.length` property is accessed only on a string, preventing errors. However, the type assertion `value as string` blindly tells TypeScript to treat `value` as a string, which can cause a runtime error when `value` is actually a number."
       },
       {
         "type": "paragraph",
-        "value": "In this example, passing null causes a compile-time error because 'name' must be a string. If you want to allow null or undefined, you need to include them in the type explicitly using a union type:"
-      },
-      {
-        "type": "code",
-        "value": "function greet(name: string | null) {\n  if (name) {\n    console.log(\"Hello, \" + name.toUpperCase());\n  } else {\n    console.log(\"Hello, guest!\");\n  }\n}\n\ngreet(null); // Output: Hello, guest!"
-      },
-      {
-        "type": "paragraph",
-        "value": "Notice how we check if 'name' is truthy before using it. This is a simple and effective way to handle nullable values safely."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also use the optional chaining operator (?.) and nullish coalescing operator (??) to make handling null and undefined values cleaner:"
-      },
-      {
-        "type": "code",
-        "value": "function getFirstChar(str: string | null | undefined) {\n  // Return the first character or a default value\n  return str?.charAt(0) ?? '-';\n}\n\nconsole.log(getFirstChar(\"TypeScript\")); // Output: T\nconsole.log(getFirstChar(null));        // Output: -\nconsole.log(getFirstChar(undefined));   // Output: -"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, strict null checks help you write safer TypeScript code by forcing you to consider and handle null and undefined explicitly. Always enable it in your projects to catch potential bugs early and improve code quality."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start today by turning on strict null checks in your tsconfig and gradually update your code to handle nullable types correctly. Happy coding!"
+        "value": "To summarize, prefer type narrowing using conditional checks whenever possible for safer code. Use type assertions sparingly when you are certain about the type but TypeScript cannot infer it correctly. This approach will help you avoid common type-related errors and make your TypeScript code more reliable."
       }
     ]
   },
   {
-    "slug": "designing-scalable-microservices-with-python-asyncio",
-    "title": "Designing Scalable Microservices with Python Asyncio: A Step-by-Step Tutorial",
+    "slug": "building-scalable-data-models-in-python-for-ml-projects",
+    "title": "Building Scalable Data Models in Python for Machine Learning Projects",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to build scalable microservices in Python using asyncio with this beginner-friendly step-by-step tutorial. Handle concurrent tasks efficiently to improve your service's performance.",
-    "videoUrl": "https://www.youtube.com/watch?v=zlesrye8jpE",
+    "description": "Learn how to build scalable and maintainable data models in Python to handle growing datasets effectively in machine learning projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=n-8S90vzE5s",
     "content": [
       {
         "type": "paragraph",
-        "value": "Microservices allow you to build applications as a collection of small, independent services. One challenge in building microservices is handling many tasks concurrently without blocking the entire system. Python's asyncio library offers a powerful way to write asynchronous code, making your services scalable and efficient. In this tutorial, we'll walk through building a simple asynchronous microservice with Python's asyncio."
+        "value": "When starting machine learning projects, one of the key challenges is managing your data efficiently as the project grows. Scalable data models help you organize, process, and expand your datasets without major rework. In this tutorial, we'll explore simple, beginner-friendly strategies to build scalable data models in Python that can easily handle large datasets."
       },
       {
         "type": "paragraph",
-        "value": "## What is asyncio?\nAsyncio is Python’s built-in library to write concurrent code using the async/await syntax. It allows your program to manage multiple tasks seemingly at the same time without creating many threads or processes."
+        "value": "A data model represents how data is structured and related in your system. For machine learning, this typically means organizing your data features, labels, and metadata. Using Python's object-oriented features and popular libraries like pandas, you can create reusable and scalable models."
       },
       {
         "type": "paragraph",
-        "value": "## Setting up a simple asynchronous microservice\nLet's build a microservice that simulates fetching user data with network delays asynchronously. This will help us understand how asyncio can handle multiple requests concurrently."
+        "value": "Let's begin by defining a basic data model class that holds features and labels, and includes methods for basic preprocessing steps. This keeps your data organized and your code clean."
       },
       {
         "type": "code",
-        "value": "import asyncio\nimport random\n\nasync def fetch_user_data(user_id):\n    # Simulate I/O-bound operation with asyncio.sleep\n    delay = random.uniform(0.5, 2.0)\n    print(f\"Fetching data for user {user_id} (will take {delay:.2f} seconds)\")\n    await asyncio.sleep(delay)  # Simulate network delay\n    data = {\n        \"user_id\": user_id,\n        \"name\": f\"User{user_id}\",\n        \"age\": random.randint(20, 40)\n    }\n    print(f\"Finished fetching data for user {user_id}\")\n    return data\n\nasync def main():\n    user_ids = [1, 2, 3, 4, 5]\n    tasks = [fetch_user_data(uid) for uid in user_ids]\n    results = await asyncio.gather(*tasks)\n    print(\"All user data fetched:\")\n    for user_data in results:\n        print(user_data)\n\nif __name__ == \"__main__\":\n    asyncio.run(main())"
+        "value": "import pandas as pd\n\nclass DataModel:\n    def __init__(self, features: pd.DataFrame, labels: pd.Series):\n        self.features = features\n        self.labels = labels\n\n    def summarize(self):\n        print(\"Features Summary:\")\n        print(self.features.describe())\n        print(\"Labels Distribution:\")\n        print(self.labels.value_counts())\n\n    def normalize_features(self):\n        self.features = (self.features - self.features.mean()) / self.features.std()\n\n    def add_feature(self, name: str, values):\n        self.features[name] = values\n"
       },
       {
         "type": "paragraph",
-        "value": "In the code above, `fetch_user_data` simulates a network operation by sleeping asynchronously for a random time, mimicking a delay you might get from an API call or database query. The main function schedules multiple `fetch_user_data` calls concurrently and waits for them all to complete."
-      },
-      {
-        "type": "paragraph",
-        "value": "## How does this help scalability?\nWhen you run this, you'll notice that the total time taken is roughly equal to the longest individual delay, rather than the sum of all delays. This is because asyncio runs all these tasks concurrently instead of waiting for each one sequentially. This concurrency means your microservice can handle many requests simultaneously, increasing throughput."
-      },
-      {
-        "type": "paragraph",
-        "value": "## Adding an HTTP server with aiohttp\nIn a real microservice, you will expose your functionality over HTTP. The `aiohttp` library lets you build asynchronous HTTP servers easily."
+        "value": "This class lets you encapsulate your dataset and common methods like summarizing and normalizing features. You can extend this model to include other preprocessing steps as you go. Here's how you might use it:"
       },
       {
         "type": "code",
-        "value": "from aiohttp import web\nimport asyncio\nimport random\n\nasync def fetch_user_data(user_id):\n    delay = random.uniform(0.5, 2.0)\n    await asyncio.sleep(delay)\n    return {\n        \"user_id\": user_id,\n        \"name\": f\"User{user_id}\",\n        \"age\": random.randint(20, 40)\n    }\n\nasync def handle_request(request):\n    user_id = int(request.match_info.get('user_id', 1))\n    user_data = await fetch_user_data(user_id)\n    return web.json_response(user_data)\n\napp = web.Application()\napp.router.add_get('/user/{user_id}', handle_request)\n\nif __name__ == '__main__':\n    web.run_app(app, port=8080)"
+        "value": "data = {\n    'height': [5.5, 6.0, 5.8, 5.7],\n    'weight': [150, 180, 165, 170]\n}\nlabels = [0, 1, 0, 1]\n\nfeatures = pd.DataFrame(data)\nlabels = pd.Series(labels)\n\nmodel = DataModel(features, labels)\nmodel.summarize()\nmodel.normalize_features()\nprint(model.features)"
       },
       {
         "type": "paragraph",
-        "value": "This code snippet sets up a simple HTTP server that asynchronously fetches and returns user data when a GET request is made to `/user/{user_id}`. Because both the HTTP handler and the data fetch function are asynchronous, the server can scale to handle many requests efficiently."
+        "value": "To make your data model scalable, consider these tips:\n\n1. **Modular Design:** Break your data processing into small, reusable methods inside your class.\n2. **Data Validation:** Add checks to ensure your data inputs match expected formats or ranges.\n3. **Use Pandas Efficiently:** Pandas is optimized for data operations and scales better than native Python lists.\n4. **Lazy Processing:** Process large datasets in chunks to avoid memory overload.\n5. **Extensibility:** Design your class so adding new features or preprocessing is easy.\n\nLet's improve our DataModel by adding a validation method and chunk processing."
+      },
+      {
+        "type": "code",
+        "value": "class DataModel:\n    def __init__(self, features: pd.DataFrame, labels: pd.Series):\n        self.features = features\n        self.labels = labels\n        self.validate_data()\n\n    def validate_data(self):\n        if not isinstance(self.features, pd.DataFrame):\n            raise TypeError(\"Features should be a pandas DataFrame\")\n        if not isinstance(self.labels, pd.Series):\n            raise TypeError(\"Labels should be a pandas Series\")\n        if len(self.features) != len(self.labels):\n            raise ValueError(\"Features and labels must have the same number of rows\")\n\n    def summarize(self):\n        print(\"Features Summary:\")\n        print(self.features.describe())\n        print(\"Labels Distribution:\")\n        print(self.labels.value_counts())\n\n    def normalize_features(self):\n        self.features = (self.features - self.features.mean()) / self.features.std()\n\n    def add_feature(self, name: str, values):\n        self.features[name] = values\n\n    def process_in_chunks(self, chunk_size):\n        for start in range(0, len(self.features), chunk_size):\n            end = start + chunk_size\n            chunk_features = self.features.iloc[start:end]\n            chunk_labels = self.labels.iloc[start:end]\n            print(f\"Processing chunk from {start} to {end}\")\n            # Example processing: normalize each chunk separately\n            norm_chunk = (chunk_features - chunk_features.mean()) / chunk_features.std()\n            print(norm_chunk)"
       },
       {
         "type": "paragraph",
-        "value": "## Summary\nIn this tutorial, you learned the basics of writing scalable microservices using Python asyncio. Key takeaways:\n- Use `async` and `await` for non-blocking I/O\n- Schedule concurrent tasks with `asyncio.gather`\n- Build asynchronous HTTP servers with `aiohttp`\n\nUsing asyncio effectively can improve responsiveness and scalability of your microservices while keeping your code simple and readable."
+        "value": "Using chunk processing allows your data model to handle large datasets that don't fit into memory at once. This is crucial for scalability in real-world machine learning tasks."
       },
       {
         "type": "paragraph",
-        "value": "Try extending this example by adding more complex data fetching or integrating with real asynchronous databases and APIs. Happy coding!"
+        "value": "In summary, building scalable data models in Python involves combining object-oriented design with powerful data tools like pandas. Start simple, then expand your model by adding validation, modular methods, and memory-efficient techniques such as chunk processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding, and remember that a well-structured data model lays a strong foundation for any successful machine learning project!"
       }
     ]
   },
   {
-    "slug": "understanding-python-typeerror-common-scenarios-and-how-to-handle-them",
-    "title": "Understanding Python's TypeError: Common Scenarios and How to Handle Them",
+    "slug": "optimizing-python-memory-usage-techniques-to-detect-and-resolve-performance-bottlenecks",
+    "title": "Optimizing Python Memory Usage: Techniques to Detect and Resolve Performance Bottlenecks",
     "language": "python",
     "type": "errors",
-    "description": "Learn what a TypeError in Python means, common causes, and how to fix them with practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "description": "Learn beginner-friendly techniques to detect and fix Python memory usage issues to boost your program’s performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=iJBCteO6mXM",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you start coding in Python, encountering errors is a normal part of the journey. One common error beginners face is the TypeError. This error happens when you use an operation or function on a value of the wrong type. In this article, we'll explore common situations that cause TypeErrors and how you can fix them."
+        "value": "When writing Python programs, especially larger ones, you may notice that your program uses a lot of memory or slows down over time. Understanding and optimizing Python's memory usage can help you fix these performance bottlenecks. This article will guide you through beginner-friendly techniques to detect memory issues and resolve them."
       },
       {
         "type": "paragraph",
-        "value": "### What is a TypeError?\nPython is a dynamically typed language, which means you don't have to declare variable types explicitly. However, Python does enforce type compatibility during operations. A TypeError is raised when an operation or function is applied to an object of an inappropriate type."
+        "value": "### Why Memory Usage Matters\nPython manages memory automatically, but sometimes this can lead to inefficient memory usage if your code holds onto objects longer than needed or creates too many temporary objects. This can cause your program to be slow or even crash due to memory exhaustion."
       },
       {
         "type": "paragraph",
-        "value": "### Common Scenario 1: Adding Different Data Types\nOne of the most frequent mistakes is trying to add or concatenate incompatible data types, such as a string and an integer."
+        "value": "### Detecting Memory Usage Problems\nA simple and effective way to check your program's memory usage is by using the built-in `sys` and `tracemalloc` modules."
+      },
+      {
+        "type": "paragraph",
+        "value": "The `tracemalloc` module helps track memory allocations and find where the most memory is used."
       },
       {
         "type": "code",
-        "value": "age = 25\nmessage = \"I am \" + age + \" years old\"\n# This will raise TypeError: can only concatenate str (not \"int\") to str"
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code block whose memory you want to check\n\nx = [i * 2 for i in range(100000)]\n\nsnapshot = tracemalloc.take_snapshot()\ntop_stats = snapshot.statistics('lineno')\n\nprint(\"Top 5 memory consuming lines:\")\nfor stat in top_stats[:5]:\n    print(stat)"
       },
       {
         "type": "paragraph",
-        "value": "To fix this, you need to convert the integer to a string using the `str()` function:"
+        "value": "Running the above lets you see which lines use the most memory, helping you locate potential bottlenecks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another handy tool is the `memory_profiler` package which gives a line-by-line report of memory usage. Install it with `pip install memory_profiler` and use the `@profile` decorator to check functions."
       },
       {
         "type": "code",
-        "value": "age = 25\nmessage = \"I am \" + str(age) + \" years old\"\nprint(message)  # Output: I am 25 years old"
+        "value": "@profile\ndef create_list():\n    result = []\n    for i in range(100000):\n        result.append(i*2)\n    return result\n\ncreate_list()"
       },
       {
         "type": "paragraph",
-        "value": "### Common Scenario 2: Calling a Function with the Wrong Type\nSuppose you expect a list as an argument, but you pass a string instead. Some operations inside the function might then raise a TypeError."
+        "value": "Run your script with `python -m memory_profiler your_script.py` and analyze the results to spot memory-heavy parts."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Resolving Common Memory Issues\nOnce you identify heavy memory usage, you can try the following strategies:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Release Unused Objects:** Remove references to large objects that are no longer needed using `del` or by overwriting variables. This allows Python’s garbage collector to free memory."
       },
       {
         "type": "code",
-        "value": "def get_first_item(items):\n    return items[0]\n\nprint(get_first_item([1, 2, 3]))  # Works fine\nprint(get_first_item(123))        # TypeError: 'int' object is not subscriptable"
+        "value": "large_list = [0] * 1000000\n# Do something with large_list\n\ndel large_list  # frees memory if no other refs"
       },
       {
         "type": "paragraph",
-        "value": "Here, `123` is an integer, and you can't use indexing (`items[0]`) on an integer. To avoid this error, always check the type before performing operations or add input validation in your function."
+        "value": "2. **Use Generators Instead of Lists:** Generators produce items one at a time and use less memory, unlike lists which store everything in memory."
       },
       {
         "type": "code",
-        "value": "def get_first_item(items):\n    if not isinstance(items, (list, tuple, str)):\n        raise TypeError(\"Expected a list, tuple, or string\")\n    return items[0]\n\nprint(get_first_item([1, 2, 3]))\n# print(get_first_item(123))  # Now this raises a clear TypeError with a message"
+        "value": "def squares(n):\n    for i in range(n):\n        yield i * i\n\nfor sq in squares(100000):\n    pass  # memory efficient iteration"
       },
       {
         "type": "paragraph",
-        "value": "### Common Scenario 3: Using Operators on Incompatible Types\nAnother case is using operators like `*`, `/`, or `+` on incompatible types."
+        "value": "3. **Optimize Data Structures:** Use efficient data types, such as `array.array` or `collections.deque` when appropriate, to reduce memory overhead compared to lists."
       },
       {
         "type": "code",
-        "value": "result = 'hello' - 'h'\n# TypeError: unsupported operand type(s) for -: 'str' and 'str'"
+        "value": "from array import array\n\nnumbers = array('i', range(1000))  # uses less memory than a list"
       },
       {
         "type": "paragraph",
-        "value": "Strings don’t support the `-` operator, so Python raises a TypeError. Always make sure that the operators you use work with the operand types."
+        "value": "4. **Avoid Circular References:** Circular references can prevent Python’s garbage collector from releasing memory. Use weak references via the `weakref` module if needed."
       },
       {
         "type": "paragraph",
-        "value": "### Tips to Handle TypeErrors Effectively\n- **Read the error message carefully:** Python usually tells you which types caused the problem.\n- **Use `type()` function:** To debug, check the type of variables causing issues.\n- **Add input validation:** Functions should validate inputs and raise informative errors.\n- **Use conversion functions:** Convert data types like `str()`, `int()`, `float()` when appropriate.\n\nBy understanding why TypeErrors happen, you can write cleaner, bug-free code and become a more confident Python programmer."
+        "value": "5. **Profile and Refactor:** Keep profiling your program as you make changes to ensure your optimizations are effective."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nOptimizing memory in Python starts with detecting heavy memory usage using tools like `tracemalloc` and `memory_profiler`. Then, simplify your code to release unused objects, use generators, choose optimized data structures, and avoid circular references. These beginner-friendly techniques will help you improve your program’s performance and memory efficiency."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try these techniques in your own projects to build faster and more memory-efficient Python applications!"
       }
     ]
   },
   {
-    "slug": "mastering-recursive-ctes-in-sql-for-complex-hierarchical-data-analysis",
-    "title": "Mastering Recursive CTEs in SQL for Complex Hierarchical Data Analysis",
+    "slug": "scalable-ecommerce-inventory-management-sql",
+    "title": "Building a Scalable E-commerce Inventory Management System with SQL",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use recursive Common Table Expressions (CTEs) in SQL to efficiently analyze and query complex hierarchical data step-by-step.",
-    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
+    "description": "Learn how to create a scalable and efficient e-commerce inventory management system using SQL, tailored for beginners to handle product stock, orders, and updates effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=9GVqKuTVANE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Hierarchical data like organizational charts, bill of materials, or category trees can be challenging to query with traditional SQL techniques. Recursive Common Table Expressions (CTEs) offer a powerful and elegant way to traverse and analyze such complex data structures. In this tutorial, we'll walk you through the basics of recursive CTEs, provide simple examples, and explain how to use them effectively."
+        "value": "Managing inventory efficiently is crucial for any e-commerce business. A well-designed SQL-based inventory management system can help handle product stock, process orders, and scale as your business grows. This tutorial will walk you through building a scalable system using simple SQL commands, focusing on structure, relationships, and basic operations."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Recursive CTE?\nA CTE (Common Table Expression) is a temporary result set you can reference within a \nSELECT, INSERT, UPDATE, or DELETE statement. Recursive CTEs allow a query to repeatedly reference itself to navigate hierarchical or recursive relationships, such as parent-child structures in a table."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Basic Structure of a Recursive CTE\nA recursive CTE has two parts:\n\n1. Anchor member: The base query that returns the starting rows.\n2. Recursive member: The query that references the CTE itself to build upon result rows.\n\nThese parts are combined with a UNION ALL clause."
+        "value": "### Step 1: Design the Database Schema\nFirst, we'll design the tables needed for our inventory system. The key entities include Products, Categories, and Inventory. Additionally, we'll create an Orders table to track product sales."
       },
       {
         "type": "code",
-        "value": "WITH RECURSIVE cte_name AS (\n  -- Anchor member\n  SELECT ... FROM ... WHERE ...\n  UNION ALL\n  -- Recursive member\n  SELECT ... FROM ... JOIN cte_name ON ...\n)\nSELECT * FROM cte_name;"
+        "value": "CREATE TABLE Categories (\n  category_id INT PRIMARY KEY AUTO_INCREMENT,\n  category_name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE Products (\n  product_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_name VARCHAR(100) NOT NULL,\n  category_id INT,\n  price DECIMAL(10, 2) NOT NULL,\n  FOREIGN KEY (category_id) REFERENCES Categories(category_id)\n);\n\nCREATE TABLE Inventory (\n  product_id INT PRIMARY KEY,\n  quantity INT NOT NULL DEFAULT 0,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);\n\nCREATE TABLE Orders (\n  order_id INT PRIMARY KEY AUTO_INCREMENT,\n  product_id INT,\n  quantity INT NOT NULL,\n  order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (product_id) REFERENCES Products(product_id)\n);"
       },
       {
         "type": "paragraph",
-        "value": "### Example: Organizational Hierarchy\nConsider a simple employee table that contains employee IDs and their manager's ID. Let's find all employees under a specific manager."
+        "value": "### Step 2: Insert Sample Data\nLet's add some sample categories, products, and inventory quantities to get started."
       },
       {
         "type": "code",
-        "value": "-- Table structure and sample data\nCREATE TABLE Employees (\n  EmployeeID INT PRIMARY KEY,\n  EmployeeName VARCHAR(50),\n  ManagerID INT NULL\n);\n\nINSERT INTO Employees VALUES\n(1, 'Alice', NULL),   -- CEO\n(2, 'Bob', 1),        -- Bob reports to Alice\n(3, 'Charlie', 1),    -- Charlie reports to Alice\n(4, 'David', 2),      -- David reports to Bob\n(5, 'Eva', 2);\n\n-- Recursive CTE to get hierarchy under Alice\nWITH RECURSIVE EmployeeHierarchy AS (\n  -- Anchor: Start with Alice (EmployeeID 1)\n  SELECT EmployeeID, EmployeeName, ManagerID\n  FROM Employees\n  WHERE EmployeeID = 1\n  UNION ALL\n  -- Recursive: find employees managed by those already found\n  SELECT e.EmployeeID, e.EmployeeName, e.ManagerID\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;"
+        "value": "INSERT INTO Categories (category_name) VALUES ('Electronics'), ('Books'), ('Clothing');\n\nINSERT INTO Products (product_name, category_id, price) VALUES\n('Smartphone', 1, 699.99),\n('Laptop', 1, 1299.99),\n('Novel', 2, 15.99),\n('T-Shirt', 3, 9.99);\n\nINSERT INTO Inventory (product_id, quantity) VALUES\n(1, 100),\n(2, 50),\n(3, 200),\n(4, 150);"
       },
       {
         "type": "paragraph",
-        "value": "This query starts with the CEO Alice (EmployeeID 1) and recursively finds all employees under her by linking on ManagerID. The result will include Alice, Bob, Charlie, David, and Eva."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Tips for Using Recursive CTEs\n- Always include a base case (anchor) to start recursion.\n- Use UNION ALL instead of UNION for better performance unless you need to eliminate duplicates.\n- Limit recursion depth if data might contain cycles using a counter.\n- Recursive CTEs can also be used for path finding or generating sequences."
+        "value": "### Step 3: Handling Orders and Updating Inventory\nWhen an order is placed, you need to insert a record into the Orders table and reduce the product's available quantity in Inventory."
       },
       {
         "type": "code",
-        "value": "-- Example limiting recursion depth to 5\nWITH RECURSIVE EmployeeHierarchy AS (\n  SELECT EmployeeID, EmployeeName, ManagerID, 1 AS Level\n  FROM Employees\n  WHERE EmployeeID = 1\n  UNION ALL\n  SELECT e.EmployeeID, e.EmployeeName, e.ManagerID, eh.Level + 1\n  FROM Employees e\n  INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n  WHERE eh.Level < 5\n)\nSELECT * FROM EmployeeHierarchy;"
+        "value": "-- Suppose a customer orders 3 Smartphones (product_id=1)\n\nSTART TRANSACTION;\n\nINSERT INTO Orders (product_id, quantity) VALUES (1, 3);\n\nUPDATE Inventory\nSET quantity = quantity - 3\nWHERE product_id = 1 AND quantity >= 3;\n\n-- Check if the update affected a row, otherwise rollback\n-- This prevents selling more than available stock\n\nCOMMIT;"
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion\nRecursive CTEs are a powerful feature in SQL for mastering hierarchical and recursive data problems. With a clear understanding of their structure and some practice, you can write efficient queries to analyze organizational charts, bill of materials, nested categories, and more. Give it a try on your own data to unlock the full potential of recursive queries!"
+        "value": "Using transactions ensures that the order and inventory update happen atomically. If there isn't enough stock, the inventory update won't proceed, preventing negative stock values."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Querying Inventory Status\nTo check current stock levels and product details, use a simple join query."
+      },
+      {
+        "type": "code",
+        "value": "SELECT p.product_name, c.category_name, i.quantity, p.price\nFROM Products p\nJOIN Inventory i ON p.product_id = i.product_id\nJOIN Categories c ON p.category_id = c.category_id\nORDER BY p.product_name;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Scaling Tips\nAs your business grows, consider the following:\n- Indexing key columns (e.g., product_id) for faster lookups.\n- Archiving old orders in a separate table to keep the Orders table performant.\n- Using stored procedures or triggers for complex inventory updates.\n- Separating read and write databases to improve scalability.\n\nThis basic example lays the foundation, making it easier for you to extend functionality as needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following this tutorial, you've learned how to build a straightforward and scalable e-commerce inventory management system using SQL. You can now track products, manage stock levels, process orders safely, and prepare your database for growth."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-queries-best-practices-to-avoid-performance-pitfalls",
-    "title": "Optimizing SQL Queries: Best Practices to Avoid Performance Pitfalls",
+    "slug": "understanding-null-behavior-in-sql-and-how-it-impacts-your-queries",
+    "title": "Understanding NULL Behavior in SQL and How It Impacts Your Queries",
     "language": "sql",
     "type": "errors",
-    "description": "Learn beginner-friendly best practices to optimize your SQL queries and avoid common performance pitfalls.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how NULL values work in SQL, why they can cause unexpected results, and how to handle them correctly in your queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=RKUYYrmv6gw",
     "content": [
       {
         "type": "paragraph",
-        "value": "Writing efficient SQL queries is essential for maintaining fast and responsive databases. Beginners often face performance issues caused by inefficient query structures or missing optimizations. In this article, we'll explore practical tips and common mistakes to help you optimize your SQL queries and improve their performance."
+        "value": "In SQL, NULL represents a missing or unknown value. It’s not the same as an empty string or zero; NULL means the data is simply not known or does not exist. This concept can sometimes confuse beginners and cause unexpected outcomes in queries."
       },
       {
         "type": "paragraph",
-        "value": "1. Avoid Using SELECT *\nSelecting all columns with SELECT * can slow down your query, especially on large tables. It fetches unnecessary data, increasing network load and processing time. Instead, select only the columns you need."
+        "value": "One of the main things to remember about NULL is that it behaves differently in comparisons. For example, NULL is not equal to NULL — instead, any comparison with NULL results in UNKNOWN. This means common operators like =, <>, >, and < will not work as you might expect when dealing with NULL."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example where NULL impacts query results:"
       },
       {
         "type": "code",
-        "value": "-- Inefficient\nSELECT * FROM employees;\n\n-- Optimized\nSELECT first_name, last_name, email FROM employees;"
+        "value": "SELECT * FROM users WHERE last_login_date = NULL;"
       },
       {
         "type": "paragraph",
-        "value": "2. Use Appropriate Indexes\nIndexes speed up data retrieval but can slow down inserts and updates. Ensure your frequently searched columns, especially those used in WHERE clauses or JOIN conditions, have indexes. Avoid over-indexing as it consumes additional storage."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. Filter Early Using WHERE Clauses\nApplying filters early reduces the number of rows processed. This avoids unnecessary computations or joins on large datasets."
+        "value": "The above query will not return any rows even if some users have a NULL `last_login_date`. You should use the `IS NULL` syntax to check for NULL values instead."
       },
       {
         "type": "code",
-        "value": "-- Less efficient\nSELECT first_name, last_name FROM employees JOIN departments ON employees.dept_id = departments.id;\n\n-- More efficient if we only want employees in 'Sales'\nSELECT first_name, last_name FROM employees JOIN departments ON employees.dept_id = departments.id WHERE departments.name = 'Sales';"
+        "value": "SELECT * FROM users WHERE last_login_date IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "4. Avoid Functions on Indexed Columns in WHERE Clauses\nUsing functions on indexed columns (e.g., WHERE YEAR(date) = 2023) disables the index, causing full table scans. Instead, rewrite conditions to use range queries."
+        "value": "Similarly, to find rows where a column is not NULL, use `IS NOT NULL`:"
       },
       {
         "type": "code",
-        "value": "-- Avoid\nSELECT * FROM orders WHERE YEAR(order_date) = 2023;\n\n-- Better\nSELECT * FROM orders WHERE order_date >= '2023-01-01' AND order_date < '2024-01-01';"
+        "value": "SELECT * FROM users WHERE last_login_date IS NOT NULL;"
       },
       {
         "type": "paragraph",
-        "value": "5. Limit Result Sets\nUse LIMIT or FETCH FIRST to restrict the number of returned rows when you only need a subset, improving speed and reducing resource usage."
+        "value": "Another common pitfall involves functions and aggregate calculations. For instance, the SUM() function ignores NULL values, which can lead to unexpected results if you aren’t careful."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want to replace NULL values with something more meaningful for calculations or display, you can use the `COALESCE()` function. It returns the first non-NULL value from its arguments."
       },
       {
         "type": "code",
-        "value": "SELECT first_name, last_name FROM employees ORDER BY hire_date DESC LIMIT 10;"
+        "value": "SELECT user_id, COALESCE(last_login_date, 'No login') AS display_login FROM users;"
       },
       {
         "type": "paragraph",
-        "value": "6. Be Cautious With JOINs\nOnly join tables when necessary and use the appropriate type of join (INNER JOIN, LEFT JOIN, etc.). Joining large tables without filters can cause slowdowns."
-      },
-      {
-        "type": "paragraph",
-        "value": "7. Avoid DISTINCT and ORDER BY Unless Necessary\nDISTINCT removes duplicates but can be costly on large result sets. ORDER BY forces sorting, which may degrade performance if not required."
-      },
-      {
-        "type": "paragraph",
-        "value": "By following these beginner-friendly tips, you can write SQL queries that run faster and avoid common performance pitfalls. Understanding your data, queries, and indexes is the key to effective optimization."
+        "value": "In summary, understanding how NULL behaves in SQL is key to writing correct and effective queries. Always use `IS NULL` or `IS NOT NULL` for checking NULLs, and use functions like `COALESCE()` to handle NULL values in expressions."
       }
     ]
   }
