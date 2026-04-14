@@ -57213,5 +57213,495 @@ export const articles = [
         "value": "In summary, understanding how NULL behaves in SQL is key to writing correct and effective queries. Always use `IS NULL` or `IS NOT NULL` for checking NULLs, and use functions like `COALESCE()` to handle NULL values in expressions."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-closures-practical-examples-for-cleaner-code",
+    "title": "Mastering JavaScript Closures: Practical Examples for Cleaner Code",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how JavaScript closures work with practical examples that help you write cleaner, more efficient code. Perfect for beginners!",
+    "videoUrl": "https://www.youtube.com/watch?v=vKJpN5FAeF4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Closures are a fundamental concept in JavaScript that often confuse beginners. Simply put, a closure is a function that remembers the variables from the place where it was created, even after that place has finished executing. Understanding closures helps you write cleaner and more efficient code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example to see a closure in action."
+      },
+      {
+        "type": "code",
+        "value": "function outerFunction() {\n  let outerVariable = 'I am from outside!';\n\n  function innerFunction() {\n    console.log(outerVariable);\n  }\n\n  return innerFunction;\n}\n\nconst myClosure = outerFunction();\nmyClosure(); // Output: I am from outside!"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `innerFunction` is a closure. It has access to `outerVariable`, even after `outerFunction` has finished running. This is because `innerFunction` \"closes over\" the environment where it was created."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures are especially useful for data privacy and creating functions with persistent state. Let's explore how to use closures to create a simple counter."
+      },
+      {
+        "type": "code",
+        "value": "function createCounter() {\n  let count = 0;\n\n  return function() {\n    count += 1;\n    return count;\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `createCounter` returns a function that increments and returns the `count`. The variable `count` is private and cannot be accessed directly from outside. This keeps the state safe and controlled."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common use of closures is in event handlers and asynchronous code. Closures help maintain access to variables at the time the function was created."
+      },
+      {
+        "type": "code",
+        "value": "for (let i = 1; i <= 3; i++) {\n  setTimeout(function() {\n    console.log('Count:', i);\n  }, i * 1000);\n}\n// Outputs:\n// Count: 1 (after 1 second)\n// Count: 2 (after 2 seconds)\n// Count: 3 (after 3 seconds)"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this asynchronous example, the closure created by the `setTimeout` function holds onto the current value of `i` because `let` creates a block-scoped variable. If you used `var` instead, all timeouts would print the same value since `var` is function-scoped."
+      },
+      {
+        "type": "paragraph",
+        "value": "Closures can seem tricky at first, but once mastered, they help you write modular, maintainable, and powerful JavaScript code. Always think of a closure as a function bundled with its surrounding state or variables."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing closures by building small examples like counters, private data stores, or callbacks. Soon, they will become a natural part of your JavaScript toolkit!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-data-modeling-in-javascript-handling-complex-json-structures-without-errors",
+    "title": "Mastering Data Modeling in JavaScript: Handling Complex JSON Structures Without Errors",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle complex JSON data in JavaScript effectively, avoid common mistakes, and model your data accurately without errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with complex JSON data in JavaScript can sometimes lead to errors or unexpected behavior if you don't model the data correctly. This article will guide you through best practices to handle nested JSON structures, validate your data, and avoid common pitfalls as a beginner."
+      },
+      {
+        "type": "paragraph",
+        "value": "JSON (JavaScript Object Notation) is the most common format to store and exchange data on the web. When JSON data becomes complex with multiple nested objects and arrays, handling it without errors requires a good understanding of how to access and manipulate these structures in JavaScript."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by considering a typical complex JSON object representing a user profile with nested information like addresses, orders, and preferences."
+      },
+      {
+        "type": "code",
+        "value": "const userProfile = {\n  id: 12345,\n  name: \"John Doe\",\n  email: \"john.doe@example.com\",\n  addresses: [\n    {\n      type: \"home\",\n      street: \"123 Main St\",\n      city: \"Anytown\",\n      country: \"USA\"\n    },\n    {\n      type: \"work\",\n      street: \"456 Office Rd\",\n      city: \"Busytown\",\n      country: \"USA\"\n    }\n  ],\n  orders: [\n    {\n      orderId: \"A001\",\n      items: [\n        { product: \"Laptop\", price: 999.99 },\n        { product: \"Mouse\", price: 19.99 }\n      ],\n      delivered: true\n    },\n    {\n      orderId: \"A002\",\n      items: [],\n      delivered: false\n    }\n  ],\n  preferences: {\n    newsletter: true,\n    notifications: {\n      email: true,\n      sms: false\n    }\n  }\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Errors to Avoid"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Accessing properties without safety checks:** Trying to access nested properties directly without ensuring they exist can cause runtime errors."
+      },
+      {
+        "type": "code",
+        "value": "console.log(userProfile.preferences.notifications.email); // Works fine\nconsole.log(userProfile.settings.theme); // Throws error: Cannot read property 'theme' of undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent such errors, use optional chaining (`?.`) introduced in ES2020:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(userProfile.settings?.theme); // undefined, no error"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Not checking array lengths before accessing elements:** Attempting to access an item in an empty array will return `undefined`, which can cause issues if you expect an object."
+      },
+      {
+        "type": "code",
+        "value": "console.log(userProfile.orders[1].items[0]); // undefined (items array is empty)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always check if an array has items before accessing:"
+      },
+      {
+        "type": "code",
+        "value": "if (userProfile.orders[1].items.length > 0) {\n  console.log(userProfile.orders[1].items[0]);\n} else {\n  console.log(\"No items in order A002\");\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Using the wrong data type for modeling:** Sometimes data you expect to be an object may be null or a string due to inconsistent data sources. Always validate data types before using."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Handling Complex JSON:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use optional chaining (`?.`) to safely access nested properties.\n- Validate data types with `typeof` or `Array.isArray()` before processing.\n- Use default values with the nullish coalescing operator (`??`).\n- Use destructuring carefully and provide defaults where necessary.\n- Avoid mutations on original data to prevent bugs; consider cloning if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Example: Safely Accessing Nested Data"
+      },
+      {
+        "type": "code",
+        "value": "// Safely get user's work city, using defaults if data is missing\nconst workAddress = userProfile.addresses?.find(addr => addr.type === \"work\") ?? {};\nconst workCity = workAddress.city ?? \"Unknown City\";\nconsole.log(\"Work city:\", workCity);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Validating JSON Structure"
+      },
+      {
+        "type": "paragraph",
+        "value": "Before processing JSON data, you may want to validate its structure either manually or using a schema validator like `ajv` for more complex applications. Here's a simple manual check:"
+      },
+      {
+        "type": "code",
+        "value": "function validateUserProfile(data) {\n  if (typeof data !== \"object\" || data === null) return false;\n  if (!Array.isArray(data.addresses)) return false;\n  if (!Array.isArray(data.orders)) return false;\n  if (typeof data.preferences !== \"object\" || data.preferences === null) return false;\n  return true;\n}\n\nif (validateUserProfile(userProfile)) {\n  console.log(\"User profile is valid!\");\n} else {\n  console.log(\"Invalid user profile data.\");\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering data modeling in JavaScript for complex JSON means handling nested data safely and validating structures before use. Using modern language features like optional chaining and nullish coalescing helps avoid common errors and makes your code more robust and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-decorators-advanced-patterns-and-practical-use-cases",
+    "title": "Mastering TypeScript Decorators: Advanced Patterns and Practical Use Cases",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore advanced TypeScript decorators with practical examples. Learn how to enhance your code by mastering class, method, property, and parameter decorators.",
+    "videoUrl": "https://www.youtube.com/watch?v=tv-_1er1mWI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators are a powerful feature that allow you to modify classes, methods, properties, or parameters at design time. They provide a clean and reusable way to add extra logic to your code without cluttering the main business logic. In this tutorial, we'll explore advanced patterns and practical use cases of decorators to help you write better, cleaner, and more maintainable TypeScript code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before diving into advanced patterns, let's briefly cover what decorators are. A decorator is a special kind of declaration that can be attached to a class declaration, method, accessor, property, or parameter. The decorator is a function that receives details about the decorated element and can modify or replace it."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of a class decorator that logs when an instance of a class is created:"
+      },
+      {
+        "type": "code",
+        "value": "function LogCreation(constructor: Function) {\n  const original = constructor;\n\n  function construct(constructor: any, args: any[]) {\n    console.log(`Creating instance of ${constructor.name}`);\n    return new constructor(...args);\n  }\n\n  const newConstructor: any = function (...args: any[]) {\n    return construct(original, args);\n  };\n\n  newConstructor.prototype = original.prototype;\n  return newConstructor;\n}\n\n@LogCreation\nclass Person {\n  constructor(public name: string) {}\n}\n\nconst p = new Person('Alice');"
+      },
+      {
+        "type": "paragraph",
+        "value": "This decorator replaces the class constructor with a new one that logs a message before creating the instance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Advanced Pattern: Method Timing Decorator"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you want to measure how long a method takes to execute. Here's a method decorator to do exactly that:"
+      },
+      {
+        "type": "code",
+        "value": "function Timer(\n  target: any,\n  propertyKey: string,\n  descriptor: PropertyDescriptor\n) {\n  const originalMethod = descriptor.value;\n\n  descriptor.value = function (...args: any[]) {\n    console.time(`${propertyKey} execution time`);\n    const result = originalMethod.apply(this, args);\n    console.timeEnd(`${propertyKey} execution time`);\n    return result;\n  };\n\n  return descriptor;\n}\n\nclass Calculator {\n  @Timer\n  fibonacci(n: number): number {\n    if (n <= 1) return n;\n    return this.fibonacci(n - 1) + this.fibonacci(n - 2);\n  }\n}\n\nconst calc = new Calculator();\nconsole.log(calc.fibonacci(10));"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `@Timer` decorator wraps the original method, measuring execution time using `console.time` and `console.timeEnd`. This pattern is useful for performance monitoring."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Case: Property Validation Decorator"
+      },
+      {
+        "type": "paragraph",
+        "value": "To enforce constraints on class properties, a property decorator can validate inputs automatically."
+      },
+      {
+        "type": "code",
+        "value": "function MinLength(length: number) {\n  return function (target: any, propertyKey: string) {\n    let value: string = '';\n\n    const getter = () => value;\n    const setter = (newVal: string) => {\n      if (newVal.length < length) {\n        throw new Error(\n          `${propertyKey} should be at least ${length} characters long.`\n        );\n      }\n      value = newVal;\n    };\n\n    Object.defineProperty(target, propertyKey, {\n      get: getter,\n      set: setter,\n      enumerable: true,\n      configurable: true,\n    });\n  };\n}\n\nclass User {\n  @MinLength(5)\n  username: string;\n\n  constructor(username: string) {\n    this.username = username;\n  }\n}\n\nconst user = new User('admin'); // Works fine\n// const badUser = new User('abc'); // Throws error"
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern helps automate validation, keeping your code clean by avoiding manual checks in every setter or method."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Parameter Decorator Example: Logging Parameter Index"
+      },
+      {
+        "type": "paragraph",
+        "value": "Parameter decorators allow you to observe or modify parameter metadata. Here's a simple example that logs the index of the decorated parameter:"
+      },
+      {
+        "type": "code",
+        "value": "function LogParameter(\n  target: any,\n  propertyKey: string | symbol,\n  parameterIndex: number\n) {\n  console.log(\n    `Parameter at position ${parameterIndex} in method ${String(propertyKey)} is decorated.`\n  );\n}\n\nclass Greeter {\n  greet(@LogParameter message: string) {\n    console.log(message);\n  }\n}\n\nconst greeter = new Greeter();\ngreeter.greet('Hello!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Each time the class is defined, the decorator logs the position of the parameter decorated. This is helpful for advanced metadata handling or frameworks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Decorators are an excellent tool to add reusable behavior like logging, validation, timing, or metadata collection without cluttering your core code. They make your classes more expressive and maintainable. With this tutorial, you've seen how to create and use advanced decorator patterns for classes, methods, properties, and parameters."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get started with decorators in your project, make sure your `tsconfig.json` has `experimentalDecorators` enabled:\n\n\n{\n  \"compilerOptions\": {\n    \"experimentalDecorators\": true\n  }\n}\n\n\nExperiment with these patterns and you'll quickly discover the power of TypeScript decorators!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-type-inference-pitfalls-in-large-typescript-codebases",
+    "title": "Handling Type Inference Pitfalls in Large TypeScript Codebases",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to identify and fix common type inference issues in large TypeScript projects to improve code safety and maintainability.",
+    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is great at inferring types automatically, which reduces the need for explicit type annotations. However, in large codebases, relying too much on type inference can lead to errors, confusing code, or loss of type safety. In this article, we'll discuss some common type inference pitfalls and how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Problem 1: Implicit 'any' When Types Are Too Complex or Missing"
+      },
+      {
+        "type": "paragraph",
+        "value": "When TypeScript can't infer a type properly, it may fall back to 'any', which disables type checking for that variable. This is especially dangerous in large projects because errors can sneak in unnoticed."
+      },
+      {
+        "type": "code",
+        "value": "function process(data) {\n  return data.value + 10;\n}\n\n// Here, 'data' is implicitly typed as 'any'. This means no type safety or autocompletion."
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, add explicit type annotations to your function parameters and variables."
+      },
+      {
+        "type": "code",
+        "value": "interface Data {\n  value: number;\n}\n\nfunction process(data: Data) {\n  return data.value + 10;\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Problem 2: Type Inference Can Be Too Narrow or Too Wide"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript sometimes infers types too narrowly or too widely, which can cause problems later. For example, if you initialize an array with an empty array `[]`, TypeScript infers its type as `never[]`, leading to confusing errors when you try to push values."
+      },
+      {
+        "type": "code",
+        "value": "const numbers = [];\nnumbers.push(1); // Error: Property 'push' does not exist on type 'never[]'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Explicitly declare the type to fix this:"
+      },
+      {
+        "type": "code",
+        "value": "const numbers: number[] = [];\nnumbers.push(1); // Works fine"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Problem 3: Excess Property Checks Are Bypassed with Inference"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you create objects without explicit types, TypeScript might not warn you about extra or misspelled properties."
+      },
+      {
+        "type": "code",
+        "value": "function printUser(user: {name: string, age: number}) {\n  console.log(user.name, user.age);\n}\n\nprintUser({name: \"Alice\", age: 25, agge: 30});\n// No error even though 'agge' is misspelled"
+      },
+      {
+        "type": "paragraph",
+        "value": "Adding explicit typing or using type aliasing can help catch these errors."
+      },
+      {
+        "type": "code",
+        "value": "type User = {\n  name: string;\n  age: number;\n};\n\nfunction printUser(user: User) {\n  console.log(user.name, user.age);\n}\n\n// Now TypeScript will give an error if extra properties exist\nprintUser({name: \"Alice\", age: 25, agge: 30}); // Error: Object literal may only specify known properties"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Best Practices to Avoid Type Inference Pitfalls"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use explicit type annotations when functions or variables are part of public APIs or complex logic.\n\n2. Define and use interfaces or type aliases to improve readability and type safety.\n\n3. Use TypeScript compiler flags like `noImplicitAny` to catch missing type annotations early.\n\n4. Avoid excessive use of `any`; prefer more specific types or generics.\n\n5. Utilize tooling like linters and type-checking during code reviews."
+      },
+      {
+        "type": "paragraph",
+        "value": "By combining TypeScript's inference with explicit annotations where needed, you can keep your large codebases maintainable, safe, and clear."
+      }
+    ]
+  },
+  {
+    "slug": "python-asyncio-vs-threading-real-time-data-processing",
+    "title": "Comparing Python's Asyncio vs Threading for Real-Time Data Processing",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the differences between Python's asyncio and threading with practical examples to handle real-time data processing efficiently.",
+    "videoUrl": "https://www.youtube.com/watch?v=QlkXji08lno",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with real-time data processing in Python, you often need to handle multiple tasks seemingly at once. Two popular approaches to achieve concurrency in Python are asyncio and threading. This article will introduce you to both, explain their differences, and show beginner-friendly examples of how to apply them for real-time data processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Threading?\nThreading in Python allows you to create multiple threads (smaller units of a process) that run concurrently. It's especially useful when your program is waiting on input/output (I/O), like reading data from a file, network, or sensors, because while one thread waits, another can work. Python's Global Interpreter Lock (GIL) limits true parallel execution for CPU-bound tasks, but threading can improve performance for I/O-bound tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Asyncio?\nAsyncio is a modern, built-in Python library for writing asynchronous code using the async/await syntax. It works using an event loop that manages and runs asynchronous functions (coroutines). Asyncio is well-suited for I/O-bound and high-level structured network code. It generally uses less memory and threads compared to Python's threading module."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see how both can be used to simulate real-time data processing where we receive data periodically and process it."
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport time\n\n# Simulate data receiving and processing using threading\ndef receive_data():\n    for i in range(5):\n        print(f\"[Threading] Received data chunk {i}\")\n        time.sleep(1)  # simulate waiting for data\n\n\ndef process_data():\n    for i in range(5):\n        print(f\"[Threading] Processing data chunk {i}\")\n        time.sleep(2)  # simulate processing\n\n\n# Create threads for receiving and processing\nreceive_thread = threading.Thread(target=receive_data)\nprocess_thread = threading.Thread(target=process_data)\n\nreceive_thread.start()\nprocess_thread.start()\n\nreceive_thread.join()\nprocess_thread.join()\nprint(\"[Threading] All tasks complete.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this threading example, two threads run concurrently: one simulates receiving data every second, and another simulates processing that data every two seconds. Both run independently, giving the feel of real-time multitasking."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\n# Simulate data receiving and processing using asyncio\nasync def receive_data():\n    for i in range(5):\n        print(f\"[Asyncio] Received data chunk {i}\")\n        await asyncio.sleep(1)  # simulate waiting for data\n\n\nasync def process_data():\n    for i in range(5):\n        print(f\"[Asyncio] Processing data chunk {i}\")\n        await asyncio.sleep(2)  # simulate processing\n\n\nasync def main():\n    await asyncio.gather(receive_data(), process_data())\n\nasyncio.run(main())\nprint(\"[Asyncio] All tasks complete.\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "The asyncio example uses coroutines to achieve concurrency. The event loop runs both receive_data and process_data coroutines concurrently, awaiting when each is sleeping. This design works well for I/O-bound tasks and can scale better than threading with many tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Threading or Asyncio?\n- Use **Threading** if you are working with libraries that are not asynchronous or if your tasks involve blocking I/O and you find it easier to write synchronous code.\n- Use **Asyncio** if your tasks are mostly I/O-bound and you want to write modern, efficient asynchronous code with lower overhead.\n\nRemember, for CPU-bound tasks, consider multiprocessing instead because of Python's GIL."
+      },
+      {
+        "type": "paragraph",
+        "value": "Both methods can be useful for real-time data processing. As you gain experience, you may also explore frameworks and libraries built on these concepts such as `aiohttp` for async web requests or using `queue.Queue` with threading for better communication between threads."
+      },
+      {
+        "type": "paragraph",
+        "value": "This beginner-friendly comparison should help you start experimenting with both concurrency models in Python and choose the right tool based on your application's needs."
+      }
+    ]
+  },
+  {
+    "slug": "handling-concurrency-exceptions-in-python-web-scraping-projects",
+    "title": "Handling Concurrency Exceptions in Python Web Scraping Projects",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle concurrency exceptions effectively in Python web scraping projects to make your scraping more reliable and error-resistant.",
+    "videoUrl": "https://www.youtube.com/watch?v=ZUqGMDppEDs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping is a powerful tool to gather data from the internet, but when scraping multiple pages or sites concurrently, you may run into concurrency exceptions. These errors happen when multiple tasks or threads interfere with each other or access shared resources improperly. This article will help beginners understand what concurrency exceptions are and how to handle them in Python web scraping projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "In Python, concurrency can be achieved using threads, processes, or asynchronous programming. When scraping many web pages at once, exceptions may appear due to race conditions, locked resources, or network issues causing tasks to fail simultaneously. To write a robust scraper, it’s essential to catch and handle these exceptions gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common concurrency exception occurs when threads try to write to the same file or variable without synchronization. To avoid this, you can use thread-safe mechanisms like locks from Python’s `threading` module to control access."
+      },
+      {
+        "type": "code",
+        "value": "import threading\nimport requests\n\nlock = threading.Lock()\nresults = []\n\ndef fetch_url(url):\n    try:\n        response = requests.get(url)\n        data = response.text\n        with lock:  # ensure only one thread writes at a time\n            results.append(data)\n    except requests.exceptions.RequestException as e:\n        print(f\"Error fetching {url}: {e}\")\n\nurls = ['https://example.com', 'https://example.org']\nthreads = []\n\nfor url in urls:\n    thread = threading.Thread(target=fetch_url, args=(url,))\n    thread.start()\n    threads.append(thread)\n\nfor thread in threads:\n    thread.join()\n\nprint(f\"Fetched {len(results)} pages\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `lock` prevents multiple threads from changing the `results` list at the same time, thus avoiding concurrency issues like data loss or corruption. Also, the exception handling catches network-related errors per thread, so one failure doesn’t crash the entire program."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you are using asynchronous requests with the `asyncio` library, concurrency exceptions can still occur, especially with shared variables or rate limits. Using `asyncio.Lock()` to protect shared data works similarly."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\nimport aiohttp\n\nlock = asyncio.Lock()\nresults = []\n\nasync def fetch_url(session, url):\n    try:\n        async with session.get(url) as response:\n            data = await response.text()\n            async with lock:\n                results.append(data)\n    except aiohttp.ClientError as e:\n        print(f\"Error fetching {url}: {e}\")\n\nasync def main(urls):\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch_url(session, url) for url in urls]\n        await asyncio.gather(*tasks)\n\nurls = ['https://example.com', 'https://example.org']\nasyncio.run(main(urls))\nprint(f\"Fetched {len(results)} pages\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, handling concurrency exceptions in web scraping involves:\n\n1. Protecting shared resources with locks or similar synchronization methods.\n2. Catching network or HTTP exceptions on a per-task basis.\n3. Using appropriate concurrency models (threads, async) and understanding their limitations.\n\nThese practices will help you build more reliable scraping tools that can handle multiple requests concurrently without crashing or losing data."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-to-handle-data-type-mismatches-without-errors",
+    "title": "Optimizing SQL Queries to Handle Data Type Mismatches Without Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to avoid common data type mismatch errors in SQL and optimize your queries for better performance and reliability.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL, one of the common issues beginners face is data type mismatches. These errors typically happen when you compare or combine columns and values that have incompatible data types, such as comparing a string to a number. This article will help you understand how to handle and optimize queries to prevent these errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Data type mismatches can cause SQL engines to throw errors like \"conversion failed\" or \"incompatible data types.\" These errors often disrupt your query execution and can be tricky to debug if you are new to SQL. The best way to avoid them is by making sure that the data types match or by explicitly converting data in a safe way."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some practical steps to handle data type mismatches in your SQL queries:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Know your data types: Always check the data types of the columns involved in your WHERE clause, JOIN conditions, or any comparisons."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Use explicit conversions: Use functions like CAST() or CONVERT() to convert values to a compatible type before comparing them."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM employees\nWHERE CAST(employee_id AS VARCHAR) = '123';"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Avoid implicit conversions: Relying on implicit type conversion can slow down your queries and may still cause errors. Always convert explicitly."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Use TRY_CAST or TRY_CONVERT when available: These functions attempt to convert data but return NULL instead of errors if the conversion fails, helping queries to run smoothly."
+      },
+      {
+        "type": "code",
+        "value": "SELECT *\nFROM products\nWHERE TRY_CAST(price AS INT) = 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Handle NULLs properly: When you use conversion functions that can return NULL on failure, be sure to consider NULL handling to avoid unexpected results."
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Verify data cleanliness: Sometimes, data stored as strings contains unexpected characters. Cleaning or validating data before conversion can reduce errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these guidelines, you can optimize your SQL queries to handle data type mismatches gracefully and avoid common errors. This approach will improve your query reliability and sometimes even boost performance."
+      }
+    ]
   }
 ];
