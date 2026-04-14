@@ -57703,5 +57703,253 @@ export const articles = [
         "value": "By following these guidelines, you can optimize your SQL queries to handle data type mismatches gracefully and avoid common errors. This approach will improve your query reliability and sometimes even boost performance."
       }
     ]
+  },
+  {
+    "slug": "beginners-guide-to-typescript-generics-boost-your-code-flexibility",
+    "title": "A Beginner's Guide to TypeScript Generics: Boost Your Code Flexibility",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how TypeScript generics can make your code more reusable and type-safe with this easy beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=7aCgI-2TB6c",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript generics are a powerful feature that allow you to write flexible, reusable functions and classes while still preserving strong type safety. For beginners, generics might seem tricky at first, but they can significantly improve your code by making it more adaptable to different types without sacrificing type checking."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you want to create a function that returns the first element of an array. Without generics, you'd have to create a separate function for every type or lose type information. With generics, you can write one function that works for any type!"
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst numbers = [1, 2, 3];\nconst firstNumber = getFirstElement(numbers); // Type is number\n\nconst strings = ['a', 'b', 'c'];\nconst firstString = getFirstElement(strings); // Type is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example, <T> is a generic type parameter. It acts as a placeholder for the type you pass in when calling the function. This way, TypeScript knows what type to expect in the array and what type the function will return."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics work well with classes too. Here's a simple generic stack class that can store any type of data:"
+      },
+      {
+        "type": "code",
+        "value": "class Stack<T> {\n  private items: T[] = [];\n\n  push(item: T) {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n}\n\nconst numberStack = new Stack<number>();\nnumberStack.push(10);\nnumberStack.push(20);\nconsole.log(numberStack.pop()); // Output: 20"
+      },
+      {
+        "type": "paragraph",
+        "value": "By using generics, you ensure the stack only accepts and returns items of the specified type, improving safety and reducing bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also constrain generics when you want to limit the types allowed. For example, to accept only objects with a \"length\" property:"
+      },
+      {
+        "type": "code",
+        "value": "function logLength<T extends { length: number }>(item: T): void {\n  console.log(`Length is: ${item.length}`);\n}\n\nlogLength('hello'); // Length is: 5\nlogLength([1, 2, 3]); // Length is: 3\n// logLength(10); // Error: number doesn't have 'length' property"
+      },
+      {
+        "type": "paragraph",
+        "value": "This constraint helps avoid errors by restricting generics to compatible types."
+      },
+      {
+        "type": "paragraph",
+        "value": "To sum up, generics enhance your TypeScript code by:\n- Making functions and classes reusable with any data type\n- Keeping type safety intact\n- Avoiding code duplication\n- Allowing flexible but constrained typing\n\nAs you practice, generics will become a natural part of your coding toolkit, helping you write cleaner and more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try adding generics to your next TypeScript project to experience the benefits firsthand!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-python-built-in-data-structures-lists-vs-sets-vs-dictionaries",
+    "title": "Comparing Python's Built-in Data Structures: Lists vs Sets vs Dictionaries",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the basics and differences between Python's lists, sets, and dictionaries with simple examples and practical uses.",
+    "videoUrl": "https://www.youtube.com/watch?v=gOMW_n2-2Mw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python offers several built-in data structures that help you store and organize data efficiently. Among the most commonly used are lists, sets, and dictionaries. Each one serves different purposes and has unique characteristics. This guide will compare these data structures, show you when to use each one, and provide simple code examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Lists\nLists are ordered collections that can hold any type of element. They allow duplicates and are indexed, which means you can access elements using their position. Lists are ideal when you need to maintain order and access elements by index."
+      },
+      {
+        "type": "code",
+        "value": "fruits = ['apple', 'banana', 'cherry']\nprint(fruits[1])  # Output: banana\nfruits.append('orange')\nprint(fruits)  # Output: ['apple', 'banana', 'cherry', 'orange']"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Sets\nSets are collections of unique elements without any particular order. They are useful when you want to ensure no duplicates and do not care about the order of items. Sets support mathematical operations like union, intersection, and difference."
+      },
+      {
+        "type": "code",
+        "value": "unique_numbers = {1, 2, 3, 2, 1}\nprint(unique_numbers)  # Output: {1, 2, 3}\n\n# Adding elements\nunique_numbers.add(4)\nprint(unique_numbers)  # Output: {1, 2, 3, 4}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Dictionaries\nDictionaries store key-value pairs and are unordered (in Python 3.7+, they maintain insertion order). They allow fast lookup of values based on unique keys. Use dictionaries when you need to associate values with specific identifiers."
+      },
+      {
+        "type": "code",
+        "value": "student_grades = {'Alice': 85, 'Bob': 92, 'Charlie': 78}\nprint(student_grades['Bob'])  # Output: 92\n\n# Adding or updating a value\nstudent_grades['Dave'] = 88\nprint(student_grades)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences\n- Lists allow duplicates and keep the order.\n- Sets do not allow duplicates and have no order.\n- Dictionaries store key-value pairs and allow fast access via keys.\n\n### When to Use Each\n- Use **lists** for ordered collections or when duplicates matter.\n- Use **sets** to store unique items and perform set operations.\n- Use **dictionaries** when you need to associate values with keys for quick lookups."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding these differences will help you select the right data structure for your programs and write efficient Python code."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-list-comprehensions-for-faster-execution",
+    "title": "Optimizing Python List Comprehensions for Faster Execution",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn simple, beginner-friendly tips to optimize your Python list comprehensions and avoid common errors for faster and cleaner code.",
+    "videoUrl": "https://www.youtube.com/watch?v=zlmzrD8zq0o",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "List comprehensions are a powerful and concise way to create lists in Python. They are often faster and easier to read compared to traditional loops. However, beginners sometimes write list comprehensions that run slowly or cause common errors. In this article, we'll explore practical tips to optimize your list comprehensions for better performance and fewer mistakes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example. Suppose you want to create a list of squares for numbers from 0 to 9. A list comprehension makes this simple and efficient:"
+      },
+      {
+        "type": "code",
+        "value": "squares = [x * x for x in range(10)]\nprint(squares)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code runs fast and is easy to read. But what if you want to filter the list, say keep squares only for even numbers? You can add an \"if\" condition in the list comprehension:"
+      },
+      {
+        "type": "code",
+        "value": "even_squares = [x * x for x in range(10) if x % 2 == 0]\nprint(even_squares)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Adding conditions is very helpful, but placing expensive operations inside the comprehension can slow things down. For example, avoid calling heavy functions multiple times inside the comprehension. Instead, compute values once before the comprehension."
+      },
+      {
+        "type": "code",
+        "value": "# Slow: calling expensive_function(x) twice\nresult = [expensive_function(x) + expensive_function(x) for x in range(10)]\n\n# Better: store result and reuse it\nresult = [val + val for val in (expensive_function(x) for x in range(10))]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common error is modifying the list being created inside the list comprehension, which leads to unexpected behavior or errors. Always separate list creation and modification logic."
+      },
+      {
+        "type": "code",
+        "value": "# Wrong: modifying list inside the comprehension (causes error)\n# new_list = [my_list.append(x) for x in range(5)]\n\n# Correct way:\nnew_list = []\nfor x in range(5):\n    new_list.append(x)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Also, be mindful of variable scoping inside list comprehensions. Variables inside the comprehension are local and won't affect variables outside, but naming conflicts can cause confusion. Use clear variable names to avoid this."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, here are quick tips to optimize list comprehensions:\n- Avoid expensive operations inside the comprehension; compute outside if possible.\n- Use conditions wisely to filter data efficiently.\n- Do not modify the list you're creating inside the comprehension.\n- Use clear variable names to avoid confusion.\n\nBy following these guidelines, your Python list comprehensions will run faster and be easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-queries-for-high-volume-data-warehousing",
+    "title": "Optimizing SQL Queries for High-Volume Data Warehousing: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn practical and beginner-friendly techniques to optimize SQL queries for efficient data warehousing with large volumes of data.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with data warehouses containing millions or even billions of rows, poorly written SQL queries can lead to long wait times and heavy resource consumption. Optimizing your SQL queries helps databases execute faster, reducing costs and improving user experience. This tutorial introduces beginner-friendly tips to write efficient queries for high-volume data warehousing."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use SELECT only on needed columns. Avoid SELECT * because selecting unnecessary columns wastes memory and processing time, especially on large tables."
+      },
+      {
+        "type": "code",
+        "value": "SELECT order_id, customer_id, order_date FROM sales_orders WHERE order_date >= '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Filter data early with WHERE clauses. Reducing rows before joins or aggregations speeds up execution."
+      },
+      {
+        "type": "code",
+        "value": "SELECT customer_id, SUM(amount) AS total_spent FROM sales_orders WHERE order_date BETWEEN '2023-01-01' AND '2023-03-31' GROUP BY customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use appropriate indexes. Indexes on columns used in WHERE, JOIN, and ORDER BY clauses dramatically improve performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, creating an index on order_date:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_order_date ON sales_orders(order_date);"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Avoid unnecessary joins. Joining large tables without filtering or using indexes can cause slow queries."
+      },
+      {
+        "type": "code",
+        "value": "SELECT c.customer_name, o.order_id FROM customers c JOIN sales_orders o ON c.customer_id = o.customer_id WHERE o.order_date >= '2023-01-01';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Ensure both customers.customer_id and sales_orders.customer_id are indexed."
+      },
+      {
+        "type": "paragraph",
+        "value": "5. Use LIMIT to test queries during development. This lets you preview smaller datasets to refine queries quickly."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM sales_orders WHERE order_date >= '2023-01-01' LIMIT 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "6. Avoid functions on indexed columns in WHERE clauses. Performing functions like LOWER() or CAST() can prevent the use of indexes."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of what to avoid:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM customers WHERE LOWER(email) = 'example@example.com';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, normalize data for consistent case or store indexed computed columns."
+      },
+      {
+        "type": "paragraph",
+        "value": "7. Use explain plans to understand query execution. Many database systems provide EXPLAIN or EXPLAIN ANALYZE statements to help identify bottlenecks."
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT customer_id, SUM(amount) FROM sales_orders GROUP BY customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, focus on selecting only necessary columns, filtering early, using indexes, minimizing joins, testing with small data, avoiding functions on indexed columns, and analyzing query plans. With these steps, your SQL queries will run more efficiently in high-volume data warehouse environments."
+      }
+    ]
   }
 ];
