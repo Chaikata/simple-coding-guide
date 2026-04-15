@@ -58931,5 +58931,462 @@ export const articles = [
         "value": "In summary, to handle numeric overflow and underflow in SQL: choose appropriate data types, validate input and calculations, use casting carefully, and apply conditional checks. These practices will keep your queries running smoothly without unexpected errors."
       }
     ]
+  },
+  {
+    "slug": "mastering-async-stack-traces-in-javascript-for-easier-debugging",
+    "title": "Mastering Async Stack Traces in JavaScript for Easier Debugging",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to understand and improve async stack traces in JavaScript to debug asynchronous code more effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Debugging asynchronous code in JavaScript can sometimes feel like detective work, especially when errors show confusing stack traces that don't clearly indicate where the problem started. Async stack traces help by linking together the sequence of asynchronous calls, giving you a clearer picture of what went wrong and where."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example that shows how errors in asynchronous code often result in incomplete stack traces."
+      },
+      {
+        "type": "code",
+        "value": "function firstFunction() {\n  secondFunction();\n}\n\nfunction secondFunction() {\n  setTimeout(() => {\n    throw new Error('Oops!');\n  }, 100);\n}\n\ntry {\n  firstFunction();\n} catch (e) {\n  console.error('Caught error:', e);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, we throw an error inside a `setTimeout`. However, this error is not caught by our `try...catch` block because it happens asynchronously, after the `try` block has already finished executing. Also, the stack trace in the console will only show where the error was thrown inside the timer callback, not the higher-level call chain from `firstFunction` to `secondFunction`."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get better async stack traces, modern JavaScript environments and debugging tools often capture asynchronous calls automatically, especially when using `async`/`await` syntax. Here's how rewriting the above example with `async`/`await` can improve traceability."
+      },
+      {
+        "type": "code",
+        "value": "async function firstFunction() {\n  await secondFunction();\n}\n\nasync function secondFunction() {\n  await new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Oops!'));\n    }, 100);\n  });\n}\n\nfirstFunction().catch(e => console.error('Caught async error:', e));"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `async`/`await` and Promises allows the error to propagate back up the async call chain, resulting in a more complete and helpful stack trace. The error will be caught in the `catch` method with detailed information about both where the error originated and the sequence of awaited calls."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another helpful tip is to use the `Error.captureStackTrace()` method in Node.js or ensure your environment supports long stack traces in Promises, which can link async calls by saving stack traces at multiple points."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, here are some best practices for mastering async stack traces in JavaScript:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Prefer `async`/`await` over raw callbacks for clearer stack traces.\n- Use Promises that reject instead of throwing inside callbacks.\n- Always catch errors at the top-level async function to log complete stack traces.\n- Use developer tools that support async stack traces for better debugging (modern browsers, Node.js versions).\n- Consider libraries like Bluebird which offer long stack trace capabilities in older environments."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these techniques, you'll spend less time puzzling over confusing error messages and more time fixing bugs quickly and confidently."
+      }
+    ]
+  },
+  {
+    "slug": "building-scalable-microservices-typescript-nodejs",
+    "title": "Building Scalable Microservices with TypeScript and Node.js: A Step-by-Step Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable microservices using TypeScript and Node.js with this beginner-friendly step-by-step guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=lL_j7ilk7rc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices architecture helps you build scalable and maintainable applications by breaking down your system into smaller, independent services. Using TypeScript with Node.js adds strong typing and modern JavaScript features, improving code quality and developer experience. In this tutorial, we'll create a simple scalable microservice using TypeScript and Node.js. We'll cover project setup, service creation, Docker containerization, and basic communication."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Setup Your Project\nFirst, create a new folder for your microservice project and initialize a Node.js project with npm."
+      },
+      {
+        "type": "code",
+        "value": "mkdir user-service\ncd user-service\nnpm init -y"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Install Required Packages\nWe need TypeScript, Express (for HTTP server), and necessary types."
+      },
+      {
+        "type": "code",
+        "value": "npm install express\nnpm install --save-dev typescript @types/express @types/node ts-node nodemon"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Configure TypeScript\nCreate a `tsconfig.json` file for your TypeScript settings."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"commonjs\",\n    \"rootDir\": \"src\",\n    \"outDir\": \"dist\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Build a Simple User Service\nCreate a folder `src` and add `index.ts` inside it. This will be the main file of our user microservice."
+      },
+      {
+        "type": "code",
+        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\napp.use(express.json());\n\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst users: User[] = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' },\n];\n\n// Get all users\napp.get('/users', (req: Request, res: Response) => {\n  res.json(users);\n});\n\n// Get user by ID\napp.get('/users/:id', (req: Request, res: Response) => {\n  const id = parseInt(req.params.id, 10);\n  const user = users.find(u => u.id === id);\n  if (user) {\n    res.json(user);\n  } else {\n    res.status(404).json({ message: 'User not found' });\n  }\n});\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, () => {\n  console.log(`User service running on port ${PORT}`);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Run the Service\nAdd a script to your `package.json` to run the service using ts-node with nodemon for auto-reload."
+      },
+      {
+        "type": "code",
+        "value": "\"scripts\": {\n  \"start\": \"nodemon --exec ts-node src/index.ts\"\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Then run:\n\nbash\nnpm start\n\n\nYou should see `User service running on port 3000`. Open `http://localhost:3000/users` in your browser or use curl/Postman to test the API."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Dockerize the Microservice\nTo ensure scalability, running your microservice inside Docker containers is crucial. Create a `Dockerfile` in your project root:"
+      },
+      {
+        "type": "code",
+        "value": "FROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nRUN npm run build\nEXPOSE 3000\nCMD [\"node\", \"dist/index.js\"]"
+      },
+      {
+        "type": "paragraph",
+        "value": "Add a build script in `package.json`:\n\n\n\"build\": \"tsc\"\n\n\nBuild your Docker image with:\n\nbash\ndocker build -t user-service .\n\n\nRun the container:\n\nbash\ndocker run -p 3000:3000 user-service\n\n\nYour service is now running inside a container, making it easy to scale by running multiple instances behind a load balancer."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nYou have built a simple scalable microservice with TypeScript and Node.js! This service can be expanded with databases, message brokers, and more complex communication patterns to fit your application needs. Containerizing your service with Docker helps you deploy and scale confidently."
+      }
+    ]
+  },
+  {
+    "slug": "handling-typescript-type-narrowing-failures-in-complex-conditional-logic",
+    "title": "Handling TypeScript Type Narrowing Failures in Complex Conditional Logic",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to resolve TypeScript type narrowing issues that occur in complex conditional logic with clear, beginner-friendly solutions.",
+    "videoUrl": "https://www.youtube.com/watch?v=EE-DRAeiHcg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript’s type narrowing is a powerful feature that helps you write safer code by refining types within conditional blocks. However, when dealing with complex conditional logic, you might encounter situations where TypeScript fails to narrow types as expected, causing type errors or loss of type information."
+      },
+      {
+        "type": "paragraph",
+        "value": "This article will explain why these failures happen and how you can handle them effectively using beginner-friendly techniques."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Type Narrowing Sometimes Fails"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript narrows types based on the current block or condition checks such as typeof, instanceof, or user-defined type guards. However, in complex nested conditions, combined checks, or when dealing with union types, the compiler may lose track of specific information, causing it to fall back to a broader type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example:"
+      },
+      {
+        "type": "code",
+        "value": "type Animal = { kind: 'dog'; bark: () => void } | { kind: 'cat'; meow: () => void };\n\nfunction makeSound(animal: Animal) {\n  if (animal.kind === 'dog' || animal.kind === 'cat') {\n    // TypeScript narrows to Animal here\n    // But inside this block animal could be either dog or cat\n    \n    if ('bark' in animal) {\n      animal.bark(); // Works fine\n    } else if ('meow' in animal) {\n      animal.meow(); // Works fine\n    }\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here the type narrowing works well because we checked the \"kind\" property first and then used presence checks. But consider when conditions get more intertwined or when you have more union members — TypeScript might not narrow correctly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Handle Narrowing Failures"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some practical strategies to overcome these issues:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use User-defined Type Guards:** Create functions that clearly define and assert a type. This helps TypeScript understand exactly what you intend."
+      },
+      {
+        "type": "code",
+        "value": "function isDog(animal: Animal): animal is { kind: 'dog'; bark: () => void } {\n  return animal.kind === 'dog';\n}\n\nfunction makeSound(animal: Animal) {\n  if (isDog(animal)) {\n    animal.bark();\n  } else {\n    animal.meow();\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Break Complex Conditions into Smaller Checks:** Instead of combining multiple conditions in one if statement, split them to help TypeScript track types more easily."
+      },
+      {
+        "type": "code",
+        "value": "if (animal.kind === 'dog') {\n  animal.bark();\n} else if (animal.kind === 'cat') {\n  animal.meow();\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Use Exhaustive Checks with `never`:** When working with union types, adding an exhaustive check helps catch unhandled cases and assists the compiler."
+      },
+      {
+        "type": "code",
+        "value": "function makeSound(animal: Animal) {\n  switch (animal.kind) {\n    case 'dog':\n      animal.bark();\n      break;\n    case 'cat':\n      animal.meow();\n      break;\n    default:\n      const _exhaustiveCheck: never = animal;\n      return _exhaustiveCheck;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use Type Assertions Sparingly:** If you are absolutely certain about a variable's type but TypeScript cannot infer it, you can use type assertions (`as Type`). Use this carefully as it bypasses compiler safety."
+      },
+      {
+        "type": "code",
+        "value": "if (animal.kind === 'dog') {\n  (animal as { kind: 'dog'; bark: () => void }).bark();\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing failures happen due to TypeScript’s conservative type inference in complex conditions. By writing clear, simple conditions, using user-defined type guards, exhaustive checks, and occasionally type assertions, you can help TypeScript understand your data and avoid common type errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Always strive for readability and safety in your type checks to get the most out of TypeScript's powerful static analysis capabilities."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-metaclasses-deep-dive-into-dynamic-class-creation",
+    "title": "Mastering Python's Metaclasses: Deep Dive into Dynamic Class Creation",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python metaclasses to create and customize classes dynamically. This beginner-friendly guide explains metaclasses, their basics, and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you have worked with Python classes, you might be familiar with the idea that classes themselves are objects. This opens the door to a powerful but often confusing feature: metaclasses. In simple terms, a metaclass is the \"class\" of a class. It defines how classes are created, allowing you to control their creation dynamically. This tutorial will guide you through the basics of Python metaclasses, explaining what they are, why they matter, and how to use them with clear examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Metaclass?\n\nIn Python, classes are instances of metaclasses. By default, all classes are instances of the built-in type metaclass (`type`). When you write a class statement, Python actually calls the metaclass to create that class. This allows for customization of class behavior right at the time the class is created."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break it down:\n- **Instance**: An object created from a class.\n- **Class**: A blueprint for creating instances.\n- **Metaclass**: A blueprint for creating classes.\n\nIn simpler terms, just as a class creates objects, a metaclass creates classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why use Metaclasses?\n\nMetaclasses allow you to:\n- Dynamically modify or add attributes and methods to classes.\n- Enforce coding standards or constraints on classes.\n- Automatically register classes in a system.\n- Implement Singleton patterns or other custom behaviors at a class level.\n\nFor example, suppose you want to ensure that all your classes have a specific method or attribute. A metaclass can automate that check or addition without manually modifying each class."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Metaclass\n\nTo create a metaclass, you typically inherit from the built-in `type` metaclass and override some of its methods, most commonly `__new__` or `__init__`. Here is how you can create and use a simple metaclass."
+      },
+      {
+        "type": "code",
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name} with MyMeta metaclass\")\n        # Optionally add or modify class attributes\n        dct['created_by_meta'] = True\n        return super().__new__(cls, name, bases, dct)\n\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\nprint(MyClass.created_by_meta)  # Output: True"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example:\n- `MyMeta` inherits from `type`.\n- The `__new__` method is called when a new class is created.\n- Inside `__new__`, we print a message and add a class attribute `created_by_meta`.\n- `MyClass` uses `MyMeta` as its metaclass by specifying `metaclass=MyMeta`.\n- When `MyClass` is created, the message prints, and `created_by_meta` exists on the class."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Customizing Class Creation\n\nYou can perform more complex actions, like automatically registering classes in a central registry. This is helpful in frameworks or plugins where you want to keep track of all subclasses automatically."
+      },
+      {
+        "type": "code",
+        "value": "class RegistryMeta(type):\n    registry = {}\n\n    def __new__(cls, name, bases, dct):\n        new_cls = super().__new__(cls, name, bases, dct)\n        if name != 'Base':  # Avoid registering base class itself\n            cls.registry[name] = new_cls\n        return new_cls\n\n\nclass Base(metaclass=RegistryMeta):\n    pass\n\n\nclass PluginA(Base):\n    pass\n\n\nclass PluginB(Base):\n    pass\n\nprint(RegistryMeta.registry)  # {'PluginA': <class '__main__.PluginA'>, 'PluginB': <class '__main__.PluginB'>}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `RegistryMeta` metaclass keeps a dictionary of all classes created that inherit from `Base`. This way, you can automatically discover all plugins or subclasses without manually adding them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Important Notes for Beginners\n\n- Most Python code does not require metaclasses—use them only when you have a solid reason.\n- Always inherit your metaclasses from `type`.\n- The `__new__` method of a metaclass is where the class object is created.\n- Use `super().__new__` to ensure proper creation of the class.\n\n### Summary\n\nMetaclasses let you control class creation dynamically in Python. They are the \"classes of classes,\" enabling you to add attributes, enforce rules, or register classes automatically. While powerful, they should be used thoughtfully as they can make code harder to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering metaclasses, you unlock advanced Python capabilities that power many frameworks and libraries. Keep experimenting with simple examples, and soon dynamic class creation will become a useful tool in your Python toolkit."
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-pythons-context-managers-to-handle-resource-cleanup-errors-gracefully",
+    "title": "Harnessing Python's Context Managers to Handle Resource Cleanup Errors Gracefully",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python's context managers to manage resources efficiently and handle cleanup errors smoothly, making your code more robust and beginner-friendly.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, managing resources like files, network connections, or locks is crucial. Failing to release these resources can lead to bugs and resource leaks. Python's context managers offer a neat and reliable way to handle resource cleanup automatically. In this article, we'll explore how to use context managers and how to handle errors that might occur during resource cleanup gracefully."
+      },
+      {
+        "type": "paragraph",
+        "value": "A context manager in Python is usually used with the `with` statement. It guarantees that a resource is properly acquired and released, even if an error happens during the block execution. For example, opening and closing files safely is easily managed using a context manager."
+      },
+      {
+        "type": "code",
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this snippet, Python automatically closes the file after the `with` block, even if an error occurs inside the block. This is much safer than manually opening and closing files."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, however, errors can occur during the cleanup process itself, that is when the resource is being released. By default, if the cleanup code raises an exception, it might overwrite the original exception or cause unexpected crashes. Python allows you to handle this gracefully by customizing the `__exit__` method in your own context manager."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple context manager class that demonstrates handling errors during cleanup:"
+      },
+      {
+        "type": "code",
+        "value": "class SafeResource:\n    def __enter__(self):\n        print('Resource acquired')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        try:\n            print('Cleaning up resource')\n            # Simulated cleanup that raises an error\n            raise RuntimeError('Cleanup failed!')\n        except Exception as cleanup_error:\n            print(f'Error during cleanup: {cleanup_error}')\n            # Suppress the cleanup error to not override original exceptions\n            # Return False if you want the cleanup error to propagate\n        # Returning False lets exceptions from the with block propagate\n        return False\n\n# Using the context manager\ntry:\n    with SafeResource() as res:\n        print('Doing work with resource')\n        raise ValueError('Oops! Something went wrong')\nexcept Exception as e:\n    print(f'Caught exception: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, our `SafeResource` context manager prints a message when acquiring and cleaning up the resource. The cleanup step intentionally raises an error. However, this error is caught and handled inside the `__exit__` method so it won't mask the original exception from the `with` block."
+      },
+      {
+        "type": "paragraph",
+        "value": "Notice that we return `False` from `__exit__`. Returning `False` tells Python to propagate any exception that occurred inside the `with` block (in this case, the `ValueError`). The cleanup error is logged but does not stop the program or hide the main error."
+      },
+      {
+        "type": "paragraph",
+        "value": "This pattern helps you handle resource cleanup errors gracefully without losing important debugging information. It’s especially useful when working with more complex resources where cleanup might fail for various reasons."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use the `contextlib` module to create simple context managers without writing a full class. Here's how you can catch cleanup errors using a generator-based context manager:"
+      },
+      {
+        "type": "code",
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef safe_resource():\n    print('Resource acquired')\n    try:\n        yield\n    finally:\n        try:\n            print('Cleaning up resource')\n            raise RuntimeError('Cleanup failed!')\n        except Exception as cleanup_error:\n            print(f'Error during cleanup: {cleanup_error}')\n\n\ntry:\n    with safe_resource():\n        print('Doing work with resource')\n        raise ValueError('Oops! Something went wrong')\nexcept Exception as e:\n    print(f'Caught exception: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this version, the cleanup happens in the `finally` block of the generator context manager. The cleanup error is caught and logged separately, so the original exception still propagates outside the `with` block."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using context managers to handle both resource management and error handling during cleanup keeps your code cleaner, safer, and easier to maintain. As you encounter more sophisticated resources or complex cleanup logic, this skill will become increasingly valuable."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-complex-sql-queries-with-window-functions",
+    "title": "Optimizing Complex SQL Queries with Window Functions: A Step-by-Step Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to simplify and speed up your complex SQL queries by using powerful window functions with this beginner-friendly, step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you're working with SQL queries, especially those involving aggregates and detailed row-level data, your queries can quickly become complex and slow. Window functions are a game-changer because they allow you to perform advanced calculations across sets of rows related to the current row without collapsing the output like GROUP BY does. In this guide, you'll learn how to optimize your complex queries using window functions with practical examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a common scenario: you have a sales table, and you want to calculate each salesperson's total sales, their rank among their peers, and calculate running totals—all in a single query."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simplified sales table structure:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n  salesperson_id INT,\n  sale_date DATE,\n  amount DECIMAL(10, 2)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Suppose you want the following in your results:\n- Each sale's data\n- Total sales amount per salesperson\n- Rank of each sale amount within the salesperson's sales\n- Running total of sales for each salesperson ordered by date"
+      },
+      {
+        "type": "paragraph",
+        "value": "Without window functions, you might write subqueries or multiple joins that make the query hard to read and inefficient. Window functions let you calculate these values alongside your original data easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a query that uses window functions to achieve this:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  salesperson_id,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson_id) AS total_sales,\n  RANK() OVER (PARTITION BY salesperson_id ORDER BY amount DESC) AS rank_sale,\n  SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales\nORDER BY salesperson_id, sale_date;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down the key parts:\n- The PARTITION BY clause groups the data by salesperson_id so calculations reset for each salesperson.\n- SUM(amount) OVER (...) calculates total sales per salesperson.\n- RANK() OVER (...) assigns a rank to each sale amount per salesperson, with the highest sales ranked first.\n- The running total sums sales up to the current row ordered by sale_date.\n\nThis results in an efficient, readable query producing detailed insights."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using Window Functions\n\n- **Performance:** Window functions avoid costly joins and subqueries, improving speed.\n- **Readability:** Your SQL becomes cleaner and easier to maintain.\n- **Flexibility:** You can perform multiple aggregations and rankings in one query."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for Beginners\n\n- Start by understanding aggregate functions like SUM(), AVG(), and RANK().\n- Learn how PARTITION BY works to group data inside the window.\n- Use ORDER BY inside window functions to control calculation order.\n- Test queries on small data samples to see how window functions affect results."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering window functions, you'll be able to optimize complex SQL queries significantly, making your data analysis faster and easier."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-nulls-common-misconceptions-and-how-to-handle-them",
+    "title": "Understanding SQL NULLs: Common Misconceptions and How to Handle Them",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn the basics of SQL NULLs, common misunderstandings, and practical tips on how to work with NULL values effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=vV_tqFVLqYA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In SQL, NULL represents the absence of a value or an unknown value in a database column. It's a special marker, not a regular data value, and it often causes confusion for beginners because it behaves differently compared to other values."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common misconception is that NULL is the same as zero (0) or an empty string (''). However, NULL means no value at all—not zero, not blank. This distinction is important when writing queries and handling data."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, when comparing NULL to other values using the usual comparison operators like = or !=, the result is always UNKNOWN. This means the condition will not evaluate to TRUE, and rows containing NULL may be skipped unexpectedly."
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above query will not return any rows, even if some employees have a NULL manager_id. To properly check for NULLs, use the IS NULL or IS NOT NULL operator:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, to check if a value is not NULL, use IS NOT NULL:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another useful tip is using functions like COALESCE or IFNULL to handle NULL values by providing a default value. For example, if you want to display 'No Manager' instead of NULL in your query results, you can write:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT employee_name, COALESCE(manager_id, 'No Manager') AS manager FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, remember these key points about NULLs in SQL:\n- NULL means no or unknown value, not zero or empty string.\n- Use IS NULL or IS NOT NULL to test for NULL values.\n- Use COALESCE or IFNULL to replace NULLs with default values.\n- Comparisons involving NULL (like = NULL) do not work as expected."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding how NULL works and correctly handling it in your queries, you can avoid common pitfalls and make your SQL data processing more accurate and reliable."
+      }
+    ]
   }
 ];

@@ -1,565 +1,533 @@
 [
   {
-    "slug": "mastering-javascript-proxies-for-advanced-object-manipulation",
-    "title": "Mastering JavaScript Proxies for Advanced Object Manipulation",
+    "slug": "handling-floating-point-precision-edge-cases-in-javascript-calculations",
+    "title": "Handling Floating Point Precision Edge Cases in JavaScript Calculations",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how JavaScript Proxies allow you to intercept and customize operations on objects for advanced and powerful coding techniques.",
-    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "description": "Learn how to handle and avoid common floating point precision issues in JavaScript calculations with practical tips and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=0IOsF_N1DIs",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript proxies provide a powerful way to control and customize low-level operations on objects, such as property lookup, assignment, and function invocation. This tutorial will introduce you to the basics of using proxies, helping you manipulate objects in advanced ways with clean and readable code."
+        "value": "When working with numbers in JavaScript, you might have noticed some unexpected results due to how computers handle floating point numbers internally. For example, simple calculations like 0.1 + 0.2 may not exactly equal 0.3. This is because JavaScript uses the IEEE 754 standard for representing decimal numbers, which can introduce tiny errors in precision."
       },
       {
         "type": "paragraph",
-        "value": "A Proxy wraps an existing object and intercepts operations performed on it, allowing you to define custom behavior. The core idea is to specify handler functions (called traps) that are triggered during these operations."
+        "value": "In this tutorial, you'll learn why floating point precision issues happen, common problems you might encounter, and how to handle these edge cases effectively with simple code examples."
       },
       {
         "type": "paragraph",
-        "value": "Here's the simplest example of a Proxy that logs every time you access a property on an object:"
+        "value": "### Why does floating point precision matter?\n\nFloating point numbers are stored in a binary format that can't precisely represent all decimal fractions, leading to small rounding errors. These tiny inaccuracies can cause problems especially in financial calculations, measurements, or when comparing numbers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common floating point problem example:"
       },
       {
         "type": "code",
-        "value": "const target = { name: 'Alice', age: 25 };\n\nconst handler = {\n  get: function(obj, prop) {\n    console.log(`Property '${prop}' was accessed.`);\n    return obj[prop];\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nconsole.log(proxy.name); // Logs access and outputs: Alice\nconsole.log(proxy.age);  // Logs access and outputs: 25"
+        "value": "console.log(0.1 + 0.2);     // Output: 0.30000000000000004\nconsole.log(0.1 + 0.2 === 0.3); // Output: false"
       },
       {
         "type": "paragraph",
-        "value": "In this example, the `get` trap intercepts property accesses. Whenever we read a property on `proxy`, the handler logs the property name before returning it from the original object."
+        "value": "Even though mathematically 0.1 + 0.2 equals 0.3, JavaScript's floating point arithmetic results in a slightly different number."
       },
       {
         "type": "paragraph",
-        "value": "Besides `get`, you can also trap other operations, like setting properties with `set`, checking property existence with `has`, or even function calls with `apply`. Let's create a proxy that allows only numeric values to be set on an object:"
+        "value": "### How to handle floating point precision edge cases\n\n#### 1. Use the `toFixed()` method\n\nThis method formats a number to a fixed number of decimal places and returns a string. It's helpful to round results for display."
       },
       {
         "type": "code",
-        "value": "const target = {};\n\nconst handler = {\n  set: function(obj, prop, value) {\n    if (typeof value === 'number') {\n      obj[prop] = value;\n      console.log(`Set ${prop} to ${value}`);\n      return true; // indicates success\n    } else {\n      console.log(`Failed to set ${prop}: value is not a number.`);\n      return false; // indicates failure\n    }\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nproxy.age = 30;    // Allowed, logs: Set age to 30\nproxy.name = 'Bob'; // Not allowed, logs error message\n\nconsole.log(proxy.age); // 30\nconsole.log(proxy.name); // undefined"
+        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2));  // Output: \"0.30\""
       },
       {
         "type": "paragraph",
-        "value": "With this proxy, you ensure the object only holds numeric values. This kind of validation can be very useful to maintain object state integrity."
-      },
-      {
-        "type": "paragraph",
-        "value": "Proxies can also be used for more advanced tasks like creating default values for missing properties. Here's how to return a default string when a property doesn't exist:"
+        "value": "Note: `toFixed()` returns a string, so if you need a number, you can wrap it in `parseFloat()`."
       },
       {
         "type": "code",
-        "value": "const target = {};\n\nconst handler = {\n  get: function(obj, prop) {\n    return prop in obj ? obj[prop] : `Property '${prop}' not found`;\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nproxy.name = 'Charlie';\nconsole.log(proxy.name); // Charlie\nconsole.log(proxy.age);  // Property 'age' not found"
+        "value": "const preciseSum = parseFloat(sum.toFixed(2));\nconsole.log(preciseSum);  // Output: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, JavaScript proxies are a versatile tool that can help you intercept, customize, and enhance normal object behavior. By mastering proxies, you gain greater control over your data, making your code safer, cleaner, and more expressive."
+        "value": "#### 2. Use a small tolerance value for comparisons\n\nWhen comparing two floating point numbers, instead of using `===`, check if their difference is smaller than a tiny threshold (also known as epsilon)."
+      },
+      {
+        "type": "code",
+        "value": "const a = 0.1 + 0.2;\nconst b = 0.3;\nconst epsilon = 0.000001;\n\nif (Math.abs(a - b) < epsilon) {\n  console.log('a and b are effectively equal');\n} else {\n  console.log('a and b are different');\n}"
       },
       {
         "type": "paragraph",
-        "value": "Try creating your own proxies to log actions, validate data, create default values, or even implement dynamic behavior that's challenging to achieve with normal objects. The Proxy API is well worth exploring for any JavaScript developer aiming to write advanced and maintainable code."
+        "value": "#### 3. Scale numbers to integers before calculations\n\nIf you're working with fixed decimal numbers (like money), multiply them by 100 (or 1000 etc.) to convert to integers, perform calculations, and then divide back."
+      },
+      {
+        "type": "code",
+        "value": "const price1 = 0.1;\nconst price2 = 0.2;\n\n// Convert to integers by scaling\nconst totalCents = (price1 * 100) + (price2 * 100);\nconst total = totalCents / 100;\n\nconsole.log(total);  // Output: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nHandling floating point precision requires care and understanding of JavaScript's number system. For simple cases, rounding and epsilon comparison work well. For financial or more precise requirements, scaling numbers or using dedicated libraries (like decimal.js) can be even better."
+      },
+      {
+        "type": "paragraph",
+        "value": "By applying these techniques, you can avoid tricky bugs and ensure your JavaScript calculations behave as expected even with floating point numbers."
       }
     ]
   },
   {
-    "slug": "understanding-javascript-type-coercion-errors",
-    "title": "Understanding JavaScript Type Coercion Errors: A Deep Dive with Practical Examples",
+    "slug": "mastering-async-stack-traces-in-javascript-for-easier-debugging",
+    "title": "Mastering Async Stack Traces in JavaScript for Easier Debugging",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn about JavaScript type coercion errors, why they happen, and how to avoid them with simple explanations and practical code examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=KX10dEuqQyQ",
+    "description": "Learn how to understand and improve async stack traces in JavaScript to debug asynchronous code more effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible and powerful programming language, but one of its quirks can lead to confusing bugs for beginners: type coercion errors. Type coercion refers to how JavaScript automatically converts one data type to another in certain situations, which sometimes produces unexpected results. This guide will help you understand what causes these errors and how to avoid them."
+        "value": "Debugging asynchronous code in JavaScript can sometimes feel like detective work, especially when errors show confusing stack traces that don't clearly indicate where the problem started. Async stack traces help by linking together the sequence of asynchronous calls, giving you a clearer picture of what went wrong and where."
       },
       {
         "type": "paragraph",
-        "value": "JavaScript has different data types, such as strings, numbers, booleans, and objects. It often tries to 'help' by converting values from one type to another when performing operations. However, these implicit conversions can sometimes cause surprises."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 1: Adding a Number and a String"
-      },
-      {
-        "type": "paragraph",
-        "value": "When you add a number to a string, JavaScript converts the number to a string first and then concatenates them."
+        "value": "Let's start with a simple example that shows how errors in asynchronous code often result in incomplete stack traces."
       },
       {
         "type": "code",
-        "value": "let result = 5 + '10';\nconsole.log(result); // Output: '510'\nconsole.log(typeof result); // Output: 'string'"
+        "value": "function firstFunction() {\n  secondFunction();\n}\n\nfunction secondFunction() {\n  setTimeout(() => {\n    throw new Error('Oops!');\n  }, 100);\n}\n\ntry {\n  firstFunction();\n} catch (e) {\n  console.error('Caught error:', e);\n}"
       },
       {
         "type": "paragraph",
-        "value": "If you expected the result to be a number (15), you need to convert the string to a number explicitly, like this:"
+        "value": "In this example, we throw an error inside a `setTimeout`. However, this error is not caught by our `try...catch` block because it happens asynchronously, after the `try` block has already finished executing. Also, the stack trace in the console will only show where the error was thrown inside the timer callback, not the higher-level call chain from `firstFunction` to `secondFunction`."
+      },
+      {
+        "type": "paragraph",
+        "value": "To get better async stack traces, modern JavaScript environments and debugging tools often capture asynchronous calls automatically, especially when using `async`/`await` syntax. Here's how rewriting the above example with `async`/`await` can improve traceability."
       },
       {
         "type": "code",
-        "value": "let result = 5 + Number('10');\nconsole.log(result); // Output: 15\nconsole.log(typeof result); // Output: 'number'"
+        "value": "async function firstFunction() {\n  await secondFunction();\n}\n\nasync function secondFunction() {\n  await new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Oops!'));\n    }, 100);\n  });\n}\n\nfirstFunction().catch(e => console.error('Caught async error:', e));"
       },
       {
         "type": "paragraph",
-        "value": "### Example 2: Subtracting a String from a Number"
+        "value": "Using `async`/`await` and Promises allows the error to propagate back up the async call chain, resulting in a more complete and helpful stack trace. The error will be caught in the `catch` method with detailed information about both where the error originated and the sequence of awaited calls."
       },
       {
         "type": "paragraph",
-        "value": "In subtraction, JavaScript tries to convert the string to a number automatically."
-      },
-      {
-        "type": "code",
-        "value": "let result = 10 - '5';\nconsole.log(result); // Output: 5\nconsole.log(typeof result); // Output: 'number'"
+        "value": "Another helpful tip is to use the `Error.captureStackTrace()` method in Node.js or ensure your environment supports long stack traces in Promises, which can link async calls by saving stack traces at multiple points."
       },
       {
         "type": "paragraph",
-        "value": "Here, the string '5' is coerced into the number 5, so the subtraction works as expected. Notice the difference compared to the addition example."
+        "value": "To summarize, here are some best practices for mastering async stack traces in JavaScript:"
       },
       {
         "type": "paragraph",
-        "value": "### Example 3: Comparing Values with == vs ==="
+        "value": "- Prefer `async`/`await` over raw callbacks for clearer stack traces.\n- Use Promises that reject instead of throwing inside callbacks.\n- Always catch errors at the top-level async function to log complete stack traces.\n- Use developer tools that support async stack traces for better debugging (modern browsers, Node.js versions).\n- Consider libraries like Bluebird which offer long stack trace capabilities in older environments."
       },
       {
         "type": "paragraph",
-        "value": "The double equals operator (==) compares values after coercion, which can lead to surprising results. The triple equals operator (===) compares without coercion and is generally safer."
-      },
-      {
-        "type": "code",
-        "value": "console.log(5 == '5');  // true (values coerced)\nconsole.log(5 === '5'); // false (different types)"
-      },
-      {
-        "type": "paragraph",
-        "value": "To avoid coercion-related bugs, prefer using === unless you have a specific reason not to."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example 4: Boolean Coercion Pitfalls"
-      },
-      {
-        "type": "paragraph",
-        "value": "Some values are 'falsy', meaning they become false when converted to booleans. The common ones include 0, '', null, undefined, NaN, and false."
-      },
-      {
-        "type": "code",
-        "value": "if ('') {\n  console.log('This will NOT run');\n} else {\n  console.log('Empty string is falsy');\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "If you assume a non-empty string but it is empty, your conditions may behave unexpectedly. Always be careful when relying on implicit boolean coercions."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Tips to Avoid Type Coercion Errors"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use explicit type conversions: Number(), String(), Boolean() functions help make code clearer.\n- Prefer the === operator to avoid type coercion in conditions.\n- Validate and sanitize inputs, especially if they come as strings but should be numbers.\n- Use strict linting tools (like ESLint) to warn about potentially unsafe coercions."
-      },
-      {
-        "type": "paragraph",
-        "value": "Understanding type coercion helps debug errors and write more predictable JavaScript code. With these examples and tips, you should now have a solid foundation for avoiding common type coercion pitfalls."
+        "value": "With these techniques, you'll spend less time puzzling over confusing error messages and more time fixing bugs quickly and confidently."
       }
     ]
   },
   {
-    "slug": "building-your-first-rest-api-with-typescript-and-express",
-    "title": "Building Your First REST API with TypeScript and Express: A Beginner's Guide",
+    "slug": "building-scalable-microservices-typescript-nodejs",
+    "title": "Building Scalable Microservices with TypeScript and Node.js: A Step-by-Step Guide",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to create your very first REST API using TypeScript and Express. This beginner-friendly guide takes you through every step to build a simple but functional API.",
-    "videoUrl": "https://www.youtube.com/watch?v=-MTSQjw5DrM",
+    "description": "Learn how to build scalable microservices using TypeScript and Node.js with this beginner-friendly step-by-step guide.",
+    "videoUrl": "https://www.youtube.com/watch?v=lL_j7ilk7rc",
     "content": [
       {
         "type": "paragraph",
-        "value": "REST APIs allow different software applications to communicate with each other over the internet. In this guide, you'll learn how to create a simple REST API using Express, a popular Node.js web framework, and TypeScript, a typed superset of JavaScript. This tutorial assumes you have Node.js and npm installed on your computer."
+        "value": "Microservices architecture helps you build scalable and maintainable applications by breaking down your system into smaller, independent services. Using TypeScript with Node.js adds strong typing and modern JavaScript features, improving code quality and developer experience. In this tutorial, we'll create a simple scalable microservice using TypeScript and Node.js. We'll cover project setup, service creation, Docker containerization, and basic communication."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setting Up Your Project\nFirst, create a new directory for your project and initialize it with npm:"
+        "value": "### Step 1: Setup Your Project\nFirst, create a new folder for your microservice project and initialize a Node.js project with npm."
       },
       {
         "type": "code",
-        "value": "mkdir my-first-api\ncd my-first-api\nnpm init -y"
+        "value": "mkdir user-service\ncd user-service\nnpm init -y"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Installing Required Packages\nNext, install Express and TypeScript along with type definitions and some helpful development tools:"
+        "value": "### Step 2: Install Required Packages\nWe need TypeScript, Express (for HTTP server), and necessary types."
       },
       {
         "type": "code",
-        "value": "npm install express\nnpm install --save-dev typescript @types/node @types/express ts-node nodemon"
+        "value": "npm install express\nnpm install --save-dev typescript @types/express @types/node ts-node nodemon"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Configuring TypeScript\nCreate a tsconfig.json file to configure TypeScript options. Run this command to generate a default configuration file:"
+        "value": "### Step 3: Configure TypeScript\nCreate a `tsconfig.json` file for your TypeScript settings."
       },
       {
         "type": "code",
-        "value": "npx tsc --init"
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"commonjs\",\n    \"rootDir\": \"src\",\n    \"outDir\": \"dist\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "You can keep most default settings. Just make sure to set the target to at least ES6 for modern JavaScript features like this:"
+        "value": "### Step 4: Build a Simple User Service\nCreate a folder `src` and add `index.ts` inside it. This will be the main file of our user microservice."
       },
       {
         "type": "code",
-        "value": "\"target\": \"ES6\","
+        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\napp.use(express.json());\n\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst users: User[] = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' },\n];\n\n// Get all users\napp.get('/users', (req: Request, res: Response) => {\n  res.json(users);\n});\n\n// Get user by ID\napp.get('/users/:id', (req: Request, res: Response) => {\n  const id = parseInt(req.params.id, 10);\n  const user = users.find(u => u.id === id);\n  if (user) {\n    res.json(user);\n  } else {\n    res.status(404).json({ message: 'User not found' });\n  }\n});\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, () => {\n  console.log(`User service running on port ${PORT}`);\n});"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Writing Your First API Endpoint\nCreate a `src` folder and inside it a file named `index.ts`. This will be the main file of your application. Add the following code to create a simple Express server with one GET endpoint:"
+        "value": "### Step 5: Run the Service\nAdd a script to your `package.json` to run the service using ts-node with nodemon for auto-reload."
       },
       {
         "type": "code",
-        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\nconst PORT = 3000;\n\n// Middleware to parse JSON\napp.use(express.json());\n\n// Simple GET endpoint\napp.get('/', (req: Request, res: Response) => {\n  res.send('Welcome to your first REST API built with TypeScript and Express!');\n});\n\napp.listen(PORT, () => {\n  console.log(`Server is running at http://localhost:${PORT}`);\n});"
+        "value": "\"scripts\": {\n  \"start\": \"nodemon --exec ts-node src/index.ts\"\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Step 5: Running Your Server\nTo run your server easily with automatic restarts on file changes, add this script to your `package.json`:"
+        "value": "Then run:\n\nbash\nnpm start\n\n\nYou should see `User service running on port 3000`. Open `http://localhost:3000/users` in your browser or use curl/Postman to test the API."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Dockerize the Microservice\nTo ensure scalability, running your microservice inside Docker containers is crucial. Create a `Dockerfile` in your project root:"
       },
       {
         "type": "code",
-        "value": "\"scripts\": {\n  \"start\": \"nodemon src/index.ts\"\n}"
+        "value": "FROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nRUN npm run build\nEXPOSE 3000\nCMD [\"node\", \"dist/index.js\"]"
       },
       {
         "type": "paragraph",
-        "value": "Now start your server with:"
-      },
-      {
-        "type": "code",
-        "value": "npm start"
+        "value": "Add a build script in `package.json`:\n\n\n\"build\": \"tsc\"\n\n\nBuild your Docker image with:\n\nbash\ndocker build -t user-service .\n\n\nRun the container:\n\nbash\ndocker run -p 3000:3000 user-service\n\n\nYour service is now running inside a container, making it easy to scale by running multiple instances behind a load balancer."
       },
       {
         "type": "paragraph",
-        "value": "Open your browser and go to http://localhost:3000. You should see your welcome message."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 6: Adding a RESTful Resource\nLet's add a simple resource: an array of users. We'll create routes to retrieve all users and add new users."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n}\n\nconst users: User[] = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' },\n];\n\n// Get all users\napp.get('/users', (req: Request, res: Response) => {\n  res.json(users);\n});\n\n// Add a new user\napp.post('/users', (req: Request, res: Response) => {\n  const newUser: User = {\n    id: users.length + 1,\n    name: req.body.name,\n  };\n  users.push(newUser);\n  res.status(201).json(newUser);\n});"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 7: Testing Your API\nYou can test your API using tools like Postman, Insomnia, or even curl in the terminal.\n\nTo get all users, send a GET request to:\n\nhttp://localhost:3000/users\n\n\nTo add a user, send a POST request to:\n\nhttp://localhost:3000/users\n\nwith a JSON body like:"
-      },
-      {
-        "type": "code",
-        "value": "{\n  \"name\": \"Charlie\"\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Your server will respond with the newly created user including an ID."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nCongratulations! You've built a basic REST API with TypeScript and Express. From here, you can expand by connecting a database, adding validation, authentication, and more complex routes. TypeScript helps you write safer, more predictable code by catching errors early and providing helpful autocompletion."
+        "value": "### Conclusion\nYou have built a simple scalable microservice with TypeScript and Node.js! This service can be expanded with databases, message brokers, and more complex communication patterns to fit your application needs. Containerizing your service with Docker helps you deploy and scale confidently."
       }
     ]
   },
   {
-    "slug": "handling-async-await-pitfalls-in-typescript-for-robust-api-calls",
-    "title": "Handling Async/Await Pitfalls in TypeScript for Robust API Calls",
+    "slug": "handling-typescript-type-narrowing-failures-in-complex-conditional-logic",
+    "title": "Handling TypeScript Type Narrowing Failures in Complex Conditional Logic",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn common async/await mistakes in TypeScript and how to handle them for reliable API calls.",
-    "videoUrl": "https://www.youtube.com/watch?v=_zwNvruI6ds",
+    "description": "Learn how to resolve TypeScript type narrowing issues that occur in complex conditional logic with clear, beginner-friendly solutions.",
+    "videoUrl": "https://www.youtube.com/watch?v=EE-DRAeiHcg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Async/await is a powerful feature in TypeScript that makes asynchronous code easier to write and read. However, beginners often run into common pitfalls when handling API calls, leading to bugs or unhandled errors. This article will walk you through these pitfalls with practical examples and show you how to avoid them for more robust code."
+        "value": "TypeScript’s type narrowing is a powerful feature that helps you write safer code by refining types within conditional blocks. However, when dealing with complex conditional logic, you might encounter situations where TypeScript fails to narrow types as expected, causing type errors or loss of type information."
       },
       {
         "type": "paragraph",
-        "value": "The first common mistake is not handling errors properly. When calling an API asynchronously, things like network failures or invalid responses can happen. If you don't catch these errors, your app can crash or behave unpredictably."
+        "value": "This article will explain why these failures happen and how you can handle them effectively using beginner-friendly techniques."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Type Narrowing Sometimes Fails"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript narrows types based on the current block or condition checks such as typeof, instanceof, or user-defined type guards. However, in complex nested conditions, combined checks, or when dealing with union types, the compiler may lose track of specific information, causing it to fall back to a broader type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example:"
       },
       {
         "type": "code",
-        "value": "async function fetchUser() {\n  const response = await fetch('https://api.example.com/user');\n  const data = await response.json();\n  return data;\n}\n\n// Using the function\nfetchUser().then(user => console.log(user));"
+        "value": "type Animal = { kind: 'dog'; bark: () => void } | { kind: 'cat'; meow: () => void };\n\nfunction makeSound(animal: Animal) {\n  if (animal.kind === 'dog' || animal.kind === 'cat') {\n    // TypeScript narrows to Animal here\n    // But inside this block animal could be either dog or cat\n    \n    if ('bark' in animal) {\n      animal.bark(); // Works fine\n    } else if ('meow' in animal) {\n      animal.meow(); // Works fine\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, if the fetch fails or the response isn’t JSON, the app will throw an error. To fix this, wrap the await calls in a try-catch block to catch and handle errors gracefully."
+        "value": "Here the type narrowing works well because we checked the \"kind\" property first and then used presence checks. But consider when conditions get more intertwined or when you have more union members — TypeScript might not narrow correctly."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Handle Narrowing Failures"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some practical strategies to overcome these issues:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Use User-defined Type Guards:** Create functions that clearly define and assert a type. This helps TypeScript understand exactly what you intend."
       },
       {
         "type": "code",
-        "value": "async function fetchUserSafe() {\n  try {\n    const response = await fetch('https://api.example.com/user');\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Failed to fetch user:', error);\n    // Handle error: return default data or rethrow\n    return null;\n  }\n}"
+        "value": "function isDog(animal: Animal): animal is { kind: 'dog'; bark: () => void } {\n  return animal.kind === 'dog';\n}\n\nfunction makeSound(animal: Animal) {\n  if (isDog(animal)) {\n    animal.bark();\n  } else {\n    animal.meow();\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Another pitfall is forgetting to await a promise. If you omit the await keyword, your code might continue executing before the asynchronous operation completes, causing data inconsistencies or runtime errors."
+        "value": "2. **Break Complex Conditions into Smaller Checks:** Instead of combining multiple conditions in one if statement, split them to help TypeScript track types more easily."
       },
       {
         "type": "code",
-        "value": "async function fetchUserWrong() {\n  const userPromise = fetch('https://api.example.com/user');\n  // Missing await here\n  const data = await userPromise.json(); // This will cause an error because userPromise is a Response, not a Promise<Response>\n  return data;\n}"
+        "value": "if (animal.kind === 'dog') {\n  animal.bark();\n} else if (animal.kind === 'cat') {\n  animal.meow();\n}"
       },
       {
         "type": "paragraph",
-        "value": "The correct approach is to await the fetch call before trying to use the response object."
+        "value": "3. **Use Exhaustive Checks with `never`:** When working with union types, adding an exhaustive check helps catch unhandled cases and assists the compiler."
       },
       {
         "type": "code",
-        "value": "async function fetchUserCorrect() {\n  const response = await fetch('https://api.example.com/user');\n  const data = await response.json();\n  return data;\n}"
+        "value": "function makeSound(animal: Animal) {\n  switch (animal.kind) {\n    case 'dog':\n      animal.bark();\n      break;\n    case 'cat':\n      animal.meow();\n      break;\n    default:\n      const _exhaustiveCheck: never = animal;\n      return _exhaustiveCheck;\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Finally, handling multiple async calls often causes confusion. If you have independent API calls, use Promise.all to run them concurrently and handle their results together."
+        "value": "4. **Use Type Assertions Sparingly:** If you are absolutely certain about a variable's type but TypeScript cannot infer it, you can use type assertions (`as Type`). Use this carefully as it bypasses compiler safety."
       },
       {
         "type": "code",
-        "value": "async function fetchMultipleUsers() {\n  try {\n    const urls = ['https://api.example.com/user/1', 'https://api.example.com/user/2'];\n    const responses = await Promise.all(urls.map(url => fetch(url)));\n    const data = await Promise.all(responses.map(res => {\n      if (!res.ok) {\n        throw new Error(`HTTP error! status: ${res.status}`);\n      }\n      return res.json();\n    }));\n    return data;\n  } catch (error) {\n    console.error('Error fetching multiple users:', error);\n    return [];\n  }\n}"
+        "value": "if (animal.kind === 'dog') {\n  (animal as { kind: 'dog'; bark: () => void }).bark();\n}"
       },
       {
         "type": "paragraph",
-        "value": "By correctly handling errors, always awaiting promises, and using Promise.all for concurrent operations, you can make your TypeScript API calls more reliable and easier to maintain."
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type narrowing failures happen due to TypeScript’s conservative type inference in complex conditions. By writing clear, simple conditions, using user-defined type guards, exhaustive checks, and occasionally type assertions, you can help TypeScript understand your data and avoid common type errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Always strive for readability and safety in your type checks to get the most out of TypeScript's powerful static analysis capabilities."
       }
     ]
   },
   {
-    "slug": "python-web-scraper-ecommerce-data-collection",
-    "title": "Building a Python Web Scraper to Automate Data Collection from E-commerce Sites",
+    "slug": "mastering-pythons-metaclasses-deep-dive-into-dynamic-class-creation",
+    "title": "Mastering Python's Metaclasses: Deep Dive into Dynamic Class Creation",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to build a beginner-friendly Python web scraper to automate data collection from e-commerce websites using requests and BeautifulSoup.",
-    "videoUrl": "https://www.youtube.com/watch?v=8dTpNajxaH0",
+    "description": "Learn how to use Python metaclasses to create and customize classes dynamically. This beginner-friendly guide explains metaclasses, their basics, and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
     "content": [
       {
         "type": "paragraph",
-        "value": "Web scraping is a useful skill for automating the collection of data from websites. If you want to gather product details like prices, names, or ratings from e-commerce sites, Python makes this task straightforward. In this tutorial, we'll build a simple Python web scraper using popular libraries like requests and BeautifulSoup. This guide is beginner-friendly and will walk you through the steps needed to extract data efficiently."
+        "value": "If you have worked with Python classes, you might be familiar with the idea that classes themselves are objects. This opens the door to a powerful but often confusing feature: metaclasses. In simple terms, a metaclass is the \"class\" of a class. It defines how classes are created, allowing you to control their creation dynamically. This tutorial will guide you through the basics of Python metaclasses, explaining what they are, why they matter, and how to use them with clear examples."
       },
       {
         "type": "paragraph",
-        "value": "Before starting, ensure you have Python installed on your computer. You'll also need to install two packages: requests, which allows Python to make HTTP requests, and BeautifulSoup, which parses HTML content. You can install these by running the following command in your terminal:"
+        "value": "### What is a Metaclass?\n\nIn Python, classes are instances of metaclasses. By default, all classes are instances of the built-in type metaclass (`type`). When you write a class statement, Python actually calls the metaclass to create that class. This allows for customization of class behavior right at the time the class is created."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break it down:\n- **Instance**: An object created from a class.\n- **Class**: A blueprint for creating instances.\n- **Metaclass**: A blueprint for creating classes.\n\nIn simpler terms, just as a class creates objects, a metaclass creates classes."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why use Metaclasses?\n\nMetaclasses allow you to:\n- Dynamically modify or add attributes and methods to classes.\n- Enforce coding standards or constraints on classes.\n- Automatically register classes in a system.\n- Implement Singleton patterns or other custom behaviors at a class level.\n\nFor example, suppose you want to ensure that all your classes have a specific method or attribute. A metaclass can automate that check or addition without manually modifying each class."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Metaclass\n\nTo create a metaclass, you typically inherit from the built-in `type` metaclass and override some of its methods, most commonly `__new__` or `__init__`. Here is how you can create and use a simple metaclass."
       },
       {
         "type": "code",
-        "value": "pip install requests beautifulsoup4"
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name} with MyMeta metaclass\")\n        # Optionally add or modify class attributes\n        dct['created_by_meta'] = True\n        return super().__new__(cls, name, bases, dct)\n\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\nprint(MyClass.created_by_meta)  # Output: True"
       },
       {
         "type": "paragraph",
-        "value": "Now let's write a Python script that scrapes a product listing page from a sample e-commerce site. For demonstration, we'll pretend there's a site that lists products with their names, prices, and ratings. Remember to always check a website's Terms of Service and robots.txt file before scraping."
+        "value": "In this example:\n- `MyMeta` inherits from `type`.\n- The `__new__` method is called when a new class is created.\n- Inside `__new__`, we print a message and add a class attribute `created_by_meta`.\n- `MyClass` uses `MyMeta` as its metaclass by specifying `metaclass=MyMeta`.\n- When `MyClass` is created, the message prints, and `created_by_meta` exists on the class."
       },
       {
         "type": "paragraph",
-        "value": "Here's the complete Python code for a simple scraper:"
+        "value": "### Customizing Class Creation\n\nYou can perform more complex actions, like automatically registering classes in a central registry. This is helpful in frameworks or plugins where you want to keep track of all subclasses automatically."
       },
       {
         "type": "code",
-        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# URL of the e-commerce page to scrape\nurl = 'https://example-ecommerce.com/products'\n\n# Send an HTTP GET request to the URL\nresponse = requests.get(url)\n\n# Check if the request was successful\nif response.status_code == 200:\n    # Parse the HTML content using BeautifulSoup\n    soup = BeautifulSoup(response.text, 'html.parser')\n\n    # Find all product containers - this will vary by site\n    products = soup.find_all('div', class_='product-item')\n\n    for product in products:\n        # Extract product name\n        name = product.find('h2', class_='product-title').text.strip()\n\n        # Extract product price\n        price = product.find('span', class_='product-price').text.strip()\n\n        # Extract product rating\n        rating_tag = product.find('div', class_='product-rating')\n        rating = rating_tag.text.strip() if rating_tag else 'No rating'\n\n        print(f'Name: {name}')\n        print(f'Price: {price}')\n        print(f'Rating: {rating}')\n        print('---')\nelse:\n    print(f'Failed to retrieve the page. Status code: {response.status_code}')"
+        "value": "class RegistryMeta(type):\n    registry = {}\n\n    def __new__(cls, name, bases, dct):\n        new_cls = super().__new__(cls, name, bases, dct)\n        if name != 'Base':  # Avoid registering base class itself\n            cls.registry[name] = new_cls\n        return new_cls\n\n\nclass Base(metaclass=RegistryMeta):\n    pass\n\n\nclass PluginA(Base):\n    pass\n\n\nclass PluginB(Base):\n    pass\n\nprint(RegistryMeta.registry)  # {'PluginA': <class '__main__.PluginA'>, 'PluginB': <class '__main__.PluginB'>}"
       },
       {
         "type": "paragraph",
-        "value": "Let's break down what's happening in this code. First, we import the necessary modules. We then send a GET request to the e-commerce page URL to get the HTML content. If successful, we use BeautifulSoup to parse the HTML. We search for all product items by their HTML tag and CSS class (this depends on the site’s structure). For each product, we extract the product name, price, and rating by targeting the respective HTML elements and print them out."
+        "value": "Here, the `RegistryMeta` metaclass keeps a dictionary of all classes created that inherit from `Base`. This way, you can automatically discover all plugins or subclasses without manually adding them."
       },
       {
         "type": "paragraph",
-        "value": "Remember that websites differ a lot in design, so you need to inspect the HTML code (using your browser's developer tools) to find the correct tags and classes to target for your data."
+        "value": "### Important Notes for Beginners\n\n- Most Python code does not require metaclasses—use them only when you have a solid reason.\n- Always inherit your metaclasses from `type`.\n- The `__new__` method of a metaclass is where the class object is created.\n- Use `super().__new__` to ensure proper creation of the class.\n\n### Summary\n\nMetaclasses let you control class creation dynamically in Python. They are the \"classes of classes,\" enabling you to add attributes, enforce rules, or register classes automatically. While powerful, they should be used thoughtfully as they can make code harder to understand."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, building a web scraper in Python requires these key steps: sending a request to the webpage, parsing the HTML content, extracting the data you want, and handling errors properly. With these basics, you can start collecting data to analyze prices or trends automatically from e-commerce websites."
-      },
-      {
-        "type": "paragraph",
-        "value": "Always be respectful to the websites you scrape: use reasonable request rates, follow their scraping policies, and avoid overloading their servers."
+        "value": "By mastering metaclasses, you unlock advanced Python capabilities that power many frameworks and libraries. Keep experimenting with simple examples, and soon dynamic class creation will become a useful tool in your Python toolkit."
       }
     ]
   },
   {
-    "slug": "mastering-python-traceback-analysis-for-complex-runtime-exceptions",
-    "title": "Mastering Python Traceback Analysis for Complex Runtime Exceptions",
+    "slug": "harnessing-pythons-context-managers-to-handle-resource-cleanup-errors-gracefully",
+    "title": "Harnessing Python's Context Managers to Handle Resource Cleanup Errors Gracefully",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to effectively read and understand Python tracebacks to debug complex runtime exceptions with ease.",
-    "videoUrl": "https://www.youtube.com/watch?v=WFiWfNy3xjA",
+    "description": "Learn how to use Python's context managers to manage resources efficiently and handle cleanup errors smoothly, making your code more robust and beginner-friendly.",
+    "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "When coding in Python, encountering runtime exceptions is common, especially as your programs become more complex. Understanding what went wrong is crucial, and that's where traceback analysis comes into play. This guide will help beginners learn how to read Python tracebacks to quickly identify and fix errors."
+        "value": "When writing Python programs, managing resources like files, network connections, or locks is crucial. Failing to release these resources can lead to bugs and resource leaks. Python's context managers offer a neat and reliable way to handle resource cleanup automatically. In this article, we'll explore how to use context managers and how to handle errors that might occur during resource cleanup gracefully."
       },
       {
         "type": "paragraph",
-        "value": "A Python traceback is a detailed error report generated when an exception occurs. It shows the call stack leading to the error, including file names, line numbers, and the error message itself. Let’s look at a simple example:"
+        "value": "A context manager in Python is usually used with the `with` statement. It guarantees that a resource is properly acquired and released, even if an error happens during the block execution. For example, opening and closing files safely is easily managed using a context manager."
       },
       {
         "type": "code",
-        "value": "def divide_numbers(a, b):\n    return a / b\n\nresult = divide_numbers(10, 0)"
+        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')"
       },
       {
         "type": "paragraph",
-        "value": "Running this code will produce a traceback because dividing by zero raises a `ZeroDivisionError`. Here's what the traceback might look like:"
+        "value": "In this snippet, Python automatically closes the file after the `with` block, even if an error occurs inside the block. This is much safer than manually opening and closing files."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, however, errors can occur during the cleanup process itself, that is when the resource is being released. By default, if the cleanup code raises an exception, it might overwrite the original exception or cause unexpected crashes. Python allows you to handle this gracefully by customizing the `__exit__` method in your own context manager."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's create a simple context manager class that demonstrates handling errors during cleanup:"
       },
       {
         "type": "code",
-        "value": "Traceback (most recent call last):\n  File \"example.py\", line 5, in <module>\n    result = divide_numbers(10, 0)\n  File \"example.py\", line 2, in divide_numbers\n    return a / b\nZeroDivisionError: division by zero"
+        "value": "class SafeResource:\n    def __enter__(self):\n        print('Resource acquired')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        try:\n            print('Cleaning up resource')\n            # Simulated cleanup that raises an error\n            raise RuntimeError('Cleanup failed!')\n        except Exception as cleanup_error:\n            print(f'Error during cleanup: {cleanup_error}')\n            # Suppress the cleanup error to not override original exceptions\n            # Return False if you want the cleanup error to propagate\n        # Returning False lets exceptions from the with block propagate\n        return False\n\n# Using the context manager\ntry:\n    with SafeResource() as res:\n        print('Doing work with resource')\n        raise ValueError('Oops! Something went wrong')\nexcept Exception as e:\n    print(f'Caught exception: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "From the traceback, you can see the sequence of calls that led to the error. The last line tells you the exact exception type and the cause (`division by zero`). The previous lines show where the error occurred in your code (file and line number)."
+        "value": "In this example, our `SafeResource` context manager prints a message when acquiring and cleaning up the resource. The cleanup step intentionally raises an error. However, this error is caught and handled inside the `__exit__` method so it won't mask the original exception from the `with` block."
       },
       {
         "type": "paragraph",
-        "value": "For complex programs, tracebacks can be longer, showing nested function calls. Reading from the bottom up helps you understand the context of the exception."
+        "value": "Notice that we return `False` from `__exit__`. Returning `False` tells Python to propagate any exception that occurred inside the `with` block (in this case, the `ValueError`). The cleanup error is logged but does not stop the program or hide the main error."
       },
       {
         "type": "paragraph",
-        "value": "Here are some tips to master traceback analysis:"
+        "value": "This pattern helps you handle resource cleanup errors gracefully without losing important debugging information. It’s especially useful when working with more complex resources where cleanup might fail for various reasons."
       },
       {
         "type": "paragraph",
-        "value": "1. **Identify the exception type**: The last line specifies the error type (e.g., `IndexError`, `TypeError`). Googling this along with your code context often helps."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Locate the error line**: Check the file and line number mentioned before the exception message to find where the problem started."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Understand the call stack**: Tracebacks list functions in the order they were called. This helps pinpoint which function caused or propagated the error."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Use debugging tools**: Complement traceback reading with Python debuggers like `pdb` to step through the code interactively."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's try an example with nested function calls throwing an error:"
+        "value": "You can also use the `contextlib` module to create simple context managers without writing a full class. Here's how you can catch cleanup errors using a generator-based context manager:"
       },
       {
         "type": "code",
-        "value": "def fetch_element(lst, index):\n    return lst[index]\n\ndef process_list(data):\n    return fetch_element(data, 5)\n\nsample = [1, 2, 3]\nprint(process_list(sample))"
+        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef safe_resource():\n    print('Resource acquired')\n    try:\n        yield\n    finally:\n        try:\n            print('Cleaning up resource')\n            raise RuntimeError('Cleanup failed!')\n        except Exception as cleanup_error:\n            print(f'Error during cleanup: {cleanup_error}')\n\n\ntry:\n    with safe_resource():\n        print('Doing work with resource')\n        raise ValueError('Oops! Something went wrong')\nexcept Exception as e:\n    print(f'Caught exception: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "When run, this will cause an `IndexError` because index 5 is out of range for the list `sample`. The traceback will look like this:"
-      },
-      {
-        "type": "code",
-        "value": "Traceback (most recent call last):\n  File \"example.py\", line 9, in <module>\n    print(process_list(sample))\n  File \"example.py\", line 6, in process_list\n    return fetch_element(data, 5)\n  File \"example.py\", line 2, in fetch_element\n    return lst[index]\nIndexError: list index out of range"
+        "value": "In this version, the cleanup happens in the `finally` block of the generator context manager. The cleanup error is caught and logged separately, so the original exception still propagates outside the `with` block."
       },
       {
         "type": "paragraph",
-        "value": "You can see step-by-step where the error occurred and which function calls led to it. This helps you fix the problem by checking the index values before accessing list elements."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, mastering Python traceback analysis is essential for debugging complex runtime exceptions. By reading the traceback carefully, understanding the call stack, and identifying the exception type and location, you can quickly solve errors and improve your coding skills."
+        "value": "Using context managers to handle both resource management and error handling during cleanup keeps your code cleaner, safer, and easier to maintain. As you encounter more sophisticated resources or complex cleanup logic, this skill will become increasingly valuable."
       }
     ]
   },
   {
-    "slug": "designing-scalable-sql-data-models-for-ecommerce",
-    "title": "Designing Scalable SQL Data Models for E-commerce Applications",
+    "slug": "optimizing-complex-sql-queries-with-window-functions",
+    "title": "Optimizing Complex SQL Queries with Window Functions: A Step-by-Step Guide",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to design scalable and efficient SQL data models specifically tailored for e-commerce applications, focusing on best practices for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=s6m8Aby2at8",
+    "description": "Learn how to simplify and speed up your complex SQL queries by using powerful window functions with this beginner-friendly, step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "E-commerce applications require well-designed data models to handle product catalogs, customer information, orders, and transactions efficiently. A scalable SQL data model not only helps manage growing amounts of data but also improves performance and maintainability. In this tutorial, we will explore the basics of designing a scalable SQL database for an e-commerce app."
+        "value": "When you're working with SQL queries, especially those involving aggregates and detailed row-level data, your queries can quickly become complex and slow. Window functions are a game-changer because they allow you to perform advanced calculations across sets of rows related to the current row without collapsing the output like GROUP BY does. In this guide, you'll learn how to optimize your complex queries using window functions with practical examples."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand the key entities and their relationships in typical e-commerce scenarios: Products, Customers, Orders, and Order Items. Each entity should have its own table, and relationships between tables should be clearly defined using foreign keys."
+        "value": "Let's start with a common scenario: you have a sales table, and you want to calculate each salesperson's total sales, their rank among their peers, and calculate running totals—all in a single query."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by creating a table for products. It should include essential details like product ID, name, description, price, and stock quantity."
+        "value": "Here's a simplified sales table structure:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Products (\n  ProductID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductName VARCHAR(100) NOT NULL,\n  Description TEXT,\n  Price DECIMAL(10, 2) NOT NULL,\n  StockQuantity INT DEFAULT 0\n);"
+        "value": "CREATE TABLE sales (\n  salesperson_id INT,\n  sale_date DATE,\n  amount DECIMAL(10, 2)\n);"
       },
       {
         "type": "paragraph",
-        "value": "Next, the Customers table stores user data such as customer ID, name, email, and address. Email should be unique to avoid duplicates."
+        "value": "Suppose you want the following in your results:\n- Each sale's data\n- Total sales amount per salesperson\n- Rank of each sale amount within the salesperson's sales\n- Running total of sales for each salesperson ordered by date"
+      },
+      {
+        "type": "paragraph",
+        "value": "Without window functions, you might write subqueries or multiple joins that make the query hard to read and inefficient. Window functions let you calculate these values alongside your original data easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a query that uses window functions to achieve this:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Customers (\n  CustomerID INT PRIMARY KEY AUTO_INCREMENT,\n  FullName VARCHAR(100) NOT NULL,\n  Email VARCHAR(100) NOT NULL UNIQUE,\n  Address VARCHAR(255)\n);"
+        "value": "SELECT\n  salesperson_id,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson_id) AS total_sales,\n  RANK() OVER (PARTITION BY salesperson_id ORDER BY amount DESC) AS rank_sale,\n  SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales\nORDER BY salesperson_id, sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "Orders represent a customer's purchase and include an order ID, customer reference, order date, and status. We use a foreign key to link each order to a customer."
-      },
-      {
-        "type": "code",
-        "value": "CREATE TABLE Orders (\n  OrderID INT PRIMARY KEY AUTO_INCREMENT,\n  CustomerID INT NOT NULL,\n  OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n  Status VARCHAR(50) DEFAULT 'Pending',\n  FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\n);"
+        "value": "Let's break down the key parts:\n- The PARTITION BY clause groups the data by salesperson_id so calculations reset for each salesperson.\n- SUM(amount) OVER (...) calculates total sales per salesperson.\n- RANK() OVER (...) assigns a rank to each sale amount per salesperson, with the highest sales ranked first.\n- The running total sums sales up to the current row ordered by sale_date.\n\nThis results in an efficient, readable query producing detailed insights."
       },
       {
         "type": "paragraph",
-        "value": "Since an order can contain multiple products, we use an OrderItems table to capture details about each product in the order, including quantity and price at purchase time."
-      },
-      {
-        "type": "code",
-        "value": "CREATE TABLE OrderItems (\n  OrderItemID INT PRIMARY KEY AUTO_INCREMENT,\n  OrderID INT NOT NULL,\n  ProductID INT NOT NULL,\n  Quantity INT NOT NULL,\n  UnitPrice DECIMAL(10, 2) NOT NULL,\n  FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),\n  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+        "value": "### Benefits of Using Window Functions\n\n- **Performance:** Window functions avoid costly joins and subqueries, improving speed.\n- **Readability:** Your SQL becomes cleaner and easier to maintain.\n- **Flexibility:** You can perform multiple aggregations and rankings in one query."
       },
       {
         "type": "paragraph",
-        "value": "To ensure scalability, keep the following best practices in mind: normalize your tables to eliminate redundant data, use appropriate data types, and index key columns such as foreign keys to speed up queries. For example, indexes on CustomerID in the Orders table improve lookup speed as your data grows."
+        "value": "### Tips for Beginners\n\n- Start by understanding aggregate functions like SUM(), AVG(), and RANK().\n- Learn how PARTITION BY works to group data inside the window.\n- Use ORDER BY inside window functions to control calculation order.\n- Test queries on small data samples to see how window functions affect results."
       },
       {
         "type": "paragraph",
-        "value": "Finally, as your business grows, consider partitioning large tables, archiving old orders, and using caching strategies at the application level to maintain performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "By following this simple yet effective data modeling approach, you'll build a robust foundation for your e-commerce application's database that can handle increasing loads and evolving requirements."
+        "value": "By mastering window functions, you'll be able to optimize complex SQL queries significantly, making your data analysis faster and easier."
       }
     ]
   },
   {
-    "slug": "handling-numeric-overflow-and-underflow-in-sql-queries",
-    "title": "Handling Numeric Overflow and Underflow in SQL Queries: A Beginner’s Guide",
+    "slug": "understanding-sql-nulls-common-misconceptions-and-how-to-handle-them",
+    "title": "Understanding SQL NULLs: Common Misconceptions and How to Handle Them",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to handle numeric overflow and underflow errors in SQL queries with practical tips and examples tailored for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=S3uelmFiAhg",
+    "description": "Learn the basics of SQL NULLs, common misunderstandings, and practical tips on how to work with NULL values effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=vV_tqFVLqYA",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with numeric data in SQL, especially in calculations or data insertion, you might encounter errors related to numeric overflow or underflow. These occur when a number exceeds the allowable range for its data type (overflow) or is smaller than the minimum allowed (underflow). Understanding and managing these errors is essential for maintaining data integrity and avoiding query failures."
+        "value": "In SQL, NULL represents the absence of a value or an unknown value in a database column. It's a special marker, not a regular data value, and it often causes confusion for beginners because it behaves differently compared to other values."
       },
       {
         "type": "paragraph",
-        "value": "Numeric overflow happens when the result of a calculation or the value being inserted does not fit into the defined column’s data type. For example, trying to insert a number larger than the maximum value allowed by an INT or DECIMAL type causes an overflow error. Underflow is less common but can occur with floating-point values when the number is extremely close to zero beyond the precision the type can support."
+        "value": "A common misconception is that NULL is the same as zero (0) or an empty string (''). However, NULL means no value at all—not zero, not blank. This distinction is important when writing queries and handling data."
       },
       {
         "type": "paragraph",
-        "value": "To prevent these errors, it is important to choose the appropriate data type with sufficient range and precision. SQL provides different numeric types like INT, BIGINT, DECIMAL, FLOAT, and DOUBLE, each with varying storage sizes and precision limits."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is an example where inserting a value into an INT column exceeds its range, causing an overflow error:"
+        "value": "For example, when comparing NULL to other values using the usual comparison operators like = or !=, the result is always UNKNOWN. This means the condition will not evaluate to TRUE, and rows containing NULL may be skipped unexpectedly."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE numbers (\n  id INT PRIMARY KEY,\n  value INT\n);\n\n-- Attempt to insert a value larger than INT allows (INT max is 2147483647)\nINSERT INTO numbers (id, value) VALUES (1, 3000000000);\n-- This will cause an overflow error because 3000000000 > 2147483647"
+        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
       },
       {
         "type": "paragraph",
-        "value": "To fix this, use a larger data type like BIGINT for the value column, which can hold much larger values:"
+        "value": "The above query will not return any rows, even if some employees have a NULL manager_id. To properly check for NULLs, use the IS NULL or IS NOT NULL operator:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE numbers (\n  id INT PRIMARY KEY,\n  value BIGINT\n);\n\nINSERT INTO numbers (id, value) VALUES (1, 3000000000);\n-- Works fine because BIGINT supports values up to 9,223,372,036,854,775,807"
+        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "For decimal or floating-point numbers, you can define precision and scale to control how large or precise your numbers can be. For example, DECIMAL(10,2) allows up to 10 digits in total with 2 digits after the decimal point."
+        "value": "Similarly, to check if a value is not NULL, use IS NOT NULL:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE prices (\n  id INT PRIMARY KEY,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO prices (id, amount) VALUES (1, 12345678.90);\n-- Valid because fits within 10 total digits (8 before decimal and 2 after)\n\nINSERT INTO prices (id, amount) VALUES (2, 123456789.12);\n-- Will cause an overflow error because there are 9 digits before decimal, exceeding precision"
+        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
       },
       {
         "type": "paragraph",
-        "value": "To avoid overflow and underflow errors in calculations, consider using built-in SQL functions like CAST or CONVERT to ensure data is safely converted into appropriate types and handle edge cases with conditional logic or error trapping."
+        "value": "Another useful tip is using functions like COALESCE or IFNULL to handle NULL values by providing a default value. For example, if you want to display 'No Manager' instead of NULL in your query results, you can write:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  CASE\n    WHEN amount > 9999999999.99 THEN 'Overflow detected'\n    ELSE CAST(amount AS DECIMAL(10,2))\n  END AS safe_amount\nFROM prices;"
+        "value": "SELECT employee_name, COALESCE(manager_id, 'No Manager') AS manager FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "In summary, to handle numeric overflow and underflow in SQL: choose appropriate data types, validate input and calculations, use casting carefully, and apply conditional checks. These practices will keep your queries running smoothly without unexpected errors."
+        "value": "In summary, remember these key points about NULLs in SQL:\n- NULL means no or unknown value, not zero or empty string.\n- Use IS NULL or IS NOT NULL to test for NULL values.\n- Use COALESCE or IFNULL to replace NULLs with default values.\n- Comparisons involving NULL (like = NULL) do not work as expected."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding how NULL works and correctly handling it in your queries, you can avoid common pitfalls and make your SQL data processing more accurate and reliable."
       }
     ]
   }
