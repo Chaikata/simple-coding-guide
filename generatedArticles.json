@@ -1,469 +1,529 @@
 [
   {
-    "slug": "building-real-time-collaborative-whiteboard-javascript-websockets",
-    "title": "Building a Real-Time Collaborative Whiteboard with JavaScript and WebSockets",
+    "slug": "building-real-time-chat-app-with-websockets-javascript",
+    "title": "Building a Real-Time Chat Application with WebSockets in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to create a simple real-time collaborative whiteboard using JavaScript and WebSockets, perfect for beginners interested in web development and real-time communication.",
+    "description": "Learn how to create a simple real-time chat application using WebSockets and JavaScript. This beginner-friendly tutorial covers both server and client code for instant message exchange.",
     "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
     "content": [
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll build a basic real-time collaborative whiteboard using JavaScript on the frontend and WebSockets powered by Node.js on the backend. This allows multiple users to draw on the same canvas simultaneously and see updates immediately. It's a great project to get started with web sockets and real-time applications."
+        "value": "Real-time communication is essential for many modern web apps. One of the best ways to achieve this is using WebSockets, which allow two-way interactive communication between a user’s browser and a server. In this tutorial, we'll build a simple chat app where multiple users can send and receive messages instantly."
       },
       {
         "type": "paragraph",
-        "value": "### Prerequisites\nYou should have basic knowledge of JavaScript and Node.js. We'll be using the `ws` library to handle WebSockets on the server. You can install it with npm."
+        "value": "We will use Node.js with the popular 'ws' library to create our WebSocket server, and plain JavaScript for the client that runs in the browser. Let’s start by setting up the server."
       },
       {
         "type": "code",
-        "value": "npm install ws"
+        "value": "/* Server.js - WebSocket server with Node.js and ws */\nconst WebSocket = require('ws');\n\n// Create a WebSocket server on port 8080\nconst wss = new WebSocket.Server({ port: 8080 });\n\n// Broadcast function to send message to all connected clients\nwss.broadcast = function broadcast(data) {\n  wss.clients.forEach(function each(client) {\n    if (client.readyState === WebSocket.OPEN) {\n      client.send(data);\n    }\n  });\n};\n\n// Listen for clients connecting\nwss.on('connection', function connection(ws) {\n  console.log('Client connected');\n\n  // Listen for messages from clients\n  ws.on('message', function incoming(message) {\n    console.log('Received: %s', message);\n\n    // Send the received message to all clients\n    wss.broadcast(message);\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Creating the WebSocket Server\nLet's start by creating a simple WebSocket server using Node.js. This server will handle incoming connections and broadcast drawings to all connected clients."
+        "value": "Save the above code as 'server.js' and run it using Node.js (`node server.js`). This sets up a WebSocket server that listens on port 8080 and broadcasts any received message to all connected clients."
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let’s create a basic HTML page with JavaScript to connect to this server, send messages, and display incoming chat messages in real-time."
       },
       {
         "type": "code",
-        "value": "const WebSocket = require('ws');\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', ws => {\n  console.log('New client connected');\n\n  ws.on('message', message => {\n    // Broadcast the received drawing data to all other clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Real-Time Chat with WebSockets</title>\n  <style>\n    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }\n    #message { width: 80%; }\n  </style>\n</head>\n<body>\n  <h2>WebSocket Chat</h2>\n  <div id=\"chat\"></div>\n  <input id=\"message\" type=\"text\" placeholder=\"Type your message...\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script>\n    const chatDiv = document.getElementById('chat');\n    const input = document.getElementById('message');\n    const sendBtn = document.getElementById('sendBtn');\n\n    // Connect to WebSocket server\n    const ws = new WebSocket('ws://localhost:8080');\n\n    // When connection opens\n    ws.addEventListener('open', () => {\n      appendMessage('Connected to chat server');\n    });\n\n    // When a message is received\n    ws.addEventListener('message', (event) => {\n      appendMessage(event.data);\n    });\n\n    // Handle errors\n    ws.addEventListener('error', (error) => {\n      appendMessage('WebSocket error: ' + error);\n    });\n\n    // Append message to chat div\n    function appendMessage(message) {\n      const p = document.createElement('p');\n      p.textContent = message;\n      chatDiv.appendChild(p);\n      chatDiv.scrollTop = chatDiv.scrollHeight; // Auto scroll\n    }\n\n    // Send message when button clicked\n    sendBtn.addEventListener('click', () => {\n      sendMessage();\n    });\n\n    // Also send message when pressing Enter in input\n    input.addEventListener('keyup', (event) => {\n      if (event.key === 'Enter') {\n        sendMessage();\n      }\n    });\n\n    // Send message function\n    function sendMessage() {\n      const message = input.value.trim();\n      if (message) {\n        ws.send(message);\n        input.value = '';\n      }\n    }\n  </script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Creating the Frontend Whiteboard\nOn the frontend, we'll create an HTML canvas where users can draw. We'll capture mouse events to draw on the canvas and send drawing data through the WebSocket to the server."
-      },
-      {
-        "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Collaborative Whiteboard</title>\n  <style>\n    canvas {\n      border: 1px solid #000;\n      touch-action: none;\n    }\n  </style>\n</head>\n<body>\n  <h1>Real-Time Collaborative Whiteboard</h1>\n  <canvas id=\"board\" width=\"800\" height=\"600\"></canvas>\n\n  <script>\n    const canvas = document.getElementById('board');\n    const ctx = canvas.getContext('2d');\n    const socket = new WebSocket('ws://localhost:8080');\n\n    let drawing = false;\n    let prevPos = { x: 0, y: 0 };\n\n    function getMousePos(evt) {\n      const rect = canvas.getBoundingClientRect();\n      return {\n        x: evt.clientX - rect.left,\n        y: evt.clientY - rect.top\n      };\n    }\n\n    canvas.addEventListener('mousedown', evt => {\n      drawing = true;\n      prevPos = getMousePos(evt);\n    });\n\n    canvas.addEventListener('mouseup', () => {\n      drawing = false;\n    });\n\n    canvas.addEventListener('mouseout', () => {\n      drawing = false;\n    });\n\n    canvas.addEventListener('mousemove', evt => {\n      if (!drawing) return;\n      const currentPos = getMousePos(evt);\n\n      // Draw line on own canvas\n      drawLine(prevPos, currentPos, 'black');\n\n      // Send line data to server\n      const data = {\n        prevPos,\n        currentPos\n      };\n      socket.send(JSON.stringify(data));\n\n      prevPos = currentPos;\n    });\n\n    // Draw line helper function\n    function drawLine(from, to, color) {\n      ctx.strokeStyle = color;\n      ctx.lineWidth = 2;\n      ctx.beginPath();\n      ctx.moveTo(from.x, from.y);\n      ctx.lineTo(to.x, to.y);\n      ctx.stroke();\n      ctx.closePath();\n    }\n\n    // Receive drawing data from other users\n    socket.onmessage = event => {\n      const data = JSON.parse(event.data);\n      drawLine(data.prevPos, data.currentPos, 'red'); // Other users' lines in red\n    };\n\n    socket.onopen = () => {\n      console.log('Connected to WebSocket server');\n    };\n\n    socket.onerror = error => {\n      console.error('WebSocket error:', error);\n    };\n  </script>\n</body>\n</html>"
+        "value": "Open this HTML file in multiple browser windows or tabs. When you type and send a message, it will instantly appear on all connected clients, demonstrating real-time communication."
       },
       {
         "type": "paragraph",
-        "value": "### How It Works\n- The Node.js WebSocket server listens for connections and broadcasts incoming messages to all other connected clients.\n- Each client runs the front-end code, drawing on an HTML canvas.\n- When one user draws a line (by dragging the mouse), the coordinates of the line segment are sent to the server.\n- The server forwards this data to all other clients, who then draw the same line in a different color to indicate remote users' drawings."
+        "value": "This simple example covers the basics of WebSocket usage: opening a connection, sending messages, receiving messages, and broadcasting them from the server to all clients. From here, you can enhance the app by adding user names, message timestamps, or storing chat history."
       },
       {
         "type": "paragraph",
-        "value": "### Next Steps\nThis basic demo can be extended in many ways:\n- Add color and brush size selection\n- Implement user identity and separate colors for each user\n- Add saving and loading whiteboard content\n- Handle touch events for mobile devices\n- Improve performance for large numbers of users\n\nThis project is a practical introduction to real-time communication in web apps using WebSockets and JavaScript."
+        "value": "WebSockets offer a powerful way to build interactive real-time applications. With just a few lines of JavaScript on both server and client, you can create applications that respond instantly, improving the user experience significantly."
       }
     ]
   },
   {
-    "slug": "handling-memory-leaks-in-large-scale-javascript-applications",
-    "title": "Handling Memory Leaks in Large-Scale JavaScript Applications",
+    "slug": "designing-resilient-event-driven-architectures-javascript",
+    "title": "Designing Resilient Event-Driven Architectures in JavaScript for Scalable Systems",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to identify and fix memory leaks in large-scale JavaScript applications to keep them running smoothly and efficiently.",
-    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "description": "Learn how to build resilient, scalable event-driven systems in JavaScript with clear error handling strategies for beginner developers.",
+    "videoUrl": "https://www.youtube.com/watch?v=Of-br0OG5ic",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks in JavaScript occur when your application holds onto memory it no longer needs. In large-scale applications, this can slow down your app or cause it to crash. As a beginner, understanding how to detect and fix memory leaks is essential for building performant applications."
+        "value": "Event-driven architecture (EDA) is a popular pattern for building scalable and maintainable systems. In JavaScript, especially on the server or with Node.js, events help decouple application components and enable greater responsiveness. However, to make your event-driven system resilient, you need to handle errors gracefully and ensure your app doesn't crash unexpectedly."
       },
       {
         "type": "paragraph",
-        "value": "One common cause of memory leaks is forgetting to remove event listeners. When event listeners are attached but never removed, they can hold references to elements or variables that should be garbage collected."
+        "value": "In this article, we'll explore the basics of event-driven design in JavaScript and look at strategies to handle errors effectively. We will write simple, beginner-friendly code demonstrating these ideas."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand how events work with JavaScript's built-in EventEmitter."
       },
       {
         "type": "code",
-        "value": "const button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Clicked!');\n}\n\n// Adding event listener\nbutton.addEventListener('click', handleClick);\n\n// Later when button is removed or no longer needed\n// It's important to remove the event listener\nbutton.removeEventListener('click', handleClick);"
+        "value": "const EventEmitter = require('events');\nconst eventBus = new EventEmitter();\n\n// Define an event listener\neventBus.on('dataReceived', (data) => {\n  console.log('Data received:', data);\n});\n\n// Emit the event\neventBus.emit('dataReceived', { id: 1, name: 'Sample' });"
       },
       {
         "type": "paragraph",
-        "value": "Another source of leaks is unused timers like setInterval or setTimeout that continue running even when they are no longer necessary. Always clear timers with clearInterval or clearTimeout when they're not needed."
+        "value": "In the example above, an event named `dataReceived` is emitted, and a listener handles it by logging data. But what happens if an error occurs while processing this event? Without error handling, such errors may crash your entire app."
+      },
+      {
+        "type": "paragraph",
+        "value": "To design resilient systems, you should add error handling inside your event listeners and consider centralized error handling for uncaught exceptions."
       },
       {
         "type": "code",
-        "value": "const intervalId = setInterval(() => {\n  console.log('Running repeatedly');\n}, 1000);\n\n// When done\nclearInterval(intervalId);"
+        "value": "eventBus.on('dataReceived', (data) => {\n  try {\n    // Simulate processing that may throw an error\n    if (!data.id) {\n      throw new Error('Invalid data: Missing id');\n    }\n    console.log('Processed data:', data);\n  } catch (error) {\n    console.error('Error processing dataReceived event:', error.message);\n    // Optionally: emit an error event or handle the error\n  }\n});"
       },
       {
         "type": "paragraph",
-        "value": "Circular references can also cause leaks, especially when objects reference each other strongly and prevent garbage collection. If you suspect this, try to break these cycles by nullifying references or using weak references where appropriate."
+        "value": "Here, `try...catch` inside the listener protects the system from crashing due to unexpected data problems. For better scalability, you might also want to listen for errors globally using Node.js's `process` events:"
+      },
+      {
+        "type": "code",
+        "value": "// Global error handling\nprocess.on('uncaughtException', (err) => {\n  console.error('Uncaught Exception:', err.message);\n  // Add cleanup logic or restart the process if needed\n});\n\nprocess.on('unhandledRejection', (reason) => {\n  console.error('Unhandled Rejection:', reason);\n});"
       },
       {
         "type": "paragraph",
-        "value": "Modern browsers have developer tools that help you spot memory leaks. For example, Chrome DevTools lets you take memory snapshots and analyze which objects are increasing over time. Regularly profiling your app during development can catch leaks early."
+        "value": "When building real-world scalable systems, consider using message queues or event brokers like RabbitMQ, Kafka, or cloud services that handle retries, dead-letter queues, and message persistence. This helps your system recover from failures without losing important events."
       },
       {
         "type": "paragraph",
-        "value": "In summary, to handle memory leaks in large JavaScript apps:\n- Remove event listeners when no longer needed\n- Clear timers like setInterval and setTimeout\n- Avoid unintentional global variables\n- Use tools like Chrome DevTools to monitor memory\n- Break circular references\n\nBy following these steps, you can greatly improve your app's performance and reduce crashes."
+        "value": "In summary, designing resilient event-driven architectures in JavaScript involves:\n- Using event emitters to decouple components\n- Adding error handling inside event listeners\n- Handling global errors to avoid crashes\n- Considering external event brokers for scalability"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these practices, even beginner JavaScript developers can build robust and scalable event-driven systems."
       }
     ]
   },
   {
-    "slug": "beginners-guide-to-typescript-generics-boost-your-code-flexibility",
-    "title": "A Beginner's Guide to TypeScript Generics: Boost Your Code Flexibility",
+    "slug": "beginners-guide-to-typescript-generics-writing-flexible-and-reusable-code",
+    "title": "Beginner's Guide to TypeScript Generics: Writing Flexible and Reusable Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how TypeScript generics can make your code more reusable and type-safe with this easy beginner-friendly tutorial.",
+    "description": "Learn how to use TypeScript generics to create flexible, reusable code that works with any data type. This beginner-friendly guide explains generics in simple terms with practical examples.",
     "videoUrl": "https://www.youtube.com/watch?v=7aCgI-2TB6c",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript generics are a powerful feature that allow you to write flexible, reusable functions and classes while still preserving strong type safety. For beginners, generics might seem tricky at first, but they can significantly improve your code by making it more adaptable to different types without sacrificing type checking."
+        "value": "TypeScript is a powerful language that adds static types to JavaScript. One of its most useful features is generics, which allow you to write functions and classes that work with multiple types instead of one. This helps you create flexible and reusable code with better type safety."
       },
       {
         "type": "paragraph",
-        "value": "Imagine you want to create a function that returns the first element of an array. Without generics, you'd have to create a separate function for every type or lose type information. With generics, you can write one function that works for any type!"
+        "value": "In this guide, we'll explain what generics are, why you need them, and how to use them in simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Generics?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics let you define a placeholder type parameter in your functions or classes. This type parameter can be replaced by any actual type when the function or class is used. Think of it like a recipe that can use any ingredient you choose."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Without Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine a function that takes an array and returns the first element:"
       },
       {
         "type": "code",
-        "value": "function getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst numbers = [1, 2, 3];\nconst firstNumber = getFirstElement(numbers); // Type is number\n\nconst strings = ['a', 'b', 'c'];\nconst firstString = getFirstElement(strings); // Type is string"
+        "value": "function firstElement(arr: any[]): any {\n  return arr[0];\n}\n\nconst str = firstElement([\"apple\", \"banana\", \"cherry\"]); // \"apple\"\nconst num = firstElement([1, 2, 3]); // 1"
       },
       {
         "type": "paragraph",
-        "value": "In the example, <T> is a generic type parameter. It acts as a placeholder for the type you pass in when calling the function. This way, TypeScript knows what type to expect in the array and what type the function will return."
+        "value": "The problem with this code is that it uses `any`, so TypeScript cannot check if the returned value matches the input type. This could cause bugs."
       },
       {
         "type": "paragraph",
-        "value": "Generics work well with classes too. Here's a simple generic stack class that can store any type of data:"
+        "value": "### Example With Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "We can fix this by using a generic type `T` to represent the array element type:"
       },
       {
         "type": "code",
-        "value": "class Stack<T> {\n  private items: T[] = [];\n\n  push(item: T) {\n    this.items.push(item);\n  }\n\n  pop(): T | undefined {\n    return this.items.pop();\n  }\n}\n\nconst numberStack = new Stack<number>();\nnumberStack.push(10);\nnumberStack.push(20);\nconsole.log(numberStack.pop()); // Output: 20"
+        "value": "function firstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst str = firstElement([\"apple\", \"banana\", \"cherry\"]); // inferred as string\nconst num = firstElement([1, 2, 3]); // inferred as number"
       },
       {
         "type": "paragraph",
-        "value": "By using generics, you ensure the stack only accepts and returns items of the specified type, improving safety and reducing bugs."
+        "value": "Here, `<T>` declares a generic type parameter. When you call `firstElement`, TypeScript automatically figures out what `T` should be based on the array you pass in. The return type is `T`, so TypeScript knows exactly what type to expect."
       },
       {
         "type": "paragraph",
-        "value": "You can also constrain generics when you want to limit the types allowed. For example, to accept only objects with a \"length\" property:"
+        "value": "### Generic Functions with Multiple Type Parameters"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can have multiple type parameters. For example, here’s a function that creates a pair (tuple) from two values of any types:"
       },
       {
         "type": "code",
-        "value": "function logLength<T extends { length: number }>(item: T): void {\n  console.log(`Length is: ${item.length}`);\n}\n\nlogLength('hello'); // Length is: 5\nlogLength([1, 2, 3]); // Length is: 3\n// logLength(10); // Error: number doesn't have 'length' property"
+        "value": "function makePair<T, U>(first: T, second: U): [T, U] {\n  return [first, second];\n}\n\nconst pair = makePair(\"hello\", 42); // inferred as [string, number]"
       },
       {
         "type": "paragraph",
-        "value": "This constraint helps avoid errors by restricting generics to compatible types."
+        "value": "### Generic Interfaces and Classes"
       },
       {
         "type": "paragraph",
-        "value": "To sum up, generics enhance your TypeScript code by:\n- Making functions and classes reusable with any data type\n- Keeping type safety intact\n- Avoiding code duplication\n- Allowing flexible but constrained typing\n\nAs you practice, generics will become a natural part of your coding toolkit, helping you write cleaner and more maintainable code."
+        "value": "You can also use generics with interfaces and classes to create reusable data structures."
+      },
+      {
+        "type": "code",
+        "value": "interface Box<T> {\n  value: T;\n}\n\nconst stringBox: Box<string> = { value: \"hello\" };\nconst numberBox: Box<number> = { value: 123 };\n\nclass Container<T> {\n  private content: T;\n  constructor(value: T) {\n    this.content = value;\n  }\n  getContent(): T {\n    return this.content;\n  }\n}\n\nconst container = new Container<boolean>(true);\nconsole.log(container.getContent()); // true"
       },
       {
         "type": "paragraph",
-        "value": "Try adding generics to your next TypeScript project to experience the benefits firsthand!"
+        "value": "### Benefits of Using Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Type Safety:** Generics keep type information, enabling better error checking.\n2. **Reusable Code:** Write functions/classes once that work with any type.\n3. **Maintainability:** Makes your code easier to understand and maintain.\n4. **Avoid `any`:** Helps avoid the problems associated with the `any` type."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics in TypeScript are a powerful way to write flexible and reusable code while keeping type safety. Start by defining generic type parameters with `<T>`, and TypeScript will help infer the specific types during function or class usage. As you become comfortable, you can explore more advanced generic features like constraints and default types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding with TypeScript generics!"
       }
     ]
   },
   {
-    "slug": "advanced-typescript-error-handling-patterns-for-scalable-applications",
-    "title": "Advanced TypeScript Error Handling Patterns for Scalable Applications",
+    "slug": "advanced-typescript-utility-types-for-managing-complex-error-states",
+    "title": "Advanced TypeScript Utility Types for Managing Complex Error States",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn advanced, beginner-friendly TypeScript error handling patterns to build scalable and maintainable applications with clean and robust code.",
-    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
+    "description": "Learn how to use advanced TypeScript utility types to handle complex error states in your applications with beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=UOgI202jKSU",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is essential for building scalable and reliable applications. TypeScript, with its strong typing system, allows us to create more predictable and maintainable error handling patterns. In this article, we’ll explore some advanced yet beginner-friendly techniques to handle errors effectively in TypeScript projects."
+        "value": "Managing errors effectively is an essential part of any application. When working with TypeScript, utility types can help us capture and represent complex error states in a clear and type-safe way. This article introduces some advanced TypeScript utility types that simplify working with intricate error structures, making your code more maintainable and easier to understand."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Creating Custom Error Classes\nInstead of relying solely on the built-in `Error` class, creating custom error classes can give you more control and clarity about the error types in your app. This improves type safety and makes debugging easier."
+        "value": "Imagine you have an application where multiple parts can produce errors. Each of these errors might have different properties, but you want to manage them collectively while keeping track of specific error details. We'll use some built-in TypeScript utility types like `Partial`, `Record`, and `Extract`, combined with custom types, to achieve this."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example. Suppose we have a type representing possible errors from a form:"
       },
       {
         "type": "code",
-        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = \"ValidationError\";\n  }\n}\n\nclass DatabaseError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = \"DatabaseError\";\n  }\n}\n"
+        "value": "type FormErrors = {\n  username?: string;\n  password?: string;\n  email?: string;\n};"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Using Union Types for Error Results\nInstead of throwing errors directly, you can return a union type that includes success and error results. This pattern improves readability and lets TypeScript help with error handling."
+        "value": "Here, each field can have an optional error message. But what if the errors can be more complex objects instead of just strings? We can define a more detailed error type:"
       },
       {
         "type": "code",
-        "value": "type Result<T> = { success: true; data: T } | { success: false; error: Error };\n\nfunction fetchUser(id: number): Result<{ name: string }> {\n  if (id <= 0) {\n    return { success: false, error: new ValidationError(\"Invalid user ID\") };\n  }\n  // Simulate fetching...\n  return { success: true, data: { name: \"John Doe\" } };\n}\n\nconst result = fetchUser(-1);\n\nif (!result.success) {\n  console.error(result.error.name + ': ' + result.error.message);\n} else {\n  console.log('User:', result.data.name);\n}\n"
+        "value": "type FieldError = {\n  message: string;\n  code: number;\n};\n\ntype ComplexFormErrors = {\n  username?: FieldError;\n  password?: FieldError;\n  email?: FieldError;\n};"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Handling Errors with Discriminated Unions\nCombining discriminated unions with error types can make your error handling exhaustive and type-safe. This means TypeScript warns you if you forget to handle certain error cases."
+        "value": "Using `Partial<T>` ensures all properties are optional, which matches real-world scenarios where not all fields have errors at once."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now suppose you want to ensure you always have an object with all keys but optionally filled with error info, you can use the utility type `Record` combined with `Partial`."
       },
       {
         "type": "code",
-        "value": "type AppError = \n  | { type: \"validation\"; message: string }\n  | { type: \"database\"; message: string };\n\nfunction handleError(error: AppError) {\n  switch (error.type) {\n    case \"validation\":\n      console.log(`Validation Error: ${error.message}`);\n      break;\n    case \"database\":\n      console.log(`Database Error: ${error.message}`);\n      break;\n    default:\n      // This ensures all error types are handled\n      const _exhaustiveCheck: never = error;\n      return _exhaustiveCheck;\n  }\n}\n"
+        "value": "type FieldNames = 'username' | 'password' | 'email';\n\n// All fields exist but may be undefined\nconst allFieldsErrors: Partial<Record<FieldNames, FieldError>> = {\n  username: { message: 'Required', code: 101 },\n  // password and email can be missing\n};"
       },
       {
         "type": "paragraph",
-        "value": "### 4. Async/Await Error Handling with `try/catch`\nIn async functions, surround your awaited calls with `try/catch` blocks to handle runtime errors. Combine with custom error types to identify error sources precisely."
+        "value": "Sometimes your error types are union types and you want to narrow down specific errors from them. For example, assume you have these error variants:"
       },
       {
         "type": "code",
-        "value": "async function getData() {\n  try {\n    const data = await fetch('/api/data');\n    if (!data.ok) {\n      throw new DatabaseError('Failed to fetch data');\n    }\n    const json = await data.json();\n    return json;\n  } catch (error) {\n    if (error instanceof ValidationError) {\n      console.error('Validation issue:', error.message);\n    } else if (error instanceof DatabaseError) {\n      console.error('Database issue:', error.message);\n    } else {\n      console.error('Unknown error:', error);\n    }\n    throw error; // Rethrow or handle accordingly\n  }\n}\n"
+        "value": "type NetworkError = { type: 'network'; retryAfter: number };\ntype ValidationError = { type: 'validation'; field: string; message: string };\ntype UnknownError = { type: 'unknown' };\n\ntype AppError = NetworkError | ValidationError | UnknownError;"
       },
       {
         "type": "paragraph",
-        "value": "### 5. Centralized Error Logging\nFor scalable applications, centralizing error logging helps with monitoring and debugging. Use a dedicated function or service that accepts typed errors and logs or reports them consistently."
+        "value": "You can extract only one type of error using `Extract` utility:"
       },
       {
         "type": "code",
-        "value": "function logError(error: Error) {\n  // Could integrate with a service like Sentry or LogRocket\n  console.error(`[${error.name}] - ${error.message}`);\n}\n\ntry {\n  throw new ValidationError('Invalid input data');\n} catch (error) {\n  if (error instanceof Error) {\n    logError(error);\n  }\n}\n"
+        "value": "type OnlyValidationErrors = Extract<AppError, { type: 'validation' }>;\n\nconst errorExample: OnlyValidationErrors = {\n  type: 'validation',\n  field: 'email',\n  message: 'Invalid email address'\n};"
       },
       {
         "type": "paragraph",
-        "value": "### Conclusion\nAdvanced error handling in TypeScript begins with leveraging the powerful type system. Custom error classes, union types for results, discriminated unions, and centralized logging are key patterns that help keep your application scalable and maintainable. Start using these patterns to write robust, easy-to-debug TypeScript code!"
+        "value": "To manage multiple error states dynamically, combining errors, you might want to create a mapped type that converts all possible errors to an optional list, or even a union of them."
+      },
+      {
+        "type": "code",
+        "value": "type ErrorMap = {\n  network: NetworkError[];\n  validation: ValidationError[];\n  unknown: UnknownError[];\n};\n\n// Using Partial so some error types might be missing if no errors of that type exist\nconst errors: Partial<ErrorMap> = {\n  network: [{ type: 'network', retryAfter: 30 }],\n  validation: [\n    { type: 'validation', field: 'password', message: 'Too short' },\n  ]\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "This structure is easy to check, update, and provides clear insight into what errors are currently active."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, these advanced TypeScript utility types (`Partial`, `Record`, `Extract`) help manage complex error states by defining flexible but strict type structures. Using these makes your error handling code safer and clearer, especially in large applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "As you continue learning TypeScript, practice combining these utilities with your own custom types to handle errors and other complex state data cleanly and effectively."
       }
     ]
   },
   {
-    "slug": "comparing-python-built-in-data-structures-lists-vs-sets-vs-dictionaries",
-    "title": "Comparing Python's Built-in Data Structures: Lists vs Sets vs Dictionaries",
+    "slug": "how-to-automate-daily-tasks-with-python-beginners-guide",
+    "title": "How to Automate Daily Tasks with Python: A Beginner’s Guide",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the basics and differences between Python's lists, sets, and dictionaries with simple examples and practical uses.",
-    "videoUrl": "https://www.youtube.com/watch?v=gOMW_n2-2Mw",
+    "description": "Learn how to use Python to automate repetitive daily tasks, saving time and increasing productivity. A beginner-friendly guide with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=lumze3ZNA-s",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python offers several built-in data structures that help you store and organize data efficiently. Among the most commonly used are lists, sets, and dictionaries. Each one serves different purposes and has unique characteristics. This guide will compare these data structures, show you when to use each one, and provide simple code examples."
+        "value": "Automating daily tasks can help you save time, avoid errors, and increase productivity. Python, with its simple syntax and powerful libraries, is a great language to start automating repetitive tasks. In this tutorial, you will learn basic concepts of Python automation with practical examples that you can try immediately."
       },
       {
         "type": "paragraph",
-        "value": "### Lists\nLists are ordered collections that can hold any type of element. They allow duplicates and are indexed, which means you can access elements using their position. Lists are ideal when you need to maintain order and access elements by index."
+        "value": "First, it's important to identify tasks that can be easily automated. Examples include renaming files in bulk, sending emails automatically, scraping simple data from websites, or organizing files into folders. Let's start with a simple task: renaming multiple files in a folder."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Rename Multiple Files\nSuppose you have many photos with names like 'IMG_001.jpg', 'IMG_002.jpg' and you want to rename them to 'Vacation_1.jpg', 'Vacation_2.jpg', etc."
       },
       {
         "type": "code",
-        "value": "fruits = ['apple', 'banana', 'cherry']\nprint(fruits[1])  # Output: banana\nfruits.append('orange')\nprint(fruits)  # Output: ['apple', 'banana', 'cherry', 'orange']"
+        "value": "import os\n\nfolder_path = 'path/to/your/folder'\n\nfor count, filename in enumerate(os.listdir(folder_path), start=1):\n    if filename.endswith('.jpg'):\n        new_name = f'Vacation_{count}.jpg'\n        src = os.path.join(folder_path, filename)\n        dst = os.path.join(folder_path, new_name)\n        os.rename(src, dst)\n        print(f'Renamed {filename} to {new_name}')"
       },
       {
         "type": "paragraph",
-        "value": "### Sets\nSets are collections of unique elements without any particular order. They are useful when you want to ensure no duplicates and do not care about the order of items. Sets support mathematical operations like union, intersection, and difference."
+        "value": "This script loops through all files in your specified folder, checks if the file is a JPG image, and renames it with a new format. Make sure to replace 'path/to/your/folder' with your actual folder path."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Sending Automated Emails\nPython can also help send emails automatically using the built-in smtplib library. Here's a simple example to send an email via Gmail's SMTP server."
       },
       {
         "type": "code",
-        "value": "unique_numbers = {1, 2, 3, 2, 1}\nprint(unique_numbers)  # Output: {1, 2, 3}\n\n# Adding elements\nunique_numbers.add(4)\nprint(unique_numbers)  # Output: {1, 2, 3, 4}"
+        "value": "import smtplib\nfrom email.mime.text import MIMEText\n\nsmtp_server = 'smtp.gmail.com'\nsmtp_port = 587\nsender_email = 'your_email@gmail.com'\npassword = 'your_app_password'  # Use App Password, not your regular password\nreceiver_email = 'receiver@example.com'\n\nmessage = MIMEText('Hello, this is an automated email sent by Python!')\nmessage['Subject'] = 'Automated Email'\nmessage['From'] = sender_email\nmessage['To'] = receiver_email\n\nwith smtplib.SMTP(smtp_server, smtp_port) as server:\n    server.starttls()  # Secure the connection\n    server.login(sender_email, password)\n    server.send_message(message)\n\nprint('Email sent successfully!')"
       },
       {
         "type": "paragraph",
-        "value": "### Dictionaries\nDictionaries store key-value pairs and are unordered (in Python 3.7+, they maintain insertion order). They allow fast lookup of values based on unique keys. Use dictionaries when you need to associate values with specific identifiers."
+        "value": "Remember to set up an app password if you use Gmail, as regular passwords will not work for SMTP. This script creates and sends a simple plain-text email."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Organize Files by Extension\nAnother common task is organizing files by moving them into folders based on their file extensions."
       },
       {
         "type": "code",
-        "value": "student_grades = {'Alice': 85, 'Bob': 92, 'Charlie': 78}\nprint(student_grades['Bob'])  # Output: 92\n\n# Adding or updating a value\nstudent_grades['Dave'] = 88\nprint(student_grades)"
+        "value": "import os\nimport shutil\n\nfolder_path = 'path/to/your/folder'\n\nfor filename in os.listdir(folder_path):\n    if os.path.isfile(os.path.join(folder_path, filename)):\n        ext = filename.split('.')[-1]\n        ext_folder = os.path.join(folder_path, ext.upper() + '_files')\n        if not os.path.exists(ext_folder):\n            os.makedirs(ext_folder)\n        src = os.path.join(folder_path, filename)\n        dst = os.path.join(ext_folder, filename)\n        shutil.move(src, dst)\n        print(f'Moved {filename} to {ext_folder}')"
       },
       {
         "type": "paragraph",
-        "value": "### Key Differences\n- Lists allow duplicates and keep the order.\n- Sets do not allow duplicates and have no order.\n- Dictionaries store key-value pairs and allow fast access via keys.\n\n### When to Use Each\n- Use **lists** for ordered collections or when duplicates matter.\n- Use **sets** to store unique items and perform set operations.\n- Use **dictionaries** when you need to associate values with keys for quick lookups."
+        "value": "This script creates folders like 'JPG_files', 'PDF_files', etc., and moves files to their corresponding folder based on extension. It helps keep your folder clean and organized."
       },
       {
         "type": "paragraph",
-        "value": "Understanding these differences will help you select the right data structure for your programs and write efficient Python code."
+        "value": "### Final Tips\n- Always test your scripts in a safe environment to avoid accidental data loss.\n- Use virtual environments and install necessary libraries when needed.\n- Gradually automate more complex tasks as you gain confidence.\n- Explore libraries such as `schedule` to run automation scripts at regular intervals.\n\nWith these simple steps and scripts, you are well on your way to automating daily tasks using Python. Experiment and have fun!"
       }
     ]
   },
   {
-    "slug": "optimizing-python-list-comprehensions-for-faster-execution",
-    "title": "Optimizing Python List Comprehensions for Faster Execution",
+    "slug": "mastering-data-validation-in-python-data-models-for-reliable-analytics",
+    "title": "Mastering Data Validation in Python Data Models for Reliable Analytics",
     "language": "python",
     "type": "errors",
-    "description": "Learn simple, beginner-friendly tips to optimize your Python list comprehensions and avoid common errors for faster and cleaner code.",
-    "videoUrl": "https://www.youtube.com/watch?v=zlmzrD8zq0o",
+    "description": "Learn how to use Python data models and validation techniques to ensure your data is reliable and error-free for accurate analytics.",
+    "videoUrl": "https://www.youtube.com/watch?v=mut8eTdoRxU",
     "content": [
       {
         "type": "paragraph",
-        "value": "List comprehensions are a powerful and concise way to create lists in Python. They are often faster and easier to read compared to traditional loops. However, beginners sometimes write list comprehensions that run slowly or cause common errors. In this article, we'll explore practical tips to optimize your list comprehensions for better performance and fewer mistakes."
+        "value": "Data validation is a crucial step in building reliable analytics. When working with Python data models, ensuring that the data entering your system is clean and accurate helps prevent errors downstream and improves the quality of your insights. This guide will walk you through beginner-friendly techniques to implement data validation effectively in Python."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a basic example. Suppose you want to create a list of squares for numbers from 0 to 9. A list comprehension makes this simple and efficient:"
+        "value": "A popular way to define data models and validate data in Python is to use the `pydantic` library. Pydantic uses Python type annotations to validate data efficiently. Let’s start by installing pydantic."
       },
       {
         "type": "code",
-        "value": "squares = [x * x for x in range(10)]\nprint(squares)"
+        "value": "pip install pydantic"
       },
       {
         "type": "paragraph",
-        "value": "This code runs fast and is easy to read. But what if you want to filter the list, say keep squares only for even numbers? You can add an \"if\" condition in the list comprehension:"
+        "value": "Next, we'll create a simple data model for a customer with fields like name, age, and email. Pydantic will help us ensure that age is a positive integer and the email is a valid string format."
       },
       {
         "type": "code",
-        "value": "even_squares = [x * x for x in range(10) if x % 2 == 0]\nprint(even_squares)"
+        "value": "from pydantic import BaseModel, EmailStr, ValidationError\n\nclass Customer(BaseModel):\n    name: str\n    age: int\n    email: EmailStr\n\n# Creating a valid customer instance\ncustomer = Customer(name='Alice', age=30, email='alice@example.com')\nprint(customer)"
       },
       {
         "type": "paragraph",
-        "value": "Adding conditions is very helpful, but placing expensive operations inside the comprehension can slow things down. For example, avoid calling heavy functions multiple times inside the comprehension. Instead, compute values once before the comprehension."
+        "value": "If you try to create a Customer with invalid data, pydantic will raise a `ValidationError`. This makes it easy to catch bad data early."
       },
       {
         "type": "code",
-        "value": "# Slow: calling expensive_function(x) twice\nresult = [expensive_function(x) + expensive_function(x) for x in range(10)]\n\n# Better: store result and reuse it\nresult = [val + val for val in (expensive_function(x) for x in range(10))]"
+        "value": "try:\n    invalid_customer = Customer(name='Bob', age=-5, email='not-an-email')\nexcept ValidationError as e:\n    print(e.json())"
       },
       {
         "type": "paragraph",
-        "value": "Another common error is modifying the list being created inside the list comprehension, which leads to unexpected behavior or errors. Always separate list creation and modification logic."
+        "value": "The error message clearly shows which fields are invalid and why. For example, it will say the age must be a positive integer and the email must be valid, helping you debug faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also add custom validators to your model to enforce more specific rules. Suppose we want to limit the maximum age to 120."
       },
       {
         "type": "code",
-        "value": "# Wrong: modifying list inside the comprehension (causes error)\n# new_list = [my_list.append(x) for x in range(5)]\n\n# Correct way:\nnew_list = []\nfor x in range(5):\n    new_list.append(x)"
+        "value": "from pydantic import validator\n\nclass Customer(BaseModel):\n    name: str\n    age: int\n    email: EmailStr\n\n    @validator('age')\n    def age_must_be_realistic(cls, v):\n        if v < 0 or v > 120:\n            raise ValueError('Age must be between 0 and 120')\n        return v\n\ntry:\n    invalid_customer = Customer(name='Charlie', age=150, email='charlie@example.com')\nexcept ValidationError as e:\n    print(e)"
       },
       {
         "type": "paragraph",
-        "value": "Also, be mindful of variable scoping inside list comprehensions. Variables inside the comprehension are local and won't affect variables outside, but naming conflicts can cause confusion. Use clear variable names to avoid this."
+        "value": "This example shows how Python's data models with validation can help ensure your data is clean before it enters your analytics pipeline. By using libraries like pydantic, you can write concise, readable, and robust validation logic."
       },
       {
         "type": "paragraph",
-        "value": "In summary, here are quick tips to optimize list comprehensions:\n- Avoid expensive operations inside the comprehension; compute outside if possible.\n- Use conditions wisely to filter data efficiently.\n- Do not modify the list you're creating inside the comprehension.\n- Use clear variable names to avoid confusion.\n\nBy following these guidelines, your Python list comprehensions will run faster and be easier to maintain."
+        "value": "In summary, data validation in Python not only avoids runtime errors but also increases data trustworthiness for better insights. Start integrating validation early in your data projects to master reliable analytics!"
       }
     ]
   },
   {
-    "slug": "optimizing-sql-queries-for-high-volume-data-warehousing",
-    "title": "Optimizing SQL Queries for High-Volume Data Warehousing: A Beginner's Guide",
+    "slug": "mastering-window-functions-for-complex-data-analysis-in-sql",
+    "title": "Mastering Window Functions for Complex Data Analysis in SQL",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn practical and beginner-friendly techniques to optimize SQL queries for efficient data warehousing with large volumes of data.",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis easily. This beginner-friendly tutorial explains key concepts with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions allow you to perform calculations across a set of table rows related to the current row without collapsing rows into groups. This makes them incredibly powerful for complex data analysis tasks like running totals, ranking, and moving averages."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with an example dataset of sales records to illustrate how window functions work. Imagine you have a table named `sales` with columns `salesperson`, `month`, and `amount`."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE sales (\n  salesperson VARCHAR(50),\n  month INT,\n  amount DECIMAL(10,2)\n);\n\nINSERT INTO sales VALUES\n('Alice', 1, 500),\n('Alice', 2, 700),\n('Alice', 3, 600),\n('Bob', 1, 450),\n('Bob', 2, 550),\n('Bob', 3, 750);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using ROW_NUMBER() to rank sales within each salesperson's records\n\nThe ROW_NUMBER() function assigns a unique sequential rank to rows within a partition. Here, we rank months by sales amount for each salesperson."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson,\n  month,\n  amount,\n  ROW_NUMBER() OVER (PARTITION BY salesperson ORDER BY amount DESC) AS rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query partitions the data by `salesperson`, then orders by `amount` in descending order within each partition, assigning ranks starting at 1. This lets you identify the best sales month per person."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using SUM() as a window function for running totals\n\nCalculate a running total of sales by month for each salesperson with SUM() used as a window function."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson,\n  month,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson ORDER BY month) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the SUM() function computes a cumulative total of sales amounts ordered by month within each salesperson's data."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using LAG() to compare current month sales to the previous month\n\nLAG() allows you to access data from preceding rows without a self-join. This example calculates the difference between the current month’s sales and the previous month’s sales."
+      },
+      {
+        "type": "code",
+        "value": "SELECT \n  salesperson,\n  month,\n  amount,\n  LAG(amount, 1) OVER (PARTITION BY salesperson ORDER BY month) AS previous_month_amount,\n  amount - LAG(amount, 1) OVER (PARTITION BY salesperson ORDER BY month) AS difference\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The query uses LAG() to grab the amount from the previous month within each salesperson’s data and subtracts it from the current month amount to show the change."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\n\nWindow functions are essential in SQL for answers that require data comparison and analytics without reducing the result to aggregated groups. By mastering functions like ROW_NUMBER(), SUM() OVER, and LAG(), you can significantly simplify your complex data analysis tasks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Experiment with these functions on your own datasets, and you'll find they open up many new possibilities for efficient data exploration."
+      }
+    ]
+  },
+  {
+    "slug": "diagnosing-and-resolving-performance-bottlenecks-in-complex-sql-queries",
+    "title": "Diagnosing and Resolving Performance Bottlenecks in Complex SQL Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix common performance issues in complex SQL queries to make your database operations faster and more efficient.",
     "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with data warehouses containing millions or even billions of rows, poorly written SQL queries can lead to long wait times and heavy resource consumption. Optimizing your SQL queries helps databases execute faster, reducing costs and improving user experience. This tutorial introduces beginner-friendly tips to write efficient queries for high-volume data warehousing."
+        "value": "When working with large databases or complex queries, poor performance can slow down your applications significantly. Understanding how to diagnose performance bottlenecks in SQL queries is an important skill for every beginner. This article will walk you through practical steps to spot and resolve these issues."
       },
       {
         "type": "paragraph",
-        "value": "1. Use SELECT only on needed columns. Avoid SELECT * because selecting unnecessary columns wastes memory and processing time, especially on large tables."
+        "value": "The first step is to analyze your query execution plan. Most database systems offer commands or tools to see how the SQL engine processes your query. For example, in MySQL, you can use EXPLAIN, and in PostgreSQL, EXPLAIN ANALYZE. These tools help you understand which parts of your query are taking the most time."
       },
       {
         "type": "code",
-        "value": "SELECT order_id, customer_id, order_date FROM sales_orders WHERE order_date >= '2023-01-01';"
+        "value": "EXPLAIN SELECT * FROM orders WHERE customer_id = 123;"
       },
       {
         "type": "paragraph",
-        "value": "2. Filter data early with WHERE clauses. Reducing rows before joins or aggregations speeds up execution."
+        "value": "Look for full table scans or operations with high cost. Full scans mean the database is reading every row instead of using an index. To fix this, ensure your WHERE clause columns have proper indexes."
       },
       {
         "type": "code",
-        "value": "SELECT customer_id, SUM(amount) AS total_spent FROM sales_orders WHERE order_date BETWEEN '2023-01-01' AND '2023-03-31' GROUP BY customer_id;"
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
       },
       {
         "type": "paragraph",
-        "value": "3. Use appropriate indexes. Indexes on columns used in WHERE, JOIN, and ORDER BY clauses dramatically improve performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "For example, creating an index on order_date:"
+        "value": "Another common bottleneck is joining large tables without proper keys. Always check that your JOIN statements use indexed columns to speed up matching rows."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_order_date ON sales_orders(order_date);"
+        "value": "SELECT o.id, c.name FROM orders o JOIN customers c ON o.customer_id = c.id;"
       },
       {
         "type": "paragraph",
-        "value": "4. Avoid unnecessary joins. Joining large tables without filtering or using indexes can cause slow queries."
+        "value": "Avoid using SELECT * in your queries. Returning unnecessary columns increases data transfer and processing time. Specify only the columns you truly need."
+      },
+      {
+        "type": "paragraph",
+        "value": "Large result sets can also cause performance issues. Use LIMIT to restrict the number of rows returned during development or when appropriate."
       },
       {
         "type": "code",
-        "value": "SELECT c.customer_name, o.order_id FROM customers c JOIN sales_orders o ON c.customer_id = o.customer_id WHERE o.order_date >= '2023-01-01';"
+        "value": "SELECT id, order_date FROM orders WHERE customer_id = 123 LIMIT 100;"
       },
       {
         "type": "paragraph",
-        "value": "Ensure both customers.customer_id and sales_orders.customer_id are indexed."
+        "value": "Finally, consider breaking down very complex queries into simpler steps or temporary tables. This can make debugging easier and may improve performance."
       },
       {
         "type": "paragraph",
-        "value": "5. Use LIMIT to test queries during development. This lets you preview smaller datasets to refine queries quickly."
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM sales_orders WHERE order_date >= '2023-01-01' LIMIT 100;"
-      },
-      {
-        "type": "paragraph",
-        "value": "6. Avoid functions on indexed columns in WHERE clauses. Performing functions like LOWER() or CAST() can prevent the use of indexes."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example of what to avoid:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM customers WHERE LOWER(email) = 'example@example.com';"
-      },
-      {
-        "type": "paragraph",
-        "value": "Instead, normalize data for consistent case or store indexed computed columns."
-      },
-      {
-        "type": "paragraph",
-        "value": "7. Use explain plans to understand query execution. Many database systems provide EXPLAIN or EXPLAIN ANALYZE statements to help identify bottlenecks."
-      },
-      {
-        "type": "code",
-        "value": "EXPLAIN SELECT customer_id, SUM(amount) FROM sales_orders GROUP BY customer_id;"
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, focus on selecting only necessary columns, filtering early, using indexes, minimizing joins, testing with small data, avoiding functions on indexed columns, and analyzing query plans. With these steps, your SQL queries will run more efficiently in high-volume data warehouse environments."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-recursive-ctes-for-complex-hierarchical-data-queries-in-sql",
-    "title": "Mastering Recursive CTEs for Complex Hierarchical Data Queries in SQL",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn how to use recursive Common Table Expressions (CTEs) in SQL to query hierarchical data efficiently. This beginner-friendly guide explains errors you might encounter and how to fix them.",
-    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Recursive Common Table Expressions (CTEs) are a powerful feature in SQL that help you work with hierarchical or tree-structured data, such as organizational charts, category trees, or folder structures. However, beginners often face errors when writing recursive queries. In this article, you'll learn how to write recursive CTEs properly and understand common mistakes to avoid."
-      },
-      {
-        "type": "paragraph",
-        "value": "A recursive CTE consists of two parts: the anchor member and the recursive member. The anchor member defines the starting row(s), and the recursive member references the CTE itself to find related rows step-by-step until no more rows are found."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let’s look at an example using an employees table with hierarchical reporting:"
-      },
-      {
-        "type": "code",
-        "value": "CREATE TABLE employees (\n    employee_id INT PRIMARY KEY,\n    name VARCHAR(50),\n    manager_id INT\n);\n\nINSERT INTO employees VALUES\n(1, 'Alice', NULL),\n(2, 'Bob', 1),\n(3, 'Charlie', 1),\n(4, 'Dana', 2),\n(5, 'Evan', 2);\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "We want to find all employees under manager Alice (employee_id = 1), including indirect reports."
-      },
-      {
-        "type": "code",
-        "value": "WITH RECURSIVE employee_hierarchy AS (\n    -- Anchor member: start with the manager\n    SELECT employee_id, name, manager_id\n    FROM employees\n    WHERE employee_id = 1\n\n    UNION ALL\n\n    -- Recursive member: find employees reporting to those already found\n    SELECT e.employee_id, e.name, e.manager_id\n    FROM employees e\n    INNER JOIN employee_hierarchy eh ON e.manager_id = eh.employee_id\n)\nSELECT * FROM employee_hierarchy;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query starts with Alice and recursively finds her direct reports and their reports. However, beginners often run into errors, such as:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Error: Recursive CTEs must have an explicit column list or consistent columns.** Make sure the columns in the anchor and recursive parts match in number and data types."
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Error: Infinite recursion or maximum recursion depth exceeded.** This happens if there's a circular reference in your data, causing the recursion to never stop. To fix this, make sure your data hierarchy has no cycles."
-      },
-      {
-        "type": "paragraph",
-        "value": "Some SQL dialects let you limit recursion with an option such as `OPTION (MAXRECURSION 100)` in SQL Server or `SET max_recursion_depth` in others to prevent infinite loops."
-      },
-      {
-        "type": "paragraph",
-        "value": "If you want to include the level or depth of each employee in the hierarchy, you can add a column that increments with each recursion step:"
-      },
-      {
-        "type": "code",
-        "value": "WITH RECURSIVE employee_hierarchy AS (\n    SELECT employee_id, name, manager_id, 1 AS level\n    FROM employees\n    WHERE employee_id = 1\n\n    UNION ALL\n\n    SELECT e.employee_id, e.name, e.manager_id, eh.level + 1\n    FROM employees e\n    INNER JOIN employee_hierarchy eh ON e.manager_id = eh.employee_id\n)\nSELECT * FROM employee_hierarchy ORDER BY level;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This helps visualize how deep each employee is in the hierarchy."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, when mastering recursive CTEs:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Always ensure anchor and recursive parts return the same columns with compatible data types.\n- Watch for circular references to avoid infinite recursion.\n- Use recursion limits if your SQL implementation supports them.\n- Add columns to track recursion depth for clearer output."
-      },
-      {
-        "type": "paragraph",
-        "value": "With practice, recursive CTEs become an essential tool for working with complex hierarchical data efficiently in SQL."
+        "value": "By regularly analyzing your queries with execution plans, indexing correctly, avoiding SELECT *, limiting result sizes, and simplifying complex queries, you can diagnose and resolve most common performance bottlenecks."
       }
     ]
   }

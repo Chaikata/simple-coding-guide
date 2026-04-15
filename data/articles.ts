@@ -57951,5 +57951,421 @@ export const articles = [
         "value": "In summary, focus on selecting only necessary columns, filtering early, using indexes, minimizing joins, testing with small data, avoiding functions on indexed columns, and analyzing query plans. With these steps, your SQL queries will run more efficiently in high-volume data warehouse environments."
       }
     ]
+  },
+  {
+    "slug": "designing-resilient-event-driven-architectures-javascript",
+    "title": "Designing Resilient Event-Driven Architectures in JavaScript for Scalable Systems",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to build resilient, scalable event-driven systems in JavaScript with clear error handling strategies for beginner developers.",
+    "videoUrl": "https://www.youtube.com/watch?v=Of-br0OG5ic",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture (EDA) is a popular pattern for building scalable and maintainable systems. In JavaScript, especially on the server or with Node.js, events help decouple application components and enable greater responsiveness. However, to make your event-driven system resilient, you need to handle errors gracefully and ensure your app doesn't crash unexpectedly."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore the basics of event-driven design in JavaScript and look at strategies to handle errors effectively. We will write simple, beginner-friendly code demonstrating these ideas."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand how events work with JavaScript's built-in EventEmitter."
+      },
+      {
+        "type": "code",
+        "value": "const EventEmitter = require('events');\nconst eventBus = new EventEmitter();\n\n// Define an event listener\neventBus.on('dataReceived', (data) => {\n  console.log('Data received:', data);\n});\n\n// Emit the event\neventBus.emit('dataReceived', { id: 1, name: 'Sample' });"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, an event named `dataReceived` is emitted, and a listener handles it by logging data. But what happens if an error occurs while processing this event? Without error handling, such errors may crash your entire app."
+      },
+      {
+        "type": "paragraph",
+        "value": "To design resilient systems, you should add error handling inside your event listeners and consider centralized error handling for uncaught exceptions."
+      },
+      {
+        "type": "code",
+        "value": "eventBus.on('dataReceived', (data) => {\n  try {\n    // Simulate processing that may throw an error\n    if (!data.id) {\n      throw new Error('Invalid data: Missing id');\n    }\n    console.log('Processed data:', data);\n  } catch (error) {\n    console.error('Error processing dataReceived event:', error.message);\n    // Optionally: emit an error event or handle the error\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `try...catch` inside the listener protects the system from crashing due to unexpected data problems. For better scalability, you might also want to listen for errors globally using Node.js's `process` events:"
+      },
+      {
+        "type": "code",
+        "value": "// Global error handling\nprocess.on('uncaughtException', (err) => {\n  console.error('Uncaught Exception:', err.message);\n  // Add cleanup logic or restart the process if needed\n});\n\nprocess.on('unhandledRejection', (reason) => {\n  console.error('Unhandled Rejection:', reason);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "When building real-world scalable systems, consider using message queues or event brokers like RabbitMQ, Kafka, or cloud services that handle retries, dead-letter queues, and message persistence. This helps your system recover from failures without losing important events."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, designing resilient event-driven architectures in JavaScript involves:\n- Using event emitters to decouple components\n- Adding error handling inside event listeners\n- Handling global errors to avoid crashes\n- Considering external event brokers for scalability"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these practices, even beginner JavaScript developers can build robust and scalable event-driven systems."
+      }
+    ]
+  },
+  {
+    "slug": "beginners-guide-to-typescript-generics-writing-flexible-and-reusable-code",
+    "title": "Beginner's Guide to TypeScript Generics: Writing Flexible and Reusable Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript generics to create flexible, reusable code that works with any data type. This beginner-friendly guide explains generics in simple terms with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=7aCgI-2TB6c",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that adds static types to JavaScript. One of its most useful features is generics, which allow you to write functions and classes that work with multiple types instead of one. This helps you create flexible and reusable code with better type safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this guide, we'll explain what generics are, why you need them, and how to use them in simple examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Generics?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics let you define a placeholder type parameter in your functions or classes. This type parameter can be replaced by any actual type when the function or class is used. Think of it like a recipe that can use any ingredient you choose."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example Without Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine a function that takes an array and returns the first element:"
+      },
+      {
+        "type": "code",
+        "value": "function firstElement(arr: any[]): any {\n  return arr[0];\n}\n\nconst str = firstElement([\"apple\", \"banana\", \"cherry\"]); // \"apple\"\nconst num = firstElement([1, 2, 3]); // 1"
+      },
+      {
+        "type": "paragraph",
+        "value": "The problem with this code is that it uses `any`, so TypeScript cannot check if the returned value matches the input type. This could cause bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example With Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "We can fix this by using a generic type `T` to represent the array element type:"
+      },
+      {
+        "type": "code",
+        "value": "function firstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst str = firstElement([\"apple\", \"banana\", \"cherry\"]); // inferred as string\nconst num = firstElement([1, 2, 3]); // inferred as number"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `<T>` declares a generic type parameter. When you call `firstElement`, TypeScript automatically figures out what `T` should be based on the array you pass in. The return type is `T`, so TypeScript knows exactly what type to expect."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Functions with Multiple Type Parameters"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics can have multiple type parameters. For example, here’s a function that creates a pair (tuple) from two values of any types:"
+      },
+      {
+        "type": "code",
+        "value": "function makePair<T, U>(first: T, second: U): [T, U] {\n  return [first, second];\n}\n\nconst pair = makePair(\"hello\", 42); // inferred as [string, number]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generic Interfaces and Classes"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also use generics with interfaces and classes to create reusable data structures."
+      },
+      {
+        "type": "code",
+        "value": "interface Box<T> {\n  value: T;\n}\n\nconst stringBox: Box<string> = { value: \"hello\" };\nconst numberBox: Box<number> = { value: 123 };\n\nclass Container<T> {\n  private content: T;\n  constructor(value: T) {\n    this.content = value;\n  }\n  getContent(): T {\n    return this.content;\n  }\n}\n\nconst container = new Container<boolean>(true);\nconsole.log(container.getContent()); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Benefits of Using Generics"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Type Safety:** Generics keep type information, enabling better error checking.\n2. **Reusable Code:** Write functions/classes once that work with any type.\n3. **Maintainability:** Makes your code easier to understand and maintain.\n4. **Avoid `any`:** Helps avoid the problems associated with the `any` type."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics in TypeScript are a powerful way to write flexible and reusable code while keeping type safety. Start by defining generic type parameters with `<T>`, and TypeScript will help infer the specific types during function or class usage. As you become comfortable, you can explore more advanced generic features like constraints and default types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding with TypeScript generics!"
+      }
+    ]
+  },
+  {
+    "slug": "advanced-typescript-utility-types-for-managing-complex-error-states",
+    "title": "Advanced TypeScript Utility Types for Managing Complex Error States",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use advanced TypeScript utility types to handle complex error states in your applications with beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=UOgI202jKSU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Managing errors effectively is an essential part of any application. When working with TypeScript, utility types can help us capture and represent complex error states in a clear and type-safe way. This article introduces some advanced TypeScript utility types that simplify working with intricate error structures, making your code more maintainable and easier to understand."
+      },
+      {
+        "type": "paragraph",
+        "value": "Imagine you have an application where multiple parts can produce errors. Each of these errors might have different properties, but you want to manage them collectively while keeping track of specific error details. We'll use some built-in TypeScript utility types like `Partial`, `Record`, and `Extract`, combined with custom types, to achieve this."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a basic example. Suppose we have a type representing possible errors from a form:"
+      },
+      {
+        "type": "code",
+        "value": "type FormErrors = {\n  username?: string;\n  password?: string;\n  email?: string;\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, each field can have an optional error message. But what if the errors can be more complex objects instead of just strings? We can define a more detailed error type:"
+      },
+      {
+        "type": "code",
+        "value": "type FieldError = {\n  message: string;\n  code: number;\n};\n\ntype ComplexFormErrors = {\n  username?: FieldError;\n  password?: FieldError;\n  email?: FieldError;\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using `Partial<T>` ensures all properties are optional, which matches real-world scenarios where not all fields have errors at once."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now suppose you want to ensure you always have an object with all keys but optionally filled with error info, you can use the utility type `Record` combined with `Partial`."
+      },
+      {
+        "type": "code",
+        "value": "type FieldNames = 'username' | 'password' | 'email';\n\n// All fields exist but may be undefined\nconst allFieldsErrors: Partial<Record<FieldNames, FieldError>> = {\n  username: { message: 'Required', code: 101 },\n  // password and email can be missing\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes your error types are union types and you want to narrow down specific errors from them. For example, assume you have these error variants:"
+      },
+      {
+        "type": "code",
+        "value": "type NetworkError = { type: 'network'; retryAfter: number };\ntype ValidationError = { type: 'validation'; field: string; message: string };\ntype UnknownError = { type: 'unknown' };\n\ntype AppError = NetworkError | ValidationError | UnknownError;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can extract only one type of error using `Extract` utility:"
+      },
+      {
+        "type": "code",
+        "value": "type OnlyValidationErrors = Extract<AppError, { type: 'validation' }>;\n\nconst errorExample: OnlyValidationErrors = {\n  type: 'validation',\n  field: 'email',\n  message: 'Invalid email address'\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "To manage multiple error states dynamically, combining errors, you might want to create a mapped type that converts all possible errors to an optional list, or even a union of them."
+      },
+      {
+        "type": "code",
+        "value": "type ErrorMap = {\n  network: NetworkError[];\n  validation: ValidationError[];\n  unknown: UnknownError[];\n};\n\n// Using Partial so some error types might be missing if no errors of that type exist\nconst errors: Partial<ErrorMap> = {\n  network: [{ type: 'network', retryAfter: 30 }],\n  validation: [\n    { type: 'validation', field: 'password', message: 'Too short' },\n  ]\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "This structure is easy to check, update, and provides clear insight into what errors are currently active."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, these advanced TypeScript utility types (`Partial`, `Record`, `Extract`) help manage complex error states by defining flexible but strict type structures. Using these makes your error handling code safer and clearer, especially in large applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "As you continue learning TypeScript, practice combining these utilities with your own custom types to handle errors and other complex state data cleanly and effectively."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-automate-daily-tasks-with-python-beginners-guide",
+    "title": "How to Automate Daily Tasks with Python: A Beginner’s Guide",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python to automate repetitive daily tasks, saving time and increasing productivity. A beginner-friendly guide with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=lumze3ZNA-s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Automating daily tasks can help you save time, avoid errors, and increase productivity. Python, with its simple syntax and powerful libraries, is a great language to start automating repetitive tasks. In this tutorial, you will learn basic concepts of Python automation with practical examples that you can try immediately."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, it's important to identify tasks that can be easily automated. Examples include renaming files in bulk, sending emails automatically, scraping simple data from websites, or organizing files into folders. Let's start with a simple task: renaming multiple files in a folder."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Rename Multiple Files\nSuppose you have many photos with names like 'IMG_001.jpg', 'IMG_002.jpg' and you want to rename them to 'Vacation_1.jpg', 'Vacation_2.jpg', etc."
+      },
+      {
+        "type": "code",
+        "value": "import os\n\nfolder_path = 'path/to/your/folder'\n\nfor count, filename in enumerate(os.listdir(folder_path), start=1):\n    if filename.endswith('.jpg'):\n        new_name = f'Vacation_{count}.jpg'\n        src = os.path.join(folder_path, filename)\n        dst = os.path.join(folder_path, new_name)\n        os.rename(src, dst)\n        print(f'Renamed {filename} to {new_name}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This script loops through all files in your specified folder, checks if the file is a JPG image, and renames it with a new format. Make sure to replace 'path/to/your/folder' with your actual folder path."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Sending Automated Emails\nPython can also help send emails automatically using the built-in smtplib library. Here's a simple example to send an email via Gmail's SMTP server."
+      },
+      {
+        "type": "code",
+        "value": "import smtplib\nfrom email.mime.text import MIMEText\n\nsmtp_server = 'smtp.gmail.com'\nsmtp_port = 587\nsender_email = 'your_email@gmail.com'\npassword = 'your_app_password'  # Use App Password, not your regular password\nreceiver_email = 'receiver@example.com'\n\nmessage = MIMEText('Hello, this is an automated email sent by Python!')\nmessage['Subject'] = 'Automated Email'\nmessage['From'] = sender_email\nmessage['To'] = receiver_email\n\nwith smtplib.SMTP(smtp_server, smtp_port) as server:\n    server.starttls()  # Secure the connection\n    server.login(sender_email, password)\n    server.send_message(message)\n\nprint('Email sent successfully!')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to set up an app password if you use Gmail, as regular passwords will not work for SMTP. This script creates and sends a simple plain-text email."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Organize Files by Extension\nAnother common task is organizing files by moving them into folders based on their file extensions."
+      },
+      {
+        "type": "code",
+        "value": "import os\nimport shutil\n\nfolder_path = 'path/to/your/folder'\n\nfor filename in os.listdir(folder_path):\n    if os.path.isfile(os.path.join(folder_path, filename)):\n        ext = filename.split('.')[-1]\n        ext_folder = os.path.join(folder_path, ext.upper() + '_files')\n        if not os.path.exists(ext_folder):\n            os.makedirs(ext_folder)\n        src = os.path.join(folder_path, filename)\n        dst = os.path.join(ext_folder, filename)\n        shutil.move(src, dst)\n        print(f'Moved {filename} to {ext_folder}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "This script creates folders like 'JPG_files', 'PDF_files', etc., and moves files to their corresponding folder based on extension. It helps keep your folder clean and organized."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Tips\n- Always test your scripts in a safe environment to avoid accidental data loss.\n- Use virtual environments and install necessary libraries when needed.\n- Gradually automate more complex tasks as you gain confidence.\n- Explore libraries such as `schedule` to run automation scripts at regular intervals.\n\nWith these simple steps and scripts, you are well on your way to automating daily tasks using Python. Experiment and have fun!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-data-validation-in-python-data-models-for-reliable-analytics",
+    "title": "Mastering Data Validation in Python Data Models for Reliable Analytics",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to use Python data models and validation techniques to ensure your data is reliable and error-free for accurate analytics.",
+    "videoUrl": "https://www.youtube.com/watch?v=mut8eTdoRxU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Data validation is a crucial step in building reliable analytics. When working with Python data models, ensuring that the data entering your system is clean and accurate helps prevent errors downstream and improves the quality of your insights. This guide will walk you through beginner-friendly techniques to implement data validation effectively in Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "A popular way to define data models and validate data in Python is to use the `pydantic` library. Pydantic uses Python type annotations to validate data efficiently. Let’s start by installing pydantic."
+      },
+      {
+        "type": "code",
+        "value": "pip install pydantic"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, we'll create a simple data model for a customer with fields like name, age, and email. Pydantic will help us ensure that age is a positive integer and the email is a valid string format."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel, EmailStr, ValidationError\n\nclass Customer(BaseModel):\n    name: str\n    age: int\n    email: EmailStr\n\n# Creating a valid customer instance\ncustomer = Customer(name='Alice', age=30, email='alice@example.com')\nprint(customer)"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to create a Customer with invalid data, pydantic will raise a `ValidationError`. This makes it easy to catch bad data early."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    invalid_customer = Customer(name='Bob', age=-5, email='not-an-email')\nexcept ValidationError as e:\n    print(e.json())"
+      },
+      {
+        "type": "paragraph",
+        "value": "The error message clearly shows which fields are invalid and why. For example, it will say the age must be a positive integer and the email must be valid, helping you debug faster."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also add custom validators to your model to enforce more specific rules. Suppose we want to limit the maximum age to 120."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import validator\n\nclass Customer(BaseModel):\n    name: str\n    age: int\n    email: EmailStr\n\n    @validator('age')\n    def age_must_be_realistic(cls, v):\n        if v < 0 or v > 120:\n            raise ValueError('Age must be between 0 and 120')\n        return v\n\ntry:\n    invalid_customer = Customer(name='Charlie', age=150, email='charlie@example.com')\nexcept ValidationError as e:\n    print(e)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example shows how Python's data models with validation can help ensure your data is clean before it enters your analytics pipeline. By using libraries like pydantic, you can write concise, readable, and robust validation logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, data validation in Python not only avoids runtime errors but also increases data trustworthiness for better insights. Start integrating validation early in your data projects to master reliable analytics!"
+      }
+    ]
+  },
+  {
+    "slug": "diagnosing-and-resolving-performance-bottlenecks-in-complex-sql-queries",
+    "title": "Diagnosing and Resolving Performance Bottlenecks in Complex SQL Queries",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to identify and fix common performance issues in complex SQL queries to make your database operations faster and more efficient.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with large databases or complex queries, poor performance can slow down your applications significantly. Understanding how to diagnose performance bottlenecks in SQL queries is an important skill for every beginner. This article will walk you through practical steps to spot and resolve these issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "The first step is to analyze your query execution plan. Most database systems offer commands or tools to see how the SQL engine processes your query. For example, in MySQL, you can use EXPLAIN, and in PostgreSQL, EXPLAIN ANALYZE. These tools help you understand which parts of your query are taking the most time."
+      },
+      {
+        "type": "code",
+        "value": "EXPLAIN SELECT * FROM orders WHERE customer_id = 123;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Look for full table scans or operations with high cost. Full scans mean the database is reading every row instead of using an index. To fix this, ensure your WHERE clause columns have proper indexes."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customer_id ON orders(customer_id);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common bottleneck is joining large tables without proper keys. Always check that your JOIN statements use indexed columns to speed up matching rows."
+      },
+      {
+        "type": "code",
+        "value": "SELECT o.id, c.name FROM orders o JOIN customers c ON o.customer_id = c.id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid using SELECT * in your queries. Returning unnecessary columns increases data transfer and processing time. Specify only the columns you truly need."
+      },
+      {
+        "type": "paragraph",
+        "value": "Large result sets can also cause performance issues. Use LIMIT to restrict the number of rows returned during development or when appropriate."
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, order_date FROM orders WHERE customer_id = 123 LIMIT 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, consider breaking down very complex queries into simpler steps or temporary tables. This can make debugging easier and may improve performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "By regularly analyzing your queries with execution plans, indexing correctly, avoiding SELECT *, limiting result sizes, and simplifying complex queries, you can diagnose and resolve most common performance bottlenecks."
+      }
+    ]
   }
 ];
