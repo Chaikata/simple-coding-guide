@@ -58367,5 +58367,569 @@ export const articles = [
         "value": "By regularly analyzing your queries with execution plans, indexing correctly, avoiding SELECT *, limiting result sizes, and simplifying complex queries, you can diagnose and resolve most common performance bottlenecks."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-proxies-for-advanced-object-manipulation",
+    "title": "Mastering JavaScript Proxies for Advanced Object Manipulation",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how JavaScript Proxies allow you to intercept and customize operations on objects for advanced and powerful coding techniques.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript proxies provide a powerful way to control and customize low-level operations on objects, such as property lookup, assignment, and function invocation. This tutorial will introduce you to the basics of using proxies, helping you manipulate objects in advanced ways with clean and readable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy wraps an existing object and intercepts operations performed on it, allowing you to define custom behavior. The core idea is to specify handler functions (called traps) that are triggered during these operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's the simplest example of a Proxy that logs every time you access a property on an object:"
+      },
+      {
+        "type": "code",
+        "value": "const target = { name: 'Alice', age: 25 };\n\nconst handler = {\n  get: function(obj, prop) {\n    console.log(`Property '${prop}' was accessed.`);\n    return obj[prop];\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nconsole.log(proxy.name); // Logs access and outputs: Alice\nconsole.log(proxy.age);  // Logs access and outputs: 25"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `get` trap intercepts property accesses. Whenever we read a property on `proxy`, the handler logs the property name before returning it from the original object."
+      },
+      {
+        "type": "paragraph",
+        "value": "Besides `get`, you can also trap other operations, like setting properties with `set`, checking property existence with `has`, or even function calls with `apply`. Let's create a proxy that allows only numeric values to be set on an object:"
+      },
+      {
+        "type": "code",
+        "value": "const target = {};\n\nconst handler = {\n  set: function(obj, prop, value) {\n    if (typeof value === 'number') {\n      obj[prop] = value;\n      console.log(`Set ${prop} to ${value}`);\n      return true; // indicates success\n    } else {\n      console.log(`Failed to set ${prop}: value is not a number.`);\n      return false; // indicates failure\n    }\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nproxy.age = 30;    // Allowed, logs: Set age to 30\nproxy.name = 'Bob'; // Not allowed, logs error message\n\nconsole.log(proxy.age); // 30\nconsole.log(proxy.name); // undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "With this proxy, you ensure the object only holds numeric values. This kind of validation can be very useful to maintain object state integrity."
+      },
+      {
+        "type": "paragraph",
+        "value": "Proxies can also be used for more advanced tasks like creating default values for missing properties. Here's how to return a default string when a property doesn't exist:"
+      },
+      {
+        "type": "code",
+        "value": "const target = {};\n\nconst handler = {\n  get: function(obj, prop) {\n    return prop in obj ? obj[prop] : `Property '${prop}' not found`;\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nproxy.name = 'Charlie';\nconsole.log(proxy.name); // Charlie\nconsole.log(proxy.age);  // Property 'age' not found"
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, JavaScript proxies are a versatile tool that can help you intercept, customize, and enhance normal object behavior. By mastering proxies, you gain greater control over your data, making your code safer, cleaner, and more expressive."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try creating your own proxies to log actions, validate data, create default values, or even implement dynamic behavior that's challenging to achieve with normal objects. The Proxy API is well worth exploring for any JavaScript developer aiming to write advanced and maintainable code."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-type-coercion-errors",
+    "title": "Understanding JavaScript Type Coercion Errors: A Deep Dive with Practical Examples",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn about JavaScript type coercion errors, why they happen, and how to avoid them with simple explanations and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=KX10dEuqQyQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible and powerful programming language, but one of its quirks can lead to confusing bugs for beginners: type coercion errors. Type coercion refers to how JavaScript automatically converts one data type to another in certain situations, which sometimes produces unexpected results. This guide will help you understand what causes these errors and how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript has different data types, such as strings, numbers, booleans, and objects. It often tries to 'help' by converting values from one type to another when performing operations. However, these implicit conversions can sometimes cause surprises."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 1: Adding a Number and a String"
+      },
+      {
+        "type": "paragraph",
+        "value": "When you add a number to a string, JavaScript converts the number to a string first and then concatenates them."
+      },
+      {
+        "type": "code",
+        "value": "let result = 5 + '10';\nconsole.log(result); // Output: '510'\nconsole.log(typeof result); // Output: 'string'"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you expected the result to be a number (15), you need to convert the string to a number explicitly, like this:"
+      },
+      {
+        "type": "code",
+        "value": "let result = 5 + Number('10');\nconsole.log(result); // Output: 15\nconsole.log(typeof result); // Output: 'number'"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 2: Subtracting a String from a Number"
+      },
+      {
+        "type": "paragraph",
+        "value": "In subtraction, JavaScript tries to convert the string to a number automatically."
+      },
+      {
+        "type": "code",
+        "value": "let result = 10 - '5';\nconsole.log(result); // Output: 5\nconsole.log(typeof result); // Output: 'number'"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the string '5' is coerced into the number 5, so the subtraction works as expected. Notice the difference compared to the addition example."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 3: Comparing Values with == vs ==="
+      },
+      {
+        "type": "paragraph",
+        "value": "The double equals operator (==) compares values after coercion, which can lead to surprising results. The triple equals operator (===) compares without coercion and is generally safer."
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 == '5');  // true (values coerced)\nconsole.log(5 === '5'); // false (different types)"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid coercion-related bugs, prefer using === unless you have a specific reason not to."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example 4: Boolean Coercion Pitfalls"
+      },
+      {
+        "type": "paragraph",
+        "value": "Some values are 'falsy', meaning they become false when converted to booleans. The common ones include 0, '', null, undefined, NaN, and false."
+      },
+      {
+        "type": "code",
+        "value": "if ('') {\n  console.log('This will NOT run');\n} else {\n  console.log('Empty string is falsy');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you assume a non-empty string but it is empty, your conditions may behave unexpectedly. Always be careful when relying on implicit boolean coercions."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Tips to Avoid Type Coercion Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use explicit type conversions: Number(), String(), Boolean() functions help make code clearer.\n- Prefer the === operator to avoid type coercion in conditions.\n- Validate and sanitize inputs, especially if they come as strings but should be numbers.\n- Use strict linting tools (like ESLint) to warn about potentially unsafe coercions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding type coercion helps debug errors and write more predictable JavaScript code. With these examples and tips, you should now have a solid foundation for avoiding common type coercion pitfalls."
+      }
+    ]
+  },
+  {
+    "slug": "building-your-first-rest-api-with-typescript-and-express",
+    "title": "Building Your First REST API with TypeScript and Express: A Beginner's Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create your very first REST API using TypeScript and Express. This beginner-friendly guide takes you through every step to build a simple but functional API.",
+    "videoUrl": "https://www.youtube.com/watch?v=-MTSQjw5DrM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "REST APIs allow different software applications to communicate with each other over the internet. In this guide, you'll learn how to create a simple REST API using Express, a popular Node.js web framework, and TypeScript, a typed superset of JavaScript. This tutorial assumes you have Node.js and npm installed on your computer."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Setting Up Your Project\nFirst, create a new directory for your project and initialize it with npm:"
+      },
+      {
+        "type": "code",
+        "value": "mkdir my-first-api\ncd my-first-api\nnpm init -y"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Installing Required Packages\nNext, install Express and TypeScript along with type definitions and some helpful development tools:"
+      },
+      {
+        "type": "code",
+        "value": "npm install express\nnpm install --save-dev typescript @types/node @types/express ts-node nodemon"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Configuring TypeScript\nCreate a tsconfig.json file to configure TypeScript options. Run this command to generate a default configuration file:"
+      },
+      {
+        "type": "code",
+        "value": "npx tsc --init"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can keep most default settings. Just make sure to set the target to at least ES6 for modern JavaScript features like this:"
+      },
+      {
+        "type": "code",
+        "value": "\"target\": \"ES6\","
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Writing Your First API Endpoint\nCreate a `src` folder and inside it a file named `index.ts`. This will be the main file of your application. Add the following code to create a simple Express server with one GET endpoint:"
+      },
+      {
+        "type": "code",
+        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\nconst PORT = 3000;\n\n// Middleware to parse JSON\napp.use(express.json());\n\n// Simple GET endpoint\napp.get('/', (req: Request, res: Response) => {\n  res.send('Welcome to your first REST API built with TypeScript and Express!');\n});\n\napp.listen(PORT, () => {\n  console.log(`Server is running at http://localhost:${PORT}`);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Running Your Server\nTo run your server easily with automatic restarts on file changes, add this script to your `package.json`:"
+      },
+      {
+        "type": "code",
+        "value": "\"scripts\": {\n  \"start\": \"nodemon src/index.ts\"\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now start your server with:"
+      },
+      {
+        "type": "code",
+        "value": "npm start"
+      },
+      {
+        "type": "paragraph",
+        "value": "Open your browser and go to http://localhost:3000. You should see your welcome message."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Adding a RESTful Resource\nLet's add a simple resource: an array of users. We'll create routes to retrieve all users and add new users."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n}\n\nconst users: User[] = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' },\n];\n\n// Get all users\napp.get('/users', (req: Request, res: Response) => {\n  res.json(users);\n});\n\n// Add a new user\napp.post('/users', (req: Request, res: Response) => {\n  const newUser: User = {\n    id: users.length + 1,\n    name: req.body.name,\n  };\n  users.push(newUser);\n  res.status(201).json(newUser);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 7: Testing Your API\nYou can test your API using tools like Postman, Insomnia, or even curl in the terminal.\n\nTo get all users, send a GET request to:\n\nhttp://localhost:3000/users\n\n\nTo add a user, send a POST request to:\n\nhttp://localhost:3000/users\n\nwith a JSON body like:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"name\": \"Charlie\"\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Your server will respond with the newly created user including an ID."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nCongratulations! You've built a basic REST API with TypeScript and Express. From here, you can expand by connecting a database, adding validation, authentication, and more complex routes. TypeScript helps you write safer, more predictable code by catching errors early and providing helpful autocompletion."
+      }
+    ]
+  },
+  {
+    "slug": "handling-async-await-pitfalls-in-typescript-for-robust-api-calls",
+    "title": "Handling Async/Await Pitfalls in TypeScript for Robust API Calls",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn common async/await mistakes in TypeScript and how to handle them for reliable API calls.",
+    "videoUrl": "https://www.youtube.com/watch?v=_zwNvruI6ds",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Async/await is a powerful feature in TypeScript that makes asynchronous code easier to write and read. However, beginners often run into common pitfalls when handling API calls, leading to bugs or unhandled errors. This article will walk you through these pitfalls with practical examples and show you how to avoid them for more robust code."
+      },
+      {
+        "type": "paragraph",
+        "value": "The first common mistake is not handling errors properly. When calling an API asynchronously, things like network failures or invalid responses can happen. If you don't catch these errors, your app can crash or behave unpredictably."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUser() {\n  const response = await fetch('https://api.example.com/user');\n  const data = await response.json();\n  return data;\n}\n\n// Using the function\nfetchUser().then(user => console.log(user));"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, if the fetch fails or the response isn’t JSON, the app will throw an error. To fix this, wrap the await calls in a try-catch block to catch and handle errors gracefully."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUserSafe() {\n  try {\n    const response = await fetch('https://api.example.com/user');\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.json();\n    return data;\n  } catch (error) {\n    console.error('Failed to fetch user:', error);\n    // Handle error: return default data or rethrow\n    return null;\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another pitfall is forgetting to await a promise. If you omit the await keyword, your code might continue executing before the asynchronous operation completes, causing data inconsistencies or runtime errors."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUserWrong() {\n  const userPromise = fetch('https://api.example.com/user');\n  // Missing await here\n  const data = await userPromise.json(); // This will cause an error because userPromise is a Response, not a Promise<Response>\n  return data;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The correct approach is to await the fetch call before trying to use the response object."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchUserCorrect() {\n  const response = await fetch('https://api.example.com/user');\n  const data = await response.json();\n  return data;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, handling multiple async calls often causes confusion. If you have independent API calls, use Promise.all to run them concurrently and handle their results together."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchMultipleUsers() {\n  try {\n    const urls = ['https://api.example.com/user/1', 'https://api.example.com/user/2'];\n    const responses = await Promise.all(urls.map(url => fetch(url)));\n    const data = await Promise.all(responses.map(res => {\n      if (!res.ok) {\n        throw new Error(`HTTP error! status: ${res.status}`);\n      }\n      return res.json();\n    }));\n    return data;\n  } catch (error) {\n    console.error('Error fetching multiple users:', error);\n    return [];\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By correctly handling errors, always awaiting promises, and using Promise.all for concurrent operations, you can make your TypeScript API calls more reliable and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "python-web-scraper-ecommerce-data-collection",
+    "title": "Building a Python Web Scraper to Automate Data Collection from E-commerce Sites",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build a beginner-friendly Python web scraper to automate data collection from e-commerce websites using requests and BeautifulSoup.",
+    "videoUrl": "https://www.youtube.com/watch?v=8dTpNajxaH0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Web scraping is a useful skill for automating the collection of data from websites. If you want to gather product details like prices, names, or ratings from e-commerce sites, Python makes this task straightforward. In this tutorial, we'll build a simple Python web scraper using popular libraries like requests and BeautifulSoup. This guide is beginner-friendly and will walk you through the steps needed to extract data efficiently."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before starting, ensure you have Python installed on your computer. You'll also need to install two packages: requests, which allows Python to make HTTP requests, and BeautifulSoup, which parses HTML content. You can install these by running the following command in your terminal:"
+      },
+      {
+        "type": "code",
+        "value": "pip install requests beautifulsoup4"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's write a Python script that scrapes a product listing page from a sample e-commerce site. For demonstration, we'll pretend there's a site that lists products with their names, prices, and ratings. Remember to always check a website's Terms of Service and robots.txt file before scraping."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's the complete Python code for a simple scraper:"
+      },
+      {
+        "type": "code",
+        "value": "import requests\nfrom bs4 import BeautifulSoup\n\n# URL of the e-commerce page to scrape\nurl = 'https://example-ecommerce.com/products'\n\n# Send an HTTP GET request to the URL\nresponse = requests.get(url)\n\n# Check if the request was successful\nif response.status_code == 200:\n    # Parse the HTML content using BeautifulSoup\n    soup = BeautifulSoup(response.text, 'html.parser')\n\n    # Find all product containers - this will vary by site\n    products = soup.find_all('div', class_='product-item')\n\n    for product in products:\n        # Extract product name\n        name = product.find('h2', class_='product-title').text.strip()\n\n        # Extract product price\n        price = product.find('span', class_='product-price').text.strip()\n\n        # Extract product rating\n        rating_tag = product.find('div', class_='product-rating')\n        rating = rating_tag.text.strip() if rating_tag else 'No rating'\n\n        print(f'Name: {name}')\n        print(f'Price: {price}')\n        print(f'Rating: {rating}')\n        print('---')\nelse:\n    print(f'Failed to retrieve the page. Status code: {response.status_code}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down what's happening in this code. First, we import the necessary modules. We then send a GET request to the e-commerce page URL to get the HTML content. If successful, we use BeautifulSoup to parse the HTML. We search for all product items by their HTML tag and CSS class (this depends on the site’s structure). For each product, we extract the product name, price, and rating by targeting the respective HTML elements and print them out."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember that websites differ a lot in design, so you need to inspect the HTML code (using your browser's developer tools) to find the correct tags and classes to target for your data."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, building a web scraper in Python requires these key steps: sending a request to the webpage, parsing the HTML content, extracting the data you want, and handling errors properly. With these basics, you can start collecting data to analyze prices or trends automatically from e-commerce websites."
+      },
+      {
+        "type": "paragraph",
+        "value": "Always be respectful to the websites you scrape: use reasonable request rates, follow their scraping policies, and avoid overloading their servers."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-traceback-analysis-for-complex-runtime-exceptions",
+    "title": "Mastering Python Traceback Analysis for Complex Runtime Exceptions",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to effectively read and understand Python tracebacks to debug complex runtime exceptions with ease.",
+    "videoUrl": "https://www.youtube.com/watch?v=WFiWfNy3xjA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When coding in Python, encountering runtime exceptions is common, especially as your programs become more complex. Understanding what went wrong is crucial, and that's where traceback analysis comes into play. This guide will help beginners learn how to read Python tracebacks to quickly identify and fix errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Python traceback is a detailed error report generated when an exception occurs. It shows the call stack leading to the error, including file names, line numbers, and the error message itself. Let’s look at a simple example:"
+      },
+      {
+        "type": "code",
+        "value": "def divide_numbers(a, b):\n    return a / b\n\nresult = divide_numbers(10, 0)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running this code will produce a traceback because dividing by zero raises a `ZeroDivisionError`. Here's what the traceback might look like:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 5, in <module>\n    result = divide_numbers(10, 0)\n  File \"example.py\", line 2, in divide_numbers\n    return a / b\nZeroDivisionError: division by zero"
+      },
+      {
+        "type": "paragraph",
+        "value": "From the traceback, you can see the sequence of calls that led to the error. The last line tells you the exact exception type and the cause (`division by zero`). The previous lines show where the error occurred in your code (file and line number)."
+      },
+      {
+        "type": "paragraph",
+        "value": "For complex programs, tracebacks can be longer, showing nested function calls. Reading from the bottom up helps you understand the context of the exception."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some tips to master traceback analysis:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Identify the exception type**: The last line specifies the error type (e.g., `IndexError`, `TypeError`). Googling this along with your code context often helps."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Locate the error line**: Check the file and line number mentioned before the exception message to find where the problem started."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Understand the call stack**: Tracebacks list functions in the order they were called. This helps pinpoint which function caused or propagated the error."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Use debugging tools**: Complement traceback reading with Python debuggers like `pdb` to step through the code interactively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's try an example with nested function calls throwing an error:"
+      },
+      {
+        "type": "code",
+        "value": "def fetch_element(lst, index):\n    return lst[index]\n\ndef process_list(data):\n    return fetch_element(data, 5)\n\nsample = [1, 2, 3]\nprint(process_list(sample))"
+      },
+      {
+        "type": "paragraph",
+        "value": "When run, this will cause an `IndexError` because index 5 is out of range for the list `sample`. The traceback will look like this:"
+      },
+      {
+        "type": "code",
+        "value": "Traceback (most recent call last):\n  File \"example.py\", line 9, in <module>\n    print(process_list(sample))\n  File \"example.py\", line 6, in process_list\n    return fetch_element(data, 5)\n  File \"example.py\", line 2, in fetch_element\n    return lst[index]\nIndexError: list index out of range"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can see step-by-step where the error occurred and which function calls led to it. This helps you fix the problem by checking the index values before accessing list elements."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering Python traceback analysis is essential for debugging complex runtime exceptions. By reading the traceback carefully, understanding the call stack, and identifying the exception type and location, you can quickly solve errors and improve your coding skills."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-sql-data-models-for-ecommerce",
+    "title": "Designing Scalable SQL Data Models for E-commerce Applications",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to design scalable and efficient SQL data models specifically tailored for e-commerce applications, focusing on best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=s6m8Aby2at8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "E-commerce applications require well-designed data models to handle product catalogs, customer information, orders, and transactions efficiently. A scalable SQL data model not only helps manage growing amounts of data but also improves performance and maintainability. In this tutorial, we will explore the basics of designing a scalable SQL database for an e-commerce app."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's understand the key entities and their relationships in typical e-commerce scenarios: Products, Customers, Orders, and Order Items. Each entity should have its own table, and relationships between tables should be clearly defined using foreign keys."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a table for products. It should include essential details like product ID, name, description, price, and stock quantity."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Products (\n  ProductID INT PRIMARY KEY AUTO_INCREMENT,\n  ProductName VARCHAR(100) NOT NULL,\n  Description TEXT,\n  Price DECIMAL(10, 2) NOT NULL,\n  StockQuantity INT DEFAULT 0\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, the Customers table stores user data such as customer ID, name, email, and address. Email should be unique to avoid duplicates."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Customers (\n  CustomerID INT PRIMARY KEY AUTO_INCREMENT,\n  FullName VARCHAR(100) NOT NULL,\n  Email VARCHAR(100) NOT NULL UNIQUE,\n  Address VARCHAR(255)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Orders represent a customer's purchase and include an order ID, customer reference, order date, and status. We use a foreign key to link each order to a customer."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Orders (\n  OrderID INT PRIMARY KEY AUTO_INCREMENT,\n  CustomerID INT NOT NULL,\n  OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,\n  Status VARCHAR(50) DEFAULT 'Pending',\n  FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Since an order can contain multiple products, we use an OrderItems table to capture details about each product in the order, including quantity and price at purchase time."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE OrderItems (\n  OrderItemID INT PRIMARY KEY AUTO_INCREMENT,\n  OrderID INT NOT NULL,\n  ProductID INT NOT NULL,\n  Quantity INT NOT NULL,\n  UnitPrice DECIMAL(10, 2) NOT NULL,\n  FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),\n  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To ensure scalability, keep the following best practices in mind: normalize your tables to eliminate redundant data, use appropriate data types, and index key columns such as foreign keys to speed up queries. For example, indexes on CustomerID in the Orders table improve lookup speed as your data grows."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, as your business grows, consider partitioning large tables, archiving old orders, and using caching strategies at the application level to maintain performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following this simple yet effective data modeling approach, you'll build a robust foundation for your e-commerce application's database that can handle increasing loads and evolving requirements."
+      }
+    ]
+  },
+  {
+    "slug": "handling-numeric-overflow-and-underflow-in-sql-queries",
+    "title": "Handling Numeric Overflow and Underflow in SQL Queries: A Beginner’s Guide",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to handle numeric overflow and underflow errors in SQL queries with practical tips and examples tailored for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=S3uelmFiAhg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with numeric data in SQL, especially in calculations or data insertion, you might encounter errors related to numeric overflow or underflow. These occur when a number exceeds the allowable range for its data type (overflow) or is smaller than the minimum allowed (underflow). Understanding and managing these errors is essential for maintaining data integrity and avoiding query failures."
+      },
+      {
+        "type": "paragraph",
+        "value": "Numeric overflow happens when the result of a calculation or the value being inserted does not fit into the defined column’s data type. For example, trying to insert a number larger than the maximum value allowed by an INT or DECIMAL type causes an overflow error. Underflow is less common but can occur with floating-point values when the number is extremely close to zero beyond the precision the type can support."
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent these errors, it is important to choose the appropriate data type with sufficient range and precision. SQL provides different numeric types like INT, BIGINT, DECIMAL, FLOAT, and DOUBLE, each with varying storage sizes and precision limits."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example where inserting a value into an INT column exceeds its range, causing an overflow error:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE numbers (\n  id INT PRIMARY KEY,\n  value INT\n);\n\n-- Attempt to insert a value larger than INT allows (INT max is 2147483647)\nINSERT INTO numbers (id, value) VALUES (1, 3000000000);\n-- This will cause an overflow error because 3000000000 > 2147483647"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, use a larger data type like BIGINT for the value column, which can hold much larger values:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE numbers (\n  id INT PRIMARY KEY,\n  value BIGINT\n);\n\nINSERT INTO numbers (id, value) VALUES (1, 3000000000);\n-- Works fine because BIGINT supports values up to 9,223,372,036,854,775,807"
+      },
+      {
+        "type": "paragraph",
+        "value": "For decimal or floating-point numbers, you can define precision and scale to control how large or precise your numbers can be. For example, DECIMAL(10,2) allows up to 10 digits in total with 2 digits after the decimal point."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE prices (\n  id INT PRIMARY KEY,\n  amount DECIMAL(10, 2)\n);\n\nINSERT INTO prices (id, amount) VALUES (1, 12345678.90);\n-- Valid because fits within 10 total digits (8 before decimal and 2 after)\n\nINSERT INTO prices (id, amount) VALUES (2, 123456789.12);\n-- Will cause an overflow error because there are 9 digits before decimal, exceeding precision"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid overflow and underflow errors in calculations, consider using built-in SQL functions like CAST or CONVERT to ensure data is safely converted into appropriate types and handle edge cases with conditional logic or error trapping."
+      },
+      {
+        "type": "code",
+        "value": "SELECT\n  CASE\n    WHEN amount > 9999999999.99 THEN 'Overflow detected'\n    ELSE CAST(amount AS DECIMAL(10,2))\n  END AS safe_amount\nFROM prices;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to handle numeric overflow and underflow in SQL: choose appropriate data types, validate input and calculations, use casting carefully, and apply conditional checks. These practices will keep your queries running smoothly without unexpected errors."
+      }
+    ]
   }
 ];
