@@ -8415,5 +8415,178 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-a-simple-bank-account-manager-in-c",
+    "title": "Build a Simple Bank Account Manager in C++",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a basic console application in C++ to simulate a simple bank account manager that allows a user to deposit, withdraw, and check their balance.",
+    "prompt": "Write a C++ program that defines a class called BankAccount. This class should have private attributes for the account balance and public methods to deposit money, withdraw money (if sufficient funds exist), and check the current balance. Your program should create an instance of BankAccount, allow the user to perform multiple operations via simple menu choices, and print the updated balance after each operation. Implement basic input validation to ensure no negative deposits or withdrawals more than the current balance occur.",
+    "guidance": [
+      "Define a BankAccount class with a private balance attribute.",
+      "Implement public methods: deposit(double amount), withdraw(double amount), and getBalance().",
+      "Create a loop in main() to display a menu and process user input for multiple operations.",
+      "Validate inputs to prevent invalid deposit or withdrawal amounts."
+    ],
+    "hints": [
+      "Initialize the balance to zero in the BankAccount constructor.",
+      "Use if statements to check that deposit is positive and withdrawal does not exceed balance.",
+      "Use a while loop in main() to keep prompting the user until they choose to exit."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nclass BankAccount {\nprivate:\n    double balance;\npublic:\n    BankAccount() {\n        balance = 0.0;\n    }\n    void deposit(double amount) {\n        // Implement deposit logic here\n    }\n    bool withdraw(double amount) {\n        // Implement withdraw logic here\n        return false;\n    }\n    double getBalance() {\n        return balance;\n    }\n};\n\nint main() {\n    BankAccount myAccount;\n    int choice;\n    double amount;\n\n    do {\n        cout << \"\\nBank Account Menu:\\n\";\n        cout << \"1. Deposit\\n\";\n        cout << \"2. Withdraw\\n\";\n        cout << \"3. Check Balance\\n\";\n        cout << \"4. Exit\\n\";\n        cout << \"Enter your choice: \";\n        cin >> choice;\n\n        switch(choice) {\n            case 1:\n                cout << \"Enter amount to deposit: \";\n                cin >> amount;\n                // Call deposit method\n                break;\n            case 2:\n                cout << \"Enter amount to withdraw: \";\n                cin >> amount;\n                // Call withdraw method\n                break;\n            case 3:\n                cout << \"Current balance: $\" << myAccount.getBalance() << endl;\n                break;\n            case 4:\n                cout << \"Exiting program.\\n\";\n                break;\n            default:\n                cout << \"Invalid choice. Please try again.\\n\";\n        }\n    } while (choice != 4);\n\n    return 0;\n}\n",
+    "expectedOutput": "Bank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 1\nEnter amount to deposit: 100\nDeposit successful. Current balance: $100\n\nBank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 2\nEnter amount to withdraw: 50\nWithdrawal successful. Current balance: $50\n\nBank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 3\nCurrent balance: $50\n\nBank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 4\nExiting program.",
+    "concepts": [
+      "Classes and Objects",
+      "Conditional statements",
+      "Loops",
+      "Basic Input/Output"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-complex-sql-join-with-aggregation-and-filtering",
+    "title": "Predict the Output of a Complex SQL JOIN with Aggregation and Filtering",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "query-analysis",
+    "description": "Analyze the given SQL query that involves multiple JOINs, aggregation, and HAVING clauses, and predict the final output.",
+    "prompt": "Consider the following database schema with two tables:\n\nEmployees(emp_id, emp_name, dept_id)\nSalaries(emp_id, salary)\n\nGiven the SQL query below, predict the exact output it will produce:\n\nSELECT d.dept_id, COUNT(e.emp_id) AS num_employees, AVG(s.salary) AS avg_salary\nFROM Employees e\nJOIN Salaries s ON e.emp_id = s.emp_id\nJOIN (SELECT DISTINCT dept_id FROM Employees) d ON e.dept_id = d.dept_id\nGROUP BY d.dept_id\nHAVING AVG(s.salary) > 60000\nORDER BY avg_salary DESC;\n\nAssuming the following data:\n\nEmployees:\nemp_id | emp_name  | dept_id\n1      | Alice     | 101\n2      | Bob       | 102\n3      | Charlie   | 101\n4      | David     | 103\n5      | Eve       | 101\n\nSalaries:\nemp_id | salary\n1      | 70000\n2      | 50000\n3      | 65000\n4      | 55000\n5      | 72000\n\nWhat will be the output rows generated by this query?",
+    "guidance": [
+      "Carefully follow each JOIN condition and understand which rows from each table get associated.",
+      "Calculate the count of employees and the average salary per department before applying the HAVING filter.",
+      "Remember that HAVING filters groups after aggregation and ORDER BY sorts the final output."
+    ],
+    "hints": [
+      "First, join Employees with Salaries to match salaries to employees.",
+      "Then identify unique department IDs and join them to ensure all related records are grouped.",
+      "For each department, compute the average salary and count, then filter groups having avg_salary > 60000."
+    ],
+    "starterCode": "SELECT d.dept_id, COUNT(e.emp_id) AS num_employees, AVG(s.salary) AS avg_salary\nFROM Employees e\nJOIN Salaries s ON e.emp_id = s.emp_id\nJOIN (SELECT DISTINCT dept_id FROM Employees) d ON e.dept_id = d.dept_id\nGROUP BY d.dept_id\nHAVING AVG(s.salary) > 60000\nORDER BY avg_salary DESC;",
+    "expectedOutput": "dept_id | num_employees | avg_salary\n101     | 3             | 69000",
+    "concepts": [
+      "JOIN operations",
+      "GROUP BY aggregation",
+      "HAVING clause filtering",
+      "ORDER BY sorting"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-task-manager-with-dynamic-filtering-and-sorting",
+    "title": "Build a Task Manager with Dynamic Filtering and Sorting",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "mini-projects",
+    "description": "Create a JavaScript function that manages a list of tasks, allowing dynamic filtering by status and priority, and sorting by due date or priority. This mini-project focuses on multi-step data manipulation and state handling with arrays and objects.",
+    "prompt": "Write a function named manageTasks that accepts an array of task objects and a filter/sort options object. Each task has properties: id (number), title (string), status (string: 'pending', 'in-progress', 'completed'), priority (string: 'low', 'medium', 'high'), and dueDate (string in ISO date format). The function should filter the tasks based on the provided status and priority filters, then sort the filtered list according to the sort option. The sort option is either 'dueDate' (ascending) or 'priority' (descending: high > medium > low). Return the filtered and sorted array of tasks.",
+    "guidance": [
+      "Implement filtering by checking task properties against provided filters; if a filter is not given, do not filter by that property.",
+      "For sorting by priority, define a map to associate priority levels with numeric values to enable comparison.",
+      "Ensure that date strings are correctly parsed to Date objects for sorting."
+    ],
+    "hints": [
+      "Use Array.prototype.filter for filtering tasks based on multiple criteria.",
+      "Use Array.prototype.sort with custom comparison logic for dueDate and priority.",
+      "Convert ISO date strings to Date objects using new Date(task.dueDate) inside the sort comparator."
+    ],
+    "starterCode": "function manageTasks(tasks, options) {\n  // tasks: Array of task objects\n  // options: { status: string|null, priority: string|null, sortBy: 'dueDate'|'priority' }\n\n  // Your code here\n}",
+    "expectedOutput": "For tasks = [\n  { id: 1, title: 'Write report', status: 'pending', priority: 'high', dueDate: '2024-06-10' },\n  { id: 2, title: 'Email client', status: 'completed', priority: 'medium', dueDate: '2024-06-05' },\n  { id: 3, title: 'Fix bugs', status: 'in-progress', priority: 'high', dueDate: '2024-06-08' },\n  { id: 4, title: 'Team meeting', status: 'pending', priority: 'low', dueDate: '2024-06-07' }\n],\n\ncalling manageTasks(tasks, { status: 'pending', priority: null, sortBy: 'dueDate' }) should return:\n[\n  { id: 4, title: 'Team meeting', status: 'pending', priority: 'low', dueDate: '2024-06-07' },\n  { id: 1, title: 'Write report', status: 'pending', priority: 'high', dueDate: '2024-06-10' }\n]",
+    "concepts": [
+      "array filtering",
+      "sorting with custom comparator",
+      "date parsing",
+      "object manipulation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-complex-recursive-lambda-with-state-captures-in-c",
+    "title": "Predict the Output of a Complex Recursive Lambda with State Captures in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Understand and predict the output of advanced C++ code involving recursive lambdas with mutable and reference state captures that manipulate shared variables and invoke themselves conditionally.",
+    "prompt": "Analyze the following C++ code snippet that defines and invokes a recursive lambda function with both mutable and reference captures. Predict the exact output printed to the console when the program runs.",
+    "guidance": [
+      "Carefully track how the shared variables are modified throughout the recursive calls.",
+      "Understand how mutable lambdas allow changing captured variables and how references affect shared state across recursive calls.",
+      "Consider the order of operations and the stopping condition for recursion."
+    ],
+    "hints": [
+      "Remember that mutable lambdas make captured variables local copies that can be modified, unless captured by reference.",
+      "Recursive lambda calls share the same captured variables by reference, affecting subsequent calls.",
+      "Trace the changes step-by-step and note how the printed output relates to the variable states."
+    ],
+    "starterCode": "#include <iostream>\n\nint main() {\n    int x = 1;\n    int y = 2;\n    auto recurse = [&](auto&& self, int n) mutable -> void {\n        if (n == 0) return;\n        x += y;\n        y += 1;\n        std::cout << x << \"-\" << y << \" \";\n        self(self, n - 1);\n    };\n\n    recurse(recurse, 4);\n    return 0;\n}",
+    "expectedOutput": "3-3 6-4 10-5 15-6",
+    "concepts": [
+      "recursive lambda functions",
+      "mutable lambda captures",
+      "reference captures",
+      "state mutation across recursion"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-the-user-data-formatter-function-for-better-readability-and-performance",
+    "title": "Refactor the User Data Formatter Function for Better Readability and Performance",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve a given JavaScript function that formats an array of user objects by cleaning up nested conditionals, reducing duplication, and enhancing readability while keeping the output unchanged.",
+    "prompt": "You have been given a function that processes an array of user objects and returns a formatted array of strings combining user details. The current implementation uses nested conditionals and repeated code which makes it hard to read and maintain.\n\nRefactor the function to improve code readability and maintainability without changing its behavior or output.\n\nExample input: [{ name: 'Alice', age: 30, isAdmin: true }, { name: 'Bob', age: 25, isAdmin: false }]\nExpected output: ['Alice (Admin) - 30 years old', 'Bob - 25 years old']",
+    "guidance": [
+      "Simplify nested conditionals using clearer logic or ternary operators.",
+      "Avoid repeated code by storing repeated values in variables.",
+      "Use modern JavaScript features such as template literals for string building."
+    ],
+    "hints": [
+      "Consider using map() to iterate and transform the array.",
+      "Extract repeated parts of the string to variables before conditionals to minimize duplication."
+    ],
+    "starterCode": "function formatUsers(users) {\n  const result = [];\n  for (let i = 0; i < users.length; i++) {\n    let userString = '';\n    if (users[i].isAdmin) {\n      if (users[i].age) {\n        userString = users[i].name + ' (Admin) - ' + users[i].age + ' years old';\n      } else {\n        userString = users[i].name + ' (Admin)';\n      }\n    } else {\n      if (users[i].age) {\n        userString = users[i].name + ' - ' + users[i].age + ' years old';\n      } else {\n        userString = users[i].name;\n      }\n    }\n    result.push(userString);\n  }\n  return result;\n}",
+    "expectedOutput": "['Alice (Admin) - 30 years old', 'Bob - 25 years old']",
+    "concepts": [
+      "refactoring",
+      "array iteration",
+      "conditional logic",
+      "template literals"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-incorrect-join-conditions-in-sql-sales-report-query",
+    "title": "Fix the Incorrect JOIN Conditions in SQL Sales Report Query",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "This challenge presents a SQL query intended to generate a monthly sales summary by joining the sales and products tables. However, the query contains incorrect join logic that leads to incorrect results or excessive rows. Your task is to fix the join conditions and any other issues to produce an accurate sales report.",
+    "prompt": "You have two tables: sales(sale_id, product_id, quantity_sold, sale_date) and products(product_id, product_name, price).\n\nThe following SQL query attempts to generate a sales report showing total quantity sold and total revenue per product for March 2024. However, the query returns incorrect or inflated results due to bugs.\n\nIdentify and fix all bugs in the query to ensure correct totals.\n\nQuery:\n\nSELECT \n  p.product_name,\n  SUM(s.quantity_sold) as total_quantity,\n  SUM(s.quantity_sold * p.price) as total_revenue\nFROM sales s\nJOIN products p ON s.sale_id = p.product_id\nWHERE s.sale_date BETWEEN '2024-03-01' AND '2024-03-31'\nGROUP BY p.product_name\nORDER BY total_revenue DESC;",
+    "guidance": [
+      "Confirm that join conditions use correct keys linking sales to products.",
+      "Check date filter formats and ranges to ensure proper filtering.",
+      "Validate aggregation logic to correctly calculate total quantities and revenue."
+    ],
+    "hints": [
+      "The join currently links sale_id with product_id - are these related columns?",
+      "Sale dates should be filtered inclusively for the entire month of March 2024.",
+      "Aggregations should sum quantity_sold and multiplication by price to get revenue."
+    ],
+    "starterCode": "SELECT \n  p.product_name,\n  SUM(s.quantity_sold) as total_quantity,\n  SUM(s.quantity_sold * p.price) as total_revenue\nFROM sales s\nJOIN products p ON s.sale_id = p.product_id\nWHERE s.sale_date BETWEEN '2024-03-01' AND '2024-03-31'\nGROUP BY p.product_name\nORDER BY total_revenue DESC;",
+    "expectedOutput": "An aggregated list showing each product sold in March 2024, with correct total_quantity and total_revenue, ordered from highest to lowest revenue.",
+    "concepts": [
+      "SQL JOIN conditions",
+      "SQL Aggregation",
+      "Date Filtering in SQL"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
