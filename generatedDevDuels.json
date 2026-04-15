@@ -1,175 +1,180 @@
 [
   {
-    "slug": "build-a-simple-bank-account-manager-in-c",
-    "title": "Build a Simple Bank Account Manager in C++",
-    "language": "cpp",
-    "difficulty": "beginner",
-    "category": "mini-projects",
-    "description": "Create a basic console application in C++ to simulate a simple bank account manager that allows a user to deposit, withdraw, and check their balance.",
-    "prompt": "Write a C++ program that defines a class called BankAccount. This class should have private attributes for the account balance and public methods to deposit money, withdraw money (if sufficient funds exist), and check the current balance. Your program should create an instance of BankAccount, allow the user to perform multiple operations via simple menu choices, and print the updated balance after each operation. Implement basic input validation to ensure no negative deposits or withdrawals more than the current balance occur.",
+    "slug": "build-a-memoized-async-function-runner-with-concurrency-control",
+    "title": "Build a Memoized Async Function Runner with Concurrency Control",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an advanced utility function in JavaScript that memoizes asynchronous functions and limits their concurrency, optimizing performance and resource usage.",
+    "prompt": "Write a function `memoizedAsyncRunner` that accepts an asynchronous function `asyncFn` and a concurrency limit `maxConcurrent` as arguments. This function should return a new function with the following behavior: 1) It memoizes results so that multiple calls with the same arguments return cached promises instead of triggering new executions. 2) It enforces a maximum number of concurrent executions (`maxConcurrent`). If the concurrency limit is reached, additional calls are queued and executed in order once previous calls complete. 3) Supports arguments of any JSON-serializable type, using those as memoization keys. Ensure it handles rejection correctly and does not cache rejected promises. The returned function should preserve the async nature and resolve to the original asyncFn's result. Implement this with maximum efficiency for high-concurrency environments.",
     "guidance": [
-      "Define a BankAccount class with a private balance attribute.",
-      "Implement public methods: deposit(double amount), withdraw(double amount), and getBalance().",
-      "Create a loop in main() to display a menu and process user input for multiple operations.",
-      "Validate inputs to prevent invalid deposit or withdrawal amounts."
+      "Use a Map to store memoized promises keyed by JSON-stringified arguments.",
+      "Use a queue to track calls waiting to execute when concurrency limit is exceeded.",
+      "Ensure errors from the async function clear the cache for the relevant key.",
+      "Use async/await syntax and carefully manage concurrency counters."
     ],
     "hints": [
-      "Initialize the balance to zero in the BankAccount constructor.",
-      "Use if statements to check that deposit is positive and withdrawal does not exceed balance.",
-      "Use a while loop in main() to keep prompting the user until they choose to exit."
+      "Consider maintaining a 'running count' of active asyncFn calls to check before proceeding.",
+      "To queue calls, return a Promise that resolves when execution starts and completes.",
+      "Be careful when JSON-stringifying arguments to handle edge cases like nested objects properly."
     ],
-    "starterCode": "#include <iostream>\nusing namespace std;\n\nclass BankAccount {\nprivate:\n    double balance;\npublic:\n    BankAccount() {\n        balance = 0.0;\n    }\n    void deposit(double amount) {\n        // Implement deposit logic here\n    }\n    bool withdraw(double amount) {\n        // Implement withdraw logic here\n        return false;\n    }\n    double getBalance() {\n        return balance;\n    }\n};\n\nint main() {\n    BankAccount myAccount;\n    int choice;\n    double amount;\n\n    do {\n        cout << \"\\nBank Account Menu:\\n\";\n        cout << \"1. Deposit\\n\";\n        cout << \"2. Withdraw\\n\";\n        cout << \"3. Check Balance\\n\";\n        cout << \"4. Exit\\n\";\n        cout << \"Enter your choice: \";\n        cin >> choice;\n\n        switch(choice) {\n            case 1:\n                cout << \"Enter amount to deposit: \";\n                cin >> amount;\n                // Call deposit method\n                break;\n            case 2:\n                cout << \"Enter amount to withdraw: \";\n                cin >> amount;\n                // Call withdraw method\n                break;\n            case 3:\n                cout << \"Current balance: $\" << myAccount.getBalance() << endl;\n                break;\n            case 4:\n                cout << \"Exiting program.\\n\";\n                break;\n            default:\n                cout << \"Invalid choice. Please try again.\\n\";\n        }\n    } while (choice != 4);\n\n    return 0;\n}\n",
-    "expectedOutput": "Bank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 1\nEnter amount to deposit: 100\nDeposit successful. Current balance: $100\n\nBank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 2\nEnter amount to withdraw: 50\nWithdrawal successful. Current balance: $50\n\nBank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 3\nCurrent balance: $50\n\nBank Account Menu:\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Exit\nEnter your choice: 4\nExiting program.",
+    "starterCode": "function memoizedAsyncRunner(asyncFn, maxConcurrent) {\n  // Your implementation here\n}\n\n// Example usage:\n// const memoizedFetch = memoizedAsyncRunner(fetchData, 3);",
+    "expectedOutput": "Calling the returned function multiple times with the same arguments should return the cached Promise.\nNo more than maxConcurrent Promises should be running concurrently.\nRejected Promises should not be cached, allowing retry.",
     "concepts": [
-      "Classes and Objects",
-      "Conditional statements",
-      "Loops",
-      "Basic Input/Output"
+      "asynchronous programming",
+      "memoization",
+      "concurrency control",
+      "promise management"
     ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "20 minutes",
     "isFeatured": true
   },
   {
-    "slug": "predict-the-output-of-a-complex-sql-join-with-aggregation-and-filtering",
-    "title": "Predict the Output of a Complex SQL JOIN with Aggregation and Filtering",
+    "slug": "refactor-legacy-c-code-to-enhance-readability-and-performance",
+    "title": "Refactor Legacy C++ Code to Enhance Readability and Performance",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Given a legacy C++ function that processes and filters a vector of user data with multiple nested loops and repeated conditions, refactor the code to improve readability, reduce complexity, and optimize performance while preserving the original behavior.",
+    "prompt": "You are provided with a legacy C++ function that takes a vector of users (with name, age, and score) and returns a filtered vector based on complex criteria. The original code contains nested loops, repeated conditions, and unnecessary copies. Refactor the function to improve code clarity, reduce complexity, and enhance performance without changing the output. Keep the function signature the same. Write clean, modern C++ code using best practices.",
+    "guidance": [
+      "Analyze the current nested loops and condition checks to identify redundancies.",
+      "Use STL algorithms and standard library features to simplify code.",
+      "Avoid unnecessary copying of objects by using references and move semantics where appropriate.",
+      "Ensure the refactored function returns the exact same filtered results as the original."
+    ],
+    "hints": [
+      "Consider using std::copy_if or std::remove_if combined with lambda expressions to simplify filtering.",
+      "Use structured bindings and const references for better readability and efficiency.",
+      "Break down complex conditions into well-named boolean variables or helper functions."
+    ],
+    "starterCode": "#include <vector>\n#include <string>\n\nstruct User {\n    std::string name;\n    int age;\n    double score;\n};\n\nstd::vector<User> filterUsers(const std::vector<User>& users) {\n    std::vector<User> result;\n    for (size_t i = 0; i < users.size(); ++i) {\n        if (users[i].age > 18) {\n            for (size_t j = 0; j < users.size(); ++j) {\n                if (j != i) {\n                    if (users[j].score > 50.0) {\n                        if (users[i].score > 70.0) {\n                            result.push_back(users[i]);\n                            break;\n                        }\n                    }\n                }\n            }\n        }\n    }\n    return result;\n}\n",
+    "expectedOutput": "The refactored function returns a vector of Users from the input where the user's age is greater than 18, the user has score above 70, and there exists at least one other user with score above 50. The output matches exactly what the original function would produce but with cleaner, more efficient code.",
+    "concepts": [
+      "C++ STL algorithms",
+      "code refactoring",
+      "performance optimization",
+      "modern C++ best practices"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-join-logic-to-correctly-aggregate-sales-by-customer",
+    "title": "Fix the Join Logic to Correctly Aggregate Sales by Customer",
     "language": "sql",
     "difficulty": "intermediate",
-    "category": "query-analysis",
-    "description": "Analyze the given SQL query that involves multiple JOINs, aggregation, and HAVING clauses, and predict the final output.",
-    "prompt": "Consider the following database schema with two tables:\n\nEmployees(emp_id, emp_name, dept_id)\nSalaries(emp_id, salary)\n\nGiven the SQL query below, predict the exact output it will produce:\n\nSELECT d.dept_id, COUNT(e.emp_id) AS num_employees, AVG(s.salary) AS avg_salary\nFROM Employees e\nJOIN Salaries s ON e.emp_id = s.emp_id\nJOIN (SELECT DISTINCT dept_id FROM Employees) d ON e.dept_id = d.dept_id\nGROUP BY d.dept_id\nHAVING AVG(s.salary) > 60000\nORDER BY avg_salary DESC;\n\nAssuming the following data:\n\nEmployees:\nemp_id | emp_name  | dept_id\n1      | Alice     | 101\n2      | Bob       | 102\n3      | Charlie   | 101\n4      | David     | 103\n5      | Eve       | 101\n\nSalaries:\nemp_id | salary\n1      | 70000\n2      | 50000\n3      | 65000\n4      | 55000\n5      | 72000\n\nWhat will be the output rows generated by this query?",
+    "category": "debugging",
+    "description": "This challenge asks you to debug a broken SQL query intended to calculate total sales per customer by joining sales and customers tables. The existing query returns incorrect aggregates due to an erroneous join and grouping logic.",
+    "prompt": "You are given two tables: `customers` and `sales`.\n\n- `customers` has columns: `customer_id`, `customer_name`.\n- `sales` has columns: `sale_id`, `customer_id`, `amount`.\n\nThe current query aims to calculate the total sales amount per customer but returns incorrect results because of bugs in the join and grouping logic.\n\nFix the query so that it correctly computes the total sales amount for each customer, including customers with zero sales.\n\nHere is the broken query:\n\nSELECT c.customer_name, SUM(s.amount) AS total_sales\nFROM customers c\nJOIN sales s ON c.customer_id = s.sale_id\nGROUP BY c.customer_id;",
     "guidance": [
-      "Carefully follow each JOIN condition and understand which rows from each table get associated.",
-      "Calculate the count of employees and the average salary per department before applying the HAVING filter.",
-      "Remember that HAVING filters groups after aggregation and ORDER BY sorts the final output."
+      "Check the join condition between `customers` and `sales`, ensuring the correct keys are matched.",
+      "Use the appropriate JOIN type to include customers with no sales.",
+      "Ensure the GROUP BY clause contains the correct columns for aggregation."
     ],
     "hints": [
-      "First, join Employees with Salaries to match salaries to employees.",
-      "Then identify unique department IDs and join them to ensure all related records are grouped.",
-      "For each department, compute the average salary and count, then filter groups having avg_salary > 60000."
+      "The join condition currently matches customer_id to sale_id, which is incorrect.",
+      "Consider using a LEFT JOIN to include customers with no matching sales entries.",
+      "GROUP BY should match any non-aggregated columns in the SELECT statement."
     ],
-    "starterCode": "SELECT d.dept_id, COUNT(e.emp_id) AS num_employees, AVG(s.salary) AS avg_salary\nFROM Employees e\nJOIN Salaries s ON e.emp_id = s.emp_id\nJOIN (SELECT DISTINCT dept_id FROM Employees) d ON e.dept_id = d.dept_id\nGROUP BY d.dept_id\nHAVING AVG(s.salary) > 60000\nORDER BY avg_salary DESC;",
-    "expectedOutput": "dept_id | num_employees | avg_salary\n101     | 3             | 69000",
+    "starterCode": "SELECT c.customer_name, SUM(s.amount) AS total_sales\nFROM customers c\nJOIN sales s ON c.customer_id = s.sale_id\nGROUP BY c.customer_id;",
+    "expectedOutput": "A list of customer names with their corresponding total sales amounts. Customers without sales should appear with a total_sales amount of NULL or 0.\n\nExample:\ncustomer_name | total_sales\n--------------|------------\nAlice         | 1500\nBob           | 0\nCharlie       | 230",
     "concepts": [
-      "JOIN operations",
-      "GROUP BY aggregation",
-      "HAVING clause filtering",
-      "ORDER BY sorting"
+      "SQL JOINs",
+      "GROUP BY clause",
+      "Aggregation functions",
+      "Debugging SQL queries"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": true
+    "isFeatured": false
   },
   {
-    "slug": "build-a-task-manager-with-dynamic-filtering-and-sorting",
-    "title": "Build a Task Manager with Dynamic Filtering and Sorting",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "mini-projects",
-    "description": "Create a JavaScript function that manages a list of tasks, allowing dynamic filtering by status and priority, and sorting by due date or priority. This mini-project focuses on multi-step data manipulation and state handling with arrays and objects.",
-    "prompt": "Write a function named manageTasks that accepts an array of task objects and a filter/sort options object. Each task has properties: id (number), title (string), status (string: 'pending', 'in-progress', 'completed'), priority (string: 'low', 'medium', 'high'), and dueDate (string in ISO date format). The function should filter the tasks based on the provided status and priority filters, then sort the filtered list according to the sort option. The sort option is either 'dueDate' (ascending) or 'priority' (descending: high > medium > low). Return the filtered and sorted array of tasks.",
+    "slug": "fix-bug-in-optimized-matrix-chain-multiplication-implementation",
+    "title": "Fix Bug in Optimized Matrix Chain Multiplication Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "The provided C++ code implements the Matrix Chain Multiplication algorithm using dynamic programming to find the minimum number of scalar multiplications needed to multiply a chain of matrices. However, the current implementation contains bugs that lead to incorrect results and occasional runtime errors. Your task is to identify and fix these bugs so the algorithm returns correct and optimized results.",
+    "prompt": "You are given a broken implementation of the Matrix Chain Multiplication problem that aims to find the minimum cost of multiplying a sequence of matrices. The input is an array representing the dimensions of the matrices. The function should return the minimum number of scalar multiplications needed. Fix the bugs related to array indexing, loop boundaries, and initialization to ensure correct results and efficient runtime.",
     "guidance": [
-      "Implement filtering by checking task properties against provided filters; if a filter is not given, do not filter by that property.",
-      "For sorting by priority, define a map to associate priority levels with numeric values to enable comparison.",
-      "Ensure that date strings are correctly parsed to Date objects for sorting."
+      "Carefully check your indexing in the nested loops controlling subproblems.",
+      "Verify initialization of your DP table so intermediate values are set correctly before computation.",
+      "Trace through a simple example to confirm your fixes result in correct minimum costs."
     ],
     "hints": [
-      "Use Array.prototype.filter for filtering tasks based on multiple criteria.",
-      "Use Array.prototype.sort with custom comparison logic for dueDate and priority.",
-      "Convert ISO date strings to Date objects using new Date(task.dueDate) inside the sort comparator."
+      "Remember that matrices Ai has dimensions p[i-1] x p[i], so your loops must consider these indices carefully.",
+      "Initialize the diagonal of the cost matrix to zero as multiplying one matrix costs nothing.",
+      "Check the inner loop that partitions the matrix chain — off-by-one errors are common here."
     ],
-    "starterCode": "function manageTasks(tasks, options) {\n  // tasks: Array of task objects\n  // options: { status: string|null, priority: string|null, sortBy: 'dueDate'|'priority' }\n\n  // Your code here\n}",
-    "expectedOutput": "For tasks = [\n  { id: 1, title: 'Write report', status: 'pending', priority: 'high', dueDate: '2024-06-10' },\n  { id: 2, title: 'Email client', status: 'completed', priority: 'medium', dueDate: '2024-06-05' },\n  { id: 3, title: 'Fix bugs', status: 'in-progress', priority: 'high', dueDate: '2024-06-08' },\n  { id: 4, title: 'Team meeting', status: 'pending', priority: 'low', dueDate: '2024-06-07' }\n],\n\ncalling manageTasks(tasks, { status: 'pending', priority: null, sortBy: 'dueDate' }) should return:\n[\n  { id: 4, title: 'Team meeting', status: 'pending', priority: 'low', dueDate: '2024-06-07' },\n  { id: 1, title: 'Write report', status: 'pending', priority: 'high', dueDate: '2024-06-10' }\n]",
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <climits>\nusing namespace std;\n\nint matrixChainMultiplication(const vector<int> &p) {\n    int n = p.size();\n    vector<vector<int>> dp(n, vector<int>(n, 0));\n\n    for (int len = 2; len <= n; ++len) {\n        for (int i = 1; i < n - len + 1; ++i) {\n            int j = i + len - 1;\n            dp[i][j] = INT_MAX;\n            for (int k = i; k < j; ++k) {\n                int cost = dp[i][k] + dp[k + 1][j] + p[i] * p[k + 1] * p[j + 1];\n                if (cost < dp[i][j]) {\n                    dp[i][j] = cost;\n                }\n            }\n        }\n    }\n    return dp[1][n - 1];\n}\n\nint main() {\n    vector<int> dims = {40, 20, 30, 10, 30};\n    cout << matrixChainMultiplication(dims) << endl;\n    return 0;\n}",
+    "expectedOutput": "26000",
     "concepts": [
-      "array filtering",
-      "sorting with custom comparator",
-      "date parsing",
-      "object manipulation"
+      "dynamic programming",
+      "matrix chain multiplication",
+      "array indexing",
+      "algorithm debugging"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "predict-the-output-of-a-complex-recursive-lambda-with-state-captures-in-c",
-    "title": "Predict the Output of a Complex Recursive Lambda with State Captures in C++",
+    "slug": "advanced-multi-threaded-file-search-and-filter-utility-in-c",
+    "title": "Advanced Multi-Threaded File Search and Filter Utility in C++",
     "language": "cpp",
     "difficulty": "advanced",
-    "category": "logic",
-    "description": "Understand and predict the output of advanced C++ code involving recursive lambdas with mutable and reference state captures that manipulate shared variables and invoke themselves conditionally.",
-    "prompt": "Analyze the following C++ code snippet that defines and invokes a recursive lambda function with both mutable and reference captures. Predict the exact output printed to the console when the program runs.",
+    "category": "mini-projects",
+    "description": "Build a high-performance, multi-threaded C++ utility to recursively search through directories for files matching specific content and metadata filters, then output a summary report. This mini-project will test your architectural design, concurrency control, file I/O, and advanced C++ skills.",
+    "prompt": "Create a C++ program that recursively searches a given directory for files containing a specified keyword within their content. Your utility must support filtering results by file extension(s), minimum and maximum file size, and last modified date range. Implement efficient multi-threading to utilize all available CPU cores for scanning files concurrently. At the end, generate a summary report listing all matched files with their path, size, last modified timestamp, and a snippet of the matched content surrounding the keyword in each file. Handle errors gracefully and optimize for large directory structures with potentially thousands of files.",
     "guidance": [
-      "Carefully track how the shared variables are modified throughout the recursive calls.",
-      "Understand how mutable lambdas allow changing captured variables and how references affect shared state across recursive calls.",
-      "Consider the order of operations and the stopping condition for recursion."
+      "Use std::filesystem for directory traversal and metadata extraction.",
+      "Implement thread pools or std::async with concurrency safety to parallelize file reading and filtering.",
+      "To extract snippets with the keyword, read partial file content around the first match instead of loading entire files into memory.",
+      "Carefully design data structures to safely aggregate results from different threads and avoid race conditions."
     ],
     "hints": [
-      "Remember that mutable lambdas make captured variables local copies that can be modified, unless captured by reference.",
-      "Recursive lambda calls share the same captured variables by reference, affecting subsequent calls.",
-      "Trace the changes step-by-step and note how the printed output relates to the variable states."
+      "Consider using std::mutex, std::lock_guard, or concurrent queues for thread-safe result storage.",
+      "Minimize disk IO by filtering metadata before reading file content wherever possible.",
+      "Split directory traversal and file reading/filtering into separate phases to improve concurrency and error isolation."
     ],
-    "starterCode": "#include <iostream>\n\nint main() {\n    int x = 1;\n    int y = 2;\n    auto recurse = [&](auto&& self, int n) mutable -> void {\n        if (n == 0) return;\n        x += y;\n        y += 1;\n        std::cout << x << \"-\" << y << \" \";\n        self(self, n - 1);\n    };\n\n    recurse(recurse, 4);\n    return 0;\n}",
-    "expectedOutput": "3-3 6-4 10-5 15-6",
+    "starterCode": "#include <filesystem>\n#include <iostream>\n#include <vector>\n#include <string>\n#include <mutex>\n#include <thread>\n#include <future>\n\n// Define a struct to hold file match information\nstruct FileMatch {\n    std::filesystem::path filePath;\n    std::uintmax_t fileSize;\n    std::filesystem::file_time_type lastModified;\n    std::string snippet;\n};\n\n// Function declarations\nstd::vector<std::filesystem::path> recursiveFileSearch(const std::filesystem::path& dir);\nbool fileContainsKeyword(const std::filesystem::path& filePath, const std::string& keyword, std::string& snippet);\n\nint main() {\n    // TODO: Implement argument parsing, threading logic, filtering, and reporting\n    std::cout << \"Implement the multi-threaded file search and filter utility here.\" << std::endl;\n    return 0;\n}",
+    "expectedOutput": "Summary Report:\nMatched Files: 3\n1. /path/to/file1.txt | Size: 2048 bytes | Modified: 2024-05-20 15:32 | Snippet: \"...keyword example inside file1...\"\n2. /path/to/file2.cpp | Size: 4096 bytes | Modified: 2024-05-18 09:12 | Snippet: \"...code snippet with keyword...\"\n3. /path/to/notes.md | Size: 1024 bytes | Modified: 2024-05-22 11:03 | Snippet: \"...documentation mentioning keyword...\"",
     "concepts": [
-      "recursive lambda functions",
-      "mutable lambda captures",
-      "reference captures",
-      "state mutation across recursion"
+      "Multithreading and concurrency",
+      "Filesystem operations and metadata",
+      "File I/O optimization",
+      "Data synchronization and thread safety"
     ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-the-user-data-formatter-function-for-better-readability-and-performance",
-    "title": "Refactor the User Data Formatter Function for Better Readability and Performance",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "code-quality",
-    "description": "Improve a given JavaScript function that formats an array of user objects by cleaning up nested conditionals, reducing duplication, and enhancing readability while keeping the output unchanged.",
-    "prompt": "You have been given a function that processes an array of user objects and returns a formatted array of strings combining user details. The current implementation uses nested conditionals and repeated code which makes it hard to read and maintain.\n\nRefactor the function to improve code readability and maintainability without changing its behavior or output.\n\nExample input: [{ name: 'Alice', age: 30, isAdmin: true }, { name: 'Bob', age: 25, isAdmin: false }]\nExpected output: ['Alice (Admin) - 30 years old', 'Bob - 25 years old']",
-    "guidance": [
-      "Simplify nested conditionals using clearer logic or ternary operators.",
-      "Avoid repeated code by storing repeated values in variables.",
-      "Use modern JavaScript features such as template literals for string building."
-    ],
-    "hints": [
-      "Consider using map() to iterate and transform the array.",
-      "Extract repeated parts of the string to variables before conditionals to minimize duplication."
-    ],
-    "starterCode": "function formatUsers(users) {\n  const result = [];\n  for (let i = 0; i < users.length; i++) {\n    let userString = '';\n    if (users[i].isAdmin) {\n      if (users[i].age) {\n        userString = users[i].name + ' (Admin) - ' + users[i].age + ' years old';\n      } else {\n        userString = users[i].name + ' (Admin)';\n      }\n    } else {\n      if (users[i].age) {\n        userString = users[i].name + ' - ' + users[i].age + ' years old';\n      } else {\n        userString = users[i].name;\n      }\n    }\n    result.push(userString);\n  }\n  return result;\n}",
-    "expectedOutput": "['Alice (Admin) - 30 years old', 'Bob - 25 years old']",
-    "concepts": [
-      "refactoring",
-      "array iteration",
-      "conditional logic",
-      "template literals"
-    ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "90 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-the-incorrect-join-conditions-in-sql-sales-report-query",
-    "title": "Fix the Incorrect JOIN Conditions in SQL Sales Report Query",
-    "language": "sql",
-    "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "This challenge presents a SQL query intended to generate a monthly sales summary by joining the sales and products tables. However, the query contains incorrect join logic that leads to incorrect results or excessive rows. Your task is to fix the join conditions and any other issues to produce an accurate sales report.",
-    "prompt": "You have two tables: sales(sale_id, product_id, quantity_sold, sale_date) and products(product_id, product_name, price).\n\nThe following SQL query attempts to generate a sales report showing total quantity sold and total revenue per product for March 2024. However, the query returns incorrect or inflated results due to bugs.\n\nIdentify and fix all bugs in the query to ensure correct totals.\n\nQuery:\n\nSELECT \n  p.product_name,\n  SUM(s.quantity_sold) as total_quantity,\n  SUM(s.quantity_sold * p.price) as total_revenue\nFROM sales s\nJOIN products p ON s.sale_id = p.product_id\nWHERE s.sale_date BETWEEN '2024-03-01' AND '2024-03-31'\nGROUP BY p.product_name\nORDER BY total_revenue DESC;",
+    "slug": "advanced-file-system-indexer-and-search-tool-in-c",
+    "title": "Advanced File System Indexer and Search Tool in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a highly efficient file system indexer that recursively scans directories, indexes file metadata, and supports advanced search queries with filters and sorting, all implemented in C++.",
+    "prompt": "Create a C++ program that recursively scans a directory and all its subdirectories to index metadata of each file (including file name, path, size, last modified timestamp). Store this indexed data in an efficient in-memory data structure. Then implement a command-line interface that supports searching the indexed files based on multiple criteria such as partial file name match, size range, and modification date range. The search results should be sortable by name, size, or date. Optimize for performance by avoiding redundant scans and supporting fast queries. Additionally, implement a feature to export the current index snapshot to a JSON file and import it back to resume searching without re-scanning.",
     "guidance": [
-      "Confirm that join conditions use correct keys linking sales to products.",
-      "Check date filter formats and ranges to ensure proper filtering.",
-      "Validate aggregation logic to correctly calculate total quantities and revenue."
+      "Use recursive directory traversal with appropriate platform-specific or cross-platform APIs (e.g., <filesystem> in C++17).",
+      "Design an index data structure that allows efficient multi-criteria filtering and sorting, such as storing file metadata objects in vectors and using algorithms for queries.",
+      "Implement a flexible command parser to support user input for complex queries and sorting options.",
+      "Ensure your program can serialize and deserialize the index to/from JSON efficiently to avoid repeated filesystem scans."
     ],
     "hints": [
-      "The join currently links sale_id with product_id - are these related columns?",
-      "Sale dates should be filtered inclusively for the entire month of March 2024.",
-      "Aggregations should sum quantity_sold and multiplication by price to get revenue."
+      "Investigate std::filesystem for directory traversal and file metadata extraction.",
+      "Consider std::vector with custom filtering and sorting using std::ranges or algorithms for query processing.",
+      "Use a JSON serialization library like nlohmann/json for saving and loading the index state."
     ],
-    "starterCode": "SELECT \n  p.product_name,\n  SUM(s.quantity_sold) as total_quantity,\n  SUM(s.quantity_sold * p.price) as total_revenue\nFROM sales s\nJOIN products p ON s.sale_id = p.product_id\nWHERE s.sale_date BETWEEN '2024-03-01' AND '2024-03-31'\nGROUP BY p.product_name\nORDER BY total_revenue DESC;",
-    "expectedOutput": "An aggregated list showing each product sold in March 2024, with correct total_quantity and total_revenue, ordered from highest to lowest revenue.",
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n#include <filesystem>\n#include <chrono>\n\nstruct FileInfo {\n    std::string name;\n    std::string path;\n    uintmax_t size;\n    std::filesystem::file_time_type last_modified;\n};\n\nclass FileIndexer {\npublic:\n    void scanDirectory(const std::string& directoryPath);\n    std::vector<FileInfo> search(const std::string& nameFilter = \"\", uintmax_t minSize = 0, uintmax_t maxSize = UINTMAX_MAX);\n    void exportToJson(const std::string& jsonFilePath);\n    void importFromJson(const std::string& jsonFilePath);\nprivate:\n    std::vector<FileInfo> index;\n};\n\nint main() {\n    // Implement CLI to scan directory, perform searches, interact with export/import\n    std::cout << \"File Indexer CLI (implement your solution here)\" << std::endl;\n    return 0;\n}",
+    "expectedOutput": "Example run:\n> scan /home/user/docs\nIndexed 1024 files.\n> search name=report size>1000 sort=size desc\nFound 15 files matching criteria:\n1) report_summary.pdf - 2345 bytes - 2024-05-20\n2) annual_report.docx - 1230 bytes - 2024-05-18\n...\n> export index.json\nIndex successfully saved to index.json\n> import index.json\nIndex loaded from index.json with 1024 files.",
     "concepts": [
-      "SQL JOIN conditions",
-      "SQL Aggregation",
-      "Date Filtering in SQL"
+      "filesystem traversal",
+      "data structures and algorithms",
+      "file metadata handling",
+      "serialization and deserialization"
     ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "120 minutes",
     "isFeatured": true
   }
 ]

@@ -8588,5 +8588,183 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "build-a-memoized-async-function-runner-with-concurrency-control",
+    "title": "Build a Memoized Async Function Runner with Concurrency Control",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an advanced utility function in JavaScript that memoizes asynchronous functions and limits their concurrency, optimizing performance and resource usage.",
+    "prompt": "Write a function `memoizedAsyncRunner` that accepts an asynchronous function `asyncFn` and a concurrency limit `maxConcurrent` as arguments. This function should return a new function with the following behavior: 1) It memoizes results so that multiple calls with the same arguments return cached promises instead of triggering new executions. 2) It enforces a maximum number of concurrent executions (`maxConcurrent`). If the concurrency limit is reached, additional calls are queued and executed in order once previous calls complete. 3) Supports arguments of any JSON-serializable type, using those as memoization keys. Ensure it handles rejection correctly and does not cache rejected promises. The returned function should preserve the async nature and resolve to the original asyncFn's result. Implement this with maximum efficiency for high-concurrency environments.",
+    "guidance": [
+      "Use a Map to store memoized promises keyed by JSON-stringified arguments.",
+      "Use a queue to track calls waiting to execute when concurrency limit is exceeded.",
+      "Ensure errors from the async function clear the cache for the relevant key.",
+      "Use async/await syntax and carefully manage concurrency counters."
+    ],
+    "hints": [
+      "Consider maintaining a 'running count' of active asyncFn calls to check before proceeding.",
+      "To queue calls, return a Promise that resolves when execution starts and completes.",
+      "Be careful when JSON-stringifying arguments to handle edge cases like nested objects properly."
+    ],
+    "starterCode": "function memoizedAsyncRunner(asyncFn, maxConcurrent) {\n  // Your implementation here\n}\n\n// Example usage:\n// const memoizedFetch = memoizedAsyncRunner(fetchData, 3);",
+    "expectedOutput": "Calling the returned function multiple times with the same arguments should return the cached Promise.\nNo more than maxConcurrent Promises should be running concurrently.\nRejected Promises should not be cached, allowing retry.",
+    "concepts": [
+      "asynchronous programming",
+      "memoization",
+      "concurrency control",
+      "promise management"
+    ],
+    "estimatedTime": "20 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-legacy-c-code-to-enhance-readability-and-performance",
+    "title": "Refactor Legacy C++ Code to Enhance Readability and Performance",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Given a legacy C++ function that processes and filters a vector of user data with multiple nested loops and repeated conditions, refactor the code to improve readability, reduce complexity, and optimize performance while preserving the original behavior.",
+    "prompt": "You are provided with a legacy C++ function that takes a vector of users (with name, age, and score) and returns a filtered vector based on complex criteria. The original code contains nested loops, repeated conditions, and unnecessary copies. Refactor the function to improve code clarity, reduce complexity, and enhance performance without changing the output. Keep the function signature the same. Write clean, modern C++ code using best practices.",
+    "guidance": [
+      "Analyze the current nested loops and condition checks to identify redundancies.",
+      "Use STL algorithms and standard library features to simplify code.",
+      "Avoid unnecessary copying of objects by using references and move semantics where appropriate.",
+      "Ensure the refactored function returns the exact same filtered results as the original."
+    ],
+    "hints": [
+      "Consider using std::copy_if or std::remove_if combined with lambda expressions to simplify filtering.",
+      "Use structured bindings and const references for better readability and efficiency.",
+      "Break down complex conditions into well-named boolean variables or helper functions."
+    ],
+    "starterCode": "#include <vector>\n#include <string>\n\nstruct User {\n    std::string name;\n    int age;\n    double score;\n};\n\nstd::vector<User> filterUsers(const std::vector<User>& users) {\n    std::vector<User> result;\n    for (size_t i = 0; i < users.size(); ++i) {\n        if (users[i].age > 18) {\n            for (size_t j = 0; j < users.size(); ++j) {\n                if (j != i) {\n                    if (users[j].score > 50.0) {\n                        if (users[i].score > 70.0) {\n                            result.push_back(users[i]);\n                            break;\n                        }\n                    }\n                }\n            }\n        }\n    }\n    return result;\n}\n",
+    "expectedOutput": "The refactored function returns a vector of Users from the input where the user's age is greater than 18, the user has score above 70, and there exists at least one other user with score above 50. The output matches exactly what the original function would produce but with cleaner, more efficient code.",
+    "concepts": [
+      "C++ STL algorithms",
+      "code refactoring",
+      "performance optimization",
+      "modern C++ best practices"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-join-logic-to-correctly-aggregate-sales-by-customer",
+    "title": "Fix the Join Logic to Correctly Aggregate Sales by Customer",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "This challenge asks you to debug a broken SQL query intended to calculate total sales per customer by joining sales and customers tables. The existing query returns incorrect aggregates due to an erroneous join and grouping logic.",
+    "prompt": "You are given two tables: `customers` and `sales`.\n\n- `customers` has columns: `customer_id`, `customer_name`.\n- `sales` has columns: `sale_id`, `customer_id`, `amount`.\n\nThe current query aims to calculate the total sales amount per customer but returns incorrect results because of bugs in the join and grouping logic.\n\nFix the query so that it correctly computes the total sales amount for each customer, including customers with zero sales.\n\nHere is the broken query:\n\nSELECT c.customer_name, SUM(s.amount) AS total_sales\nFROM customers c\nJOIN sales s ON c.customer_id = s.sale_id\nGROUP BY c.customer_id;",
+    "guidance": [
+      "Check the join condition between `customers` and `sales`, ensuring the correct keys are matched.",
+      "Use the appropriate JOIN type to include customers with no sales.",
+      "Ensure the GROUP BY clause contains the correct columns for aggregation."
+    ],
+    "hints": [
+      "The join condition currently matches customer_id to sale_id, which is incorrect.",
+      "Consider using a LEFT JOIN to include customers with no matching sales entries.",
+      "GROUP BY should match any non-aggregated columns in the SELECT statement."
+    ],
+    "starterCode": "SELECT c.customer_name, SUM(s.amount) AS total_sales\nFROM customers c\nJOIN sales s ON c.customer_id = s.sale_id\nGROUP BY c.customer_id;",
+    "expectedOutput": "A list of customer names with their corresponding total sales amounts. Customers without sales should appear with a total_sales amount of NULL or 0.\n\nExample:\ncustomer_name | total_sales\n--------------|------------\nAlice         | 1500\nBob           | 0\nCharlie       | 230",
+    "concepts": [
+      "SQL JOINs",
+      "GROUP BY clause",
+      "Aggregation functions",
+      "Debugging SQL queries"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-optimized-matrix-chain-multiplication-implementation",
+    "title": "Fix Bug in Optimized Matrix Chain Multiplication Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "The provided C++ code implements the Matrix Chain Multiplication algorithm using dynamic programming to find the minimum number of scalar multiplications needed to multiply a chain of matrices. However, the current implementation contains bugs that lead to incorrect results and occasional runtime errors. Your task is to identify and fix these bugs so the algorithm returns correct and optimized results.",
+    "prompt": "You are given a broken implementation of the Matrix Chain Multiplication problem that aims to find the minimum cost of multiplying a sequence of matrices. The input is an array representing the dimensions of the matrices. The function should return the minimum number of scalar multiplications needed. Fix the bugs related to array indexing, loop boundaries, and initialization to ensure correct results and efficient runtime.",
+    "guidance": [
+      "Carefully check your indexing in the nested loops controlling subproblems.",
+      "Verify initialization of your DP table so intermediate values are set correctly before computation.",
+      "Trace through a simple example to confirm your fixes result in correct minimum costs."
+    ],
+    "hints": [
+      "Remember that matrices Ai has dimensions p[i-1] x p[i], so your loops must consider these indices carefully.",
+      "Initialize the diagonal of the cost matrix to zero as multiplying one matrix costs nothing.",
+      "Check the inner loop that partitions the matrix chain — off-by-one errors are common here."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <climits>\nusing namespace std;\n\nint matrixChainMultiplication(const vector<int> &p) {\n    int n = p.size();\n    vector<vector<int>> dp(n, vector<int>(n, 0));\n\n    for (int len = 2; len <= n; ++len) {\n        for (int i = 1; i < n - len + 1; ++i) {\n            int j = i + len - 1;\n            dp[i][j] = INT_MAX;\n            for (int k = i; k < j; ++k) {\n                int cost = dp[i][k] + dp[k + 1][j] + p[i] * p[k + 1] * p[j + 1];\n                if (cost < dp[i][j]) {\n                    dp[i][j] = cost;\n                }\n            }\n        }\n    }\n    return dp[1][n - 1];\n}\n\nint main() {\n    vector<int> dims = {40, 20, 30, 10, 30};\n    cout << matrixChainMultiplication(dims) << endl;\n    return 0;\n}",
+    "expectedOutput": "26000",
+    "concepts": [
+      "dynamic programming",
+      "matrix chain multiplication",
+      "array indexing",
+      "algorithm debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-multi-threaded-file-search-and-filter-utility-in-c",
+    "title": "Advanced Multi-Threaded File Search and Filter Utility in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a high-performance, multi-threaded C++ utility to recursively search through directories for files matching specific content and metadata filters, then output a summary report. This mini-project will test your architectural design, concurrency control, file I/O, and advanced C++ skills.",
+    "prompt": "Create a C++ program that recursively searches a given directory for files containing a specified keyword within their content. Your utility must support filtering results by file extension(s), minimum and maximum file size, and last modified date range. Implement efficient multi-threading to utilize all available CPU cores for scanning files concurrently. At the end, generate a summary report listing all matched files with their path, size, last modified timestamp, and a snippet of the matched content surrounding the keyword in each file. Handle errors gracefully and optimize for large directory structures with potentially thousands of files.",
+    "guidance": [
+      "Use std::filesystem for directory traversal and metadata extraction.",
+      "Implement thread pools or std::async with concurrency safety to parallelize file reading and filtering.",
+      "To extract snippets with the keyword, read partial file content around the first match instead of loading entire files into memory.",
+      "Carefully design data structures to safely aggregate results from different threads and avoid race conditions."
+    ],
+    "hints": [
+      "Consider using std::mutex, std::lock_guard, or concurrent queues for thread-safe result storage.",
+      "Minimize disk IO by filtering metadata before reading file content wherever possible.",
+      "Split directory traversal and file reading/filtering into separate phases to improve concurrency and error isolation."
+    ],
+    "starterCode": "#include <filesystem>\n#include <iostream>\n#include <vector>\n#include <string>\n#include <mutex>\n#include <thread>\n#include <future>\n\n// Define a struct to hold file match information\nstruct FileMatch {\n    std::filesystem::path filePath;\n    std::uintmax_t fileSize;\n    std::filesystem::file_time_type lastModified;\n    std::string snippet;\n};\n\n// Function declarations\nstd::vector<std::filesystem::path> recursiveFileSearch(const std::filesystem::path& dir);\nbool fileContainsKeyword(const std::filesystem::path& filePath, const std::string& keyword, std::string& snippet);\n\nint main() {\n    // TODO: Implement argument parsing, threading logic, filtering, and reporting\n    std::cout << \"Implement the multi-threaded file search and filter utility here.\" << std::endl;\n    return 0;\n}",
+    "expectedOutput": "Summary Report:\nMatched Files: 3\n1. /path/to/file1.txt | Size: 2048 bytes | Modified: 2024-05-20 15:32 | Snippet: \"...keyword example inside file1...\"\n2. /path/to/file2.cpp | Size: 4096 bytes | Modified: 2024-05-18 09:12 | Snippet: \"...code snippet with keyword...\"\n3. /path/to/notes.md | Size: 1024 bytes | Modified: 2024-05-22 11:03 | Snippet: \"...documentation mentioning keyword...\"",
+    "concepts": [
+      "Multithreading and concurrency",
+      "Filesystem operations and metadata",
+      "File I/O optimization",
+      "Data synchronization and thread safety"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-file-system-indexer-and-search-tool-in-c",
+    "title": "Advanced File System Indexer and Search Tool in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Build a highly efficient file system indexer that recursively scans directories, indexes file metadata, and supports advanced search queries with filters and sorting, all implemented in C++.",
+    "prompt": "Create a C++ program that recursively scans a directory and all its subdirectories to index metadata of each file (including file name, path, size, last modified timestamp). Store this indexed data in an efficient in-memory data structure. Then implement a command-line interface that supports searching the indexed files based on multiple criteria such as partial file name match, size range, and modification date range. The search results should be sortable by name, size, or date. Optimize for performance by avoiding redundant scans and supporting fast queries. Additionally, implement a feature to export the current index snapshot to a JSON file and import it back to resume searching without re-scanning.",
+    "guidance": [
+      "Use recursive directory traversal with appropriate platform-specific or cross-platform APIs (e.g., <filesystem> in C++17).",
+      "Design an index data structure that allows efficient multi-criteria filtering and sorting, such as storing file metadata objects in vectors and using algorithms for queries.",
+      "Implement a flexible command parser to support user input for complex queries and sorting options.",
+      "Ensure your program can serialize and deserialize the index to/from JSON efficiently to avoid repeated filesystem scans."
+    ],
+    "hints": [
+      "Investigate std::filesystem for directory traversal and file metadata extraction.",
+      "Consider std::vector with custom filtering and sorting using std::ranges or algorithms for query processing.",
+      "Use a JSON serialization library like nlohmann/json for saving and loading the index state."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n#include <filesystem>\n#include <chrono>\n\nstruct FileInfo {\n    std::string name;\n    std::string path;\n    uintmax_t size;\n    std::filesystem::file_time_type last_modified;\n};\n\nclass FileIndexer {\npublic:\n    void scanDirectory(const std::string& directoryPath);\n    std::vector<FileInfo> search(const std::string& nameFilter = \"\", uintmax_t minSize = 0, uintmax_t maxSize = UINTMAX_MAX);\n    void exportToJson(const std::string& jsonFilePath);\n    void importFromJson(const std::string& jsonFilePath);\nprivate:\n    std::vector<FileInfo> index;\n};\n\nint main() {\n    // Implement CLI to scan directory, perform searches, interact with export/import\n    std::cout << \"File Indexer CLI (implement your solution here)\" << std::endl;\n    return 0;\n}",
+    "expectedOutput": "Example run:\n> scan /home/user/docs\nIndexed 1024 files.\n> search name=report size>1000 sort=size desc\nFound 15 files matching criteria:\n1) report_summary.pdf - 2345 bytes - 2024-05-20\n2) annual_report.docx - 1230 bytes - 2024-05-18\n...\n> export index.json\nIndex successfully saved to index.json\n> import index.json\nIndex loaded from index.json with 1024 files.",
+    "concepts": [
+      "filesystem traversal",
+      "data structures and algorithms",
+      "file metadata handling",
+      "serialization and deserialization"
+    ],
+    "estimatedTime": "120 minutes",
+    "isFeatured": true
   }
 ];
