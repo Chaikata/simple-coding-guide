@@ -59388,5 +59388,464 @@ export const articles = [
         "value": "By understanding how NULL works and correctly handling it in your queries, you can avoid common pitfalls and make your SQL data processing more accurate and reliable."
       }
     ]
+  },
+  {
+    "slug": "comparing-javascript-promise-libraries-bluebird-vs-native-promises",
+    "title": "Comparing JavaScript Promise Libraries: Bluebird vs Native Promises",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Explore the key differences between Bluebird and native JavaScript Promises. Learn which one fits your needs with clear examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=5vnVF-qp3BI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Promises in JavaScript help manage asynchronous operations, making code easier to write and read. There are two main ways to use Promises: the built-in native JavaScript Promises and third-party libraries like Bluebird. In this tutorial, we'll compare these two to help you decide which one is best for your project."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Native Promises? \nNative Promises are part of JavaScript since ES6 (2015) and are supported in all modern browsers and Node.js. They provide basic functionality for asynchronous flow control with methods like `.then()`, `.catch()`, and `.finally()`."
+      },
+      {
+        "type": "code",
+        "value": "const nativePromise = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Native Promise Resolved!');\n  }, 1000);\n});\n\nnativePromise.then(result => {\n  console.log(result);\n}).catch(error => {\n  console.error(error);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Bluebird?\nBluebird is a fully-featured Promise library that was popular before native Promises became widely supported. It extends Promises with many additional methods and better performance in some scenarios. It’s commonly used in older projects and sometimes preferred for its extra utilities."
+      },
+      {
+        "type": "code",
+        "value": "const Bluebird = require('bluebird');\n\nconst bluebirdPromise = new Bluebird((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Bluebird Promise Resolved!');\n  }, 1000);\n});\n\nbluebirdPromise.then(result => {\n  console.log(result);\n}).catch(error => {\n  console.error(error);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **API Features:** Bluebird offers extensions like `.map()`, `.reduce()`, `.coroutine()`, and `.delay()` which are not available in native Promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Performance:** Bluebird was optimized for speed before native Promises were fast, but modern engines have improved native Promise performance significantly."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Error Handling:** Bluebird has more informative error stack traces which can make debugging easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Compatibility:** Native Promises work everywhere modern JavaScript runs without additional dependencies."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Which?"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want something straightforward that works out of the box, the native Promises are the way to go. They keep your project lighter and simpler to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "If your project needs advanced Promise utilities and you don’t mind adding a dependency, Bluebird can be a powerful choice."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Using `.map()` with Bluebird vs Native Promises"
+      },
+      {
+        "type": "code",
+        "value": "const Bluebird = require('bluebird');\nconst arr = [1, 2, 3];\n\n// Bluebird's map method\nBluebird.map(arr, async (num) => {\n  return num * 2;\n}).then(results => {\n  console.log('Bluebird map results:', results);\n});"
+      },
+      {
+        "type": "code",
+        "value": "// Native Promise equivalent using Promise.all\nconst arr = [1, 2, 3];\n\nPromise.all(arr.map(async (num) => {\n  return num * 2;\n})).then(results => {\n  console.log('Native Promise results:', results);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, native Promises are excellent for most cases with wide support and simplicity. Bluebird provides extra features for more complex asynchronous needs but introduces a dependency and some added complexity."
+      },
+      {
+        "type": "paragraph",
+        "value": "Choose the approach that best matches your project’s requirements, and you'll write cleaner, more maintainable asynchronous JavaScript."
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-pitfalls-javascript",
+    "title": "Handling Floating Point Precision Pitfalls in JavaScript Edge Cases",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle floating point precision issues in JavaScript to avoid common edge case errors in your calculations.",
+    "videoUrl": "https://www.youtube.com/watch?v=0IOsF_N1DIs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript uses a floating-point format to represent numbers, which can lead to unexpected behavior when performing arithmetic operations. This is because certain decimal numbers cannot be represented exactly in binary floating-point form, leading to precision errors in calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common example is simple addition:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(0.1 + 0.2); // Outputs: 0.30000000000000004"
+      },
+      {
+        "type": "paragraph",
+        "value": "The result is not exactly 0.3 as you might expect. This small precision error can cause problems if you use the result in comparisons or further calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid these pitfalls, here are some beginner-friendly techniques you can use:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Using the `toFixed` method to round numbers to a fixed number of decimal places:"
+      },
+      {
+        "type": "code",
+        "value": "const sum = 0.1 + 0.2;\nconst roundedSum = Number(sum.toFixed(2));\nconsole.log(roundedSum); // Outputs: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "Note that `toFixed` returns a string, so it’s necessary to convert it back to a number using `Number()` or `parseFloat()`."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Multiplying numbers to work with integers, then dividing back after calculations:"
+      },
+      {
+        "type": "code",
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst result = (a * 10 + b * 10) / 10;\nconsole.log(result); // Outputs: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "This method avoids floating point errors by dealing with whole numbers as much as possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Using libraries like `decimal.js` or `big.js` if you need high-precision arithmetic. These libraries handle decimals more accurately and are great for financial calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example with decimal.js:"
+      },
+      {
+        "type": "code",
+        "value": "import Decimal from 'decimal.js';\n\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\nconsole.log(sum.toString()); // Outputs: 0.3"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, floating point precision errors are common in JavaScript because of how numbers are stored internally. By rounding results, working with integers, or using a dedicated library, you can handle these edge cases effectively and avoid subtle bugs."
+      }
+    ]
+  },
+  {
+    "slug": "designing-resilient-typescript-systems-handling-runtime-exceptions-gracefully",
+    "title": "Designing Resilient TypeScript Systems: Handling Runtime Exceptions Gracefully",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn practical tips for handling runtime exceptions effectively in TypeScript, making your applications more stable and easier to debug.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that adds types to JavaScript, helping catch many bugs during development. However, no matter how well you type your code, runtime exceptions can still happen. These exceptions might be caused by unexpected input, network issues, or logic errors. Designing systems that handle these exceptions gracefully is critical for building resilient, user-friendly applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll cover best practices for handling runtime exceptions in TypeScript, including the usage of try-catch blocks, custom error classes, and strategies to provide meaningful feedback to users or maintainers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Try-Catch Blocks to Handle Known Exceptions"
+      },
+      {
+        "type": "paragraph",
+        "value": "When calling code that might throw an error, wrapping it in a try-catch block allows you to capture and handle these exceptions gracefully instead of letting your program crash."
+      },
+      {
+        "type": "code",
+        "value": "function parseJson(input: string) {\n  try {\n    const data = JSON.parse(input);\n    console.log('Parsing succeeded:', data);\n  } catch (error) {\n    console.error('Failed to parse JSON:', error);\n  }\n}\n\nparseJson('{ \"key\": \"value\" }'); // Works\nparseJson('invalid json'); // Catches error"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, the `JSON.parse` method might throw an exception if input is not valid JSON. The try-catch block allows us to catch that exception and handle it (here, logging an error) instead of crashing."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating Custom Error Classes for More Context"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript allows you to create custom error classes that extend the built-in `Error` class. This helps you categorize and provide more meaningful information about errors."
+      },
+      {
+        "type": "code",
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction validateName(name: string) {\n  if (name.length < 3) {\n    throw new ValidationError('Name must be at least 3 characters long.');\n  }\n  console.log('Name is valid:', name);\n}\n\ntry {\n  validateName('Al');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation failed:', error.message);\n  } else {\n    console.error('Unexpected error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By defining `ValidationError`, we can specifically check for validation problems and handle them differently than other errors. This improves error handling clarity and maintains code readability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Avoid Overusing Try-Catch Blocks"
+      },
+      {
+        "type": "paragraph",
+        "value": "While try-catch is valuable, overusing it can lead to complicated code. Only use try-catch around code that is likely to throw exceptions, such as parsing, network calls, or external APIs."
+      },
+      {
+        "type": "paragraph",
+        "value": "For other kinds of errors, consider using conditional checks and returning error objects or special types instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Async Errors Using async/await and try-catch"
+      },
+      {
+        "type": "paragraph",
+        "value": "For asynchronous code, errors should be caught using try-catch with async/await syntax to maintain readability:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData(url: string) {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n  }\n}\n\nfetchData('https://api.example.com/data');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Logging and Monitoring Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "To maintain resilient systems, log errors with enough detail for diagnosis and use monitoring tools to alert you of issues early. Proper error messages help both users and developers."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling runtime exceptions gracefully in TypeScript involves anticipating errors, using try-catch wisely, creating custom errors for clarity, and properly handling asynchronous operations. These practices make your code more robust, easier to maintain, and improve user experience by preventing unexpected crashes."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-restful-api-with-fastapi-and-python-step-by-step-tutorial",
+    "title": "Building a RESTful API with FastAPI and Python: Step-by-Step Tutorial",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to create a simple RESTful API using FastAPI and Python. This step-by-step tutorial is perfect for beginners who want to build efficient APIs quickly.",
+    "videoUrl": "https://www.youtube.com/watch?v=iWS9ogMPOI0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "APIs (Application Programming Interfaces) are essential for modern web and mobile applications. A RESTful API allows different software systems to communicate over HTTP. FastAPI is a modern, fast, and easy-to-use Python web framework for building APIs. In this tutorial, you will learn how to build a basic RESTful API with FastAPI from scratch."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Install FastAPI and Uvicorn\nFirst, you need to install FastAPI and a server called Uvicorn to run your API. You can install them using pip:"
+      },
+      {
+        "type": "code",
+        "value": "pip install fastapi uvicorn"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Create Your First FastAPI Application\nCreate a new Python file called `main.py`. This file will contain your API code. Start by importing FastAPI and creating an app instance."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"Hello, FastAPI!\"}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This code creates a simple API with one endpoint (`/`). When you visit this endpoint, it returns a JSON response with the message `Hello, FastAPI!`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Run Your API Server\nTo run the API server, use Uvicorn from the terminal:"
+      },
+      {
+        "type": "code",
+        "value": "uvicorn main:app --reload"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `--reload` flag automatically reloads the server when you make code changes, which is handy during development. Open your browser and go to [http://127.0.0.1:8000](http://127.0.0.1:8000) to see the response."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Define a Data Model Using Pydantic\nFastAPI uses Pydantic to validate and serialize data. Let's create a simple model for a `Book` with a title and author."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel\n\nclass Book(BaseModel):\n    title: str\n    author: str"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Create CRUD Endpoints\nLet's create endpoints to add and read books stored in memory. We'll use a list to keep our books."
+      },
+      {
+        "type": "code",
+        "value": "books = []  # Our in-memory database\n\n@app.post(\"/books/\")\ndef create_book(book: Book):\n    books.append(book)\n    return book\n\n@app.get(\"/books/\")\ndef get_books():\n    return books"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `POST /books/` endpoint allows clients to add a new book, and the `GET /books/` endpoint returns the list of all books."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Test Your API\nWith the server running, you can test your API using tools like curl, Postman, or directly from the interactive docs FastAPI generates."
+      },
+      {
+        "type": "paragraph",
+        "value": "Open your browser at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) to access the automatically generated Swagger UI. You can use it to try your `/books/` endpoints easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nYou have now built a simple RESTful API using FastAPI. From here, you can expand your API by connecting to databases, adding authentication, or deploying your app to the cloud. FastAPI’s simplicity and power make it a great choice for building APIs efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "designing-fault-tolerant-systems-python-error-resilience",
+    "title": "Designing Fault-Tolerant Systems in Python: Best Practices for Error Resilience",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to design fault-tolerant systems in Python by applying best practices for error handling and recovery to build robust, resilient applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=3Lis4w4_bBc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Fault-tolerant systems are designed to continue operating smoothly even when problems occur, such as unexpected errors or hardware failures. In Python, creating fault-tolerant applications involves writing code that anticipates possible failures and handles them gracefully. This article introduces beginner-friendly techniques for improving error resilience in your Python programs."
+      },
+      {
+        "type": "paragraph",
+        "value": "The first step in fault tolerance is to use proper exception handling. Python provides try-except blocks to catch and respond to errors instead of letting the program crash. Aim to catch specific exceptions to avoid masking other issues."
+      },
+      {
+        "type": "code",
+        "value": "try:\n    result = 10 / user_input\nexcept ZeroDivisionError:\n    print('Cannot divide by zero! Please provide a valid number.')\nexcept TypeError:\n    print('Invalid input type! Please enter a number.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another best practice is to validate inputs before processing. Validations prevent errors by checking data early and ensuring it meets expected criteria."
+      },
+      {
+        "type": "code",
+        "value": "def get_positive_number():\n    while True:\n        try:\n            value = int(input('Enter a positive number: '))\n            if value <= 0:\n                print('Number must be positive.')\n            else:\n                return value\n        except ValueError:\n            print('Invalid input, please enter an integer.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Retrying operations that may fail temporarily can enhance reliability. For example, network requests can be wrapped in retry loops with delays."
+      },
+      {
+        "type": "code",
+        "value": "import time\n\ndef fetch_data(url, retries=3):\n    for attempt in range(retries):\n        try:\n            # Simulate network request\n            response = some_network_function(url)\n            return response\n        except ConnectionError:\n            print(f'Retry {attempt + 1} failed. Retrying...')\n            time.sleep(2)\n    print('All retries failed.')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, using logging rather than print statements can help monitor and diagnose errors in production environments. Python’s built-in logging module allows you to record errors with different severity levels."
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\nlogging.basicConfig(level=logging.ERROR, filename='app.log')\n\ntry:\n    risky_operation()\nexcept Exception as e:\n    logging.error(f'Error occurred: {e}')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, designing fault-tolerant systems in Python involves anticipating errors, validating inputs, implementing retries, and using logging for error tracing. These best practices help you build robust and user-friendly applications that handle failures gracefully."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-transaction-isolation-levels-sql-performance-data-integrity",
+    "title": "Optimizing Transaction Isolation Levels to Balance Performance and Data Integrity in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize SQL transaction isolation levels to improve database performance while maintaining data integrity, with beginner-friendly explanations and error handling tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=bqrPeBWf9ZY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases in SQL, transactions help ensure your data remains consistent and accurate. However, the way transactions isolate themselves from others—known as the isolation level—can impact both performance and correctness of your data operations. Understanding and optimizing these isolation levels is essential, especially for beginners, to avoid common errors like deadlocks or dirty reads."
+      },
+      {
+        "type": "paragraph",
+        "value": "Transaction isolation levels define how visible the changes made in one transaction are to other concurrent transactions. SQL supports several levels, each providing a trade-off between performance and data integrity."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are the common isolation levels in SQL along with their key characteristics:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- READ UNCOMMITTED: The lowest level, where transactions can see uncommitted changes made by others (dirty reads). Fast but risky."
+      },
+      {
+        "type": "paragraph",
+        "value": "- READ COMMITTED: Prevents dirty reads by only seeing committed changes. It allows non-repeatable reads and phantom reads."
+      },
+      {
+        "type": "paragraph",
+        "value": "- REPEATABLE READ: Prevents dirty and non-repeatable reads by holding shared locks. Phantom reads can still occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "- SERIALIZABLE: The highest level. It prevents dirty reads, non-repeatable reads, and phantom reads by serializing transactions but can slow down performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Setting the correct isolation level depends on your application needs:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. For applications where performance is critical and small inconsistencies are acceptable (like analytics), READ UNCOMMITTED or READ COMMITTED might be enough."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. For financial or inventory systems where accuracy is critical, REPEATABLE READ or SERIALIZABLE levels ensure higher data integrity but can slow down concurrent transactions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can set the isolation level in SQL Server:"
+      },
+      {
+        "type": "code",
+        "value": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED;\nBEGIN TRANSACTION;\n-- Your SQL statements go here\nCOMMIT TRANSACTION;"
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, if you want to prevent dirty reads but still maintain good performance, using READ COMMITTED as above is a good start."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors related to transaction isolation levels include deadlocks and lost updates. Deadlocks occur when two transactions wait indefinitely for each other’s locks. To minimize this, keep transactions short and avoid user interaction during transactions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lost updates happen when two transactions overwrite each other's changes. Higher isolation levels or row versioning can help avoid this issue."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, balancing between performance and data integrity involves:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Choosing the appropriate isolation level based on your need for accuracy vs. performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Testing your transactions under load to identify possible locking conflicts or inconsistencies."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Monitoring for errors such as deadlocks and addressing them by optimizing transaction design."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding how isolation levels affect your SQL transactions, you can write more robust and efficient database code that keeps your application reliable and fast."
+      }
+    ]
   }
 ];

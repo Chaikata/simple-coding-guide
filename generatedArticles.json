@@ -1,281 +1,301 @@
 [
   {
-    "slug": "handling-floating-point-precision-edge-cases-in-javascript-calculations",
-    "title": "Handling Floating Point Precision Edge Cases in JavaScript Calculations",
+    "slug": "comparing-javascript-promise-libraries-bluebird-vs-native-promises",
+    "title": "Comparing JavaScript Promise Libraries: Bluebird vs Native Promises",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to handle and avoid common floating point precision issues in JavaScript calculations with practical tips and examples.",
+    "description": "Explore the key differences between Bluebird and native JavaScript Promises. Learn which one fits your needs with clear examples and beginner-friendly explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=5vnVF-qp3BI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Promises in JavaScript help manage asynchronous operations, making code easier to write and read. There are two main ways to use Promises: the built-in native JavaScript Promises and third-party libraries like Bluebird. In this tutorial, we'll compare these two to help you decide which one is best for your project."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What Are Native Promises? \nNative Promises are part of JavaScript since ES6 (2015) and are supported in all modern browsers and Node.js. They provide basic functionality for asynchronous flow control with methods like `.then()`, `.catch()`, and `.finally()`."
+      },
+      {
+        "type": "code",
+        "value": "const nativePromise = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Native Promise Resolved!');\n  }, 1000);\n});\n\nnativePromise.then(result => {\n  console.log(result);\n}).catch(error => {\n  console.error(error);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Bluebird?\nBluebird is a fully-featured Promise library that was popular before native Promises became widely supported. It extends Promises with many additional methods and better performance in some scenarios. It’s commonly used in older projects and sometimes preferred for its extra utilities."
+      },
+      {
+        "type": "code",
+        "value": "const Bluebird = require('bluebird');\n\nconst bluebirdPromise = new Bluebird((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Bluebird Promise Resolved!');\n  }, 1000);\n});\n\nbluebirdPromise.then(result => {\n  console.log(result);\n}).catch(error => {\n  console.error(error);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Key Differences"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **API Features:** Bluebird offers extensions like `.map()`, `.reduce()`, `.coroutine()`, and `.delay()` which are not available in native Promises."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Performance:** Bluebird was optimized for speed before native Promises were fast, but modern engines have improved native Promise performance significantly."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Error Handling:** Bluebird has more informative error stack traces which can make debugging easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Compatibility:** Native Promises work everywhere modern JavaScript runs without additional dependencies."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Which?"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you want something straightforward that works out of the box, the native Promises are the way to go. They keep your project lighter and simpler to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "If your project needs advanced Promise utilities and you don’t mind adding a dependency, Bluebird can be a powerful choice."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Using `.map()` with Bluebird vs Native Promises"
+      },
+      {
+        "type": "code",
+        "value": "const Bluebird = require('bluebird');\nconst arr = [1, 2, 3];\n\n// Bluebird's map method\nBluebird.map(arr, async (num) => {\n  return num * 2;\n}).then(results => {\n  console.log('Bluebird map results:', results);\n});"
+      },
+      {
+        "type": "code",
+        "value": "// Native Promise equivalent using Promise.all\nconst arr = [1, 2, 3];\n\nPromise.all(arr.map(async (num) => {\n  return num * 2;\n})).then(results => {\n  console.log('Native Promise results:', results);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, native Promises are excellent for most cases with wide support and simplicity. Bluebird provides extra features for more complex asynchronous needs but introduces a dependency and some added complexity."
+      },
+      {
+        "type": "paragraph",
+        "value": "Choose the approach that best matches your project’s requirements, and you'll write cleaner, more maintainable asynchronous JavaScript."
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-pitfalls-javascript",
+    "title": "Handling Floating Point Precision Pitfalls in JavaScript Edge Cases",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to handle floating point precision issues in JavaScript to avoid common edge case errors in your calculations.",
     "videoUrl": "https://www.youtube.com/watch?v=0IOsF_N1DIs",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with numbers in JavaScript, you might have noticed some unexpected results due to how computers handle floating point numbers internally. For example, simple calculations like 0.1 + 0.2 may not exactly equal 0.3. This is because JavaScript uses the IEEE 754 standard for representing decimal numbers, which can introduce tiny errors in precision."
+        "value": "JavaScript uses a floating-point format to represent numbers, which can lead to unexpected behavior when performing arithmetic operations. This is because certain decimal numbers cannot be represented exactly in binary floating-point form, leading to precision errors in calculations."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, you'll learn why floating point precision issues happen, common problems you might encounter, and how to handle these edge cases effectively with simple code examples."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why does floating point precision matter?\n\nFloating point numbers are stored in a binary format that can't precisely represent all decimal fractions, leading to small rounding errors. These tiny inaccuracies can cause problems especially in financial calculations, measurements, or when comparing numbers."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common floating point problem example:"
+        "value": "A common example is simple addition:"
       },
       {
         "type": "code",
-        "value": "console.log(0.1 + 0.2);     // Output: 0.30000000000000004\nconsole.log(0.1 + 0.2 === 0.3); // Output: false"
+        "value": "console.log(0.1 + 0.2); // Outputs: 0.30000000000000004"
       },
       {
         "type": "paragraph",
-        "value": "Even though mathematically 0.1 + 0.2 equals 0.3, JavaScript's floating point arithmetic results in a slightly different number."
+        "value": "The result is not exactly 0.3 as you might expect. This small precision error can cause problems if you use the result in comparisons or further calculations."
       },
       {
         "type": "paragraph",
-        "value": "### How to handle floating point precision edge cases\n\n#### 1. Use the `toFixed()` method\n\nThis method formats a number to a fixed number of decimal places and returns a string. It's helpful to round results for display."
+        "value": "To avoid these pitfalls, here are some beginner-friendly techniques you can use:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Using the `toFixed` method to round numbers to a fixed number of decimal places:"
       },
       {
         "type": "code",
-        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum.toFixed(2));  // Output: \"0.30\""
+        "value": "const sum = 0.1 + 0.2;\nconst roundedSum = Number(sum.toFixed(2));\nconsole.log(roundedSum); // Outputs: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "Note: `toFixed()` returns a string, so if you need a number, you can wrap it in `parseFloat()`."
+        "value": "Note that `toFixed` returns a string, so it’s necessary to convert it back to a number using `Number()` or `parseFloat()`."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Multiplying numbers to work with integers, then dividing back after calculations:"
       },
       {
         "type": "code",
-        "value": "const preciseSum = parseFloat(sum.toFixed(2));\nconsole.log(preciseSum);  // Output: 0.3"
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst result = (a * 10 + b * 10) / 10;\nconsole.log(result); // Outputs: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "#### 2. Use a small tolerance value for comparisons\n\nWhen comparing two floating point numbers, instead of using `===`, check if their difference is smaller than a tiny threshold (also known as epsilon)."
+        "value": "This method avoids floating point errors by dealing with whole numbers as much as possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Using libraries like `decimal.js` or `big.js` if you need high-precision arithmetic. These libraries handle decimals more accurately and are great for financial calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example with decimal.js:"
       },
       {
         "type": "code",
-        "value": "const a = 0.1 + 0.2;\nconst b = 0.3;\nconst epsilon = 0.000001;\n\nif (Math.abs(a - b) < epsilon) {\n  console.log('a and b are effectively equal');\n} else {\n  console.log('a and b are different');\n}"
+        "value": "import Decimal from 'decimal.js';\n\nconst a = new Decimal(0.1);\nconst b = new Decimal(0.2);\nconst sum = a.plus(b);\nconsole.log(sum.toString()); // Outputs: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "#### 3. Scale numbers to integers before calculations\n\nIf you're working with fixed decimal numbers (like money), multiply them by 100 (or 1000 etc.) to convert to integers, perform calculations, and then divide back."
-      },
-      {
-        "type": "code",
-        "value": "const price1 = 0.1;\nconst price2 = 0.2;\n\n// Convert to integers by scaling\nconst totalCents = (price1 * 100) + (price2 * 100);\nconst total = totalCents / 100;\n\nconsole.log(total);  // Output: 0.3"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nHandling floating point precision requires care and understanding of JavaScript's number system. For simple cases, rounding and epsilon comparison work well. For financial or more precise requirements, scaling numbers or using dedicated libraries (like decimal.js) can be even better."
-      },
-      {
-        "type": "paragraph",
-        "value": "By applying these techniques, you can avoid tricky bugs and ensure your JavaScript calculations behave as expected even with floating point numbers."
+        "value": "In summary, floating point precision errors are common in JavaScript because of how numbers are stored internally. By rounding results, working with integers, or using a dedicated library, you can handle these edge cases effectively and avoid subtle bugs."
       }
     ]
   },
   {
-    "slug": "mastering-async-stack-traces-in-javascript-for-easier-debugging",
-    "title": "Mastering Async Stack Traces in JavaScript for Easier Debugging",
-    "language": "javascript",
-    "type": "errors",
-    "description": "Learn how to understand and improve async stack traces in JavaScript to debug asynchronous code more effectively.",
-    "videoUrl": "https://www.youtube.com/watch?v=oe3Ay8PRDW4",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Debugging asynchronous code in JavaScript can sometimes feel like detective work, especially when errors show confusing stack traces that don't clearly indicate where the problem started. Async stack traces help by linking together the sequence of asynchronous calls, giving you a clearer picture of what went wrong and where."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example that shows how errors in asynchronous code often result in incomplete stack traces."
-      },
-      {
-        "type": "code",
-        "value": "function firstFunction() {\n  secondFunction();\n}\n\nfunction secondFunction() {\n  setTimeout(() => {\n    throw new Error('Oops!');\n  }, 100);\n}\n\ntry {\n  firstFunction();\n} catch (e) {\n  console.error('Caught error:', e);\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this example, we throw an error inside a `setTimeout`. However, this error is not caught by our `try...catch` block because it happens asynchronously, after the `try` block has already finished executing. Also, the stack trace in the console will only show where the error was thrown inside the timer callback, not the higher-level call chain from `firstFunction` to `secondFunction`."
-      },
-      {
-        "type": "paragraph",
-        "value": "To get better async stack traces, modern JavaScript environments and debugging tools often capture asynchronous calls automatically, especially when using `async`/`await` syntax. Here's how rewriting the above example with `async`/`await` can improve traceability."
-      },
-      {
-        "type": "code",
-        "value": "async function firstFunction() {\n  await secondFunction();\n}\n\nasync function secondFunction() {\n  await new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(new Error('Oops!'));\n    }, 100);\n  });\n}\n\nfirstFunction().catch(e => console.error('Caught async error:', e));"
-      },
-      {
-        "type": "paragraph",
-        "value": "Using `async`/`await` and Promises allows the error to propagate back up the async call chain, resulting in a more complete and helpful stack trace. The error will be caught in the `catch` method with detailed information about both where the error originated and the sequence of awaited calls."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another helpful tip is to use the `Error.captureStackTrace()` method in Node.js or ensure your environment supports long stack traces in Promises, which can link async calls by saving stack traces at multiple points."
-      },
-      {
-        "type": "paragraph",
-        "value": "To summarize, here are some best practices for mastering async stack traces in JavaScript:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Prefer `async`/`await` over raw callbacks for clearer stack traces.\n- Use Promises that reject instead of throwing inside callbacks.\n- Always catch errors at the top-level async function to log complete stack traces.\n- Use developer tools that support async stack traces for better debugging (modern browsers, Node.js versions).\n- Consider libraries like Bluebird which offer long stack trace capabilities in older environments."
-      },
-      {
-        "type": "paragraph",
-        "value": "With these techniques, you'll spend less time puzzling over confusing error messages and more time fixing bugs quickly and confidently."
-      }
-    ]
-  },
-  {
-    "slug": "building-scalable-microservices-typescript-nodejs",
-    "title": "Building Scalable Microservices with TypeScript and Node.js: A Step-by-Step Guide",
+    "slug": "mastering-typescript-generics-for-high-performance-code",
+    "title": "Mastering TypeScript Generics for High-Performance Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to build scalable microservices using TypeScript and Node.js with this beginner-friendly step-by-step guide.",
-    "videoUrl": "https://www.youtube.com/watch?v=lL_j7ilk7rc",
+    "description": "Learn how to leverage TypeScript generics to write reusable, type-safe, and high-performance code with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=EcCTIExsqmI",
     "content": [
       {
         "type": "paragraph",
-        "value": "Microservices architecture helps you build scalable and maintainable applications by breaking down your system into smaller, independent services. Using TypeScript with Node.js adds strong typing and modern JavaScript features, improving code quality and developer experience. In this tutorial, we'll create a simple scalable microservice using TypeScript and Node.js. We'll cover project setup, service creation, Docker containerization, and basic communication."
+        "value": "TypeScript generics are a powerful tool that allows you to write flexible and reusable code while maintaining strict type safety. If you're new to TypeScript or generics, this tutorial will guide you through the basics and show you how to use generics to improve your code's performance and reliability."
       },
       {
         "type": "paragraph",
-        "value": "### Step 1: Setup Your Project\nFirst, create a new folder for your microservice project and initialize a Node.js project with npm."
+        "value": "Generics allow you to create components, functions, or classes that can work with any data type without sacrificing type safety. Instead of using `any`, which bypasses type checks, generics let you specify a placeholder type that will be replaced with the actual type when you use the generic."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example. Suppose you want to write a function that returns the item it receives as an argument. Using generics, you can write:"
       },
       {
         "type": "code",
-        "value": "mkdir user-service\ncd user-service\nnpm init -y"
+        "value": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst numberIdentity = identity(42);       // number\nconst stringIdentity = identity('hello');  // string"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Install Required Packages\nWe need TypeScript, Express (for HTTP server), and necessary types."
+        "value": "Here, `<T>` is a generic type parameter. When you call `identity`, TypeScript infers the type based on the argument. This means `numberIdentity` is correctly typed as `number`, and `stringIdentity` as `string`. This is better than using `any`, which would lose type information."
+      },
+      {
+        "type": "paragraph",
+        "value": "Generics are also useful for working with collections. For example, writing a function that returns the first element of an array:"
       },
       {
         "type": "code",
-        "value": "npm install express\nnpm install --save-dev typescript @types/express @types/node ts-node nodemon"
+        "value": "function getFirstElement<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n\nconst firstNumber = getFirstElement([1, 2, 3]);      // number\nconst firstString = getFirstElement(['a', 'b']);    // string"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Configure TypeScript\nCreate a `tsconfig.json` file for your TypeScript settings."
+        "value": "By specifying `T[]`, we say that the function works with arrays of any type `T`. The return type `T | undefined` covers the case where the array might be empty."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also constrain generics to ensure the generic type has certain properties. For instance, if you want a function that logs the length of any object that has a `.length` property, you can do:"
       },
       {
         "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"commonjs\",\n    \"rootDir\": \"src\",\n    \"outDir\": \"dist\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  }\n}"
+        "value": "interface HasLength {\n  length: number;\n}\n\nfunction logLength<T extends HasLength>(item: T): T {\n  console.log(item.length);\n  return item;\n}\n\nlogLength('hello');         // 5\nlogLength([1, 2, 3, 4]);   // 4\n// logLength(123);          // Error: number doesn't have 'length'"
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Build a Simple User Service\nCreate a folder `src` and add `index.ts` inside it. This will be the main file of our user microservice."
-      },
-      {
-        "type": "code",
-        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\napp.use(express.json());\n\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nconst users: User[] = [\n  { id: 1, name: 'Alice', email: 'alice@example.com' },\n  { id: 2, name: 'Bob', email: 'bob@example.com' },\n];\n\n// Get all users\napp.get('/users', (req: Request, res: Response) => {\n  res.json(users);\n});\n\n// Get user by ID\napp.get('/users/:id', (req: Request, res: Response) => {\n  const id = parseInt(req.params.id, 10);\n  const user = users.find(u => u.id === id);\n  if (user) {\n    res.json(user);\n  } else {\n    res.status(404).json({ message: 'User not found' });\n  }\n});\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, () => {\n  console.log(`User service running on port ${PORT}`);\n});"
+        "value": "Using constraints makes your generics safer and prevents runtime errors by catching type mismatches at compile time."
       },
       {
         "type": "paragraph",
-        "value": "### Step 5: Run the Service\nAdd a script to your `package.json` to run the service using ts-node with nodemon for auto-reload."
-      },
-      {
-        "type": "code",
-        "value": "\"scripts\": {\n  \"start\": \"nodemon --exec ts-node src/index.ts\"\n}"
+        "value": "Generics shine in high-performance scenarios because they help you write efficient, reusable code without sacrificing type safety. Avoiding `any` means your editor and compiler can catch bugs early, and optimized type checking can improve development speed and reliability."
       },
       {
         "type": "paragraph",
-        "value": "Then run:\n\nbash\nnpm start\n\n\nYou should see `User service running on port 3000`. Open `http://localhost:3000/users` in your browser or use curl/Postman to test the API."
+        "value": "To summarize, mastering TypeScript generics involves:\n- Using generic type parameters to write flexible functions and classes.\n- Leveraging type inference to reduce verbosity.\n- Applying constraints to enforce type requirements.\n- Writing reusable code that performs well and is type-safe."
       },
       {
         "type": "paragraph",
-        "value": "### Step 6: Dockerize the Microservice\nTo ensure scalability, running your microservice inside Docker containers is crucial. Create a `Dockerfile` in your project root:"
-      },
-      {
-        "type": "code",
-        "value": "FROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nRUN npm run build\nEXPOSE 3000\nCMD [\"node\", \"dist/index.js\"]"
-      },
-      {
-        "type": "paragraph",
-        "value": "Add a build script in `package.json`:\n\n\n\"build\": \"tsc\"\n\n\nBuild your Docker image with:\n\nbash\ndocker build -t user-service .\n\n\nRun the container:\n\nbash\ndocker run -p 3000:3000 user-service\n\n\nYour service is now running inside a container, making it easy to scale by running multiple instances behind a load balancer."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nYou have built a simple scalable microservice with TypeScript and Node.js! This service can be expanded with databases, message brokers, and more complex communication patterns to fit your application needs. Containerizing your service with Docker helps you deploy and scale confidently."
+        "value": "Start integrating generics into your TypeScript code to make it both powerful and maintainable. Happy coding!"
       }
     ]
   },
   {
-    "slug": "handling-typescript-type-narrowing-failures-in-complex-conditional-logic",
-    "title": "Handling TypeScript Type Narrowing Failures in Complex Conditional Logic",
+    "slug": "designing-resilient-typescript-systems-handling-runtime-exceptions-gracefully",
+    "title": "Designing Resilient TypeScript Systems: Handling Runtime Exceptions Gracefully",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to resolve TypeScript type narrowing issues that occur in complex conditional logic with clear, beginner-friendly solutions.",
-    "videoUrl": "https://www.youtube.com/watch?v=EE-DRAeiHcg",
+    "description": "Learn practical tips for handling runtime exceptions effectively in TypeScript, making your applications more stable and easier to debug.",
+    "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript’s type narrowing is a powerful feature that helps you write safer code by refining types within conditional blocks. However, when dealing with complex conditional logic, you might encounter situations where TypeScript fails to narrow types as expected, causing type errors or loss of type information."
+        "value": "TypeScript is a powerful language that adds types to JavaScript, helping catch many bugs during development. However, no matter how well you type your code, runtime exceptions can still happen. These exceptions might be caused by unexpected input, network issues, or logic errors. Designing systems that handle these exceptions gracefully is critical for building resilient, user-friendly applications."
       },
       {
         "type": "paragraph",
-        "value": "This article will explain why these failures happen and how you can handle them effectively using beginner-friendly techniques."
+        "value": "In this article, we'll cover best practices for handling runtime exceptions in TypeScript, including the usage of try-catch blocks, custom error classes, and strategies to provide meaningful feedback to users or maintainers."
       },
       {
         "type": "paragraph",
-        "value": "### Why Type Narrowing Sometimes Fails"
+        "value": "### Use Try-Catch Blocks to Handle Known Exceptions"
       },
       {
         "type": "paragraph",
-        "value": "TypeScript narrows types based on the current block or condition checks such as typeof, instanceof, or user-defined type guards. However, in complex nested conditions, combined checks, or when dealing with union types, the compiler may lose track of specific information, causing it to fall back to a broader type."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's look at an example:"
+        "value": "When calling code that might throw an error, wrapping it in a try-catch block allows you to capture and handle these exceptions gracefully instead of letting your program crash."
       },
       {
         "type": "code",
-        "value": "type Animal = { kind: 'dog'; bark: () => void } | { kind: 'cat'; meow: () => void };\n\nfunction makeSound(animal: Animal) {\n  if (animal.kind === 'dog' || animal.kind === 'cat') {\n    // TypeScript narrows to Animal here\n    // But inside this block animal could be either dog or cat\n    \n    if ('bark' in animal) {\n      animal.bark(); // Works fine\n    } else if ('meow' in animal) {\n      animal.meow(); // Works fine\n    }\n  }\n}"
+        "value": "function parseJson(input: string) {\n  try {\n    const data = JSON.parse(input);\n    console.log('Parsing succeeded:', data);\n  } catch (error) {\n    console.error('Failed to parse JSON:', error);\n  }\n}\n\nparseJson('{ \"key\": \"value\" }'); // Works\nparseJson('invalid json'); // Catches error"
       },
       {
         "type": "paragraph",
-        "value": "Here the type narrowing works well because we checked the \"kind\" property first and then used presence checks. But consider when conditions get more intertwined or when you have more union members — TypeScript might not narrow correctly."
+        "value": "In this example, the `JSON.parse` method might throw an exception if input is not valid JSON. The try-catch block allows us to catch that exception and handle it (here, logging an error) instead of crashing."
       },
       {
         "type": "paragraph",
-        "value": "### How to Handle Narrowing Failures"
+        "value": "### Creating Custom Error Classes for More Context"
       },
       {
         "type": "paragraph",
-        "value": "Here are some practical strategies to overcome these issues:"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use User-defined Type Guards:** Create functions that clearly define and assert a type. This helps TypeScript understand exactly what you intend."
+        "value": "TypeScript allows you to create custom error classes that extend the built-in `Error` class. This helps you categorize and provide more meaningful information about errors."
       },
       {
         "type": "code",
-        "value": "function isDog(animal: Animal): animal is { kind: 'dog'; bark: () => void } {\n  return animal.kind === 'dog';\n}\n\nfunction makeSound(animal: Animal) {\n  if (isDog(animal)) {\n    animal.bark();\n  } else {\n    animal.meow();\n  }\n}"
+        "value": "class ValidationError extends Error {\n  constructor(message: string) {\n    super(message);\n    this.name = 'ValidationError';\n  }\n}\n\nfunction validateName(name: string) {\n  if (name.length < 3) {\n    throw new ValidationError('Name must be at least 3 characters long.');\n  }\n  console.log('Name is valid:', name);\n}\n\ntry {\n  validateName('Al');\n} catch (error) {\n  if (error instanceof ValidationError) {\n    console.error('Validation failed:', error.message);\n  } else {\n    console.error('Unexpected error:', error);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "2. **Break Complex Conditions into Smaller Checks:** Instead of combining multiple conditions in one if statement, split them to help TypeScript track types more easily."
-      },
-      {
-        "type": "code",
-        "value": "if (animal.kind === 'dog') {\n  animal.bark();\n} else if (animal.kind === 'cat') {\n  animal.meow();\n}"
+        "value": "By defining `ValidationError`, we can specifically check for validation problems and handle them differently than other errors. This improves error handling clarity and maintains code readability."
       },
       {
         "type": "paragraph",
-        "value": "3. **Use Exhaustive Checks with `never`:** When working with union types, adding an exhaustive check helps catch unhandled cases and assists the compiler."
-      },
-      {
-        "type": "code",
-        "value": "function makeSound(animal: Animal) {\n  switch (animal.kind) {\n    case 'dog':\n      animal.bark();\n      break;\n    case 'cat':\n      animal.meow();\n      break;\n    default:\n      const _exhaustiveCheck: never = animal;\n      return _exhaustiveCheck;\n  }\n}"
+        "value": "### Avoid Overusing Try-Catch Blocks"
       },
       {
         "type": "paragraph",
-        "value": "4. **Use Type Assertions Sparingly:** If you are absolutely certain about a variable's type but TypeScript cannot infer it, you can use type assertions (`as Type`). Use this carefully as it bypasses compiler safety."
+        "value": "While try-catch is valuable, overusing it can lead to complicated code. Only use try-catch around code that is likely to throw exceptions, such as parsing, network calls, or external APIs."
+      },
+      {
+        "type": "paragraph",
+        "value": "For other kinds of errors, consider using conditional checks and returning error objects or special types instead."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Async Errors Using async/await and try-catch"
+      },
+      {
+        "type": "paragraph",
+        "value": "For asynchronous code, errors should be caught using try-catch with async/await syntax to maintain readability:"
       },
       {
         "type": "code",
-        "value": "if (animal.kind === 'dog') {\n  (animal as { kind: 'dog'; bark: () => void }).bark();\n}"
+        "value": "async function fetchData(url: string) {\n  try {\n    const response = await fetch(url);\n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n  }\n}\n\nfetchData('https://api.example.com/data');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Logging and Monitoring Errors"
+      },
+      {
+        "type": "paragraph",
+        "value": "To maintain resilient systems, log errors with enough detail for diagnosis and use monitoring tools to alert you of issues early. Proper error messages help both users and developers."
       },
       {
         "type": "paragraph",
@@ -283,251 +303,287 @@
       },
       {
         "type": "paragraph",
-        "value": "Type narrowing failures happen due to TypeScript’s conservative type inference in complex conditions. By writing clear, simple conditions, using user-defined type guards, exhaustive checks, and occasionally type assertions, you can help TypeScript understand your data and avoid common type errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "Always strive for readability and safety in your type checks to get the most out of TypeScript's powerful static analysis capabilities."
+        "value": "Handling runtime exceptions gracefully in TypeScript involves anticipating errors, using try-catch wisely, creating custom errors for clarity, and properly handling asynchronous operations. These practices make your code more robust, easier to maintain, and improve user experience by preventing unexpected crashes."
       }
     ]
   },
   {
-    "slug": "mastering-pythons-metaclasses-deep-dive-into-dynamic-class-creation",
-    "title": "Mastering Python's Metaclasses: Deep Dive into Dynamic Class Creation",
+    "slug": "building-a-restful-api-with-fastapi-and-python-step-by-step-tutorial",
+    "title": "Building a RESTful API with FastAPI and Python: Step-by-Step Tutorial",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python metaclasses to create and customize classes dynamically. This beginner-friendly guide explains metaclasses, their basics, and practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
+    "description": "Learn how to create a simple RESTful API using FastAPI and Python. This step-by-step tutorial is perfect for beginners who want to build efficient APIs quickly.",
+    "videoUrl": "https://www.youtube.com/watch?v=iWS9ogMPOI0",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you have worked with Python classes, you might be familiar with the idea that classes themselves are objects. This opens the door to a powerful but often confusing feature: metaclasses. In simple terms, a metaclass is the \"class\" of a class. It defines how classes are created, allowing you to control their creation dynamically. This tutorial will guide you through the basics of Python metaclasses, explaining what they are, why they matter, and how to use them with clear examples."
+        "value": "APIs (Application Programming Interfaces) are essential for modern web and mobile applications. A RESTful API allows different software systems to communicate over HTTP. FastAPI is a modern, fast, and easy-to-use Python web framework for building APIs. In this tutorial, you will learn how to build a basic RESTful API with FastAPI from scratch."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Metaclass?\n\nIn Python, classes are instances of metaclasses. By default, all classes are instances of the built-in type metaclass (`type`). When you write a class statement, Python actually calls the metaclass to create that class. This allows for customization of class behavior right at the time the class is created."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's break it down:\n- **Instance**: An object created from a class.\n- **Class**: A blueprint for creating instances.\n- **Metaclass**: A blueprint for creating classes.\n\nIn simpler terms, just as a class creates objects, a metaclass creates classes."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why use Metaclasses?\n\nMetaclasses allow you to:\n- Dynamically modify or add attributes and methods to classes.\n- Enforce coding standards or constraints on classes.\n- Automatically register classes in a system.\n- Implement Singleton patterns or other custom behaviors at a class level.\n\nFor example, suppose you want to ensure that all your classes have a specific method or attribute. A metaclass can automate that check or addition without manually modifying each class."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Creating a Simple Metaclass\n\nTo create a metaclass, you typically inherit from the built-in `type` metaclass and override some of its methods, most commonly `__new__` or `__init__`. Here is how you can create and use a simple metaclass."
+        "value": "### Step 1: Install FastAPI and Uvicorn\nFirst, you need to install FastAPI and a server called Uvicorn to run your API. You can install them using pip:"
       },
       {
         "type": "code",
-        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name} with MyMeta metaclass\")\n        # Optionally add or modify class attributes\n        dct['created_by_meta'] = True\n        return super().__new__(cls, name, bases, dct)\n\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\nprint(MyClass.created_by_meta)  # Output: True"
+        "value": "pip install fastapi uvicorn"
       },
       {
         "type": "paragraph",
-        "value": "In this example:\n- `MyMeta` inherits from `type`.\n- The `__new__` method is called when a new class is created.\n- Inside `__new__`, we print a message and add a class attribute `created_by_meta`.\n- `MyClass` uses `MyMeta` as its metaclass by specifying `metaclass=MyMeta`.\n- When `MyClass` is created, the message prints, and `created_by_meta` exists on the class."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Customizing Class Creation\n\nYou can perform more complex actions, like automatically registering classes in a central registry. This is helpful in frameworks or plugins where you want to keep track of all subclasses automatically."
+        "value": "### Step 2: Create Your First FastAPI Application\nCreate a new Python file called `main.py`. This file will contain your API code. Start by importing FastAPI and creating an app instance."
       },
       {
         "type": "code",
-        "value": "class RegistryMeta(type):\n    registry = {}\n\n    def __new__(cls, name, bases, dct):\n        new_cls = super().__new__(cls, name, bases, dct)\n        if name != 'Base':  # Avoid registering base class itself\n            cls.registry[name] = new_cls\n        return new_cls\n\n\nclass Base(metaclass=RegistryMeta):\n    pass\n\n\nclass PluginA(Base):\n    pass\n\n\nclass PluginB(Base):\n    pass\n\nprint(RegistryMeta.registry)  # {'PluginA': <class '__main__.PluginA'>, 'PluginB': <class '__main__.PluginB'>}"
+        "value": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"Hello, FastAPI!\"}"
       },
       {
         "type": "paragraph",
-        "value": "Here, the `RegistryMeta` metaclass keeps a dictionary of all classes created that inherit from `Base`. This way, you can automatically discover all plugins or subclasses without manually adding them."
+        "value": "This code creates a simple API with one endpoint (`/`). When you visit this endpoint, it returns a JSON response with the message `Hello, FastAPI!`."
       },
       {
         "type": "paragraph",
-        "value": "### Important Notes for Beginners\n\n- Most Python code does not require metaclasses—use them only when you have a solid reason.\n- Always inherit your metaclasses from `type`.\n- The `__new__` method of a metaclass is where the class object is created.\n- Use `super().__new__` to ensure proper creation of the class.\n\n### Summary\n\nMetaclasses let you control class creation dynamically in Python. They are the \"classes of classes,\" enabling you to add attributes, enforce rules, or register classes automatically. While powerful, they should be used thoughtfully as they can make code harder to understand."
+        "value": "### Step 3: Run Your API Server\nTo run the API server, use Uvicorn from the terminal:"
+      },
+      {
+        "type": "code",
+        "value": "uvicorn main:app --reload"
       },
       {
         "type": "paragraph",
-        "value": "By mastering metaclasses, you unlock advanced Python capabilities that power many frameworks and libraries. Keep experimenting with simple examples, and soon dynamic class creation will become a useful tool in your Python toolkit."
+        "value": "The `--reload` flag automatically reloads the server when you make code changes, which is handy during development. Open your browser and go to [http://127.0.0.1:8000](http://127.0.0.1:8000) to see the response."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Define a Data Model Using Pydantic\nFastAPI uses Pydantic to validate and serialize data. Let's create a simple model for a `Book` with a title and author."
+      },
+      {
+        "type": "code",
+        "value": "from pydantic import BaseModel\n\nclass Book(BaseModel):\n    title: str\n    author: str"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Create CRUD Endpoints\nLet's create endpoints to add and read books stored in memory. We'll use a list to keep our books."
+      },
+      {
+        "type": "code",
+        "value": "books = []  # Our in-memory database\n\n@app.post(\"/books/\")\ndef create_book(book: Book):\n    books.append(book)\n    return book\n\n@app.get(\"/books/\")\ndef get_books():\n    return books"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `POST /books/` endpoint allows clients to add a new book, and the `GET /books/` endpoint returns the list of all books."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Test Your API\nWith the server running, you can test your API using tools like curl, Postman, or directly from the interactive docs FastAPI generates."
+      },
+      {
+        "type": "paragraph",
+        "value": "Open your browser at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) to access the automatically generated Swagger UI. You can use it to try your `/books/` endpoints easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nYou have now built a simple RESTful API using FastAPI. From here, you can expand your API by connecting to databases, adding authentication, or deploying your app to the cloud. FastAPI’s simplicity and power make it a great choice for building APIs efficiently."
       }
     ]
   },
   {
-    "slug": "harnessing-pythons-context-managers-to-handle-resource-cleanup-errors-gracefully",
-    "title": "Harnessing Python's Context Managers to Handle Resource Cleanup Errors Gracefully",
+    "slug": "designing-fault-tolerant-systems-python-error-resilience",
+    "title": "Designing Fault-Tolerant Systems in Python: Best Practices for Error Resilience",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to use Python's context managers to manage resources efficiently and handle cleanup errors smoothly, making your code more robust and beginner-friendly.",
-    "videoUrl": "",
+    "description": "Learn how to design fault-tolerant systems in Python by applying best practices for error handling and recovery to build robust, resilient applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=3Lis4w4_bBc",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing Python programs, managing resources like files, network connections, or locks is crucial. Failing to release these resources can lead to bugs and resource leaks. Python's context managers offer a neat and reliable way to handle resource cleanup automatically. In this article, we'll explore how to use context managers and how to handle errors that might occur during resource cleanup gracefully."
+        "value": "Fault-tolerant systems are designed to continue operating smoothly even when problems occur, such as unexpected errors or hardware failures. In Python, creating fault-tolerant applications involves writing code that anticipates possible failures and handles them gracefully. This article introduces beginner-friendly techniques for improving error resilience in your Python programs."
       },
       {
         "type": "paragraph",
-        "value": "A context manager in Python is usually used with the `with` statement. It guarantees that a resource is properly acquired and released, even if an error happens during the block execution. For example, opening and closing files safely is easily managed using a context manager."
+        "value": "The first step in fault tolerance is to use proper exception handling. Python provides try-except blocks to catch and respond to errors instead of letting the program crash. Aim to catch specific exceptions to avoid masking other issues."
       },
       {
         "type": "code",
-        "value": "with open('example.txt', 'w') as file:\n    file.write('Hello, world!')"
+        "value": "try:\n    result = 10 / user_input\nexcept ZeroDivisionError:\n    print('Cannot divide by zero! Please provide a valid number.')\nexcept TypeError:\n    print('Invalid input type! Please enter a number.')"
       },
       {
         "type": "paragraph",
-        "value": "In this snippet, Python automatically closes the file after the `with` block, even if an error occurs inside the block. This is much safer than manually opening and closing files."
-      },
-      {
-        "type": "paragraph",
-        "value": "Sometimes, however, errors can occur during the cleanup process itself, that is when the resource is being released. By default, if the cleanup code raises an exception, it might overwrite the original exception or cause unexpected crashes. Python allows you to handle this gracefully by customizing the `__exit__` method in your own context manager."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's create a simple context manager class that demonstrates handling errors during cleanup:"
+        "value": "Another best practice is to validate inputs before processing. Validations prevent errors by checking data early and ensuring it meets expected criteria."
       },
       {
         "type": "code",
-        "value": "class SafeResource:\n    def __enter__(self):\n        print('Resource acquired')\n        return self\n\n    def __exit__(self, exc_type, exc_value, traceback):\n        try:\n            print('Cleaning up resource')\n            # Simulated cleanup that raises an error\n            raise RuntimeError('Cleanup failed!')\n        except Exception as cleanup_error:\n            print(f'Error during cleanup: {cleanup_error}')\n            # Suppress the cleanup error to not override original exceptions\n            # Return False if you want the cleanup error to propagate\n        # Returning False lets exceptions from the with block propagate\n        return False\n\n# Using the context manager\ntry:\n    with SafeResource() as res:\n        print('Doing work with resource')\n        raise ValueError('Oops! Something went wrong')\nexcept Exception as e:\n    print(f'Caught exception: {e}')"
+        "value": "def get_positive_number():\n    while True:\n        try:\n            value = int(input('Enter a positive number: '))\n            if value <= 0:\n                print('Number must be positive.')\n            else:\n                return value\n        except ValueError:\n            print('Invalid input, please enter an integer.')"
       },
       {
         "type": "paragraph",
-        "value": "In this example, our `SafeResource` context manager prints a message when acquiring and cleaning up the resource. The cleanup step intentionally raises an error. However, this error is caught and handled inside the `__exit__` method so it won't mask the original exception from the `with` block."
-      },
-      {
-        "type": "paragraph",
-        "value": "Notice that we return `False` from `__exit__`. Returning `False` tells Python to propagate any exception that occurred inside the `with` block (in this case, the `ValueError`). The cleanup error is logged but does not stop the program or hide the main error."
-      },
-      {
-        "type": "paragraph",
-        "value": "This pattern helps you handle resource cleanup errors gracefully without losing important debugging information. It’s especially useful when working with more complex resources where cleanup might fail for various reasons."
-      },
-      {
-        "type": "paragraph",
-        "value": "You can also use the `contextlib` module to create simple context managers without writing a full class. Here's how you can catch cleanup errors using a generator-based context manager:"
+        "value": "Retrying operations that may fail temporarily can enhance reliability. For example, network requests can be wrapped in retry loops with delays."
       },
       {
         "type": "code",
-        "value": "from contextlib import contextmanager\n\n@contextmanager\ndef safe_resource():\n    print('Resource acquired')\n    try:\n        yield\n    finally:\n        try:\n            print('Cleaning up resource')\n            raise RuntimeError('Cleanup failed!')\n        except Exception as cleanup_error:\n            print(f'Error during cleanup: {cleanup_error}')\n\n\ntry:\n    with safe_resource():\n        print('Doing work with resource')\n        raise ValueError('Oops! Something went wrong')\nexcept Exception as e:\n    print(f'Caught exception: {e}')"
+        "value": "import time\n\ndef fetch_data(url, retries=3):\n    for attempt in range(retries):\n        try:\n            # Simulate network request\n            response = some_network_function(url)\n            return response\n        except ConnectionError:\n            print(f'Retry {attempt + 1} failed. Retrying...')\n            time.sleep(2)\n    print('All retries failed.')"
       },
       {
         "type": "paragraph",
-        "value": "In this version, the cleanup happens in the `finally` block of the generator context manager. The cleanup error is caught and logged separately, so the original exception still propagates outside the `with` block."
+        "value": "Finally, using logging rather than print statements can help monitor and diagnose errors in production environments. Python’s built-in logging module allows you to record errors with different severity levels."
+      },
+      {
+        "type": "code",
+        "value": "import logging\n\nlogging.basicConfig(level=logging.ERROR, filename='app.log')\n\ntry:\n    risky_operation()\nexcept Exception as e:\n    logging.error(f'Error occurred: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "Using context managers to handle both resource management and error handling during cleanup keeps your code cleaner, safer, and easier to maintain. As you encounter more sophisticated resources or complex cleanup logic, this skill will become increasingly valuable."
+        "value": "In summary, designing fault-tolerant systems in Python involves anticipating errors, validating inputs, implementing retries, and using logging for error tracing. These best practices help you build robust and user-friendly applications that handle failures gracefully."
       }
     ]
   },
   {
-    "slug": "optimizing-complex-sql-queries-with-window-functions",
-    "title": "Optimizing Complex SQL Queries with Window Functions: A Step-by-Step Guide",
+    "slug": "comparing-window-functions-vs-aggregate-functions-in-sql",
+    "title": "Comparing Window Functions vs. Aggregate Functions in SQL for Advanced Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to simplify and speed up your complex SQL queries by using powerful window functions with this beginner-friendly, step-by-step tutorial.",
+    "description": "Learn the key differences between window functions and aggregate functions in SQL with beginner-friendly examples to enhance your data analysis skills.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you're working with SQL queries, especially those involving aggregates and detailed row-level data, your queries can quickly become complex and slow. Window functions are a game-changer because they allow you to perform advanced calculations across sets of rows related to the current row without collapsing the output like GROUP BY does. In this guide, you'll learn how to optimize your complex queries using window functions with practical examples."
+        "value": "When working with SQL for data analysis, understanding how to summarize and analyze data efficiently is crucial. Two important concepts that often confuse beginners are window functions and aggregate functions. Both help you perform calculations and aggregations, but they work differently and serve unique purposes."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a common scenario: you have a sales table, and you want to calculate each salesperson's total sales, their rank among their peers, and calculate running totals—all in a single query."
+        "value": "Aggregate functions like SUM(), COUNT(), AVG(), MAX(), and MIN() combine multiple rows of data into a single result for each group of rows. They are often used with the GROUP BY clause to summarize data. On the other hand, window functions perform calculations across a set of table rows related to the current row without collapsing the results into a single output row."
       },
       {
         "type": "paragraph",
-        "value": "Here's a simplified sales table structure:"
+        "value": "Let's explore the differences with simple examples using a sales table that contains the following columns: `id`, `employee`, `department`, and `sales_amount`."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n  salesperson_id INT,\n  sale_date DATE,\n  amount DECIMAL(10, 2)\n);"
+        "value": "SELECT department, SUM(sales_amount) AS total_sales\nFROM sales\nGROUP BY department;"
       },
       {
         "type": "paragraph",
-        "value": "Suppose you want the following in your results:\n- Each sale's data\n- Total sales amount per salesperson\n- Rank of each sale amount within the salesperson's sales\n- Running total of sales for each salesperson ordered by date"
-      },
-      {
-        "type": "paragraph",
-        "value": "Without window functions, you might write subqueries or multiple joins that make the query hard to read and inefficient. Window functions let you calculate these values alongside your original data easily."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a query that uses window functions to achieve this:"
+        "value": "The above query uses the aggregate function SUM() to calculate total sales for each department. The result returns one row per department with the sum of sales_amount for that group."
       },
       {
         "type": "code",
-        "value": "SELECT\n  salesperson_id,\n  sale_date,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson_id) AS total_sales,\n  RANK() OVER (PARTITION BY salesperson_id ORDER BY amount DESC) AS rank_sale,\n  SUM(amount) OVER (PARTITION BY salesperson_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales\nORDER BY salesperson_id, sale_date;"
+        "value": "SELECT id, employee, department, sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY department) AS total_sales_by_dept\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "Let's break down the key parts:\n- The PARTITION BY clause groups the data by salesperson_id so calculations reset for each salesperson.\n- SUM(amount) OVER (...) calculates total sales per salesperson.\n- RANK() OVER (...) assigns a rank to each sale amount per salesperson, with the highest sales ranked first.\n- The running total sums sales up to the current row ordered by sale_date.\n\nThis results in an efficient, readable query producing detailed insights."
+        "value": "This query uses the window function SUM() with the OVER() clause. It calculates the sum of sales_amount for each department but returns all rows without collapsing them. You get total sales per department repeated on each row belonging to that department alongside individual sale records."
       },
       {
         "type": "paragraph",
-        "value": "### Benefits of Using Window Functions\n\n- **Performance:** Window functions avoid costly joins and subqueries, improving speed.\n- **Readability:** Your SQL becomes cleaner and easier to maintain.\n- **Flexibility:** You can perform multiple aggregations and rankings in one query."
+        "value": "Here are key points to remember:"
       },
       {
         "type": "paragraph",
-        "value": "### Tips for Beginners\n\n- Start by understanding aggregate functions like SUM(), AVG(), and RANK().\n- Learn how PARTITION BY works to group data inside the window.\n- Use ORDER BY inside window functions to control calculation order.\n- Test queries on small data samples to see how window functions affect results."
+        "value": "1. Aggregate functions group rows and return a single result per group, often reducing the number of rows.\n2. Window functions calculate results across rows related to the current row and return the same number of rows as the input.\n3. Window functions are useful for running totals, rankings, moving averages, and comparisons within groups without losing row-level details."
       },
       {
         "type": "paragraph",
-        "value": "By mastering window functions, you'll be able to optimize complex SQL queries significantly, making your data analysis faster and easier."
+        "value": "For example, to rank employees by sales within their departments, window functions are very effective:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, employee, department, sales_amount,\n       RANK() OVER (PARTITION BY department ORDER BY sales_amount DESC) AS sales_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This shows each employee's sales rank within their department without grouping the data. It is impossible to produce the same result with aggregate functions alone."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, use aggregate functions when you want summarized data by groups, and use window functions when you want to keep row-level details but still perform computations across related rows. Mastering these can greatly enhance your SQL data analysis capabilities."
       }
     ]
   },
   {
-    "slug": "understanding-sql-nulls-common-misconceptions-and-how-to-handle-them",
-    "title": "Understanding SQL NULLs: Common Misconceptions and How to Handle Them",
+    "slug": "optimizing-transaction-isolation-levels-sql-performance-data-integrity",
+    "title": "Optimizing Transaction Isolation Levels to Balance Performance and Data Integrity in SQL",
     "language": "sql",
     "type": "errors",
-    "description": "Learn the basics of SQL NULLs, common misunderstandings, and practical tips on how to work with NULL values effectively.",
-    "videoUrl": "https://www.youtube.com/watch?v=vV_tqFVLqYA",
+    "description": "Learn how to optimize SQL transaction isolation levels to improve database performance while maintaining data integrity, with beginner-friendly explanations and error handling tips.",
+    "videoUrl": "https://www.youtube.com/watch?v=bqrPeBWf9ZY",
     "content": [
       {
         "type": "paragraph",
-        "value": "In SQL, NULL represents the absence of a value or an unknown value in a database column. It's a special marker, not a regular data value, and it often causes confusion for beginners because it behaves differently compared to other values."
+        "value": "When working with databases in SQL, transactions help ensure your data remains consistent and accurate. However, the way transactions isolate themselves from others—known as the isolation level—can impact both performance and correctness of your data operations. Understanding and optimizing these isolation levels is essential, especially for beginners, to avoid common errors like deadlocks or dirty reads."
       },
       {
         "type": "paragraph",
-        "value": "A common misconception is that NULL is the same as zero (0) or an empty string (''). However, NULL means no value at all—not zero, not blank. This distinction is important when writing queries and handling data."
+        "value": "Transaction isolation levels define how visible the changes made in one transaction are to other concurrent transactions. SQL supports several levels, each providing a trade-off between performance and data integrity."
       },
       {
         "type": "paragraph",
-        "value": "For example, when comparing NULL to other values using the usual comparison operators like = or !=, the result is always UNKNOWN. This means the condition will not evaluate to TRUE, and rows containing NULL may be skipped unexpectedly."
+        "value": "Here are the common isolation levels in SQL along with their key characteristics:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- READ UNCOMMITTED: The lowest level, where transactions can see uncommitted changes made by others (dirty reads). Fast but risky."
+      },
+      {
+        "type": "paragraph",
+        "value": "- READ COMMITTED: Prevents dirty reads by only seeing committed changes. It allows non-repeatable reads and phantom reads."
+      },
+      {
+        "type": "paragraph",
+        "value": "- REPEATABLE READ: Prevents dirty and non-repeatable reads by holding shared locks. Phantom reads can still occur."
+      },
+      {
+        "type": "paragraph",
+        "value": "- SERIALIZABLE: The highest level. It prevents dirty reads, non-repeatable reads, and phantom reads by serializing transactions but can slow down performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Setting the correct isolation level depends on your application needs:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. For applications where performance is critical and small inconsistencies are acceptable (like analytics), READ UNCOMMITTED or READ COMMITTED might be enough."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. For financial or inventory systems where accuracy is critical, REPEATABLE READ or SERIALIZABLE levels ensure higher data integrity but can slow down concurrent transactions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can set the isolation level in SQL Server:"
       },
       {
         "type": "code",
-        "value": "SELECT * FROM employees WHERE manager_id = NULL;"
+        "value": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED;\nBEGIN TRANSACTION;\n-- Your SQL statements go here\nCOMMIT TRANSACTION;"
       },
       {
         "type": "paragraph",
-        "value": "The above query will not return any rows, even if some employees have a NULL manager_id. To properly check for NULLs, use the IS NULL or IS NOT NULL operator:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM employees WHERE manager_id IS NULL;"
+        "value": "For example, if you want to prevent dirty reads but still maintain good performance, using READ COMMITTED as above is a good start."
       },
       {
         "type": "paragraph",
-        "value": "Similarly, to check if a value is not NULL, use IS NOT NULL:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM employees WHERE manager_id IS NOT NULL;"
+        "value": "Common errors related to transaction isolation levels include deadlocks and lost updates. Deadlocks occur when two transactions wait indefinitely for each other’s locks. To minimize this, keep transactions short and avoid user interaction during transactions."
       },
       {
         "type": "paragraph",
-        "value": "Another useful tip is using functions like COALESCE or IFNULL to handle NULL values by providing a default value. For example, if you want to display 'No Manager' instead of NULL in your query results, you can write:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT employee_name, COALESCE(manager_id, 'No Manager') AS manager FROM employees;"
+        "value": "Lost updates happen when two transactions overwrite each other's changes. Higher isolation levels or row versioning can help avoid this issue."
       },
       {
         "type": "paragraph",
-        "value": "In summary, remember these key points about NULLs in SQL:\n- NULL means no or unknown value, not zero or empty string.\n- Use IS NULL or IS NOT NULL to test for NULL values.\n- Use COALESCE or IFNULL to replace NULLs with default values.\n- Comparisons involving NULL (like = NULL) do not work as expected."
+        "value": "In summary, balancing between performance and data integrity involves:"
       },
       {
         "type": "paragraph",
-        "value": "By understanding how NULL works and correctly handling it in your queries, you can avoid common pitfalls and make your SQL data processing more accurate and reliable."
+        "value": "- Choosing the appropriate isolation level based on your need for accuracy vs. performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Testing your transactions under load to identify possible locking conflicts or inconsistencies."
+      },
+      {
+        "type": "paragraph",
+        "value": "- Monitoring for errors such as deadlocks and addressing them by optimizing transaction design."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding how isolation levels affect your SQL transactions, you can write more robust and efficient database code that keeps your application reliable and fast."
       }
     ]
   }
