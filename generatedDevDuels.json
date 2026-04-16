@@ -1,180 +1,170 @@
 [
   {
-    "slug": "build-a-memoized-async-function-runner-with-concurrency-control",
-    "title": "Build a Memoized Async Function Runner with Concurrency Control",
-    "language": "javascript",
-    "difficulty": "advanced",
-    "category": "functions",
-    "description": "Create an advanced utility function in JavaScript that memoizes asynchronous functions and limits their concurrency, optimizing performance and resource usage.",
-    "prompt": "Write a function `memoizedAsyncRunner` that accepts an asynchronous function `asyncFn` and a concurrency limit `maxConcurrent` as arguments. This function should return a new function with the following behavior: 1) It memoizes results so that multiple calls with the same arguments return cached promises instead of triggering new executions. 2) It enforces a maximum number of concurrent executions (`maxConcurrent`). If the concurrency limit is reached, additional calls are queued and executed in order once previous calls complete. 3) Supports arguments of any JSON-serializable type, using those as memoization keys. Ensure it handles rejection correctly and does not cache rejected promises. The returned function should preserve the async nature and resolve to the original asyncFn's result. Implement this with maximum efficiency for high-concurrency environments.",
-    "guidance": [
-      "Use a Map to store memoized promises keyed by JSON-stringified arguments.",
-      "Use a queue to track calls waiting to execute when concurrency limit is exceeded.",
-      "Ensure errors from the async function clear the cache for the relevant key.",
-      "Use async/await syntax and carefully manage concurrency counters."
-    ],
-    "hints": [
-      "Consider maintaining a 'running count' of active asyncFn calls to check before proceeding.",
-      "To queue calls, return a Promise that resolves when execution starts and completes.",
-      "Be careful when JSON-stringifying arguments to handle edge cases like nested objects properly."
-    ],
-    "starterCode": "function memoizedAsyncRunner(asyncFn, maxConcurrent) {\n  // Your implementation here\n}\n\n// Example usage:\n// const memoizedFetch = memoizedAsyncRunner(fetchData, 3);",
-    "expectedOutput": "Calling the returned function multiple times with the same arguments should return the cached Promise.\nNo more than maxConcurrent Promises should be running concurrently.\nRejected Promises should not be cached, allowing retry.",
-    "concepts": [
-      "asynchronous programming",
-      "memoization",
-      "concurrency control",
-      "promise management"
-    ],
-    "estimatedTime": "20 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-legacy-c-code-to-enhance-readability-and-performance",
-    "title": "Refactor Legacy C++ Code to Enhance Readability and Performance",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "code-quality",
-    "description": "Given a legacy C++ function that processes and filters a vector of user data with multiple nested loops and repeated conditions, refactor the code to improve readability, reduce complexity, and optimize performance while preserving the original behavior.",
-    "prompt": "You are provided with a legacy C++ function that takes a vector of users (with name, age, and score) and returns a filtered vector based on complex criteria. The original code contains nested loops, repeated conditions, and unnecessary copies. Refactor the function to improve code clarity, reduce complexity, and enhance performance without changing the output. Keep the function signature the same. Write clean, modern C++ code using best practices.",
-    "guidance": [
-      "Analyze the current nested loops and condition checks to identify redundancies.",
-      "Use STL algorithms and standard library features to simplify code.",
-      "Avoid unnecessary copying of objects by using references and move semantics where appropriate.",
-      "Ensure the refactored function returns the exact same filtered results as the original."
-    ],
-    "hints": [
-      "Consider using std::copy_if or std::remove_if combined with lambda expressions to simplify filtering.",
-      "Use structured bindings and const references for better readability and efficiency.",
-      "Break down complex conditions into well-named boolean variables or helper functions."
-    ],
-    "starterCode": "#include <vector>\n#include <string>\n\nstruct User {\n    std::string name;\n    int age;\n    double score;\n};\n\nstd::vector<User> filterUsers(const std::vector<User>& users) {\n    std::vector<User> result;\n    for (size_t i = 0; i < users.size(); ++i) {\n        if (users[i].age > 18) {\n            for (size_t j = 0; j < users.size(); ++j) {\n                if (j != i) {\n                    if (users[j].score > 50.0) {\n                        if (users[i].score > 70.0) {\n                            result.push_back(users[i]);\n                            break;\n                        }\n                    }\n                }\n            }\n        }\n    }\n    return result;\n}\n",
-    "expectedOutput": "The refactored function returns a vector of Users from the input where the user's age is greater than 18, the user has score above 70, and there exists at least one other user with score above 50. The output matches exactly what the original function would produce but with cleaner, more efficient code.",
-    "concepts": [
-      "C++ STL algorithms",
-      "code refactoring",
-      "performance optimization",
-      "modern C++ best practices"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "fix-the-join-logic-to-correctly-aggregate-sales-by-customer",
-    "title": "Fix the Join Logic to Correctly Aggregate Sales by Customer",
+    "slug": "build-a-function-to-calculate-users-average-monthly-orders",
+    "title": "Build a Function to Calculate User's Average Monthly Orders",
     "language": "sql",
     "difficulty": "intermediate",
-    "category": "debugging",
-    "description": "This challenge asks you to debug a broken SQL query intended to calculate total sales per customer by joining sales and customers tables. The existing query returns incorrect aggregates due to an erroneous join and grouping logic.",
-    "prompt": "You are given two tables: `customers` and `sales`.\n\n- `customers` has columns: `customer_id`, `customer_name`.\n- `sales` has columns: `sale_id`, `customer_id`, `amount`.\n\nThe current query aims to calculate the total sales amount per customer but returns incorrect results because of bugs in the join and grouping logic.\n\nFix the query so that it correctly computes the total sales amount for each customer, including customers with zero sales.\n\nHere is the broken query:\n\nSELECT c.customer_name, SUM(s.amount) AS total_sales\nFROM customers c\nJOIN sales s ON c.customer_id = s.sale_id\nGROUP BY c.customer_id;",
+    "category": "queries",
+    "description": "Write an SQL function that calculates the average number of orders a user places per month based on an orders table with timestamps.",
+    "prompt": "Create an SQL function named get_avg_monthly_orders(user_id INT) that returns the average number of orders placed by the specified user per month. Use the `orders` table which contains columns `order_id`, `user_id`, and `order_date` (DATE or TIMESTAMP). The function should consider all available order data for that user and calculate their monthly order average rounded to two decimal places.",
     "guidance": [
-      "Check the join condition between `customers` and `sales`, ensuring the correct keys are matched.",
-      "Use the appropriate JOIN type to include customers with no sales.",
-      "Ensure the GROUP BY clause contains the correct columns for aggregation."
+      "Aggregate orders by month and user to get total orders per month.",
+      "Calculate the average over the months where the user placed orders.",
+      "Handle cases where the user has no orders by returning 0."
     ],
     "hints": [
-      "The join condition currently matches customer_id to sale_id, which is incorrect.",
-      "Consider using a LEFT JOIN to include customers with no matching sales entries.",
-      "GROUP BY should match any non-aggregated columns in the SELECT statement."
+      "Use SQL date functions like EXTRACT(YEAR FROM order_date) and EXTRACT(MONTH FROM order_date) to group by months.",
+      "COUNT and AVG aggregate functions will be useful to calculate orders and their average.",
+      "Consider using ROUND() to format the average value to two decimal places."
     ],
-    "starterCode": "SELECT c.customer_name, SUM(s.amount) AS total_sales\nFROM customers c\nJOIN sales s ON c.customer_id = s.sale_id\nGROUP BY c.customer_id;",
-    "expectedOutput": "A list of customer names with their corresponding total sales amounts. Customers without sales should appear with a total_sales amount of NULL or 0.\n\nExample:\ncustomer_name | total_sales\n--------------|------------\nAlice         | 1500\nBob           | 0\nCharlie       | 230",
+    "starterCode": "CREATE FUNCTION get_avg_monthly_orders(user_id INT) RETURNS FLOAT AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "For example, for user_id = 5, the function should return a float representing the average monthly orders, e.g. 3.42",
     "concepts": [
-      "SQL JOINs",
-      "GROUP BY clause",
-      "Aggregation functions",
-      "Debugging SQL queries"
+      "aggregations",
+      "date functions",
+      "user-defined functions"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-bug-in-optimized-matrix-chain-multiplication-implementation",
-    "title": "Fix Bug in Optimized Matrix Chain Multiplication Implementation",
-    "language": "cpp",
+    "slug": "fix-bug-in-advanced-recursive-directory-size-calculator",
+    "title": "Fix Bug in Advanced Recursive Directory Size Calculator",
+    "language": "python",
     "difficulty": "advanced",
     "category": "debugging",
-    "description": "The provided C++ code implements the Matrix Chain Multiplication algorithm using dynamic programming to find the minimum number of scalar multiplications needed to multiply a chain of matrices. However, the current implementation contains bugs that lead to incorrect results and occasional runtime errors. Your task is to identify and fix these bugs so the algorithm returns correct and optimized results.",
-    "prompt": "You are given a broken implementation of the Matrix Chain Multiplication problem that aims to find the minimum cost of multiplying a sequence of matrices. The input is an array representing the dimensions of the matrices. The function should return the minimum number of scalar multiplications needed. Fix the bugs related to array indexing, loop boundaries, and initialization to ensure correct results and efficient runtime.",
+    "description": "Debug and correct a broken Python function designed to recursively compute total file sizes in nested directory structures represented as dictionaries.",
+    "prompt": "You are given a Python function that attempts to recursively calculate the total size of files in a nested directory-like dictionary structure. Each directory is represented by a dictionary where keys are names and values are either integers (file sizes in bytes) or nested dictionaries (subdirectories). The function intends to sum all file sizes under a given directory but currently returns incorrect results or throws errors for certain inputs. Your task is to debug and fix the function so that it correctly computes the total file size for any valid nested directory structure.",
     "guidance": [
-      "Carefully check your indexing in the nested loops controlling subproblems.",
-      "Verify initialization of your DP table so intermediate values are set correctly before computation.",
-      "Trace through a simple example to confirm your fixes result in correct minimum costs."
+      "Consider how the function differentiates between files (integers) and subdirectories (dictionaries).",
+      "Check for missing or incorrect recursive calls and aggregation logic.",
+      "Ensure the function handles edge cases like empty directories or mixed types correctly."
     ],
     "hints": [
-      "Remember that matrices Ai has dimensions p[i-1] x p[i], so your loops must consider these indices carefully.",
-      "Initialize the diagonal of the cost matrix to zero as multiplying one matrix costs nothing.",
-      "Check the inner loop that partitions the matrix chain — off-by-one errors are common here."
+      "Use the built-in isinstance() function to distinguish between integers and dictionaries.",
+      "Verify that the recursive call returns a numerical value to be added to the running total.",
+      "Watch out for the case where the directory dictionary might be empty, which should return zero size."
     ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <climits>\nusing namespace std;\n\nint matrixChainMultiplication(const vector<int> &p) {\n    int n = p.size();\n    vector<vector<int>> dp(n, vector<int>(n, 0));\n\n    for (int len = 2; len <= n; ++len) {\n        for (int i = 1; i < n - len + 1; ++i) {\n            int j = i + len - 1;\n            dp[i][j] = INT_MAX;\n            for (int k = i; k < j; ++k) {\n                int cost = dp[i][k] + dp[k + 1][j] + p[i] * p[k + 1] * p[j + 1];\n                if (cost < dp[i][j]) {\n                    dp[i][j] = cost;\n                }\n            }\n        }\n    }\n    return dp[1][n - 1];\n}\n\nint main() {\n    vector<int> dims = {40, 20, 30, 10, 30};\n    cout << matrixChainMultiplication(dims) << endl;\n    return 0;\n}",
-    "expectedOutput": "26000",
+    "starterCode": "def calculate_directory_size(directory):\n    total_size = 0\n    for item in directory:\n        if type(directory[item]) == dict:\n            total_size += calculate_directory_size(item)\n        else:\n            total_size += directory[item]\n    return total_size",
+    "expectedOutput": "For input:\n{\n  'file1.txt': 1000,\n  'subfolder': {\n    'file2.txt': 2000,\n    'file3.txt': 3000,\n    'nested': {\n      'file4.txt': 1500\n    }\n  },\n  'file5.txt': 500\n}\nThe function should return: 8000",
     "concepts": [
-      "dynamic programming",
-      "matrix chain multiplication",
-      "array indexing",
-      "algorithm debugging"
+      "recursion",
+      "type checking",
+      "dictionary traversal",
+      "debugging"
     ],
     "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "advanced-multi-threaded-file-search-and-filter-utility-in-c",
-    "title": "Advanced Multi-Threaded File Search and Filter Utility in C++",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build a high-performance, multi-threaded C++ utility to recursively search through directories for files matching specific content and metadata filters, then output a summary report. This mini-project will test your architectural design, concurrency control, file I/O, and advanced C++ skills.",
-    "prompt": "Create a C++ program that recursively searches a given directory for files containing a specified keyword within their content. Your utility must support filtering results by file extension(s), minimum and maximum file size, and last modified date range. Implement efficient multi-threading to utilize all available CPU cores for scanning files concurrently. At the end, generate a summary report listing all matched files with their path, size, last modified timestamp, and a snippet of the matched content surrounding the keyword in each file. Handle errors gracefully and optimize for large directory structures with potentially thousands of files.",
-    "guidance": [
-      "Use std::filesystem for directory traversal and metadata extraction.",
-      "Implement thread pools or std::async with concurrency safety to parallelize file reading and filtering.",
-      "To extract snippets with the keyword, read partial file content around the first match instead of loading entire files into memory.",
-      "Carefully design data structures to safely aggregate results from different threads and avoid race conditions."
-    ],
-    "hints": [
-      "Consider using std::mutex, std::lock_guard, or concurrent queues for thread-safe result storage.",
-      "Minimize disk IO by filtering metadata before reading file content wherever possible.",
-      "Split directory traversal and file reading/filtering into separate phases to improve concurrency and error isolation."
-    ],
-    "starterCode": "#include <filesystem>\n#include <iostream>\n#include <vector>\n#include <string>\n#include <mutex>\n#include <thread>\n#include <future>\n\n// Define a struct to hold file match information\nstruct FileMatch {\n    std::filesystem::path filePath;\n    std::uintmax_t fileSize;\n    std::filesystem::file_time_type lastModified;\n    std::string snippet;\n};\n\n// Function declarations\nstd::vector<std::filesystem::path> recursiveFileSearch(const std::filesystem::path& dir);\nbool fileContainsKeyword(const std::filesystem::path& filePath, const std::string& keyword, std::string& snippet);\n\nint main() {\n    // TODO: Implement argument parsing, threading logic, filtering, and reporting\n    std::cout << \"Implement the multi-threaded file search and filter utility here.\" << std::endl;\n    return 0;\n}",
-    "expectedOutput": "Summary Report:\nMatched Files: 3\n1. /path/to/file1.txt | Size: 2048 bytes | Modified: 2024-05-20 15:32 | Snippet: \"...keyword example inside file1...\"\n2. /path/to/file2.cpp | Size: 4096 bytes | Modified: 2024-05-18 09:12 | Snippet: \"...code snippet with keyword...\"\n3. /path/to/notes.md | Size: 1024 bytes | Modified: 2024-05-22 11:03 | Snippet: \"...documentation mentioning keyword...\"",
-    "concepts": [
-      "Multithreading and concurrency",
-      "Filesystem operations and metadata",
-      "File I/O optimization",
-      "Data synchronization and thread safety"
-    ],
-    "estimatedTime": "90 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "advanced-file-system-indexer-and-search-tool-in-c",
-    "title": "Advanced File System Indexer and Search Tool in C++",
-    "language": "cpp",
-    "difficulty": "advanced",
-    "category": "mini-projects",
-    "description": "Build a highly efficient file system indexer that recursively scans directories, indexes file metadata, and supports advanced search queries with filters and sorting, all implemented in C++.",
-    "prompt": "Create a C++ program that recursively scans a directory and all its subdirectories to index metadata of each file (including file name, path, size, last modified timestamp). Store this indexed data in an efficient in-memory data structure. Then implement a command-line interface that supports searching the indexed files based on multiple criteria such as partial file name match, size range, and modification date range. The search results should be sortable by name, size, or date. Optimize for performance by avoiding redundant scans and supporting fast queries. Additionally, implement a feature to export the current index snapshot to a JSON file and import it back to resume searching without re-scanning.",
-    "guidance": [
-      "Use recursive directory traversal with appropriate platform-specific or cross-platform APIs (e.g., <filesystem> in C++17).",
-      "Design an index data structure that allows efficient multi-criteria filtering and sorting, such as storing file metadata objects in vectors and using algorithms for queries.",
-      "Implement a flexible command parser to support user input for complex queries and sorting options.",
-      "Ensure your program can serialize and deserialize the index to/from JSON efficiently to avoid repeated filesystem scans."
-    ],
-    "hints": [
-      "Investigate std::filesystem for directory traversal and file metadata extraction.",
-      "Consider std::vector with custom filtering and sorting using std::ranges or algorithms for query processing.",
-      "Use a JSON serialization library like nlohmann/json for saving and loading the index state."
-    ],
-    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n#include <filesystem>\n#include <chrono>\n\nstruct FileInfo {\n    std::string name;\n    std::string path;\n    uintmax_t size;\n    std::filesystem::file_time_type last_modified;\n};\n\nclass FileIndexer {\npublic:\n    void scanDirectory(const std::string& directoryPath);\n    std::vector<FileInfo> search(const std::string& nameFilter = \"\", uintmax_t minSize = 0, uintmax_t maxSize = UINTMAX_MAX);\n    void exportToJson(const std::string& jsonFilePath);\n    void importFromJson(const std::string& jsonFilePath);\nprivate:\n    std::vector<FileInfo> index;\n};\n\nint main() {\n    // Implement CLI to scan directory, perform searches, interact with export/import\n    std::cout << \"File Indexer CLI (implement your solution here)\" << std::endl;\n    return 0;\n}",
-    "expectedOutput": "Example run:\n> scan /home/user/docs\nIndexed 1024 files.\n> search name=report size>1000 sort=size desc\nFound 15 files matching criteria:\n1) report_summary.pdf - 2345 bytes - 2024-05-20\n2) annual_report.docx - 1230 bytes - 2024-05-18\n...\n> export index.json\nIndex successfully saved to index.json\n> import index.json\nIndex loaded from index.json with 1024 files.",
-    "concepts": [
-      "filesystem traversal",
-      "data structures and algorithms",
-      "file metadata handling",
-      "serialization and deserialization"
-    ],
-    "estimatedTime": "120 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-sql-query-to-simplify-and-optimize-filtering",
+    "title": "Refactor a SQL Query to Simplify and Optimize Filtering",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve a given SQL query by refactoring it for clarity and better performance while maintaining the same output. This challenge focuses on rewriting a query that uses unnecessary subqueries and redundant filtering.",
+    "prompt": "You are given a SQL query that fetches the names of employees who belong to the 'Sales' department and whose salary is above 50000. The current query uses nested subqueries and redundant WHERE conditions making it harder to read and potentially less efficient.\n\nRefactor the query to remove unnecessary subqueries and simplify the WHERE clause but ensure the output remains exactly the same.\n\nHere is the original query:\n\nSELECT name FROM employees\nWHERE department_id IN (\n  SELECT id FROM departments\n  WHERE name = 'Sales' AND id IN (\n    SELECT department_id FROM employees WHERE salary > 50000\n  )\n);",
+    "guidance": [
+      "Focus on flattening the query by removing nested IN clauses when possible.",
+      "Combine filtering conditions logically to reduce complexity.",
+      "Make sure the refactored query returns the same employee names as the original."
+    ],
+    "hints": [
+      "Consider joining the tables instead of using multiple nested IN subqueries.",
+      "Filtering by salary can be done in the main WHERE clause to avoid nested subqueries."
+    ],
+    "starterCode": "SELECT name FROM employees\nWHERE department_id IN (\n  SELECT id FROM departments\n  WHERE name = 'Sales' AND id IN (\n    SELECT department_id FROM employees WHERE salary > 50000\n  )\n);",
+    "expectedOutput": "List of employee names who work in the 'Sales' department and earn more than 50000.",
+    "concepts": [
+      "WHERE clause simplification",
+      "Subquery refactoring",
+      "Basic SQL filtering"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-custom-array-transformation-function-in-c",
+    "title": "Predict the Output of a Custom Array Transformation Function in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given C++ code that transforms an integer array through nested loops and conditional swaps. Predict what the output will be when the code is executed with a specific input array.",
+    "prompt": "Given the following C++ program, which takes an integer array and modifies it using nested loops and conditional swapping, what will be the final contents of the array after the function processArray is called? Provide the exact output as printed by the main function.",
+    "guidance": [
+      "Trace the nested loops carefully, paying attention to how elements are compared and swapped.",
+      "Visualize or write down array states after each outer loop iteration to follow changes step-by-step."
+    ],
+    "hints": [
+      "Remember that the inner loop starts from the element after the outer loop index, so it compares pairs only forward in the array.",
+      "Focus on how the conditional swap is triggered only when the current outer element is greater than an inner element."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nvoid processArray(vector<int>& arr) {\n    for (int i = 0; i < arr.size(); i++) {\n        for (int j = i + 1; j < arr.size(); j++) {\n            if (arr[i] > arr[j]) {\n                int temp = arr[i];\n                arr[i] = arr[j];\n                arr[j] = temp;\n            }\n        }\n    }\n}\n\nint main() {\n    vector<int> data = {8, 3, 7, 1, 9};\n    processArray(data);\n    for (int num : data) {\n        cout << num << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
+    "expectedOutput": "1 3 7 8 9",
+    "concepts": [
+      "nested loops",
+      "array manipulation",
+      "sorting logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-scalable-task-scheduler-with-dependency-resolution-in-python",
+    "title": "Build a Scalable Task Scheduler with Dependency Resolution in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a mini-project in Python to implement a task scheduler that executes tasks in the correct order based on their dependencies. The scheduler should detect circular dependencies and optimize for concurrent execution where possible.",
+    "prompt": "Design and implement a Python function called 'task_scheduler' which receives a dictionary where keys are task names (strings) and values are lists of dependencies (tasks that must be completed before the key task). Your scheduler should return a list of lists where each inner list represents tasks that can be executed concurrently in that stage. Tasks must only be started after all their dependencies are completed. If circular dependencies exist, raise an exception with an informative message.",
+    "guidance": [
+      "Use topological sorting with cycle detection to determine execution order.",
+      "Group all tasks that have no mutual dependencies into the same execution stage for concurrency.",
+      "Ensure the function raises a descriptive exception on circular dependencies."
+    ],
+    "hints": [
+      "Consider using Depth-First Search (DFS) to detect cycles and generate task order.",
+      "Use a queue or list to track tasks with no remaining dependencies to execute in parallel.",
+      "Model the tasks and dependencies as a directed graph."
+    ],
+    "starterCode": "def task_scheduler(tasks):\n    '''\n    tasks: dict[str, list[str]] - keys are task names, values their dependencies\n    returns: list[list[str]] - stages of concurrently executable tasks\n    '''\n    # Implement your scheduler here\n    pass",
+    "expectedOutput": "[['task1', 'task3'], ['task2'], ['task4']]  # Example output for given dependencies",
+    "concepts": [
+      "topological sort",
+      "graph algorithms",
+      "cycle detection",
+      "concurrency scheduling"
+    ],
+    "estimatedTime": "40 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-function-to-filter-and-transform-user-data",
+    "title": "Build a Function to Filter and Transform User Data",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a JavaScript function that takes an array of user objects and returns a new array containing only users above a certain age, with their full names combined into a single string.",
+    "prompt": "Write a function named filterAndFormatUsers that accepts two parameters: an array of user objects and a minimum age number. Each user object has properties: firstName, lastName, and age. The function should return a new array of strings where each string is the full name of users whose age is strictly greater than the given minimum age. The full name should be formatted as 'FirstName LastName'.",
+    "guidance": [
+      "Filter the users array to include only those with age greater than the minimum age.",
+      "Map the filtered users to a new array of full name strings.",
+      "Return the resulting array of full names."
+    ],
+    "hints": [
+      "Use the array methods filter and map for concise and readable code.",
+      "Remember to concatenate firstName and lastName with a space in between.",
+      "Check for strict greater than when comparing ages."
+    ],
+    "starterCode": "function filterAndFormatUsers(users, minAge) {\n  // Your code here\n}",
+    "expectedOutput": "filterAndFormatUsers([\n  { firstName: 'Alice', lastName: 'Johnson', age: 25 },\n  { firstName: 'Bob', lastName: 'Smith', age: 19 },\n  { firstName: 'Carol', lastName: 'Taylor', age: 30 }\n], 20);\n\n// Expected output: ['Alice Johnson', 'Carol Taylor']",
+    "concepts": [
+      "array filtering",
+      "array mapping",
+      "objects",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ]

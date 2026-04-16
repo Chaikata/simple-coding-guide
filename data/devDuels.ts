@@ -8766,5 +8766,173 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "120 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "build-a-function-to-calculate-users-average-monthly-orders",
+    "title": "Build a Function to Calculate User's Average Monthly Orders",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "queries",
+    "description": "Write an SQL function that calculates the average number of orders a user places per month based on an orders table with timestamps.",
+    "prompt": "Create an SQL function named get_avg_monthly_orders(user_id INT) that returns the average number of orders placed by the specified user per month. Use the `orders` table which contains columns `order_id`, `user_id`, and `order_date` (DATE or TIMESTAMP). The function should consider all available order data for that user and calculate their monthly order average rounded to two decimal places.",
+    "guidance": [
+      "Aggregate orders by month and user to get total orders per month.",
+      "Calculate the average over the months where the user placed orders.",
+      "Handle cases where the user has no orders by returning 0."
+    ],
+    "hints": [
+      "Use SQL date functions like EXTRACT(YEAR FROM order_date) and EXTRACT(MONTH FROM order_date) to group by months.",
+      "COUNT and AVG aggregate functions will be useful to calculate orders and their average.",
+      "Consider using ROUND() to format the average value to two decimal places."
+    ],
+    "starterCode": "CREATE FUNCTION get_avg_monthly_orders(user_id INT) RETURNS FLOAT AS $$\nBEGIN\n  -- Your code here\nEND;\n$$ LANGUAGE plpgsql;",
+    "expectedOutput": "For example, for user_id = 5, the function should return a float representing the average monthly orders, e.g. 3.42",
+    "concepts": [
+      "aggregations",
+      "date functions",
+      "user-defined functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-advanced-recursive-directory-size-calculator",
+    "title": "Fix Bug in Advanced Recursive Directory Size Calculator",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Debug and correct a broken Python function designed to recursively compute total file sizes in nested directory structures represented as dictionaries.",
+    "prompt": "You are given a Python function that attempts to recursively calculate the total size of files in a nested directory-like dictionary structure. Each directory is represented by a dictionary where keys are names and values are either integers (file sizes in bytes) or nested dictionaries (subdirectories). The function intends to sum all file sizes under a given directory but currently returns incorrect results or throws errors for certain inputs. Your task is to debug and fix the function so that it correctly computes the total file size for any valid nested directory structure.",
+    "guidance": [
+      "Consider how the function differentiates between files (integers) and subdirectories (dictionaries).",
+      "Check for missing or incorrect recursive calls and aggregation logic.",
+      "Ensure the function handles edge cases like empty directories or mixed types correctly."
+    ],
+    "hints": [
+      "Use the built-in isinstance() function to distinguish between integers and dictionaries.",
+      "Verify that the recursive call returns a numerical value to be added to the running total.",
+      "Watch out for the case where the directory dictionary might be empty, which should return zero size."
+    ],
+    "starterCode": "def calculate_directory_size(directory):\n    total_size = 0\n    for item in directory:\n        if type(directory[item]) == dict:\n            total_size += calculate_directory_size(item)\n        else:\n            total_size += directory[item]\n    return total_size",
+    "expectedOutput": "For input:\n{\n  'file1.txt': 1000,\n  'subfolder': {\n    'file2.txt': 2000,\n    'file3.txt': 3000,\n    'nested': {\n      'file4.txt': 1500\n    }\n  },\n  'file5.txt': 500\n}\nThe function should return: 8000",
+    "concepts": [
+      "recursion",
+      "type checking",
+      "dictionary traversal",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-sql-query-to-simplify-and-optimize-filtering",
+    "title": "Refactor a SQL Query to Simplify and Optimize Filtering",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "optimization",
+    "description": "Improve a given SQL query by refactoring it for clarity and better performance while maintaining the same output. This challenge focuses on rewriting a query that uses unnecessary subqueries and redundant filtering.",
+    "prompt": "You are given a SQL query that fetches the names of employees who belong to the 'Sales' department and whose salary is above 50000. The current query uses nested subqueries and redundant WHERE conditions making it harder to read and potentially less efficient.\n\nRefactor the query to remove unnecessary subqueries and simplify the WHERE clause but ensure the output remains exactly the same.\n\nHere is the original query:\n\nSELECT name FROM employees\nWHERE department_id IN (\n  SELECT id FROM departments\n  WHERE name = 'Sales' AND id IN (\n    SELECT department_id FROM employees WHERE salary > 50000\n  )\n);",
+    "guidance": [
+      "Focus on flattening the query by removing nested IN clauses when possible.",
+      "Combine filtering conditions logically to reduce complexity.",
+      "Make sure the refactored query returns the same employee names as the original."
+    ],
+    "hints": [
+      "Consider joining the tables instead of using multiple nested IN subqueries.",
+      "Filtering by salary can be done in the main WHERE clause to avoid nested subqueries."
+    ],
+    "starterCode": "SELECT name FROM employees\nWHERE department_id IN (\n  SELECT id FROM departments\n  WHERE name = 'Sales' AND id IN (\n    SELECT department_id FROM employees WHERE salary > 50000\n  )\n);",
+    "expectedOutput": "List of employee names who work in the 'Sales' department and earn more than 50000.",
+    "concepts": [
+      "WHERE clause simplification",
+      "Subquery refactoring",
+      "Basic SQL filtering"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "predict-the-output-of-a-custom-array-transformation-function-in-c",
+    "title": "Predict the Output of a Custom Array Transformation Function in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze the given C++ code that transforms an integer array through nested loops and conditional swaps. Predict what the output will be when the code is executed with a specific input array.",
+    "prompt": "Given the following C++ program, which takes an integer array and modifies it using nested loops and conditional swapping, what will be the final contents of the array after the function processArray is called? Provide the exact output as printed by the main function.",
+    "guidance": [
+      "Trace the nested loops carefully, paying attention to how elements are compared and swapped.",
+      "Visualize or write down array states after each outer loop iteration to follow changes step-by-step."
+    ],
+    "hints": [
+      "Remember that the inner loop starts from the element after the outer loop index, so it compares pairs only forward in the array.",
+      "Focus on how the conditional swap is triggered only when the current outer element is greater than an inner element."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nvoid processArray(vector<int>& arr) {\n    for (int i = 0; i < arr.size(); i++) {\n        for (int j = i + 1; j < arr.size(); j++) {\n            if (arr[i] > arr[j]) {\n                int temp = arr[i];\n                arr[i] = arr[j];\n                arr[j] = temp;\n            }\n        }\n    }\n}\n\nint main() {\n    vector<int> data = {8, 3, 7, 1, 9};\n    processArray(data);\n    for (int num : data) {\n        cout << num << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
+    "expectedOutput": "1 3 7 8 9",
+    "concepts": [
+      "nested loops",
+      "array manipulation",
+      "sorting logic"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-scalable-task-scheduler-with-dependency-resolution-in-python",
+    "title": "Build a Scalable Task Scheduler with Dependency Resolution in Python",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a mini-project in Python to implement a task scheduler that executes tasks in the correct order based on their dependencies. The scheduler should detect circular dependencies and optimize for concurrent execution where possible.",
+    "prompt": "Design and implement a Python function called 'task_scheduler' which receives a dictionary where keys are task names (strings) and values are lists of dependencies (tasks that must be completed before the key task). Your scheduler should return a list of lists where each inner list represents tasks that can be executed concurrently in that stage. Tasks must only be started after all their dependencies are completed. If circular dependencies exist, raise an exception with an informative message.",
+    "guidance": [
+      "Use topological sorting with cycle detection to determine execution order.",
+      "Group all tasks that have no mutual dependencies into the same execution stage for concurrency.",
+      "Ensure the function raises a descriptive exception on circular dependencies."
+    ],
+    "hints": [
+      "Consider using Depth-First Search (DFS) to detect cycles and generate task order.",
+      "Use a queue or list to track tasks with no remaining dependencies to execute in parallel.",
+      "Model the tasks and dependencies as a directed graph."
+    ],
+    "starterCode": "def task_scheduler(tasks):\n    '''\n    tasks: dict[str, list[str]] - keys are task names, values their dependencies\n    returns: list[list[str]] - stages of concurrently executable tasks\n    '''\n    # Implement your scheduler here\n    pass",
+    "expectedOutput": "[['task1', 'task3'], ['task2'], ['task4']]  # Example output for given dependencies",
+    "concepts": [
+      "topological sort",
+      "graph algorithms",
+      "cycle detection",
+      "concurrency scheduling"
+    ],
+    "estimatedTime": "40 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-function-to-filter-and-transform-user-data",
+    "title": "Build a Function to Filter and Transform User Data",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a JavaScript function that takes an array of user objects and returns a new array containing only users above a certain age, with their full names combined into a single string.",
+    "prompt": "Write a function named filterAndFormatUsers that accepts two parameters: an array of user objects and a minimum age number. Each user object has properties: firstName, lastName, and age. The function should return a new array of strings where each string is the full name of users whose age is strictly greater than the given minimum age. The full name should be formatted as 'FirstName LastName'.",
+    "guidance": [
+      "Filter the users array to include only those with age greater than the minimum age.",
+      "Map the filtered users to a new array of full name strings.",
+      "Return the resulting array of full names."
+    ],
+    "hints": [
+      "Use the array methods filter and map for concise and readable code.",
+      "Remember to concatenate firstName and lastName with a space in between.",
+      "Check for strict greater than when comparing ages."
+    ],
+    "starterCode": "function filterAndFormatUsers(users, minAge) {\n  // Your code here\n}",
+    "expectedOutput": "filterAndFormatUsers([\n  { firstName: 'Alice', lastName: 'Johnson', age: 25 },\n  { firstName: 'Bob', lastName: 'Smith', age: 19 },\n  { firstName: 'Carol', lastName: 'Taylor', age: 30 }\n], 20);\n\n// Expected output: ['Alice Johnson', 'Carol Taylor']",
+    "concepts": [
+      "array filtering",
+      "array mapping",
+      "objects",
+      "functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
