@@ -8934,5 +8934,179 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "implement-a-high-performance-memoized-fibonacci-calculator-in-c",
+    "title": "Implement a High-Performance Memoized Fibonacci Calculator in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Build a highly optimized C++ function to compute Fibonacci numbers using memoization to minimize time complexity for very large inputs without stack overflow or excessive memory usage.",
+    "prompt": "Write a C++ function named `fib` that takes an unsigned 64-bit integer n and returns the nth Fibonacci number. Your implementation must use memoization to optimize repeated calls and handle inputs up to at least 10^7 efficiently. The function should avoid recursion depth issues and optimize memory usage. Implement your own caching mechanism without using global or static variables to ensure thread safety and reentrancy.",
+    "guidance": [
+      "Use an efficient data structure such as an unordered_map or vector with dynamic resizing for caching intermediate results.",
+      "Consider using an iterative approach combined with memoization to avoid deep recursion stack overflow.",
+      "Design the cache to be local to the function or passed explicitly to maintain thread safety.",
+      "Optimize memory usage by clearing unneeded cache entries dynamically if possible."
+    ],
+    "hints": [
+      "Avoid naive recursion; combine iteration with memoization for better performance.",
+      "Think about passing cache storage structures as function arguments or keeping them within a class.",
+      "Carefully handle large data types since Fibonacci numbers grow exponentially; consider using a 64-bit integer for results."
+    ],
+    "starterCode": "uint64_t fib(uint64_t n) {\n    // Your memoized Fibonacci implementation here\n    return 0;\n}",
+    "expectedOutput": "fib(10) = 55\nfib(50) = 12586269025\nfib(100) = 354224848179261915075",
+    "concepts": [
+      "memoization",
+      "dynamic programming",
+      "optimization",
+      "iterative algorithms"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-list-comprehension-with-nested-conditions",
+    "title": "Predict the Output of a List Comprehension with Nested Conditions",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze a Python code snippet using nested list comprehensions with conditional statements and predict the final output list.",
+    "prompt": "Consider the following Python code snippet:\n\nnumbers = [1, 2, 3, 4, 5]\nresult = [x * y for x in numbers if x % 2 == 0 for y in numbers if y > x]\n\nWhat is the output of the 'result' list after this code executes? Provide the exact list that will be printed if you run 'print(result)'.",
+    "guidance": [
+      "Pay attention to the order of the nested for-loops inside the list comprehension.",
+      "Understand the conditions applied to each loop variable before multiplying.",
+      "Break down the comprehension step-by-step: first filter x, then filter y based on x, then multiply."
+    ],
+    "hints": [
+      "x only iterates over even numbers in the 'numbers' list.",
+      "For each valid x, y iterates over elements greater than x.",
+      "Try listing out pairs (x, y) that satisfy both conditions before multiplying."
+    ],
+    "starterCode": "numbers = [1, 2, 3, 4, 5]\nresult = [x * y for x in numbers if x % 2 == 0 for y in numbers if y > x]\nprint(result)",
+    "expectedOutput": "[6, 8, 10, 20]",
+    "concepts": [
+      "list comprehension",
+      "nested loops",
+      "conditional filtering",
+      "Python iteration"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "build-a-memoized-deep-object-comparator-function",
+    "title": "Build a Memoized Deep Object Comparator Function",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an advanced JavaScript function that deeply compares two objects for structural and value equality, with memoization to optimize repeated comparisons of the same pairs.",
+    "prompt": "Write a function named deepCompareMemo that takes two arguments (objA and objB) and returns true if they are deeply equal, or false otherwise. The comparison should handle nested objects, arrays, and primitive values. To optimize, implement memoization so that if the same pair of objects is compared multiple times, the function returns the cached result instead of recomputing. The memoization should uniquely identify pairs regardless of argument order, i.e., deepCompareMemo(objA, objB) and deepCompareMemo(objB, objA) should return the cached value for the same comparison.",
+    "guidance": [
+      "Consider using a WeakMap or Map to store cached comparison results for object pairs.",
+      "Think about edge cases such as functions, null, and different data types while comparing deeply.",
+      "Design the memoization key so that the order of arguments does not affect cache hits."
+    ],
+    "hints": [
+      "Primitive values can be compared directly with ===, but objects and arrays require recursion.",
+      "To create a unique key for memoization, consider using pairs of objects stored as nested Maps instead of stringifying.",
+      "Be careful with circular references; although not required, ensure your function doesn’t crash with them."
+    ],
+    "starterCode": "function deepCompareMemo(objA, objB) {\n  const cache = new Map();\n\n  function isEqual(a, b) {\n    // Implement deep comparison logic here\n  }\n\n  return isEqual(objA, objB);\n}",
+    "expectedOutput": "deepCompareMemo({a:1, b:[2,3]}, {a:1, b:[2,3]}) // true\n\ndeepCompareMemo({a:1}, {a:'1'}) // false\n\ndeepCompareMemo(obj1, obj2) called multiple times returns cached result quickly",
+    "concepts": [
+      "deep object comparison",
+      "memoization",
+      "recursion",
+      "data structures (Map, WeakMap)"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-sql-query-for-customer-lifetime-value-calculation",
+    "title": "Fix Bug in SQL Query for Customer Lifetime Value Calculation",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in the provided SQL query that attempts to calculate the Customer Lifetime Value (CLV) by aggregating total purchases over all transactions per customer, but currently returns incorrect results due to improper GROUP BY and JOIN logic.",
+    "prompt": "The given query tries to calculate each customer's lifetime value by summing their total purchase amounts from the transactions table joined with customer info. However, the output has duplicate rows and incorrect sums. Your task is to find and fix the bug in the SQL query so the results correctly show each customer's total lifetime value, with one row per customer.",
+    "guidance": [
+      "Review the JOIN conditions and ensure that the grouping is done properly at the customer level.",
+      "Check if aggregations are performed after joining or before to avoid multiplication of rows.",
+      "Make sure all selected columns comply with GROUP BY clauses."
+    ],
+    "hints": [
+      "The INNER JOIN might cause row multiplication if multiple transactions match a single customer. Try aggregating before joining.",
+      "GROUP BY should include all non-aggregated columns in the SELECT.",
+      "Consider using subqueries or Common Table Expressions (CTEs) for aggregation before joining."
+    ],
+    "starterCode": "SELECT c.customer_id, c.customer_name, SUM(t.purchase_amount) AS lifetime_value\nFROM customers c\nINNER JOIN transactions t ON c.customer_id = t.customer_id\nGROUP BY c.customer_id;\n",
+    "expectedOutput": "customer_id | customer_name | lifetime_value\n------------|---------------|----------------\n1           | Alice         | 1500.00\n2           | Bob           | 900.50\n3           | Charlie       | 1230.75",
+    "concepts": [
+      "SQL Aggregation",
+      "JOINs",
+      "GROUP BY",
+      "Subqueries or CTEs"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-sql-query-to-calculate-average-order-value-per-customer",
+    "title": "Fix the Bug in SQL Query to Calculate Average Order Value Per Customer",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "You are given a broken SQL query that attempts to calculate the average order value for each customer from an orders table. The query returns incorrect results due to logical and syntactical bugs. Your task is to identify and fix these bugs so the query produces the correct average order value per customer.",
+    "prompt": "The orders table contains columns: customer_id, order_id, order_amount. The goal is to write a query that outputs each customer_id alongside their average order amount (order_value). The broken query below produces incorrect averages and duplicates rows. Identify and fix the errors to ensure each customer appears once with their correct average order value.",
+    "guidance": [
+      "Check the use of aggregate functions and GROUP BY clause.",
+      "Verify that no unnecessary joins or duplicates appear in the result.",
+      "Test and validate the output with sample data to ensure accuracy."
+    ],
+    "hints": [
+      "Make sure the GROUP BY clause aligns correctly with the selected columns.",
+      "Review how AVG() is used and whether the total sum and count are being applied properly.",
+      "Look out for joins or subqueries that might be duplicating rows unintentionally."
+    ],
+    "starterCode": "SELECT customer_id, SUM(order_amount) / COUNT(order_id) AS avg_order_value FROM orders;",
+    "expectedOutput": "customer_id | avg_order_value\n1           | 150.75\n2           | 220.00\n3           | 310.50",
+    "concepts": [
+      "SQL aggregate functions",
+      "GROUP BY clause",
+      "basic debugging"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-sales-performance-summary-report-using-window-functions",
+    "title": "Create a Sales Performance Summary Report Using Window Functions",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "data-modeling",
+    "description": "Build a SQL query that summarizes monthly sales performance per salesperson, including cumulative sales, ranking within each month, and percentage contribution to total sales. This intermediate mini-project involves data modeling concepts such as aggregation, window functions, and joining tables.",
+    "prompt": "You are given two tables: `sales` and `salespeople`.\n\n`sales` table columns:\n- sale_id (INT): Unique sale identifier\n- salesperson_id (INT): ID of the salesperson who made the sale\n- sale_date (DATE): Date of the sale\n- amount (DECIMAL): Sale amount\n\n`salespeople` table columns:\n- salesperson_id (INT): Unique salesperson identifier\n- name (VARCHAR): Salesperson's full name\n\nWrite a SQL query that returns a monthly summary report for each salesperson that includes:\n- Salesperson name\n- Year and Month (e.g., 2023-04)\n- Total sales amount for that month\n- Cumulative sales amount for that salesperson up to and including that month\n- Rank of the salesperson's total sales in that month compared to others (1 is highest)\n- Percentage contribution of the salesperson's monthly sales to the total sales made by all salespeople in that same month\n\nSort the results by year-month ascending and by salesperson name ascending.",
+    "guidance": [
+      "Use the DATE_FORMAT (MySQL) or TO_CHAR (PostgreSQL) function to extract year and month from sale_date.",
+      "Use window functions such as RANK(), SUM() OVER(), and SUM() FILTER() or subqueries to compute rankings, cumulative sums, and total monthly sales.",
+      "Join sales with salespeople on salesperson_id to get salesperson names."
+    ],
+    "hints": [
+      "Consider using a common table expression (CTE) or subquery to group sales by salesperson and month before applying window functions.",
+      "Remember that ranking functions reset by partition; partition by year-month for monthly rank and partition by salesperson_id ordered by year-month for cumulative sum.",
+      "To calculate percentage contribution, divide the salesperson's monthly total sales by the grand total of sales in the same month."
+    ],
+    "starterCode": "WITH monthly_sales AS (\n  SELECT\n    salesperson_id,\n    TO_CHAR(sale_date, 'YYYY-MM') AS year_month,\n    SUM(amount) AS monthly_total\n  FROM sales\n  GROUP BY salesperson_id, TO_CHAR(sale_date, 'YYYY-MM')\n)\nSELECT\n  sp.name,\n  ms.year_month,\n  ms.monthly_total,\n  -- cumulative sum, rank, and percentage calculation to be filled\nFROM monthly_sales ms\nJOIN salespeople sp ON ms.salesperson_id = sp.salesperson_id\nORDER BY ms.year_month, sp.name;",
+    "expectedOutput": "name      | year_month | monthly_total | cumulative_sales | rank | percentage_of_monthly_total\n----------|------------|---------------|------------------|------|--------------------------\nAlice     | 2023-01    | 15000         | 15000            | 1    | 0.375                    \nBob       | 2023-01    | 10000         | 10000            | 2    | 0.25                     \nAlice     | 2023-02    | 20000         | 35000            | 1    | 0.5                      \nBob       | 2023-02    | 10000         | 20000            | 2    | 0.25                     \n...",
+    "concepts": [
+      "SQL window functions",
+      "aggregation and grouping",
+      "data modeling",
+      "joins"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
