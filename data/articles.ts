@@ -60333,5 +60333,437 @@ export const articles = [
         "value": "In summary, mastering recursive CTEs for hierarchical data is a matter of understanding their structure and common pitfalls. Always check your recursive references, data integrity, and column consistency. With these tips, you will be confidently using recursive CTEs to model complex hierarchies in SQL."
       }
     ]
+  },
+  {
+    "slug": "building-scalable-microservices-in-javascript-using-event-driven-architecture",
+    "title": "Building Scalable Microservices in JavaScript Using Event-Driven Architecture",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to build scalable and maintainable microservices in JavaScript by leveraging the power of event-driven architecture. This beginner-friendly tutorial walks you through key concepts and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Microservices are a popular approach to building scalable applications by breaking them down into smaller, independent services. One effective way to design microservices is using an event-driven architecture, where services communicate by emitting and listening to events asynchronously. This makes your system more flexible, loosely coupled, and easier to scale. In this tutorial, we'll explore how to create simple microservices in JavaScript using event-driven principles."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Event-Driven Architecture? \nEvent-driven architecture (EDA) centers around the idea that services produce events when something happens and other services listen and react to these events. Unlike traditional request-response communication, EDA allows for asynchronous, decoupled, and scalable systems."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Setting Up Our Project\nLet's start by creating two simple microservices: an Order Service and an Email Service. The Order Service will emit an event when a new order is created, and the Email Service will listen for that event to send a confirmation email."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Installing Dependencies\nWe'll use Node.js and the `eventemitter3` package, which is a lightweight event emitter implementation."
+      },
+      {
+        "type": "code",
+        "value": "npm init -y\nnpm install eventemitter3"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Creating the Event Bus\nThe event bus is a shared event emitter that allows different services to communicate by publishing and subscribing to events."
+      },
+      {
+        "type": "code",
+        "value": "// eventBus.js\nconst EventEmitter = require('eventemitter3');\nconst eventBus = new EventEmitter();\n\nmodule.exports = eventBus;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Building the Order Service\nThis service will simulate order creation and emit an \"orderCreated\" event with order details."
+      },
+      {
+        "type": "code",
+        "value": "// orderService.js\nconst eventBus = require('./eventBus');\n\nfunction createOrder(order) {\n  console.log('Creating order:', order);\n  // After creating order, emit an event\n  eventBus.emit('orderCreated', order);\n}\n\n// Simulate an order creation\ndefaultOrder = { id: 1, item: 'Book', quantity: 2, customerEmail: 'customer@example.com' };\ncreateOrder(defaultOrder);"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Building the Email Service\nThis service listens for the \"orderCreated\" event and sends a confirmation email (simulated here with a console log)."
+      },
+      {
+        "type": "code",
+        "value": "// emailService.js\nconst eventBus = require('./eventBus');\n\neventBus.on('orderCreated', (order) => {\n  console.log(`Sending confirmation email to ${order.customerEmail} for order ${order.id}`);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Running Our Services Together\nTo see the event-driven flow in action, create an entry point file that requires both services to make sure they share the same event bus."
+      },
+      {
+        "type": "code",
+        "value": "// index.js\nrequire('./emailService');\nrequire('./orderService');"
+      },
+      {
+        "type": "paragraph",
+        "value": "Run `node index.js` in your terminal. You should see the order creation message followed by the email sending message, demonstrating how the services communicate via events."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Advantages of Event-Driven Microservices\n- **Loose Coupling:** Services only know about events, not each other.\n- **Scalability:** Services can be scaled independently.\n- **Asynchronous Communication:** Improves performance and responsiveness.\n- **Extensibility:** Easily add new services that listen to events without changing existing code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Next Steps\nThis example uses a simple in-memory event bus for illustration. For real-world applications, consider using messaging systems like RabbitMQ, Kafka, or AWS SNS/SQS to handle events across multiple machines and services."
+      },
+      {
+        "type": "paragraph",
+        "value": "By adopting event-driven architecture in your JavaScript microservices, you can build systems that are scalable, maintainable, and ready to handle complex workflows with ease."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-event-driven-architectures-with-javascript",
+    "title": "Designing Scalable Event-Driven Architectures with JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to build scalable event-driven architectures with JavaScript, understand common errors, and best practices for handling events effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architectures (EDA) are a powerful way to build scalable, responsive applications. In JavaScript, events allow parts of your code to communicate with each other asynchronously. However, beginners often run into errors like event listener leaks, missed events, or unhandled exceptions. In this article, we'll explore how to design scalable event-driven systems in JavaScript while avoiding common pitfalls."
+      },
+      {
+        "type": "paragraph",
+        "value": "At its core, an event-driven system works by emitting events and listening for them. The EventEmitter class in Node.js is a classic example that supports multiple listeners for the same event."
+      },
+      {
+        "type": "code",
+        "value": "const EventEmitter = require('events');\n\nclass MyEmitter extends EventEmitter {}\nconst myEmitter = new MyEmitter();\n\nmyEmitter.on('event', () => {\n  console.log('An event occurred!');\n});\n\nmyEmitter.emit('event');\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Errors and How to Avoid Them"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Memory leaks due to too many listeners:** If you add listeners repeatedly without removing them, you may hit a warning or cause increased memory usage."
+      },
+      {
+        "type": "code",
+        "value": "myEmitter.on('event', () => console.log('Listener 1'));\nmyEmitter.on('event', () => console.log('Listener 2'));\n// ... adding many listeners without removal\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent this, remove listeners when they're no longer needed using `off` or `removeListener`."
+      },
+      {
+        "type": "code",
+        "value": "const listener = () => console.log('Hello');\nmyEmitter.on('event', listener);\n// Later when no longer needed\nmyEmitter.off('event', listener);\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Events emitted before listeners are registered:** If you emit an event before adding a listener, the event won't be received."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle this, ensure listeners are set up before events emit or use event queues or buffers."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Unhandled exceptions in listeners:** If a listener throws an error, it can crash your app."
+      },
+      {
+        "type": "paragraph",
+        "value": "Always handle errors gracefully inside listeners."
+      },
+      {
+        "type": "code",
+        "value": "myEmitter.on('event', () => {\n  try {\n    // Some code that might throw\n  } catch (error) {\n    console.error('Error in listener:', error);\n  }\n});\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Scaling Your Event-Driven System"
+      },
+      {
+        "type": "paragraph",
+        "value": "For large applications, consider these tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Use event queues or brokers** like Redis, RabbitMQ, or Kafka to decouple services.\n- **Design idempotent event handlers** to handle repeated events safely.\n- **Use domain-specific event names** to keep things organized.\n- **Monitor and log event emissions** to trace issues quickly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example using JavaScript's async behavior with an event emitter to demonstrate non-blocking event handling:"
+      },
+      {
+        "type": "code",
+        "value": "myEmitter.on('asyncEvent', async () => {\n  await new Promise(resolve => setTimeout(resolve, 1000));\n  console.log('Async event handled after 1 second');\n});\n\nmyEmitter.emit('asyncEvent');\nconsole.log('Event emitted');\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above example shows how events can be handled asynchronously, allowing your system to remain responsive."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding and handling common errors and applying best practices for event management, you can design scalable and reliable event-driven systems with JavaScript."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-conditional-types-for-advanced-error-handling-patterns",
+    "title": "Mastering TypeScript's Conditional Types for Advanced Error Handling Patterns",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's conditional types to create advanced and type-safe error handling patterns. This beginner-friendly guide explains concepts with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=0kmllUg1-48",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is a crucial part of writing reliable applications. In TypeScript, conditional types allow you to create flexible, type-safe error handling patterns that adapt based on the error context. This guide will walk you through the basics of conditional types and show you how to apply them for advanced error management."
+      },
+      {
+        "type": "paragraph",
+        "value": "Conditional types in TypeScript work like `if-else` statements for types. They check a condition and return one type if true and another if false. This helps us create more precise error types depending on specific conditions."
+      },
+      {
+        "type": "code",
+        "value": "type IsString<T> = T extends string ? \"Yes\" : \"No\";\n\n// Usage\ntype Test1 = IsString<string>; // \"Yes\"\ntype Test2 = IsString<number>; // \"No\""
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's see how to use conditional types for error handling. Imagine you have a function that fetches data and returns either a success type or an error type. You want to define a generic error type that changes based on whether the error is a network error or a validation error."
+      },
+      {
+        "type": "code",
+        "value": "interface NetworkError {\n  type: \"network\";\n  message: string;\n  statusCode: number;\n}\n\ninterface ValidationError {\n  type: \"validation\";\n  message: string;\n  field: string;\n}\n\n// Conditional type to pick the shape based on error type\n\ntype AppError<T extends string> =\n  T extends \"network\" ? NetworkError :\n  T extends \"validation\" ? ValidationError :\n  { type: \"unknown\"; message: string };\n\n// Usage examples\n\nconst error1: AppError<\"network\"> = {\n  type: \"network\",\n  message: \"Failed to connect\",\n  statusCode: 503,\n};\n\nconst error2: AppError<\"validation\"> = {\n  type: \"validation\",\n  message: \"Invalid email\",\n  field: \"email\",\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "This conditional typing helps you create a strict, discriminated union of errors without writing repetitive code. The `AppError<T>` type adapts its shape depending on the error category you provide."
+      },
+      {
+        "type": "paragraph",
+        "value": "For a more dynamic and reusable pattern, you can combine conditional types with utility types and generics to extract error information from functions to get strongly typed error handling."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T, E> = { success: true; value: T } | { success: false; error: E };\n\nfunction fetchData(): Result<string, AppError<\"network\" | \"validation\">> {\n  // Simulated error result\n  return {\n    success: false,\n    error: {\n      type: \"network\",\n      message: \"Timeout\",\n      statusCode: 504,\n    },\n  };\n}\n\nconst result = fetchData();\n\nif (!result.success) {\n  // TypeScript will narrow the error type as one of NetworkError or ValidationError\n  if (result.error.type === \"network\") {\n    console.log(\"Network issue:\", result.error.statusCode);\n  } else if (result.error.type === \"validation\") {\n    console.log(\"Validation error on field:\", result.error.field);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering conditional types, you can build flexible error types that improve code readability and help avoid bugs. TypeScript’s powerful type system gives you the ability to model error handling patterns specific to your application needs and catch mistakes during development rather than at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start experimenting with conditional types today to enhance your error handling strategies and write safer, more maintainable TypeScript code."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-runtime-errors-and-how-to-prevent-them",
+    "title": "Understanding Python's Common Runtime Errors and How to Prevent Them",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn about common runtime errors in Python and practical tips to prevent them, making your programs run smoother.",
+    "videoUrl": "https://www.youtube.com/watch?v=gQZ5pSv1a58",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When you are learning Python, runtime errors can be confusing and frustrating. These errors appear while your program is running and cause it to stop unexpectedly. Understanding the most common runtime errors and how to avoid them will help you write better code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's explore some frequent runtime errors with examples and tips to prevent them."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. ZeroDivisionError: This happens when your code tries to divide a number by zero. Since division by zero is undefined, Python raises this runtime error."
+      },
+      {
+        "type": "code",
+        "value": "a = 10\nb = 0\nresult = a / b  # This line will cause ZeroDivisionError"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent this, check if the denominator is zero before division:"
+      },
+      {
+        "type": "code",
+        "value": "a = 10\nb = 0\nif b != 0:\n    result = a / b\n    print(result)\nelse:\n    print(\"Cannot divide by zero\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. IndexError: It occurs when you try to access an index that is outside the range of a list or a string."
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3]\nprint(numbers[5])  # IndexError because index 5 doesn't exist"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid this, always check the length before accessing indices:"
+      },
+      {
+        "type": "code",
+        "value": "numbers = [1, 2, 3]\nindex = 5\nif index < len(numbers):\n    print(numbers[index])\nelse:\n    print(\"Index out of range\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. KeyError: This happens when you try to access a dictionary key that does not exist."
+      },
+      {
+        "type": "code",
+        "value": "person = {\"name\": \"Alice\", \"age\": 25}\nprint(person[\"address\"])  # KeyError because 'address' key is missing"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent KeyError, use the get() method or check if the key exists:"
+      },
+      {
+        "type": "code",
+        "value": "print(person.get(\"address\", \"Address not provided\"))\n\nif \"address\" in person:\n    print(person[\"address\"])\nelse:\n    print(\"Address not provided\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "4. TypeError: This error occurs when you use an operation or function on a value of an inappropriate type."
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\nprint(num + text)  # TypeError because we cannot add int and str"
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent TypeError, make sure data types match or convert them explicitly:"
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\nprint(str(num) + text)  # Converts num to string before concatenation"
+      },
+      {
+        "type": "paragraph",
+        "value": "5. ValueError: Raised when a function receives an argument of right type but inappropriate value."
+      },
+      {
+        "type": "code",
+        "value": "int(\"abc\")  # ValueError because 'abc' cannot be converted to an integer"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always validate input before conversions or handle exceptions:"
+      },
+      {
+        "type": "code",
+        "value": "user_input = \"abc\"\nif user_input.isdigit():\n    print(int(user_input))\nelse:\n    print(\"Invalid input for integer conversion\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, runtime errors are part of learning to code. Handling them by checking values, types, and existence before performing actions will make your programs more reliable and user-friendly."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding!"
+      }
+    ]
+  },
+  {
+    "slug": "handling-recursive-queries-with-common-table-expressions-in-sql",
+    "title": "Handling Recursive Queries with Common Table Expressions (CTEs) in SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to write and understand recursive queries in SQL using Common Table Expressions (CTEs) with simple examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=K1WeoKxLZ5o",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive queries in SQL allow you to perform operations that involve hierarchical or sequential data, such as organizational charts or folder structures. A Common Table Expression (CTE) provides a clean way to write these queries by allowing a named temporary result set that refers to itself. In this tutorial, you'll learn what recursive CTEs are and how to use them with clear examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE consists of two parts: the anchor member and the recursive member. The anchor member is the base query that runs first, and the recursive member references the CTE itself to process additional rows. The recursion stops when the query returns no new rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see a simple example using an employee hierarchy table. Suppose we have a table called Employees with columns EmployeeID, ManagerID, and Name. We want to find the entire chain of employees under a specific manager."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    ManagerID INT,\n    Name VARCHAR(100)\n);\n\nINSERT INTO Employees (EmployeeID, ManagerID, Name) VALUES\n(1, NULL, 'CEO'),\n(2, 1, 'Director'),\n(3, 2, 'Manager'),\n(4, 3, 'Lead Developer'),\n(5, 3, 'QA Lead');"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query finds all employees who report directly or indirectly to the employee with EmployeeID = 2 (the Director):"
+      },
+      {
+        "type": "code",
+        "value": "WITH RecursiveEmployees AS (\n    -- Anchor member: start with the manager\n    SELECT EmployeeID, ManagerID, Name\n    FROM Employees\n    WHERE EmployeeID = 2\n    \n    UNION ALL\n    \n    -- Recursive member: find employees reporting to the previous level\n    SELECT e.EmployeeID, e.ManagerID, e.Name\n    FROM Employees e\n    INNER JOIN RecursiveEmployees re ON e.ManagerID = re.EmployeeID\n)\nSELECT * FROM RecursiveEmployees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query works in two steps: first it selects the Director (EmployeeID = 2), then it repeatedly joins the Employees table to find all employees whose ManagerID matches the earlier level's EmployeeID. This process continues until no more employees are found."
+      },
+      {
+        "type": "paragraph",
+        "value": "Recursive CTEs are powerful for many use cases like traversing hierarchical data, generating sequences, or processing recursive calculations. Remember to always include a stopping condition (like no new rows) to avoid infinite loops."
+      },
+      {
+        "type": "paragraph",
+        "value": "As a bonus, you can add a \"level\" column to keep track of the recursion depth, helping you understand the hierarchy levels:"
+      },
+      {
+        "type": "code",
+        "value": "WITH RecursiveEmployees AS (\n    SELECT EmployeeID, ManagerID, Name, 0 AS level\n    FROM Employees\n    WHERE EmployeeID = 2\n\n    UNION ALL\n\n    SELECT e.EmployeeID, e.ManagerID, e.Name, re.level + 1\n    FROM Employees e\n    INNER JOIN RecursiveEmployees re ON e.ManagerID = re.EmployeeID\n)\nSELECT * FROM RecursiveEmployees ORDER BY level;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Try writing your own recursive queries using CTEs to explore recursive data in your databases!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-query-optimization-to-prevent-execution-errors",
+    "title": "Mastering SQL Query Optimization to Prevent Execution Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn beginner-friendly tips to optimize your SQL queries and avoid common execution errors for smoother database interactions.",
+    "videoUrl": "https://www.youtube.com/watch?v=xAZrlhpqw54",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL queries are the backbone of interacting with databases, but poorly written queries can lead to execution errors and slow performance. This article will guide you through simple, effective techniques to optimize your SQL queries and prevent common errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common cause of execution errors is syntax mistakes. Always double-check your SQL syntax, especially with commands like SELECT, JOIN, WHERE, and GROUP BY. Here's a simple example of a SELECT query that fetches data correctly:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT first_name, last_name FROM employees WHERE department = 'Sales';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another frequent error is missing or incorrect JOIN conditions, which can result in a Cartesian product or no output at all. To prevent this, always specify the join condition explicitly. Here is how to properly join two tables:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT orders.order_id, customers.customer_name\nFROM orders\nJOIN customers ON orders.customer_id = customers.customer_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Query performance issues can also cause execution errors, especially with large datasets. One way to optimize your query is by indexing the columns used in WHERE clauses or JOIN conditions. For example, creating an index on a frequently filtered column:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_department ON employees(department);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using LIMIT or TOP clauses helps reduce the returned data size and speeds up query execution when you only need a sample of the data. For example:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM employees WHERE department = 'Marketing' LIMIT 10;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, avoid running complex queries without testing. Break down large queries and test each part individually. This approach helps spot where errors occur and makes debugging easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these beginner-friendly tips—checking syntax, writing clear JOINs, using indexes, limiting results, and testing incrementally—you can master SQL query optimization and reduce execution errors."
+      }
+    ]
   }
 ];
