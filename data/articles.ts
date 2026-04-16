@@ -61229,5 +61229,345 @@ export const articles = [
         "value": "By mastering NULL handling, you'll write more robust and reliable SQL queries that gracefully manage missing or unknown data."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-javascript-best-practices",
+    "title": "Mastering Asynchronous JavaScript: Best Practices for Clean and Efficient Code",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to write clean and efficient asynchronous JavaScript code with practical best practices for beginners, including Promises, async/await, and error handling.",
+    "videoUrl": "https://www.youtube.com/watch?v=Mus_vwhTCq0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, meaning it executes code one piece at a time. But many tasks, like fetching data from a server, take time and shouldn't block the main thread. This is where asynchronous JavaScript comes in. Learning how to write asynchronous code cleanly and efficiently is essential for building responsive web applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with the basics: callbacks. Traditionally, asynchronous code used callbacks — functions passed as arguments to be called after a task completes. However, callbacks can lead to complex and hard-to-read code, often called \"callback hell.\""
+      },
+      {
+        "type": "code",
+        "value": "setTimeout(() => {\n  console.log('This happens asynchronously after 1 second');\n}, 1000);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To address callback hell and improve readability, JavaScript introduced Promises. A Promise represents a value that may be available now, later, or never. Promises allow chaining and better error handling."
+      },
+      {
+        "type": "code",
+        "value": "const myPromise = new Promise((resolve, reject) => {\n  // Simulate async operation\n  setTimeout(() => {\n    const success = true;\n    if (success) {\n      resolve('Data loaded');\n    } else {\n      reject('Error occurred');\n    }\n  }, 1000);\n});\n\nmyPromise\n  .then(result => {\n    console.log(result);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "While Promises improve code structure, the syntax can still feel verbose. That's why JavaScript introduced the async/await syntax, which lets you write asynchronous code that looks synchronous — making it easier to read and maintain."
+      },
+      {
+        "type": "code",
+        "value": "function delay(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function fetchData() {\n  try {\n    await delay(1000); // Wait for 1 second\n    console.log('Data fetched after 1 second');\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some best practices for mastering asynchronous JavaScript:\n\n1. Always handle errors, either with .catch() in Promises or try/catch blocks with async/await.\n2. Avoid deeply nested callbacks by using Promises or async/await.\n3. Use Promise.all() to run asynchronous operations in parallel when possible for better performance.\n4. Keep functions small and focused on a single task for better readability and easier debugging."
+      },
+      {
+        "type": "code",
+        "value": "async function getMultipleData() {\n  try {\n    const [data1, data2] = await Promise.all([\n      fetch('https://jsonplaceholder.typicode.com/posts/1').then(res => res.json()),\n      fetch('https://jsonplaceholder.typicode.com/posts/2').then(res => res.json())\n    ]);\n    console.log('Data 1:', data1);\n    console.log('Data 2:', data2);\n  } catch (error) {\n    console.error('Failed to fetch data:', error);\n  }\n}\n\ngetMultipleData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these tips and using async/await together with Promises, you can write asynchronous JavaScript that's clean, efficient, and easy to maintain. Mastering these concepts will greatly improve your web development skills and allow you to build faster, more responsive applications."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-memory-leaks-large-scale-javascript-applications",
+    "title": "Optimizing Memory Leaks in Large-Scale JavaScript Applications",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn how to identify and fix memory leaks in large-scale JavaScript applications to optimize performance and prevent slowdowns.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks happen when your JavaScript application keeps references to objects that are no longer needed, causing the memory to never be freed. In large-scale applications, this can lead to slow performance and crashes. Understanding how to find and fix these leaks is essential for keeping your app running smoothly."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common cause of memory leaks is forgetting to remove event listeners. If you add an event listener to elements or objects but never remove them, those references can stack up."
+      },
+      {
+        "type": "code",
+        "value": "const button = document.getElementById('myButton');\n\nfunction handleClick() {\n  console.log('Button clicked!');\n}\n\nbutton.addEventListener('click', handleClick);\n\n// Later when button is removed from the DOM, remember to remove the listener\nbutton.removeEventListener('click', handleClick);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another source of memory leaks can be closures that unintentionally hold onto variables. For example, if you keep references to large objects in closures after they are no longer needed, they won't get garbage collected."
+      },
+      {
+        "type": "code",
+        "value": "function createHeavyClosure() {\n  const largeArray = new Array(1000000).fill('data');\n  return function() {\n    console.log(largeArray[0]);\n  };\n}\n\nlet heavyFunction = createHeavyClosure();\n\n// If you no longer need heavyFunction, setting it to null helps free memory\nheavyFunction = null;"
+      },
+      {
+        "type": "paragraph",
+        "value": "To catch memory leaks, use browser developer tools. The Chrome DevTools Memory tab lets you take heap snapshots and find detached DOM nodes or objects retained in memory longer than necessary."
+      },
+      {
+        "type": "paragraph",
+        "value": "Additionally, be cautious when using global variables or large caches, as these can grow indefinitely during the app’s lifecycle. Instead, implement limits and regularly clean up data that is no longer needed."
+      },
+      {
+        "type": "code",
+        "value": "const cache = new Map();\n\nfunction addToCache(key, data) {\n  if (cache.size > 100) { // Limit cache size\n    const firstKey = cache.keys().next().value;\n    cache.delete(firstKey);\n  }\n  cache.set(key, data);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, preventing memory leaks in large JavaScript projects requires careful management of event listeners, closures, global variables, and caches. Regularly profiling your application and applying cleanup strategies will keep your app fast and stable."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-typescript-type-guards-runtime-performance",
+    "title": "Optimizing TypeScript Type Guards for Runtime Performance",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to write efficient TypeScript type guards that improve runtime performance while ensuring type safety.",
+    "videoUrl": "https://www.youtube.com/watch?v=M-VU0fLjIUU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Type guards in TypeScript help us narrow down types at runtime, allowing safer and more precise coding. However, poorly written type guards can slow down your application, especially when used frequently or in large-scale projects. This article covers how to optimize TypeScript type guards to boost runtime performance without sacrificing readability or correctness."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common beginner mistake is to use complex or expensive checks inside type guards. For example, using deep property checks or looping through arrays repeatedly can cause unnecessary overhead."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n}\n\ninterface Admin {\n  id: number;\n  name: string;\n  permissions: string[];\n}\n\nfunction isAdmin(user: User | Admin): user is Admin {\n  // Expensive check inside type guard\n  return Array.isArray((user as Admin).permissions) &&\n    (user as Admin).permissions.includes('admin');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above guard checks if the \"permissions\" property is an array and contains 'admin'. While it works, it's inefficient because it calls methods like includes that may iterate internally. Let's optimize this."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, simplify checks to only those necessary to confirm the type. Avoid repetitive work and costly operations. Instead, check for property existence and type."
+      },
+      {
+        "type": "code",
+        "value": "function isAdminOptimized(user: User | Admin): user is Admin {\n  // Simple and fast type guard\n  return 'permissions' in user && Array.isArray((user as Admin).permissions);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This optimized guard checks if the 'permissions' property exists and is an array without searching its contents. It’s usually sufficient to confirm an Admin type, improving runtime speed while maintaining correctness."
+      },
+      {
+        "type": "paragraph",
+        "value": "Second, avoid repeated type guard calls in performance-critical code. Cache your results when possible or refactor logic to minimize calls."
+      },
+      {
+        "type": "code",
+        "value": "const users: (User | Admin)[] = [...];\n\n// Instead of calling the guard multiple times in loops, do this:\nconst admins: Admin[] = [];\nfor (const user of users) {\n  if (isAdminOptimized(user)) {\n    admins.push(user); // Safe to treat as Admin here\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, prefer using built-in operators like \"in\" and \"typeof\" where possible. They are faster than complex logic or third-party functions."
+      },
+      {
+        "type": "code",
+        "value": "function isString(value: unknown): value is string {\n  return typeof value === 'string';\n}\n\nfunction hasId(obj: unknown): obj is { id: number } {\n  return obj !== null && typeof obj === 'object' && 'id' in obj;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to optimize TypeScript type guards for runtime performance:\n\n- Keep checks simple and direct.\n- Use fast built-in operators like \"in\" and \"typeof\".\n- Avoid expensive operations inside guards.\n- Minimize repeated calls to guards.\n- Cache or restructure logic where possible."
+      },
+      {
+        "type": "paragraph",
+        "value": "With these tips, you can write clean and efficient type guards that keep your TypeScript code safe and fast."
+      }
+    ]
+  },
+  {
+    "slug": "handling-time-zone-conversion-errors-python-global-applications",
+    "title": "Handling Time Zone Conversion Errors in Python for Global Applications",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to handle common time zone conversion errors in Python to build reliable global applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=eirjjyP2qcQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications used around the world, handling dates and times correctly is crucial. Time zone conversions are a common task but can easily cause errors if not managed properly. In this article, we'll explore how to handle time zone conversion errors in Python using beginner-friendly examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "Python's standard library offers the datetime module to work with dates and times, but it needs some help with time zones. The third-party library pytz is widely used to work with different time zones effectively. Let's start by installing it:"
+      },
+      {
+        "type": "code",
+        "value": "pip install pytz"
+      },
+      {
+        "type": "paragraph",
+        "value": "Once installed, you can create timezone-aware datetime objects and convert between time zones. Here's an example that converts New York time to London time:"
+      },
+      {
+        "type": "code",
+        "value": "from datetime import datetime\nimport pytz\n\n# Create a naive datetime (no timezone info)\nnaive_dt = datetime(2024, 4, 27, 15, 0, 0)\n\n# Define New York timezone\nny_tz = pytz.timezone('America/New_York')\n\n# Localize naive datetime to New York timezone\nny_aware_dt = ny_tz.localize(naive_dt)\n\n# Convert to London timezone\nlondon_tz = pytz.timezone('Europe/London')\nlondon_dt = ny_aware_dt.astimezone(london_tz)\n\nprint(\"New York time:\", ny_aware_dt)\nprint(\"London time:\", london_dt)"
+      },
+      {
+        "type": "paragraph",
+        "value": "However, time zone conversion can lead to errors, especially during Daylight Saving Time (DST) changes. Common errors include ambiguous times (when the clock moves back) and non-existent times (when the clock moves forward). To handle these, pytz provides useful options."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a date during the end of DST in New York, when the clock moves back from 2 AM to 1 AM. This creates an ambiguous time which could be either before or after the change. If you try to localize such a time, pytz will raise an AmbiguousTimeError."
+      },
+      {
+        "type": "code",
+        "value": "from pytz.exceptions import AmbiguousTimeError\ntry:\n    ambiguous_time = datetime(2023, 11, 5, 1, 30, 0)\n    localized_time = ny_tz.localize(ambiguous_time)\nexcept AmbiguousTimeError:\n    # Resolve by specifying is_dst\n    localized_time = ny_tz.localize(ambiguous_time, is_dst=True)  # or False\n\nprint(\"Resolved ambiguous time:\", localized_time)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, time can be non-existent during the start of DST, e.g., when the clock moves forward and skips certain times. Trying to localize these will raise a NonExistentTimeError, which you can catch and handle gracefully."
+      },
+      {
+        "type": "code",
+        "value": "from pytz.exceptions import NonExistentTimeError\ntry:\n    nonexistent_time = datetime(2023, 3, 12, 2, 30, 0)\n    localized_time = ny_tz.localize(nonexistent_time)\nexcept NonExistentTimeError:\n    # Handle the error, e.g., shift time forward by 1 hour\n    print(\"Non-existent time during DST start.\")\n    corrected_time = ny_tz.localize(datetime(2023, 3, 12, 3, 0, 0))\n    print(\"Corrected time:\", corrected_time)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Handling these errors ensures your application does not crash and can correctly interpret local times during DST changes, which is essential for global applications dealing with multiple time zones."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, always use timezone-aware datetime objects, and be prepared to catch and resolve AmbiguousTimeError and NonExistentTimeError when working with pytz. These practices will make your global application robust and user-friendly."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-for-complex-hierarchical-data",
+    "title": "Mastering Recursive Common Table Expressions (CTEs) for Complex Hierarchical Data",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) in SQL to efficiently query and manage complex hierarchical data with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=K1WeoKxLZ5o",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Hierarchical data, like organizational charts or folder structures, can be challenging to query using standard SQL. Recursive Common Table Expressions (CTEs) provide a powerful and elegant solution to traverse these hierarchies efficiently. In this tutorial, we'll explore how recursive CTEs work and how to use them step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "A Common Table Expression (CTE) is a temporary result set you can reference within a SQL statement. When a CTE refers to itself (recursive CTE), it allows you to perform iterative processing, which is perfect for hierarchical data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's consider a simple example: an employee table where each employee may have a manager. Our goal is to find the entire management hierarchy for a specific employee."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  name VARCHAR(100),\n  manager_id INT\n);\n\nINSERT INTO employees (employee_id, name, manager_id) VALUES\n(1, 'Alice', NULL),\n(2, 'Bob', 1),\n(3, 'Charlie', 2),\n(4, 'Diana', 2),\n(5, 'Eve', 1);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, Alice (employee_id = 1) is the top-level manager, Bob and Eve report to Alice, and Charlie and Diana report to Bob. To retrieve the full hierarchy starting from Alice, we use a recursive CTE."
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE employee_hierarchy AS (\n  -- Anchor member: starts with the top-level employee\n  SELECT employee_id, name, manager_id, 1 AS level\n  FROM employees\n  WHERE manager_id IS NULL\n\n  UNION ALL\n\n  -- Recursive member: join employees to the previous result to find subordinates\n  SELECT e.employee_id, e.name, e.manager_id, eh.level + 1\n  FROM employees e\n  INNER JOIN employee_hierarchy eh ON e.manager_id = eh.employee_id\n)\nSELECT *\nFROM employee_hierarchy\nORDER BY level, manager_id;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query works in two parts: first it selects the anchor row (top-level employees with no managers). Then it recursively joins employees whose manager_id matches the employee_id found in the previous step. The 'level' column tracks the depth in the hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also modify the recursive CTE to start from any employee (not necessarily the top) and explore their full reporting chain upwards or downwards."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, to find all managers of \"Charlie\" (employee_id = 3), you can write:"
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE managers AS (\n  -- Anchor member: start from Charlie\n  SELECT employee_id, name, manager_id\n  FROM employees\n  WHERE employee_id = 3\n\n  UNION ALL\n\n  -- Recursive member: find Charlie's managers\n  SELECT e.employee_id, e.name, e.manager_id\n  FROM employees e\n  INNER JOIN managers m ON e.employee_id = m.manager_id\n)\nSELECT * FROM managers;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Recursive CTEs are supported in most modern SQL databases including PostgreSQL, SQL Server, SQLite, and MySQL 8.0+. They are highly useful for querying descendants, ancestors, and paths in a hierarchy."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering recursive CTEs enables you to handle complex hierarchical data with clarity and efficiency. Practice them with different hierarchical datasets to solidify your understanding."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-advanced-hierarchical-queries-sql",
+    "title": "Mastering Recursive CTEs: Unlocking Advanced Hierarchical Queries in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding and fixing common errors in recursive CTEs for hierarchical queries in SQL.",
+    "videoUrl": "https://www.youtube.com/watch?v=g_AG0QKT23g",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are a powerful SQL feature used to run hierarchical or tree-structured queries in a clean and readable way. Despite their power, beginners often encounter errors executing recursive CTEs due to syntax issues, missing anchors or incorrect recursion logic. This guide will help you master recursive CTEs by focusing on common mistakes and how to fix them."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's quickly review what a recursive CTE is. It consists of two parts: an \"anchor member\" and the \"recursive member.\" The anchor member defines the base query or the starting point. The recursive member references the CTE itself to climb through the hierarchy. Both parts are combined with a UNION ALL operator."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example using an employee hierarchy where each employee reports to a manager:"
+      },
+      {
+        "type": "code",
+        "value": "WITH EmployeeHierarchy AS (\n  -- Anchor member: select top-level managers (reports_to is NULL)\n  SELECT employee_id, name, reports_to\n  FROM employees\n  WHERE reports_to IS NULL\n\n  UNION ALL\n\n  -- Recursive member: join employees to the hierarchy\n  SELECT e.employee_id, e.name, e.reports_to\n  FROM employees e\n  INNER JOIN EmployeeHierarchy eh ON e.reports_to = eh.employee_id\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common errors and how to fix them:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Missing UNION ALL**: A recursive CTE needs UNION ALL between the anchor and recursive queries. Sometimes beginners forget this or use UNION instead, which can cause unexpected results or errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Recursive member does not reference the CTE**: The recursive part must have a join referencing the CTE itself to build the hierarchy. Forgetting this causes infinite loops or failure."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Column mismatch between anchor and recursive parts**: Both parts must return the same number of columns with compatible types."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Infinite recursion**: If the recursive member doesn’t move towards a base case (e.g., the join condition doesn’t eventually fail), SQL engines might throw an error or run indefinitely. Use a MAXRECURSION option in SQL Server or LIMIT in others."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's see an example of an error and fix it."
+      },
+      {
+        "type": "code",
+        "value": "-- Error example: missing UNION ALL\nWITH EmployeeHierarchy AS (\n  SELECT employee_id, name, reports_to\n  FROM employees\n  WHERE reports_to IS NULL\n\n  SELECT e.employee_id, e.name, e.reports_to\n  FROM employees e\n  INNER JOIN EmployeeHierarchy eh ON e.reports_to = eh.employee_id\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query will fail because the UNION ALL is missing. Adding UNION ALL fixes it:"
+      },
+      {
+        "type": "code",
+        "value": "WITH EmployeeHierarchy AS (\n  SELECT employee_id, name, reports_to\n  FROM employees\n  WHERE reports_to IS NULL\n\n  UNION ALL\n\n  SELECT e.employee_id, e.name, e.reports_to\n  FROM employees e\n  INNER JOIN EmployeeHierarchy eh ON e.reports_to = eh.employee_id\n)\nSELECT * FROM EmployeeHierarchy;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, recursive CTEs are fantastic for hierarchical queries, but they demand correct syntax and clear logic. Always ensure you have:\n- Anchor member\n- UNION ALL\n- Recursive member referencing the CTE\n- Matching columns\n- A stopping condition to prevent infinite loops\n\nWith practice, recursive CTEs will become a powerful addition to your SQL skillset."
+      }
+    ]
   }
 ];
