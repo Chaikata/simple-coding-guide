@@ -59847,5 +59847,491 @@ export const articles = [
         "value": "By understanding how isolation levels affect your SQL transactions, you can write more robust and efficient database code that keeps your application reliable and fast."
       }
     ]
+  },
+  {
+    "slug": "mastering-javascript-proxy-creative-use-cases-for-dynamic-object-manipulation",
+    "title": "Mastering JavaScript Proxy: Creative Use Cases for Dynamic Object Manipulation",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to use JavaScript Proxy to dynamically control and customize object behaviors with practical, beginner-friendly examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=zO6CHvTErxE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript Proxy is a powerful feature that lets you create a wrapper around an object to intercept and redefine fundamental operations like getting, setting, or deleting properties. This makes it ideal for dynamic object manipulation and adding custom behaviors without changing the original object."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll cover the basics of Proxy and explore creative examples to enhance your understanding, even if you're new to this concept."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Proxy in JavaScript?"
+      },
+      {
+        "type": "paragraph",
+        "value": "A Proxy takes two parameters: the target object and a handler object. The handler contains traps, which are functions that intercept operations on the target object. For example, `get` intercepts property access, and `set` intercepts property assignment."
+      },
+      {
+        "type": "code",
+        "value": "const target = {};\n\nconst handler = {\n  get: function(obj, prop) {\n    console.log(`Property '${prop}' was accessed`);\n    return obj[prop];\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nproxy.name = 'Alice';\nconsole.log(proxy.name);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, when we access `proxy.name`, the `get` trap logs a message first, then returns the actual value."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Case 1: Validation on Property Assignment"
+      },
+      {
+        "type": "paragraph",
+        "value": "Proxy can validate values before they are set on an object. For example, if you want to ensure a user's age is always a positive number:"
+      },
+      {
+        "type": "code",
+        "value": "const user = { age: 25 };\n\nconst validator = {\n  set: function(obj, prop, value) {\n    if (prop === 'age') {\n      if (!Number.isInteger(value) || value <= 0) {\n        throw new Error('Age must be a positive integer');\n      }\n    }\n    obj[prop] = value;\n    return true; // indicate success\n  }\n};\n\nconst proxyUser = new Proxy(user, validator);\n\nproxyUser.age = 30; // Works\n// proxyUser.age = -5; // Throws Error\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach helps catch invalid data immediately during object updates."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Case 2: Default Values for Missing Properties"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can return default values when accessing properties that don’t exist on the target object:"
+      },
+      {
+        "type": "code",
+        "value": "const defaults = {\n  language: 'JavaScript',\n  level: 'Beginner'\n};\n\nconst handler = {\n  get: function(obj, prop) {\n    return prop in obj ? obj[prop] : defaults[prop];\n  }\n};\n\nconst user = { language: 'Python' };\nconst proxyUser = new Proxy(user, handler);\n\nconsole.log(proxyUser.language); // 'Python'\nconsole.log(proxyUser.level);    // 'Beginner'\nconsole.log(proxyUser.framework); // undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "This fixes missing properties by transparently providing fallback values."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Use Case 3: Logging Property Accesses"
+      },
+      {
+        "type": "paragraph",
+        "value": "Proxies can help track when properties are read or updated, which is useful for debugging or analytics:"
+      },
+      {
+        "type": "code",
+        "value": "const book = { title: '1984', author: 'George Orwell' };\n\nconst logger = {\n  get(target, prop) {\n    console.log(`Reading property '${prop}'`);\n    return target[prop];\n  },\n  set(target, prop, value) {\n    console.log(`Setting property '${prop}' to '${value}'`);\n    target[prop] = value;\n    return true;\n  }\n};\n\nconst proxyBook = new Proxy(book, logger);\n\nconsole.log(proxyBook.title);\nproxyBook.author = 'Orwell';"
+      },
+      {
+        "type": "paragraph",
+        "value": "This way, every access and update is logged automatically."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "JavaScript's Proxy object empowers you to customize and extend the behavior of objects easily and dynamically. From validation, default values, to detailed logging, Proxies unlock many creative possibilities without complex inheritance or design patterns."
+      },
+      {
+        "type": "paragraph",
+        "value": "Experiment with these examples and explore the many other traps such as `deleteProperty`, `has`, and `apply` for functions to master dynamic object manipulation."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-type-coercion-common-pitfalls-and-how-to-avoid-them",
+    "title": "Understanding JavaScript Type Coercion: Common Pitfalls and How to Avoid Them",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn about JavaScript's type coercion, why it can cause unexpected behavior, and practical tips to avoid common mistakes for cleaner code.",
+    "videoUrl": "https://www.youtube.com/watch?v=fHtXN_4BX-k",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that often automatically converts values from one type to another. This process is called type coercion. While type coercion can be helpful, it sometimes leads to unexpected results, especially for beginners. By understanding common pitfalls and how to avoid them, you can write more predictable and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Type Coercion?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion happens when JavaScript automatically changes the type of a value to match the expected type in an operation. For example, when you add a number and a string, JavaScript converts the number to a string and concatenates them."
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 + '5'); // '55' because 5 is converted to '5' and concatenated"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Pitfalls"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Using '==' instead of '===': Double equals (==) compares values after coercion, which can cause unexpected true results."
+      },
+      {
+        "type": "code",
+        "value": "console.log(0 == false); // true\nconsole.log('' == 0);    // true\nconsole.log(null == undefined); // true"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using triple equals (===) compares both type and value, avoiding coercion and giving more predictable results."
+      },
+      {
+        "type": "code",
+        "value": "console.log(0 === false); // false\nconsole.log('' === 0);    // false\nconsole.log(null === undefined); // false"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Unexpected boolean coercion: Some values like empty strings (\"\"), 0, null, undefined, and NaN are \"falsy\" and convert to false in boolean contexts."
+      },
+      {
+        "type": "code",
+        "value": "if ('') {\n  console.log('This won\\'t run');\n} else {\n  console.log('Empty string is falsy');\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Adding numbers and strings: Mixing numbers and strings with + results in string concatenation, which may not be intended."
+      },
+      {
+        "type": "code",
+        "value": "console.log(10 + '5');  // '105'\nconsole.log('10' + 5);  // '105'\nconsole.log(10 + 5);    // 15"
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Avoid Type Coercion Problems"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Always use === and !== instead of == and != to avoid unexpected coercion."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Explicitly convert types when needed using functions like Number(), String(), or Boolean(). This makes your code intention clear."
+      },
+      {
+        "type": "code",
+        "value": "const input = '5';\nconst number = Number(input); // Converts string to number\nconsole.log(number + 10); // 15"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Be careful when concatenating values. If you need to sum numbers, ensure they are number types."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Understand truthy and falsy values so you can predict boolean behavior."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion is a powerful feature but can also cause bugs if you're not careful. Use strict equality, explicit conversions, and always be mindful of the types your variables contain. With these tips, you can write clearer and safer JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-decorators-advanced-patterns-and-real-world-applications",
+    "title": "Mastering TypeScript Decorators: Advanced Patterns and Real-World Applications",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore advanced TypeScript decorators with practical examples and real-world use cases to enhance your codebase and improve maintainability.",
+    "videoUrl": "https://www.youtube.com/watch?v=OH5PNzOioGM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators are powerful tools that allow you to modify or annotate classes, methods, properties, or parameters. While the basics are easy to grasp, advanced patterns enable sophisticated behaviors and cleaner code. In this tutorial, we’ll delve into advanced decorator patterns and real-world applications that beginners can implement today."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's briefly recap the four types of decorators in TypeScript: class decorators, method decorators, property decorators, and parameter decorators. Each serves to extend or customize how those elements behave or are processed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Class Decorators with Parameters\nClass decorators receive the target class constructor and can return a new constructor to modify behavior. Adding parameters gives you more flexibility."
+      },
+      {
+        "type": "code",
+        "value": "function Logger(prefix: string) {\n  return function<T extends { new (...args: any[]): {} }>(constructor: T) {\n    return class extends constructor {\n      constructor(...args: any[]) {\n        super(...args);\n        console.log(`${prefix} - New instance created`);\n      }\n    };\n  };\n}\n\n@Logger('INFO')\nclass User {\n  constructor(public name: string) {}\n}\n\nconst user = new User('Alice');\n// Console: INFO - New instance created"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Method Decorators for Timing Function Execution\nYou can create method decorators that wrap an existing method to add functionality, such as logging how long a method takes to execute."
+      },
+      {
+        "type": "code",
+        "value": "function MeasureTime(target: any, propertyKey: string, descriptor: PropertyDescriptor) {\n  const originalMethod = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    const start = performance.now();\n    const result = originalMethod.apply(this, args);\n    const end = performance.now();\n    console.log(`${propertyKey} took ${end - start} ms`);\n    return result;\n  };\n}\n\nclass MathOps {\n  @MeasureTime\n  factorial(n: number): number {\n    return n <= 1 ? 1 : n * this.factorial(n - 1);\n  }\n}\n\nconst math = new MathOps();\nconsole.log(math.factorial(10));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Property Decorators for Validation\nProperty decorators can be used to validate property values whenever they are set."
+      },
+      {
+        "type": "code",
+        "value": "function MinLength(limit: number) {\n  return function(target: any, propertyKey: string) {\n    let value: string;\n\n    const getter = () => value;\n    const setter = (val: string) => {\n      if (val.length < limit) {\n        throw new Error(`${propertyKey} must be at least ${limit} characters`);\n      }\n      value = val;\n    };\n\n    Object.defineProperty(target, propertyKey, {\n      get: getter,\n      set: setter,\n      enumerable: true,\n      configurable: true\n    });\n  };\n}\n\nclass UserProfile {\n  @MinLength(5)\n  username: string;\n\n  constructor(username: string) {\n    this.username = username;\n  }\n}\n\ntry {\n  const profile = new UserProfile('Joe'); // Throws error\n} catch (e) {\n  console.error(e.message);\n}\n\nconst validProfile = new UserProfile('Joseph'); // Works fine"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Parameter Decorators for Metadata\nParameter decorators help attach metadata to function parameters, which can be useful for dependency injection or validation frameworks."
+      },
+      {
+        "type": "code",
+        "value": "import 'reflect-metadata';\n\nfunction Required(target: any, propertyKey: string | symbol, parameterIndex: number) {\n  const existingRequiredParameters: number[] = Reflect.getOwnMetadata('requiredParameters', target, propertyKey) || [];\n  existingRequiredParameters.push(parameterIndex);\n  Reflect.defineMetadata('requiredParameters', existingRequiredParameters, target, propertyKey);\n}\n\nclass Api {\n  getData(@Required id: string) {\n    console.log(`Fetching data with ID ${id}`);\n  }\n}\n\nfunction validate(target: any, propertyName: string, descriptor: PropertyDescriptor) {\n  const method = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    const requiredParameters: number[] = Reflect.getOwnMetadata('requiredParameters', target, propertyName);\n    if (requiredParameters) {\n      for (const index of requiredParameters) {\n        if (args[index] == null) {\n          throw new Error('Missing required argument.');\n        }\n      }\n    }\n    return method.apply(this, args);\n  };\n}\n\nReflect.decorate([validate], Api.prototype, 'getData', Object.getOwnPropertyDescriptor(Api.prototype, 'getData'));\n\nconst api = new Api();\n// api.getData(null); // Throws error\napi.getData('123'); // Works fine"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion\nAdvanced TypeScript decorators not only enhance your code by making it cleaner and more maintainable but also help implement powerful patterns such as logging, validation, and metadata management. With practice, you can master these patterns and apply them in real-world applications effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember: decorators can sometimes add complexity, so use them judiciously and always document their purpose clearly for your team."
+      }
+    ]
+  },
+  {
+    "slug": "leveraging-typescripts-advanced-types-to-prevent-system-design-scalability-issues",
+    "title": "Leveraging TypeScript’s Advanced Types to Prevent System Design Scalability Issues",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript’s advanced types to catch and prevent common errors that can cause scalability problems in system design, ensuring your application grows smoothly.",
+    "videoUrl": "https://www.youtube.com/watch?v=auEGg0P-6PQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building scalable systems, early detection of design mistakes is crucial. TypeScript's powerful typing system can help catch errors that might cause issues as your application grows. In this article, we will explore how advanced TypeScript types like union types, intersection types, mapped types, and conditional types help prevent system design scalability problems by enforcing correct data structures and function usages."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common scalability issue is having inconsistent data shapes across your application. This leads to runtime errors and hard-to-maintain code. Using union types ensures that only predetermined valid values are accepted."
+      },
+      {
+        "type": "code",
+        "value": "type UserRole = 'admin' | 'editor' | 'viewer';\n\nfunction setUserRole(role: UserRole) {\n  // Only 'admin', 'editor', or 'viewer' are allowed\n  console.log(`Setting user role to ${role}`);\n}\n\nsetUserRole('admin'); // ✅ Valid\n// setUserRole('guest'); // ❌ Error: Argument of type 'guest' is not assignable to parameter of type 'UserRole'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Intersection types can be used to combine multiple types, ensuring objects meet all required constraints, which is helpful in system design for merging configurations or entity definitions."
+      },
+      {
+        "type": "code",
+        "value": "type RequestParams = { id: string };\ntype RequestBody = { data: string };\n\ntype Request = RequestParams & RequestBody;\n\nfunction handleRequest(req: Request) {\n  console.log(req.id, req.data);\n}\n\nhandleRequest({ id: '123', data: 'Hello' }); // ✅ Valid\n// handleRequest({ id: '123' }); // ❌ Error: Property 'data' is missing."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mapped types automate the creation of new types based on existing ones. This prevents duplication and inconsistency when evolving your system. For instance, you can make all properties in a type optional or readonly."
+      },
+      {
+        "type": "code",
+        "value": "type Config = {\n  apiUrl: string;\n  timeout: number;\n};\n\n// Make all properties optional\ntype PartialConfig = {\n  [Key in keyof Config]?: Config[Key];\n};\n\nconst config: PartialConfig = { apiUrl: 'https://example.com' }; // ✅ Valid\n// config.timeout = 'fast'; // ❌ Error: Type 'string' is not assignable to type 'number'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Conditional types enable sophisticated compile-time checks that adapt based on generic type parameters. This can prevent passing incorrect types in generic functions, which helps maintain a flexible but safe codebase."
+      },
+      {
+        "type": "code",
+        "value": "type IsString<T> = T extends string ? true : false;\n\nfunction assertString<T>(value: T): IsString<T> {\n  if (typeof value === 'string') {\n    return true as IsString<T>;\n  }\n  throw new Error('Value is not a string');\n}\n\nassertString('hello'); // ✅ true\n// assertString(123); // ❌ Error at runtime: Value is not a string"
+      },
+      {
+        "type": "paragraph",
+        "value": "By leveraging these advanced types, you can enforce strict contracts on your data structures and functions, catching errors as early as development time. This reduces bugs that appear during scaling, making your system more robust and easier to maintain. Start applying these tips today to prevent common scalability pitfalls in your TypeScript projects!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-typeerror-common-causes-and-practical-solutions",
+    "title": "Understanding Python's TypeError: Common Causes and Practical Solutions",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn what Python's TypeError means, common causes, and how to fix it with practical examples. A beginner-friendly guide to avoid and solve TypeErrors in your code.",
+    "videoUrl": "https://www.youtube.com/watch?v=uswm-Xtekfs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's TypeError is a common error that occurs when you perform an operation on incompatible data types. Understanding why this error happens and how to fix it is essential for beginners. This article will explain the most frequent causes of TypeError and show you practical ways to resolve them."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a TypeError?\nTypeError occurs when an operation or function is applied to an object of an inappropriate type. For example, trying to add a number to a string will cause Python to raise this error."
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"Hello\"\n# This will raise a TypeError because you cannot add an int and a str\nresult = num + text"
+      },
+      {
+        "type": "paragraph",
+        "value": "Running the code above gives the error: `TypeError: unsupported operand type(s) for +: 'int' and 'str'`. To fix this, you should convert one type to be compatible with the other."
+      },
+      {
+        "type": "code",
+        "value": "# Convert the number to string before adding\nresult = str(num) + text\nprint(result)  # Output: 5Hello"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Causes of TypeError and Solutions"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Adding or Combining Different Types**: Adding strings and integers without conversion leads to TypeError."
+      },
+      {
+        "type": "code",
+        "value": "age = 25\nmessage = \"I am \" + age + \" years old.\"\n# Fix by converting age to string\nmessage = \"I am \" + str(age) + \" years old.\""
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Calling a Non-Callable Object**: Trying to call a variable that is not a function causes TypeError."
+      },
+      {
+        "type": "code",
+        "value": "value = 10\nvalue()\n# Fix: check if value is callable, or it might be a mistake in the code."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Using Indexing on Non-Indexable Types**: Attempting to index an integer or other non-sequence types leads to TypeError."
+      },
+      {
+        "type": "code",
+        "value": "num = 100\nprint(num[0])  # TypeError: 'int' object is not subscriptable\n# Fix: only index strings, lists, tuples, or other sequences."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Passing Wrong Type of Arguments to Functions**: Some functions expect specific types, passing incompatible ones causes TypeError."
+      },
+      {
+        "type": "code",
+        "value": "def greet(name):\n    print(\"Hello, \" + name)\n\ngreet(100)  # TypeError because 100 is not a string\n# Fix: Convert input to correct type if needed\ngreet(str(100))"
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Debug and Avoid TypeErrors"
+      },
+      {
+        "type": "paragraph",
+        "value": " - **Read the error message carefully.** Python usually tells you the types involved and where the error happens.\n - **Use the `type()` function** to check variable types during debugging.\n - **Convert types explicitly** when combining different types, like using `str()`, `int()`, or `float()`.\n - **Write clear code** where variable types are predictable.\n - **Use type hints** (optional) to help keep track of expected types."
+      },
+      {
+        "type": "code",
+        "value": "value = 42\nprint(type(value))  # <class 'int'>\ntext = str(value)  # Convert integer to string"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nTypeError is a common beginner error caused by operations on incompatible data types. The good news is that by understanding what types your variables hold and converting them explicitly when needed, you can avoid most TypeErrors. Practice reading error messages, testing types, and writing clear code to improve your Python skills."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-scalable-ecommerce-product-search-engine-with-sql",
+    "title": "Building a Scalable E-commerce Product Search Engine with SQL: A Beginner's Guide",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to create a scalable product search engine for your e-commerce site using SQL, focusing on database design, indexing, and practical query examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=kkeFE6iRfMM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Creating an efficient and scalable product search engine is crucial for any e-commerce website. SQL databases can be optimized to provide fast and relevant search results without the need for complex third-party search engines. This guide will walk you through the basics of designing your product database and writing SQL queries to build a simple, scalable search engine."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, let's design a product table with common attributes such as id, name, description, price, and category. We’ll use VARCHAR for text fields and INTEGER or DECIMAL for others. Creating indexes on columns you search frequently is essential to improve performance."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE products (\n    id INTEGER PRIMARY KEY,\n    name VARCHAR(255) NOT NULL,\n    description TEXT,\n    price DECIMAL(10, 2),\n    category VARCHAR(100)\n);\n\n-- Create an index on 'name' and 'category' to speed up search\nCREATE INDEX idx_products_name ON products(name);\nCREATE INDEX idx_products_category ON products(category);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, let's insert some sample data into the products table so that we can run search queries:"
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO products (id, name, description, price, category) VALUES\n(1, 'Wireless Mouse', 'Ergonomic wireless mouse with USB receiver', 25.99, 'Electronics'),\n(2, 'Bluetooth Headphones', 'Noise-cancelling over-ear headphones', 89.99, 'Electronics'),\n(3, 'Coffee Mug', 'Ceramic mug suitable for hot beverages', 9.99, 'Home & Kitchen'),\n(4, 'Gaming Keyboard', 'Mechanical keyboard with RGB lighting', 79.99, 'Electronics');"
+      },
+      {
+        "type": "paragraph",
+        "value": "A simple product search often involves finding products whose name or description contains a keyword. Here’s an example query to find products matching a user’s keyword:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, name, price, category\nFROM products\nWHERE name LIKE '%wireless%'\n   OR description LIKE '%wireless%';"
+      },
+      {
+        "type": "paragraph",
+        "value": "To support more advanced search features like filtering by category and price range, you can extend your queries with WHERE conditions:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT id, name, price, category\nFROM products\nWHERE (name LIKE '%headphones%' OR description LIKE '%headphones%')\n  AND category = 'Electronics'\n  AND price BETWEEN 50 AND 100;"
+      },
+      {
+        "type": "paragraph",
+        "value": "For scalability, consider the following best practices:\n\n1. Use full-text indexing if your SQL database supports it (e.g., MySQL's FULLTEXT or PostgreSQL's tsvector). This improves search relevance and speed.\n2. Maintain appropriate indexes on searchable columns.\n3. Use pagination with LIMIT and OFFSET to handle large result sets efficiently.\n\nHere is an example with FULLTEXT search in MySQL:"
+      },
+      {
+        "type": "code",
+        "value": "-- Add FULLTEXT index\nALTER TABLE products ADD FULLTEXT(name, description);\n\n-- Use MATCH/AGAINST for full-text search\nSELECT id, name, price, category\nFROM products\nWHERE MATCH(name, description) AGAINST('wireless' IN NATURAL LANGUAGE MODE);\n\n-- Add pagination\nSELECT id, name, price, category\nFROM products\nWHERE MATCH(name, description) AGAINST('wireless' IN NATURAL LANGUAGE MODE)\nLIMIT 10 OFFSET 0;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these steps and continuously optimizing your database and queries, you can build a scalable and efficient e-commerce product search engine using only SQL. As your application grows, explore more advanced SQL features and consider additional tools like caching or external search engines when needed."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-cte-for-hierarchical-data-sql-errors",
+    "title": "Mastering Recursive Common Table Expressions for Hierarchical Data Modeling in SQL: Troubleshooting Common Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to effectively use recursive Common Table Expressions (CTEs) in SQL for hierarchical data modeling and how to troubleshoot common errors beginners encounter.",
+    "videoUrl": "https://www.youtube.com/watch?v=K1WeoKxLZ5o",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Recursive Common Table Expressions (CTEs) are powerful SQL tools used to query hierarchical data such as organizational charts, category trees, or bill-of-materials structures. While they simplify complex recursive operations, beginners often face errors that can be confusing. This article guides you through the basics of recursive CTEs and highlights common errors with practical fixes to help you master hierarchical data modeling."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive CTE consists of two parts: the anchor member and the recursive member. The anchor part selects the base rows (like root nodes), and the recursive part references the CTE itself to find child rows. Below is a simple example demonstrating how to get an employee hierarchy."
+      },
+      {
+        "type": "code",
+        "value": "WITH EmployeeHierarchy AS (\n    -- Anchor member selects the top-level managers (no manager_id)\n    SELECT EmployeeID, ManagerID, EmployeeName, 0 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n    \n    UNION ALL\n    \n    -- Recursive member finds employees reporting to the previous level\n    SELECT e.EmployeeID, e.ManagerID, e.EmployeeName, Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT * FROM EmployeeHierarchy;\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error 1: \"Recursive member must reference the recursive CTE\"\nBeginners sometimes forget to join the recursive part to the CTE itself. In the example above, the line \"INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\" is essential. Omitting or incorrectly referencing the CTE causes this error."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error 2: \"Query exceeded maximum recursion level\"\nThis error appears when the recursion goes too deep, often caused by circular references in the data (e.g., an employee who indirectly manages themselves). You can limit recursion depth with the MAXRECURSION option or fix the data:"
+      },
+      {
+        "type": "code",
+        "value": "OPTION (MAXRECURSION 100)\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid infinite loops, check your data for cycles or add conditions to break recursion early."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common Error 3: \"Incorrect Column Name or Number\"\nThe anchor and recursive query parts must return the same number and type of columns. If one part returns extra columns or the order differs, the CTE fails. Ensure both queries match in structure exactly."
+      },
+      {
+        "type": "paragraph",
+        "value": "As a tip, always alias your columns properly and verify the columns for consistency between the anchor and recursive parts."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering recursive CTEs for hierarchical data is a matter of understanding their structure and common pitfalls. Always check your recursive references, data integrity, and column consistency. With these tips, you will be confidently using recursive CTEs to model complex hierarchies in SQL."
+      }
+    ]
   }
 ];
