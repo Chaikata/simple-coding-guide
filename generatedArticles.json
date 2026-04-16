@@ -1,375 +1,199 @@
 [
   {
-    "slug": "building-scalable-microservices-in-javascript-using-event-driven-architecture",
-    "title": "Building Scalable Microservices in JavaScript Using Event-Driven Architecture",
+    "slug": "building-a-real-time-chat-application-with-websockets-in-javascript",
+    "title": "Building a Real-Time Chat Application with WebSockets in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to build scalable and maintainable microservices in JavaScript by leveraging the power of event-driven architecture. This beginner-friendly tutorial walks you through key concepts and practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "description": "Learn how to create a simple real-time chat app using JavaScript and WebSockets. This beginner-friendly tutorial guides you through setting up both server and client sides for instant messaging.",
+    "videoUrl": "https://www.youtube.com/watch?v=1BfCnjr_Vjg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Microservices are a popular approach to building scalable applications by breaking them down into smaller, independent services. One effective way to design microservices is using an event-driven architecture, where services communicate by emitting and listening to events asynchronously. This makes your system more flexible, loosely coupled, and easier to scale. In this tutorial, we'll explore how to create simple microservices in JavaScript using event-driven principles."
+        "value": "Real-time communication is essential for modern web applications, and WebSockets make it easy to build interactive experiences like chat apps. In this tutorial, you'll learn how to create a basic real-time chat application using JavaScript and WebSockets. We'll build a simple server using Node.js and a client that runs in the browser."
       },
       {
         "type": "paragraph",
-        "value": "### What is Event-Driven Architecture? \nEvent-driven architecture (EDA) centers around the idea that services produce events when something happens and other services listen and react to these events. Unlike traditional request-response communication, EDA allows for asynchronous, decoupled, and scalable systems."
+        "value": "### What are WebSockets?\nWebSockets provide a full-duplex communication channel that remains open between the client and server, allowing messages to be sent instantly in both directions without repeated HTTP requests. This makes it perfect for real-time applications like chat."
       },
       {
         "type": "paragraph",
-        "value": "### Setting Up Our Project\nLet's start by creating two simple microservices: an Order Service and an Email Service. The Order Service will emit an event when a new order is created, and the Email Service will listen for that event to send a confirmation email."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 1: Installing Dependencies\nWe'll use Node.js and the `eventemitter3` package, which is a lightweight event emitter implementation."
+        "value": "### Step 1: Setting Up the Server\nFirst, we'll create a server using Node.js and the `ws` library, which is a popular WebSocket implementation for Node."
       },
       {
         "type": "code",
-        "value": "npm init -y\nnpm install eventemitter3"
+        "value": "const WebSocket = require('ws');\n\nconst server = new WebSocket.Server({ port: 8080 });\n\nserver.on('connection', socket => {\n  console.log('New client connected');\n\n  // Broadcast to all clients except sender\n  socket.on('message', message => {\n    server.clients.forEach(client => {\n      if (client !== socket && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  socket.on('close', () => {\n    console.log('Client disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
       },
       {
         "type": "paragraph",
-        "value": "### Step 2: Creating the Event Bus\nThe event bus is a shared event emitter that allows different services to communicate by publishing and subscribing to events."
+        "value": "Save the above code in a file named `server.js`. To install the required package, run `npm install ws`. Then start your server with `node server.js`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Creating the Client\nNow, let's create the client-side HTML and JavaScript that will connect to the WebSocket server, send messages, and display incoming chat messages."
       },
       {
         "type": "code",
-        "value": "// eventBus.js\nconst EventEmitter = require('eventemitter3');\nconst eventBus = new EventEmitter();\n\nmodule.exports = eventBus;"
+        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Simple WebSocket Chat</title>\n  <style>\n    #messages { list-style-type: none; padding: 0; }\n    #messages li { padding: 5px 10px; background: #f4f4f4; margin-bottom: 5px; border-radius: 4px; }\n  </style>\n</head>\n<body>\n  <h1>WebSocket Chat</h1>\n  <ul id=\"messages\"></ul>\n  <input id=\"input\" autocomplete=\"off\" placeholder=\"Type a message...\" />\n  <button id=\"send\">Send</button>\n\n  <script>\n    const ws = new WebSocket('ws://localhost:8080');\n    const input = document.getElementById('input');\n    const sendButton = document.getElementById('send');\n    const messages = document.getElementById('messages');\n\n    // Display incoming messages\n    ws.onmessage = event => {\n      const li = document.createElement('li');\n      li.textContent = event.data;\n      messages.appendChild(li);\n    };\n\n    // Send message function\n    function sendMessage() {\n      if(input.value) {\n        ws.send(input.value);\n        const li = document.createElement('li');\n        li.textContent = `You: ${input.value}`;\n        li.style.fontWeight = 'bold';\n        messages.appendChild(li);\n        input.value = '';\n      }\n    }\n\n    // Send message on button click\n    sendButton.addEventListener('click', sendMessage);\n\n    // Send message on Enter key\n    input.addEventListener('keypress', event => {\n      if (event.key === 'Enter') {\n        sendMessage();\n      }\n    });\n  </script>\n</body>\n</html>"
       },
       {
         "type": "paragraph",
-        "value": "### Step 3: Building the Order Service\nThis service will simulate order creation and emit an \"orderCreated\" event with order details."
-      },
-      {
-        "type": "code",
-        "value": "// orderService.js\nconst eventBus = require('./eventBus');\n\nfunction createOrder(order) {\n  console.log('Creating order:', order);\n  // After creating order, emit an event\n  eventBus.emit('orderCreated', order);\n}\n\n// Simulate an order creation\ndefaultOrder = { id: 1, item: 'Book', quantity: 2, customerEmail: 'customer@example.com' };\ncreateOrder(defaultOrder);"
+        "value": "Open this HTML file in multiple browser windows or tabs to test chatting between clients. When you type a message in one window and press 'Send' or Enter, other connected clients will see the message in real time."
       },
       {
         "type": "paragraph",
-        "value": "### Step 4: Building the Email Service\nThis service listens for the \"orderCreated\" event and sends a confirmation email (simulated here with a console log)."
-      },
-      {
-        "type": "code",
-        "value": "// emailService.js\nconst eventBus = require('./eventBus');\n\neventBus.on('orderCreated', (order) => {\n  console.log(`Sending confirmation email to ${order.customerEmail} for order ${order.id}`);\n});"
+        "value": "### Summary\nIn this tutorial, you built a real-time chat application using JavaScript and WebSockets. The WebSocket server handles client connections and broadcasts messages, while the client connects to the server and displays messages live. This basic setup can be extended with features like usernames, message history, and styling."
       },
       {
         "type": "paragraph",
-        "value": "### Step 5: Running Our Services Together\nTo see the event-driven flow in action, create an entry point file that requires both services to make sure they share the same event bus."
-      },
-      {
-        "type": "code",
-        "value": "// index.js\nrequire('./emailService');\nrequire('./orderService');"
-      },
-      {
-        "type": "paragraph",
-        "value": "Run `node index.js` in your terminal. You should see the order creation message followed by the email sending message, demonstrating how the services communicate via events."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Advantages of Event-Driven Microservices\n- **Loose Coupling:** Services only know about events, not each other.\n- **Scalability:** Services can be scaled independently.\n- **Asynchronous Communication:** Improves performance and responsiveness.\n- **Extensibility:** Easily add new services that listen to events without changing existing code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Next Steps\nThis example uses a simple in-memory event bus for illustration. For real-world applications, consider using messaging systems like RabbitMQ, Kafka, or AWS SNS/SQS to handle events across multiple machines and services."
-      },
-      {
-        "type": "paragraph",
-        "value": "By adopting event-driven architecture in your JavaScript microservices, you can build systems that are scalable, maintainable, and ready to handle complex workflows with ease."
+        "value": "Experiment with this code by adding more features and deploying your chat app online to share with friends!"
       }
     ]
   },
   {
-    "slug": "designing-scalable-event-driven-architectures-with-javascript",
-    "title": "Designing Scalable Event-Driven Architectures with JavaScript",
+    "slug": "understanding-and-handling-promise-rejection-errors-in-javascript",
+    "title": "Understanding and Handling Promise Rejection Errors in JavaScript",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to build scalable event-driven architectures with JavaScript, understand common errors, and best practices for handling events effectively.",
-    "videoUrl": "https://www.youtube.com/watch?v=7fkS-18KBlw",
+    "description": "Learn what promise rejection errors are in JavaScript and how to handle them effectively with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
     "content": [
       {
         "type": "paragraph",
-        "value": "Event-driven architectures (EDA) are a powerful way to build scalable, responsive applications. In JavaScript, events allow parts of your code to communicate with each other asynchronously. However, beginners often run into errors like event listener leaks, missed events, or unhandled exceptions. In this article, we'll explore how to design scalable event-driven systems in JavaScript while avoiding common pitfalls."
+        "value": "Promises are an important feature in JavaScript for handling asynchronous operations like fetching data from an API or reading files. Sometimes, these promises fail and get \"rejected.\" Understanding how to handle these promise rejections is crucial for building error-resilient applications."
       },
       {
         "type": "paragraph",
-        "value": "At its core, an event-driven system works by emitting events and listening for them. The EventEmitter class in Node.js is a classic example that supports multiple listeners for the same event."
+        "value": "A promise can be in one of three states: pending, fulfilled, or rejected. When a promise is rejected, it means an error or unexpected situation occurred during the async operation."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of creating a promise that rejects:"
       },
       {
         "type": "code",
-        "value": "const EventEmitter = require('events');\n\nclass MyEmitter extends EventEmitter {}\nconst myEmitter = new MyEmitter();\n\nmyEmitter.on('event', () => {\n  console.log('An event occurred!');\n});\n\nmyEmitter.emit('event');\n"
+        "value": "const myPromise = new Promise((resolve, reject) => {\n  reject('Something went wrong!');\n});"
       },
       {
         "type": "paragraph",
-        "value": "### Common Errors and How to Avoid Them"
+        "value": "If you run this promise without handling rejection, you may get an unhandled promise rejection warning or error. To handle rejected promises, you can use either `.catch()` after the promise or use `async/await` with try/catch blocks."
       },
       {
         "type": "paragraph",
-        "value": "1. **Memory leaks due to too many listeners:** If you add listeners repeatedly without removing them, you may hit a warning or cause increased memory usage."
+        "value": "Here's how to catch rejected promises using `.catch()`:"
       },
       {
         "type": "code",
-        "value": "myEmitter.on('event', () => console.log('Listener 1'));\nmyEmitter.on('event', () => console.log('Listener 2'));\n// ... adding many listeners without removal\n"
+        "value": "myPromise\n  .then(result => {\n    console.log('Success:', result);\n  })\n  .catch(error => {\n    console.error('Error caught:', error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "To prevent this, remove listeners when they're no longer needed using `off` or `removeListener`."
+        "value": "The `.catch()` method receives the rejection reason (error) and lets you handle it gracefully instead of the app crashing or showing unwanted warnings."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you are using `async/await`, you handle promise rejections using a try/catch block as shown below:"
       },
       {
         "type": "code",
-        "value": "const listener = () => console.log('Hello');\nmyEmitter.on('event', listener);\n// Later when no longer needed\nmyEmitter.off('event', listener);\n"
+        "value": "async function fetchData() {\n  try {\n    const data = await myPromise;\n    console.log('Data:', data);\n  } catch (error) {\n    console.error('Caught error with async/await:', error);\n  }\n}\n\nfetchData();"
       },
       {
         "type": "paragraph",
-        "value": "2. **Events emitted before listeners are registered:** If you emit an event before adding a listener, the event won't be received."
+        "value": "Using try/catch with async/await provides a clean way to handle promise rejections especially when working with multiple asynchronous operations."
       },
       {
         "type": "paragraph",
-        "value": "To handle this, ensure listeners are set up before events emit or use event queues or buffers."
+        "value": "In summary, always handle rejected promises either by chaining `.catch()` or using try/catch when working with async/await. This prevents unhandled promise rejections and allows your app to recover or show friendly error messages."
       },
       {
         "type": "paragraph",
-        "value": "3. **Unhandled exceptions in listeners:** If a listener throws an error, it can crash your app."
-      },
-      {
-        "type": "paragraph",
-        "value": "Always handle errors gracefully inside listeners."
-      },
-      {
-        "type": "code",
-        "value": "myEmitter.on('event', () => {\n  try {\n    // Some code that might throw\n  } catch (error) {\n    console.error('Error in listener:', error);\n  }\n});\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Scaling Your Event-Driven System"
-      },
-      {
-        "type": "paragraph",
-        "value": "For large applications, consider these tips:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Use event queues or brokers** like Redis, RabbitMQ, or Kafka to decouple services.\n- **Design idempotent event handlers** to handle repeated events safely.\n- **Use domain-specific event names** to keep things organized.\n- **Monitor and log event emissions** to trace issues quickly."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple example using JavaScript's async behavior with an event emitter to demonstrate non-blocking event handling:"
-      },
-      {
-        "type": "code",
-        "value": "myEmitter.on('asyncEvent', async () => {\n  await new Promise(resolve => setTimeout(resolve, 1000));\n  console.log('Async event handled after 1 second');\n});\n\nmyEmitter.emit('asyncEvent');\nconsole.log('Event emitted');\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "The above example shows how events can be handled asynchronously, allowing your system to remain responsive."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding and handling common errors and applying best practices for event management, you can design scalable and reliable event-driven systems with JavaScript."
+        "value": "By practicing proper error handling, you make your JavaScript applications more stable and easier to debug."
       }
     ]
   },
   {
-    "slug": "building-a-real-time-chat-application-with-typescript-and-websockets",
-    "title": "Building a Real-Time Chat Application with TypeScript and WebSockets",
+    "slug": "mastering-typescript-decorators-practical-patterns-for-scalable-code",
+    "title": "Mastering TypeScript Decorators: Practical Patterns for Scalable Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to build a simple real-time chat app using TypeScript and WebSockets for interactive, live messaging.",
-    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
+    "description": "Learn how to use TypeScript decorators with practical examples to write cleaner, more scalable, and maintainable code in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=JxixzqBcdis",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time communication is essential for modern web applications. In this tutorial, we'll build a simple real-time chat application using TypeScript on both the server and client sides, utilizing WebSockets for instant message exchange."
+        "value": "TypeScript decorators are a powerful feature that can help you add meta-programming capabilities to your code. They allow you to modify classes, methods, properties, or parameters at design time, making your code more expressive and easier to maintain. This tutorial will introduce you to the basics of TypeScript decorators and guide you through practical patterns you can use in real-world projects."
       },
       {
         "type": "paragraph",
-        "value": "We'll start by creating a WebSocket server using the `ws` package in Node.js. Then, we'll build a TypeScript client that connects to the server and sends/receives messages."
+        "value": "Before we dive in, make sure you enable the experimental decorator support in your TypeScript configuration by adding `\"experimentalDecorators\": true` to your `tsconfig.json`."
       },
       {
         "type": "paragraph",
-        "value": "First, set up a new Node.js project and install dependencies. Run these commands in your terminal:"
+        "value": "### What are Decorators?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Decorators are special functions prefixed with `@` that you can attach to classes, methods, properties, or parameters. They let you intercept, modify, or enhance the behavior of these elements without changing their original code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Class Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "A class decorator receives the constructor of a class and can return a new constructor to replace it. This is useful for things like logging, dependency injection, or adding static properties."
       },
       {
         "type": "code",
-        "value": "npm init -y\nnpm install ws express\nnpm install -D typescript ts-node @types/ws @types/node"
+        "value": "function Logger(constructor: Function) {\n  console.log(`Class created: ${constructor.name}`);\n}\n\n@Logger\nclass Person {\n  constructor(public name: string) {}\n}\n\nconst p = new Person('Alice'); // Console: Class created: Person"
       },
       {
         "type": "paragraph",
-        "value": "Create a `tsconfig.json` to configure TypeScript:"
+        "value": "### Method Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Method decorators take the target, the method name, and the property descriptor, allowing you to wrap or modify the method."
       },
       {
         "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"commonjs\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"outDir\": \"dist\"\n  },\n  \"include\": [\"src/**/*\"]\n}"
+        "value": "function LogMethod(\n  target: any,\n  propertyName: string,\n  descriptor: PropertyDescriptor\n) {\n  const method = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    console.log(`Calling ${propertyName} with`, args);\n    return method.apply(this, args);\n  };\n}\n\nclass Calculator {\n  @LogMethod\n  add(a: number, b: number): number {\n    return a + b;\n  }\n}\n\nconst calc = new Calculator();\ncalc.add(2, 3); // Console: Calling add with [2,3]"
       },
       {
         "type": "paragraph",
-        "value": "Now let's write a simple WebSocket server in `src/server.ts`. This server will accept connections and broadcast received messages to all connected clients."
+        "value": "### Property Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Property decorators let you observe or modify properties on a class prototype, although you don’t get direct access to their values."
       },
       {
         "type": "code",
-        "value": "import express from 'express';\nimport { WebSocketServer } from 'ws';\n\nconst app = express();\nconst port = 3000;\n\n// Serve a simple HTML client for testing (optional)\napp.get('/', (_req, res) => {\n  res.send('WebSocket Chat Server is running. Use a client to connect.');\n});\n\nconst server = app.listen(port, () => {\n  console.log(`HTTP server listening on http://localhost:${port}`);\n});\n\nconst wss = new WebSocketServer({ server });\n\nwss.on('connection', (ws) => {\n  console.log('New client connected');\n\n  ws.on('message', (data) => {\n    const message = data.toString();\n    console.log(`Received: ${message}`);\n\n    // Broadcast the message to all clients\n    wss.clients.forEach((client) => {\n      if (client !== ws && client.readyState === ws.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('Client disconnected');\n  });\n});"
+        "value": "function ReadOnly(target: any, propertyKey: string) {\n  Object.defineProperty(target, propertyKey, {\n    writable: false,\n    configurable: false\n  });\n}\n\nclass User {\n  @ReadOnly\n  role = 'user';\n}\n\nconst user = new User();\nuser.role = 'admin'; // This assignment will silently fail in strict mode"
       },
       {
         "type": "paragraph",
-        "value": "To run the server, add this script to your `package.json` and start it with `npm run start`:"
+        "value": "### Parameter Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Parameter decorators provide metadata about a method parameter. They’re often used in frameworks like Angular."
       },
       {
         "type": "code",
-        "value": "\"scripts\": {\n  \"start\": \"ts-node src/server.ts\"\n}"
+        "value": "function LogParameter(target: any, methodName: string, parameterIndex: number) {\n  console.log(`Parameter at position ${parameterIndex} in method ${methodName} has a decorator.`);\n}\n\nclass Greeter {\n  greet(@LogParameter message: string) {\n    console.log(message);\n  }\n}\n\nconst greeter = new Greeter();\ngreeter.greet('Hello!');"
       },
       {
         "type": "paragraph",
-        "value": "Next, let's create a simple client in `src/client.ts` that connects to our WebSocket server, sends messages typed in the terminal, and logs messages received from other users."
+        "value": "### Practical Pattern: Debounce Method Decorator"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a practical example to improve performance in applications by debouncing method calls (delaying execution to avoid spamming):"
       },
       {
         "type": "code",
-        "value": "import WebSocket from 'ws';\nimport * as readline from 'readline';\n\nconst ws = new WebSocket('ws://localhost:3000');\n\nconst rl = readline.createInterface({\n  input: process.stdin,\n  output: process.stdout\n});\n\nws.on('open', () => {\n  console.log('Connected to chat server');\n  rl.prompt();\n\n  rl.on('line', (line) => {\n    if (line.trim() === '') {\n      rl.prompt();\n      return;\n    }\n    ws.send(line);\n    rl.prompt();\n  });\n});\n\nws.on('message', (data) => {\n  const message = data.toString();\n  console.log(`\\nNew message: ${message}`);\n  rl.prompt();\n});\n\nws.on('close', () => {\n  console.log('Disconnected from chat server');\n  process.exit(0);\n});"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can run this client with `ts-node src/client.ts` in a separate terminal window. Open multiple terminal windows running the client to chat in real-time."
-      },
-      {
-        "type": "paragraph",
-        "value": "This simple setup can be expanded with user management, better UI, message history, and more. But for beginners, this tutorial showcases how TypeScript and WebSockets combine to deliver real-time messaging functionality with clear and type-safe code."
-      },
-      {
-        "type": "paragraph",
-        "value": "Happy coding and enjoy building your chat application!"
-      }
-    ]
-  },
-  {
-    "slug": "mastering-typescripts-conditional-types-for-advanced-error-handling-patterns",
-    "title": "Mastering TypeScript's Conditional Types for Advanced Error Handling Patterns",
-    "language": "typescript",
-    "type": "errors",
-    "description": "Learn how to use TypeScript's conditional types to create advanced and type-safe error handling patterns. This beginner-friendly guide explains concepts with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=0kmllUg1-48",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Error handling is a crucial part of writing reliable applications. In TypeScript, conditional types allow you to create flexible, type-safe error handling patterns that adapt based on the error context. This guide will walk you through the basics of conditional types and show you how to apply them for advanced error management."
-      },
-      {
-        "type": "paragraph",
-        "value": "Conditional types in TypeScript work like `if-else` statements for types. They check a condition and return one type if true and another if false. This helps us create more precise error types depending on specific conditions."
-      },
-      {
-        "type": "code",
-        "value": "type IsString<T> = T extends string ? \"Yes\" : \"No\";\n\n// Usage\ntype Test1 = IsString<string>; // \"Yes\"\ntype Test2 = IsString<number>; // \"No\""
-      },
-      {
-        "type": "paragraph",
-        "value": "Now, let's see how to use conditional types for error handling. Imagine you have a function that fetches data and returns either a success type or an error type. You want to define a generic error type that changes based on whether the error is a network error or a validation error."
-      },
-      {
-        "type": "code",
-        "value": "interface NetworkError {\n  type: \"network\";\n  message: string;\n  statusCode: number;\n}\n\ninterface ValidationError {\n  type: \"validation\";\n  message: string;\n  field: string;\n}\n\n// Conditional type to pick the shape based on error type\n\ntype AppError<T extends string> =\n  T extends \"network\" ? NetworkError :\n  T extends \"validation\" ? ValidationError :\n  { type: \"unknown\"; message: string };\n\n// Usage examples\n\nconst error1: AppError<\"network\"> = {\n  type: \"network\",\n  message: \"Failed to connect\",\n  statusCode: 503,\n};\n\nconst error2: AppError<\"validation\"> = {\n  type: \"validation\",\n  message: \"Invalid email\",\n  field: \"email\",\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "This conditional typing helps you create a strict, discriminated union of errors without writing repetitive code. The `AppError<T>` type adapts its shape depending on the error category you provide."
-      },
-      {
-        "type": "paragraph",
-        "value": "For a more dynamic and reusable pattern, you can combine conditional types with utility types and generics to extract error information from functions to get strongly typed error handling."
-      },
-      {
-        "type": "code",
-        "value": "type Result<T, E> = { success: true; value: T } | { success: false; error: E };\n\nfunction fetchData(): Result<string, AppError<\"network\" | \"validation\">> {\n  // Simulated error result\n  return {\n    success: false,\n    error: {\n      type: \"network\",\n      message: \"Timeout\",\n      statusCode: 504,\n    },\n  };\n}\n\nconst result = fetchData();\n\nif (!result.success) {\n  // TypeScript will narrow the error type as one of NetworkError or ValidationError\n  if (result.error.type === \"network\") {\n    console.log(\"Network issue:\", result.error.statusCode);\n  } else if (result.error.type === \"validation\") {\n    console.log(\"Validation error on field:\", result.error.field);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "By mastering conditional types, you can build flexible error types that improve code readability and help avoid bugs. TypeScript’s powerful type system gives you the ability to model error handling patterns specific to your application needs and catch mistakes during development rather than at runtime."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start experimenting with conditional types today to enhance your error handling strategies and write safer, more maintainable TypeScript code."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-python-metaclasses-deep-dive-into-dynamic-class-creation",
-    "title": "Mastering Python Metaclasses: Deep Dive into Dynamic Class Creation",
-    "language": "python",
-    "type": "tutorials",
-    "description": "Learn what Python metaclasses are, how they work, and how to use them for dynamic class creation in a beginner-friendly way.",
-    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Python metaclasses are a powerful but often misunderstood feature that allows you to control the creation of classes themselves. If you’ve used classes in Python, you know that classes are the blueprints for creating objects. But did you know classes themselves are objects? Metaclasses define how these class objects are created."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this tutorial, we will explore what metaclasses are, why they are useful, and how you can create your own metaclass to dynamically control class creation."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is a Metaclass?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Simply put, a metaclass is the \"class of a class.\" Whereas instances are created from classes, classes themselves are created from metaclasses. By default, Python uses a metaclass called `type` to create all classes."
-      },
-      {
-        "type": "paragraph",
-        "value": "When you define a class in Python, something like `class MyClass: pass`, Python internally does something like `MyClass = type('MyClass', (), {})`."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why Use Metaclasses?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Metaclasses let you customize class creation. This can be useful for validation, automatically registering classes, adding attributes, or customizing inheritance. While not needed in most programs, they are powerful for frameworks or advanced Python programming."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Creating Your Own Metaclass"
-      },
-      {
-        "type": "paragraph",
-        "value": "To create a metaclass, you define a class that inherits from `type` and override the `__new__` or `__init__` methods. Here’s a simple example that prints a message every time a new class is created using this metaclass."
-      },
-      {
-        "type": "code",
-        "value": "class DebugMeta(type):\n    def __new__(cls, name, bases, attrs):\n        print(f\"Creating class {name} with DebugMeta\")\n        return super().__new__(cls, name, bases, attrs)\n\nclass MyClass(metaclass=DebugMeta):\n    pass"
-      },
-      {
-        "type": "paragraph",
-        "value": "When this code runs, it prints \"Creating class MyClass with DebugMeta\" before defining `MyClass`. This demonstrates how metaclasses intervene at class creation time."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Adding Attributes Automatically"
-      },
-      {
-        "type": "paragraph",
-        "value": "Metaclasses can modify the attributes of classes they create. For example, you can add a custom attribute to every class that uses your metaclass."
-      },
-      {
-        "type": "code",
-        "value": "class AutoAttrMeta(type):\n    def __new__(cls, name, bases, attrs):\n        attrs['custom_attr'] = f\"This is added to {name}\"  # Add a custom attribute\n        return super().__new__(cls, name, bases, attrs)\n\nclass Example(metaclass=AutoAttrMeta):\n    pass\n\nprint(Example.custom_attr)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Output:\n\nThis is added to Example"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Use Case: Class Registration"
-      },
-      {
-        "type": "paragraph",
-        "value": "Suppose you want to automatically keep track of all subclasses of a specific base class. Metaclasses can help you register classes when they are created."
-      },
-      {
-        "type": "code",
-        "value": "class RegistryMeta(type):\n    registry = {}\n\n    def __new__(cls, name, bases, attrs):\n        new_class = super().__new__(cls, name, bases, attrs)\n        cls.registry[name] = new_class\n        return new_class\n\nclass Base(metaclass=RegistryMeta):\n    pass\n\nclass First(Base):\n    pass\n\nclass Second(Base):\n    pass\n\nprint(RegistryMeta.registry)"
-      },
-      {
-        "type": "paragraph",
-        "value": "This example prints a dictionary containing all classes created with `RegistryMeta` as metaclass, enabling you to keep a dynamic class registry."
+        "value": "function Debounce(delay: number = 300) {\n  return function (\n    target: any,\n    propertyKey: string,\n    descriptor: PropertyDescriptor\n  ) {\n    const originalMethod = descriptor.value;\n    let timeoutId: any;\n    descriptor.value = function (...args: any[]) {\n      clearTimeout(timeoutId);\n      timeoutId = setTimeout(() => {\n        originalMethod.apply(this, args);\n      }, delay);\n    };\n  };\n}\n\nclass Search {\n  @Debounce(500)\n  query(term: string) {\n    console.log(`Searching for ${term}`);\n  }\n}\n\nconst search = new Search();\nsearch.query('TypeScript');\nsearch.query('TypeScript Decorators'); // Only this call logs after 500ms"
       },
       {
         "type": "paragraph",
@@ -377,225 +201,373 @@
       },
       {
         "type": "paragraph",
-        "value": "Metaclasses are a deeper layer of Python's object model that allow you to customize class creation. Although they can be complex, start by experimenting with simple metaclasses to print messages or add attributes. Once comfortable, you can explore advanced patterns such as automatic class registration or interface enforcement."
-      },
-      {
-        "type": "paragraph",
-        "value": "Keep in mind: use metaclasses sparingly. Most programming tasks don’t require metaclasses, but when you need dynamic control over classes, metaclasses unlock new possibilities."
+        "value": "TypeScript decorators are great for writing scalable, maintainable code by encapsulating repetitive logic in reusable patterns. To get the most out of them, start by experimenting with simple class and method decorators, then explore how parameter and property decorators can help in your projects. Always strive for readable and predictable decorator code to avoid complexity."
       }
     ]
   },
   {
-    "slug": "understanding-python-runtime-errors-and-how-to-prevent-them",
-    "title": "Understanding Python's Common Runtime Errors and How to Prevent Them",
+    "slug": "handling-typescript-union-types-in-complex-edge-cases",
+    "title": "Handling TypeScript Union Types in Complex Edge Cases",
+    "language": "typescript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding and resolving errors when working with complex union types in TypeScript.",
+    "videoUrl": "https://www.youtube.com/watch?v=E1T-yZ4hPr0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript's union types allow variables to hold more than one type, which is great for flexibility. However, as unions get complex—especially with multiple possible types—errors and confusion can arise. This guide will help you handle these edge cases clearly and effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a union type like this:"
+      },
+      {
+        "type": "code",
+        "value": "type Result = { success: true; value: string } | { success: false; error: string };"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you receive a variable of type `Result`, you need to tell TypeScript how to safely access its properties without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Type Guards"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards check the type at runtime to narrow down the union. For the example:"
+      },
+      {
+        "type": "code",
+        "value": "function handleResult(result: Result) {\n  if (result.success) {\n    // Here, TypeScript knows result is { success: true; value: string }\n    console.log('Value:', result.value);\n  } else {\n    // Here, TypeScript knows result is { success: false; error: string }\n    console.error('Error:', result.error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Complex Unions with Shared Properties"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes union types have overlapping properties, which can confuse TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "type Animal = { name: string } & (\n  | { type: 'dog'; barkVolume: number }\n  | { type: 'cat'; livesLeft: number }\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use the discriminant property `type` to narrow the type:"
+      },
+      {
+        "type": "code",
+        "value": "function speak(animal: Animal) {\n  if (animal.type === 'dog') {\n    console.log(`${animal.name} barks at volume ${animal.barkVolume}`);\n  } else {\n    // animal.type === 'cat'\n    console.log(`${animal.name} has ${animal.livesLeft} lives left`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Accessing Common Properties Safely"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can safely access properties shared by all union members without type issues. For example:"
+      },
+      {
+        "type": "code",
+        "value": "function printName(animal: Animal) {\n  // 'name' is common to all Animal types\n  console.log(`Animal name is ${animal.name}`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using User-Defined Type Guards for Complex Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you may want to create custom functions to check types:"
+      },
+      {
+        "type": "code",
+        "value": "function isDog(animal: Animal): animal is Extract<Animal, { type: 'dog' }> {\n  return animal.type === 'dog';\n}\n\nfunction speakSafely(animal: Animal) {\n  if (isDog(animal)) {\n    console.log(`${animal.name} barks: volume ${animal.barkVolume}`);\n  } else {\n    console.log(`${animal.name} is a cat with ${animal.livesLeft} lives.`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Nullable or Undefined Members in Unions"
+      },
+      {
+        "type": "paragraph",
+        "value": "If a union includes `null` or `undefined`, always check for those before access to avoid errors:"
+      },
+      {
+        "type": "code",
+        "value": "type Data = string | null | undefined;\n\nfunction display(data: Data) {\n  if (data != null) { // checks for both null and undefined\n    console.log(data.toUpperCase());\n  } else {\n    console.log('No data available');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Working with union types requires narrowing down types with type guards or discriminants. Always check the specific type or nullability first before accessing properties. Using these strategies will help you avoid common TypeScript errors in complex union scenarios, making your code safer and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-restful-api-with-python-and-fastapi",
+    "title": "Building a RESTful API with Python and FastAPI: A Step-by-Step Tutorial",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build a simple and efficient RESTful API using Python and FastAPI in this beginner-friendly step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=iWS9ogMPOI0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "RESTful APIs allow different applications to communicate with each other over the web. FastAPI is a modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints. In this tutorial, we'll walk through building a simple RESTful API with FastAPI."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Install FastAPI and Uvicorn\nFirst, you need to install FastAPI and Uvicorn. Uvicorn is an ASGI server used to run FastAPI applications."
+      },
+      {
+        "type": "code",
+        "value": "pip install fastapi uvicorn"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Create a Basic FastAPI Application\nCreate a new Python file called `main.py` and add the following code to create a simple API that responds with a greeting message."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"Hello, FastAPI!\"}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Run the Application\nUse Uvicorn to run your API server. Open your terminal and run:"
+      },
+      {
+        "type": "code",
+        "value": "uvicorn main:app --reload"
+      },
+      {
+        "type": "paragraph",
+        "value": "Navigate to `http://127.0.0.1:8000` in your browser or send a request using a tool like Postman or curl. You should see this response:"
+      },
+      {
+        "type": "code",
+        "value": "{ \"message\": \"Hello, FastAPI!\" }"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Adding Path and Query Parameters\nFastAPI makes it easy to receive parameters from the URL path or as query parameters. Let's modify the API to greet a user by name."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/hello/{name}\")\ndef read_hello(name: str, age: int = 0):\n    return {\"message\": f\"Hello, {name}! Your age is {age}.\"}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example uses a path parameter `name` and an optional query parameter `age`. For example, visiting `/hello/Alice?age=25` will respond with:"
+      },
+      {
+        "type": "code",
+        "value": "{ \"message\": \"Hello, Alice! Your age is 25.\" }"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Creating a POST Endpoint\nLet's create a POST endpoint where a user can send data in JSON format, and the API will return it back."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Item(BaseModel):\n    name: str\n    description: str = None\n    price: float\n    tax: float = None\n\n@app.post(\"/items/\")\ndef create_item(item: Item):\n    item_dict = item.dict()\n    if item.tax:\n        price_with_tax = item.price + item.tax\n        item_dict.update({\"price_with_tax\": price_with_tax})\n    return item_dict"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can send a POST request with JSON data like this:"
+      },
+      {
+        "type": "code",
+        "value": "{\n    \"name\": \"Widget\",\n    \"description\": \"A useful widget\",\n    \"price\": 25.5,\n    \"tax\": 1.5\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The response will include the original data plus the calculated price including tax."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Summary\nIn just a few lines of code, you've built a RESTful API with GET and POST endpoints using FastAPI. FastAPI automatically generates interactive API docs at `/docs` using Swagger UI, which helps you test your endpoints easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "FastAPI is a powerful framework for building APIs quickly and efficiently while maintaining simplicity and readability. Continue exploring FastAPI's features to build more complex APIs with authentication, databases, and more!"
+      }
+    ]
+  },
+  {
+    "slug": "harnessing-pythons-exception-chaining-for-cleaner-debugging",
+    "title": "Harnessing Python's Exception Chaining for Cleaner Debugging",
     "language": "python",
     "type": "errors",
-    "description": "Learn about common runtime errors in Python and practical tips to prevent them, making your programs run smoother.",
-    "videoUrl": "https://www.youtube.com/watch?v=gQZ5pSv1a58",
+    "description": "Learn how to use Python's exception chaining feature to write cleaner error handling code and make debugging easier for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
     "content": [
       {
         "type": "paragraph",
-        "value": "When you are learning Python, runtime errors can be confusing and frustrating. These errors appear while your program is running and cause it to stop unexpectedly. Understanding the most common runtime errors and how to avoid them will help you write better code."
+        "value": "When writing Python programs, errors (or exceptions) can sometimes be confusing, especially if one error causes another. Python has a helpful feature called exception chaining that lets you link errors together. This makes it easier to understand what went wrong and where. In this article, we'll explain how to use exception chaining to write clearer and more informative error handling code."
       },
       {
         "type": "paragraph",
-        "value": "Let's explore some frequent runtime errors with examples and tips to prevent them."
+        "value": "Exception chaining happens when a new exception is raised while handling another exception. Instead of losing the original error information, Python lets you show both errors together. This is particularly useful when your program catches one error but then raises a different one to provide more context."
       },
       {
         "type": "paragraph",
-        "value": "1. ZeroDivisionError: This happens when your code tries to divide a number by zero. Since division by zero is undefined, Python raises this runtime error."
+        "value": "Let's start with a simple example without exception chaining:"
       },
       {
         "type": "code",
-        "value": "a = 10\nb = 0\nresult = a / b  # This line will cause ZeroDivisionError"
+        "value": "def divide_numbers(x, y):\n    try:\n        result = x / y\n    except ZeroDivisionError:\n        # Raising a new error without chaining\n        raise ValueError(\"Cannot divide by zero!\")\n\ntry:\n    divide_numbers(10, 0)\nexcept ValueError as e:\n    print(e)"
       },
       {
         "type": "paragraph",
-        "value": "To prevent this, check if the denominator is zero before division:"
+        "value": "In this example, dividing by zero raises a ZeroDivisionError inside the function. We catch it and raise a ValueError instead. However, when we run this code, we only see the ValueError message and lose the original ZeroDivisionError details. This can make debugging harder."
+      },
+      {
+        "type": "paragraph",
+        "value": "To preserve the original error information, Python allows you to use the `from` keyword when raising a new exception. This enables exception chaining."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how you can modify the previous example to chain exceptions:"
       },
       {
         "type": "code",
-        "value": "a = 10\nb = 0\nif b != 0:\n    result = a / b\n    print(result)\nelse:\n    print(\"Cannot divide by zero\")"
+        "value": "def divide_numbers(x, y):\n    try:\n        result = x / y\n    except ZeroDivisionError as e:\n        # Chain the original exception with 'from'\n        raise ValueError(\"Cannot divide by zero!\") from e\n\ntry:\n    divide_numbers(10, 0)\nexcept ValueError as e:\n    print(e)\n    # Optionally, print the full traceback with chained exception info\n    import traceback\n    traceback.print_exc()"
       },
       {
         "type": "paragraph",
-        "value": "2. IndexError: It occurs when you try to access an index that is outside the range of a list or a string."
+        "value": "When you run this code, Python shows both the original `ZeroDivisionError` and the new `ValueError`. This helps you understand what caused the error in more detail."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also explicitly suppress chaining by using `raise ... from None`. This hides the original exception if it's not useful for debugging."
       },
       {
         "type": "code",
-        "value": "numbers = [1, 2, 3]\nprint(numbers[5])  # IndexError because index 5 doesn't exist"
+        "value": "try:\n    int('abc')\nexcept ValueError:\n    # Raise a new error without showing the original one\n    raise RuntimeError(\"Failed to convert string to int\") from None"
       },
       {
         "type": "paragraph",
-        "value": "To avoid this, always check the length before accessing indices:"
-      },
-      {
-        "type": "code",
-        "value": "numbers = [1, 2, 3]\nindex = 5\nif index < len(numbers):\n    print(numbers[index])\nelse:\n    print(\"Index out of range\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "3. KeyError: This happens when you try to access a dictionary key that does not exist."
-      },
-      {
-        "type": "code",
-        "value": "person = {\"name\": \"Alice\", \"age\": 25}\nprint(person[\"address\"])  # KeyError because 'address' key is missing"
-      },
-      {
-        "type": "paragraph",
-        "value": "To prevent KeyError, use the get() method or check if the key exists:"
-      },
-      {
-        "type": "code",
-        "value": "print(person.get(\"address\", \"Address not provided\"))\n\nif \"address\" in person:\n    print(person[\"address\"])\nelse:\n    print(\"Address not provided\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "4. TypeError: This error occurs when you use an operation or function on a value of an inappropriate type."
-      },
-      {
-        "type": "code",
-        "value": "num = 5\ntext = \"hello\"\nprint(num + text)  # TypeError because we cannot add int and str"
-      },
-      {
-        "type": "paragraph",
-        "value": "To prevent TypeError, make sure data types match or convert them explicitly:"
-      },
-      {
-        "type": "code",
-        "value": "num = 5\ntext = \"hello\"\nprint(str(num) + text)  # Converts num to string before concatenation"
-      },
-      {
-        "type": "paragraph",
-        "value": "5. ValueError: Raised when a function receives an argument of right type but inappropriate value."
-      },
-      {
-        "type": "code",
-        "value": "int(\"abc\")  # ValueError because 'abc' cannot be converted to an integer"
-      },
-      {
-        "type": "paragraph",
-        "value": "Always validate input before conversions or handle exceptions:"
-      },
-      {
-        "type": "code",
-        "value": "user_input = \"abc\"\nif user_input.isdigit():\n    print(int(user_input))\nelse:\n    print(\"Invalid input for integer conversion\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "In conclusion, runtime errors are part of learning to code. Handling them by checking values, types, and existence before performing actions will make your programs more reliable and user-friendly."
-      },
-      {
-        "type": "paragraph",
-        "value": "Happy coding!"
+        "value": "Use exception chaining to make your error handling code more informative and easier to debug. By linking related errors, you create a clear trail of what went wrong and why, saving you time and frustration."
       }
     ]
   },
   {
-    "slug": "handling-recursive-queries-with-common-table-expressions-in-sql",
-    "title": "Handling Recursive Queries with Common Table Expressions (CTEs) in SQL",
+    "slug": "mastering-recursive-ctes-for-hierarchical-data-modeling-in-sql",
+    "title": "Mastering Recursive CTEs for Hierarchical Data Modeling in SQL",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to write and understand recursive queries in SQL using Common Table Expressions (CTEs) with simple examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=K1WeoKxLZ5o",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) to efficiently model and query hierarchical data in SQL with practical examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Recursive queries in SQL allow you to perform operations that involve hierarchical or sequential data, such as organizational charts or folder structures. A Common Table Expression (CTE) provides a clean way to write these queries by allowing a named temporary result set that refers to itself. In this tutorial, you'll learn what recursive CTEs are and how to use them with clear examples."
+        "value": "Hierarchical data, such as organizational charts, product categories, or file systems, often require special handling in SQL because of their parent-child relationships. Recursive Common Table Expressions (CTEs) provide a powerful and elegant solution to query this kind of data, enabling you to navigate hierarchy levels easily."
       },
       {
         "type": "paragraph",
-        "value": "A recursive CTE consists of two parts: the anchor member and the recursive member. The anchor member is the base query that runs first, and the recursive member references the CTE itself to process additional rows. The recursion stops when the query returns no new rows."
+        "value": "In this tutorial, we'll walk through the basics of recursive CTEs and build a simple example to demonstrate how to retrieve hierarchical data step-by-step."
       },
       {
         "type": "paragraph",
-        "value": "Let's see a simple example using an employee hierarchy table. Suppose we have a table called Employees with columns EmployeeID, ManagerID, and Name. We want to find the entire chain of employees under a specific manager."
+        "value": "Let's assume you have a table named Employees representing an organizational hierarchy. Each employee has an ID and a ManagerID that points to their manager (null if top-level)."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    ManagerID INT,\n    Name VARCHAR(100)\n);\n\nINSERT INTO Employees (EmployeeID, ManagerID, Name) VALUES\n(1, NULL, 'CEO'),\n(2, 1, 'Director'),\n(3, 2, 'Manager'),\n(4, 3, 'Lead Developer'),\n(5, 3, 'QA Lead');"
+        "value": "CREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    EmployeeName VARCHAR(100),\n    ManagerID INT NULL\n);\n\nINSERT INTO Employees (EmployeeID, EmployeeName, ManagerID) VALUES\n(1, 'CEO', NULL),\n(2, 'CTO', 1),\n(3, 'CFO', 1),\n(4, 'Dev Manager', 2),\n(5, 'Developer', 4),\n(6, 'Accountant', 3);"
       },
       {
         "type": "paragraph",
-        "value": "This query finds all employees who report directly or indirectly to the employee with EmployeeID = 2 (the Director):"
+        "value": "The goal is to retrieve the entire hierarchy starting from the CEO, showing all employees and their reporting levels."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is the recursive CTE to accomplish this:"
       },
       {
         "type": "code",
-        "value": "WITH RecursiveEmployees AS (\n    -- Anchor member: start with the manager\n    SELECT EmployeeID, ManagerID, Name\n    FROM Employees\n    WHERE EmployeeID = 2\n    \n    UNION ALL\n    \n    -- Recursive member: find employees reporting to the previous level\n    SELECT e.EmployeeID, e.ManagerID, e.Name\n    FROM Employees e\n    INNER JOIN RecursiveEmployees re ON e.ManagerID = re.EmployeeID\n)\nSELECT * FROM RecursiveEmployees;"
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    -- Anchor member: select the top-level employee(s)\n    SELECT EmployeeID, EmployeeName, ManagerID, 0 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    -- Recursive member: select employees reporting to the previous level\n    SELECT e.EmployeeID, e.EmployeeName, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT EmployeeID, EmployeeName, ManagerID, Level\nFROM EmployeeHierarchy\nORDER BY Level, ManagerID;"
       },
       {
         "type": "paragraph",
-        "value": "This query works in two steps: first it selects the Director (EmployeeID = 2), then it repeatedly joins the Employees table to find all employees whose ManagerID matches the earlier level's EmployeeID. This process continues until no more employees are found."
+        "value": "Let's break down how this works:"
       },
       {
         "type": "paragraph",
-        "value": "Recursive CTEs are powerful for many use cases like traversing hierarchical data, generating sequences, or processing recursive calculations. Remember to always include a stopping condition (like no new rows) to avoid infinite loops."
+        "value": "1. **Anchor member:** This part selects the root employee(s) — here, those without a ManagerID. We assign Level = 0 meaning top level.\n2. **Recursive member:** This joins the Employees table with the CTE result from the previous step to find direct reports (children) and increases the Level by 1.\n3. **The final SELECT:** Fetches the full hierarchy with levels indicating each employee’s distance from the root."
       },
       {
         "type": "paragraph",
-        "value": "As a bonus, you can add a \"level\" column to keep track of the recursion depth, helping you understand the hierarchy levels:"
+        "value": "Run this query to see the hierarchy:"
       },
       {
         "type": "code",
-        "value": "WITH RecursiveEmployees AS (\n    SELECT EmployeeID, ManagerID, Name, 0 AS level\n    FROM Employees\n    WHERE EmployeeID = 2\n\n    UNION ALL\n\n    SELECT e.EmployeeID, e.ManagerID, e.Name, re.level + 1\n    FROM Employees e\n    INNER JOIN RecursiveEmployees re ON e.ManagerID = re.EmployeeID\n)\nSELECT * FROM RecursiveEmployees ORDER BY level;"
+        "value": "EmployeeID | EmployeeName | ManagerID | Level\n-----------|--------------|-----------|------\n1          | CEO          | NULL      | 0\n2          | CTO          | 1         | 1\n3          | CFO          | 1         | 1\n4          | Dev Manager  | 2         | 2\n6          | Accountant   | 3         | 2\n5          | Developer    | 4         | 3"
       },
       {
         "type": "paragraph",
-        "value": "Try writing your own recursive queries using CTEs to explore recursive data in your databases!"
+        "value": "This output shows the hierarchy tree clearly, with Level indicating how deep in the structure an employee is."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using recursive CTEs is not only limited to organizational charts — it works well for folder structures, bill of materials, or any tree-like data in your databases."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, recursive CTEs:\n- Have an anchor member for root nodes\n- Recursively call themselves to traverse hierarchy\n- Enable easy querying of hierarchical data with level information\n\nPractice writing recursive CTEs with your own datasets to master hierarchical data modeling in SQL."
       }
     ]
   },
   {
-    "slug": "mastering-sql-query-optimization-to-prevent-execution-errors",
-    "title": "Mastering SQL Query Optimization to Prevent Execution Errors",
+    "slug": "understanding-null-handling-in-sql-common-pitfalls-and-best-practices",
+    "title": "Understanding NULL Handling in SQL: Common Pitfalls and Best Practices",
     "language": "sql",
     "type": "errors",
-    "description": "Learn beginner-friendly tips to optimize your SQL queries and avoid common execution errors for smoother database interactions.",
-    "videoUrl": "https://www.youtube.com/watch?v=xAZrlhpqw54",
+    "description": "Learn how to properly handle NULL values in SQL, avoid common mistakes, and apply best practices for accurate database queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=hF6wqnDIuK0",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL queries are the backbone of interacting with databases, but poorly written queries can lead to execution errors and slow performance. This article will guide you through simple, effective techniques to optimize your SQL queries and prevent common errors."
+        "value": "In SQL, NULL represents the absence of a value or unknown data. Handling NULLs correctly is crucial to writing accurate and bug-free queries. Beginners often confuse NULL with empty strings or zero, which can lead to unexpected results. This article explains common pitfalls when dealing with NULL and shares best practices to manage them effectively."
       },
       {
         "type": "paragraph",
-        "value": "One common cause of execution errors is syntax mistakes. Always double-check your SQL syntax, especially with commands like SELECT, JOIN, WHERE, and GROUP BY. Here's a simple example of a SELECT query that fetches data correctly:"
+        "value": "One common mistake is using the = operator to compare values to NULL. Since NULL means unknown, any comparison with NULL using = or <> returns NULL (which acts like false in conditions). Instead, you must use IS NULL or IS NOT NULL to check for NULL values."
       },
       {
         "type": "code",
-        "value": "SELECT first_name, last_name FROM employees WHERE department = 'Sales';"
+        "value": "-- Incorrect: This will not return rows with NULL values\nSELECT * FROM employees WHERE manager_id = NULL;\n\n-- Correct: Use IS NULL to find NULL values\nSELECT * FROM employees WHERE manager_id IS NULL;"
       },
       {
         "type": "paragraph",
-        "value": "Another frequent error is missing or incorrect JOIN conditions, which can result in a Cartesian product or no output at all. To prevent this, always specify the join condition explicitly. Here is how to properly join two tables:"
+        "value": "Another pitfall involves aggregate functions like COUNT, SUM, or AVG. By default, these functions ignore NULL values. For example, COUNT(column_name) counts only non-NULL values, while COUNT(*) counts all rows regardless of NULLs."
       },
       {
         "type": "code",
-        "value": "SELECT orders.order_id, customers.customer_name\nFROM orders\nJOIN customers ON orders.customer_id = customers.customer_id;"
+        "value": "SELECT COUNT(*) AS total_rows, COUNT(salary) AS salary_count FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Query performance issues can also cause execution errors, especially with large datasets. One way to optimize your query is by indexing the columns used in WHERE clauses or JOIN conditions. For example, creating an index on a frequently filtered column:"
+        "value": "Use the COALESCE function to replace NULLs with a default value during queries. This can prevent NULL-related issues especially in calculations or concatenations."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_department ON employees(department);"
+        "value": "-- Replace NULL salary with 0 for calculation\nSELECT employee_id, COALESCE(salary, 0) AS salary FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Using LIMIT or TOP clauses helps reduce the returned data size and speeds up query execution when you only need a sample of the data. For example:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT * FROM employees WHERE department = 'Marketing' LIMIT 10;"
+        "value": "When filtering data with WHERE clauses, remember that NULL values behave differently. Conditions using logical operators like AND, OR may produce unexpected results if NULLs are present. Use IS NULL checks or COALESCE carefully to handle these scenarios."
       },
       {
         "type": "paragraph",
-        "value": "Finally, avoid running complex queries without testing. Break down large queries and test each part individually. This approach helps spot where errors occur and makes debugging easier."
+        "value": "To summarize, follow these best practices for NULL handling in SQL:\n- Always use IS NULL or IS NOT NULL to check for NULL values.\n- Understand that NULL is not equal to anything, including itself.\n- Use COALESCE to substitute NULLs with meaningful default values.\n- Be cautious with aggregate functions and NULLs.\n- Test your queries with NULL data to ensure correct results."
       },
       {
         "type": "paragraph",
-        "value": "By following these beginner-friendly tips—checking syntax, writing clear JOINs, using indexes, limiting results, and testing incrementally—you can master SQL query optimization and reduce execution errors."
+        "value": "By mastering NULL handling, you'll write more robust and reliable SQL queries that gracefully manage missing or unknown data."
       }
     ]
   }

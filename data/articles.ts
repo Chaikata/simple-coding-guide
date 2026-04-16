@@ -60765,5 +60765,469 @@ export const articles = [
         "value": "By following these beginner-friendly tips—checking syntax, writing clear JOINs, using indexes, limiting results, and testing incrementally—you can master SQL query optimization and reduce execution errors."
       }
     ]
+  },
+  {
+    "slug": "understanding-and-handling-promise-rejection-errors-in-javascript",
+    "title": "Understanding and Handling Promise Rejection Errors in JavaScript",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what promise rejection errors are in JavaScript and how to handle them effectively with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=DHvZLI7Db8E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Promises are an important feature in JavaScript for handling asynchronous operations like fetching data from an API or reading files. Sometimes, these promises fail and get \"rejected.\" Understanding how to handle these promise rejections is crucial for building error-resilient applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "A promise can be in one of three states: pending, fulfilled, or rejected. When a promise is rejected, it means an error or unexpected situation occurred during the async operation."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example of creating a promise that rejects:"
+      },
+      {
+        "type": "code",
+        "value": "const myPromise = new Promise((resolve, reject) => {\n  reject('Something went wrong!');\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you run this promise without handling rejection, you may get an unhandled promise rejection warning or error. To handle rejected promises, you can use either `.catch()` after the promise or use `async/await` with try/catch blocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's how to catch rejected promises using `.catch()`:"
+      },
+      {
+        "type": "code",
+        "value": "myPromise\n  .then(result => {\n    console.log('Success:', result);\n  })\n  .catch(error => {\n    console.error('Error caught:', error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `.catch()` method receives the rejection reason (error) and lets you handle it gracefully instead of the app crashing or showing unwanted warnings."
+      },
+      {
+        "type": "paragraph",
+        "value": "If you are using `async/await`, you handle promise rejections using a try/catch block as shown below:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const data = await myPromise;\n    console.log('Data:', data);\n  } catch (error) {\n    console.error('Caught error with async/await:', error);\n  }\n}\n\nfetchData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using try/catch with async/await provides a clean way to handle promise rejections especially when working with multiple asynchronous operations."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, always handle rejected promises either by chaining `.catch()` or using try/catch when working with async/await. This prevents unhandled promise rejections and allows your app to recover or show friendly error messages."
+      },
+      {
+        "type": "paragraph",
+        "value": "By practicing proper error handling, you make your JavaScript applications more stable and easier to debug."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescript-decorators-practical-patterns-for-scalable-code",
+    "title": "Mastering TypeScript Decorators: Practical Patterns for Scalable Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use TypeScript decorators with practical examples to write cleaner, more scalable, and maintainable code in your projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=JxixzqBcdis",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators are a powerful feature that can help you add meta-programming capabilities to your code. They allow you to modify classes, methods, properties, or parameters at design time, making your code more expressive and easier to maintain. This tutorial will introduce you to the basics of TypeScript decorators and guide you through practical patterns you can use in real-world projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before we dive in, make sure you enable the experimental decorator support in your TypeScript configuration by adding `\"experimentalDecorators\": true` to your `tsconfig.json`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What are Decorators?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Decorators are special functions prefixed with `@` that you can attach to classes, methods, properties, or parameters. They let you intercept, modify, or enhance the behavior of these elements without changing their original code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Class Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "A class decorator receives the constructor of a class and can return a new constructor to replace it. This is useful for things like logging, dependency injection, or adding static properties."
+      },
+      {
+        "type": "code",
+        "value": "function Logger(constructor: Function) {\n  console.log(`Class created: ${constructor.name}`);\n}\n\n@Logger\nclass Person {\n  constructor(public name: string) {}\n}\n\nconst p = new Person('Alice'); // Console: Class created: Person"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Method Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Method decorators take the target, the method name, and the property descriptor, allowing you to wrap or modify the method."
+      },
+      {
+        "type": "code",
+        "value": "function LogMethod(\n  target: any,\n  propertyName: string,\n  descriptor: PropertyDescriptor\n) {\n  const method = descriptor.value;\n  descriptor.value = function (...args: any[]) {\n    console.log(`Calling ${propertyName} with`, args);\n    return method.apply(this, args);\n  };\n}\n\nclass Calculator {\n  @LogMethod\n  add(a: number, b: number): number {\n    return a + b;\n  }\n}\n\nconst calc = new Calculator();\ncalc.add(2, 3); // Console: Calling add with [2,3]"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Property Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Property decorators let you observe or modify properties on a class prototype, although you don’t get direct access to their values."
+      },
+      {
+        "type": "code",
+        "value": "function ReadOnly(target: any, propertyKey: string) {\n  Object.defineProperty(target, propertyKey, {\n    writable: false,\n    configurable: false\n  });\n}\n\nclass User {\n  @ReadOnly\n  role = 'user';\n}\n\nconst user = new User();\nuser.role = 'admin'; // This assignment will silently fail in strict mode"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Parameter Decorators"
+      },
+      {
+        "type": "paragraph",
+        "value": "Parameter decorators provide metadata about a method parameter. They’re often used in frameworks like Angular."
+      },
+      {
+        "type": "code",
+        "value": "function LogParameter(target: any, methodName: string, parameterIndex: number) {\n  console.log(`Parameter at position ${parameterIndex} in method ${methodName} has a decorator.`);\n}\n\nclass Greeter {\n  greet(@LogParameter message: string) {\n    console.log(message);\n  }\n}\n\nconst greeter = new Greeter();\ngreeter.greet('Hello!');"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Pattern: Debounce Method Decorator"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a practical example to improve performance in applications by debouncing method calls (delaying execution to avoid spamming):"
+      },
+      {
+        "type": "code",
+        "value": "function Debounce(delay: number = 300) {\n  return function (\n    target: any,\n    propertyKey: string,\n    descriptor: PropertyDescriptor\n  ) {\n    const originalMethod = descriptor.value;\n    let timeoutId: any;\n    descriptor.value = function (...args: any[]) {\n      clearTimeout(timeoutId);\n      timeoutId = setTimeout(() => {\n        originalMethod.apply(this, args);\n      }, delay);\n    };\n  };\n}\n\nclass Search {\n  @Debounce(500)\n  query(term: string) {\n    console.log(`Searching for ${term}`);\n  }\n}\n\nconst search = new Search();\nsearch.query('TypeScript');\nsearch.query('TypeScript Decorators'); // Only this call logs after 500ms"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript decorators are great for writing scalable, maintainable code by encapsulating repetitive logic in reusable patterns. To get the most out of them, start by experimenting with simple class and method decorators, then explore how parameter and property decorators can help in your projects. Always strive for readable and predictable decorator code to avoid complexity."
+      }
+    ]
+  },
+  {
+    "slug": "handling-typescript-union-types-in-complex-edge-cases",
+    "title": "Handling TypeScript Union Types in Complex Edge Cases",
+    "language": "typescript",
+    "type": "errors",
+    "description": "A beginner-friendly guide to understanding and resolving errors when working with complex union types in TypeScript.",
+    "videoUrl": "https://www.youtube.com/watch?v=E1T-yZ4hPr0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript's union types allow variables to hold more than one type, which is great for flexibility. However, as unions get complex—especially with multiple possible types—errors and confusion can arise. This guide will help you handle these edge cases clearly and effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a union type like this:"
+      },
+      {
+        "type": "code",
+        "value": "type Result = { success: true; value: string } | { success: false; error: string };"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you receive a variable of type `Result`, you need to tell TypeScript how to safely access its properties without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using Type Guards"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type guards check the type at runtime to narrow down the union. For the example:"
+      },
+      {
+        "type": "code",
+        "value": "function handleResult(result: Result) {\n  if (result.success) {\n    // Here, TypeScript knows result is { success: true; value: string }\n    console.log('Value:', result.value);\n  } else {\n    // Here, TypeScript knows result is { success: false; error: string }\n    console.error('Error:', result.error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Complex Unions with Shared Properties"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes union types have overlapping properties, which can confuse TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "type Animal = { name: string } & (\n  | { type: 'dog'; barkVolume: number }\n  | { type: 'cat'; livesLeft: number }\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can use the discriminant property `type` to narrow the type:"
+      },
+      {
+        "type": "code",
+        "value": "function speak(animal: Animal) {\n  if (animal.type === 'dog') {\n    console.log(`${animal.name} barks at volume ${animal.barkVolume}`);\n  } else {\n    // animal.type === 'cat'\n    console.log(`${animal.name} has ${animal.livesLeft} lives left`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Accessing Common Properties Safely"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can safely access properties shared by all union members without type issues. For example:"
+      },
+      {
+        "type": "code",
+        "value": "function printName(animal: Animal) {\n  // 'name' is common to all Animal types\n  console.log(`Animal name is ${animal.name}`);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using User-Defined Type Guards for Complex Checks"
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes you may want to create custom functions to check types:"
+      },
+      {
+        "type": "code",
+        "value": "function isDog(animal: Animal): animal is Extract<Animal, { type: 'dog' }> {\n  return animal.type === 'dog';\n}\n\nfunction speakSafely(animal: Animal) {\n  if (isDog(animal)) {\n    console.log(`${animal.name} barks: volume ${animal.barkVolume}`);\n  } else {\n    console.log(`${animal.name} is a cat with ${animal.livesLeft} lives.`);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Nullable or Undefined Members in Unions"
+      },
+      {
+        "type": "paragraph",
+        "value": "If a union includes `null` or `undefined`, always check for those before access to avoid errors:"
+      },
+      {
+        "type": "code",
+        "value": "type Data = string | null | undefined;\n\nfunction display(data: Data) {\n  if (data != null) { // checks for both null and undefined\n    console.log(data.toUpperCase());\n  } else {\n    console.log('No data available');\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Working with union types requires narrowing down types with type guards or discriminants. Always check the specific type or nullability first before accessing properties. Using these strategies will help you avoid common TypeScript errors in complex union scenarios, making your code safer and easier to maintain."
+      }
+    ]
+  },
+  {
+    "slug": "building-a-restful-api-with-python-and-fastapi",
+    "title": "Building a RESTful API with Python and FastAPI: A Step-by-Step Tutorial",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to build a simple and efficient RESTful API using Python and FastAPI in this beginner-friendly step-by-step tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=iWS9ogMPOI0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "RESTful APIs allow different applications to communicate with each other over the web. FastAPI is a modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints. In this tutorial, we'll walk through building a simple RESTful API with FastAPI."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Install FastAPI and Uvicorn\nFirst, you need to install FastAPI and Uvicorn. Uvicorn is an ASGI server used to run FastAPI applications."
+      },
+      {
+        "type": "code",
+        "value": "pip install fastapi uvicorn"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 2: Create a Basic FastAPI Application\nCreate a new Python file called `main.py` and add the following code to create a simple API that responds with a greeting message."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"Hello, FastAPI!\"}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Run the Application\nUse Uvicorn to run your API server. Open your terminal and run:"
+      },
+      {
+        "type": "code",
+        "value": "uvicorn main:app --reload"
+      },
+      {
+        "type": "paragraph",
+        "value": "Navigate to `http://127.0.0.1:8000` in your browser or send a request using a tool like Postman or curl. You should see this response:"
+      },
+      {
+        "type": "code",
+        "value": "{ \"message\": \"Hello, FastAPI!\" }"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Adding Path and Query Parameters\nFastAPI makes it easy to receive parameters from the URL path or as query parameters. Let's modify the API to greet a user by name."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/hello/{name}\")\ndef read_hello(name: str, age: int = 0):\n    return {\"message\": f\"Hello, {name}! Your age is {age}.\"}"
+      },
+      {
+        "type": "paragraph",
+        "value": "This example uses a path parameter `name` and an optional query parameter `age`. For example, visiting `/hello/Alice?age=25` will respond with:"
+      },
+      {
+        "type": "code",
+        "value": "{ \"message\": \"Hello, Alice! Your age is 25.\" }"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 5: Creating a POST Endpoint\nLet's create a POST endpoint where a user can send data in JSON format, and the API will return it back."
+      },
+      {
+        "type": "code",
+        "value": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Item(BaseModel):\n    name: str\n    description: str = None\n    price: float\n    tax: float = None\n\n@app.post(\"/items/\")\ndef create_item(item: Item):\n    item_dict = item.dict()\n    if item.tax:\n        price_with_tax = item.price + item.tax\n        item_dict.update({\"price_with_tax\": price_with_tax})\n    return item_dict"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can send a POST request with JSON data like this:"
+      },
+      {
+        "type": "code",
+        "value": "{\n    \"name\": \"Widget\",\n    \"description\": \"A useful widget\",\n    \"price\": 25.5,\n    \"tax\": 1.5\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "The response will include the original data plus the calculated price including tax."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 6: Summary\nIn just a few lines of code, you've built a RESTful API with GET and POST endpoints using FastAPI. FastAPI automatically generates interactive API docs at `/docs` using Swagger UI, which helps you test your endpoints easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "FastAPI is a powerful framework for building APIs quickly and efficiently while maintaining simplicity and readability. Continue exploring FastAPI's features to build more complex APIs with authentication, databases, and more!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-recursive-ctes-for-hierarchical-data-modeling-in-sql",
+    "title": "Mastering Recursive CTEs for Hierarchical Data Modeling in SQL",
+    "language": "sql",
+    "type": "tutorials",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) to efficiently model and query hierarchical data in SQL with practical examples and clear explanations.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Hierarchical data, such as organizational charts, product categories, or file systems, often require special handling in SQL because of their parent-child relationships. Recursive Common Table Expressions (CTEs) provide a powerful and elegant solution to query this kind of data, enabling you to navigate hierarchy levels easily."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this tutorial, we'll walk through the basics of recursive CTEs and build a simple example to demonstrate how to retrieve hierarchical data step-by-step."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's assume you have a table named Employees representing an organizational hierarchy. Each employee has an ID and a ManagerID that points to their manager (null if top-level)."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Employees (\n    EmployeeID INT PRIMARY KEY,\n    EmployeeName VARCHAR(100),\n    ManagerID INT NULL\n);\n\nINSERT INTO Employees (EmployeeID, EmployeeName, ManagerID) VALUES\n(1, 'CEO', NULL),\n(2, 'CTO', 1),\n(3, 'CFO', 1),\n(4, 'Dev Manager', 2),\n(5, 'Developer', 4),\n(6, 'Accountant', 3);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The goal is to retrieve the entire hierarchy starting from the CEO, showing all employees and their reporting levels."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is the recursive CTE to accomplish this:"
+      },
+      {
+        "type": "code",
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n    -- Anchor member: select the top-level employee(s)\n    SELECT EmployeeID, EmployeeName, ManagerID, 0 AS Level\n    FROM Employees\n    WHERE ManagerID IS NULL\n\n    UNION ALL\n\n    -- Recursive member: select employees reporting to the previous level\n    SELECT e.EmployeeID, e.EmployeeName, e.ManagerID, eh.Level + 1\n    FROM Employees e\n    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID\n)\nSELECT EmployeeID, EmployeeName, ManagerID, Level\nFROM EmployeeHierarchy\nORDER BY Level, ManagerID;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's break down how this works:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Anchor member:** This part selects the root employee(s) — here, those without a ManagerID. We assign Level = 0 meaning top level.\n2. **Recursive member:** This joins the Employees table with the CTE result from the previous step to find direct reports (children) and increases the Level by 1.\n3. **The final SELECT:** Fetches the full hierarchy with levels indicating each employee’s distance from the root."
+      },
+      {
+        "type": "paragraph",
+        "value": "Run this query to see the hierarchy:"
+      },
+      {
+        "type": "code",
+        "value": "EmployeeID | EmployeeName | ManagerID | Level\n-----------|--------------|-----------|------\n1          | CEO          | NULL      | 0\n2          | CTO          | 1         | 1\n3          | CFO          | 1         | 1\n4          | Dev Manager  | 2         | 2\n6          | Accountant   | 3         | 2\n5          | Developer    | 4         | 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "This output shows the hierarchy tree clearly, with Level indicating how deep in the structure an employee is."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using recursive CTEs is not only limited to organizational charts — it works well for folder structures, bill of materials, or any tree-like data in your databases."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, recursive CTEs:\n- Have an anchor member for root nodes\n- Recursively call themselves to traverse hierarchy\n- Enable easy querying of hierarchical data with level information\n\nPractice writing recursive CTEs with your own datasets to master hierarchical data modeling in SQL."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-null-handling-in-sql-common-pitfalls-and-best-practices",
+    "title": "Understanding NULL Handling in SQL: Common Pitfalls and Best Practices",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to properly handle NULL values in SQL, avoid common mistakes, and apply best practices for accurate database queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=hF6wqnDIuK0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "In SQL, NULL represents the absence of a value or unknown data. Handling NULLs correctly is crucial to writing accurate and bug-free queries. Beginners often confuse NULL with empty strings or zero, which can lead to unexpected results. This article explains common pitfalls when dealing with NULL and shares best practices to manage them effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common mistake is using the = operator to compare values to NULL. Since NULL means unknown, any comparison with NULL using = or <> returns NULL (which acts like false in conditions). Instead, you must use IS NULL or IS NOT NULL to check for NULL values."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect: This will not return rows with NULL values\nSELECT * FROM employees WHERE manager_id = NULL;\n\n-- Correct: Use IS NULL to find NULL values\nSELECT * FROM employees WHERE manager_id IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another pitfall involves aggregate functions like COUNT, SUM, or AVG. By default, these functions ignore NULL values. For example, COUNT(column_name) counts only non-NULL values, while COUNT(*) counts all rows regardless of NULLs."
+      },
+      {
+        "type": "code",
+        "value": "SELECT COUNT(*) AS total_rows, COUNT(salary) AS salary_count FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Use the COALESCE function to replace NULLs with a default value during queries. This can prevent NULL-related issues especially in calculations or concatenations."
+      },
+      {
+        "type": "code",
+        "value": "-- Replace NULL salary with 0 for calculation\nSELECT employee_id, COALESCE(salary, 0) AS salary FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "When filtering data with WHERE clauses, remember that NULL values behave differently. Conditions using logical operators like AND, OR may produce unexpected results if NULLs are present. Use IS NULL checks or COALESCE carefully to handle these scenarios."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize, follow these best practices for NULL handling in SQL:\n- Always use IS NULL or IS NOT NULL to check for NULL values.\n- Understand that NULL is not equal to anything, including itself.\n- Use COALESCE to substitute NULLs with meaningful default values.\n- Be cautious with aggregate functions and NULLs.\n- Test your queries with NULL data to ensure correct results."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering NULL handling, you'll write more robust and reliable SQL queries that gracefully manage missing or unknown data."
+      }
+    ]
   }
 ];
