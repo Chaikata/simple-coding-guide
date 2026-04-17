@@ -1,207 +1,219 @@
 [
   {
-    "slug": "async-await-vs-promises-in-javascript",
-    "title": "Comparing Async/Await vs Promises: When and How to Use Each in JavaScript",
+    "slug": "comparing-async-await-vs-promises-in-javascript",
+    "title": "Comparing Async/Await vs Promises in JavaScript: When and How to Use Them",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn the basics of JavaScript Promises and async/await, understand their differences, and discover when to use each for handling asynchronous code effectively.",
+    "description": "Learn the differences between Async/Await and Promises in JavaScript, and discover when and how to use each approach for cleaner, more readable asynchronous code.",
     "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is single-threaded, which means it executes code line by line. To handle operations that take time, like fetching data from a server, JavaScript uses asynchronous programming. Two popular ways to handle asynchronous code are Promises and async/await. This tutorial explains both concepts clearly and helps you understand when to use each."
+        "value": "JavaScript is single-threaded, so handling tasks like fetching data from a server can be tricky without freezing the app. Asynchronous programming helps with this. Two popular ways to handle asynchronous code in JavaScript are Promises and Async/Await. In this tutorial, we will compare these approaches and learn when to use each."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Promise?\nA Promise is an object that represents a value that may be available now, later, or never. It allows you to attach callbacks for success (`then`) and failure (`catch`)."
+        "value": "Promises were introduced first and provide a way to handle async operations by chaining .then() and .catch() callbacks. Async/Await was added later as syntactic sugar on top of Promises to make async code look more like synchronous code, improving readability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example using a Promise to fetch user data from an API:"
       },
       {
         "type": "code",
-        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data loaded');\n      } else {\n        reject('Error loading data');\n      }\n    }, 1000);\n  });\n};\n\nfetchData()\n  .then(response => console.log(response))\n  .catch(error => console.error(error));"
+        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const user = { id: 1, name: \"Alice\" };\n      resolve(user);\n    }, 1000);\n  });\n}\n\nfetchUserData()\n  .then(user => {\n    console.log(\"User data (Promise):\", user);\n  })\n  .catch(error => {\n    console.error(\"Error fetching user data:\", error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `fetchData` returns a Promise. After 1 second, it either resolves successfully or rejects with an error. We handle these outcomes with `.then()` and `.catch()`."
-      },
-      {
-        "type": "paragraph",
-        "value": "### What is async/await?\nAsync/await is a more modern syntax built on Promises that makes your asynchronous code look and behave like synchronous code, which is easier to read and maintain."
+        "value": "Now, here’s the same example using Async/Await, which makes it look cleaner:"
       },
       {
         "type": "code",
-        "value": "const fetchDataAsync = () => {\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve('Data loaded async');\n    }, 1000);\n  });\n};\n\nasync function getData() {\n  try {\n    const data = await fetchDataAsync();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const user = { id: 1, name: \"Alice\" };\n      resolve(user);\n    }, 1000);\n  });\n}\n\nasync function getUser() {\n  try {\n    const user = await fetchUserData();\n    console.log(\"User data (Async/Await):\", user);\n  } catch (error) {\n    console.error(\"Error fetching user data:\", error);\n  }\n}\n\ngetUser();"
       },
       {
         "type": "paragraph",
-        "value": "The `async` keyword before the function means it will always return a Promise. Inside that function, `await` pauses the execution until the Promise resolves or rejects."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Promises vs Async/Await: When to Use Each\n- **Promises** are great for simple async operations or when chaining multiple asynchronous calls.\n- **Async/await** improves readability, especially for complex flow control or when you have multiple async operations in a row.\n- Async/await code tends to be easier to understand and debug compared to deeply nested `.then()` chains."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Handling Multiple Async Operations\nUsing Promises with `.then()` chain:"
+        "value": "### When to Use Promises\nPromises are great when you want straightforward chaining of async operations. They work well if you want to combine multiple async tasks using Promise.all, Promise.race, or when supporting older codebases without async/await syntax.\n\nExample of chaining promises:"
       },
       {
         "type": "code",
-        "value": "fetchData()\n  .then(data => {\n    console.log(data);\n    return fetchData();\n  })\n  .then(data2 => {\n    console.log(data2);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+        "value": "fetchUserData()\n  .then(user => {\n    console.log(\"User received:\", user);\n    return fetchUserPosts(user.id);\n  })\n  .then(posts => {\n    console.log(\"Posts received:\", posts);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "Using async/await for the same operations:"
+        "value": "### When to Use Async/Await\nAsync/Await offers cleaner, easier-to-read code, especially when you have multiple asynchronous operations that need to run sequentially. It lets you write async code in a style similar to synchronous code, which can reduce bugs and improve maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of sequential async operations:"
       },
       {
         "type": "code",
-        "value": "async function handleMultiple() {\n  try {\n    const data1 = await fetchData();\n    console.log(data1);\n    const data2 = await fetchData();\n    console.log(data2);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nhandleMultiple();"
+        "value": "async function getUserAndPosts() {\n  try {\n    const user = await fetchUserData();\n    const posts = await fetchUserPosts(user.id);\n    console.log(user, posts);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetUserAndPosts();"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nBoth Promises and async/await are important tools in JavaScript for managing asynchronous code. Promises are a fundamental concept you should understand, while async/await makes your code cleaner and easier to follow. Start by using Promises in simple cases, and adopt async/await as you build more complex applications."
+        "value": "### Summary\n- Promises are the foundation for handling asynchronous operations and work well with chaining and combinators like Promise.all.\n- Async/Await is syntactic sugar built on Promises that makes asynchronous code easier to write and understand.\n- Use Async/Await for cleaner and more readable async flows, especially for sequential operations.\n- Use Promises when you need advanced chaining, parallel execution with Promise.all, or compatibility with older JavaScript environments."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding both, you'll be able to write better asynchronous JavaScript code that's easier to maintain and debug."
       }
     ]
   },
   {
-    "slug": "javascript-memory-leaks-in-large-scale-system-design-and-how-to-prevent-them",
-    "title": "JavaScript Memory Leaks in Large-Scale System Design and How to Prevent Them",
+    "slug": "understanding-javascript-type-coercion-errors-deep-dive",
+    "title": "Understanding JavaScript Type Coercion Errors: A Deep Dive",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn what causes JavaScript memory leaks in large-scale systems and best practices to prevent them, helping your applications stay efficient and stable.",
-    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "description": "Learn the basics of JavaScript type coercion and common errors beginners face when types are automatically converted. Understand how to avoid these pitfalls with simple examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=GKJh3vdat8A",
     "content": [
       {
         "type": "paragraph",
-        "value": "Memory leaks happen when a program keeps using more and more memory without releasing it back. In JavaScript, this can slow down or even crash your applications. Large-scale systems are especially vulnerable because they run for a long time and handle lots of data."
+        "value": "JavaScript is a flexible language that allows mixing different data types easily. This flexibility is due to a feature called \"type coercion,\" where JavaScript automatically converts values from one type to another to perform operations. While this behavior can be helpful, it sometimes leads to unexpected errors, especially for beginners. Understanding how type coercion works can help you write more predictable and bug-free code."
       },
       {
         "type": "paragraph",
-        "value": "Understanding common causes of memory leaks is the first step in preventing them. Let's go over some typical memory leak sources in JavaScript and how to avoid them:"
+        "value": "Type coercion happens mainly in two places: during loose equality checks (using `==`) and when performing operations between values of different types like addition or subtraction."
       },
       {
         "type": "paragraph",
-        "value": "1. **Global Variables:** Variables declared without `var`, `let`, or `const` automatically become global and never get cleaned up."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Closures Holding References:** Closures can hold references to variables longer than needed if not properly managed."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Unremoved Event Listeners:** Adding event listeners but never removing them causes memory to stay occupied."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Timers and Intervals:** If you forget to clear intervals or timeouts, they keep running and consuming memory."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example of a memory leak caused by an event listener not being removed:"
+        "value": "For example, let's look at how JavaScript handles adding a number and a string:"
       },
       {
         "type": "code",
-        "value": "function setup() {\n  const element = document.getElementById('button');\n  element.addEventListener('click', () => {\n    console.log('Button clicked');\n  });\n}\n\n// If setup() is called many times without removing listeners, memory leaks happen."
+        "value": "console.log(5 + '5'); // Output: '55'\n\n// JavaScript converts the number 5 to a string '5' and concatenates."
       },
       {
         "type": "paragraph",
-        "value": "To prevent this, always remove event listeners when they’re no longer needed:"
+        "value": "In the code above, since one value is a string, JavaScript converts the number to a string and joins them. This might surprise beginners who expect a numerical addition. Similarly, subtraction behaves differently:"
       },
       {
         "type": "code",
-        "value": "function setup() {\n  const element = document.getElementById('button');\n  const handleClick = () => {\n    console.log('Button clicked');\n  };\n  element.addEventListener('click', handleClick);\n\n  // Later, remove the listener\n  return () => {\n    element.removeEventListener('click', handleClick);\n  };\n}"
+        "value": "console.log(5 - '2'); // Output: 3\n\n// Here, JavaScript converts the string '2' to the number 2 and performs subtraction."
       },
       {
         "type": "paragraph",
-        "value": "Other useful tips for avoiding memory leaks in large-scale systems include:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Use `let` and `const`:** Avoid accidental globals.\n- **Clear timers:** Always clear timeouts and intervals with `clearTimeout()` and `clearInterval()`.\n- **Limit large data retention:** Don’t store unnecessary big objects or arrays.\n- **Use Weak References:** `WeakMap` and `WeakSet` allow objects to be garbage collected if not used elsewhere.\n- **Profile your app:** Use browser developer tools' memory profilers to catch leaks early."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is an example of clearing intervals to prevent leaks:"
+        "value": "One common source of bugs is using loose equality (`==`) instead of strict equality (`===`). The loose equality operator allows type coercion before comparison, which can cause unexpected true or false results."
       },
       {
         "type": "code",
-        "value": "const intervalId = setInterval(() => {\n  console.log('Running repeated task');\n}, 1000);\n\n// When done:\nclearInterval(intervalId);"
+        "value": "console.log(0 == false);  // true\nconsole.log(0 === false); // false\n\n// '==' converts false to 0, so 0 == false is true. '===' checks type and value, so false."
       },
       {
         "type": "paragraph",
-        "value": "By following these best practices, you can limit memory leaks and keep your JavaScript applications performant, especially as they grow in size and complexity."
+        "value": "To avoid type coercion errors, it is recommended to use strict equality (`===` and `!==`), which compares both type and value and prevents automatic conversions that lead to bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common error happens when values like `null`, `undefined`, or empty strings are involved. For example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(null == undefined); // true\nconsole.log(null === undefined); // false\n\n// '==' considers null and undefined equal, but '===' does not."
+      },
+      {
+        "type": "paragraph",
+        "value": "Be careful with these comparisons because they can cause logical errors in your code, especially when checking for missing or empty values."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, JavaScript’s type coercion can make coding flexible but also tricky. To avoid common errors:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use strict equality operators (`===` and `!==`).\n- Be aware of how JavaScript converts types in arithmetic operations.\n- Check the actual types of your variables using `typeof` if needed.\n- Avoid relying on automatic coercion in condition checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these rules and following best practices, you will reduce bugs and write cleaner JavaScript code."
       }
     ]
   },
   {
-    "slug": "typescript-vs-javascript-type-safety-developer-experience",
-    "title": "TypeScript vs JavaScript: Deep Dive into Type Safety and Developer Experience",
+    "slug": "mastering-advanced-typescript-utility-types-for-cleaner-code",
+    "title": "Mastering Advanced TypeScript Utility Types for Cleaner Code",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Explore the benefits of TypeScript over JavaScript focusing on type safety and enhanced developer experience in this beginner-friendly tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
+    "description": "Learn how to use advanced TypeScript utility types to write cleaner, more maintainable, and error-free code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=eJ6R1knfsoc",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible and widely-used programming language for web development, but as applications grow larger, it can become challenging to manage and debug the code. TypeScript is a superset of JavaScript that adds static typing, which helps catch errors early in the development process and improves the overall developer experience. In this article, we will explore the key differences between JavaScript and TypeScript, focusing on type safety and why TypeScript can make you a more productive developer."
+        "value": "TypeScript offers powerful utility types that help you manipulate and transform types to make your code more flexible and maintainable. While many developers are familiar with basic utilities like Partial and Readonly, there are advanced utility types that can take your coding skills to the next level. In this tutorial, we'll explore some of these advanced utility types and see practical examples of how they improve your code."
       },
       {
         "type": "paragraph",
-        "value": "### What is Type Safety?"
+        "value": "### 1. Omit<Type, Keys> - Exclude Specific Properties"
       },
       {
         "type": "paragraph",
-        "value": "Type safety means that the programming language can check the types of variables, function parameters, and return values to prevent type-related errors. In JavaScript, types are dynamic, meaning variables can hold any type of data at any time. This is flexible but can lead to runtime errors if data types do not match expectations."
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript introduces static types, which means variables and function signatures have defined types checked at compile time. This helps identify bugs early and makes your code easier to understand and maintain."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Example: Dynamic Typing in JavaScript"
+        "value": "The Omit utility type allows you to create a new type by excluding one or more properties from an existing type. This is useful when you want to reuse a type but want to remove certain keys."
       },
       {
         "type": "code",
-        "value": "function greet(name) {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(\"Alice\")); // Hello, ALICE\nconsole.log(greet(42)); // Runtime error: 42.toUpperCase is not a function"
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  password: string;\n}\n\n// We want to create a new type for a User without the password property\n\ntype UserWithoutPassword = Omit<User, 'password'>;\n\nconst user: UserWithoutPassword = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com'\n  // password is excluded here\n};"
       },
       {
         "type": "paragraph",
-        "value": "Here, JavaScript allows calling the function with a number, but this causes a runtime error because numbers do not have the method `toUpperCase`."
+        "value": "### 2. Pick<Type, Keys> - Select Specific Properties"
       },
       {
         "type": "paragraph",
-        "value": "### Example: Static Typing in TypeScript"
+        "value": "Opposite to Omit, the Pick utility allows creating a new type by selecting only certain properties from an existing type. This helps keep your types precise."
       },
       {
         "type": "code",
-        "value": "function greet(name: string): string {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(\"Alice\")); // Hello, ALICE\n// console.log(greet(42)); // Error: Argument of type 'number' is not assignable to parameter of type 'string'."
+        "value": "type UserPreview = Pick<User, 'id' | 'name'>;\n\nconst preview: UserPreview = {\n  id: 1,\n  name: 'Alice'\n};"
       },
       {
         "type": "paragraph",
-        "value": "TypeScript's compiler catches the error before the code runs, preventing the runtime issue."
+        "value": "### 3. Exclude<UnionType, ExcludedMembers> - Remove Union Members"
       },
       {
         "type": "paragraph",
-        "value": "### Enhanced Developer Experience with TypeScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "Besides type safety, TypeScript improves the developer experience in various ways:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- **Better Code Autocompletion:** Your editor can provide smarter suggestions because it knows the types.\n- **Improved Refactoring:** Type information allows for safer renaming and restructuring.\n- **Clearer Documentation:** Types serve as documentation for functions and data structures.\n- **Early Bug Detection:** Catch bugs during compilation instead of at runtime."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Tip: Using TypeScript with JavaScript Projects"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can gradually adopt TypeScript in your JavaScript projects by renaming `.js` files to `.ts` and adding type annotations where needed. This incremental adoption helps ease the transition."
+        "value": "Exclude helps you create a new union type by removing specific members from another union type. This is handy for filtering types."
       },
       {
         "type": "code",
-        "value": "// JavaScript\n// sum.js\nfunction sum(a, b) {\n  return a + b;\n}\n\n// TypeScript\n// sum.ts\nfunction sum(a: number, b: number): number {\n  return a + b;\n}"
+        "value": "type Status = 'pending' | 'active' | 'inactive' | 'banned';\n\ntype AllowedStatus = Exclude<Status, 'banned' | 'inactive'>;\n\nconst currentStatus: AllowedStatus = 'active';  // 'banned' and 'inactive' are excluded"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Extract<UnionType, MembersToExtract> - Extract Specific Union Members"
+      },
+      {
+        "type": "paragraph",
+        "value": "Extract creates a new union type by picking elements that overlap between two union types. It is useful when narrowing down possible types."
+      },
+      {
+        "type": "code",
+        "value": "type Mixed = 'text' | 'image' | 'video' | 'audio';\n\ntype Media = Extract<Mixed, 'image' | 'video' | 'audio'>;\n\nconst mediaType: Media = 'video';"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. NonNullable<Type> - Remove null and undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "When working with data that might be null or undefined, NonNullable helps you create a type that excludes these values."
+      },
+      {
+        "type": "code",
+        "value": "type Name = string | null | undefined;\n\ntype ValidName = NonNullable<Name>;\n\nfunction greet(name: ValidName) {\n  console.log('Hello, ' + name.toUpperCase());\n}\n\ngreet('Alice'); // Works fine\n// greet(null); // Error: Argument of type 'null' is not assignable"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. ReturnType<Type> - Get the Return Type of a Function"
+      },
+      {
+        "type": "paragraph",
+        "value": "ReturnType utility extracts the return type of a function type, helping keep types consistent when you reuse functions."
+      },
+      {
+        "type": "code",
+        "value": "function fetchUser() {\n  return { id: 1, name: 'Alice' };\n}\n\ntype UserType = ReturnType<typeof fetchUser>;\n\nconst user: UserType = {\n  id: 2,\n  name: 'Bob'\n};"
       },
       {
         "type": "paragraph",
@@ -209,189 +221,147 @@
       },
       {
         "type": "paragraph",
-        "value": "While JavaScript is easy to start with, TypeScript adds valuable tools for building reliable and maintainable applications. By introducing type safety and improving the developer experience, TypeScript helps catch errors early, understand code better, and work more efficiently, making it a great choice for both beginners and experienced developers."
+        "value": "Mastering these advanced utility types unlocks the full power of TypeScript, making your code cleaner, easier to understand, and less error-prone. Try incorporating Omit, Pick, Exclude, Extract, NonNullable, and ReturnType in your next TypeScript project to experience their benefits firsthand."
       }
     ]
   },
   {
-    "slug": "comparing-typescript-error-handling-try-catch-vs-result-types",
-    "title": "Comparing TypeScript Error Handling Techniques: Try-Catch vs Result Types",
+    "slug": "handling-floating-point-precision-edge-cases-in-typescript-arithmetic",
+    "title": "Handling Floating Point Precision Edge Cases in TypeScript Arithmetic",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn about two popular error handling techniques in TypeScript—try-catch blocks and Result types—to write safer, clearer code.",
-    "videoUrl": "https://www.youtube.com/watch?v=deenC-vH14E",
+    "description": "Learn how to manage floating point precision issues in TypeScript arithmetic with easy-to-understand methods and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=5HDTkOLHHds",
     "content": [
       {
         "type": "paragraph",
-        "value": "Error handling is an important part of writing reliable code in any programming language, including TypeScript. Two common ways to handle errors are using try-catch blocks and using Result types. In this article, we'll compare these approaches so beginners can understand their pros and cons."
+        "value": "When working with numbers in TypeScript (and JavaScript), one common challenge is dealing with floating point precision errors. This happens because computers represent decimal numbers using binary fractions, which can result in tiny rounding errors. For example, simple arithmetic like 0.1 + 0.2 doesn't exactly equal 0.3. Understanding and handling these edge cases is crucial to avoid bugs in your calculations."
       },
       {
         "type": "paragraph",
-        "value": "### Try-Catch Blocks\nTry-catch is a traditional method to handle runtime errors. You wrap code that might throw an error inside a try block, and catch the error in the catch block. This allows you to respond to unexpected issues gracefully."
+        "value": "Let's look at an example where floating point precision causes an unexpected result:"
       },
       {
         "type": "code",
-        "value": "function parseJson(jsonString: string) {\n  try {\n    return JSON.parse(jsonString);\n  } catch (error) {\n    console.error(\"Invalid JSON:\", error);\n    return null;\n  }\n}\n\nconst data = parseJson('{ \"name\": \"Alice\" }');\nconsole.log(data);"
+        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum); // Output: 0.30000000000000004\nconsole.log(sum === 0.3); // Output: false"
       },
       {
         "type": "paragraph",
-        "value": "Try-catch is straightforward and works well for handling errors that throw exceptions. However, it can sometimes make it harder to anticipate all possible error states, and mixing error handling with main logic can reduce readability."
+        "value": "Here, `sum` is not exactly 0.3, which can cause issues in comparisons or further calculations. To handle these edge cases, there are several strategies you can use."
       },
       {
         "type": "paragraph",
-        "value": "### Result Types\nResult types are a functional programming pattern to explicitly represent success or failure as part of a function's return type. A Result type typically has two variants: Ok (success) and Err (error). This makes error handling explicit and forces developers to handle both cases."
+        "value": "**1. Use a small tolerance value for comparisons**\n\nInstead of checking for exact equality, check if the difference between two numbers is smaller than a tiny epsilon value."
       },
       {
         "type": "code",
-        "value": "type Result<T, E> =\n  | { type: \"ok\"; value: T }\n  | { type: \"err\"; error: E };\n\nfunction parseJsonResult(jsonString: string): Result<any, string> {\n  try {\n    const parsed = JSON.parse(jsonString);\n    return { type: \"ok\", value: parsed };\n  } catch {\n    return { type: \"err\", error: \"Invalid JSON\" };\n  }\n}\n\nconst result = parseJsonResult('{ \"name\": \"Alice\" }');\n\nif (result.type === \"ok\") {\n  console.log(\"Parsed data:\", result.value);\n} else {\n  console.error(\"Error:\", result.error);\n}"
+        "value": "const EPSILON = 0.000001;\nfunction areEqual(a: number, b: number): boolean {\n  return Math.abs(a - b) < EPSILON;\n}\n\nconsole.log(areEqual(0.1 + 0.2, 0.3)); // Output: true"
       },
       {
         "type": "paragraph",
-        "value": "Using Result types improves code clarity because it clearly separates successful and failed outcomes. It encourages handling errors explicitly instead of relying on exceptions. However, it requires more verbose code and understanding of union types."
+        "value": "**2. Use integer arithmetic when possible**\n\nFor financial calculations or fixed decimal places, multiply numbers to work with integers, then divide back after the calculation."
+      },
+      {
+        "type": "code",
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst multiplier = 100;\n\nconst intSum = (a * multiplier) + (b * multiplier); // 10 + 20 = 30\nconst result = intSum / multiplier; // 30 / 100 = 0.3\n\nconsole.log(result); // Output: 0.3\nconsole.log(result === 0.3); // Output: true"
       },
       {
         "type": "paragraph",
-        "value": "### When to Use Which?\n- Use try-catch for simple cases where exceptions are expected and can be handled locally.\n- Use Result types when you want to enforce explicit handling of errors and make success/failure part of your function contract.\n\nBoth methods have their place in TypeScript development. Combining them smartly can help create robust and maintainable applications."
+        "value": "**3. Use built-in methods like `toFixed()` for formatting**\n\nThough `toFixed()` converts numbers to strings, you can parse them back to numbers to avoid precision problems when displaying or storing values."
+      },
+      {
+        "type": "code",
+        "value": "const value = 0.1 + 0.2;\nconst formattedValue = Number(value.toFixed(2));\n\nconsole.log(formattedValue); // Output: 0.3\nconsole.log(formattedValue === 0.3); // Output: true"
       },
       {
         "type": "paragraph",
-        "value": "By understanding these two techniques, beginners can write safer, clearer error handling code in TypeScript that matches their project needs."
+        "value": "In summary, understanding floating point precision issues and employing techniques like tolerance checks, integer arithmetic, or formatting methods helps keep your TypeScript arithmetic reliable and bug-free. These small adjustments are important in applications such as financial calculations, data analysis, or anywhere exact decimals matter."
       }
     ]
   },
   {
-    "slug": "mastering-python-metaclasses-advanced-techniques-and-practical-use-cases",
-    "title": "Mastering Python Metaclasses: Advanced Techniques and Practical Use Cases",
+    "slug": "mastering-pythons-unicode-edge-cases-for-international-text-processing",
+    "title": "Mastering Python’s Unicode Edge Cases for International Text Processing",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn the power of Python metaclasses with simple explanations, practical examples, and real-world use cases to enhance your coding skills.",
-    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
+    "description": "Learn how to handle Unicode edge cases in Python to effectively process international text with practical examples for beginners.",
+    "videoUrl": "",
     "content": [
       {
         "type": "paragraph",
-        "value": "If you're diving deeper into Python, you've probably heard about metaclasses — a powerful but often confusing concept. In this tutorial, we'll demystify metaclasses, show their practical uses, and provide clear examples, making it easy even for beginners to grasp."
+        "value": "Working with text from around the world means dealing with diverse characters, scripts, and languages. Python natively supports Unicode, which helps handle this diversity, but there are important edge cases every beginner should know. This tutorial guides you through some common Unicode challenges and shows how to handle them gracefully in Python."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Metaclass?\n\nIn Python, classes themselves are objects. Metaclasses are the 'blueprints' for classes, much like classes are blueprints for objects. Essentially, a metaclass controls how classes are created. By default, Python uses the metaclass named `type`."
+        "value": "### What is Unicode? \nUnicode is a standard designed to represent text in most of the world’s writing systems. Python 3 strings are Unicode by default, so you can write characters from many languages directly in your code or input."
       },
       {
         "type": "paragraph",
-        "value": "### Why Use Metaclasses?\n\nMetaclasses can automate class creation tasks, enforce coding standards, or modify classes dynamically. They allow you to customize or add functionality to classes at creation time."
+        "value": "### Common Unicode Edge Cases in Python"
       },
       {
         "type": "paragraph",
-        "value": "### Creating a Simple Metaclass\n\nLet's create a metaclass that prints a message every time a new class is created using it."
+        "value": "1. **Combining Characters:** Some languages use combining marks to modify the base character, but visually they appear as one character. For example, 'e' + a combining acute accent (´) vs. 'é'."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Normalization:** Different Unicode sequences can look the same but be encoded differently. Normalizing text is essential before comparing or processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Surrogate Pairs:** Some high Unicode code points (characters beyond the Basic Multilingual Plane) are represented using pairs of 16-bit code units internally."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Encoding/Decoding Errors:** When you read or write files, be mindful of using the right encoding (like UTF-8) to avoid errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s explore these with practical Python examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Combining Characters and Normalization"
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider the letter 'é'. It can be a single character (precomposed) or an 'e' followed by a combining acute accent. Visually, they look the same but differ internally."
       },
       {
         "type": "code",
-        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f'Creating class {name}')\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\n# Output: Creating class MyClass"
+        "value": "import unicodedata\n\n# Single character é (precomposed)\nprecomposed = 'é'\n\n# e + combining acute accent\ncombining = 'e\\u0301'\n\nprint(f\"Precomposed: {precomposed}, Combining: {combining}\")\nprint(f\"Are they equal? {precomposed == combining}\")"
       },
       {
         "type": "paragraph",
-        "value": "The `__new__` method in the metaclass is called before the class is created. By overriding it, we customize what happens during class creation."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Practical Use Case 1: Enforcing Naming Conventions\n\nLet’s enforce a rule that class names must start with an uppercase letter."
+        "value": "Since they are not equal, we use Unicode normalization to standardize them before comparison."
       },
       {
         "type": "code",
-        "value": "class UppercaseMeta(type):\n    def __new__(cls, name, bases, dct):\n        if not name[0].isupper():\n            raise TypeError(\"Class name must start with an uppercase letter\")\n        return super().__new__(cls, name, bases, dct)\n\nclass CorrectName(metaclass=UppercaseMeta):\n    pass\n\n# class wrongName(metaclass=UppercaseMeta):\n#     pass  # This will raise TypeError"
+        "value": "print(f\"Normalized equal? {unicodedata.normalize('NFC', precomposed) == unicodedata.normalize('NFC', combining)}\")"
       },
       {
         "type": "paragraph",
-        "value": "### Practical Use Case 2: Automatically Adding Methods\n\nYou can add methods automatically to all classes using your metaclass. Here, we'll add a `greet` method to any class using `GreetMeta`."
+        "value": "### Working with High Unicode Characters (Emojis & Rare Scripts)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Characters like emojis can have code points that require special handling internally. Python’s string length counts characters, not code units, so you usually don’t need to worry about surrogate pairs."
       },
       {
         "type": "code",
-        "value": "def greet(self):\n    return f\"Hello from {self.__class__.__name__}!\"\n\nclass GreetMeta(type):\n    def __new__(cls, name, bases, dct):\n        dct['greet'] = greet\n        return super().__new__(cls, name, bases, dct)\n\nclass Person(metaclass=GreetMeta):\n    pass\n\np = Person()\nprint(p.greet())  # Output: Hello from Person!"
+        "value": "emoji = '😀'  # Grinning Face Emoji\nprint(f\"Emoji: {emoji}, Length: {len(emoji)}\")"
       },
       {
         "type": "paragraph",
-        "value": "### When Should You Use Metaclasses?\n\n- Enforcing coding standards or conventions\n- Automatically registering classes (like plugins or handlers)\n- Modifying or adding attributes and methods on class creation\n- Creating singleton classes or abstract base classes\n\nRemember, metaclasses add complexity, so use them when simpler options like decorators or class inheritance don't suffice."
+        "value": "### Correctly Reading/Writing Unicode Files"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\n\nMetaclasses control class creation in Python and can be used for advanced tasks like enforcing rules or enhancing classes automatically. By understanding and applying metaclasses, you can write more flexible and powerful Python code."
-      }
-    ]
-  },
-  {
-    "slug": "optimizing-python-code-identifying-resolving-memory-leaks",
-    "title": "Optimizing Python Code by Identifying and Resolving Memory Leaks",
-    "language": "python",
-    "type": "errors",
-    "description": "Learn how to find and fix memory leaks in Python to improve your program's performance and prevent crashes. A beginner-friendly guide with examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=fMKilBkCJX0",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Memory leaks in Python occur when your program holds onto memory that it no longer needs, causing your application to use more and more memory over time. This can slow down your program or even cause it to crash. Even though Python has automatic memory management through its garbage collector, it’s still possible to create memory leaks, especially with certain data structures or bugs."
-      },
-      {
-        "type": "paragraph",
-        "value": "In this article, we'll explore how to identify memory leaks in Python and resolve them using practical examples. We’ll also introduce some built-in tools that make tracking memory usage easier."
-      },
-      {
-        "type": "paragraph",
-        "value": "### How to Identify a Memory Leak in Python"
-      },
-      {
-        "type": "paragraph",
-        "value": "A common sign of a memory leak is your program’s memory consumption steadily increasing without being released. To verify this, you can manually monitor memory usage with external tools like your system's Task Manager or use Python tools like `tracemalloc`."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's a simple example that creates a memory leak by continuously appending to a global list:"
+        "value": "Always specify encoding when working with files to avoid surprises."
       },
       {
         "type": "code",
-        "value": "leaky_list = []\n\ndef add_to_list():\n    # This function keeps adding data without removing any\n    leaky_list.append('x' * 10000)  # Add 10,000 characters repeatedly\n\nfor _ in range(100000):\n    add_to_list()"
-      },
-      {
-        "type": "paragraph",
-        "value": "In this case, `leaky_list` keeps growing and will use more and more memory. To track where memory is growing, Python’s `tracemalloc` module is very helpful."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Using tracemalloc to Track Memory Usage"
-      },
-      {
-        "type": "paragraph",
-        "value": "You can enable `tracemalloc` to get a snapshot of memory allocations before and after a suspected leak."
-      },
-      {
-        "type": "code",
-        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code that may leak memory\nleaky_list = []\nfor _ in range(10000):\n    leaky_list.append('x' * 10000)\n\nsnapshot = tracemalloc.take_snapshot()\nfor stat in snapshot.statistics('filename')[:5]:\n    print(stat)"
-      },
-      {
-        "type": "paragraph",
-        "value": "This will show you which files and lines of code are responsible for the most memory allocation so you can narrow down the leak’s source."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Fixing Common Memory Leaks in Python"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Unintentional Global Variables**: Avoid creating large global containers that grow without bounds. Use local variables or clear data when no longer needed."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Circular References**: Objects referring to each other can prevent Python’s garbage collector from freeing them. Use `weakref` module for references that shouldn’t increase object reference count."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Caching Without Limits**: If you implement your own cache, make sure it has a maximum size or expiration policy to free old data."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s an example fixing a leak caused by accumulating data in a global list by clearing it periodically:"
-      },
-      {
-        "type": "code",
-        "value": "leaky_list = []\n\ndef add_to_list():\n    leaky_list.append('x' * 10000)\n    if len(leaky_list) > 1000:\n        leaky_list.clear()  # Clear list to free memory\n\nfor _ in range(100000):\n    add_to_list()"
+        "value": "sample_text = 'Hello, world! Привет мир! こんにちは世界！'\n\n# Write text to file with UTF-8 encoding\nwith open('sample.txt', 'w', encoding='utf-8') as f:\n    f.write(sample_text)\n\n# Read it back\nwith open('sample.txt', 'r', encoding='utf-8') as f:\n    content = f.read()\n\nprint(content)"
       },
       {
         "type": "paragraph",
@@ -399,131 +369,237 @@
       },
       {
         "type": "paragraph",
-        "value": "Memory leaks in Python can degrade performance and cause crashes, but they are often fixable with careful coding and monitoring. Use tools like `tracemalloc` to identify leaks, avoid unbounded data structures, and be mindful of circular references or uncontrolled caching. With these steps, your Python programs will be more efficient and reliable."
+        "value": "1. Use `unicodedata.normalize` to handle Unicode string equivalency.\n2. Python 3 handles most Unicode characters well internally, including emojis.\n3. Always specify encoding when reading or writing text files.\n4. Experiment with your international text data to understand specific needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering these Unicode edge cases will help you build robust applications that truly support global text processing!"
       }
     ]
   },
   {
-    "slug": "designing-scalable-data-models-for-multi-tenant-sql-databases",
-    "title": "Designing Scalable Data Models for Multi-Tenant SQL Databases: A Beginner's Guide",
+    "slug": "understanding-python-typeerror-common-causes-and-prevention-techniques",
+    "title": "Understanding Python's TypeError: Common Causes and Prevention Techniques",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the common causes of Python's TypeError and how to prevent it with simple, clear examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python raises a TypeError when an operation or function is applied to an object of an inappropriate type. This error occurs when you try to perform an action that Python doesn't know how to do with the given data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some frequent causes of TypeError and how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Performing unsupported operations between different data types."
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\n\n# This will cause a TypeError because you cannot add an integer and a string\nresult = num + text"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, convert the types so they match. For example, convert the integer to a string before concatenation:"
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\n\nresult = str(num) + text\nprint(result)  # Output: 5hello"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Calling a function with an argument of the wrong type."
+      },
+      {
+        "type": "code",
+        "value": "def square(x):\n    return x * x\n\n# Passing a string instead of a number causes TypeError\nsquare('4')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Ensure you pass the correct data types to functions. You can add checks or convert types inside your functions."
+      },
+      {
+        "type": "code",
+        "value": "def square(x):\n    if not isinstance(x, (int, float)):\n        raise TypeError(\"Input must be a number\")\n    return x * x\n\nprint(square(4))  # Output: 16"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Using built-in functions or methods incorrectly."
+      },
+      {
+        "type": "code",
+        "value": "my_list = [1, 2, 3]\n\n# Using the len() function correctly\nlength = len(my_list)\n\n# Trying to use len() on an integer causes TypeError\nlength = len(5)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always check the documentation to ensure you use functions with suitable data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Attempting to index or iterate over non-iterable types."
+      },
+      {
+        "type": "code",
+        "value": "number = 10\n\n# Trying to loop over an integer results in TypeError\nfor i in number:\n    print(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, loop over iterable objects like lists, strings, or ranges."
+      },
+      {
+        "type": "code",
+        "value": "for i in range(number):\n    print(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Prevention Tips"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use type checking with `isinstance()` before performing operations.\n- Convert data types explicitly when needed using functions like `int()`, `str()`, or `float()`.\n- Read and understand function requirements to pass correct argument types.\n- Test small parts of your code to catch type errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding why TypeErrors happen and following these simple rules, you can write more robust Python code and avoid common pitfalls."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-advanced-sql-tricks-for-data-analysis",
+    "title": "Mastering Window Functions: Advanced SQL Tricks for Data Analysis",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to design scalable and efficient data models for multi-tenant SQL databases. This beginner-friendly tutorial covers basic concepts and practical examples to help you build databases that serve multiple customers securely and efficiently.",
-    "videoUrl": "https://www.youtube.com/watch?v=ExnKdgIMabI",
+    "description": "Learn how to use SQL window functions to perform advanced data analysis efficiently and easily, even as a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Multi-tenancy in databases means storing data for multiple customers (tenants) in a single database system. It is widely used in SaaS applications to reduce costs and simplify maintenance. When designing scalable data models for multi-tenant SQL databases, beginners should focus on tenant isolation, performance, and flexibility."
+        "value": "Window functions in SQL are powerful tools that allow you to perform calculations across sets of rows related to the current row, without collapsing your result into grouped summaries. Unlike aggregate functions, window functions keep individual row details visible, which makes them ideal for advanced data analysis."
       },
       {
         "type": "paragraph",
-        "value": "There are three common approaches to multi-tenant data models in SQL databases: Separate Databases, Shared Database with Separate Schemas, and Shared Database with Shared Schema. Here, we will focus on the most scalable and commonly used one: Shared Database with Shared Schema."
+        "value": "To understand window functions, you first need to know their basic structure. A window function is typically used with the OVER() clause, which defines the partitioning and ordering of the dataset it operates on."
       },
       {
         "type": "paragraph",
-        "value": "### Shared Database with Shared Schema\nThis approach stores all tenants' data in the same tables but distinguishes them using a TenantID column. It requires careful design to ensure data isolation and easy tenant-specific queries."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's consider a simple example: a database for an online store serving multiple tenants. Each tenant has customers and orders. We add a TenantID column to each table to separate data."
+        "value": "Let's start with a simple example. Suppose you have a sales table with columns `salesperson`, `region`, and `sales_amount`. You might want to calculate the total sales per region but still see each individual sale."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE Tenants (\n    TenantID INT PRIMARY KEY,\n    TenantName VARCHAR(100)\n);\n\nCREATE TABLE Customers (\n    CustomerID INT PRIMARY KEY,\n    TenantID INT,\n    CustomerName VARCHAR(100),\n    Email VARCHAR(100),\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID)\n);\n\nCREATE TABLE Orders (\n    OrderID INT PRIMARY KEY,\n    TenantID INT,\n    CustomerID INT,\n    OrderDate DATE,\n    Amount DECIMAL(10, 2),\n    FOREIGN KEY (TenantID) REFERENCES Tenants(TenantID),\n    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\n);"
+        "value": "SELECT salesperson,\n       region,\n       sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY region) AS total_region_sales\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### Key points for scalability and security:\n- **TenantID Column:** This is crucial for identifying which data belongs to which tenant.\n- **Indexes:** Create indexes on TenantID columns to speed up tenant-specific queries.\n- **Foreign Keys:** Include TenantID in foreign keys to prevent cross-tenant data linking.\n- **Security and Filtering:** Always filter queries by TenantID to avoid data leaks."
+        "value": "In this example, `SUM(sales_amount) OVER (PARTITION BY region)` calculates the total sales for each region but keeps all individual rows visible. This means each row shows a salesperson's sale along with their region's total sales."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another popular window function is ROW_NUMBER(). It assigns a unique sequential number to rows within a partition of the result set, ordered by some criteria."
       },
       {
         "type": "code",
-        "value": "-- Example query to get orders for a specific tenant\nSELECT OrderID, OrderDate, Amount\nFROM Orders\nWHERE TenantID = 1;"
+        "value": "SELECT salesperson,\n       region,\n       sales_amount,\n       ROW_NUMBER() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS rank_in_region\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "### Additional Tips for Beginners\n- Use parameterized queries in your application code to prevent SQL injection.\n- Regularly monitor query performance and optimize indexes.\n- Consider row-level security features if your database supports them.\n- Start with simple models like this and evolve your design as needs grow."
+        "value": "Here, `ROW_NUMBER()` ranks salespeople within each region by their sales amount, starting at 1 for the highest sale. This is useful for identifying top performers or sorting data within specific categories."
       },
       {
         "type": "paragraph",
-        "value": "By designing your multi-tenant database model with a shared schema and clear tenant separation, you'll create a scalable system that grows as your user base expands while keeping data safe and organized."
+        "value": "You can also calculate moving averages or running totals, which are common in time series analysis. Suppose you want a running total of sales by date:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT sales_date,\n       salesperson,\n       sales_amount,\n       SUM(sales_amount) OVER (ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This query sums all sales from the start up to the current row's date, creating a running total that grows over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Finally, window functions can be combined or nested for complex analysis. For instance, you could rank salespeople globally and within regions simultaneously:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT salesperson,\n       region,\n       sales_amount,\n       RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS regional_rank,\n       RANK() OVER (ORDER BY sales_amount DESC) AS global_rank\nFROM sales;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This shows relative performance in the region and overall, which can help with targeted decisions."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering window functions enables you to unlock advanced, efficient, and readable SQL queries for detailed data analysis. Experiment with PARTITION BY and ORDER BY clauses inside OVER() to tailor the calculations to your needs."
       }
     ]
   },
   {
-    "slug": "optimizing-query-performance-by-analyzing-execution-plan-anomalies-in-sql",
-    "title": "Optimizing Query Performance by Analyzing Execution Plan Anomalies in SQL",
+    "slug": "optimizing-sql-query-performance-advanced-indexing",
+    "title": "Optimizing SQL Query Performance with Advanced Indexing Strategies",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to improve SQL query performance by identifying and fixing common execution plan anomalies. This beginner-friendly guide explains key concepts and practical steps for troubleshooting slow queries.",
-    "videoUrl": "https://www.youtube.com/watch?v=0G9xh1yxRXs",
+    "description": "Learn how to improve SQL query speed by using advanced indexing techniques that go beyond basic indexes. This beginner-friendly guide explains how to avoid common indexing errors and optimize your database queries effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, slow queries can negatively affect application performance. One of the best ways to understand why a query is slow is by analyzing its execution plan. An execution plan shows the steps the SQL database engine takes to retrieve the requested data. Detecting anomalies in these plans can help you optimize queries and fix performance issues."
+        "value": "Indexes are powerful tools for speeding up SQL queries, but improper use of indexes can lead to errors and slower performance. This article introduces you to advanced indexing strategies that help optimize your queries, reduce execution time, and improve overall database performance."
       },
       {
         "type": "paragraph",
-        "value": "Common execution plan anomalies include unexpected full table scans, missing indexes, incorrect join orders, and high-cost operations. These usually indicate where the query optimizer did not choose an efficient path to execute your query."
+        "value": "The first step to optimizing with indexes is understanding the types of indexes available. Besides the basic single-column index, you can use composite indexes, covering indexes, and partial indexes. Each type has different use cases and performance impacts."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by looking at how to generate an execution plan in SQL Server. Use the following command before running your query to get the estimated execution plan:"
+        "value": "Composite indexes index multiple columns in a specified order and are useful when your WHERE clause filters on more than one column. However, be mindful of their order because SQL uses the leftmost prefix of the index."
       },
       {
         "type": "code",
-        "value": "SET SHOWPLAN_ALL ON;\nGO\n-- Run your query below\nSELECT * FROM Employees WHERE DepartmentID = 5;\nGO\nSET SHOWPLAN_ALL OFF;\nGO"
+        "value": "CREATE INDEX idx_user_date ON orders (user_id, order_date);"
       },
       {
         "type": "paragraph",
-        "value": "The output will give detailed step-by-step operations planned by SQL Server. Look for the following common anomalies:"
+        "value": "This composite index will speed up queries filtering by both user_id and order_date. It can also help when filtering only by user_id, but not as effectively when filtering only by order_date."
       },
       {
         "type": "paragraph",
-        "value": "1. **Table Scan**: This means the database is reading the entire table instead of using indexes. Table scans are costly if the table is large."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Missing Indexes**: Execution plans may suggest missing indexes. Adding appropriate indexes can speed up data lookups."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Low Cardinality Index Usage**: Using indexes with low selectivity might not be worth it. The optimizer might be forced to scan despite the index."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Nested Loops Join on Large Tables**: Nested loops are efficient on small datasets but can be slow on large tables. Look for hash or merge joins in those cases."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's an example of a query with a missing index problem and how to fix it. First, see the query plan that triggers a table scan:"
+        "value": "Covering indexes contain all the columns required by a query, allowing the database to fetch data directly from the index without accessing the table (known as an index-only scan)."
       },
       {
         "type": "code",
-        "value": "SELECT * FROM Orders WHERE CustomerID = 'ALFKI';"
+        "value": "CREATE INDEX idx_user_order_amount ON orders (user_id) INCLUDE (order_amount);"
       },
       {
         "type": "paragraph",
-        "value": "Assuming the Orders table has no index on CustomerID, SQL Server will perform a full table scan. The execution plan will indicate this and may suggest creating an index."
+        "value": "The above index includes order_amount as an additional column in the index so that queries selecting user_id and order_amount can be served entirely from the index."
       },
       {
         "type": "paragraph",
-        "value": "To optimize, create an index on the CustomerID column:"
+        "value": "Partial indexes can improve performance when queries only access a portion of the data, such as active users or orders within a date range."
       },
       {
         "type": "code",
-        "value": "CREATE INDEX idx_customerid ON Orders(CustomerID);"
+        "value": "CREATE INDEX idx_active_users ON users (username) WHERE active = true;"
       },
       {
         "type": "paragraph",
-        "value": "After creating the index, rerun the query and check the execution plan again. You should see an index seek instead of a table scan, which greatly improves performance."
+        "value": "This index is created only for rows where active is true, making lookups for active users faster without wasting space indexing the entire table."
       },
       {
         "type": "paragraph",
-        "value": "In summary, the key to optimizing query performance is to regularly analyze execution plans for anomalies. Start by observing full scans and missing indexes, then fix them with proper indexing and query rewriting if needed."
+        "value": "Common mistakes to avoid when using advanced indexing strategies include creating too many indexes, ignoring index maintenance, or not considering the query patterns. Too many indexes can slow down write operations such as INSERTs and UPDATEs."
       },
       {
         "type": "paragraph",
-        "value": "By understanding and addressing execution plan anomalies, even beginners can make their SQL queries run faster and more efficiently."
+        "value": "Remember to analyze your queries with tools like EXPLAIN to see if indexes are being used effectively. Always test indexing changes in a development environment before applying them in production."
+      },
+      {
+        "type": "paragraph",
+        "value": "By learning and applying these advanced indexing strategies carefully, you can significantly improve the speed and efficiency of your SQL queries, creating a faster and more responsive application."
       }
     ]
   }

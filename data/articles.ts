@@ -62631,5 +62631,538 @@ export const articles = [
         "value": "By understanding and addressing execution plan anomalies, even beginners can make their SQL queries run faster and more efficiently."
       }
     ]
+  },
+  {
+    "slug": "comparing-async-await-vs-promises-in-javascript",
+    "title": "Comparing Async/Await vs Promises in JavaScript: When and How to Use Them",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the differences between Async/Await and Promises in JavaScript, and discover when and how to use each approach for cleaner, more readable asynchronous code.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, so handling tasks like fetching data from a server can be tricky without freezing the app. Asynchronous programming helps with this. Two popular ways to handle asynchronous code in JavaScript are Promises and Async/Await. In this tutorial, we will compare these approaches and learn when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises were introduced first and provide a way to handle async operations by chaining .then() and .catch() callbacks. Async/Await was added later as syntactic sugar on top of Promises to make async code look more like synchronous code, improving readability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s a simple example using a Promise to fetch user data from an API:"
+      },
+      {
+        "type": "code",
+        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const user = { id: 1, name: \"Alice\" };\n      resolve(user);\n    }, 1000);\n  });\n}\n\nfetchUserData()\n  .then(user => {\n    console.log(\"User data (Promise):\", user);\n  })\n  .catch(error => {\n    console.error(\"Error fetching user data:\", error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, here’s the same example using Async/Await, which makes it look cleaner:"
+      },
+      {
+        "type": "code",
+        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const user = { id: 1, name: \"Alice\" };\n      resolve(user);\n    }, 1000);\n  });\n}\n\nasync function getUser() {\n  try {\n    const user = await fetchUserData();\n    console.log(\"User data (Async/Await):\", user);\n  } catch (error) {\n    console.error(\"Error fetching user data:\", error);\n  }\n}\n\ngetUser();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Promises\nPromises are great when you want straightforward chaining of async operations. They work well if you want to combine multiple async tasks using Promise.all, Promise.race, or when supporting older codebases without async/await syntax.\n\nExample of chaining promises:"
+      },
+      {
+        "type": "code",
+        "value": "fetchUserData()\n  .then(user => {\n    console.log(\"User received:\", user);\n    return fetchUserPosts(user.id);\n  })\n  .then(posts => {\n    console.log(\"Posts received:\", posts);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Async/Await\nAsync/Await offers cleaner, easier-to-read code, especially when you have multiple asynchronous operations that need to run sequentially. It lets you write async code in a style similar to synchronous code, which can reduce bugs and improve maintainability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of sequential async operations:"
+      },
+      {
+        "type": "code",
+        "value": "async function getUserAndPosts() {\n  try {\n    const user = await fetchUserData();\n    const posts = await fetchUserPosts(user.id);\n    console.log(user, posts);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetUserAndPosts();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n- Promises are the foundation for handling asynchronous operations and work well with chaining and combinators like Promise.all.\n- Async/Await is syntactic sugar built on Promises that makes asynchronous code easier to write and understand.\n- Use Async/Await for cleaner and more readable async flows, especially for sequential operations.\n- Use Promises when you need advanced chaining, parallel execution with Promise.all, or compatibility with older JavaScript environments."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding both, you'll be able to write better asynchronous JavaScript code that's easier to maintain and debug."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-javascript-type-coercion-errors-deep-dive",
+    "title": "Understanding JavaScript Type Coercion Errors: A Deep Dive",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn the basics of JavaScript type coercion and common errors beginners face when types are automatically converted. Understand how to avoid these pitfalls with simple examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=GKJh3vdat8A",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible language that allows mixing different data types easily. This flexibility is due to a feature called \"type coercion,\" where JavaScript automatically converts values from one type to another to perform operations. While this behavior can be helpful, it sometimes leads to unexpected errors, especially for beginners. Understanding how type coercion works can help you write more predictable and bug-free code."
+      },
+      {
+        "type": "paragraph",
+        "value": "Type coercion happens mainly in two places: during loose equality checks (using `==`) and when performing operations between values of different types like addition or subtraction."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, let's look at how JavaScript handles adding a number and a string:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 + '5'); // Output: '55'\n\n// JavaScript converts the number 5 to a string '5' and concatenates."
+      },
+      {
+        "type": "paragraph",
+        "value": "In the code above, since one value is a string, JavaScript converts the number to a string and joins them. This might surprise beginners who expect a numerical addition. Similarly, subtraction behaves differently:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(5 - '2'); // Output: 3\n\n// Here, JavaScript converts the string '2' to the number 2 and performs subtraction."
+      },
+      {
+        "type": "paragraph",
+        "value": "One common source of bugs is using loose equality (`==`) instead of strict equality (`===`). The loose equality operator allows type coercion before comparison, which can cause unexpected true or false results."
+      },
+      {
+        "type": "code",
+        "value": "console.log(0 == false);  // true\nconsole.log(0 === false); // false\n\n// '==' converts false to 0, so 0 == false is true. '===' checks type and value, so false."
+      },
+      {
+        "type": "paragraph",
+        "value": "To avoid type coercion errors, it is recommended to use strict equality (`===` and `!==`), which compares both type and value and prevents automatic conversions that lead to bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common error happens when values like `null`, `undefined`, or empty strings are involved. For example:"
+      },
+      {
+        "type": "code",
+        "value": "console.log(null == undefined); // true\nconsole.log(null === undefined); // false\n\n// '==' considers null and undefined equal, but '===' does not."
+      },
+      {
+        "type": "paragraph",
+        "value": "Be careful with these comparisons because they can cause logical errors in your code, especially when checking for missing or empty values."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, JavaScript’s type coercion can make coding flexible but also tricky. To avoid common errors:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use strict equality operators (`===` and `!==`).\n- Be aware of how JavaScript converts types in arithmetic operations.\n- Check the actual types of your variables using `typeof` if needed.\n- Avoid relying on automatic coercion in condition checks."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these rules and following best practices, you will reduce bugs and write cleaner JavaScript code."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-advanced-typescript-utility-types-for-cleaner-code",
+    "title": "Mastering Advanced TypeScript Utility Types for Cleaner Code",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to use advanced TypeScript utility types to write cleaner, more maintainable, and error-free code with practical examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=eJ6R1knfsoc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript offers powerful utility types that help you manipulate and transform types to make your code more flexible and maintainable. While many developers are familiar with basic utilities like Partial and Readonly, there are advanced utility types that can take your coding skills to the next level. In this tutorial, we'll explore some of these advanced utility types and see practical examples of how they improve your code."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Omit<Type, Keys> - Exclude Specific Properties"
+      },
+      {
+        "type": "paragraph",
+        "value": "The Omit utility type allows you to create a new type by excluding one or more properties from an existing type. This is useful when you want to reuse a type but want to remove certain keys."
+      },
+      {
+        "type": "code",
+        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  password: string;\n}\n\n// We want to create a new type for a User without the password property\n\ntype UserWithoutPassword = Omit<User, 'password'>;\n\nconst user: UserWithoutPassword = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com'\n  // password is excluded here\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Pick<Type, Keys> - Select Specific Properties"
+      },
+      {
+        "type": "paragraph",
+        "value": "Opposite to Omit, the Pick utility allows creating a new type by selecting only certain properties from an existing type. This helps keep your types precise."
+      },
+      {
+        "type": "code",
+        "value": "type UserPreview = Pick<User, 'id' | 'name'>;\n\nconst preview: UserPreview = {\n  id: 1,\n  name: 'Alice'\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Exclude<UnionType, ExcludedMembers> - Remove Union Members"
+      },
+      {
+        "type": "paragraph",
+        "value": "Exclude helps you create a new union type by removing specific members from another union type. This is handy for filtering types."
+      },
+      {
+        "type": "code",
+        "value": "type Status = 'pending' | 'active' | 'inactive' | 'banned';\n\ntype AllowedStatus = Exclude<Status, 'banned' | 'inactive'>;\n\nconst currentStatus: AllowedStatus = 'active';  // 'banned' and 'inactive' are excluded"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Extract<UnionType, MembersToExtract> - Extract Specific Union Members"
+      },
+      {
+        "type": "paragraph",
+        "value": "Extract creates a new union type by picking elements that overlap between two union types. It is useful when narrowing down possible types."
+      },
+      {
+        "type": "code",
+        "value": "type Mixed = 'text' | 'image' | 'video' | 'audio';\n\ntype Media = Extract<Mixed, 'image' | 'video' | 'audio'>;\n\nconst mediaType: Media = 'video';"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. NonNullable<Type> - Remove null and undefined"
+      },
+      {
+        "type": "paragraph",
+        "value": "When working with data that might be null or undefined, NonNullable helps you create a type that excludes these values."
+      },
+      {
+        "type": "code",
+        "value": "type Name = string | null | undefined;\n\ntype ValidName = NonNullable<Name>;\n\nfunction greet(name: ValidName) {\n  console.log('Hello, ' + name.toUpperCase());\n}\n\ngreet('Alice'); // Works fine\n// greet(null); // Error: Argument of type 'null' is not assignable"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. ReturnType<Type> - Get the Return Type of a Function"
+      },
+      {
+        "type": "paragraph",
+        "value": "ReturnType utility extracts the return type of a function type, helping keep types consistent when you reuse functions."
+      },
+      {
+        "type": "code",
+        "value": "function fetchUser() {\n  return { id: 1, name: 'Alice' };\n}\n\ntype UserType = ReturnType<typeof fetchUser>;\n\nconst user: UserType = {\n  id: 2,\n  name: 'Bob'\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering these advanced utility types unlocks the full power of TypeScript, making your code cleaner, easier to understand, and less error-prone. Try incorporating Omit, Pick, Exclude, Extract, NonNullable, and ReturnType in your next TypeScript project to experience their benefits firsthand."
+      }
+    ]
+  },
+  {
+    "slug": "handling-floating-point-precision-edge-cases-in-typescript-arithmetic",
+    "title": "Handling Floating Point Precision Edge Cases in TypeScript Arithmetic",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to manage floating point precision issues in TypeScript arithmetic with easy-to-understand methods and practical code examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=5HDTkOLHHds",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with numbers in TypeScript (and JavaScript), one common challenge is dealing with floating point precision errors. This happens because computers represent decimal numbers using binary fractions, which can result in tiny rounding errors. For example, simple arithmetic like 0.1 + 0.2 doesn't exactly equal 0.3. Understanding and handling these edge cases is crucial to avoid bugs in your calculations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at an example where floating point precision causes an unexpected result:"
+      },
+      {
+        "type": "code",
+        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum); // Output: 0.30000000000000004\nconsole.log(sum === 0.3); // Output: false"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, `sum` is not exactly 0.3, which can cause issues in comparisons or further calculations. To handle these edge cases, there are several strategies you can use."
+      },
+      {
+        "type": "paragraph",
+        "value": "**1. Use a small tolerance value for comparisons**\n\nInstead of checking for exact equality, check if the difference between two numbers is smaller than a tiny epsilon value."
+      },
+      {
+        "type": "code",
+        "value": "const EPSILON = 0.000001;\nfunction areEqual(a: number, b: number): boolean {\n  return Math.abs(a - b) < EPSILON;\n}\n\nconsole.log(areEqual(0.1 + 0.2, 0.3)); // Output: true"
+      },
+      {
+        "type": "paragraph",
+        "value": "**2. Use integer arithmetic when possible**\n\nFor financial calculations or fixed decimal places, multiply numbers to work with integers, then divide back after the calculation."
+      },
+      {
+        "type": "code",
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst multiplier = 100;\n\nconst intSum = (a * multiplier) + (b * multiplier); // 10 + 20 = 30\nconst result = intSum / multiplier; // 30 / 100 = 0.3\n\nconsole.log(result); // Output: 0.3\nconsole.log(result === 0.3); // Output: true"
+      },
+      {
+        "type": "paragraph",
+        "value": "**3. Use built-in methods like `toFixed()` for formatting**\n\nThough `toFixed()` converts numbers to strings, you can parse them back to numbers to avoid precision problems when displaying or storing values."
+      },
+      {
+        "type": "code",
+        "value": "const value = 0.1 + 0.2;\nconst formattedValue = Number(value.toFixed(2));\n\nconsole.log(formattedValue); // Output: 0.3\nconsole.log(formattedValue === 0.3); // Output: true"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, understanding floating point precision issues and employing techniques like tolerance checks, integer arithmetic, or formatting methods helps keep your TypeScript arithmetic reliable and bug-free. These small adjustments are important in applications such as financial calculations, data analysis, or anywhere exact decimals matter."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-pythons-unicode-edge-cases-for-international-text-processing",
+    "title": "Mastering Python’s Unicode Edge Cases for International Text Processing",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to handle Unicode edge cases in Python to effectively process international text with practical examples for beginners.",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Working with text from around the world means dealing with diverse characters, scripts, and languages. Python natively supports Unicode, which helps handle this diversity, but there are important edge cases every beginner should know. This tutorial guides you through some common Unicode challenges and shows how to handle them gracefully in Python."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Unicode? \nUnicode is a standard designed to represent text in most of the world’s writing systems. Python 3 strings are Unicode by default, so you can write characters from many languages directly in your code or input."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Common Unicode Edge Cases in Python"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Combining Characters:** Some languages use combining marks to modify the base character, but visually they appear as one character. For example, 'e' + a combining acute accent (´) vs. 'é'."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Normalization:** Different Unicode sequences can look the same but be encoded differently. Normalizing text is essential before comparing or processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Surrogate Pairs:** Some high Unicode code points (characters beyond the Basic Multilingual Plane) are represented using pairs of 16-bit code units internally."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Encoding/Decoding Errors:** When you read or write files, be mindful of using the right encoding (like UTF-8) to avoid errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let’s explore these with practical Python examples."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Handling Combining Characters and Normalization"
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider the letter 'é'. It can be a single character (precomposed) or an 'e' followed by a combining acute accent. Visually, they look the same but differ internally."
+      },
+      {
+        "type": "code",
+        "value": "import unicodedata\n\n# Single character é (precomposed)\nprecomposed = 'é'\n\n# e + combining acute accent\ncombining = 'e\\u0301'\n\nprint(f\"Precomposed: {precomposed}, Combining: {combining}\")\nprint(f\"Are they equal? {precomposed == combining}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Since they are not equal, we use Unicode normalization to standardize them before comparison."
+      },
+      {
+        "type": "code",
+        "value": "print(f\"Normalized equal? {unicodedata.normalize('NFC', precomposed) == unicodedata.normalize('NFC', combining)}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Working with High Unicode Characters (Emojis & Rare Scripts)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Characters like emojis can have code points that require special handling internally. Python’s string length counts characters, not code units, so you usually don’t need to worry about surrogate pairs."
+      },
+      {
+        "type": "code",
+        "value": "emoji = '😀'  # Grinning Face Emoji\nprint(f\"Emoji: {emoji}, Length: {len(emoji)}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Correctly Reading/Writing Unicode Files"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always specify encoding when working with files to avoid surprises."
+      },
+      {
+        "type": "code",
+        "value": "sample_text = 'Hello, world! Привет мир! こんにちは世界！'\n\n# Write text to file with UTF-8 encoding\nwith open('sample.txt', 'w', encoding='utf-8') as f:\n    f.write(sample_text)\n\n# Read it back\nwith open('sample.txt', 'r', encoding='utf-8') as f:\n    content = f.read()\n\nprint(content)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Use `unicodedata.normalize` to handle Unicode string equivalency.\n2. Python 3 handles most Unicode characters well internally, including emojis.\n3. Always specify encoding when reading or writing text files.\n4. Experiment with your international text data to understand specific needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Mastering these Unicode edge cases will help you build robust applications that truly support global text processing!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-python-typeerror-common-causes-and-prevention-techniques",
+    "title": "Understanding Python's TypeError: Common Causes and Prevention Techniques",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn the common causes of Python's TypeError and how to prevent it with simple, clear examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python raises a TypeError when an operation or function is applied to an object of an inappropriate type. This error occurs when you try to perform an action that Python doesn't know how to do with the given data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are some frequent causes of TypeError and how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Performing unsupported operations between different data types."
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\n\n# This will cause a TypeError because you cannot add an integer and a string\nresult = num + text"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, convert the types so they match. For example, convert the integer to a string before concatenation:"
+      },
+      {
+        "type": "code",
+        "value": "num = 5\ntext = \"hello\"\n\nresult = str(num) + text\nprint(result)  # Output: 5hello"
+      },
+      {
+        "type": "paragraph",
+        "value": "2. Calling a function with an argument of the wrong type."
+      },
+      {
+        "type": "code",
+        "value": "def square(x):\n    return x * x\n\n# Passing a string instead of a number causes TypeError\nsquare('4')"
+      },
+      {
+        "type": "paragraph",
+        "value": "Ensure you pass the correct data types to functions. You can add checks or convert types inside your functions."
+      },
+      {
+        "type": "code",
+        "value": "def square(x):\n    if not isinstance(x, (int, float)):\n        raise TypeError(\"Input must be a number\")\n    return x * x\n\nprint(square(4))  # Output: 16"
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Using built-in functions or methods incorrectly."
+      },
+      {
+        "type": "code",
+        "value": "my_list = [1, 2, 3]\n\n# Using the len() function correctly\nlength = len(my_list)\n\n# Trying to use len() on an integer causes TypeError\nlength = len(5)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always check the documentation to ensure you use functions with suitable data types."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. Attempting to index or iterate over non-iterable types."
+      },
+      {
+        "type": "code",
+        "value": "number = 10\n\n# Trying to loop over an integer results in TypeError\nfor i in number:\n    print(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "Instead, loop over iterable objects like lists, strings, or ranges."
+      },
+      {
+        "type": "code",
+        "value": "for i in range(number):\n    print(i)"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Prevention Tips"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Use type checking with `isinstance()` before performing operations.\n- Convert data types explicitly when needed using functions like `int()`, `str()`, or `float()`.\n- Read and understand function requirements to pass correct argument types.\n- Test small parts of your code to catch type errors early."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding why TypeErrors happen and following these simple rules, you can write more robust Python code and avoid common pitfalls."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-query-performance-advanced-indexing",
+    "title": "Optimizing SQL Query Performance with Advanced Indexing Strategies",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve SQL query speed by using advanced indexing techniques that go beyond basic indexes. This beginner-friendly guide explains how to avoid common indexing errors and optimize your database queries effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Indexes are powerful tools for speeding up SQL queries, but improper use of indexes can lead to errors and slower performance. This article introduces you to advanced indexing strategies that help optimize your queries, reduce execution time, and improve overall database performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "The first step to optimizing with indexes is understanding the types of indexes available. Besides the basic single-column index, you can use composite indexes, covering indexes, and partial indexes. Each type has different use cases and performance impacts."
+      },
+      {
+        "type": "paragraph",
+        "value": "Composite indexes index multiple columns in a specified order and are useful when your WHERE clause filters on more than one column. However, be mindful of their order because SQL uses the leftmost prefix of the index."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_user_date ON orders (user_id, order_date);"
+      },
+      {
+        "type": "paragraph",
+        "value": "This composite index will speed up queries filtering by both user_id and order_date. It can also help when filtering only by user_id, but not as effectively when filtering only by order_date."
+      },
+      {
+        "type": "paragraph",
+        "value": "Covering indexes contain all the columns required by a query, allowing the database to fetch data directly from the index without accessing the table (known as an index-only scan)."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_user_order_amount ON orders (user_id) INCLUDE (order_amount);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The above index includes order_amount as an additional column in the index so that queries selecting user_id and order_amount can be served entirely from the index."
+      },
+      {
+        "type": "paragraph",
+        "value": "Partial indexes can improve performance when queries only access a portion of the data, such as active users or orders within a date range."
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_active_users ON users (username) WHERE active = true;"
+      },
+      {
+        "type": "paragraph",
+        "value": "This index is created only for rows where active is true, making lookups for active users faster without wasting space indexing the entire table."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common mistakes to avoid when using advanced indexing strategies include creating too many indexes, ignoring index maintenance, or not considering the query patterns. Too many indexes can slow down write operations such as INSERTs and UPDATEs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to analyze your queries with tools like EXPLAIN to see if indexes are being used effectively. Always test indexing changes in a development environment before applying them in production."
+      },
+      {
+        "type": "paragraph",
+        "value": "By learning and applying these advanced indexing strategies carefully, you can significantly improve the speed and efficiency of your SQL queries, creating a faster and more responsive application."
+      }
+    ]
   }
 ];
