@@ -9108,5 +9108,176 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "simple-bank-account-management-system",
+    "title": "Simple Bank Account Management System",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a basic bank account management mini-project in C++ that allows creating an account, depositing money, withdrawing money, and showing the current balance.",
+    "prompt": "Create a C++ program that simulates a simple bank account system. You need to implement a class named BankAccount with the following functionalities:\n\n1. A constructor that initializes the account with the owner's name and an initial balance (default to 0).\n2. A method deposit(double amount) that adds money to the balance.\n3. A method withdraw(double amount) that subtracts money if enough balance exists, otherwise prints \"Insufficient funds\".\n4. A method getBalance() that returns the current balance.\n5. A method display() that prints the account owner's name and current balance in a friendly format.\n\nYour program should demonstrate creating at least one account, making some deposits and withdrawals, and then displaying the final account balance.",
+    "guidance": [
+      "Define a class with private variables for owner's name and balance.",
+      "Use methods to modify and access the balance safely.",
+      "Make sure withdrawals do not reduce the balance below zero.",
+      "Test your class by creating objects and calling methods in main()."
+    ],
+    "hints": [
+      "Use simple conditional statements to check funds before withdrawal.",
+      "The constructor should initialize the balance using an initializer list or inside the constructor body.",
+      "Use cout for displaying output."
+    ],
+    "starterCode": "#include <iostream>\n#include <string>\n\nusing namespace std;\n\nclass BankAccount {\nprivate:\n    string owner;\n    double balance;\n\npublic:\n    // Constructor\n    BankAccount(string ownerName, double initialBalance = 0) {\n        // Initialize variables here\n    }\n\n    // Deposit money\n    void deposit(double amount) {\n        // Add amount to balance\n    }\n\n    // Withdraw money\n    void withdraw(double amount) {\n        // Subtract amount if possible\n    }\n\n    // Get balance\n    double getBalance() {\n        return balance;\n    }\n\n    // Display account info\n    void display() {\n        // Print owner and balance\n    }\n};\n\nint main() {\n    BankAccount account1(\"Alice\");\n    account1.deposit(1000);\n    account1.withdraw(500);\n    account1.withdraw(600); // Should print insufficient funds\n    account1.display();\n    return 0;\n}",
+    "expectedOutput": "Insufficient funds\nAccount owner: Alice\nCurrent balance: 500",
+    "concepts": [
+      "classes",
+      "methods",
+      "conditionals",
+      "basic I/O"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-function-to-calculate-average-temperatures-with-clean-code-practices",
+    "title": "Refactor a Function to Calculate Average Temperatures with Clean Code Practices",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability, efficiency, and maintainability of a messy Python function that calculates the average temperature from a list of daily readings.",
+    "prompt": "You are given a function that calculates the average temperature from a list of daily temperature readings. The function works correctly but is poorly structured, has redundant code, and uses unclear variable names. Refactor the function to improve readability, remove unnecessary steps, and use Pythonic best practices without changing its output behavior.",
+    "guidance": [
+      "Rename variables to meaningful names that reflect their purpose.",
+      "Remove redundant calculations or variables that do not contribute to the final result.",
+      "Use Python built-in functions and idiomatic constructs where appropriate."
+    ],
+    "hints": [
+      "Consider using the built-in sum() and len() functions instead of manually accumulating values.",
+      "Avoid unnecessary initialization of variables that are reassigned later.",
+      "List comprehensions or generator expressions can simplify iteration."
+    ],
+    "starterCode": "def average_temperature(data):\n    total = 0\n    count = 0\n    for i in range(0, len(data)):\n        temp = data[i]\n        total += temp\n        count = count + 1\n    avg = total / count\n    return avg",
+    "expectedOutput": "If called with average_temperature([70, 72, 68, 71, 69]), the function should return 70.0 without any change in output after refactoring.",
+    "concepts": [
+      "code refactoring",
+      "Python built-ins",
+      "code readability",
+      "variable naming"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-sql-query-for-calculating-monthly-sales-totals",
+    "title": "Fix Bug in SQL Query for Calculating Monthly Sales Totals",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "You are given a SQL query that is supposed to calculate the total sales amount per month from a sales table. However, the current query returns incorrect results. Identify and fix the bug so the query correctly aggregates sales by month.",
+    "prompt": "The following SQL query is intended to calculate the total sales per month by aggregating the amount from each sale grouped by year and month. However, the result does not show correct monthly aggregations. Fix the query so it correctly sums sales grouped by the calendar month and year.\n\nTable structure:\n- sales(sale_id INT, sale_date DATE, amount DECIMAL)\n\nQuery to fix:\n\nSELECT\n  YEAR(sale_date) AS year,\n  MONTH(sale_date) AS month,\n  SUM(amount) AS total_sales\nFROM sales\nGROUP BY month\nORDER BY year, month;",
+    "guidance": [
+      "Check how the GROUP BY clause is defined. Are you grouping by all the selected non-aggregated columns?",
+      "Remember that when grouping by multiple columns, you have to include all those columns in the GROUP BY clause."
+    ],
+    "hints": [
+      "The query currently groups only by month, which mixes data from different years.",
+      "Add YEAR(sale_date) to the GROUP BY clause along with MONTH(sale_date)."
+    ],
+    "starterCode": "SELECT\n  YEAR(sale_date) AS year,\n  MONTH(sale_date) AS month,\n  SUM(amount) AS total_sales\nFROM sales\nGROUP BY month\nORDER BY year, month;",
+    "expectedOutput": "A result set showing each unique year-month combination with the correct summed total sales amount for that month. For example:\n\nyear | month | total_sales\n-----|-------|------------\n2023 | 1     | 10000.00\n2023 | 2     | 8500.50\n2024 | 1     | 12000.00",
+    "concepts": [
+      "GROUP BY",
+      "aggregate functions",
+      "date functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-messy-c-function-to-improve-readability-and-efficiency",
+    "title": "Refactor Messy C++ Function to Improve Readability and Efficiency",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Given a function with redundant variables and unclear naming, refactor it to improve code quality without changing its behavior.",
+    "prompt": "You are given a C++ function that calculates the sum of all integers from 1 to n but contains unnecessary variables and verbose logic. Refactor this function to make the code cleaner, more readable, and efficient, while maintaining the same functionality.",
+    "guidance": [
+      "Remove any redundant variables that do not contribute to the logic.",
+      "Rename variables to have more meaningful and concise names.",
+      "Simplify the loop or logic if possible, keeping the result unchanged."
+    ],
+    "hints": [
+      "Consider if all declared variables are necessary.",
+      "Think about meaningful variable names that explain their role clearly.",
+      "Check if the loop or summing logic can be expressed more cleanly."
+    ],
+    "starterCode": "int calculateSum(int n) {\n    int totalSum = 0;\n    int temp = 0;\n    for(int i = 1; i <= n; i++) {\n        temp = i;\n        totalSum = totalSum + temp;\n    }\n    return totalSum;\n}",
+    "expectedOutput": "For input n=5, the function should return 15 (1+2+3+4+5).",
+    "concepts": [
+      "variables",
+      "loops",
+      "functions",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-function-to-group-and-count-array-elements-by-key",
+    "title": "Create a Function to Group and Count Array Elements by Key",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Build a JavaScript function that groups objects in an array by a specific key and returns the count of each group.",
+    "prompt": "Write a function named 'groupByCount' that takes two parameters: an array of objects and a string key. The function should return an object where the keys are the unique values from the specified key in the objects, and the values are the count of how many times each unique value appears in the array.\n\nFor example, given an array of objects representing people and the key 'age', the function should group people by their age and count how many have the same age.",
+    "guidance": [
+      "Iterate over the array and use an object to keep track of counts by the specified key.",
+      "Check if the key exists in the object; if not, initialize it to zero before incrementing.",
+      "Return the final object with grouped counts once all array elements have been processed."
+    ],
+    "hints": [
+      "Consider using the array's forEach or reduce methods for iteration.",
+      "Remember to handle cases where some objects might not contain the specified key.",
+      "You may use short-circuit evaluation to simplify incrementing counts."
+    ],
+    "starterCode": "function groupByCount(arr, key) {\n  // Your code here\n}",
+    "expectedOutput": "{ '25': 3, '30': 2, '40': 1 }",
+    "concepts": [
+      "object manipulation",
+      "array iteration",
+      "counting/grouping"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "simple-budget-tracker-track-expenses-and-calculate-balance",
+    "title": "Simple Budget Tracker: Track Expenses and Calculate Balance",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Create a beginner-friendly console program in C++ that allows users to input their income and a list of expenses, then calculates and displays the remaining balance.",
+    "prompt": "Write a C++ program that asks the user to enter their total income as a double, then prompts for the number of expense items. Allow the user to input each expense amount. Finally, calculate and display the total expenses and the remaining balance after subtracting expenses from income.",
+    "guidance": [
+      "Use variables to store income, expenses, total expenses, and balance.",
+      "Use a loop to input multiple expense amounts and calculate their sum.",
+      "Display results with clear formatting to the user."
+    ],
+    "hints": [
+      "You can use a for loop to iterate through the number of expenses.",
+      "Make sure to use double type variables to handle currency values with decimal points.",
+      "Use simple arithmetic operations to sum expenses and calculate balance."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double income, expense, totalExpenses = 0;\n    int expenseCount;\n\n    cout << \"Enter your total income: \";\n    cin >> income;\n\n    cout << \"How many expenses do you have? \";\n    cin >> expenseCount;\n\n    for (int i = 0; i < expenseCount; i++) {\n        cout << \"Enter expense #\" << (i + 1) << \": \";\n        // Input expense here and add to totalExpenses\n    }\n\n    // Calculate and display total expenses and remaining balance\n\n    return 0;\n}",
+    "expectedOutput": "Enter your total income: 2000\nHow many expenses do you have? 3\nEnter expense #1: 300.50\nEnter expense #2: 150\nEnter expense #3: 100\n\nTotal expenses: 550.5\nRemaining balance: 1449.5",
+    "concepts": [
+      "variables",
+      "loops",
+      "input/output",
+      "arithmetic operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
