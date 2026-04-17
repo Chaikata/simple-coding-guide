@@ -1,173 +1,174 @@
 [
   {
-    "slug": "simple-bank-account-management-system",
-    "title": "Simple Bank Account Management System",
-    "language": "cpp",
-    "difficulty": "beginner",
-    "category": "mini-projects",
-    "description": "Build a basic bank account management mini-project in C++ that allows creating an account, depositing money, withdrawing money, and showing the current balance.",
-    "prompt": "Create a C++ program that simulates a simple bank account system. You need to implement a class named BankAccount with the following functionalities:\n\n1. A constructor that initializes the account with the owner's name and an initial balance (default to 0).\n2. A method deposit(double amount) that adds money to the balance.\n3. A method withdraw(double amount) that subtracts money if enough balance exists, otherwise prints \"Insufficient funds\".\n4. A method getBalance() that returns the current balance.\n5. A method display() that prints the account owner's name and current balance in a friendly format.\n\nYour program should demonstrate creating at least one account, making some deposits and withdrawals, and then displaying the final account balance.",
-    "guidance": [
-      "Define a class with private variables for owner's name and balance.",
-      "Use methods to modify and access the balance safely.",
-      "Make sure withdrawals do not reduce the balance below zero.",
-      "Test your class by creating objects and calling methods in main()."
-    ],
-    "hints": [
-      "Use simple conditional statements to check funds before withdrawal.",
-      "The constructor should initialize the balance using an initializer list or inside the constructor body.",
-      "Use cout for displaying output."
-    ],
-    "starterCode": "#include <iostream>\n#include <string>\n\nusing namespace std;\n\nclass BankAccount {\nprivate:\n    string owner;\n    double balance;\n\npublic:\n    // Constructor\n    BankAccount(string ownerName, double initialBalance = 0) {\n        // Initialize variables here\n    }\n\n    // Deposit money\n    void deposit(double amount) {\n        // Add amount to balance\n    }\n\n    // Withdraw money\n    void withdraw(double amount) {\n        // Subtract amount if possible\n    }\n\n    // Get balance\n    double getBalance() {\n        return balance;\n    }\n\n    // Display account info\n    void display() {\n        // Print owner and balance\n    }\n};\n\nint main() {\n    BankAccount account1(\"Alice\");\n    account1.deposit(1000);\n    account1.withdraw(500);\n    account1.withdraw(600); // Should print insufficient funds\n    account1.display();\n    return 0;\n}",
-    "expectedOutput": "Insufficient funds\nAccount owner: Alice\nCurrent balance: 500",
-    "concepts": [
-      "classes",
-      "methods",
-      "conditionals",
-      "basic I/O"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "refactor-a-function-to-calculate-average-temperatures-with-clean-code-practices",
-    "title": "Refactor a Function to Calculate Average Temperatures with Clean Code Practices",
+    "slug": "predict-the-output-of-a-recursive-function-with-memoization-and-complex-state-updates",
+    "title": "Predict the Output of a Recursive Function with Memoization and Complex State Updates",
     "language": "python",
-    "difficulty": "intermediate",
-    "category": "code-quality",
-    "description": "Improve the readability, efficiency, and maintainability of a messy Python function that calculates the average temperature from a list of daily readings.",
-    "prompt": "You are given a function that calculates the average temperature from a list of daily temperature readings. The function works correctly but is poorly structured, has redundant code, and uses unclear variable names. Refactor the function to improve readability, remove unnecessary steps, and use Pythonic best practices without changing its output behavior.",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze the given Python code implementing a recursive function with memoization and state-dependent logic updates, then predict the final printed output.",
+    "prompt": "Consider the following Python code that defines a recursive function `compute` with memoization. The function performs complex state changes and calls itself based on multiple conditions on its arguments. Without running the code, carefully trace the logic and determine the exact output printed when calling `compute(5, 3)`.",
     "guidance": [
-      "Rename variables to meaningful names that reflect their purpose.",
-      "Remove redundant calculations or variables that do not contribute to the final result.",
-      "Use Python built-in functions and idiomatic constructs where appropriate."
+      "Track the memo dictionary carefully – understand when results are cached and reused.",
+      "Follow the recursion tree closely, noting how state variables `a` and `b` evolve in each call.",
+      "Break down the function into smaller logical units to predict each recursive call's return value."
     ],
     "hints": [
-      "Consider using the built-in sum() and len() functions instead of manually accumulating values.",
-      "Avoid unnecessary initialization of variables that are reassigned later.",
-      "List comprehensions or generator expressions can simplify iteration."
+      "Pay special attention to the order of recursive calls and how the parameters change between calls.",
+      "Note the base cases and what values they return for different inputs.",
+      "Memoization prevents repeated calculations—try sketching the call stack and the memo dictionary entries."
     ],
-    "starterCode": "def average_temperature(data):\n    total = 0\n    count = 0\n    for i in range(0, len(data)):\n        temp = data[i]\n        total += temp\n        count = count + 1\n    avg = total / count\n    return avg",
-    "expectedOutput": "If called with average_temperature([70, 72, 68, 71, 69]), the function should return 70.0 without any change in output after refactoring.",
+    "starterCode": "def compute(a, b, memo=None):\n    if memo is None:\n        memo = {}\n    if (a, b) in memo:\n        return memo[(a, b)]\n    if a == 0:\n        result = b\n    elif b == 0:\n        result = a\n    else:\n        res1 = compute(a - 1, b, memo)\n        res2 = compute(a, b - 1, memo)\n        if res1 % 2 == 0:\n            result = res1 + res2\n        else:\n            result = res1 * res2\n    memo[(a, b)] = result\n    return result\n\nprint(compute(5, 3))",
+    "expectedOutput": "4536",
     "concepts": [
-      "code refactoring",
-      "Python built-ins",
-      "code readability",
-      "variable naming"
+      "Recursion",
+      "Memoization",
+      "State management",
+      "Complex conditionals"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "fix-bug-in-sql-query-for-calculating-monthly-sales-totals",
-    "title": "Fix Bug in SQL Query for Calculating Monthly Sales Totals",
+    "slug": "implement-a-high-performance-memoized-fibonacci-function-using-c-17-features",
+    "title": "Implement a High-Performance Memoized Fibonacci Function Using C++17 Features",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an optimized recursive Fibonacci function that uses memoization with modern C++17 features such as std::unordered_map and constexpr optimizations to achieve efficient calculations for large Fibonacci indices.",
+    "prompt": "Write a C++ function named fibonacci that takes a single unsigned integer n and returns the nth Fibonacci number. Your solution must use memoization to avoid repeated calculations and be optimized for performance. Use C++17 features where appropriate, such as structured bindings or inline variables, to enhance readability and efficiency. The Fibonacci sequence is defined as: Fib(0) = 0, Fib(1) = 1, and Fib(n) = Fib(n-1) + Fib(n-2) for n >= 2.",
+    "guidance": [
+      "Use a static or external cache (e.g., unordered_map or vector) to store previously computed Fibonacci values.",
+      "Consider thread-safety if using static variables, but for this challenge focus on single-threaded performance.",
+      "Leverage C++17 features like structured bindings or inline variables to simplify code where suitable."
+    ],
+    "hints": [
+      "Memoization can be implemented using recursion combined with a map that stores intermediate results to prevent redundant calls.",
+      "Since Fib(0) and Fib(1) are base cases, initialize them in your cache before starting recursion.",
+      "Try to avoid recomputing the same Fibonacci number multiple times by checking the cache before making recursive calls."
+    ],
+    "starterCode": "unsigned long long fibonacci(unsigned int n) {\n    // TODO: Implement memoized Fibonacci\n}",
+    "expectedOutput": "fibonacci(10) == 55\nfibonacci(50) == 12586269025",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "C++17 features"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-sql-output-prediction-recursive-cte-with-window-functions",
+    "title": "Advanced SQL Output Prediction: Recursive CTE with Window Functions",
     "language": "sql",
+    "difficulty": "advanced",
+    "category": "query-analysis",
+    "description": "Analyze the given SQL query utilizing recursive Common Table Expressions (CTEs) combined with window functions, and predict the exact output it will generate based on the provided data.",
+    "prompt": "Given the following tables and SQL query, predict the complete output including all columns and rows. Explain the reasoning behind the result, focusing on how the recursive CTE operates alongside window functions within the query.\n\nTables:\nEmployees(employee_id INT, manager_id INT, name VARCHAR)\n\nData:\nemployee_id | manager_id | name\n1           | NULL       | 'Alice'\n2           | 1          | 'Bob'\n3           | 1          | 'Charlie'\n4           | 2          | 'Diana'\n5           | 2          | 'Eve'\n\nQuery:\nWITH RECURSIVE HierarchyCTE AS (\n  SELECT employee_id, manager_id, name, 1 AS level\n  FROM Employees\n  WHERE manager_id IS NULL\n  UNION ALL\n  SELECT e.employee_id, e.manager_id, e.name, h.level + 1\n  FROM Employees e\n  INNER JOIN HierarchyCTE h ON e.manager_id = h.employee_id\n)\nSELECT employee_id, name, level,\n       ROW_NUMBER() OVER (PARTITION BY level ORDER BY employee_id) AS rn\nFROM HierarchyCTE\nORDER BY level, rn;",
+    "guidance": [
+      "Carefully track the recursion as the CTE builds the hierarchy level by level.",
+      "Understand how ROW_NUMBER() is applied partitioned by the level to order employees within each level by employee_id."
+    ],
+    "hints": [
+      "Start by identifying the employees with manager_id IS NULL for the base case of the recursion.",
+      "For each subsequent recursion step, employees managed by those in the previous level are assigned a level number incremented by one."
+    ],
+    "starterCode": "WITH RECURSIVE HierarchyCTE AS (\n  SELECT employee_id, manager_id, name, 1 AS level\n  FROM Employees\n  WHERE manager_id IS NULL\n  UNION ALL\n  SELECT e.employee_id, e.manager_id, e.name, h.level + 1\n  FROM Employees e\n  INNER JOIN HierarchyCTE h ON e.manager_id = h.employee_id\n)\nSELECT employee_id, name, level,\n       ROW_NUMBER() OVER (PARTITION BY level ORDER BY employee_id) AS rn\nFROM HierarchyCTE\nORDER BY level, rn;",
+    "expectedOutput": "employee_id | name    | level | rn\n1           | Alice   | 1     | 1\n2           | Bob     | 2     | 1\n3           | Charlie | 2     | 2\n4           | Diana   | 3     | 1\n5           | Eve     | 3     | 2",
+    "concepts": [
+      "Recursive CTE",
+      "Window Functions",
+      "Hierarchical Queries",
+      "ROW_NUMBER()"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-integer-array-reversal-bug-in-c",
+    "title": "Fix the Integer Array Reversal Bug in C++",
+    "language": "cpp",
     "difficulty": "intermediate",
     "category": "debugging",
-    "description": "You are given a SQL query that is supposed to calculate the total sales amount per month from a sales table. However, the current query returns incorrect results. Identify and fix the bug so the query correctly aggregates sales by month.",
-    "prompt": "The following SQL query is intended to calculate the total sales per month by aggregating the amount from each sale grouped by year and month. However, the result does not show correct monthly aggregations. Fix the query so it correctly sums sales grouped by the calendar month and year.\n\nTable structure:\n- sales(sale_id INT, sale_date DATE, amount DECIMAL)\n\nQuery to fix:\n\nSELECT\n  YEAR(sale_date) AS year,\n  MONTH(sale_date) AS month,\n  SUM(amount) AS total_sales\nFROM sales\nGROUP BY month\nORDER BY year, month;",
+    "description": "The given C++ function is intended to reverse the elements of an integer array in place, but it contains logical errors causing incorrect output or runtime issues. Your task is to identify and fix the bugs so the array is reversed correctly.",
+    "prompt": "You are given a C++ function meant to reverse an integer array in place. However, the function currently produces incorrect results or runtime errors due to bugs in the code. Fix the function so that it correctly reverses the array elements without using extra memory.\n\nExample:\nInput: arr = {1, 2, 3, 4, 5}\nAfter calling reverseArray(arr, 5), arr should be {5, 4, 3, 2, 1}\n\nAnalyze the code carefully, identify bugs, and correct them.",
     "guidance": [
-      "Check how the GROUP BY clause is defined. Are you grouping by all the selected non-aggregated columns?",
-      "Remember that when grouping by multiple columns, you have to include all those columns in the GROUP BY clause."
+      "Review the loop conditions and index calculations carefully to ensure you don’t access out of bounds elements.",
+      "Check the swapping logic to verify both elements are exchanged properly.",
+      "Remember that array indices in C++ start at 0, so the last element is at size - 1."
     ],
     "hints": [
-      "The query currently groups only by month, which mixes data from different years.",
-      "Add YEAR(sale_date) to the GROUP BY clause along with MONTH(sale_date)."
+      "Pay close attention to the loop boundary; it should only iterate halfway through the array.",
+      "The swap should use a temporary variable to avoid overwriting values before swapping both elements.",
+      "Be sure not to increment or decrement indices in a way that skips elements or causes invalid access."
     ],
-    "starterCode": "SELECT\n  YEAR(sale_date) AS year,\n  MONTH(sale_date) AS month,\n  SUM(amount) AS total_sales\nFROM sales\nGROUP BY month\nORDER BY year, month;",
-    "expectedOutput": "A result set showing each unique year-month combination with the correct summed total sales amount for that month. For example:\n\nyear | month | total_sales\n-----|-------|------------\n2023 | 1     | 10000.00\n2023 | 2     | 8500.50\n2024 | 1     | 12000.00",
+    "starterCode": "void reverseArray(int arr[], int size) {\n    int start = 0;\n    int end = size;\n    while (start < end) {\n        int temp = arr[start];\n        arr[start] = arr[end];\n        arr[end] = temp;\n        start++;\n        end--;\n    }\n}",
+    "expectedOutput": "For input: {10, 20, 30, 40, 50}\nAfter reverseArray call: {50, 40, 30, 20, 10}",
     "concepts": [
-      "GROUP BY",
-      "aggregate functions",
-      "date functions"
+      "array indexing",
+      "in-place array reversal",
+      "loop conditions",
+      "pointer/array manipulation"
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
   },
   {
-    "slug": "refactor-messy-c-function-to-improve-readability-and-efficiency",
-    "title": "Refactor Messy C++ Function to Improve Readability and Efficiency",
-    "language": "cpp",
-    "difficulty": "beginner",
-    "category": "code-quality",
-    "description": "Given a function with redundant variables and unclear naming, refactor it to improve code quality without changing its behavior.",
-    "prompt": "You are given a C++ function that calculates the sum of all integers from 1 to n but contains unnecessary variables and verbose logic. Refactor this function to make the code cleaner, more readable, and efficient, while maintaining the same functionality.",
-    "guidance": [
-      "Remove any redundant variables that do not contribute to the logic.",
-      "Rename variables to have more meaningful and concise names.",
-      "Simplify the loop or logic if possible, keeping the result unchanged."
-    ],
-    "hints": [
-      "Consider if all declared variables are necessary.",
-      "Think about meaningful variable names that explain their role clearly.",
-      "Check if the loop or summing logic can be expressed more cleanly."
-    ],
-    "starterCode": "int calculateSum(int n) {\n    int totalSum = 0;\n    int temp = 0;\n    for(int i = 1; i <= n; i++) {\n        temp = i;\n        totalSum = totalSum + temp;\n    }\n    return totalSum;\n}",
-    "expectedOutput": "For input n=5, the function should return 15 (1+2+3+4+5).",
-    "concepts": [
-      "variables",
-      "loops",
-      "functions",
-      "code readability"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "create-a-function-to-group-and-count-array-elements-by-key",
-    "title": "Create a Function to Group and Count Array Elements by Key",
+    "slug": "advanced-recursive-function-to-deeply-flatten-and-transform-nested-arrays-in-javascript",
+    "title": "Advanced Recursive Function to Deeply Flatten and Transform Nested Arrays in JavaScript",
     "language": "javascript",
-    "difficulty": "intermediate",
+    "difficulty": "advanced",
     "category": "functions",
-    "description": "Build a JavaScript function that groups objects in an array by a specific key and returns the count of each group.",
-    "prompt": "Write a function named 'groupByCount' that takes two parameters: an array of objects and a string key. The function should return an object where the keys are the unique values from the specified key in the objects, and the values are the count of how many times each unique value appears in the array.\n\nFor example, given an array of objects representing people and the key 'age', the function should group people by their age and count how many have the same age.",
+    "description": "Create a highly optimized recursive function that accepts an arbitrarily nested array structure containing numbers and arrays, deeply flattens it into a single-level array, and applies a transformation function to each number. This challenge tests mastery of recursion, performance optimization, and functional programming in JavaScript.",
+    "prompt": "Build a function named `deepFlattenTransform` that takes two parameters: (1) an arbitrarily nested array containing numbers or further nested arrays, and (2) a callback function to transform each number. The function should recursively flatten all levels of nesting into a single array, applying the callback transformation to each numeric value before including it in the output array. Your implementation must be efficient and capable of handling deeply nested and large inputs without exceeding the call stack or causing significant performance degradation.",
     "guidance": [
-      "Iterate over the array and use an object to keep track of counts by the specified key.",
-      "Check if the key exists in the object; if not, initialize it to zero before incrementing.",
-      "Return the final object with grouped counts once all array elements have been processed."
+      "Use recursion to traverse nested arrays, but consider tail call optimization techniques or iterative solutions if your environment supports them to avoid stack overflows.",
+      "Apply the callback function as you extract each number from the nested structure before adding it to the result array.",
+      "Optimize for performance when handling large and deeply nested arrays, avoiding unnecessary array concatenations or copying.",
+      "Ensure your function gracefully handles edge cases such as empty arrays, arrays with non-numeric values, and deeply nested empty arrays."
     ],
     "hints": [
-      "Consider using the array's forEach or reduce methods for iteration.",
-      "Remember to handle cases where some objects might not contain the specified key.",
-      "You may use short-circuit evaluation to simplify incrementing counts."
+      "Consider using a helper function or inner recursive function to maintain clean code organization.",
+      "Avoid using Array.prototype.flat(Infinity), as it might not allow easy insertion of the transformation step.",
+      "Think about using iterative methods with your own stack if recursion depth is a concern in your environment."
     ],
-    "starterCode": "function groupByCount(arr, key) {\n  // Your code here\n}",
-    "expectedOutput": "{ '25': 3, '30': 2, '40': 1 }",
+    "starterCode": "function deepFlattenTransform(nestedArray, transformFn) {\n  // Your code here\n}",
+    "expectedOutput": "deepFlattenTransform([1, [2, [3, [4]], 5]], x => x * 2) // returns [2, 4, 6, 8, 10]",
     "concepts": [
-      "object manipulation",
-      "array iteration",
-      "counting/grouping"
+      "recursion",
+      "higher-order functions",
+      "performance optimization",
+      "array manipulation"
     ],
-    "estimatedTime": "10 minutes",
+    "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "simple-budget-tracker-track-expenses-and-calculate-balance",
-    "title": "Simple Budget Tracker: Track Expenses and Calculate Balance",
-    "language": "cpp",
+    "slug": "create-a-simple-employee-department-relationship-table",
+    "title": "Create a Simple Employee-Department Relationship Table",
+    "language": "sql",
     "difficulty": "beginner",
-    "category": "mini-projects",
-    "description": "Create a beginner-friendly console program in C++ that allows users to input their income and a list of expenses, then calculates and displays the remaining balance.",
-    "prompt": "Write a C++ program that asks the user to enter their total income as a double, then prompts for the number of expense items. Allow the user to input each expense amount. Finally, calculate and display the total expenses and the remaining balance after subtracting expenses from income.",
+    "category": "data-modeling",
+    "description": "Build SQL tables to model employees and departments, then write queries to retrieve employee details along with their department names.",
+    "prompt": "You need to create two tables: Employees and Departments. The Employees table should store employee_id, employee_name, and department_id. The Departments table should store department_id and department_name. Populate both tables with sample data. Then, write a query to list all employees with their corresponding department names.",
     "guidance": [
-      "Use variables to store income, expenses, total expenses, and balance.",
-      "Use a loop to input multiple expense amounts and calculate their sum.",
-      "Display results with clear formatting to the user."
+      "Define primary keys for both tables: employee_id for Employees and department_id for Departments.",
+      "Use a foreign key (department_id) in Employees to link to Departments.",
+      "Write a SELECT query joining Employees and Departments on department_id."
     ],
     "hints": [
-      "You can use a for loop to iterate through the number of expenses.",
-      "Make sure to use double type variables to handle currency values with decimal points.",
-      "Use simple arithmetic operations to sum expenses and calculate balance."
+      "Use CREATE TABLE statements to define the tables with appropriate columns and constraints.",
+      "Insert a few rows in each table using INSERT INTO statements.",
+      "Use INNER JOIN to combine data from Employees and Departments in your SELECT query."
     ],
-    "starterCode": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double income, expense, totalExpenses = 0;\n    int expenseCount;\n\n    cout << \"Enter your total income: \";\n    cin >> income;\n\n    cout << \"How many expenses do you have? \";\n    cin >> expenseCount;\n\n    for (int i = 0; i < expenseCount; i++) {\n        cout << \"Enter expense #\" << (i + 1) << \": \";\n        // Input expense here and add to totalExpenses\n    }\n\n    // Calculate and display total expenses and remaining balance\n\n    return 0;\n}",
-    "expectedOutput": "Enter your total income: 2000\nHow many expenses do you have? 3\nEnter expense #1: 300.50\nEnter expense #2: 150\nEnter expense #3: 100\n\nTotal expenses: 550.5\nRemaining balance: 1449.5",
+    "starterCode": "CREATE TABLE Departments (\n    department_id INT PRIMARY KEY,\n    department_name VARCHAR(50)\n);\n\nCREATE TABLE Employees (\n    employee_id INT PRIMARY KEY,\n    employee_name VARCHAR(100),\n    department_id INT,\n    FOREIGN KEY (department_id) REFERENCES Departments(department_id)\n);\n\n-- Insert sample data here\n-- Write your SELECT query here",
+    "expectedOutput": "employee_id | employee_name | department_name\n------------|---------------|----------------\n1           | Alice Smith   | HR\n2           | Bob Johnson   | IT\n3           | Charlie Lee   | Marketing",
     "concepts": [
-      "variables",
-      "loops",
-      "input/output",
-      "arithmetic operations"
+      "CREATE TABLE",
+      "PRIMARY KEY",
+      "FOREIGN KEY",
+      "JOIN"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": false
+    "isFeatured": true
   }
 ]

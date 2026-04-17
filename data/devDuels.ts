@@ -9279,5 +9279,177 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "predict-the-output-of-a-recursive-function-with-memoization-and-complex-state-updates",
+    "title": "Predict the Output of a Recursive Function with Memoization and Complex State Updates",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "logic",
+    "description": "Analyze the given Python code implementing a recursive function with memoization and state-dependent logic updates, then predict the final printed output.",
+    "prompt": "Consider the following Python code that defines a recursive function `compute` with memoization. The function performs complex state changes and calls itself based on multiple conditions on its arguments. Without running the code, carefully trace the logic and determine the exact output printed when calling `compute(5, 3)`.",
+    "guidance": [
+      "Track the memo dictionary carefully – understand when results are cached and reused.",
+      "Follow the recursion tree closely, noting how state variables `a` and `b` evolve in each call.",
+      "Break down the function into smaller logical units to predict each recursive call's return value."
+    ],
+    "hints": [
+      "Pay special attention to the order of recursive calls and how the parameters change between calls.",
+      "Note the base cases and what values they return for different inputs.",
+      "Memoization prevents repeated calculations—try sketching the call stack and the memo dictionary entries."
+    ],
+    "starterCode": "def compute(a, b, memo=None):\n    if memo is None:\n        memo = {}\n    if (a, b) in memo:\n        return memo[(a, b)]\n    if a == 0:\n        result = b\n    elif b == 0:\n        result = a\n    else:\n        res1 = compute(a - 1, b, memo)\n        res2 = compute(a, b - 1, memo)\n        if res1 % 2 == 0:\n            result = res1 + res2\n        else:\n            result = res1 * res2\n    memo[(a, b)] = result\n    return result\n\nprint(compute(5, 3))",
+    "expectedOutput": "4536",
+    "concepts": [
+      "Recursion",
+      "Memoization",
+      "State management",
+      "Complex conditionals"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "implement-a-high-performance-memoized-fibonacci-function-using-c-17-features",
+    "title": "Implement a High-Performance Memoized Fibonacci Function Using C++17 Features",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an optimized recursive Fibonacci function that uses memoization with modern C++17 features such as std::unordered_map and constexpr optimizations to achieve efficient calculations for large Fibonacci indices.",
+    "prompt": "Write a C++ function named fibonacci that takes a single unsigned integer n and returns the nth Fibonacci number. Your solution must use memoization to avoid repeated calculations and be optimized for performance. Use C++17 features where appropriate, such as structured bindings or inline variables, to enhance readability and efficiency. The Fibonacci sequence is defined as: Fib(0) = 0, Fib(1) = 1, and Fib(n) = Fib(n-1) + Fib(n-2) for n >= 2.",
+    "guidance": [
+      "Use a static or external cache (e.g., unordered_map or vector) to store previously computed Fibonacci values.",
+      "Consider thread-safety if using static variables, but for this challenge focus on single-threaded performance.",
+      "Leverage C++17 features like structured bindings or inline variables to simplify code where suitable."
+    ],
+    "hints": [
+      "Memoization can be implemented using recursion combined with a map that stores intermediate results to prevent redundant calls.",
+      "Since Fib(0) and Fib(1) are base cases, initialize them in your cache before starting recursion.",
+      "Try to avoid recomputing the same Fibonacci number multiple times by checking the cache before making recursive calls."
+    ],
+    "starterCode": "unsigned long long fibonacci(unsigned int n) {\n    // TODO: Implement memoized Fibonacci\n}",
+    "expectedOutput": "fibonacci(10) == 55\nfibonacci(50) == 12586269025",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "C++17 features"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-sql-output-prediction-recursive-cte-with-window-functions",
+    "title": "Advanced SQL Output Prediction: Recursive CTE with Window Functions",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "query-analysis",
+    "description": "Analyze the given SQL query utilizing recursive Common Table Expressions (CTEs) combined with window functions, and predict the exact output it will generate based on the provided data.",
+    "prompt": "Given the following tables and SQL query, predict the complete output including all columns and rows. Explain the reasoning behind the result, focusing on how the recursive CTE operates alongside window functions within the query.\n\nTables:\nEmployees(employee_id INT, manager_id INT, name VARCHAR)\n\nData:\nemployee_id | manager_id | name\n1           | NULL       | 'Alice'\n2           | 1          | 'Bob'\n3           | 1          | 'Charlie'\n4           | 2          | 'Diana'\n5           | 2          | 'Eve'\n\nQuery:\nWITH RECURSIVE HierarchyCTE AS (\n  SELECT employee_id, manager_id, name, 1 AS level\n  FROM Employees\n  WHERE manager_id IS NULL\n  UNION ALL\n  SELECT e.employee_id, e.manager_id, e.name, h.level + 1\n  FROM Employees e\n  INNER JOIN HierarchyCTE h ON e.manager_id = h.employee_id\n)\nSELECT employee_id, name, level,\n       ROW_NUMBER() OVER (PARTITION BY level ORDER BY employee_id) AS rn\nFROM HierarchyCTE\nORDER BY level, rn;",
+    "guidance": [
+      "Carefully track the recursion as the CTE builds the hierarchy level by level.",
+      "Understand how ROW_NUMBER() is applied partitioned by the level to order employees within each level by employee_id."
+    ],
+    "hints": [
+      "Start by identifying the employees with manager_id IS NULL for the base case of the recursion.",
+      "For each subsequent recursion step, employees managed by those in the previous level are assigned a level number incremented by one."
+    ],
+    "starterCode": "WITH RECURSIVE HierarchyCTE AS (\n  SELECT employee_id, manager_id, name, 1 AS level\n  FROM Employees\n  WHERE manager_id IS NULL\n  UNION ALL\n  SELECT e.employee_id, e.manager_id, e.name, h.level + 1\n  FROM Employees e\n  INNER JOIN HierarchyCTE h ON e.manager_id = h.employee_id\n)\nSELECT employee_id, name, level,\n       ROW_NUMBER() OVER (PARTITION BY level ORDER BY employee_id) AS rn\nFROM HierarchyCTE\nORDER BY level, rn;",
+    "expectedOutput": "employee_id | name    | level | rn\n1           | Alice   | 1     | 1\n2           | Bob     | 2     | 1\n3           | Charlie | 2     | 2\n4           | Diana   | 3     | 1\n5           | Eve     | 3     | 2",
+    "concepts": [
+      "Recursive CTE",
+      "Window Functions",
+      "Hierarchical Queries",
+      "ROW_NUMBER()"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-integer-array-reversal-bug-in-c",
+    "title": "Fix the Integer Array Reversal Bug in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "The given C++ function is intended to reverse the elements of an integer array in place, but it contains logical errors causing incorrect output or runtime issues. Your task is to identify and fix the bugs so the array is reversed correctly.",
+    "prompt": "You are given a C++ function meant to reverse an integer array in place. However, the function currently produces incorrect results or runtime errors due to bugs in the code. Fix the function so that it correctly reverses the array elements without using extra memory.\n\nExample:\nInput: arr = {1, 2, 3, 4, 5}\nAfter calling reverseArray(arr, 5), arr should be {5, 4, 3, 2, 1}\n\nAnalyze the code carefully, identify bugs, and correct them.",
+    "guidance": [
+      "Review the loop conditions and index calculations carefully to ensure you don’t access out of bounds elements.",
+      "Check the swapping logic to verify both elements are exchanged properly.",
+      "Remember that array indices in C++ start at 0, so the last element is at size - 1."
+    ],
+    "hints": [
+      "Pay close attention to the loop boundary; it should only iterate halfway through the array.",
+      "The swap should use a temporary variable to avoid overwriting values before swapping both elements.",
+      "Be sure not to increment or decrement indices in a way that skips elements or causes invalid access."
+    ],
+    "starterCode": "void reverseArray(int arr[], int size) {\n    int start = 0;\n    int end = size;\n    while (start < end) {\n        int temp = arr[start];\n        arr[start] = arr[end];\n        arr[end] = temp;\n        start++;\n        end--;\n    }\n}",
+    "expectedOutput": "For input: {10, 20, 30, 40, 50}\nAfter reverseArray call: {50, 40, 30, 20, 10}",
+    "concepts": [
+      "array indexing",
+      "in-place array reversal",
+      "loop conditions",
+      "pointer/array manipulation"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "advanced-recursive-function-to-deeply-flatten-and-transform-nested-arrays-in-javascript",
+    "title": "Advanced Recursive Function to Deeply Flatten and Transform Nested Arrays in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a highly optimized recursive function that accepts an arbitrarily nested array structure containing numbers and arrays, deeply flattens it into a single-level array, and applies a transformation function to each number. This challenge tests mastery of recursion, performance optimization, and functional programming in JavaScript.",
+    "prompt": "Build a function named `deepFlattenTransform` that takes two parameters: (1) an arbitrarily nested array containing numbers or further nested arrays, and (2) a callback function to transform each number. The function should recursively flatten all levels of nesting into a single array, applying the callback transformation to each numeric value before including it in the output array. Your implementation must be efficient and capable of handling deeply nested and large inputs without exceeding the call stack or causing significant performance degradation.",
+    "guidance": [
+      "Use recursion to traverse nested arrays, but consider tail call optimization techniques or iterative solutions if your environment supports them to avoid stack overflows.",
+      "Apply the callback function as you extract each number from the nested structure before adding it to the result array.",
+      "Optimize for performance when handling large and deeply nested arrays, avoiding unnecessary array concatenations or copying.",
+      "Ensure your function gracefully handles edge cases such as empty arrays, arrays with non-numeric values, and deeply nested empty arrays."
+    ],
+    "hints": [
+      "Consider using a helper function or inner recursive function to maintain clean code organization.",
+      "Avoid using Array.prototype.flat(Infinity), as it might not allow easy insertion of the transformation step.",
+      "Think about using iterative methods with your own stack if recursion depth is a concern in your environment."
+    ],
+    "starterCode": "function deepFlattenTransform(nestedArray, transformFn) {\n  // Your code here\n}",
+    "expectedOutput": "deepFlattenTransform([1, [2, [3, [4]], 5]], x => x * 2) // returns [2, 4, 6, 8, 10]",
+    "concepts": [
+      "recursion",
+      "higher-order functions",
+      "performance optimization",
+      "array manipulation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "create-a-simple-employee-department-relationship-table",
+    "title": "Create a Simple Employee-Department Relationship Table",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build SQL tables to model employees and departments, then write queries to retrieve employee details along with their department names.",
+    "prompt": "You need to create two tables: Employees and Departments. The Employees table should store employee_id, employee_name, and department_id. The Departments table should store department_id and department_name. Populate both tables with sample data. Then, write a query to list all employees with their corresponding department names.",
+    "guidance": [
+      "Define primary keys for both tables: employee_id for Employees and department_id for Departments.",
+      "Use a foreign key (department_id) in Employees to link to Departments.",
+      "Write a SELECT query joining Employees and Departments on department_id."
+    ],
+    "hints": [
+      "Use CREATE TABLE statements to define the tables with appropriate columns and constraints.",
+      "Insert a few rows in each table using INSERT INTO statements.",
+      "Use INNER JOIN to combine data from Employees and Departments in your SELECT query."
+    ],
+    "starterCode": "CREATE TABLE Departments (\n    department_id INT PRIMARY KEY,\n    department_name VARCHAR(50)\n);\n\nCREATE TABLE Employees (\n    employee_id INT PRIMARY KEY,\n    employee_name VARCHAR(100),\n    department_id INT,\n    FOREIGN KEY (department_id) REFERENCES Departments(department_id)\n);\n\n-- Insert sample data here\n-- Write your SELECT query here",
+    "expectedOutput": "employee_id | employee_name | department_name\n------------|---------------|----------------\n1           | Alice Smith   | HR\n2           | Bob Johnson   | IT\n3           | Charlie Lee   | Marketing",
+    "concepts": [
+      "CREATE TABLE",
+      "PRIMARY KEY",
+      "FOREIGN KEY",
+      "JOIN"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
   }
 ];
