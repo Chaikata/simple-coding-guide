@@ -1,461 +1,497 @@
 [
   {
-    "slug": "mastering-asynchronous-patterns-in-javascript-beyond-promises-and-async-await",
-    "title": "Mastering Asynchronous Patterns in JavaScript: Beyond Promises and Async/Await",
+    "slug": "building-scalable-data-models-in-javascript-using-immutable-js",
+    "title": "Building Scalable Data Models in JavaScript Using Immutable.js",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to handle asynchronous operations in JavaScript using patterns beyond Promises and async/await, including callbacks, event emitters, and generators for deeper control and understanding.",
-    "videoUrl": "https://www.youtube.com/watch?v=9JSKWVoKSZ8",
+    "description": "Learn how to build scalable and maintainable data models in JavaScript using Immutable.js, a powerful library that helps manage immutable data structures efficiently.",
+    "videoUrl": "https://www.youtube.com/watch?v=PDe6S9GfKGA",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is single-threaded, meaning it executes code one piece at a time. To handle operations that take time—like HTTP requests or reading files—JavaScript uses asynchronous patterns. Most beginners start with Promises and async/await, but there's more to mastering asynchronous JavaScript. In this tutorial, we explore other patterns like callbacks, event emitters, and generator functions, helping you gain deeper control and flexibility."
+        "value": "Managing data efficiently is key to building scalable web applications. One common challenge is dealing with mutable data, which can lead to bugs and unpredictable behavior as your app grows. Immutable.js is a popular JavaScript library that helps you create data structures that cannot be changed once created, making your data predictable and your code easier to debug."
       },
       {
         "type": "paragraph",
-        "value": "### Callbacks: The Old but Gold Pattern\nCallbacks were the original way to handle async code. You pass a function as an argument to be called after the operation finishes. Let’s look at a simple example simulating a network request:"
+        "value": "In this tutorial, we'll cover the basics of Immutable.js, show you how to create and manipulate immutable data structures, and demonstrate how to build scalable data models using these concepts."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, install Immutable.js via npm or yarn:"
       },
       {
         "type": "code",
-        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    callback(null, 'Data loaded');\n  }, 1000);\n}\n\nfetchData((error, data) => {\n  if (error) {\n    console.error('Error:', error);\n  } else {\n    console.log('Success:', data);\n  }\n});"
+        "value": "npm install immutable\n// or\nyarn add immutable"
       },
       {
         "type": "paragraph",
-        "value": "While callbacks work, they can lead to 'callback hell' where nested callbacks become hard to read and maintain. This led to the rise of Promises and async/await, which offer cleaner syntax. However, understanding callbacks helps to grasp how async JS evolved."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Event Emitters: Handling Events Asynchronously\nAnother powerful pattern is the EventEmitter, commonly used in Node.js. It allows objects to emit named events and register listeners. This pattern is great when multiple parts of your app need to react to certain async events."
+        "value": "Once installed, you can import Immutable.js in your JavaScript file."
       },
       {
         "type": "code",
-        "value": "const EventEmitter = require('events');\n\nclass DataStreamer extends EventEmitter {\n  start() {\n    setTimeout(() => this.emit('data', 'Chunk 1'), 500);\n    setTimeout(() => this.emit('data', 'Chunk 2'), 1000);\n    setTimeout(() => this.emit('end'), 1500);\n  }\n}\n\nconst stream = new DataStreamer();\n\nstream.on('data', (chunk) => {\n  console.log('Received:', chunk);\n});\n\nstream.on('end', () => {\n  console.log('Stream ended');\n});\n\nstream.start();"
+        "value": "const { Map, List } = require('immutable');\n\n// or using ES6 modules\n// import { Map, List } from 'immutable';"
       },
       {
         "type": "paragraph",
-        "value": "Here, the DataStreamer emits 'data' events asynchronously, and listeners react to them. Event-driven programming is very useful in complex systems where multiple components communicate asynchronously."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Generators and Yield: Pausing Async Execution\nGenerators are functions you can pause and resume using the yield keyword. They can be combined with Promises to handle async code in a very controlled manner—let’s see an example using a simple generator runner:"
+        "value": "### Creating Immutable Data Structures\nLet's start by creating an immutable map (similar to an object) and list (similar to an array)."
       },
       {
         "type": "code",
-        "value": "function* fetchSequence() {\n  const data1 = yield new Promise(resolve => setTimeout(() => resolve('First data'), 1000));\n  console.log(data1);\n\n  const data2 = yield new Promise(resolve => setTimeout(() => resolve('Second data'), 1000));\n  console.log(data2);\n}\n\nfunction runGenerator(genFunc) {\n  const iterator = genFunc();\n\n  function iterate(iteration) {\n    if (iteration.done) return;\n    iteration.value.then(result => iterate(iterator.next(result)));\n  }\n\n  iterate(iterator.next());\n}\n\nrunGenerator(fetchSequence);"
+        "value": "const user = Map({\n  id: 1,\n  name: 'Alice',\n  hobbies: List(['reading', 'gaming'])\n});\n\nconsole.log(user.toJS());\n// Output: { id: 1, name: 'Alice', hobbies: ['reading', 'gaming'] }"
       },
       {
         "type": "paragraph",
-        "value": "The function runGenerator drives the generator, waiting for each yielded Promise to resolve before continuing. This was a precursor pattern to async/await and still useful if you want fine-grained control over async logic."
+        "value": "### Updating Immutable Data\nWhen you want to update data, you don't modify it directly. Instead, Immutable.js returns a new copy with the changes, keeping the original data intact."
+      },
+      {
+        "type": "code",
+        "value": "const updatedUser = user.set('name', 'Bob');\n\nconsole.log(user.get('name'));         // Alice\nconsole.log(updatedUser.get('name'));  // Bob"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\nWhile Promises and async/await have simplified asynchronous programming in JavaScript, knowing alternative patterns like callbacks, event emitters, and generators strengthens your understanding of async flows and prepares you for a wider range of programming problems. Start experimenting with these to become a more versatile JavaScript developer!"
+        "value": "Similarly, you can update nested data structures with methods such as `update` and `setIn`."
+      },
+      {
+        "type": "code",
+        "value": "const userWithMoreHobbies = user.update('hobbies', hobbies => hobbies.push('hiking'));\n\nconsole.log(user.get('hobbies').toJS());          // ['reading', 'gaming']\nconsole.log(userWithMoreHobbies.get('hobbies').toJS());  // ['reading', 'gaming', 'hiking']"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Building Scalable Models\nAs your app grows, you can build complex, nested data models while still leveraging the benefits of immutability. Here's an example representing a simple blog post model with comments:"
+      },
+      {
+        "type": "code",
+        "value": "const post = Map({\n  id: 101,\n  title: 'Building Scalable Data Models',\n  content: 'Immutable.js helps manage data effectively.',\n  comments: List([\n    Map({ id: 1, text: 'Great post!' }),\n    Map({ id: 2, text: 'Very helpful, thanks!' })\n  ])\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "To add a comment immutably:"
+      },
+      {
+        "type": "code",
+        "value": "const newComment = Map({ id: 3, text: 'Nice explanation!' });\nconst updatedPost = post.update('comments', comments => comments.push(newComment));\n\nconsole.log(post.get('comments').size);        // 2\nconsole.log(updatedPost.get('comments').size); // 3"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Immutable.js?\n- Safer state management by preventing accidental mutations\n- Easier to track changes and debug\n- Optimized structural sharing leading to good performance\n- Simple API for managing complex nested data"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nUsing Immutable.js, you can build scalable and predictable data models in JavaScript. This approach is especially useful in applications with complex state logic like React apps or large data-driven projects."
+      },
+      {
+        "type": "paragraph",
+        "value": "Try using Immutable.js in your next project to experience the benefits of immutability in managing your data structures!"
       }
     ]
   },
   {
-    "slug": "understanding-common-asynchronous-errors-in-javascript-and-how-to-handle-them",
-    "title": "Understanding Common Asynchronous Errors in JavaScript and How to Handle Them",
+    "slug": "designing-resilient-javascript-systems-handling-unexpected-failures",
+    "title": "Designing Resilient JavaScript Systems: Strategies for Handling Unexpected Failures",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn the most common errors when working with asynchronous JavaScript code and how to effectively handle them with practical examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=Kc3OQZz67IQ",
+    "description": "Learn beginner-friendly strategies to design resilient JavaScript applications that handle unexpected errors gracefully.",
+    "videoUrl": "https://www.youtube.com/watch?v=K2Sd8JCT-kU",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is widely used for building interactive web applications, and much of its power comes from handling asynchronous operations. However, working with asynchronous code often leads to errors that can be confusing for beginners. In this article, we'll explore common asynchronous errors and practical ways to handle them using Promises, async/await, and try-catch blocks."
+        "value": "Building resilient JavaScript systems means expecting that things can go wrong and preparing your code to handle errors effectively. This helps improve user experience by preventing your application from crashing unexpectedly. In this article, we will discuss practical strategies for handling unexpected failures in JavaScript, especially useful for beginners."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Forgetting to handle promise rejections\nWhen using Promises, one common mistake is not handling rejections properly. If a promise fails and you don't handle the error, it can cause unhandled promise rejection warnings or unexpected behavior."
+        "value": "### 1. Use try...catch for Synchronous Errors\nJavaScript's built-in try...catch block is essential for catching errors that happen during code execution. It allows you to handle errors without stopping your program entirely."
       },
       {
         "type": "code",
-        "value": "fetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => console.log(data));\n\n// What if the network request fails? There's no error handling here!"
+        "value": "try {\n  // Code that might throw an error\n  const result = someFunction();\n  console.log(result);\n} catch (error) {\n  console.error('An error occurred:', error.message);\n  // Handle error gracefully, maybe show a message to the user\n}\n"
       },
       {
         "type": "paragraph",
-        "value": "To fix this, always add a `.catch()` method to handle errors gracefully:"
+        "value": "### 2. Handle Asynchronous Errors with Promises\nWhen working with asynchronous code, errors happen in a different way. Use `.catch()` with promises or try...catch inside async functions to handle errors."
       },
       {
         "type": "code",
-        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => console.log(data))\n  .catch(error => console.error('Fetch error:', error));"
+        "value": "fetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('Fetch error:', error);\n  });\n\n// Or using async/await:\nasync function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Async error:', error);\n  }\n}\ngetData();"
       },
       {
         "type": "paragraph",
-        "value": "### 2. Mixing callbacks with promises incorrectly\nCallback functions were used before Promises became popular. Mixing callbacks with async/await or promises without proper error handling leads to confusion and bugs."
+        "value": "### 3. Validate Inputs to Prevent Common Errors\nMany unexpected failures happen because of invalid input data. Always validate what you receive before processing it. This prevents errors from propagating."
       },
       {
         "type": "code",
-        "value": "// Incorrect: ignoring callback errors\nfunction getData(callback) {\n  setTimeout(() => {\n    const error = null;\n    const data = { message: 'Hello!' };\n    callback(error, data);\n  }, 1000);\n}\n\ngetData((error, data) => {\n  // Not checking for error\n  console.log(data.message); // What if error isn't null?\n});"
+        "value": "function divide(a, b) {\n  if (typeof a !== 'number' || typeof b !== 'number') {\n    throw new Error('Inputs must be numbers');\n  }\n  if (b === 0) {\n    throw new Error('Cannot divide by zero');\n  }\n  return a / b;\n}\n\ntry {\n  console.log(divide(10, 2));\n  console.log(divide(5, 0));\n} catch (error) {\n  console.error('Division error:', error.message);\n}"
       },
       {
         "type": "paragraph",
-        "value": "Always check for errors in callbacks before proceeding:"
+        "value": "### 4. Use Default Values and Fallbacks\nWhen data from an external source might be missing or incorrect, use default values to keep your application stable."
       },
       {
         "type": "code",
-        "value": "getData((error, data) => {\n  if (error) {\n    return console.error('Error occurred:', error);\n  }\n  console.log(data.message); // Safe to use data now\n});"
+        "value": "function greet(name) {\n  const safeName = name || 'Guest';\n  console.log(`Hello, ${safeName}!`);\n}\n\ngreet('Alice'); // Outputs: Hello, Alice!\ngreet(); // Outputs: Hello, Guest!"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Forgetting to use `await` inside async functions\nWhen using `async` functions, you must use the `await` keyword before a promise to wait for it to resolve. Forgetting to use `await` results in receiving a Promise object instead of the actual data."
+        "value": "### 5. Centralize Error Logging\nTracking errors is key to improving your application. Centralize error logging so you can monitor and fix issues."
       },
       {
         "type": "code",
-        "value": "async function fetchData() {\n  const data = fetch('https://api.example.com/data');\n  console.log(data); // Logs a Promise, not the actual response\n}"
+        "value": "function logError(error) {\n  // This function could send errors to an external monitoring service\n  console.error('Logged error:', error.message);\n}\n\ntry {\n  // Code that might fail\n  throw new Error('Unexpected failure!');\n} catch (error) {\n  logError(error);\n}"
       },
       {
         "type": "paragraph",
-        "value": "Correct usage involves `await`:"
-      },
-      {
-        "type": "code",
-        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log(data); // The actual data\n  } catch (error) {\n    console.error('Fetch error:', error);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. Not using try-catch blocks inside async functions\nSince errors in async functions reject the returned promise, you need to catch these rejections. Surrounding your code with try-catch helps you handle errors synchronously inside async functions."
-      },
-      {
-        "type": "code",
-        "value": "async function fetchWithTryCatch() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error caught inside async function:', error);\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Summary\nHandling asynchronous errors properly is essential for building reliable JavaScript applications. Always handle promise rejections, check errors in callbacks, use `await` appropriately, and wrap your async code with try-catch blocks. This will improve your debugging experience and make your code more robust."
+        "value": "### Summary\nDesigning resilient JavaScript systems means anticipating errors and preparing your application to handle them without crashing. Use try...catch blocks, handle asynchronous errors properly, validate inputs, apply default values, and centralize error logging. These simple steps will make your applications more robust and user-friendly."
       }
     ]
   },
   {
-    "slug": "building-a-real-time-chat-application-with-typescript-and-websockets",
-    "title": "Building a Real-Time Chat Application with TypeScript and WebSockets",
+    "slug": "handling-recursive-type-aliases-in-typescript",
+    "title": "Handling Recursive Type Aliases in TypeScript: A Practical Guide",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Learn how to create a simple real-time chat app using TypeScript and WebSockets, perfect for beginners looking to get started with real-time web applications.",
-    "videoUrl": "https://www.youtube.com/watch?v=45Z-xBRHuRo",
+    "description": "Learn how to work with recursive type aliases in TypeScript with this beginner-friendly practical guide and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=KWsjMWqAXlg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Real-time applications have become increasingly popular, and chat apps are a great way to learn the concepts behind real-time communication. In this tutorial, we'll build a simple real-time chat application using TypeScript and WebSockets. This will allow multiple users to send and receive messages instantly without refreshing the page."
+        "value": "TypeScript is a powerful language that adds static types to JavaScript. One advanced feature it supports is recursive type aliases. These are types that refer to themselves, allowing you to model structures like trees or nested objects. In this guide, we'll explain what recursive type aliases are and how to use them practically."
       },
       {
         "type": "paragraph",
-        "value": "WebSockets provide a full-duplex communication channel over a single TCP connection. This makes them perfect for real-time applications that need instant communication, such as chat, gaming, or live notifications."
+        "value": "A recursive type alias is a type definition that references itself, so it can describe infinitely nested shapes. This is useful, for example, when you want to represent JSON objects or tree-like data structures."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by setting up a basic WebSocket server in TypeScript using Node.js. We'll then create a basic client to connect to the server and send/receive messages."
+        "value": "Let's look at a simple example: defining a type for a nested comment system where a comment can have replies, and those replies can themselves have replies."
       },
       {
         "type": "code",
-        "value": "import * as WebSocket from 'ws';\n\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on('connection', (ws) => {\n  console.log('User connected');\n\n  ws.on('message', (message: string) => {\n    console.log(`Received: ${message}`);\n    // Broadcast the received message to all clients\n    wss.clients.forEach(client => {\n      if (client !== ws && client.readyState === WebSocket.OPEN) {\n        client.send(message);\n      }\n    });\n  });\n\n  ws.on('close', () => {\n    console.log('User disconnected');\n  });\n});\n\nconsole.log('WebSocket server is running on ws://localhost:8080');"
+        "value": "type Comment = {\n  id: number;\n  text: string;\n  replies?: Comment[];\n};"
       },
       {
         "type": "paragraph",
-        "value": "In the code above, we create a WebSocket server that listens on port 8080. When a client connects, we listen for messages from that client. Once a message is received, the server broadcasts it to all other connected clients. This way, everyone gets the latest chat messages."
+        "value": "Here, the `Comment` type has a property `replies` which is an optional array of `Comment` itself. This way, comments can nest endlessly, with replies inside replies."
       },
       {
         "type": "paragraph",
-        "value": "Next, let's create a simple HTML client that connects to this server and allows users to send and receive messages. We'll use plain TypeScript for typing and better code quality."
+        "value": "You can create data with this type like so:"
       },
       {
         "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>TypeScript WebSocket Chat</title>\n</head>\n<body>\n  <h2>Real-Time Chat</h2>\n  <div id=\"chatArea\" style=\"border:1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px;\"></div>\n  <input type=\"text\" id=\"messageInput\" placeholder=\"Type a message...\" style=\"width: 80%;\" />\n  <button id=\"sendBtn\">Send</button>\n\n  <script type=\"module\">\n    const ws = new WebSocket('ws://localhost:8080');\n    const chatArea = document.getElementById('chatArea') as HTMLDivElement;\n    const messageInput = document.getElementById('messageInput') as HTMLInputElement;\n    const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;\n\n    ws.onopen = () => {\n      appendMessage('Connected to the chat server.');\n    };\n\n    ws.onmessage = (event: MessageEvent) => {\n      appendMessage(`Friend: ${event.data}`);\n    };\n\n    ws.onclose = () => {\n      appendMessage('Disconnected from the chat server.');\n    };\n\n    sendBtn.onclick = () => {\n      const message = messageInput.value.trim();\n      if (message) {\n        ws.send(message);\n        appendMessage(`You: ${message}`);\n        messageInput.value = '';\n      }\n    };\n\n    function appendMessage(message: string) {\n      const messageElem = document.createElement('div');\n      messageElem.textContent = message;\n      chatArea.appendChild(messageElem);\n      chatArea.scrollTop = chatArea.scrollHeight;\n    }\n  </script>\n</body>\n</html>"
+        "value": "const commentTree: Comment = {\n  id: 1,\n  text: \"This is the first comment\",\n  replies: [\n    {\n      id: 2,\n      text: \"This is a reply\",\n      replies: [\n        {\n          id: 3,\n          text: \"This is a nested reply\"\n        }\n      ]\n    }\n  ]\n};"
       },
       {
         "type": "paragraph",
-        "value": "This client connects to our WebSocket server and updates the chat area whenever a new message arrives. Users can type a message and click the send button to broadcast it to other connected clients."
+        "value": "If you try to define recursive type aliases in a more complex way, sometimes TypeScript can struggle with infinite expansion. To avoid this, you can use interfaces for recursive types, or use type aliases carefully, often combining with unions or base cases."
       },
       {
         "type": "paragraph",
-        "value": "To run this project, follow these steps:\n\n1. Make sure you have Node.js installed.\n2. Initialize a new Node.js project and install the \"ws\" package for WebSocket support:\n\nbash\nnpm init -y\nnpm install ws\n\n\n3. Create a file named `server.ts` and paste the server code above.\n4. Compile the TypeScript server code or run it directly using `ts-node`.\n5. Open the HTML file in two or more browser tabs to test real-time messaging."
+        "value": "For example, here's how to define a recursive type representing a JSON value:"
+      },
+      {
+        "type": "code",
+        "value": "type Json =\n  | string\n  | number\n  | boolean\n  | null\n  | Json[]\n  | { [key: string]: Json };"
       },
       {
         "type": "paragraph",
-        "value": "And that’s it! You've built a simple real-time chat application using TypeScript and WebSockets. You can expand this by adding user names, a better UI, or persisting chat history on the server."
+        "value": "This type says a JSON value can be a primitive value or an array of JSON values or an object with string keys and JSON values. The recursion happens in the array and object cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, when using recursive types, always ensure you have base cases that do not refer back to the recursive type itself. This prevents infinite recursive loops and helps TypeScript correctly analyze your types."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, recursive type aliases in TypeScript allow you to model deeply nested, tree-like data structures efficiently. Using optional and union types alongside recursion helps create flexible and accurate type definitions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing with small examples, and soon recursive types will become a natural part of your TypeScript toolkit!"
       }
     ]
   },
   {
-    "slug": "mastering-typescripts-type-narrowing-for-advanced-error-handling",
-    "title": "Mastering TypeScript's Type Narrowing for Advanced Error Handling",
+    "slug": "comparing-typescripts-type-inference-errors-with-explicit-type-annotations",
+    "title": "Comparing TypeScript's Type Inference Errors with Explicit Type Annotations",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript's type narrowing features to write safer and more precise error handling code, perfect for beginners looking to improve their TypeScript skills.",
-    "videoUrl": "https://www.youtube.com/watch?v=xdQkEn3mx1k",
+    "description": "Learn how TypeScript's type inference errors compare with explicit type annotations to write clearer and error-free code.",
+    "videoUrl": "https://www.youtube.com/watch?v=HPEgmWBR0Mg",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript's powerful type system helps catch errors at compile time, but sometimes you also need to handle errors at runtime. Type narrowing is a technique that lets TypeScript understand the exact type of a variable in a specific part of your code, making error handling more precise and reliable."
+        "value": "TypeScript is a powerful superset of JavaScript that adds static types to your code. One of its key features is type inference, where TypeScript automatically figures out the types of variables and expressions without you having to explicitly write them. This can make coding faster and your code cleaner. However, sometimes relying on type inference can lead to confusing errors that might be easier to understand when you use explicit type annotations."
       },
       {
         "type": "paragraph",
-        "value": "In JavaScript, errors are often handled with try-catch blocks where the caught error is typed as 'any' by default, losing valuable type information. TypeScript allows us to narrow down the type of an unknown error, enabling safer access to its properties and better control over the error flow."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's dive into an example:"
+        "value": "Let's start with a simple example to show how TypeScript infers types and what kind of errors you might encounter when the inferred types aren't what you expected."
       },
       {
         "type": "code",
-        "value": "function handleError(e: unknown) {\n  if (e instanceof Error) {\n    // TypeScript now knows e is an Error object\n    console.error('Error message:', e.message);\n  } else if (typeof e === 'string') {\n    // We narrowed e to string\n    console.error('String error:', e);\n  } else {\n    console.error('Unknown error:', e);\n  }\n}\n\ntry {\n  throw new Error('Something went wrong!');\n} catch (err) {\n  handleError(err);\n}"
+        "value": "let message = \"Hello, TypeScript!\";\nmessage = 42; // Error: Type 'number' is not assignable to type 'string'."
       },
       {
         "type": "paragraph",
-        "value": "In this code, the function `handleError` accepts an `unknown` type parameter. Using type narrowing inside the function lets TypeScript understand the exact type of the error and safely access the `message` property if applicable."
+        "value": "Here, TypeScript infers that the variable message is a string because it's initialized with a string. If you try to assign a number to it later, TypeScript will give you an error. This error comes from type inference, which is helpful for catching mistakes early."
       },
       {
         "type": "paragraph",
-        "value": "You can also create custom type guard functions to improve reusability and clarity:"
+        "value": "Now, let's look at the same example but with an explicit type annotation. This means you tell TypeScript exactly what type the variable should have right from the start."
       },
       {
         "type": "code",
-        "value": "function isError(e: unknown): e is Error {\n  return e instanceof Error;\n}\n\nfunction handleError(e: unknown) {\n  if (isError(e)) {\n    console.error('Caught an error:', e.message);\n  } else {\n    console.error('Non-error thrown:', e);\n  }\n}"
+        "value": "let explicitMessage: string = \"Hello, TypeScript!\";\nexplicitMessage = 42; // Error: Type 'number' is not assignable to type 'string'."
       },
       {
         "type": "paragraph",
-        "value": "By mastering type narrowing with `instanceof`, `typeof`, and custom type guards, you can create advanced and dependable error handling logic in your TypeScript projects that will reduce bugs and improve maintainability."
+        "value": "The error here is almost identical to the inference example. However, using explicit types can improve readability and make your intentions clear, especially in larger codebases. Other times, explicit types help avoid more subtle inference errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a function that takes an array and returns the first element. Without annotations, TypeScript tries to infer the type, but it can sometimes be too general or too specific."
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement(arr: any[]) {\n  return arr[0];\n}\n\nconst num = getFirstElement([1, 2, 3]);\nnum.toFixed(); // No error, but 'num' is type 'any', so you loose safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this function, TypeScript infers the return type as any because the input array can contain any type. This leads to weaker type safety. Let's improve it with explicit generics."
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst num = getFirstElement([1, 2, 3]);\nnum.toFixed(); // OK, 'num' is number\n\nconst str = getFirstElement(['a', 'b', 'c']);\nstr.toUpperCase(); // OK, 'str' is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, by adding the generic type T, both the input and return types are explicitly tied together. This gives TypeScript the information it needs to infer types correctly and avoid unsafe any values."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, type inference saves time and keeps code clean, but explicit type annotations often improve clarity and help catch errors before runtime. As you grow more comfortable with TypeScript, you'll learn when to rely on inference and when to specify types explicitly."
       }
     ]
   },
   {
-    "slug": "mastering-python-asyncio-high-performance-network-apps",
-    "title": "Mastering Python's Asyncio for High-Performance Network Applications",
+    "slug": "building-a-real-time-weather-dashboard-with-python-and-openweathermap-api",
+    "title": "Building a Real-Time Weather Dashboard with Python and OpenWeatherMap API",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to use Python's asyncio module to build efficient, high-performance network applications with ease, even if you're a beginner.",
-    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "description": "Learn how to create a real-time weather dashboard using Python and the OpenWeatherMap API. This beginner-friendly tutorial guides you through fetching weather data and displaying it in a simple console application.",
+    "videoUrl": "https://www.youtube.com/watch?v=aQZzMJgPMqQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python's asyncio library offers a powerful way to write concurrent code using the async/await syntax. It's perfect for network applications that require handling many connections simultaneously without blocking the program. In this tutorial, we'll explore how to get started with asyncio and build a simple high-performance network server."
+        "value": "Getting real-time weather data is useful for many applications, from planning your day to building smart home systems. In this tutorial, we will build a simple real-time weather dashboard using Python and the OpenWeatherMap API. You'll learn how to fetch and display current weather information for any city in a beginner-friendly way."
       },
       {
         "type": "paragraph",
-        "value": "Before asyncio, network programs often relied on multithreading or multiprocessing to handle concurrent connections, which can get complex and resource-heavy. Asyncio works on cooperative multitasking by running asynchronous tasks that yield control when waiting for I/O operations, making programs efficient and scalable."
+        "value": "First, you need to sign up for a free API key on the OpenWeatherMap website. This key allows your Python program to request weather data. Once you have the key, we will use Python's requests library to call the API and retrieve the weather information."
       },
       {
         "type": "paragraph",
-        "value": "Let's start by creating a basic TCP echo server using asyncio. This server will listen to incoming connections, read data asynchronously, and send it back to the client."
+        "value": "Let's start by installing the requests library if you don't have it yet. Run this command in your terminal or command prompt:"
       },
       {
         "type": "code",
-        "value": "import asyncio\n\nasync def handle_client(reader, writer):\n    addr = writer.get_extra_info('peername')\n    print(f\"Connected with {addr}\")\n\n    while True:\n        data = await reader.read(100)\n        if not data:\n            break\n        print(f\"Received: {data.decode()}\")\n        writer.write(data)  # Echo back\n        await writer.drain()\n\n    print(f\"Connection closed {addr}\")\n    writer.close()\n    await writer.wait_closed()\n\nasync def main():\n    server = await asyncio.start_server(handle_client, '127.0.0.1', 8888)\n    addr = server.sockets[0].getsockname()\n    print(f\"Serving on {addr}\")\n\n    async with server:\n        await server.serve_forever()\n\nif __name__ == '__main__':\n    asyncio.run(main())"
+        "value": "pip install requests"
       },
       {
         "type": "paragraph",
-        "value": "Here's what happens in the code above:\n\n1. `handle_client` is a coroutine that asynchronously reads data from a client, then writes it back (echo server behavior).\n2. The server is started with `asyncio.start_server` on localhost port 8888.\n3. `asyncio.run(main())` runs the main coroutine to start the event loop and keep the server running.\n\nThis setup handles multiple clients concurrently without creating new threads or processes."
+        "value": "Now, we'll write a Python script that asks a user for a city name, fetches real-time weather data for that city, and prints a simple weather dashboard in the console."
+      },
+      {
+        "type": "code",
+        "value": "import requests\n\nAPI_KEY = 'your_openweathermap_api_key_here'\nBASE_URL = 'http://api.openweathermap.org/data/2.5/weather'\n\n\ndef get_weather(city):\n    params = {\n        'q': city,\n        'appid': API_KEY,\n        'units': 'metric'  # Use 'imperial' for Fahrenheit\n    }\n    response = requests.get(BASE_URL, params=params)\n    if response.status_code == 200:\n        data = response.json()\n        return data\n    else:\n        print(f\"Error: Unable to get weather data for {city}.\")\n        return None\n\n\ndef display_weather(data):\n    if data:\n        city_name = data['name']\n        weather_desc = data['weather'][0]['description']\n        temp = data['main']['temp']\n        humidity = data['main']['humidity']\n        wind_speed = data['wind']['speed']\n\n        print(f\"--- Weather Dashboard for {city_name} ---\")\n        print(f\"Description : {weather_desc.capitalize()}\")\n        print(f\"Temperature : {temp}°C\")\n        print(f\"Humidity    : {humidity}%\")\n        print(f\"Wind Speed  : {wind_speed} m/s\")\n        print(\"-------------------------------------\")\n    else:\n        print(\"No data to display.\")\n\n\ndef main():\n    city = input(\"Enter city name: \")\n    weather_data = get_weather(city)\n    display_weather(weather_data)\n\n\nif __name__ == \"__main__\":\n    main()"
       },
       {
         "type": "paragraph",
-        "value": "To test the server, open a terminal and run:\n\nbash\nnc 127.0.0.1 8888\n\n\nThen type something and hit enter. The server should echo back the text you sent."
+        "value": "Replace 'your_openweathermap_api_key_here' with your actual API key. When you run the program, it will prompt you to enter a city name like 'London' or 'New York'. After entering a valid city, the program fetches the weather data and displays temperature, description, humidity, and wind speed."
       },
       {
         "type": "paragraph",
-        "value": "Using asyncio in this manner dramatically improves the performance of network applications since it handles many connections efficiently in a single-threaded event loop. It also makes your code easier to maintain and reason about compared to traditional threading."
+        "value": "This simple dashboard can be further enhanced by adding features like multiple cities, improved error handling, or even a graphical user interface with libraries such as Tkinter or PyQt. For now, this script provides a clear demonstration of how to work with APIs and display real-time data in Python."
       },
       {
         "type": "paragraph",
-        "value": "For more advanced use cases, you can explore asyncio locks, queues, and subprocess management to enhance your network apps further."
-      },
-      {
-        "type": "paragraph",
-        "value": "Now that you've seen a basic example, try modifying the server to handle simple HTTP requests or build a chat server where multiple clients can communicate asynchronously!"
+        "value": "Feel free to experiment and expand this project as you learn more about Python and web APIs!"
       }
     ]
   },
   {
-    "slug": "mastering-python-exception-hierarchy-writing-robust-error-handling-code",
-    "title": "Mastering Python Exception Hierarchy: Writing Robust Error Handling Code",
+    "slug": "handling-api-rate-limit-errors-gracefully-python",
+    "title": "Handling API Rate Limit Errors Gracefully in Python Real-World Applications",
     "language": "python",
     "type": "errors",
-    "description": "Learn how Python's exception hierarchy works and write robust error handling code that improves your programs' reliability and user experience.",
-    "videoUrl": "https://www.youtube.com/watch?v=WJMhHCEENxc",
+    "description": "Learn how to handle API rate limit errors gracefully in Python applications with practical examples and tips, ensuring your app runs smoothly under request limits.",
+    "videoUrl": "https://www.youtube.com/watch?v=_qNHROq0pGk",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing Python programs, errors and unexpected situations can occur. Handling these errors gracefully is essential for creating robust, user-friendly applications. Python's exception hierarchy provides a structured way to catch and manage errors effectively."
+        "value": "When working with APIs, you might encounter rate limit errors if you send too many requests in a short period. These limits protect the API provider's resources and ensure fair usage among users. Handling these errors gracefully is important to prevent your application from crashing or overwhelming the server."
       },
       {
         "type": "paragraph",
-        "value": "At the top of Python's exception hierarchy is the built-in Exception class. All error types inherit from this class. Understanding this hierarchy helps you catch specific errors or more general ones depending on your needs."
+        "value": "In this article, we'll learn how to detect rate limit errors and implement retry mechanisms using Python. We’ll use the popular `requests` library to make HTTP calls and showcase best practices for managing rate limits."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at some common built-in exceptions and their place within the hierarchy:"
+        "value": "API rate limiting usually responds with status code `429` (Too Many Requests). This response may also include a `Retry-After` header that tells you how many seconds to wait before retrying."
       },
       {
         "type": "paragraph",
-        "value": "- Exception: The base class for most built-in exceptions.\n- ArithmeticError: Base class for numeric calculation errors like ZeroDivisionError and OverflowError.\n- LookupError: Base class for lookup errors like KeyError and IndexError.\n- ValueError: Raised when a function receives an argument of the right type but an inappropriate value.\n- TypeError: Raised when an operation is applied to an object of inappropriate type."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is a simple example demonstrating how to use try-except blocks to handle specific exceptions:"
+        "value": "Here's a simple example of how to handle such errors:"
       },
       {
         "type": "code",
-        "value": "def divide_numbers(a, b):\n    try:\n        result = a / b\n    except ZeroDivisionError:\n        print(\"Error: Cannot divide by zero.\")\n    except TypeError:\n        print(\"Error: Inputs must be numbers.\")\n    else:\n        print(f\"Result is {result}\")\n\n# Example usage\n\n# Valid input\ndivide_numbers(10, 2)\n\n# Division by zero\ndivide_numbers(10, 0)\n\n# Wrong input type\ndivide_numbers(10, 'five')"
+        "value": "import time\nimport requests\n\nAPI_URL = 'https://api.example.com/data'\n\n\ndef fetch_data():\n    while True:\n        response = requests.get(API_URL)\n\n        if response.status_code == 200:\n            return response.json()\n        elif response.status_code == 429:\n            retry_after = int(response.headers.get('Retry-After', 1))\n            print(f\"Rate limit exceeded. Retrying after {retry_after} seconds...\")\n            time.sleep(retry_after)\n        else:\n            # Handle other errors or raise an exception\n            response.raise_for_status()\n\n\ndata = fetch_data()\nprint(data)"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, different exceptions are caught separately, allowing customized error messages. Using multiple except blocks helps to provide more precise feedback, enhancing user experience and debugging."
+        "value": "In this code, the `fetch_data` function makes a request to the API inside a loop. If it receives a 429 status code, it reads the `Retry-After` header and waits for that many seconds before retrying. For other errors, it raises an exception to avoid silent failures."
       },
       {
         "type": "paragraph",
-        "value": "Sometimes, you may want to catch all exceptions derived from Exception, but avoid catching system-exiting exceptions like KeyboardInterrupt or SystemExit. For this, catching Exception directly is a good practice:"
+        "value": "Using a retry loop like this prevents your app from bombing the API with too many requests and helps it recover smoothly after hitting rate limits."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more complex scenarios, you might want to implement exponential backoff, which increases the wait time between retries after each failure, reducing server load further."
       },
       {
         "type": "code",
-        "value": "try:\n    # Some operation\n    value = int(input(\"Enter a number: \"))\n    print(10 / value)\nexcept Exception as e:\n    print(f\"An error occurred: {e}\")"
+        "value": "def fetch_data_with_backoff(max_retries=5):\n    retries = 0\n    backoff_time = 1  # start with 1 second\n\n    while retries < max_retries:\n        response = requests.get(API_URL)\n\n        if response.status_code == 200:\n            return response.json()\n        elif response.status_code == 429:\n            retry_after = int(response.headers.get('Retry-After', backoff_time))\n            print(f\"Rate limit hit. Retrying after {retry_after} seconds...\")\n            time.sleep(retry_after)\n            backoff_time *= 2  # double wait time\n            retries += 1\n        else:\n            response.raise_for_status()\n    \n    raise Exception('Max retries exceeded')\n\n\ntry:\n    data = fetch_data_with_backoff()\n    print(data)\nexcept Exception as e:\n    print(f\"Request failed: {e}\")"
       },
       {
         "type": "paragraph",
-        "value": "Here, any error derived from Exception will be caught, and the user will see an appropriate message. But exceptions that stop the program intentionally, like KeyboardInterrupt, will still propagate."
+        "value": "This example uses exponential backoff to handle repeated rate limit errors more efficiently. The delay doubles after each retry, up to a maximum number of retries."
       },
       {
         "type": "paragraph",
-        "value": "Lastly, always strive to handle as specific exceptions as possible before using a general Exception catch. It is a best practice to avoid bare except blocks without specifying the exception type as they may hide bugs."
-      },
-      {
-        "type": "paragraph",
-        "value": "By mastering Python's exception hierarchy and practicing careful error handling, your code will be much more robust, easier to maintain, and friendly to users."
+        "value": "In summary, to handle API rate limits gracefully in Python:\n\n1. Check for status code 429.\n2. Use the `Retry-After` header to wait before retrying.\n3. Implement retry logic, optionally with exponential backoff.\n4. Avoid silent failures by handling other HTTP errors properly.\n\nThis approach improves your application's reliability and respects API usage policies."
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-for-complex-data-analysis-in-sql",
-    "title": "Mastering Window Functions for Complex Data Analysis in SQL",
+    "slug": "mastering-recursive-ctes-practical-sql-tricks-for-hierarchical-data",
+    "title": "Mastering Recursive CTEs: Practical SQL Tricks for Hierarchical Data",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform advanced data analysis with ease, enabling efficient calculations like running totals, rankings, and moving averages.",
-    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
+    "description": "Learn how to use recursive Common Table Expressions (CTEs) in SQL to efficiently query and manage hierarchical data structures like organizational charts and folder trees.",
+    "videoUrl": "https://www.youtube.com/watch?v=LJC8277LONg",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions are powerful tools in SQL that allow you to perform calculations across a set of table rows related to the current row without collapsing the result into a single output row. This means you can do advanced analytics like running totals, rankings, and moving averages while still seeing individual row data. Let's explore how to get started with window functions."
+        "value": "Hierarchical data, such as organizational structures, category trees, or file directories, is common in many databases. Handling these types of data with standard SQL queries can be challenging because they often require self-joins or complex logic. A powerful feature called Recursive Common Table Expressions (CTEs) makes it easier to query hierarchical data by performing recursive queries within a single SQL statement."
       },
       {
         "type": "paragraph",
-        "value": "The general syntax for a window function looks like this:\n\n function_name() OVER (PARTITION BY column(s) ORDER BY column(s))"
+        "value": "In this tutorial, we will cover the basics of recursive CTEs and dive into a practical example using an employee hierarchy. You will learn how to write recursive queries and how they can simplify your SQL code."
       },
       {
         "type": "paragraph",
-        "value": "Here, `PARTITION BY` divides the dataset into groups (like SQL's GROUP BY, but without aggregating), and `ORDER BY` defines the order of rows inside each partition. Some common window functions include ROW_NUMBER(), RANK(), SUM(), AVG(), and LEAD()/LAG()."
+        "value": "### What is a Recursive CTE?"
       },
       {
         "type": "paragraph",
-        "value": "Let's use an example table `sales` with columns: `employee_id`, `department`, `sale_date`, and `sale_amount`."
+        "value": "A Recursive CTE is a Common Table Expression that references itself to perform iterative logic. It consists of two parts: the anchor member and the recursive member. The anchor member is the initial result set, and the recursive member repeatedly executes using the output of the previous iteration until no new rows are returned."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Calculating Running Total by Employee"
+        "value": "### Example: Employee Hierarchy"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's say we have an `employees` table containing employee IDs, names, and their manager's ID (which is null for the top-level managers). Our goal is to retrieve the entire company hierarchy starting from the CEO."
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY employee_id ORDER BY sale_date) AS running_total\nFROM sales\nORDER BY employee_id, sale_date;"
+        "value": "-- Sample employees table\nCREATE TABLE employees (\n  employee_id INT PRIMARY KEY,\n  name VARCHAR(100),\n  manager_id INT NULL\n);\n\n-- Sample data\nINSERT INTO employees(employee_id, name, manager_id) VALUES\n(1, 'Alice', NULL), -- CEO\n(2, 'Bob', 1),\n(3, 'Charlie', 1),\n(4, 'David', 2),\n(5, 'Eva', 2),\n(6, 'Frank', 3);"
       },
       {
         "type": "paragraph",
-        "value": "This query calculates a running total of sales per employee, ordered by the date of the sale. The `SUM()` function runs over the window defined by each `employee_id` partition."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. Assigning Ranks to Sales by Department"
+        "value": "To get the company hierarchy, we write a recursive CTE:"
       },
       {
         "type": "code",
-        "value": "SELECT\n  employee_id,\n  department,\n  sale_amount,\n  RANK() OVER (PARTITION BY department ORDER BY sale_amount DESC) AS department_rank\nFROM sales;"
+        "value": "WITH RECURSIVE EmployeeHierarchy AS (\n  -- Anchor member: start with the CEO (top-level managers)\n  SELECT employee_id, name, manager_id, 1 AS level\n  FROM employees\n  WHERE manager_id IS NULL\n\n  UNION ALL\n\n  -- Recursive member: get employees reporting to the previous level\n  SELECT e.employee_id, e.name, e.manager_id, eh.level + 1\n  FROM employees e\n  INNER JOIN EmployeeHierarchy eh ON e.manager_id = eh.employee_id\n)\nSELECT * FROM EmployeeHierarchy\nORDER BY level, manager_id;"
       },
       {
         "type": "paragraph",
-        "value": "Here, `RANK()` assigns a rank based on sale amounts within each department. The highest sale gets rank 1."
+        "value": "### Explanation"
       },
       {
         "type": "paragraph",
-        "value": "### 3. Comparing Current Sale to Previous One Using LAG()"
-      },
-      {
-        "type": "code",
-        "value": "SELECT\n  employee_id,\n  sale_date,\n  sale_amount,\n  LAG(sale_amount) OVER (PARTITION BY employee_id ORDER BY sale_date) AS previous_sale_amount\nFROM sales;"
+        "value": "- The anchor member selects the CEO(s) — employees with no manager.\n- The recursive member joins employees with the previous level's employees based on the `manager_id`.\n- We use a `level` column to track the depth of the hierarchy.\n- The recursion stops when no additional employees are found."
       },
       {
         "type": "paragraph",
-        "value": "The `LAG()` function fetches the sale amount from the previous row within the same employee partition, enabling comparisons between current and previous sales."
+        "value": "### Additional Tips"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "- Use `ORDER BY` at the end to present the hierarchy clearly.\n- You can include additional columns, such as path strings, to show the full reporting path.\n- Recursive CTEs can be used in many SQL dialects, but syntax details might vary slightly (e.g., some require `WITH RECURSIVE`)."
       },
       {
         "type": "paragraph",
-        "value": "Window functions provide a flexible way to perform complex calculations directly in your SQL queries without losing detailed row-level data. Start experimenting with these functions on your datasets, and you'll unlock powerful insights with ease."
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "Recursive CTEs are an elegant way to query hierarchical data in SQL. By mastering them, you can perform complex tree traversals, organizational reporting, and category breakdowns directly in your SQL queries, saving you time and additional application-side processing."
       }
     ]
   },
   {
-    "slug": "optimizing-sql-transaction-isolation-levels-scalable-system-design",
-    "title": "Optimizing SQL Transaction Isolation Levels for Scalable System Design",
+    "slug": "mastering-sql-window-functions-avoiding-common-pitfalls-and-errors",
+    "title": "Mastering SQL Window Functions: Avoiding Common Pitfalls and Errors",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to optimize SQL transaction isolation levels to improve system scalability and avoid common concurrency errors.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "description": "Learn how to use SQL window functions effectively by avoiding common mistakes. This beginner-friendly guide explains errors and best practices for smooth SQL queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=jQWSMHrQPOc",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with databases in scalable systems, managing transactions correctly is crucial. One key aspect is choosing the right transaction isolation level. Isolation levels control how transactions interact with each other, affecting performance and data consistency."
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of table rows related to the current row. They are essential for analytics, ranking, running totals, and more. However, beginners often encounter errors or unexpected results when using window functions. This article will help you understand common pitfalls and how to avoid them."
       },
       {
         "type": "paragraph",
-        "value": "Too strict isolation levels can cause blocking, deadlocks, or slow performance, whereas too loose isolation levels may lead to data anomalies like dirty reads or lost updates. Understanding these levels helps you balance correctness and scalability."
+        "value": "One frequent mistake is misunderstanding the difference between window functions and aggregate functions. While aggregate functions like SUM() collapse rows into a single value, window functions perform aggregations without reducing the number of output rows."
       },
       {
         "type": "paragraph",
-        "value": "Here are the common SQL isolation levels and their impact on errors and performance:"
+        "value": "Another common error is forgetting the OVER() clause. Without the OVER() clause, SQL will treat the function as a regular aggregate, which often leads to syntax errors."
       },
       {
         "type": "code",
-        "value": "-- 1. READ UNCOMMITTED\nSET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;\n-- Allows dirty reads, which may lead to reading uncommitted, temporary data."
+        "value": "-- Incorrect: Missing OVER() clause causes error\nSELECT employee_id, department_id, SUM(salary) FROM employees;\n\n-- Correct: Adding OVER() clause enables window function usage\nSELECT employee_id, department_id, SUM(salary) OVER (PARTITION BY department_id) AS dept_salary_sum FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the PARTITION BY clause inside OVER() helps you group rows within the window function. A common mistake is to omit PARTITION BY when it's needed, resulting in a calculation done over the entire result set instead of per group."
       },
       {
         "type": "code",
-        "value": "-- 2. READ COMMITTED (default in many DBMS)\nSET TRANSACTION ISOLATION LEVEL READ COMMITTED;\n-- Prevents dirty reads but can cause non-repeatable reads or phantom reads."
+        "value": "-- Counts all rows without partitioning\nSELECT employee_id, COUNT(*) OVER () AS total_employees FROM employees;\n\n-- Counts employees by department\nSELECT employee_id, department_id, COUNT(*) OVER (PARTITION BY department_id) AS dept_employee_count FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Be careful with the ORDER BY clause inside OVER(). It's used to define the order of rows for ranking or running calculations. Omitting ORDER BY in ranking functions like ROW_NUMBER() can lead to inconsistent or meaningless results."
       },
       {
         "type": "code",
-        "value": "-- 3. REPEATABLE READ\nSET TRANSACTION ISOLATION LEVEL REPEATABLE READ;\n-- Prevents dirty and non-repeatable reads but may cause phantom reads."
+        "value": "-- Inconsistent row numbering without ORDER BY\nSELECT employee_id, ROW_NUMBER() OVER () AS row_num FROM employees;\n\n-- Consistent row numbering by salary\nSELECT employee_id, ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid mixing window functions and GROUP BY in the same query layer without understanding how they interact. Window functions are applied after GROUP BY aggregation, so using window functions on non-grouped columns can cause errors."
       },
       {
         "type": "code",
-        "value": "-- 4. SERIALIZABLE\nSET TRANSACTION ISOLATION LEVEL SERIALIZABLE;\n-- The strictest level, ensuring complete isolation but can cause more locking and reduced concurrency."
+        "value": "-- Incorrect use causes error\nSELECT department_id, employee_id, SUM(salary), RANK() OVER (ORDER BY salary DESC) FROM employees GROUP BY department_id;\n\n-- Correct use: apply window functions after GROUP BY in a subquery\nWITH dept_salaries AS (\n  SELECT department_id, employee_id, SUM(salary) AS total_salary\n  FROM employees GROUP BY department_id, employee_id\n)\nSELECT department_id, employee_id, total_salary,\n       RANK() OVER (ORDER BY total_salary DESC) AS salary_rank\nFROM dept_salaries;"
       },
       {
         "type": "paragraph",
-        "value": "In scalable system design, using SERIALIZABLE isolation often causes performance bottlenecks, especially under high concurrency, due to excessive locking and blocking. On the other hand, using READ UNCOMMITTED can lead to incorrect data processing."
-      },
-      {
-        "type": "paragraph",
-        "value": "A common and practical approach is to use READ COMMITTED or REPEATABLE READ for everyday transactions and carefully apply SERIALIZABLE only for critical sections where absolute consistency is mandatory."
-      },
-      {
-        "type": "paragraph",
-        "value": "Additionally, to reduce errors like deadlocks, you can optimize your transactions by:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Keeping transactions short\n- Accessing tables in a consistent order\n- Indexing correctly to avoid full table scans\n- Using optimistic concurrency control where supported"
-      },
-      {
-        "type": "paragraph",
-        "value": "Example of setting the isolation level in a transaction (SQL Server syntax):"
-      },
-      {
-        "type": "code",
-        "value": "BEGIN TRANSACTION;\nSET TRANSACTION ISOLATION LEVEL REPEATABLE READ;\n\n-- Your SQL data modification statements here\n\nCOMMIT TRANSACTION;"
-      },
-      {
-        "type": "paragraph",
-        "value": "By choosing the optimal isolation level for your workload and applying good transaction design principles, you can prevent common transactional errors and build a more scalable system."
+        "value": "In summary, mastering window functions requires understanding the correct syntax of the OVER() clause, proper usage of PARTITION BY and ORDER BY, and awareness of how window functions interact with GROUP BY. By avoiding these common pitfalls, your SQL queries will be more reliable and easier to troubleshoot."
       }
     ]
   }

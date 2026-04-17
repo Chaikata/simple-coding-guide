@@ -61909,5 +61909,245 @@ export const articles = [
         "value": "By choosing the optimal isolation level for your workload and applying good transaction design principles, you can prevent common transactional errors and build a more scalable system."
       }
     ]
+  },
+  {
+    "slug": "designing-resilient-javascript-systems-handling-unexpected-failures",
+    "title": "Designing Resilient JavaScript Systems: Strategies for Handling Unexpected Failures",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn beginner-friendly strategies to design resilient JavaScript applications that handle unexpected errors gracefully.",
+    "videoUrl": "https://www.youtube.com/watch?v=K2Sd8JCT-kU",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Building resilient JavaScript systems means expecting that things can go wrong and preparing your code to handle errors effectively. This helps improve user experience by preventing your application from crashing unexpectedly. In this article, we will discuss practical strategies for handling unexpected failures in JavaScript, especially useful for beginners."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Use try...catch for Synchronous Errors\nJavaScript's built-in try...catch block is essential for catching errors that happen during code execution. It allows you to handle errors without stopping your program entirely."
+      },
+      {
+        "type": "code",
+        "value": "try {\n  // Code that might throw an error\n  const result = someFunction();\n  console.log(result);\n} catch (error) {\n  console.error('An error occurred:', error.message);\n  // Handle error gracefully, maybe show a message to the user\n}\n"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Handle Asynchronous Errors with Promises\nWhen working with asynchronous code, errors happen in a different way. Use `.catch()` with promises or try...catch inside async functions to handle errors."
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('Fetch error:', error);\n  });\n\n// Or using async/await:\nasync function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('Async error:', error);\n  }\n}\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Validate Inputs to Prevent Common Errors\nMany unexpected failures happen because of invalid input data. Always validate what you receive before processing it. This prevents errors from propagating."
+      },
+      {
+        "type": "code",
+        "value": "function divide(a, b) {\n  if (typeof a !== 'number' || typeof b !== 'number') {\n    throw new Error('Inputs must be numbers');\n  }\n  if (b === 0) {\n    throw new Error('Cannot divide by zero');\n  }\n  return a / b;\n}\n\ntry {\n  console.log(divide(10, 2));\n  console.log(divide(5, 0));\n} catch (error) {\n  console.error('Division error:', error.message);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Use Default Values and Fallbacks\nWhen data from an external source might be missing or incorrect, use default values to keep your application stable."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  const safeName = name || 'Guest';\n  console.log(`Hello, ${safeName}!`);\n}\n\ngreet('Alice'); // Outputs: Hello, Alice!\ngreet(); // Outputs: Hello, Guest!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Centralize Error Logging\nTracking errors is key to improving your application. Centralize error logging so you can monitor and fix issues."
+      },
+      {
+        "type": "code",
+        "value": "function logError(error) {\n  // This function could send errors to an external monitoring service\n  console.error('Logged error:', error.message);\n}\n\ntry {\n  // Code that might fail\n  throw new Error('Unexpected failure!');\n} catch (error) {\n  logError(error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nDesigning resilient JavaScript systems means anticipating errors and preparing your application to handle them without crashing. Use try...catch blocks, handle asynchronous errors properly, validate inputs, apply default values, and centralize error logging. These simple steps will make your applications more robust and user-friendly."
+      }
+    ]
+  },
+  {
+    "slug": "handling-recursive-type-aliases-in-typescript",
+    "title": "Handling Recursive Type Aliases in TypeScript: A Practical Guide",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to work with recursive type aliases in TypeScript with this beginner-friendly practical guide and examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=KWsjMWqAXlg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful language that adds static types to JavaScript. One advanced feature it supports is recursive type aliases. These are types that refer to themselves, allowing you to model structures like trees or nested objects. In this guide, we'll explain what recursive type aliases are and how to use them practically."
+      },
+      {
+        "type": "paragraph",
+        "value": "A recursive type alias is a type definition that references itself, so it can describe infinitely nested shapes. This is useful, for example, when you want to represent JSON objects or tree-like data structures."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at a simple example: defining a type for a nested comment system where a comment can have replies, and those replies can themselves have replies."
+      },
+      {
+        "type": "code",
+        "value": "type Comment = {\n  id: number;\n  text: string;\n  replies?: Comment[];\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the `Comment` type has a property `replies` which is an optional array of `Comment` itself. This way, comments can nest endlessly, with replies inside replies."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can create data with this type like so:"
+      },
+      {
+        "type": "code",
+        "value": "const commentTree: Comment = {\n  id: 1,\n  text: \"This is the first comment\",\n  replies: [\n    {\n      id: 2,\n      text: \"This is a reply\",\n      replies: [\n        {\n          id: 3,\n          text: \"This is a nested reply\"\n        }\n      ]\n    }\n  ]\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you try to define recursive type aliases in a more complex way, sometimes TypeScript can struggle with infinite expansion. To avoid this, you can use interfaces for recursive types, or use type aliases carefully, often combining with unions or base cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, here's how to define a recursive type representing a JSON value:"
+      },
+      {
+        "type": "code",
+        "value": "type Json =\n  | string\n  | number\n  | boolean\n  | null\n  | Json[]\n  | { [key: string]: Json };"
+      },
+      {
+        "type": "paragraph",
+        "value": "This type says a JSON value can be a primitive value or an array of JSON values or an object with string keys and JSON values. The recursion happens in the array and object cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember, when using recursive types, always ensure you have base cases that do not refer back to the recursive type itself. This prevents infinite recursive loops and helps TypeScript correctly analyze your types."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, recursive type aliases in TypeScript allow you to model deeply nested, tree-like data structures efficiently. Using optional and union types alongside recursion helps create flexible and accurate type definitions."
+      },
+      {
+        "type": "paragraph",
+        "value": "Keep practicing with small examples, and soon recursive types will become a natural part of your TypeScript toolkit!"
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescripts-type-inference-errors-with-explicit-type-annotations",
+    "title": "Comparing TypeScript's Type Inference Errors with Explicit Type Annotations",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how TypeScript's type inference errors compare with explicit type annotations to write clearer and error-free code.",
+    "videoUrl": "https://www.youtube.com/watch?v=HPEgmWBR0Mg",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript is a powerful superset of JavaScript that adds static types to your code. One of its key features is type inference, where TypeScript automatically figures out the types of variables and expressions without you having to explicitly write them. This can make coding faster and your code cleaner. However, sometimes relying on type inference can lead to confusing errors that might be easier to understand when you use explicit type annotations."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start with a simple example to show how TypeScript infers types and what kind of errors you might encounter when the inferred types aren't what you expected."
+      },
+      {
+        "type": "code",
+        "value": "let message = \"Hello, TypeScript!\";\nmessage = 42; // Error: Type 'number' is not assignable to type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, TypeScript infers that the variable message is a string because it's initialized with a string. If you try to assign a number to it later, TypeScript will give you an error. This error comes from type inference, which is helpful for catching mistakes early."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now, let's look at the same example but with an explicit type annotation. This means you tell TypeScript exactly what type the variable should have right from the start."
+      },
+      {
+        "type": "code",
+        "value": "let explicitMessage: string = \"Hello, TypeScript!\";\nexplicitMessage = 42; // Error: Type 'number' is not assignable to type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "The error here is almost identical to the inference example. However, using explicit types can improve readability and make your intentions clear, especially in larger codebases. Other times, explicit types help avoid more subtle inference errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Consider a function that takes an array and returns the first element. Without annotations, TypeScript tries to infer the type, but it can sometimes be too general or too specific."
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement(arr: any[]) {\n  return arr[0];\n}\n\nconst num = getFirstElement([1, 2, 3]);\nnum.toFixed(); // No error, but 'num' is type 'any', so you loose safety."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this function, TypeScript infers the return type as any because the input array can contain any type. This leads to weaker type safety. Let's improve it with explicit generics."
+      },
+      {
+        "type": "code",
+        "value": "function getFirstElement<T>(arr: T[]): T {\n  return arr[0];\n}\n\nconst num = getFirstElement([1, 2, 3]);\nnum.toFixed(); // OK, 'num' is number\n\nconst str = getFirstElement(['a', 'b', 'c']);\nstr.toUpperCase(); // OK, 'str' is string"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, by adding the generic type T, both the input and return types are explicitly tied together. This gives TypeScript the information it needs to infer types correctly and avoid unsafe any values."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, type inference saves time and keeps code clean, but explicit type annotations often improve clarity and help catch errors before runtime. As you grow more comfortable with TypeScript, you'll learn when to rely on inference and when to specify types explicitly."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-sql-window-functions-avoiding-common-pitfalls-and-errors",
+    "title": "Mastering SQL Window Functions: Avoiding Common Pitfalls and Errors",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use SQL window functions effectively by avoiding common mistakes. This beginner-friendly guide explains errors and best practices for smooth SQL queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=jQWSMHrQPOc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across sets of table rows related to the current row. They are essential for analytics, ranking, running totals, and more. However, beginners often encounter errors or unexpected results when using window functions. This article will help you understand common pitfalls and how to avoid them."
+      },
+      {
+        "type": "paragraph",
+        "value": "One frequent mistake is misunderstanding the difference between window functions and aggregate functions. While aggregate functions like SUM() collapse rows into a single value, window functions perform aggregations without reducing the number of output rows."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common error is forgetting the OVER() clause. Without the OVER() clause, SQL will treat the function as a regular aggregate, which often leads to syntax errors."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect: Missing OVER() clause causes error\nSELECT employee_id, department_id, SUM(salary) FROM employees;\n\n-- Correct: Adding OVER() clause enables window function usage\nSELECT employee_id, department_id, SUM(salary) OVER (PARTITION BY department_id) AS dept_salary_sum FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using the PARTITION BY clause inside OVER() helps you group rows within the window function. A common mistake is to omit PARTITION BY when it's needed, resulting in a calculation done over the entire result set instead of per group."
+      },
+      {
+        "type": "code",
+        "value": "-- Counts all rows without partitioning\nSELECT employee_id, COUNT(*) OVER () AS total_employees FROM employees;\n\n-- Counts employees by department\nSELECT employee_id, department_id, COUNT(*) OVER (PARTITION BY department_id) AS dept_employee_count FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Be careful with the ORDER BY clause inside OVER(). It's used to define the order of rows for ranking or running calculations. Omitting ORDER BY in ranking functions like ROW_NUMBER() can lead to inconsistent or meaningless results."
+      },
+      {
+        "type": "code",
+        "value": "-- Inconsistent row numbering without ORDER BY\nSELECT employee_id, ROW_NUMBER() OVER () AS row_num FROM employees;\n\n-- Consistent row numbering by salary\nSELECT employee_id, ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid mixing window functions and GROUP BY in the same query layer without understanding how they interact. Window functions are applied after GROUP BY aggregation, so using window functions on non-grouped columns can cause errors."
+      },
+      {
+        "type": "code",
+        "value": "-- Incorrect use causes error\nSELECT department_id, employee_id, SUM(salary), RANK() OVER (ORDER BY salary DESC) FROM employees GROUP BY department_id;\n\n-- Correct use: apply window functions after GROUP BY in a subquery\nWITH dept_salaries AS (\n  SELECT department_id, employee_id, SUM(salary) AS total_salary\n  FROM employees GROUP BY department_id, employee_id\n)\nSELECT department_id, employee_id, total_salary,\n       RANK() OVER (ORDER BY total_salary DESC) AS salary_rank\nFROM dept_salaries;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, mastering window functions requires understanding the correct syntax of the OVER() clause, proper usage of PARTITION BY and ORDER BY, and awareness of how window functions interact with GROUP BY. By avoiding these common pitfalls, your SQL queries will be more reliable and easier to troubleshoot."
+      }
+    ]
   }
 ];
