@@ -61569,5 +61569,345 @@ export const articles = [
         "value": "In summary, recursive CTEs are fantastic for hierarchical queries, but they demand correct syntax and clear logic. Always ensure you have:\n- Anchor member\n- UNION ALL\n- Recursive member referencing the CTE\n- Matching columns\n- A stopping condition to prevent infinite loops\n\nWith practice, recursive CTEs will become a powerful addition to your SQL skillset."
       }
     ]
+  },
+  {
+    "slug": "mastering-asynchronous-patterns-in-javascript-beyond-promises-and-async-await",
+    "title": "Mastering Asynchronous Patterns in JavaScript: Beyond Promises and Async/Await",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn how to handle asynchronous operations in JavaScript using patterns beyond Promises and async/await, including callbacks, event emitters, and generators for deeper control and understanding.",
+    "videoUrl": "https://www.youtube.com/watch?v=9JSKWVoKSZ8",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, meaning it executes code one piece at a time. To handle operations that take time—like HTTP requests or reading files—JavaScript uses asynchronous patterns. Most beginners start with Promises and async/await, but there's more to mastering asynchronous JavaScript. In this tutorial, we explore other patterns like callbacks, event emitters, and generator functions, helping you gain deeper control and flexibility."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Callbacks: The Old but Gold Pattern\nCallbacks were the original way to handle async code. You pass a function as an argument to be called after the operation finishes. Let’s look at a simple example simulating a network request:"
+      },
+      {
+        "type": "code",
+        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    callback(null, 'Data loaded');\n  }, 1000);\n}\n\nfetchData((error, data) => {\n  if (error) {\n    console.error('Error:', error);\n  } else {\n    console.log('Success:', data);\n  }\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "While callbacks work, they can lead to 'callback hell' where nested callbacks become hard to read and maintain. This led to the rise of Promises and async/await, which offer cleaner syntax. However, understanding callbacks helps to grasp how async JS evolved."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Event Emitters: Handling Events Asynchronously\nAnother powerful pattern is the EventEmitter, commonly used in Node.js. It allows objects to emit named events and register listeners. This pattern is great when multiple parts of your app need to react to certain async events."
+      },
+      {
+        "type": "code",
+        "value": "const EventEmitter = require('events');\n\nclass DataStreamer extends EventEmitter {\n  start() {\n    setTimeout(() => this.emit('data', 'Chunk 1'), 500);\n    setTimeout(() => this.emit('data', 'Chunk 2'), 1000);\n    setTimeout(() => this.emit('end'), 1500);\n  }\n}\n\nconst stream = new DataStreamer();\n\nstream.on('data', (chunk) => {\n  console.log('Received:', chunk);\n});\n\nstream.on('end', () => {\n  console.log('Stream ended');\n});\n\nstream.start();"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, the DataStreamer emits 'data' events asynchronously, and listeners react to them. Event-driven programming is very useful in complex systems where multiple components communicate asynchronously."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Generators and Yield: Pausing Async Execution\nGenerators are functions you can pause and resume using the yield keyword. They can be combined with Promises to handle async code in a very controlled manner—let’s see an example using a simple generator runner:"
+      },
+      {
+        "type": "code",
+        "value": "function* fetchSequence() {\n  const data1 = yield new Promise(resolve => setTimeout(() => resolve('First data'), 1000));\n  console.log(data1);\n\n  const data2 = yield new Promise(resolve => setTimeout(() => resolve('Second data'), 1000));\n  console.log(data2);\n}\n\nfunction runGenerator(genFunc) {\n  const iterator = genFunc();\n\n  function iterate(iteration) {\n    if (iteration.done) return;\n    iteration.value.then(result => iterate(iterator.next(result)));\n  }\n\n  iterate(iterator.next());\n}\n\nrunGenerator(fetchSequence);"
+      },
+      {
+        "type": "paragraph",
+        "value": "The function runGenerator drives the generator, waiting for each yielded Promise to resolve before continuing. This was a precursor pattern to async/await and still useful if you want fine-grained control over async logic."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nWhile Promises and async/await have simplified asynchronous programming in JavaScript, knowing alternative patterns like callbacks, event emitters, and generators strengthens your understanding of async flows and prepares you for a wider range of programming problems. Start experimenting with these to become a more versatile JavaScript developer!"
+      }
+    ]
+  },
+  {
+    "slug": "understanding-common-asynchronous-errors-in-javascript-and-how-to-handle-them",
+    "title": "Understanding Common Asynchronous Errors in JavaScript and How to Handle Them",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn the most common errors when working with asynchronous JavaScript code and how to effectively handle them with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=Kc3OQZz67IQ",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is widely used for building interactive web applications, and much of its power comes from handling asynchronous operations. However, working with asynchronous code often leads to errors that can be confusing for beginners. In this article, we'll explore common asynchronous errors and practical ways to handle them using Promises, async/await, and try-catch blocks."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Forgetting to handle promise rejections\nWhen using Promises, one common mistake is not handling rejections properly. If a promise fails and you don't handle the error, it can cause unhandled promise rejection warnings or unexpected behavior."
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => response.json())\n  .then(data => console.log(data));\n\n// What if the network request fails? There's no error handling here!"
+      },
+      {
+        "type": "paragraph",
+        "value": "To fix this, always add a `.catch()` method to handle errors gracefully:"
+      },
+      {
+        "type": "code",
+        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => console.log(data))\n  .catch(error => console.error('Fetch error:', error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Mixing callbacks with promises incorrectly\nCallback functions were used before Promises became popular. Mixing callbacks with async/await or promises without proper error handling leads to confusion and bugs."
+      },
+      {
+        "type": "code",
+        "value": "// Incorrect: ignoring callback errors\nfunction getData(callback) {\n  setTimeout(() => {\n    const error = null;\n    const data = { message: 'Hello!' };\n    callback(error, data);\n  }, 1000);\n}\n\ngetData((error, data) => {\n  // Not checking for error\n  console.log(data.message); // What if error isn't null?\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "Always check for errors in callbacks before proceeding:"
+      },
+      {
+        "type": "code",
+        "value": "getData((error, data) => {\n  if (error) {\n    return console.error('Error occurred:', error);\n  }\n  console.log(data.message); // Safe to use data now\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Forgetting to use `await` inside async functions\nWhen using `async` functions, you must use the `await` keyword before a promise to wait for it to resolve. Forgetting to use `await` results in receiving a Promise object instead of the actual data."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  const data = fetch('https://api.example.com/data');\n  console.log(data); // Logs a Promise, not the actual response\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Correct usage involves `await`:"
+      },
+      {
+        "type": "code",
+        "value": "async function fetchData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log(data); // The actual data\n  } catch (error) {\n    console.error('Fetch error:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Not using try-catch blocks inside async functions\nSince errors in async functions reject the returned promise, you need to catch these rejections. Surrounding your code with try-catch helps you handle errors synchronously inside async functions."
+      },
+      {
+        "type": "code",
+        "value": "async function fetchWithTryCatch() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Error caught inside async function:', error);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nHandling asynchronous errors properly is essential for building reliable JavaScript applications. Always handle promise rejections, check errors in callbacks, use `await` appropriately, and wrap your async code with try-catch blocks. This will improve your debugging experience and make your code more robust."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-typescripts-type-narrowing-for-advanced-error-handling",
+    "title": "Mastering TypeScript's Type Narrowing for Advanced Error Handling",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn how to use TypeScript's type narrowing features to write safer and more precise error handling code, perfect for beginners looking to improve their TypeScript skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=xdQkEn3mx1k",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "TypeScript's powerful type system helps catch errors at compile time, but sometimes you also need to handle errors at runtime. Type narrowing is a technique that lets TypeScript understand the exact type of a variable in a specific part of your code, making error handling more precise and reliable."
+      },
+      {
+        "type": "paragraph",
+        "value": "In JavaScript, errors are often handled with try-catch blocks where the caught error is typed as 'any' by default, losing valuable type information. TypeScript allows us to narrow down the type of an unknown error, enabling safer access to its properties and better control over the error flow."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's dive into an example:"
+      },
+      {
+        "type": "code",
+        "value": "function handleError(e: unknown) {\n  if (e instanceof Error) {\n    // TypeScript now knows e is an Error object\n    console.error('Error message:', e.message);\n  } else if (typeof e === 'string') {\n    // We narrowed e to string\n    console.error('String error:', e);\n  } else {\n    console.error('Unknown error:', e);\n  }\n}\n\ntry {\n  throw new Error('Something went wrong!');\n} catch (err) {\n  handleError(err);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this code, the function `handleError` accepts an `unknown` type parameter. Using type narrowing inside the function lets TypeScript understand the exact type of the error and safely access the `message` property if applicable."
+      },
+      {
+        "type": "paragraph",
+        "value": "You can also create custom type guard functions to improve reusability and clarity:"
+      },
+      {
+        "type": "code",
+        "value": "function isError(e: unknown): e is Error {\n  return e instanceof Error;\n}\n\nfunction handleError(e: unknown) {\n  if (isError(e)) {\n    console.error('Caught an error:', e.message);\n  } else {\n    console.error('Non-error thrown:', e);\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering type narrowing with `instanceof`, `typeof`, and custom type guards, you can create advanced and dependable error handling logic in your TypeScript projects that will reduce bugs and improve maintainability."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-asyncio-high-performance-network-apps",
+    "title": "Mastering Python's Asyncio for High-Performance Network Applications",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn how to use Python's asyncio module to build efficient, high-performance network applications with ease, even if you're a beginner.",
+    "videoUrl": "https://www.youtube.com/watch?v=Qb9s3UiMSTA",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Python's asyncio library offers a powerful way to write concurrent code using the async/await syntax. It's perfect for network applications that require handling many connections simultaneously without blocking the program. In this tutorial, we'll explore how to get started with asyncio and build a simple high-performance network server."
+      },
+      {
+        "type": "paragraph",
+        "value": "Before asyncio, network programs often relied on multithreading or multiprocessing to handle concurrent connections, which can get complex and resource-heavy. Asyncio works on cooperative multitasking by running asynchronous tasks that yield control when waiting for I/O operations, making programs efficient and scalable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a basic TCP echo server using asyncio. This server will listen to incoming connections, read data asynchronously, and send it back to the client."
+      },
+      {
+        "type": "code",
+        "value": "import asyncio\n\nasync def handle_client(reader, writer):\n    addr = writer.get_extra_info('peername')\n    print(f\"Connected with {addr}\")\n\n    while True:\n        data = await reader.read(100)\n        if not data:\n            break\n        print(f\"Received: {data.decode()}\")\n        writer.write(data)  # Echo back\n        await writer.drain()\n\n    print(f\"Connection closed {addr}\")\n    writer.close()\n    await writer.wait_closed()\n\nasync def main():\n    server = await asyncio.start_server(handle_client, '127.0.0.1', 8888)\n    addr = server.sockets[0].getsockname()\n    print(f\"Serving on {addr}\")\n\n    async with server:\n        await server.serve_forever()\n\nif __name__ == '__main__':\n    asyncio.run(main())"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's what happens in the code above:\n\n1. `handle_client` is a coroutine that asynchronously reads data from a client, then writes it back (echo server behavior).\n2. The server is started with `asyncio.start_server` on localhost port 8888.\n3. `asyncio.run(main())` runs the main coroutine to start the event loop and keep the server running.\n\nThis setup handles multiple clients concurrently without creating new threads or processes."
+      },
+      {
+        "type": "paragraph",
+        "value": "To test the server, open a terminal and run:\n\nbash\nnc 127.0.0.1 8888\n\n\nThen type something and hit enter. The server should echo back the text you sent."
+      },
+      {
+        "type": "paragraph",
+        "value": "Using asyncio in this manner dramatically improves the performance of network applications since it handles many connections efficiently in a single-threaded event loop. It also makes your code easier to maintain and reason about compared to traditional threading."
+      },
+      {
+        "type": "paragraph",
+        "value": "For more advanced use cases, you can explore asyncio locks, queues, and subprocess management to enhance your network apps further."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now that you've seen a basic example, try modifying the server to handle simple HTTP requests or build a chat server where multiple clients can communicate asynchronously!"
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-exception-hierarchy-writing-robust-error-handling-code",
+    "title": "Mastering Python Exception Hierarchy: Writing Robust Error Handling Code",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how Python's exception hierarchy works and write robust error handling code that improves your programs' reliability and user experience.",
+    "videoUrl": "https://www.youtube.com/watch?v=WJMhHCEENxc",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When writing Python programs, errors and unexpected situations can occur. Handling these errors gracefully is essential for creating robust, user-friendly applications. Python's exception hierarchy provides a structured way to catch and manage errors effectively."
+      },
+      {
+        "type": "paragraph",
+        "value": "At the top of Python's exception hierarchy is the built-in Exception class. All error types inherit from this class. Understanding this hierarchy helps you catch specific errors or more general ones depending on your needs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's look at some common built-in exceptions and their place within the hierarchy:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Exception: The base class for most built-in exceptions.\n- ArithmeticError: Base class for numeric calculation errors like ZeroDivisionError and OverflowError.\n- LookupError: Base class for lookup errors like KeyError and IndexError.\n- ValueError: Raised when a function receives an argument of the right type but an inappropriate value.\n- TypeError: Raised when an operation is applied to an object of inappropriate type."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is a simple example demonstrating how to use try-except blocks to handle specific exceptions:"
+      },
+      {
+        "type": "code",
+        "value": "def divide_numbers(a, b):\n    try:\n        result = a / b\n    except ZeroDivisionError:\n        print(\"Error: Cannot divide by zero.\")\n    except TypeError:\n        print(\"Error: Inputs must be numbers.\")\n    else:\n        print(f\"Result is {result}\")\n\n# Example usage\n\n# Valid input\ndivide_numbers(10, 2)\n\n# Division by zero\ndivide_numbers(10, 0)\n\n# Wrong input type\ndivide_numbers(10, 'five')"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, different exceptions are caught separately, allowing customized error messages. Using multiple except blocks helps to provide more precise feedback, enhancing user experience and debugging."
+      },
+      {
+        "type": "paragraph",
+        "value": "Sometimes, you may want to catch all exceptions derived from Exception, but avoid catching system-exiting exceptions like KeyboardInterrupt or SystemExit. For this, catching Exception directly is a good practice:"
+      },
+      {
+        "type": "code",
+        "value": "try:\n    # Some operation\n    value = int(input(\"Enter a number: \"))\n    print(10 / value)\nexcept Exception as e:\n    print(f\"An error occurred: {e}\")"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, any error derived from Exception will be caught, and the user will see an appropriate message. But exceptions that stop the program intentionally, like KeyboardInterrupt, will still propagate."
+      },
+      {
+        "type": "paragraph",
+        "value": "Lastly, always strive to handle as specific exceptions as possible before using a general Exception catch. It is a best practice to avoid bare except blocks without specifying the exception type as they may hide bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering Python's exception hierarchy and practicing careful error handling, your code will be much more robust, easier to maintain, and friendly to users."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-sql-transaction-isolation-levels-scalable-system-design",
+    "title": "Optimizing SQL Transaction Isolation Levels for Scalable System Design",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to optimize SQL transaction isolation levels to improve system scalability and avoid common concurrency errors.",
+    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases in scalable systems, managing transactions correctly is crucial. One key aspect is choosing the right transaction isolation level. Isolation levels control how transactions interact with each other, affecting performance and data consistency."
+      },
+      {
+        "type": "paragraph",
+        "value": "Too strict isolation levels can cause blocking, deadlocks, or slow performance, whereas too loose isolation levels may lead to data anomalies like dirty reads or lost updates. Understanding these levels helps you balance correctness and scalability."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here are the common SQL isolation levels and their impact on errors and performance:"
+      },
+      {
+        "type": "code",
+        "value": "-- 1. READ UNCOMMITTED\nSET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;\n-- Allows dirty reads, which may lead to reading uncommitted, temporary data."
+      },
+      {
+        "type": "code",
+        "value": "-- 2. READ COMMITTED (default in many DBMS)\nSET TRANSACTION ISOLATION LEVEL READ COMMITTED;\n-- Prevents dirty reads but can cause non-repeatable reads or phantom reads."
+      },
+      {
+        "type": "code",
+        "value": "-- 3. REPEATABLE READ\nSET TRANSACTION ISOLATION LEVEL REPEATABLE READ;\n-- Prevents dirty and non-repeatable reads but may cause phantom reads."
+      },
+      {
+        "type": "code",
+        "value": "-- 4. SERIALIZABLE\nSET TRANSACTION ISOLATION LEVEL SERIALIZABLE;\n-- The strictest level, ensuring complete isolation but can cause more locking and reduced concurrency."
+      },
+      {
+        "type": "paragraph",
+        "value": "In scalable system design, using SERIALIZABLE isolation often causes performance bottlenecks, especially under high concurrency, due to excessive locking and blocking. On the other hand, using READ UNCOMMITTED can lead to incorrect data processing."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common and practical approach is to use READ COMMITTED or REPEATABLE READ for everyday transactions and carefully apply SERIALIZABLE only for critical sections where absolute consistency is mandatory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Additionally, to reduce errors like deadlocks, you can optimize your transactions by:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Keeping transactions short\n- Accessing tables in a consistent order\n- Indexing correctly to avoid full table scans\n- Using optimistic concurrency control where supported"
+      },
+      {
+        "type": "paragraph",
+        "value": "Example of setting the isolation level in a transaction (SQL Server syntax):"
+      },
+      {
+        "type": "code",
+        "value": "BEGIN TRANSACTION;\nSET TRANSACTION ISOLATION LEVEL REPEATABLE READ;\n\n-- Your SQL data modification statements here\n\nCOMMIT TRANSACTION;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By choosing the optimal isolation level for your workload and applying good transaction design principles, you can prevent common transactional errors and build a more scalable system."
+      }
+    ]
   }
 ];
