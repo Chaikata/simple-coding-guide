@@ -62149,5 +62149,487 @@ export const articles = [
         "value": "In summary, mastering window functions requires understanding the correct syntax of the OVER() clause, proper usage of PARTITION BY and ORDER BY, and awareness of how window functions interact with GROUP BY. By avoiding these common pitfalls, your SQL queries will be more reliable and easier to troubleshoot."
       }
     ]
+  },
+  {
+    "slug": "async-await-vs-promises-in-javascript",
+    "title": "Comparing Async/Await vs Promises: When and How to Use Each in JavaScript",
+    "language": "javascript",
+    "type": "tutorials",
+    "description": "Learn the basics of JavaScript Promises and async/await, understand their differences, and discover when to use each for handling asynchronous code effectively.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is single-threaded, which means it executes code line by line. To handle operations that take time, like fetching data from a server, JavaScript uses asynchronous programming. Two popular ways to handle asynchronous code are Promises and async/await. This tutorial explains both concepts clearly and helps you understand when to use each."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Promise?\nA Promise is an object that represents a value that may be available now, later, or never. It allows you to attach callbacks for success (`then`) and failure (`catch`)."
+      },
+      {
+        "type": "code",
+        "value": "const fetchData = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data loaded');\n      } else {\n        reject('Error loading data');\n      }\n    }, 1000);\n  });\n};\n\nfetchData()\n  .then(response => console.log(response))\n  .catch(error => console.error(error));"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, `fetchData` returns a Promise. After 1 second, it either resolves successfully or rejects with an error. We handle these outcomes with `.then()` and `.catch()`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is async/await?\nAsync/await is a more modern syntax built on Promises that makes your asynchronous code look and behave like synchronous code, which is easier to read and maintain."
+      },
+      {
+        "type": "code",
+        "value": "const fetchDataAsync = () => {\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve('Data loaded async');\n    }, 1000);\n  });\n};\n\nasync function getData() {\n  try {\n    const data = await fetchDataAsync();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `async` keyword before the function means it will always return a Promise. Inside that function, `await` pauses the execution until the Promise resolves or rejects."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Promises vs Async/Await: When to Use Each\n- **Promises** are great for simple async operations or when chaining multiple asynchronous calls.\n- **Async/await** improves readability, especially for complex flow control or when you have multiple async operations in a row.\n- Async/await code tends to be easier to understand and debug compared to deeply nested `.then()` chains."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Handling Multiple Async Operations\nUsing Promises with `.then()` chain:"
+      },
+      {
+        "type": "code",
+        "value": "fetchData()\n  .then(data => {\n    console.log(data);\n    return fetchData();\n  })\n  .then(data2 => {\n    console.log(data2);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using async/await for the same operations:"
+      },
+      {
+        "type": "code",
+        "value": "async function handleMultiple() {\n  try {\n    const data1 = await fetchData();\n    console.log(data1);\n    const data2 = await fetchData();\n    console.log(data2);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\nhandleMultiple();"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\nBoth Promises and async/await are important tools in JavaScript for managing asynchronous code. Promises are a fundamental concept you should understand, while async/await makes your code cleaner and easier to follow. Start by using Promises in simple cases, and adopt async/await as you build more complex applications."
+      }
+    ]
+  },
+  {
+    "slug": "javascript-memory-leaks-in-large-scale-system-design-and-how-to-prevent-them",
+    "title": "JavaScript Memory Leaks in Large-Scale System Design and How to Prevent Them",
+    "language": "javascript",
+    "type": "errors",
+    "description": "Learn what causes JavaScript memory leaks in large-scale systems and best practices to prevent them, helping your applications stay efficient and stable.",
+    "videoUrl": "https://www.youtube.com/watch?v=YBnN2JpS4hI",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks happen when a program keeps using more and more memory without releasing it back. In JavaScript, this can slow down or even crash your applications. Large-scale systems are especially vulnerable because they run for a long time and handle lots of data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Understanding common causes of memory leaks is the first step in preventing them. Let's go over some typical memory leak sources in JavaScript and how to avoid them:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Global Variables:** Variables declared without `var`, `let`, or `const` automatically become global and never get cleaned up."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Closures Holding References:** Closures can hold references to variables longer than needed if not properly managed."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Unremoved Event Listeners:** Adding event listeners but never removing them causes memory to stay occupied."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Timers and Intervals:** If you forget to clear intervals or timeouts, they keep running and consuming memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of a memory leak caused by an event listener not being removed:"
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const element = document.getElementById('button');\n  element.addEventListener('click', () => {\n    console.log('Button clicked');\n  });\n}\n\n// If setup() is called many times without removing listeners, memory leaks happen."
+      },
+      {
+        "type": "paragraph",
+        "value": "To prevent this, always remove event listeners when they’re no longer needed:"
+      },
+      {
+        "type": "code",
+        "value": "function setup() {\n  const element = document.getElementById('button');\n  const handleClick = () => {\n    console.log('Button clicked');\n  };\n  element.addEventListener('click', handleClick);\n\n  // Later, remove the listener\n  return () => {\n    element.removeEventListener('click', handleClick);\n  };\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Other useful tips for avoiding memory leaks in large-scale systems include:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Use `let` and `const`:** Avoid accidental globals.\n- **Clear timers:** Always clear timeouts and intervals with `clearTimeout()` and `clearInterval()`.\n- **Limit large data retention:** Don’t store unnecessary big objects or arrays.\n- **Use Weak References:** `WeakMap` and `WeakSet` allow objects to be garbage collected if not used elsewhere.\n- **Profile your app:** Use browser developer tools' memory profilers to catch leaks early."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here is an example of clearing intervals to prevent leaks:"
+      },
+      {
+        "type": "code",
+        "value": "const intervalId = setInterval(() => {\n  console.log('Running repeated task');\n}, 1000);\n\n// When done:\nclearInterval(intervalId);"
+      },
+      {
+        "type": "paragraph",
+        "value": "By following these best practices, you can limit memory leaks and keep your JavaScript applications performant, especially as they grow in size and complexity."
+      }
+    ]
+  },
+  {
+    "slug": "typescript-vs-javascript-type-safety-developer-experience",
+    "title": "TypeScript vs JavaScript: Deep Dive into Type Safety and Developer Experience",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Explore the benefits of TypeScript over JavaScript focusing on type safety and enhanced developer experience in this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=5ChkQKUzDCs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "JavaScript is a flexible and widely-used programming language for web development, but as applications grow larger, it can become challenging to manage and debug the code. TypeScript is a superset of JavaScript that adds static typing, which helps catch errors early in the development process and improves the overall developer experience. In this article, we will explore the key differences between JavaScript and TypeScript, focusing on type safety and why TypeScript can make you a more productive developer."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is Type Safety?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Type safety means that the programming language can check the types of variables, function parameters, and return values to prevent type-related errors. In JavaScript, types are dynamic, meaning variables can hold any type of data at any time. This is flexible but can lead to runtime errors if data types do not match expectations."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript introduces static types, which means variables and function signatures have defined types checked at compile time. This helps identify bugs early and makes your code easier to understand and maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Dynamic Typing in JavaScript"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name) {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(\"Alice\")); // Hello, ALICE\nconsole.log(greet(42)); // Runtime error: 42.toUpperCase is not a function"
+      },
+      {
+        "type": "paragraph",
+        "value": "Here, JavaScript allows calling the function with a number, but this causes a runtime error because numbers do not have the method `toUpperCase`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Example: Static Typing in TypeScript"
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string): string {\n  return \"Hello, \" + name.toUpperCase();\n}\n\nconsole.log(greet(\"Alice\")); // Hello, ALICE\n// console.log(greet(42)); // Error: Argument of type 'number' is not assignable to parameter of type 'string'."
+      },
+      {
+        "type": "paragraph",
+        "value": "TypeScript's compiler catches the error before the code runs, preventing the runtime issue."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Enhanced Developer Experience with TypeScript"
+      },
+      {
+        "type": "paragraph",
+        "value": "Besides type safety, TypeScript improves the developer experience in various ways:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Better Code Autocompletion:** Your editor can provide smarter suggestions because it knows the types.\n- **Improved Refactoring:** Type information allows for safer renaming and restructuring.\n- **Clearer Documentation:** Types serve as documentation for functions and data structures.\n- **Early Bug Detection:** Catch bugs during compilation instead of at runtime."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Tip: Using TypeScript with JavaScript Projects"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can gradually adopt TypeScript in your JavaScript projects by renaming `.js` files to `.ts` and adding type annotations where needed. This incremental adoption helps ease the transition."
+      },
+      {
+        "type": "code",
+        "value": "// JavaScript\n// sum.js\nfunction sum(a, b) {\n  return a + b;\n}\n\n// TypeScript\n// sum.ts\nfunction sum(a: number, b: number): number {\n  return a + b;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Conclusion"
+      },
+      {
+        "type": "paragraph",
+        "value": "While JavaScript is easy to start with, TypeScript adds valuable tools for building reliable and maintainable applications. By introducing type safety and improving the developer experience, TypeScript helps catch errors early, understand code better, and work more efficiently, making it a great choice for both beginners and experienced developers."
+      }
+    ]
+  },
+  {
+    "slug": "comparing-typescript-error-handling-try-catch-vs-result-types",
+    "title": "Comparing TypeScript Error Handling Techniques: Try-Catch vs Result Types",
+    "language": "typescript",
+    "type": "errors",
+    "description": "Learn about two popular error handling techniques in TypeScript—try-catch blocks and Result types—to write safer, clearer code.",
+    "videoUrl": "https://www.youtube.com/watch?v=deenC-vH14E",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Error handling is an important part of writing reliable code in any programming language, including TypeScript. Two common ways to handle errors are using try-catch blocks and using Result types. In this article, we'll compare these approaches so beginners can understand their pros and cons."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Try-Catch Blocks\nTry-catch is a traditional method to handle runtime errors. You wrap code that might throw an error inside a try block, and catch the error in the catch block. This allows you to respond to unexpected issues gracefully."
+      },
+      {
+        "type": "code",
+        "value": "function parseJson(jsonString: string) {\n  try {\n    return JSON.parse(jsonString);\n  } catch (error) {\n    console.error(\"Invalid JSON:\", error);\n    return null;\n  }\n}\n\nconst data = parseJson('{ \"name\": \"Alice\" }');\nconsole.log(data);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Try-catch is straightforward and works well for handling errors that throw exceptions. However, it can sometimes make it harder to anticipate all possible error states, and mixing error handling with main logic can reduce readability."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Result Types\nResult types are a functional programming pattern to explicitly represent success or failure as part of a function's return type. A Result type typically has two variants: Ok (success) and Err (error). This makes error handling explicit and forces developers to handle both cases."
+      },
+      {
+        "type": "code",
+        "value": "type Result<T, E> =\n  | { type: \"ok\"; value: T }\n  | { type: \"err\"; error: E };\n\nfunction parseJsonResult(jsonString: string): Result<any, string> {\n  try {\n    const parsed = JSON.parse(jsonString);\n    return { type: \"ok\", value: parsed };\n  } catch {\n    return { type: \"err\", error: \"Invalid JSON\" };\n  }\n}\n\nconst result = parseJsonResult('{ \"name\": \"Alice\" }');\n\nif (result.type === \"ok\") {\n  console.log(\"Parsed data:\", result.value);\n} else {\n  console.error(\"Error:\", result.error);\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Using Result types improves code clarity because it clearly separates successful and failed outcomes. It encourages handling errors explicitly instead of relying on exceptions. However, it requires more verbose code and understanding of union types."
+      },
+      {
+        "type": "paragraph",
+        "value": "### When to Use Which?\n- Use try-catch for simple cases where exceptions are expected and can be handled locally.\n- Use Result types when you want to enforce explicit handling of errors and make success/failure part of your function contract.\n\nBoth methods have their place in TypeScript development. Combining them smartly can help create robust and maintainable applications."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding these two techniques, beginners can write safer, clearer error handling code in TypeScript that matches their project needs."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-python-metaclasses-advanced-techniques-and-practical-use-cases",
+    "title": "Mastering Python Metaclasses: Advanced Techniques and Practical Use Cases",
+    "language": "python",
+    "type": "tutorials",
+    "description": "Learn the power of Python metaclasses with simple explanations, practical examples, and real-world use cases to enhance your coding skills.",
+    "videoUrl": "https://www.youtube.com/watch?v=-byGtvsTvp0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "If you're diving deeper into Python, you've probably heard about metaclasses — a powerful but often confusing concept. In this tutorial, we'll demystify metaclasses, show their practical uses, and provide clear examples, making it easy even for beginners to grasp."
+      },
+      {
+        "type": "paragraph",
+        "value": "### What is a Metaclass?\n\nIn Python, classes themselves are objects. Metaclasses are the 'blueprints' for classes, much like classes are blueprints for objects. Essentially, a metaclass controls how classes are created. By default, Python uses the metaclass named `type`."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Why Use Metaclasses?\n\nMetaclasses can automate class creation tasks, enforce coding standards, or modify classes dynamically. They allow you to customize or add functionality to classes at creation time."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Creating a Simple Metaclass\n\nLet's create a metaclass that prints a message every time a new class is created using it."
+      },
+      {
+        "type": "code",
+        "value": "class MyMeta(type):\n    def __new__(cls, name, bases, dct):\n        print(f'Creating class {name}')\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=MyMeta):\n    pass\n\n# Output: Creating class MyClass"
+      },
+      {
+        "type": "paragraph",
+        "value": "The `__new__` method in the metaclass is called before the class is created. By overriding it, we customize what happens during class creation."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Case 1: Enforcing Naming Conventions\n\nLet’s enforce a rule that class names must start with an uppercase letter."
+      },
+      {
+        "type": "code",
+        "value": "class UppercaseMeta(type):\n    def __new__(cls, name, bases, dct):\n        if not name[0].isupper():\n            raise TypeError(\"Class name must start with an uppercase letter\")\n        return super().__new__(cls, name, bases, dct)\n\nclass CorrectName(metaclass=UppercaseMeta):\n    pass\n\n# class wrongName(metaclass=UppercaseMeta):\n#     pass  # This will raise TypeError"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Practical Use Case 2: Automatically Adding Methods\n\nYou can add methods automatically to all classes using your metaclass. Here, we'll add a `greet` method to any class using `GreetMeta`."
+      },
+      {
+        "type": "code",
+        "value": "def greet(self):\n    return f\"Hello from {self.__class__.__name__}!\"\n\nclass GreetMeta(type):\n    def __new__(cls, name, bases, dct):\n        dct['greet'] = greet\n        return super().__new__(cls, name, bases, dct)\n\nclass Person(metaclass=GreetMeta):\n    pass\n\np = Person()\nprint(p.greet())  # Output: Hello from Person!"
+      },
+      {
+        "type": "paragraph",
+        "value": "### When Should You Use Metaclasses?\n\n- Enforcing coding standards or conventions\n- Automatically registering classes (like plugins or handlers)\n- Modifying or adding attributes and methods on class creation\n- Creating singleton classes or abstract base classes\n\nRemember, metaclasses add complexity, so use them when simpler options like decorators or class inheritance don't suffice."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary\n\nMetaclasses control class creation in Python and can be used for advanced tasks like enforcing rules or enhancing classes automatically. By understanding and applying metaclasses, you can write more flexible and powerful Python code."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-python-code-identifying-resolving-memory-leaks",
+    "title": "Optimizing Python Code by Identifying and Resolving Memory Leaks",
+    "language": "python",
+    "type": "errors",
+    "description": "Learn how to find and fix memory leaks in Python to improve your program's performance and prevent crashes. A beginner-friendly guide with examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=fMKilBkCJX0",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in Python occur when your program holds onto memory that it no longer needs, causing your application to use more and more memory over time. This can slow down your program or even cause it to crash. Even though Python has automatic memory management through its garbage collector, it’s still possible to create memory leaks, especially with certain data structures or bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "In this article, we'll explore how to identify memory leaks in Python and resolve them using practical examples. We’ll also introduce some built-in tools that make tracking memory usage easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "### How to Identify a Memory Leak in Python"
+      },
+      {
+        "type": "paragraph",
+        "value": "A common sign of a memory leak is your program’s memory consumption steadily increasing without being released. To verify this, you can manually monitor memory usage with external tools like your system's Task Manager or use Python tools like `tracemalloc`."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's a simple example that creates a memory leak by continuously appending to a global list:"
+      },
+      {
+        "type": "code",
+        "value": "leaky_list = []\n\ndef add_to_list():\n    # This function keeps adding data without removing any\n    leaky_list.append('x' * 10000)  # Add 10,000 characters repeatedly\n\nfor _ in range(100000):\n    add_to_list()"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this case, `leaky_list` keeps growing and will use more and more memory. To track where memory is growing, Python’s `tracemalloc` module is very helpful."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Using tracemalloc to Track Memory Usage"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can enable `tracemalloc` to get a snapshot of memory allocations before and after a suspected leak."
+      },
+      {
+        "type": "code",
+        "value": "import tracemalloc\n\ntracemalloc.start()\n\n# Your code that may leak memory\nleaky_list = []\nfor _ in range(10000):\n    leaky_list.append('x' * 10000)\n\nsnapshot = tracemalloc.take_snapshot()\nfor stat in snapshot.statistics('filename')[:5]:\n    print(stat)"
+      },
+      {
+        "type": "paragraph",
+        "value": "This will show you which files and lines of code are responsible for the most memory allocation so you can narrow down the leak’s source."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Fixing Common Memory Leaks in Python"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Unintentional Global Variables**: Avoid creating large global containers that grow without bounds. Use local variables or clear data when no longer needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Circular References**: Objects referring to each other can prevent Python’s garbage collector from freeing them. Use `weakref` module for references that shouldn’t increase object reference count."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Caching Without Limits**: If you implement your own cache, make sure it has a maximum size or expiration policy to free old data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example fixing a leak caused by accumulating data in a global list by clearing it periodically:"
+      },
+      {
+        "type": "code",
+        "value": "leaky_list = []\n\ndef add_to_list():\n    leaky_list.append('x' * 10000)\n    if len(leaky_list) > 1000:\n        leaky_list.clear()  # Clear list to free memory\n\nfor _ in range(100000):\n    add_to_list()"
+      },
+      {
+        "type": "paragraph",
+        "value": "### Summary"
+      },
+      {
+        "type": "paragraph",
+        "value": "Memory leaks in Python can degrade performance and cause crashes, but they are often fixable with careful coding and monitoring. Use tools like `tracemalloc` to identify leaks, avoid unbounded data structures, and be mindful of circular references or uncontrolled caching. With these steps, your Python programs will be more efficient and reliable."
+      }
+    ]
+  },
+  {
+    "slug": "optimizing-query-performance-by-analyzing-execution-plan-anomalies-in-sql",
+    "title": "Optimizing Query Performance by Analyzing Execution Plan Anomalies in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to improve SQL query performance by identifying and fixing common execution plan anomalies. This beginner-friendly guide explains key concepts and practical steps for troubleshooting slow queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=0G9xh1yxRXs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with SQL databases, slow queries can negatively affect application performance. One of the best ways to understand why a query is slow is by analyzing its execution plan. An execution plan shows the steps the SQL database engine takes to retrieve the requested data. Detecting anomalies in these plans can help you optimize queries and fix performance issues."
+      },
+      {
+        "type": "paragraph",
+        "value": "Common execution plan anomalies include unexpected full table scans, missing indexes, incorrect join orders, and high-cost operations. These usually indicate where the query optimizer did not choose an efficient path to execute your query."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by looking at how to generate an execution plan in SQL Server. Use the following command before running your query to get the estimated execution plan:"
+      },
+      {
+        "type": "code",
+        "value": "SET SHOWPLAN_ALL ON;\nGO\n-- Run your query below\nSELECT * FROM Employees WHERE DepartmentID = 5;\nGO\nSET SHOWPLAN_ALL OFF;\nGO"
+      },
+      {
+        "type": "paragraph",
+        "value": "The output will give detailed step-by-step operations planned by SQL Server. Look for the following common anomalies:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. **Table Scan**: This means the database is reading the entire table instead of using indexes. Table scans are costly if the table is large."
+      },
+      {
+        "type": "paragraph",
+        "value": "2. **Missing Indexes**: Execution plans may suggest missing indexes. Adding appropriate indexes can speed up data lookups."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. **Low Cardinality Index Usage**: Using indexes with low selectivity might not be worth it. The optimizer might be forced to scan despite the index."
+      },
+      {
+        "type": "paragraph",
+        "value": "4. **Nested Loops Join on Large Tables**: Nested loops are efficient on small datasets but can be slow on large tables. Look for hash or merge joins in those cases."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of a query with a missing index problem and how to fix it. First, see the query plan that triggers a table scan:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT * FROM Orders WHERE CustomerID = 'ALFKI';"
+      },
+      {
+        "type": "paragraph",
+        "value": "Assuming the Orders table has no index on CustomerID, SQL Server will perform a full table scan. The execution plan will indicate this and may suggest creating an index."
+      },
+      {
+        "type": "paragraph",
+        "value": "To optimize, create an index on the CustomerID column:"
+      },
+      {
+        "type": "code",
+        "value": "CREATE INDEX idx_customerid ON Orders(CustomerID);"
+      },
+      {
+        "type": "paragraph",
+        "value": "After creating the index, rerun the query and check the execution plan again. You should see an index seek instead of a table scan, which greatly improves performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the key to optimizing query performance is to regularly analyze execution plans for anomalies. Start by observing full scans and missing indexes, then fix them with proper indexing and query rewriting if needed."
+      },
+      {
+        "type": "paragraph",
+        "value": "By understanding and addressing execution plan anomalies, even beginners can make their SQL queries run faster and more efficiently."
+      }
+    ]
   }
 ];
