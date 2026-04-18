@@ -9451,5 +9451,176 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "predict-output-logical-array-state-manipulation-in-c",
+    "title": "Predict Output: Logical Array State Manipulation in C++",
+    "language": "cpp",
+    "difficulty": "intermediate",
+    "category": "logic",
+    "description": "Analyze a C++ function manipulating a boolean array with combined loop and conditional logic to determine what the final output will be.",
+    "prompt": "Given the following C++ code snippet, predict what the program will print to standard output. Consider carefully how the boolean array is updated inside the loop and what printArray outputs based on that state.",
+    "guidance": [
+      "Trace each iteration of the loop step-by-step, updating the array elements as indicated.",
+      "Pay attention to the order of evaluations inside the loop and conditions that alter the array.",
+      "Recall how boolean values are printed as integers (0 or 1) in C++ when using std::cout."
+    ],
+    "hints": [
+      "Consider the initial state of the array and how it changes precisely on each loop iteration.",
+      "Remember that arr[(i+1) % 5] targets the next element circularly, so updates affect subsequent iterations.",
+      "Focus on how the condition sets arr[i] before printing; this shapes the output pattern."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\nvoid printArray(bool arr[], int size) {\n  for (int i = 0; i < size; i++) {\n    cout << arr[i] << \" \";\n  }\n  cout << endl;\n}\n\nint main() {\n  bool arr[5] = {false, true, false, true, false};\n\n  for (int i = 0; i < 10; i++) {\n    arr[(i + 1) % 5] = arr[i % 5] && !arr[(i + 2) % 5];\n    arr[i % 5] = !arr[i % 5];\n    printArray(arr, 5);\n  }\n  return 0;\n}",
+    "expectedOutput": "1 1 0 1 0 \n0 0 0 1 0 \n1 0 0 1 0 \n0 0 0 1 0 \n1 0 0 1 0 \n0 0 0 1 0 \n1 0 0 1 0 \n0 0 0 1 0 \n1 0 0 1 0 \n0 0 0 1 0",
+    "concepts": [
+      "boolean logic",
+      "arrays",
+      "loops"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-memoized-recursive-function-to-calculate-the-nth-generalized-fibonacci-number",
+    "title": "Build a Memoized Recursive Function to Calculate the nth Generalized Fibonacci Number",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create a function that efficiently computes the nth term of a generalized Fibonacci sequence, where the first k terms are given and each subsequent term is the sum of the previous k terms. Implement memoization to optimize the recursive calculations.",
+    "prompt": "Write a Python function named `generalized_fibonacci(n, k, initial_terms)` that returns the nth term of a generalized Fibonacci sequence. The sequence is defined by the first k terms provided in the list `initial_terms` (length k), and each term after these is the sum of the previous k terms. Your function must use recursion combined with memoization to handle large values of n efficiently. For example, for n=6, k=3, and initial_terms=[0, 0, 1], the sequence starts as 0, 0, 1, and then each next term is sum of previous 3 terms: 1, 2, 4, ... The function should return the exact nth term (1-indexed).",
+    "guidance": [
+      "Use a recursive helper function with a memo dictionary to store computed results and avoid redundant calculations.",
+      "Handle base cases by returning the initial terms directly when n ≤ k.",
+      "Carefully implement the sum of the previous k terms for terms beyond the initial sequence."
+    ],
+    "hints": [
+      "Think about the role of base cases in recursion and how they directly return values without further recursive calls.",
+      "Memoization can be implemented via a cache dictionary or the functools.lru_cache decorator."
+    ],
+    "starterCode": "def generalized_fibonacci(n, k, initial_terms):\n    memo = {}\n    def helper(x):\n        # Your code here\n        pass\n    return helper(n)",
+    "expectedOutput": "For example:\nprint(generalized_fibonacci(6, 3, [0, 0, 1]))  # Output: 4\nprint(generalized_fibonacci(10, 2, [0, 1]))    # Output: 34",
+    "concepts": [
+      "recursion",
+      "memoization",
+      "dynamic programming",
+      "sequence generation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "design-and-implement-a-thread-safe-lru-cache-in-c",
+    "title": "Design and Implement a Thread-Safe LRU Cache in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a high-performance, thread-safe Least Recently Used (LRU) cache class in C++. The cache should support concurrent access from multiple threads and provide O(1) time complexity for insertions, lookups, and deletions.",
+    "prompt": "Implement a generic thread-safe LRU cache class template in C++ with the following requirements:\n\n- The cache should store key-value pairs and have a fixed maximum capacity provided at initialization.\n- When the cache max capacity is reached, it should evict the least recently used item before inserting a new one.\n- Provide methods: get(key), put(key, value), and size(). The get should return std::optional<ValueType> to handle missing keys.\n- Ensure that the cache supports safe concurrent access by multiple threads with minimal locking to allow maximum performance.\n- Internally, achieve O(1) average complexity for the get and put operations.\n\nYour solution should leverage appropriate C++11 (or later) concurrency primitives and containers such as mutexes, unordered_map, and doubly-linked lists or equivalents.",
+    "guidance": [
+      "Use an unordered_map for fast key lookups and a linked data structure (e.g., std::list) to track usage order.",
+      "Synchronize access with mutexes to protect shared data, ensuring deadlock-free design.",
+      "Update the position of keys on every successful get or put to mark them as recently used."
+    ],
+    "hints": [
+      "std::list iterators remain valid upon insertions and removals of other elements, useful for O(1) updates.",
+      "Use a single mutex or consider a shared_mutex with shared locking for readers and exclusive for writers to improve concurrency.",
+      "Return std::optional to handle cache misses cleanly and idiomatically."
+    ],
+    "starterCode": "#include <unordered_map>\n#include <list>\n#include <mutex>\n#include <optional>\n\ntemplate <typename KeyType, typename ValueType>\nclass ThreadSafeLRUCache {\npublic:\n    explicit ThreadSafeLRUCache(size_t capacity) : capacity_(capacity) {}\n\n    std::optional<ValueType> get(const KeyType& key) {\n        // TODO: Implement get with thread safety and LRU update\n        return std::nullopt;\n    }\n\n    void put(const KeyType& key, const ValueType& value) {\n        // TODO: Implement put with thread safety and eviction\n    }\n\n    size_t size() const {\n        std::lock_guard<std::mutex> lock(mtx_);\n        return cache_map_.size();\n    }\n\nprivate:\n    size_t capacity_;\n    mutable std::mutex mtx_;\n    std::list<KeyType> usage_order_;\n    std::unordered_map<KeyType, std::pair<ValueType, typename std::list<KeyType>::iterator>> cache_map_;\n};",
+    "expectedOutput": "A thread-safe LRU cache class that passes usage examples such as:\n\nThreadSafeLRUCache<int, std::string> cache(2);\ncache.put(1, \"one\");\ncache.put(2, \"two\");\nassert(cache.get(1).value() == \"one\");\ncache.put(3, \"three\");\nassert(!cache.get(2).has_value()); // 2 was evicted\nassert(cache.get(3).value() == \"three\");",
+    "concepts": [
+      "Concurrency and thread safety",
+      "Data structures (unordered_map and linked list)",
+      "Cache eviction policies (LRU)",
+      "C++11 standard library features (mutex, optional, templates)"
+    ],
+    "estimatedTime": "60 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-a-slow-sales-summary-query-for-better-performance",
+    "title": "Refactor a Slow Sales Summary Query for Better Performance",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "optimization",
+    "description": "Improve the efficiency of a SQL query that summarizes total sales by product category and month by simplifying its logic and optimizing joins and aggregations.",
+    "prompt": "You are given a SQL query that calculates the total sales amount per product category per month. The current query uses multiple nested subqueries and joins that make it slow on large datasets. Refactor the provided query to improve readability and performance without changing the output results. Ensure you minimize unnecessary joins and aggregations and write a single clean query that produces the same summary results.",
+    "guidance": [
+      "Analyze the query for redundant joins or subqueries that can be simplified or removed.",
+      "Use GROUP BY with appropriate columns rather than nesting multiple aggregations.",
+      "Consider using common table expressions (CTEs) if it improves readability without harming performance."
+    ],
+    "hints": [
+      "Check if joining the sales and products table can happen before aggregation instead of using subqueries after aggregation.",
+      "Avoid aggregating multiple times; try a single aggregation with grouped columns."
+    ],
+    "starterCode": "SELECT\n    p.category,\n    DATE_FORMAT(s.sale_date, '%Y-%m') AS sale_month,\n    SUM(s.amount) AS total_sales\nFROM\n    sales s\nJOIN\n    products p ON s.product_id = p.id\nGROUP BY\n    p.category, sale_month\nORDER BY\n    p.category, sale_month;",
+    "expectedOutput": "A result set showing each product category with total sales amounts grouped by year-month, sorted by category and month. For example:\n| category  | sale_month | total_sales |\n|-----------|------------|-------------|\n| Apparel   | 2023-01    | 15000       |\n| Apparel   | 2023-02    | 17500       |\n| Electronics | 2023-01  | 30000       |",
+    "concepts": [
+      "SQL query optimization",
+      "joins and aggregations",
+      "GROUP BY",
+      "date functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-memory-leak-and-logical-bugs-in-async-data-processor",
+    "title": "Fix the Memory Leak and Logical Bugs in Async Data Processor",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and correct bugs in an asynchronous JavaScript function that processes a large dataset with complex filtering and transformations. The current implementation suffers from logical errors and potential memory leaks causing performance degradation.",
+    "prompt": "You are given a JavaScript async function intended to fetch and process a large dataset in batches, filtering data based on specific criteria and transforming it before returning the final result. The current implementation has several bugs that lead to incorrect outputs and inefficient memory usage. Your task is to analyze the code, fix the bugs, optimize the handling of asynchronous batch processing, and ensure the function returns the correct processed data without causing memory leaks or performance issues.",
+    "guidance": [
+      "Review the async batch processing logic to ensure proper sequential execution.",
+      "Check for incorrect usage of array methods such as filter and map, especially within async callbacks.",
+      "Identify any unnecessary retention of large data structures that may cause memory leaks.",
+      "Validate the final output matches the expected filtered and transformed data."
+    ],
+    "hints": [
+      "Ensure that asynchronous loops don’t run in a way that causes data to accumulate unnecessarily in memory.",
+      "Remember that array methods like filter and map do not automatically handle Promises correctly.",
+      "Look out for variables declared in the wrong scope or accumulating data from previous batches unexpectedly."
+    ],
+    "starterCode": "async function processLargeDataset(fetchBatch, batchSize, maxBatches) {\n  let results = [];\n  let batchNumber = 0;\n\n  while (batchNumber < maxBatches) {\n    fetchBatch(batchNumber, batchSize).then(batch => {\n      const filtered = batch.filter(item => item.active = true);\n      const transformed = filtered.map(async item => {\n        item.processedValue = await expensiveAsyncTransformation(item.value);\n        return item;\n      });\n      results = results.concat(transformed);\n      batchNumber++;\n    });\n  }\n\n  return results;\n}\n\nasync function expensiveAsyncTransformation(value) {\n  // Simulate an expensive async operation\n  return new Promise(resolve => setTimeout(() => resolve(value * 2), 50));\n}\n",
+    "expectedOutput": "[{ id: 1, value: 10, active: true, processedValue: 20 }, { id: 3, value: 30, active: true, processedValue: 60 }, ...]",
+    "concepts": [
+      "async/await",
+      "array methods",
+      "memory management",
+      "promise handling"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "create-a-simple-customer-orders-report-using-sql",
+    "title": "Create a Simple Customer Orders Report Using SQL",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "data-modeling",
+    "description": "Build a SQL query that models a basic data scenario by joining customer and order data to produce a simple report showing total order count and total amount spent per customer.",
+    "prompt": "You are given two tables: Customers and Orders. The Customers table contains customer_id and customer_name. The Orders table contains order_id, customer_id, and order_amount. Write a SQL query that returns each customer's name, the total number of orders they have placed, and the total amount they spent on orders. If a customer has no orders, their total orders and amount should show as zero.",
+    "guidance": [
+      "Use a LEFT JOIN to ensure all customers are included, even those without orders.",
+      "Use aggregate functions COUNT() and SUM() to calculate the total orders and total amount spent.",
+      "Group the results by customer_name to get the summary per customer."
+    ],
+    "hints": [
+      "Remember to handle NULL values for customers without any orders using COALESCE.",
+      "COUNT(order_id) counts only existing orders; it won't count NULL values after LEFT JOIN.",
+      "Grouping by customer_id is possible but use customer_name for better readability in the output."
+    ],
+    "starterCode": "SELECT c.customer_name, COUNT(o.order_id) AS total_orders, COALESCE(SUM(o.order_amount), 0) AS total_amount\nFROM Customers c\nLEFT JOIN Orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_name;",
+    "expectedOutput": "customer_name | total_orders | total_amount\n---------------|--------------|-------------\nAlice         | 3            | 150.00\nBob           | 0            | 0.00\nCharlie       | 2            | 80.00",
+    "concepts": [
+      "SQL JOINs",
+      "Aggregate functions",
+      "Grouping results"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
