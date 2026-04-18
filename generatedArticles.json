@@ -1,219 +1,109 @@
 [
   {
-    "slug": "comparing-async-await-vs-promises-in-javascript",
-    "title": "Comparing Async/Await vs Promises in JavaScript: When and How to Use Them",
+    "slug": "comparing-async-await-and-promises",
+    "title": "Comparing Async/Await and Promises: When and How to Use Them in JavaScript",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn the differences between Async/Await and Promises in JavaScript, and discover when and how to use each approach for cleaner, more readable asynchronous code.",
+    "description": "Learn the differences between async/await and promises in JavaScript, when to use each, and how to write clean asynchronous code.",
     "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is single-threaded, so handling tasks like fetching data from a server can be tricky without freezing the app. Asynchronous programming helps with this. Two popular ways to handle asynchronous code in JavaScript are Promises and Async/Await. In this tutorial, we will compare these approaches and learn when to use each."
+        "value": "JavaScript is single-threaded, but many tasks like fetching data from an API happen asynchronously. To handle these tasks, JavaScript uses Promises and async/await syntax. Both approaches allow you to write asynchronous code, but they each have their own style and use cases."
       },
       {
         "type": "paragraph",
-        "value": "Promises were introduced first and provide a way to handle async operations by chaining .then() and .catch() callbacks. Async/Await was added later as syntactic sugar on top of Promises to make async code look more like synchronous code, improving readability."
+        "value": "In this tutorial, we'll look at what Promises and async/await are, how they work, and when you might prefer one over the other."
       },
       {
         "type": "paragraph",
-        "value": "Here’s a simple example using a Promise to fetch user data from an API:"
+        "value": "### What is a Promise?\n\nA Promise represents the result of an asynchronous operation that will complete in the future. It can either be resolved (success) or rejected (error). You handle Promises with `.then()` and `.catch()` methods."
       },
       {
         "type": "code",
-        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const user = { id: 1, name: \"Alice\" };\n      resolve(user);\n    }, 1000);\n  });\n}\n\nfetchUserData()\n  .then(user => {\n    console.log(\"User data (Promise):\", user);\n  })\n  .catch(error => {\n    console.error(\"Error fetching user data:\", error);\n  });"
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const success = true;\n      if (success) {\n        resolve('Data fetched successfully!');\n      } else {\n        reject('Failed to fetch data');\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then((data) => {\n    console.log(data); // Data fetched successfully!\n  })\n  .catch((error) => {\n    console.error(error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "Now, here’s the same example using Async/Await, which makes it look cleaner:"
+        "value": "### What is Async/Await?\n\nAsync/await is syntax built on top of Promises, introduced in modern JavaScript to make asynchronous code look and behave more like synchronous code. The `async` keyword declares a function that returns a Promise, and `await` pauses the function execution until the Promise resolves."
       },
       {
         "type": "code",
-        "value": "function fetchUserData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const user = { id: 1, name: \"Alice\" };\n      resolve(user);\n    }, 1000);\n  });\n}\n\nasync function getUser() {\n  try {\n    const user = await fetchUserData();\n    console.log(\"User data (Async/Await):\", user);\n  } catch (error) {\n    console.error(\"Error fetching user data:\", error);\n  }\n}\n\ngetUser();"
+        "value": "async function fetchData() {\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      resolve('Data fetched successfully!');\n    }, 1000);\n  });\n}\n\nasync function getData() {\n  try {\n    const data = await fetchData();\n    console.log(data); // Data fetched successfully!\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetData();"
       },
       {
         "type": "paragraph",
-        "value": "### When to Use Promises\nPromises are great when you want straightforward chaining of async operations. They work well if you want to combine multiple async tasks using Promise.all, Promise.race, or when supporting older codebases without async/await syntax.\n\nExample of chaining promises:"
+        "value": "### When to Use Promises Directly\n\n- When you want to chain multiple asynchronous steps together with `.then()`.\n- In libraries or older codebases where async/await is not available.\n- When handling multiple Promises with `Promise.all()` or `Promise.race()`.\n\nExample of chaining Promises:"
       },
       {
         "type": "code",
-        "value": "fetchUserData()\n  .then(user => {\n    console.log(\"User received:\", user);\n    return fetchUserPosts(user.id);\n  })\n  .then(posts => {\n    console.log(\"Posts received:\", posts);\n  })\n  .catch(error => {\n    console.error(error);\n  });"
+        "value": "doStep1()\n  .then((result1) => doStep2(result1))\n  .then((result2) => doStep3(result2))\n  .then((finalResult) => {\n    console.log('Final result:', finalResult);\n  })\n  .catch((error) => {\n    console.error('Error:', error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "### When to Use Async/Await\nAsync/Await offers cleaner, easier-to-read code, especially when you have multiple asynchronous operations that need to run sequentially. It lets you write async code in a style similar to synchronous code, which can reduce bugs and improve maintainability."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example of sequential async operations:"
+        "value": "### When to Use Async/Await\n\n- When you want cleaner, more readable code that looks synchronous.\n- When handling complex asynchronous flows that include loops or conditional statements.\n- When writing modern JavaScript codebases.\n\nExample with async/await and a loop:"
       },
       {
         "type": "code",
-        "value": "async function getUserAndPosts() {\n  try {\n    const user = await fetchUserData();\n    const posts = await fetchUserPosts(user.id);\n    console.log(user, posts);\n  } catch (error) {\n    console.error(error);\n  }\n}\n\ngetUserAndPosts();"
+        "value": "async function processSteps() {\n  try {\n    const result1 = await doStep1();\n    const result2 = await doStep2(result1);\n    const finalResult = await doStep3(result2);\n    console.log('Final result:', finalResult);\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}\n\nprocessSteps();"
       },
       {
         "type": "paragraph",
-        "value": "### Summary\n- Promises are the foundation for handling asynchronous operations and work well with chaining and combinators like Promise.all.\n- Async/Await is syntactic sugar built on Promises that makes asynchronous code easier to write and understand.\n- Use Async/Await for cleaner and more readable async flows, especially for sequential operations.\n- Use Promises when you need advanced chaining, parallel execution with Promise.all, or compatibility with older JavaScript environments."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding both, you'll be able to write better asynchronous JavaScript code that's easier to maintain and debug."
+        "value": "### Summary\n\n- Both Promises and async/await are used to work with asynchronous operations.\n- Promises use `.then()` and `.catch()` for handling results and errors.\n- Async/await makes asynchronous code more readable and easier to write.\n- Use Promises for chaining or when working with Promise utilities.\n- Use async/await for cleaner, more maintainable code, especially with complex logic.\n\nBy understanding both, you can choose the best approach depending on your use case."
       }
     ]
   },
   {
-    "slug": "understanding-javascript-type-coercion-errors-deep-dive",
-    "title": "Understanding JavaScript Type Coercion Errors: A Deep Dive",
+    "slug": "mastering-asynchronous-error-handling-in-javascript-promises-vs-async-await",
+    "title": "Mastering Asynchronous Error Handling in JavaScript: Promises vs Async/Await",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn the basics of JavaScript type coercion and common errors beginners face when types are automatically converted. Understand how to avoid these pitfalls with simple examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=GKJh3vdat8A",
+    "description": "Learn how to handle errors effectively in JavaScript's asynchronous code using Promises and Async/Await with clear examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible language that allows mixing different data types easily. This flexibility is due to a feature called \"type coercion,\" where JavaScript automatically converts values from one type to another to perform operations. While this behavior can be helpful, it sometimes leads to unexpected errors, especially for beginners. Understanding how type coercion works can help you write more predictable and bug-free code."
+        "value": "Asynchronous operations are at the heart of JavaScript programming, especially when dealing with tasks like fetching data or reading files. Handling errors that arise during these operations is crucial to writing robust code. Two popular ways to manage asynchronous code are Promises and Async/Await. This article will help you understand how to handle errors with both approaches in a beginner-friendly way."
       },
       {
         "type": "paragraph",
-        "value": "Type coercion happens mainly in two places: during loose equality checks (using `==`) and when performing operations between values of different types like addition or subtraction."
+        "value": "### Error Handling with Promises"
       },
       {
         "type": "paragraph",
-        "value": "For example, let's look at how JavaScript handles adding a number and a string:"
+        "value": "Promises are objects representing the eventual completion (or failure) of an asynchronous operation. You can attach `.then()` for success and `.catch()` for errors. The `.catch()` method helps capture errors that happen either inside the Promise or in previous `.then()` handlers."
       },
       {
         "type": "code",
-        "value": "console.log(5 + '5'); // Output: '55'\n\n// JavaScript converts the number 5 to a string '5' and concatenates."
+        "value": "fetch('https://api.example.com/data')\n  .then(response => {\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    return response.json();\n  })\n  .then(data => {\n    console.log('Data received:', data);\n  })\n  .catch(error => {\n    console.error('There was a problem with the fetch operation:', error);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "In the code above, since one value is a string, JavaScript converts the number to a string and joins them. This might surprise beginners who expect a numerical addition. Similarly, subtraction behaves differently:"
+        "value": "In this example, if the network response is not successful, we throw an error that is caught in the `.catch()` block. This approach lets you handle all errors in one place, which makes the code clean and readable."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Error Handling with Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/Await is syntactic sugar over Promises, introduced to write asynchronous code that looks more like synchronous code. When you use `async` functions, you handle errors using `try...catch` blocks to catch exceptions."
       },
       {
         "type": "code",
-        "value": "console.log(5 - '2'); // Output: 3\n\n// Here, JavaScript converts the string '2' to the number 2 and performs subtraction."
+        "value": "async function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    if (!response.ok) {\n      throw new Error('Network response was not ok');\n    }\n    const data = await response.json();\n    console.log('Data received:', data);\n  } catch (error) {\n    console.error('There was a problem with the fetch operation:', error);\n  }\n}\n\ngetData();"
       },
       {
         "type": "paragraph",
-        "value": "One common source of bugs is using loose equality (`==`) instead of strict equality (`===`). The loose equality operator allows type coercion before comparison, which can cause unexpected true or false results."
-      },
-      {
-        "type": "code",
-        "value": "console.log(0 == false);  // true\nconsole.log(0 === false); // false\n\n// '==' converts false to 0, so 0 == false is true. '===' checks type and value, so false."
+        "value": "Here, the `await` keyword pauses the function execution until the Promise settles. The `try...catch` block makes it simple to catch any errors thrown inside the async function, including network errors or JSON parsing issues."
       },
       {
         "type": "paragraph",
-        "value": "To avoid type coercion errors, it is recommended to use strict equality (`===` and `!==`), which compares both type and value and prevents automatic conversions that lead to bugs."
+        "value": "### Key Differences and Best Practices"
       },
       {
         "type": "paragraph",
-        "value": "Another common error happens when values like `null`, `undefined`, or empty strings are involved. For example:"
-      },
-      {
-        "type": "code",
-        "value": "console.log(null == undefined); // true\nconsole.log(null === undefined); // false\n\n// '==' considers null and undefined equal, but '===' does not."
-      },
-      {
-        "type": "paragraph",
-        "value": "Be careful with these comparisons because they can cause logical errors in your code, especially when checking for missing or empty values."
-      },
-      {
-        "type": "paragraph",
-        "value": "In summary, JavaScript’s type coercion can make coding flexible but also tricky. To avoid common errors:"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use strict equality operators (`===` and `!==`).\n- Be aware of how JavaScript converts types in arithmetic operations.\n- Check the actual types of your variables using `typeof` if needed.\n- Avoid relying on automatic coercion in condition checks."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding these rules and following best practices, you will reduce bugs and write cleaner JavaScript code."
-      }
-    ]
-  },
-  {
-    "slug": "mastering-advanced-typescript-utility-types-for-cleaner-code",
-    "title": "Mastering Advanced TypeScript Utility Types for Cleaner Code",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to use advanced TypeScript utility types to write cleaner, more maintainable, and error-free code with practical examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=eJ6R1knfsoc",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript offers powerful utility types that help you manipulate and transform types to make your code more flexible and maintainable. While many developers are familiar with basic utilities like Partial and Readonly, there are advanced utility types that can take your coding skills to the next level. In this tutorial, we'll explore some of these advanced utility types and see practical examples of how they improve your code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 1. Omit<Type, Keys> - Exclude Specific Properties"
-      },
-      {
-        "type": "paragraph",
-        "value": "The Omit utility type allows you to create a new type by excluding one or more properties from an existing type. This is useful when you want to reuse a type but want to remove certain keys."
-      },
-      {
-        "type": "code",
-        "value": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  password: string;\n}\n\n// We want to create a new type for a User without the password property\n\ntype UserWithoutPassword = Omit<User, 'password'>;\n\nconst user: UserWithoutPassword = {\n  id: 1,\n  name: 'Alice',\n  email: 'alice@example.com'\n  // password is excluded here\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 2. Pick<Type, Keys> - Select Specific Properties"
-      },
-      {
-        "type": "paragraph",
-        "value": "Opposite to Omit, the Pick utility allows creating a new type by selecting only certain properties from an existing type. This helps keep your types precise."
-      },
-      {
-        "type": "code",
-        "value": "type UserPreview = Pick<User, 'id' | 'name'>;\n\nconst preview: UserPreview = {\n  id: 1,\n  name: 'Alice'\n};"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 3. Exclude<UnionType, ExcludedMembers> - Remove Union Members"
-      },
-      {
-        "type": "paragraph",
-        "value": "Exclude helps you create a new union type by removing specific members from another union type. This is handy for filtering types."
-      },
-      {
-        "type": "code",
-        "value": "type Status = 'pending' | 'active' | 'inactive' | 'banned';\n\ntype AllowedStatus = Exclude<Status, 'banned' | 'inactive'>;\n\nconst currentStatus: AllowedStatus = 'active';  // 'banned' and 'inactive' are excluded"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. Extract<UnionType, MembersToExtract> - Extract Specific Union Members"
-      },
-      {
-        "type": "paragraph",
-        "value": "Extract creates a new union type by picking elements that overlap between two union types. It is useful when narrowing down possible types."
-      },
-      {
-        "type": "code",
-        "value": "type Mixed = 'text' | 'image' | 'video' | 'audio';\n\ntype Media = Extract<Mixed, 'image' | 'video' | 'audio'>;\n\nconst mediaType: Media = 'video';"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 5. NonNullable<Type> - Remove null and undefined"
-      },
-      {
-        "type": "paragraph",
-        "value": "When working with data that might be null or undefined, NonNullable helps you create a type that excludes these values."
-      },
-      {
-        "type": "code",
-        "value": "type Name = string | null | undefined;\n\ntype ValidName = NonNullable<Name>;\n\nfunction greet(name: ValidName) {\n  console.log('Hello, ' + name.toUpperCase());\n}\n\ngreet('Alice'); // Works fine\n// greet(null); // Error: Argument of type 'null' is not assignable"
-      },
-      {
-        "type": "paragraph",
-        "value": "### 6. ReturnType<Type> - Get the Return Type of a Function"
-      },
-      {
-        "type": "paragraph",
-        "value": "ReturnType utility extracts the return type of a function type, helping keep types consistent when you reuse functions."
-      },
-      {
-        "type": "code",
-        "value": "function fetchUser() {\n  return { id: 1, name: 'Alice' };\n}\n\ntype UserType = ReturnType<typeof fetchUser>;\n\nconst user: UserType = {\n  id: 2,\n  name: 'Bob'\n};"
+        "value": "- Promises use `.then` and `.catch` chains, which can become harder to read if you have multiple asynchronous steps.\n- Async/Await lets you write asynchronous code in a more linear and readable fashion, resembling synchronous code.\n- Always handle errors in asynchronous code to avoid uncaught exceptions that may crash your application.\n- Use `try...catch` with async/await and `.catch()` with Promises to properly manage errors."
       },
       {
         "type": "paragraph",
@@ -221,385 +111,435 @@
       },
       {
         "type": "paragraph",
-        "value": "Mastering these advanced utility types unlocks the full power of TypeScript, making your code cleaner, easier to understand, and less error-prone. Try incorporating Omit, Pick, Exclude, Extract, NonNullable, and ReturnType in your next TypeScript project to experience their benefits firsthand."
+        "value": "Mastering error handling in JavaScript's async operations is essential. Whether you choose Promises or Async/Await, understanding how to catch and handle errors gracefully helps build more reliable applications. Async/Await tends to be more readable and easier to use for beginners, but knowing both methods is valuable."
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-edge-cases-in-typescript-arithmetic",
-    "title": "Handling Floating Point Precision Edge Cases in TypeScript Arithmetic",
+    "slug": "building-scalable-event-driven-systems-with-typescript-and-nodejs",
+    "title": "Building Scalable Event-Driven Systems with TypeScript and Node.js",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to create scalable event-driven systems using TypeScript and Node.js. This beginner-friendly tutorial covers key concepts, simple examples, and practical tips to build efficient event-based applications.",
+    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Event-driven architecture is a powerful design pattern that allows applications to respond to events asynchronously and scale efficiently. In this tutorial, we'll explore how to build a simple event-driven system using TypeScript and Node.js. We'll cover the basics of event emitters, handling events, and structuring your application to be scalable and maintainable."
+      },
+      {
+        "type": "paragraph",
+        "value": "Node.js has a built-in module called `events` that allows you to create an event emitter, which is the core of event-driven systems. TypeScript's type system helps us write safer, more understandable code when working with events."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's start by creating a simple event emitter that listens for user signup events and handles them."
+      },
+      {
+        "type": "code",
+        "value": "import { EventEmitter } from 'events';\n\n// Define an interface for the user data\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\n// Create a new event emitter instance\nconst eventEmitter = new EventEmitter();\n\n// Listen for 'userSignedUp' event\neventEmitter.on('userSignedUp', (user: User) => {\n  console.log(`New user signed up: ${user.name} (${user.email})`);\n  // Here you can execute additional logic, like sending a welcome email\n});\n\n// Function to simulate user signup and emit event\nfunction signUpUser(user: User) {\n  // Simulate saving user to database\n  console.log(`Saving user ${user.name} to the database.`);\n  // Emit the event when the user signs up\n  eventEmitter.emit('userSignedUp', user);\n}\n\n// Example usage\nconst newUser: User = { id: 1, name: 'Alice', email: 'alice@example.com' };\nsignUpUser(newUser);"
+      },
+      {
+        "type": "paragraph",
+        "value": "In the example above, we defined a custom `User` interface for type safety. We created an `EventEmitter` instance that listens for the `userSignedUp` event, and when the event is emitted after signing up a user, it triggers the registered callback function."
+      },
+      {
+        "type": "paragraph",
+        "value": "This approach works well for simple use cases. However, for building scalable systems, especially when your application grows or when you want to decouple event producers and consumers, using message queues or brokers like RabbitMQ, Kafka, or Redis Streams can help."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's enhance our system by implementing a basic event bus using Node.js's `EventEmitter` to organize events better and demonstrate how you can structure this for scalability."
+      },
+      {
+        "type": "code",
+        "value": "type EventHandler<T> = (payload: T) => void;\n\nclass EventBus {\n  private emitter = new EventEmitter();\n\n  public subscribe<T>(eventName: string, handler: EventHandler<T>) {\n    this.emitter.on(eventName, handler);\n  }\n\n  public publish<T>(eventName: string, payload: T) {\n    this.emitter.emit(eventName, payload);\n  }\n}\n\n// Usage example\ninterface Order {\n  orderId: number;\n  userId: number;\n  product: string;\n}\n\nconst eventBus = new EventBus();\n\n// Subscriber\neventBus.subscribe<Order>('orderPlaced', (order) => {\n  console.log(`Order placed: #${order.orderId} for product ${order.product}`);\n  // Additional business logic here\n});\n\n// Publisher\nfunction placeOrder(order: Order) {\n  console.log(`Placing order #${order.orderId}`);\n  eventBus.publish('orderPlaced', order);\n}\n\nconst newOrder: Order = { orderId: 101, userId: 1, product: 'Book' };\nplaceOrder(newOrder);"
+      },
+      {
+        "type": "paragraph",
+        "value": "With this `EventBus` class, you create a centralized system to subscribe to and publish events, making it easier to manage your event-driven logic as your application grows. You can extend this by integrating message brokers or persisting event data for recovery and analysis."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Tips for building scalable event-driven systems\n\n1. **Decouple components:** Use event-driven communication to reduce dependencies between parts of your system.\n2. **Use external message brokers:** In production systems, prefer Kafka, RabbitMQ, or Redis Streams for reliability and scalability.\n3. **Handle errors gracefully:** Always add error handling in event listeners to avoid crashing the event loop.\n4. **Consider event schemas:** Use TypeScript interfaces or JSON schemas to ensure consistent event payloads.\n5. **Monitor and log:** Keep track of event processing for debugging and performance monitoring."
+      },
+      {
+        "type": "paragraph",
+        "value": "By combining TypeScript's strong typing and Node.js's event-driven architecture, you can create scalable and maintainable systems that handle asynchronous workflows efficiently."
+      }
+    ]
+  },
+  {
+    "slug": "designing-scalable-error-handling-systems-in-typescript-for-distributed-architectures",
+    "title": "Designing Scalable Error Handling Systems in TypeScript for Distributed Architectures",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to manage floating point precision issues in TypeScript arithmetic with easy-to-understand methods and practical code examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=5HDTkOLHHds",
+    "description": "Learn how to build scalable and maintainable error handling systems in TypeScript tailored for distributed architecture environments. This beginner-friendly guide covers best practices and practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=QkMPBa0w0pQ",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with numbers in TypeScript (and JavaScript), one common challenge is dealing with floating point precision errors. This happens because computers represent decimal numbers using binary fractions, which can result in tiny rounding errors. For example, simple arithmetic like 0.1 + 0.2 doesn't exactly equal 0.3. Understanding and handling these edge cases is crucial to avoid bugs in your calculations."
+        "value": "Handling errors effectively in distributed systems can be challenging. Applications composed of multiple services often involve asynchronous processes, network delays, and diverse environments. Designing an error handling approach that scales well and provides clear information is essential for maintaining reliability and ease of debugging. In this article, we'll explore creating a scalable error handling system using TypeScript, with practical examples and best practices for distributed architectures."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at an example where floating point precision causes an unexpected result:"
+        "value": "### Why Focus on Error Handling in Distributed Systems?"
+      },
+      {
+        "type": "paragraph",
+        "value": "Distributed systems involve multiple services communicating over the network. Errors can happen at different points: the client, network requests, individual services, or downstream dependencies. A scalable error system helps you centralize error definitions, standardize logs, and enable easier tracing across services."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 1: Define a Base Error Class"
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle errors systematically, start by defining a base error class in TypeScript. This class should extend the built-in `Error` and include additional properties such as error codes, metadata, or service context."
       },
       {
         "type": "code",
-        "value": "const sum = 0.1 + 0.2;\nconsole.log(sum); // Output: 0.30000000000000004\nconsole.log(sum === 0.3); // Output: false"
+        "value": "class BaseError extends Error {\n  public readonly code: string;\n  public readonly metadata?: Record<string, any>;\n\n  constructor(message: string, code: string, metadata?: Record<string, any>) {\n    super(message);\n    this.code = code;\n    this.metadata = metadata;\n    // Set the prototype explicitly to maintain instanceof checks\n    Object.setPrototypeOf(this, new.target.prototype);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, `sum` is not exactly 0.3, which can cause issues in comparisons or further calculations. To handle these edge cases, there are several strategies you can use."
+        "value": "This `BaseError` class provides a foundation. The `code` property helps identify the error type programmatically, and `metadata` can hold additional context."
       },
       {
         "type": "paragraph",
-        "value": "**1. Use a small tolerance value for comparisons**\n\nInstead of checking for exact equality, check if the difference between two numbers is smaller than a tiny epsilon value."
+        "value": "### Step 2: Create Specific Error Subclasses"
+      },
+      {
+        "type": "paragraph",
+        "value": "Define specific error classes for common scenarios. This helps with granularity when handling different failure points."
       },
       {
         "type": "code",
-        "value": "const EPSILON = 0.000001;\nfunction areEqual(a: number, b: number): boolean {\n  return Math.abs(a - b) < EPSILON;\n}\n\nconsole.log(areEqual(0.1 + 0.2, 0.3)); // Output: true"
+        "value": "class NetworkError extends BaseError {\n  constructor(message: string, metadata?: Record<string, any>) {\n    super(message, 'NETWORK_ERROR', metadata);\n  }\n}\n\nclass ValidationError extends BaseError {\n  constructor(message: string, metadata?: Record<string, any>) {\n    super(message, 'VALIDATION_ERROR', metadata);\n  }\n}\n\nclass DatabaseError extends BaseError {\n  constructor(message: string, metadata?: Record<string, any>) {\n    super(message, 'DATABASE_ERROR', metadata);\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "**2. Use integer arithmetic when possible**\n\nFor financial calculations or fixed decimal places, multiply numbers to work with integers, then divide back after the calculation."
+        "value": "These subclasses include meaningful error codes and can carry specific metadata related to the error context."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 3: Centralize Error Handling Middleware or Functions"
+      },
+      {
+        "type": "paragraph",
+        "value": "In distributed services, use error handling middleware or a centralized function to catch thrown errors, log them with appropriate context, and format responses. For example, in an Express.js microservice:"
       },
       {
         "type": "code",
-        "value": "const a = 0.1;\nconst b = 0.2;\nconst multiplier = 100;\n\nconst intSum = (a * multiplier) + (b * multiplier); // 10 + 20 = 30\nconst result = intSum / multiplier; // 30 / 100 = 0.3\n\nconsole.log(result); // Output: 0.3\nconsole.log(result === 0.3); // Output: true"
+        "value": "import { Request, Response, NextFunction } from 'express';\n\nfunction errorHandler(err: BaseError, req: Request, res: Response, next: NextFunction) {\n  console.error(`[${err.code}] - ${err.message}`, err.metadata);\n\n  const statusMap: Record<string, number> = {\n    VALIDATION_ERROR: 400,\n    NETWORK_ERROR: 503,\n    DATABASE_ERROR: 500,\n  };\n\n  const status = statusMap[err.code] || 500;\n\n  res.status(status).json({\n    error: {\n      code: err.code,\n      message: err.message,\n      metadata: err.metadata,\n    },\n  });\n}\n\nexport default errorHandler;"
       },
       {
         "type": "paragraph",
-        "value": "**3. Use built-in methods like `toFixed()` for formatting**\n\nThough `toFixed()` converts numbers to strings, you can parse them back to numbers to avoid precision problems when displaying or storing values."
+        "value": "This centralized error middleware logs the error with details and sends a structured JSON response, making debugging and client-side handling easier."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Step 4: Propagate and Handle Errors Across Services"
+      },
+      {
+        "type": "paragraph",
+        "value": "When services communicate (e.g., via HTTP or message queues), design your error responses to include error codes and context fields. This allows clients or other services to react appropriately."
       },
       {
         "type": "code",
-        "value": "const value = 0.1 + 0.2;\nconst formattedValue = Number(value.toFixed(2));\n\nconsole.log(formattedValue); // Output: 0.3\nconsole.log(formattedValue === 0.3); // Output: true"
+        "value": "interface ErrorResponse {\n  code: string;\n  message: string;\n  metadata?: Record<string, any>;\n}\n\n// Example service response handler\nasync function fetchData(): Promise<void> {\n  try {\n    const response = await fetch('http://otherservice/api');\n    if (!response.ok) {\n      const errorBody: ErrorResponse = await response.json();\n      throw new BaseError(errorBody.message, errorBody.code, errorBody.metadata);\n    }\n    // process data\n  } catch (err) {\n    if (err instanceof BaseError) {\n      // Handle known errors\n      console.log(`Handled error code: ${err.code}`);\n    } else {\n      // Handle unexpected errors\n      console.error('Unexpected error', err);\n    }\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In summary, understanding floating point precision issues and employing techniques like tolerance checks, integer arithmetic, or formatting methods helps keep your TypeScript arithmetic reliable and bug-free. These small adjustments are important in applications such as financial calculations, data analysis, or anywhere exact decimals matter."
+        "value": "### Step 5: Use Error Logging and Monitoring Tools"
+      },
+      {
+        "type": "paragraph",
+        "value": "Integrate logging frameworks (e.g., Winston, Pino) and monitoring tools (e.g., Sentry, Datadog) to capture errors in production. Structured error classes make it easier to enrich logs with meaningful fields."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Final Thoughts"
+      },
+      {
+        "type": "paragraph",
+        "value": "Designing scalable error handling in TypeScript for distributed systems requires thoughtful error classification, propagation, and centralized handling. This approach promotes maintainability, better debugging, and smoother client experiences. Using typed error classes aligned with service boundaries enhances clarity across your architecture."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start simple, and gradually add error specifics and monitoring to keep your error handling robust as your system grows."
       }
     ]
   },
   {
-    "slug": "mastering-pythons-unicode-edge-cases-for-international-text-processing",
-    "title": "Mastering Python’s Unicode Edge Cases for International Text Processing",
+    "slug": "handling-floating-point-precision-edge-cases-in-python",
+    "title": "Handling Floating Point Precision Edge Cases in Python Calculations",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to handle Unicode edge cases in Python to effectively process international text with practical examples for beginners.",
-    "videoUrl": "",
+    "description": "Learn how to handle floating point precision issues in Python calculations with practical examples and best practices for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=3xW-7sU8cnI",
     "content": [
       {
         "type": "paragraph",
-        "value": "Working with text from around the world means dealing with diverse characters, scripts, and languages. Python natively supports Unicode, which helps handle this diversity, but there are important edge cases every beginner should know. This tutorial guides you through some common Unicode challenges and shows how to handle them gracefully in Python."
+        "value": "When working with numbers in Python, especially decimals, you might notice that some calculations give unexpected results. This happens because computers represent decimal numbers in a way that can cause small precision errors. Understanding and handling these floating point precision edge cases is important for writing accurate and reliable code."
       },
       {
         "type": "paragraph",
-        "value": "### What is Unicode? \nUnicode is a standard designed to represent text in most of the world’s writing systems. Python 3 strings are Unicode by default, so you can write characters from many languages directly in your code or input."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Common Unicode Edge Cases in Python"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Combining Characters:** Some languages use combining marks to modify the base character, but visually they appear as one character. For example, 'e' + a combining acute accent (´) vs. 'é'."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Normalization:** Different Unicode sequences can look the same but be encoded differently. Normalizing text is essential before comparing or processing."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Surrogate Pairs:** Some high Unicode code points (characters beyond the Basic Multilingual Plane) are represented using pairs of 16-bit code units internally."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Encoding/Decoding Errors:** When you read or write files, be mindful of using the right encoding (like UTF-8) to avoid errors."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let’s explore these with practical Python examples."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Handling Combining Characters and Normalization"
-      },
-      {
-        "type": "paragraph",
-        "value": "Consider the letter 'é'. It can be a single character (precomposed) or an 'e' followed by a combining acute accent. Visually, they look the same but differ internally."
+        "value": "For example, try adding 0.1 and 0.2 in Python:"
       },
       {
         "type": "code",
-        "value": "import unicodedata\n\n# Single character é (precomposed)\nprecomposed = 'é'\n\n# e + combining acute accent\ncombining = 'e\\u0301'\n\nprint(f\"Precomposed: {precomposed}, Combining: {combining}\")\nprint(f\"Are they equal? {precomposed == combining}\")"
+        "value": "print(0.1 + 0.2)\n# Output: 0.30000000000000004"
       },
       {
         "type": "paragraph",
-        "value": "Since they are not equal, we use Unicode normalization to standardize them before comparison."
+        "value": "You might expect the output to be exactly 0.3, but due to how floating point numbers are stored internally, Python shows a tiny difference. This is normal and happens in many programming languages."
+      },
+      {
+        "type": "paragraph",
+        "value": "To handle these precision issues, here are some common approaches:"
+      },
+      {
+        "type": "paragraph",
+        "value": "1. Using the built-in round() function to limit decimal places:"
       },
       {
         "type": "code",
-        "value": "print(f\"Normalized equal? {unicodedata.normalize('NFC', precomposed) == unicodedata.normalize('NFC', combining)}\")"
+        "value": "result = 0.1 + 0.2\nprint(round(result, 2))  # Output: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "### Working with High Unicode Characters (Emojis & Rare Scripts)"
+        "value": "The round() function helps you control how many decimal places you see and can avoid small floating point artifacts in the output."
       },
       {
         "type": "paragraph",
-        "value": "Characters like emojis can have code points that require special handling internally. Python’s string length counts characters, not code units, so you usually don’t need to worry about surrogate pairs."
+        "value": "2. Using the decimal module for precise decimal arithmetic:"
       },
       {
         "type": "code",
-        "value": "emoji = '😀'  # Grinning Face Emoji\nprint(f\"Emoji: {emoji}, Length: {len(emoji)}\")"
+        "value": "from decimal import Decimal\n\nresult = Decimal('0.1') + Decimal('0.2')\nprint(result)  # Output: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "### Correctly Reading/Writing Unicode Files"
+        "value": "The decimal module stores numbers as exact decimals instead of floating point approximations. This is useful when precision matters, like financial or scientific calculations."
       },
       {
         "type": "paragraph",
-        "value": "Always specify encoding when working with files to avoid surprises."
+        "value": "3. Comparing floating point numbers safely:"
       },
       {
         "type": "code",
-        "value": "sample_text = 'Hello, world! Привет мир! こんにちは世界！'\n\n# Write text to file with UTF-8 encoding\nwith open('sample.txt', 'w', encoding='utf-8') as f:\n    f.write(sample_text)\n\n# Read it back\nwith open('sample.txt', 'r', encoding='utf-8') as f:\n    content = f.read()\n\nprint(content)"
+        "value": "a = 0.1 + 0.2\nb = 0.3\n\n# Instead of using 'a == b', use a tolerance\nis_equal = abs(a - b) < 1e-9\nprint(is_equal)  # Output: True"
       },
       {
         "type": "paragraph",
-        "value": "### Summary"
+        "value": "Directly comparing floating point numbers with == can lead to unexpected results due to tiny precision differences. Using a small tolerance value helps check if they are 'close enough.'"
       },
       {
         "type": "paragraph",
-        "value": "1. Use `unicodedata.normalize` to handle Unicode string equivalency.\n2. Python 3 handles most Unicode characters well internally, including emojis.\n3. Always specify encoding when reading or writing text files.\n4. Experiment with your international text data to understand specific needs."
+        "value": "In summary, floating point precision edge cases are common but easy to manage. Use rounding for simple cases, the decimal module for exact decimals, and tolerance-based comparisons to safely check equality."
       },
       {
         "type": "paragraph",
-        "value": "Mastering these Unicode edge cases will help you build robust applications that truly support global text processing!"
+        "value": "By following these tips, your Python calculations will be more accurate and less prone to confusing errors, making your programs more reliable and easier to maintain."
       }
     ]
   },
   {
-    "slug": "understanding-python-typeerror-common-causes-and-prevention-techniques",
-    "title": "Understanding Python's TypeError: Common Causes and Prevention Techniques",
+    "slug": "understanding-python-typeerror-vs-valueerror-key-differences-explained",
+    "title": "Understanding Python TypeError vs ValueError: Key Differences Explained",
     "language": "python",
     "type": "errors",
-    "description": "Learn the common causes of Python's TypeError and how to prevent it with simple, clear examples for beginners.",
+    "description": "Learn the key differences between TypeError and ValueError in Python with clear explanations and simple examples for beginners.",
     "videoUrl": "https://www.youtube.com/watch?v=V_NXT2-QIlE",
     "content": [
       {
         "type": "paragraph",
-        "value": "Python raises a TypeError when an operation or function is applied to an object of an inappropriate type. This error occurs when you try to perform an action that Python doesn't know how to do with the given data types."
+        "value": "When you start programming in Python, you will often encounter errors like TypeError and ValueError. Understanding the difference between these two common exceptions helps you debug your code more effectively. Both errors occur when something goes wrong with the data you pass in your programs, but they happen in different scenarios."
       },
       {
         "type": "paragraph",
-        "value": "Here are some frequent causes of TypeError and how to avoid them."
+        "value": "A TypeError occurs when an operation or function is applied to an object of an inappropriate type. This means Python expected one data type but got a different one that it can't work with."
       },
       {
         "type": "paragraph",
-        "value": "1. Performing unsupported operations between different data types."
+        "value": "Here’s an example of a TypeError:"
       },
       {
         "type": "code",
-        "value": "num = 5\ntext = \"hello\"\n\n# This will cause a TypeError because you cannot add an integer and a string\nresult = num + text"
+        "value": "print('Hello' + 5)"
       },
       {
         "type": "paragraph",
-        "value": "To fix this, convert the types so they match. For example, convert the integer to a string before concatenation:"
+        "value": "This code tries to add a string ('Hello') and an integer (5). Python doesn't know how to add these different types together and raises a TypeError."
+      },
+      {
+        "type": "paragraph",
+        "value": "On the other hand, a ValueError happens when a function receives a value of the right type but an inappropriate or unexpected value. This means the data type is correct, but the actual value cannot be processed."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example of a ValueError:"
       },
       {
         "type": "code",
-        "value": "num = 5\ntext = \"hello\"\n\nresult = str(num) + text\nprint(result)  # Output: 5hello"
+        "value": "int('abc')"
       },
       {
         "type": "paragraph",
-        "value": "2. Calling a function with an argument of the wrong type."
+        "value": "In this case, the int() function expects a string that represents a number. Passing 'abc' is the correct data type (a string), but it’s not a valid number, so Python raises a ValueError."
+      },
+      {
+        "type": "paragraph",
+        "value": "To summarize:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- TypeError: The type of the data is incorrect (e.g., trying to add a string and an integer).\n- ValueError: The data type is correct, but the value is not appropriate (e.g., converting a non-numeric string to an integer)."
+      },
+      {
+        "type": "paragraph",
+        "value": "Knowing these differences helps you write better error handling in your programs. For example, you could use try-except blocks to catch these errors and provide helpful messages to the user."
       },
       {
         "type": "code",
-        "value": "def square(x):\n    return x * x\n\n# Passing a string instead of a number causes TypeError\nsquare('4')"
+        "value": "try:\n    num = int(input('Enter a number: '))\n    print('Number is:', num)\nexcept ValueError:\n    print('That is not a valid number!')\nexcept TypeError:\n    print('Type error occurred!')"
       },
       {
         "type": "paragraph",
-        "value": "Ensure you pass the correct data types to functions. You can add checks or convert types inside your functions."
-      },
-      {
-        "type": "code",
-        "value": "def square(x):\n    if not isinstance(x, (int, float)):\n        raise TypeError(\"Input must be a number\")\n    return x * x\n\nprint(square(4))  # Output: 16"
+        "value": "In this code, if the user inputs something that cannot convert to an integer, a ValueError is caught, and a friendly message is displayed."
       },
       {
         "type": "paragraph",
-        "value": "3. Using built-in functions or methods incorrectly."
-      },
-      {
-        "type": "code",
-        "value": "my_list = [1, 2, 3]\n\n# Using the len() function correctly\nlength = len(my_list)\n\n# Trying to use len() on an integer causes TypeError\nlength = len(5)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Always check the documentation to ensure you use functions with suitable data types."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. Attempting to index or iterate over non-iterable types."
-      },
-      {
-        "type": "code",
-        "value": "number = 10\n\n# Trying to loop over an integer results in TypeError\nfor i in number:\n    print(i)"
-      },
-      {
-        "type": "paragraph",
-        "value": "Instead, loop over iterable objects like lists, strings, or ranges."
-      },
-      {
-        "type": "code",
-        "value": "for i in range(number):\n    print(i)"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Prevention Tips"
-      },
-      {
-        "type": "paragraph",
-        "value": "- Use type checking with `isinstance()` before performing operations.\n- Convert data types explicitly when needed using functions like `int()`, `str()`, or `float()`.\n- Read and understand function requirements to pass correct argument types.\n- Test small parts of your code to catch type errors early."
-      },
-      {
-        "type": "paragraph",
-        "value": "By understanding why TypeErrors happen and following these simple rules, you can write more robust Python code and avoid common pitfalls."
+        "value": "By understanding TypeError and ValueError, you'll improve your Python coding skills and make your programs more robust and user-friendly."
       }
     ]
   },
   {
-    "slug": "mastering-window-functions-advanced-sql-tricks-for-data-analysis",
-    "title": "Mastering Window Functions: Advanced SQL Tricks for Data Analysis",
+    "slug": "building-real-time-inventory-management-system-sql",
+    "title": "Building a Real-Time Inventory Management System with SQL: A Beginner's Guide",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use SQL window functions to perform advanced data analysis efficiently and easily, even as a beginner.",
+    "description": "Learn how to create a simple real-time inventory management system using SQL. This beginner-friendly tutorial covers essential concepts and step-by-step instructions to track stock levels efficiently.",
+    "videoUrl": "https://www.youtube.com/watch?v=kbKty5ZVKMY",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "Inventory management is vital for businesses to keep track of stock and ensure smooth operations. SQL, a powerful language for managing databases, can be used to build a real-time inventory management system that updates stock levels instantly. In this tutorial, we'll guide you through setting up a basic system that includes creating tables, adding products, recording sales and restocking, and querying your inventory."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, we will create a table to store product details including the product ID, name, and quantity in stock. This will serve as our main inventory table."
+      },
+      {
+        "type": "code",
+        "value": "CREATE TABLE Inventory (\n  ProductID INT PRIMARY KEY,\n  ProductName VARCHAR(100),\n  Quantity INT\n);"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, add some initial products to your inventory with their starting quantities. This step helps you begin tracking available stock."
+      },
+      {
+        "type": "code",
+        "value": "INSERT INTO Inventory (ProductID, ProductName, Quantity) VALUES\n(1, 'Keyboard', 50),\n(2, 'Mouse', 100),\n(3, 'Monitor', 30);"
+      },
+      {
+        "type": "paragraph",
+        "value": "To record a sale (which reduces stock), use an UPDATE statement that decreases the Quantity based on the number of items sold. Here is how to update the inventory when 3 keyboards are sold:"
+      },
+      {
+        "type": "code",
+        "value": "UPDATE Inventory\nSET Quantity = Quantity - 3\nWHERE ProductID = 1 AND Quantity >= 3;"
+      },
+      {
+        "type": "paragraph",
+        "value": "It's important to check that the stock quantity does not go below zero. The WHERE clause in the above query prevents selling items that are out of stock."
+      },
+      {
+        "type": "paragraph",
+        "value": "Similarly, when restocking products, increase the quantity using an UPDATE statement. For example, when 20 more mice arrive:"
+      },
+      {
+        "type": "code",
+        "value": "UPDATE Inventory\nSET Quantity = Quantity + 20\nWHERE ProductID = 2;"
+      },
+      {
+        "type": "paragraph",
+        "value": "You can easily view the current inventory levels to monitor stock using a simple SELECT query:"
+      },
+      {
+        "type": "code",
+        "value": "SELECT ProductID, ProductName, Quantity\nFROM Inventory\nORDER BY ProductName;"
+      },
+      {
+        "type": "paragraph",
+        "value": "By running these SQL commands, you can maintain accurate, real-time inventory data. This setup is scalable and can be further enhanced with triggers, stored procedures, or integrating with a front-end application for better user experience."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, the key steps to building a real-time inventory system with SQL are: creating an inventory table, inserting initial products, updating quantities on sales or restocks, and querying current stock levels. Practice these commands, and you'll have a solid foundation for managing inventory in any small business."
+      }
+    ]
+  },
+  {
+    "slug": "mastering-window-functions-to-analyze-time-series-data-in-sql",
+    "title": "Mastering Window Functions to Analyze Time-Series Data in SQL",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn how to use SQL window functions to efficiently analyze time-series data with common errors and beginner-friendly examples.",
     "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Window functions in SQL are powerful tools that allow you to perform calculations across sets of rows related to the current row, without collapsing your result into grouped summaries. Unlike aggregate functions, window functions keep individual row details visible, which makes them ideal for advanced data analysis."
+        "value": "Analyzing time-series data in SQL can be incredibly powerful but also tricky for beginners, especially when using window functions. Window functions allow you to perform calculations across a set of table rows related to the current row, which is essential for time-series analysis like calculating running totals, differences between dates, or moving averages. However, beginners often encounter some common errors when working with window functions. In this article, we'll guide you through understanding and fixing these errors to make your time-series queries accurate and efficient."
       },
       {
         "type": "paragraph",
-        "value": "To understand window functions, you first need to know their basic structure. A window function is typically used with the OVER() clause, which defines the partitioning and ordering of the dataset it operates on."
-      },
-      {
-        "type": "paragraph",
-        "value": "Let's start with a simple example. Suppose you have a sales table with columns `salesperson`, `region`, and `sales_amount`. You might want to calculate the total sales per region but still see each individual sale."
+        "value": "Let's start with a simple time-series dataset example. Imagine a table called sales_data that records daily sales for different stores:"
       },
       {
         "type": "code",
-        "value": "SELECT salesperson,\n       region,\n       sales_amount,\n       SUM(sales_amount) OVER (PARTITION BY region) AS total_region_sales\nFROM sales;"
+        "value": "CREATE TABLE sales_data (\n    store_id INT,\n    sales_date DATE,\n    sales_amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales_data VALUES\n(1, '2024-01-01', 150.00),\n(1, '2024-01-02', 200.00),\n(1, '2024-01-03', 170.00),\n(2, '2024-01-01', 300.00),\n(2, '2024-01-02', 250.00);"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `SUM(sales_amount) OVER (PARTITION BY region)` calculates the total sales for each region but keeps all individual rows visible. This means each row shows a salesperson's sale along with their region's total sales."
-      },
-      {
-        "type": "paragraph",
-        "value": "Another popular window function is ROW_NUMBER(). It assigns a unique sequential number to rows within a partition of the result set, ordered by some criteria."
+        "value": "A common task is calculating the running total sales per store. You might try the following window function:"
       },
       {
         "type": "code",
-        "value": "SELECT salesperson,\n       region,\n       sales_amount,\n       ROW_NUMBER() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS rank_in_region\nFROM sales;"
+        "value": "SELECT\n  store_id,\n  sales_date,\n  sales_amount,\n  SUM(sales_amount) OVER (PARTITION BY store_id ORDER BY sales_date) AS running_total\nFROM sales_data;"
       },
       {
         "type": "paragraph",
-        "value": "Here, `ROW_NUMBER()` ranks salespeople within each region by their sales amount, starting at 1 for the highest sale. This is useful for identifying top performers or sorting data within specific categories."
+        "value": "If you run this query and get an error like \"Window functions require an ORDER BY clause\" or \"Invalid window frame\", make sure of these common fixes:"
       },
       {
         "type": "paragraph",
-        "value": "You can also calculate moving averages or running totals, which are common in time series analysis. Suppose you want a running total of sales by date:"
+        "value": "1. Ensure the ORDER BY clause is included inside the OVER(). Window functions calculating running totals or moving averages require a well-defined order, usually by date.\n2. Confirm that the PARTITION BY clause correctly groups your data—for example, by store_id for per-store calculations.\n3. Watch out for column data types. Dates should be in DATE or TIMESTAMP format to sort correctly.\n4. Some SQL databases need an explicit frame clause like ROWS UNBOUNDED PRECEDING to define the window frame for running totals."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example with an explicit window frame clause that avoids some errors:"
       },
       {
         "type": "code",
-        "value": "SELECT sales_date,\n       salesperson,\n       sales_amount,\n       SUM(sales_amount) OVER (ORDER BY sales_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;"
+        "value": "SELECT\n  store_id,\n  sales_date,\n  sales_amount,\n  SUM(sales_amount) OVER (\n    PARTITION BY store_id\n    ORDER BY sales_date\n    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n  ) AS running_total\nFROM sales_data;"
       },
       {
         "type": "paragraph",
-        "value": "This query sums all sales from the start up to the current row's date, creating a running total that grows over time."
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, window functions can be combined or nested for complex analysis. For instance, you could rank salespeople globally and within regions simultaneously:"
+        "value": "Another common error is using window functions inside WHERE clauses, which is not allowed because window functions are computed after the WHERE filtering phase. For filtering on the result of window functions, use a subquery or a Common Table Expression (CTE). For example:"
       },
       {
         "type": "code",
-        "value": "SELECT salesperson,\n       region,\n       sales_amount,\n       RANK() OVER (PARTITION BY region ORDER BY sales_amount DESC) AS regional_rank,\n       RANK() OVER (ORDER BY sales_amount DESC) AS global_rank\nFROM sales;"
+        "value": "-- Incorrect usage: causes error\nSELECT * FROM (\n  SELECT *, SUM(sales_amount) OVER (PARTITION BY store_id ORDER BY sales_date) AS running_total\n  FROM sales_data\n) sub\nWHERE running_total > 300;"
       },
       {
         "type": "paragraph",
-        "value": "This shows relative performance in the region and overall, which can help with targeted decisions."
+        "value": "Beginners also sometimes forget that window functions do not collapse rows like aggregate functions with GROUP BY. If you want to aggregate or summarize your data, use GROUP BY separately and apply window functions only when you need access to individual rows with aggregated context."
       },
       {
         "type": "paragraph",
-        "value": "In summary, mastering window functions enables you to unlock advanced, efficient, and readable SQL queries for detailed data analysis. Experiment with PARTITION BY and ORDER BY clauses inside OVER() to tailor the calculations to your needs."
-      }
-    ]
-  },
-  {
-    "slug": "optimizing-sql-query-performance-advanced-indexing",
-    "title": "Optimizing SQL Query Performance with Advanced Indexing Strategies",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn how to improve SQL query speed by using advanced indexing techniques that go beyond basic indexes. This beginner-friendly guide explains how to avoid common indexing errors and optimize your database queries effectively.",
-    "videoUrl": "https://www.youtube.com/watch?v=BHwzDmr6d7s",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "Indexes are powerful tools for speeding up SQL queries, but improper use of indexes can lead to errors and slower performance. This article introduces you to advanced indexing strategies that help optimize your queries, reduce execution time, and improve overall database performance."
-      },
-      {
-        "type": "paragraph",
-        "value": "The first step to optimizing with indexes is understanding the types of indexes available. Besides the basic single-column index, you can use composite indexes, covering indexes, and partial indexes. Each type has different use cases and performance impacts."
-      },
-      {
-        "type": "paragraph",
-        "value": "Composite indexes index multiple columns in a specified order and are useful when your WHERE clause filters on more than one column. However, be mindful of their order because SQL uses the leftmost prefix of the index."
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_user_date ON orders (user_id, order_date);"
-      },
-      {
-        "type": "paragraph",
-        "value": "This composite index will speed up queries filtering by both user_id and order_date. It can also help when filtering only by user_id, but not as effectively when filtering only by order_date."
-      },
-      {
-        "type": "paragraph",
-        "value": "Covering indexes contain all the columns required by a query, allowing the database to fetch data directly from the index without accessing the table (known as an index-only scan)."
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_user_order_amount ON orders (user_id) INCLUDE (order_amount);"
-      },
-      {
-        "type": "paragraph",
-        "value": "The above index includes order_amount as an additional column in the index so that queries selecting user_id and order_amount can be served entirely from the index."
-      },
-      {
-        "type": "paragraph",
-        "value": "Partial indexes can improve performance when queries only access a portion of the data, such as active users or orders within a date range."
-      },
-      {
-        "type": "code",
-        "value": "CREATE INDEX idx_active_users ON users (username) WHERE active = true;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This index is created only for rows where active is true, making lookups for active users faster without wasting space indexing the entire table."
-      },
-      {
-        "type": "paragraph",
-        "value": "Common mistakes to avoid when using advanced indexing strategies include creating too many indexes, ignoring index maintenance, or not considering the query patterns. Too many indexes can slow down write operations such as INSERTs and UPDATEs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Remember to analyze your queries with tools like EXPLAIN to see if indexes are being used effectively. Always test indexing changes in a development environment before applying them in production."
-      },
-      {
-        "type": "paragraph",
-        "value": "By learning and applying these advanced indexing strategies carefully, you can significantly improve the speed and efficiency of your SQL queries, creating a faster and more responsive application."
+        "value": "To summarize, mastering window functions for time-series data requires attention to:\n- Correct use of PARTITION BY and ORDER BY inside OVER()\n- Appropriate window frame definitions\n- Avoiding window functions in WHERE clauses\n- Understanding the difference between window functions and aggregation\n\nWith practice, these rules will help you avoid common errors and unlock powerful time-series analysis in SQL."
       }
     ]
   }
