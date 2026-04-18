@@ -9622,5 +9622,180 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "simple-temperature-converter-mini-project",
+    "title": "Simple Temperature Converter Mini Project",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "mini-projects",
+    "description": "Build a small program that converts temperatures between Celsius and Fahrenheit scales, allowing users to enter a temperature and choose the conversion direction.",
+    "prompt": "Create a C++ program that asks the user to input a temperature value and then select whether to convert it to Celsius or Fahrenheit. The program should perform the conversion using the correct formula and display the converted temperature clearly to the user.",
+    "guidance": [
+      "Use functions to separate the logic of converting temperatures for clarity.",
+      "Prompt the user to input both the temperature value and the desired conversion type.",
+      "Use simple conditional statements to decide which conversion formula to apply."
+    ],
+    "hints": [
+      "Conversion formulas: Fahrenheit to Celsius: (F - 32) * 5/9, Celsius to Fahrenheit: (C * 9/5) + 32.",
+      "Create two functions: one for converting Celsius to Fahrenheit and another for Fahrenheit to Celsius.",
+      "Make sure to handle the input carefully so the user knows what to enter."
+    ],
+    "starterCode": "#include <iostream>\nusing namespace std;\n\n// Function declarations\nfloat celsiusToFahrenheit(float celsius);\nfloat fahrenheitToCelsius(float fahrenheit);\n\nint main() {\n    float temperature;\n    char conversionType;\n\n    cout << \"Enter temperature value: \";\n    cin >> temperature;\n\n    cout << \"Convert to (C)elsius or (F)ahrenheit? \";\n    cin >> conversionType;\n\n    // Add your conversion logic here\n\n    return 0;\n}\n\nfloat celsiusToFahrenheit(float celsius) {\n    // TODO: implement conversion\n}\n\nfloat fahrenheitToCelsius(float fahrenheit) {\n    // TODO: implement conversion\n}\n",
+    "expectedOutput": "Enter temperature value: 100\nConvert to (C)elsius or (F)ahrenheit? F\n100 Celsius is 212 Fahrenheit\n\nEnter temperature value: 32\nConvert to (C)elsius or (F)ahrenheit? C\n32 Fahrenheit is 0 Celsius",
+    "concepts": [
+      "functions",
+      "conditionals",
+      "user input/output"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-complex-nested-callback-code-to-async-await-in-javascript",
+    "title": "Refactor Complex Nested Callback Code to Async/Await in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve code quality by refactoring a deeply nested callback-based asynchronous function into a clean, readable async/await structure, while maintaining identical functionality.",
+    "prompt": "You are given a JavaScript function that performs multiple asynchronous database fetches using nested callbacks, resulting in complex callback hell. Your task is to refactor this function into a clean async/await implementation without changing its behavior or output. Ensure proper error handling and maintain the logical order of asynchronous calls.",
+    "guidance": [
+      "Convert callback-based functions into promises or use promisified versions.",
+      "Use async/await to linearize asynchronous logic and avoid deeply nested callbacks.",
+      "Keep the error handling intact by using try/catch blocks.",
+      "Preserve the original data flow and output format."
+    ],
+    "hints": [
+      "Wrap each asynchronous call that uses callbacks into a promise if it doesn't already return one.",
+      "Remember that async functions always return promises, which you can await sequentially.",
+      "Pay attention to where errors are handled and replicate that behavior with try/catch."
+    ],
+    "starterCode": "function fetchUserData(userId, callback) {\n  getUser(userId, function(err, user) {\n    if (err) return callback(err);\n    getUserPosts(user.id, function(err, posts) {\n      if (err) return callback(err);\n      getCommentsForPosts(posts, function(err, comments) {\n        if (err) return callback(err);\n        callback(null, { user, posts, comments });\n      });\n    });\n  });\n}\n\n// Simulated async functions\nfunction getUser(id, cb) {\n  setTimeout(() => cb(null, { id, name: 'Alice' }), 100);\n}\nfunction getUserPosts(userId, cb) {\n  setTimeout(() => cb(null, [{ id: 1, content: 'Hello World' }, { id: 2, content: 'Another post' }]), 100);\n}\nfunction getCommentsForPosts(posts, cb) {\n  setTimeout(() => cb(null, [{ postId: 1, text: 'Nice post!' }, { postId: 2, text: 'Thanks for sharing' }]), 100);\n}",
+    "expectedOutput": "{ user: { id: 1, name: 'Alice' }, posts: [{ id: 1, content: 'Hello World' }, { id: 2, content: 'Another post' }], comments: [{ postId: 1, text: 'Nice post!' }, { postId: 2, text: 'Thanks for sharing' }] }",
+    "concepts": [
+      "async/await",
+      "callback hell",
+      "promises",
+      "error handling"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-nested-callbacks-to-async-await-for-cleaner-asynchronous-code",
+    "title": "Refactor Nested Callbacks to Async/Await for Cleaner Asynchronous Code",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve the provided JavaScript function by refactoring deeply nested callbacks into a more readable and maintainable async/await structure without changing the current functionality.",
+    "prompt": "You are given a function that performs multiple asynchronous database calls using nested callbacks. This causes callback hell and makes the code hard to read and maintain. Refactor this function to use async/await syntax while preserving the original behavior and error handling.\n\nThe function fetches user data from three sequential API endpoints, where each call depends on the previous call's result.\n\nEnsure all errors are properly propagated and caught, maintaining the original logical flow without introducing side effects.",
+    "guidance": [
+      "Convert callback-based asynchronous functions into Promises if they are not already Promise-based.",
+      "Use async/await to flatten the nested callbacks and improve readability.",
+      "Maintain the original error handling logic using try/catch blocks."
+    ],
+    "hints": [
+      "Look for places where functions accept callbacks and consider wrapping them with util.promisify or manually creating Promises.",
+      "Remember that async functions always return a Promise; use await to pause execution until each Promise resolves.",
+      "Keep the logical order of operations the same while refactoring."
+    ],
+    "starterCode": "function getUserProfile(userId, callback) {\n  getUser(userId, function(err, user) {\n    if (err) return callback(err);\n    getPosts(user.id, function(err, posts) {\n      if (err) return callback(err);\n      getComments(posts[0].id, function(err, comments) {\n        if (err) return callback(err);\n        callback(null, { user, posts, comments });\n      });\n    });\n  });\n}\n\n// Dummy async functions\nfunction getUser(id, cb) {\n  setTimeout(() => cb(null, { id, name: 'Alice' }), 100);\n}\n\nfunction getPosts(userId, cb) {\n  setTimeout(() => cb(null, [{ id: 1, title: 'Post 1' }, { id: 2, title: 'Post 2' }]), 100);\n}\n\nfunction getComments(postId, cb) {\n  setTimeout(() => cb(null, ['Nice post!', 'Thanks for sharing']), 100);\n}",
+    "expectedOutput": "{ user: { id: userId, name: 'Alice' }, posts: [ { id: 1, title: 'Post 1' }, { id: 2, title: 'Post 2' } ], comments: [ 'Nice post!', 'Thanks for sharing' ] }",
+    "concepts": [
+      "async/await",
+      "callback hell",
+      "error handling",
+      "promises"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-and-optimize-a-multithreaded-logging-system-in-c",
+    "title": "Refactor and Optimize a Multithreaded Logging System in C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve the readability, maintainability, and performance of an existing multithreaded logging system while preserving its functionality.",
+    "prompt": "You are given a multithreaded logging system implemented in C++. The current implementation works correctly but has poor code quality with redundant locking, duplicated code, inconsistent naming, and inefficient resource management. Refactor the given code to improve clarity, reduce locking overhead, and enhance performance while ensuring the system remains thread-safe and maintains the exact same logging behavior and output.\n\nYour refactoring should focus on:\n- Reducing lock contention and redundant synchronization.\n- Improving modularity and code reuse.\n- Using modern C++ features where appropriate for safety and clarity.\n- Avoiding data races or deadlocks.\n\nDo not change the public interface or the output format of logs.\n\nProvide the refactored C++ function(s)/class(es) that implement the logger.",
+    "guidance": [
+      "Identify sections of code that unnecessarily lock multiple times or hold locks for longer than needed.",
+      "Extract duplicated code into helper methods and improve naming consistency for clearer intent.",
+      "Consider using RAII wrappers like std::lock_guard or std::unique_lock to automatically manage mutexes."
+    ],
+    "hints": [
+      "Think about minimizing the critical section inside mutex locks to just the shared data modification.",
+      "Review how the log message queue is accessed and consider safer concurrent containers or condition variables.",
+      "Leverage C++11 smart pointers and move semantics to avoid unnecessary copying and enhance performance."
+    ],
+    "starterCode": "#include <iostream>\n#include <string>\n#include <queue>\n#include <mutex>\n#include <thread>\n#include <condition_variable>\n\nclass Logger {\nprivate:\n    std::queue<std::string> logs;\n    std::mutex mtx;\n    std::condition_variable cv;\n    bool stop = false;\n\npublic:\n    void log(const std::string &message) {\n        mtx.lock();\n        logs.push(message);\n        mtx.unlock();\n        cv.notify_one();\n    }\n\n    void processLogs() {\n        while (true) {\n            mtx.lock();\n            if (!logs.empty()) {\n                std::string msg = logs.front();\n                logs.pop();\n                mtx.unlock();\n                std::cout << msg << std::endl;\n            } else if (stop) {\n                mtx.unlock();\n                break;\n            } else {\n                mtx.unlock();\n                std::this_thread::sleep_for(std::chrono::milliseconds(100));\n            }\n        }\n    }\n\n    void shutdown() {\n        mtx.lock();\n        stop = true;\n        mtx.unlock();\n        cv.notify_all();\n    }\n};",
+    "expectedOutput": "Logs should be printed in the order they were received with no data races or crashes.\nLogging should continue smoothly until shutdown is called.",
+    "concepts": [
+      "multithreading",
+      "mutex and locking",
+      "condition variables",
+      "modern C++ best practices"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-messy-javascript-function-for-calculating-total-price",
+    "title": "Refactor Messy JavaScript Function for Calculating Total Price",
+    "language": "javascript",
+    "difficulty": "beginner",
+    "category": "code-quality",
+    "description": "Improve the readability and simplicity of a basic function that calculates the total price of items including tax by refactoring the provided messy code without changing its behavior.",
+    "prompt": "You are given a function that calculates the total price after adding tax for a list of item prices. However, the code is messy and hard to read. Refactor the function to improve readability and code quality, keeping the same behavior and output.\n\nRequirements:\n- Use meaningful variable names.\n- Simplify the calculation if possible.\n- Remove any redundant code.\n\nReturn the total price rounded to two decimal places.",
+    "guidance": [
+      "Make sure to keep the original functionality intact after refactoring.",
+      "Consider using array methods like reduce to simplify summing prices."
+    ],
+    "hints": [
+      "Check if any variables or steps are unnecessary and can be combined.",
+      "Use descriptive names to make the purpose of each variable clear."
+    ],
+    "starterCode": "function calculateTotal(prices, taxRate) {\n  var t = 0;\n  var i = 0;\n  for(i=0; i < prices.length; i++) {\n    t = t + prices[i];\n  }\n  var totalPrice = t + (t * taxRate);\n  return totalPrice.toFixed(2);\n}",
+    "expectedOutput": "calculateTotal([10, 20, 30], 0.1) // returns \"66.00\"",
+    "concepts": [
+      "functions",
+      "loops",
+      "variables",
+      "array methods",
+      "code readability"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-customizable-data-table-with-sorting-filtering-and-pagination-in-javascript",
+    "title": "Build a Customizable Data Table with Sorting, Filtering, and Pagination in JavaScript",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create a dynamic and reusable data table component in JavaScript that supports sorting by columns, filtering rows based on multiple criteria, and client-side pagination with a configurable page size.",
+    "prompt": "Build a function that accepts an array of objects (representing rows of data) and configuration options, then returns an object representing a data table with the following features:\n\n1. Sorting: Allow sorting data based on any column key, in ascending or descending order.\n2. Filtering: Support filtering the rows by multiple column values simultaneously.\n3. Pagination: Return the data split into pages with a configurable page size and the ability to switch pages.\n\nYour function should expose methods to:\n- sort(columnKey, order)\n- filter(filtersObject)\n- goToPage(pageNumber)\n- getCurrentPageData()\n\nEnsure the table state is preserved between operations, and methods can be chained or called in any order.\n\nUse pure JavaScript without UI libraries, focusing on data transformations and an API to interact with the table.",
+    "guidance": [
+      "Design your data structures carefully to track the current state of sorting, filtering, and pagination independently.",
+      "Apply filters before sorting and pagination to ensure data is consistent with the user's query.",
+      "Optimize for performance by limiting data operations only to changed aspects and avoid re-processing the entire dataset unnecessarily.",
+      "Test your function with diverse datasets, including edge cases like empty arrays or columns with non-uniform types."
+    ],
+    "hints": [
+      "Consider storing the original data separately from the processed data to reset filters or sorts easily.",
+      "Think about how to merge multiple filter criteria logically (AND behavior across filters).",
+      "Remember to validate inputs like page numbers and sort orders to prevent runtime errors."
+    ],
+    "starterCode": "function createDataTable(data, options) {\n  // options = { pageSize: number }\n  let originalData = [...data];\n  let filteredData = [...data];\n  let sortedData = [...data];\n  let currentPage = 1;\n  let pageSize = options.pageSize || 10;\n  let sortConfig = { key: null, order: 'asc' };\n  let filters = {};\n\n  function applyFilters() {\n    // TODO: apply filtering logic to filteredData\n  }\n\n  function applySorting() {\n    // TODO: sort filteredData into sortedData\n  }\n\n  return {\n    sort(columnKey, order = 'asc') {\n      // TODO\n      return this;\n    },\n    filter(filtersObject) {\n      // TODO\n      return this;\n    },\n    goToPage(pageNumber) {\n      // TODO\n      return this;\n    },\n    getCurrentPageData() {\n      // TODO: return current page slice of sortedData\n      return [];\n    }\n  };\n}",
+    "expectedOutput": "Example usage:\n\nconst data = [\n  { id: 1, name: 'Alice', age: 30 },\n  { id: 2, name: 'Bob', age: 25 },\n  { id: 3, name: 'Charlie', age: 35 },\n  // More rows...\n];\n\nconst table = createDataTable(data, { pageSize: 2 })\n  .filter({ age: val => val > 25 })\n  .sort('name', 'desc')\n  .goToPage(1);\n\nconsole.log(table.getCurrentPageData());\n\nExpected output (page 1 with filtered and sorted data):\n[\n  { id: 3, name: 'Charlie', age: 35 },\n  { id: 1, name: 'Alice', age: 30 }\n]",
+    "concepts": [
+      "Data Transformation",
+      "Sorting Algorithms",
+      "Filtering Logic",
+      "Pagination",
+      "State Management"
+    ],
+    "estimatedTime": "45 minutes",
+    "isFeatured": false
   }
 ];
