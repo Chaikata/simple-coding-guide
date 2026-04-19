@@ -9797,5 +9797,174 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "45 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "fix-the-join-logic-to-retrieve-customers-with-recent-orders",
+    "title": "Fix the JOIN Logic to Retrieve Customers With Recent Orders",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "You are given a SQL query intended to list all customers who have placed orders in the last 30 days. However, the query returns incorrect results, including customers without recent orders or missing some who should appear. Your task is to identify and fix the bugs related to the JOIN and WHERE conditions so that only customers with orders in the last 30 days are retrieved correctly.",
+    "prompt": "The provided SQL query is meant to retrieve customer IDs and names for those who have placed at least one order within the last 30 days from today. It uses orders and customers tables but produces incorrect results due to buggy JOIN and filtering logic. Your task is to fix the query so it correctly lists all and only customers with orders within the last 30 days.\n\nTables:\n- customers(customer_id, name)\n- orders(order_id, customer_id, order_date)\n\nQuery to fix:\n\nSELECT c.customer_id, c.name\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_date >= CURRENT_DATE - INTERVAL '30 days';",
+    "guidance": [
+      "Check how the WHERE clause interacts with the LEFT JOIN and affects filtering results.",
+      "Consider whether LEFT JOIN is appropriate or if INNER JOIN would yield correct results based on the filter condition.",
+      "Make sure to correctly filter on order_date while preserving intended customers."
+    ],
+    "hints": [
+      "A LEFT JOIN with a WHERE condition on the right table can convert the join effectively into an INNER JOIN, but in this case, it is not filtering as expected.",
+      "Try changing the JOIN type or move the date condition inside the JOIN ON clause.",
+      "Test your fixed query by confirming it does not include customers without recent orders."
+    ],
+    "starterCode": "SELECT c.customer_id, c.name\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_date >= CURRENT_DATE - INTERVAL '30 days';",
+    "expectedOutput": "Returns customer_id and name only for customers who have orders placed within the last 30 days. No customers without recent orders should appear.",
+    "concepts": [
+      "SQL JOINs",
+      "Filtering with WHERE",
+      "Date arithmetic",
+      "LEFT JOIN vs INNER JOIN"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-sql-query-to-correctly-filter-recent-orders",
+    "title": "Fix the SQL Query to Correctly Filter Recent Orders",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple SQL query intended to fetch orders placed in the last 7 days is not returning correct results. Find and fix the bug to make it functional.",
+    "prompt": "The query is supposed to select all columns from the 'orders' table for orders created within the last 7 days. However, it currently returns all records regardless of the date. Identify what is wrong with the WHERE clause and fix the query so that only recent orders (past 7 days) are returned.",
+    "guidance": [
+      "Check the logic and data types used in the WHERE condition.",
+      "Review how dates and intervals are handled in SQL queries."
+    ],
+    "hints": [
+      "Make sure to use the correct function to get the current date/time.",
+      "Compare the order date with the current date minus 7 days properly."
+    ],
+    "starterCode": "SELECT * FROM orders WHERE order_date > CURRENT_DATE - 7;",
+    "expectedOutput": "Only rows where 'order_date' is within the past 7 days (from today) are returned.",
+    "concepts": [
+      "SQL date functions",
+      "WHERE clause filtering"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "predict-the-result-of-a-multi-table-join-with-group-by-and-having",
+    "title": "Predict the Result of a Multi-Table Join with GROUP BY and HAVING",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "query-analysis",
+    "description": "Analyze the given SQL query with multiple joins, aggregation, and filtering to determine the final output.",
+    "prompt": "Given two tables, Employees and Sales, predict the output of the following SQL query. The Employees table contains employee_id and department, and the Sales table contains sale_id, employee_id, and sale_amount. The query joins the tables, aggregates total sales per department for employees with sales above 500, and filters departments with total sales above 1000.",
+    "guidance": [
+      "Understand how the INNER JOIN pairs records between Employees and Sales based on employee_id.",
+      "Focus on grouping results by department and how aggregation functions like SUM work.",
+      "Note how the HAVING clause filters groups after aggregation."
+    ],
+    "hints": [
+      "Remember that HAVING filters aggregated groups, while WHERE filters rows before aggregation.",
+      "Check which employees have sales greater than 500 and only those contribute to total department sales."
+    ],
+    "starterCode": "CREATE TABLE Employees (employee_id INT, department VARCHAR(20));\nINSERT INTO Employees VALUES\n(1, 'Sales'), (2, 'Marketing'), (3, 'Sales'), (4, 'Support');\n\nCREATE TABLE Sales (sale_id INT, employee_id INT, sale_amount INT);\nINSERT INTO Sales VALUES\n(101, 1, 700), (102, 1, 200), (103, 2, 300), (104, 3, 900), (105, 4, 400);\n\nSELECT e.department, SUM(s.sale_amount) AS total_sales\nFROM Employees e\nJOIN Sales s ON e.employee_id = s.employee_id\nWHERE s.sale_amount > 500\nGROUP BY e.department\nHAVING SUM(s.sale_amount) > 1000;",
+    "expectedOutput": "department | total_sales\nSales      | 1600",
+    "concepts": [
+      "JOINs",
+      "GROUP BY",
+      "HAVING clause",
+      "Aggregation functions"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-recursive-sql-function-to-calculate-employee-management-hierarchy-depth",
+    "title": "Build a Recursive SQL Function to Calculate Employee Management Hierarchy Depth",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "queries",
+    "description": "Create a user-defined SQL function that calculates the depth of management hierarchy for a given employee in an organizational chart stored in a single table. This advanced task requires knowledge of recursive Common Table Expressions (CTEs) and efficient query design.",
+    "prompt": "Given a table Employees(employee_id INT PRIMARY KEY, manager_id INT), write a SQL function get_management_depth(employee_id INT) RETURNS INT that returns the number of management levels above the given employee. The top-level manager (who has NULL as a manager_id) should have a depth of 0. For example, if employee 10 reports to 7 who reports to 3 (who is top-level), then the depth of employee 10 is 2.",
+    "guidance": [
+      "Use a recursive CTE to traverse the hierarchy from the employee up to the top manager.",
+      "Ensure your function handles cases where an employee has no manager (depth 0).",
+      "Optimize to avoid infinite recursion if there are cycles in the data.",
+      "Test your function with various employee_ids to verify correctness."
+    ],
+    "hints": [
+      "Use a base case where the manager_id is NULL (top-level).",
+      "The recursive part should repeatedly select the manager until reaching the top.",
+      "Use COUNT or a row numbering function within the CTE to calculate the depth."
+    ],
+    "starterCode": "CREATE FUNCTION get_management_depth(emp_id INT) RETURNS INT AS $$\nWITH RECURSIVE management_chain AS (\n  SELECT employee_id, manager_id, 0 AS depth\n  FROM Employees\n  WHERE employee_id = emp_id\n  UNION ALL\n  SELECT e.employee_id, e.manager_id, mc.depth + 1\n  FROM Employees e\n  JOIN management_chain mc ON e.employee_id = mc.manager_id\n  WHERE e.manager_id IS NOT NULL\n)\nSELECT MAX(depth) FROM management_chain;\n$$ LANGUAGE SQL;",
+    "expectedOutput": "For example, get_management_depth(10) returns 2 if 10 reports -> 7 reports -> 3 (top-level).",
+    "concepts": [
+      "recursive CTE",
+      "user-defined functions",
+      "hierarchical queries",
+      "SQL optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-a-user-data-processing-function-for-clarity-and-performance",
+    "title": "Refactor a User Data Processing Function for Clarity and Performance",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "code-quality",
+    "description": "Improve the readability and efficiency of a JavaScript function that processes an array of user objects by removing duplicates, sorting them by age, and mapping to a simplified format.",
+    "prompt": "You are given a function that processes an array of user objects. Each user object has id, name, and age properties. The function removes duplicates (based on id), sorts the users by age ascending, and then maps the users to an array that contains only their names and ages.\n\nYour task is to refactor the given function to improve its readability and performance while keeping the exact same output.\n\nMake sure to:\n- Remove redundant steps or loops,\n- Avoid unnecessary array iterations or mutations,\n- Use modern JavaScript features where appropriate,\n- Keep the function pure with no side effects.",
+    "guidance": [
+      "Use a Set or a Map to efficiently filter out duplicate users by id.",
+      "Try to minimize the number of iterations by combining operations where possible.",
+      "Use array destructuring and arrow functions for cleaner syntax."
+    ],
+    "hints": [
+      "Consider using Map to track users by their ids, which preserves insertion order and avoids duplicates.",
+      "Chaining methods like filter, sort, and map is clean but may be optimized by joining some steps."
+    ],
+    "starterCode": "function processUsers(users) {\n  // Remove duplicates\n  const uniqueUsers = [];\n  for (let i = 0; i < users.length; i++) {\n    let isDuplicate = false;\n    for (let j = 0; j < uniqueUsers.length; j++) {\n      if (users[i].id === uniqueUsers[j].id) {\n        isDuplicate = true;\n        break;\n      }\n    }\n    if (!isDuplicate) uniqueUsers.push(users[i]);\n  }\n\n  // Sort by age\n  uniqueUsers.sort(function(a, b) {\n    return a.age - b.age;\n  });\n\n  // Map to simplified format\n  const result = [];\n  for (let i = 0; i < uniqueUsers.length; i++) {\n    result.push({ name: uniqueUsers[i].name, age: uniqueUsers[i].age });\n  }\n\n  return result;\n}",
+    "expectedOutput": "[ { name: 'Alice', age: 25 }, { name: 'Bob', age: 30 }, { name: 'David', age: 40 } ]",
+    "concepts": [
+      "array iteration",
+      "data structures",
+      "functional programming",
+      "code refactoring"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-sum-calculation-bug-in-a-list-of-numbers",
+    "title": "Fix the Sum Calculation Bug in a List of Numbers",
+    "language": "python",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A beginner-level debugging challenge to fix a Python function that is supposed to calculate the sum of a list of numbers but currently returns an incorrect result.",
+    "prompt": "The function `calculate_sum` should take a list of numbers and return their total sum. However, the current implementation returns an incorrect value. Identify and fix the bug so the function returns the correct sum.",
+    "guidance": [
+      "Check how the sum is being accumulated inside the loop.",
+      "Make sure to initialize the sum correctly before the loop.",
+      "Verify the loop iterates through all elements in the list."
+    ],
+    "hints": [
+      "Look at the starting value of the variable that holds the total sum.",
+      "Check the variable names inside the loop; they might be mutated incorrectly.",
+      "Confirm that the sum is updated by adding each number, not overwriting it."
+    ],
+    "starterCode": "def calculate_sum(numbers):\n    total = 0\n    for num in numbers:\n        total = num\n    return total",
+    "expectedOutput": "calculate_sum([1, 2, 3, 4, 5])  # Output: 15",
+    "concepts": [
+      "loops",
+      "variables",
+      "functions",
+      "basic debugging"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
   }
 ];
