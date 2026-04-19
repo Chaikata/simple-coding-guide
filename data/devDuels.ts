@@ -9966,5 +9966,175 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "10 minutes",
     "isFeatured": false
+  },
+  {
+    "slug": "build-a-sql-function-to-calculate-the-total-price-of-an-order",
+    "title": "Build a SQL Function to Calculate the Total Price of an Order",
+    "language": "sql",
+    "difficulty": "beginner",
+    "category": "queries",
+    "description": "Write a SQL function that takes an order ID and returns the total price of that order by summing up the prices of its items.",
+    "prompt": "You have a table named OrderItems with columns: order_id, item_id, quantity, and price_per_item. Write a SQL function named calculate_order_total that takes an order_id as input and returns the total price, calculated as the sum of quantity * price_per_item for that order.",
+    "guidance": [
+      "Use the SUM aggregate function to calculate the total.",
+      "Filter the rows by the given order_id before summing.",
+      "Make sure to multiply quantity by price_per_item for each item."
+    ],
+    "hints": [
+      "Remember to filter using a WHERE clause on order_id.",
+      "The function should return a numeric value representing the total price."
+    ],
+    "starterCode": "CREATE FUNCTION calculate_order_total(p_order_id INT) RETURNS DECIMAL(10,2) BEGIN\n  -- Your code here\nEND;",
+    "expectedOutput": "If OrderItems contains rows with order_id = 101 like (item_id=1, quantity=2, price_per_item=10.50) and (item_id=2, quantity=1, price_per_item=5.00), then SELECT calculate_order_total(101); should return 26.00",
+    "concepts": [
+      "SQL functions",
+      "aggregate functions",
+      "basic arithmetic in SQL"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-deep-object-merger-function-in-javascript",
+    "title": "Build a Deep Object Merger Function in JavaScript",
+    "language": "javascript",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a function that deeply merges two JavaScript objects, combining nested properties without overwriting entire sub-objects.",
+    "prompt": "Write a function named `deepMerge` that accepts two objects and returns a new object by deeply merging them. For any matching keys where the values are both objects, the merge should happen recursively. For other value types, the value from the second object should overwrite the first. Arrays should be replaced entirely by the second object's value. The function should not modify the original input objects.",
+    "guidance": [
+      "Use recursion to handle nested objects.",
+      "Check if a value is an object before merging deeper.",
+      "Avoid mutating the input objects; create new objects during merge."
+    ],
+    "hints": [
+      "You can use `typeof` and `Array.isArray()` to differentiate between objects and arrays.",
+      "Use `Object.keys()` to iterate through properties of objects.",
+      "Remember to create new objects instead of modifying existing ones to preserve immutability."
+    ],
+    "starterCode": "function deepMerge(obj1, obj2) {\n  // Your code here\n}",
+    "expectedOutput": "deepMerge({a: 1, b: {x: 1, y: 2}}, {b: {y: 3, z: 4}, c: 5}) // returns {a: 1, b: {x: 1, y: 3, z: 4}, c: 5}",
+    "concepts": [
+      "recursion",
+      "object manipulation",
+      "immutability"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-bug-in-advanced-memoized-recursive-fibonacci-implementation",
+    "title": "Fix Bug in Advanced Memoized Recursive Fibonacci Implementation",
+    "language": "python",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix the bug in a recursive Fibonacci function optimized with memoization to achieve efficient performance for large input values.",
+    "prompt": "The following code is intended to compute the nth Fibonacci number efficiently using memoization (caching previously computed values). However, it currently produces incorrect results or runs inefficiently for larger inputs. Identify and fix the bug(s) so that it computes the correct Fibonacci number with optimal performance.",
+    "guidance": [
+      "Check the memoization dictionary usage and key handling to ensure cached values are stored and retrieved correctly.",
+      "Validate the base cases are correctly defined to prevent infinite recursion.",
+      "Test behavior on both small and large inputs to confirm correctness and efficiency."
+    ],
+    "hints": [
+      "Make sure all code paths update and return the cached results correctly.",
+      "Look closely at the base case return values and whether they correlate correctly with the Fibonacci sequence definition."
+    ],
+    "starterCode": "def fib(n, memo={}):\n    if n in memo:\n        return memo[n]\n    if n <= 1:\n        return n\n    memo[n] = fib(n-1, memo) + fib(n-2, memo-1)  # Bug here\n    return memo[n]",
+    "expectedOutput": "fib(10) should return 55\nfib(50) should return 12586269025",
+    "concepts": [
+      "memoization",
+      "recursion",
+      "debugging"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-the-memory-leak-and-logical-errors-in-a-custom-smart-pointer-implementation",
+    "title": "Fix the Memory Leak and Logical Errors in a Custom Smart Pointer Implementation",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Identify and fix memory management bugs and logical errors in a custom C++ shared pointer implementation to ensure proper resource deallocation and reference counting.",
+    "prompt": "The provided code is a basic implementation of a shared_ptr-like class in C++. However, it contains critical bugs that cause memory leaks, double-deletions, and incorrect reference counting. Your task is to identify and fix these bugs to make the smart pointer behave correctly and manage the resource safely with proper reference counting.",
+    "guidance": [
+      "Examine the destructor and copy assignment operator for proper handling of reference counts.",
+      "Ensure that the resource is deleted only when the last shared_ptr pointing to it is destroyed or reset.",
+      "Check for unsafe usage of raw pointers and dangling pointer risks."
+    ],
+    "hints": [
+      "Consider the rule of three: destructor, copy constructor, and copy assignment operator need to be consistent.",
+      "Reference count deletion and pointer nullification should happen atomically when count reaches zero.",
+      "Avoid deleting pointers multiple times; track ownership carefully."
+    ],
+    "starterCode": "template <typename T>\nclass SharedPtr {\nprivate:\n    T* ptr;\n    int* count;\npublic:\n    SharedPtr(T* p = nullptr) : ptr(p), count(new int(1)) {}\n\n    ~SharedPtr() {\n        (*count)--;\n        if (*count == 0) {\n            delete ptr;\n            delete count;\n        }\n    }\n\n    SharedPtr(const SharedPtr& sp) {\n        ptr = sp.ptr;\n        count = sp.count;\n        (*count)++;\n    }\n\n    SharedPtr& operator=(const SharedPtr& sp) {\n        if (this != &sp) {\n            if (--(*count) == 0) {\n                delete ptr;\n                delete count;\n            }\n            ptr = sp.ptr;\n            count = sp.count;\n            (*count)++;\n        }\n        return *this;\n    }\n    T& operator*() { return *ptr; }\n    T* operator->() { return ptr; }\n};",
+    "expectedOutput": "Correct behavior is no memory leaks or double deletions during usage. The pointer resource should be deleted exactly once when no SharedPtr objects reference it anymore.",
+    "concepts": [
+      "C++ pointers",
+      "memory management",
+      "reference counting",
+      "copy constructor and assignment",
+      "destructor"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "build-a-function-to-flatten-nested-lists-by-one-level",
+    "title": "Build a Function to Flatten Nested Lists by One Level",
+    "language": "python",
+    "difficulty": "intermediate",
+    "category": "functions",
+    "description": "Create a Python function that takes a list containing nested sublists and returns a new list flattened by exactly one level. This means only the first level of nested lists should be expanded, while deeper nested structures remain intact.",
+    "prompt": "Write a function named flatten_one_level that accepts one parameter: a list which may contain elements or nested lists at any depth. Your function should return a new list where only the first level of nested lists is flattened into the main list. Deeper nested lists inside those sublists should remain nested as they are.",
+    "guidance": [
+      "Iterate over each element in the input list and check whether it is a list.",
+      "If the element is a list, extend its items into the result list instead of adding the entire list as a single element.",
+      "If the element is not a list, append it normally to the result list."
+    ],
+    "hints": [
+      "Use Python's isinstance() function to check if an element is a list.",
+      "Using list.extend() is helpful when you want to add elements of a list rather than the list itself.",
+      "Avoid flattening recursively or using nested loops that go beyond one level."
+    ],
+    "starterCode": "def flatten_one_level(input_list):\n    # Your code here\n    pass",
+    "expectedOutput": "flatten_one_level([1, [2, 3], [4, [5, 6]], 7])  # returns [1, 2, 3, 4, [5, 6], 7]",
+    "concepts": [
+      "list manipulation",
+      "type checking",
+      "iteration"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "refactor-and-optimize-a-complex-sql-query-using-window-functions",
+    "title": "Refactor and Optimize a Complex SQL Query Using Window Functions",
+    "language": "sql",
+    "difficulty": "advanced",
+    "category": "optimization",
+    "description": "Given a complex SQL query with multiple nested subqueries and joins, refactor it to improve readability, performance, and maintainability while preserving the original output.",
+    "prompt": "You are provided with a SQL query that calculates rank, running totals, and aggregates from a sales dataset. The original query uses multiple nested subqueries and joins that cause inefficient execution and are hard to maintain. Your task is to refactor the SQL code to use window functions and CTEs (Common Table Expressions) to improve query performance and clarity without changing the output results. Ensure your refactored query produces the same dataset with the same order and columns.",
+    "guidance": [
+      "Use window functions such as ROW_NUMBER(), RANK(), SUM() OVER(), or others to simplify aggregation and ranking logic.",
+      "Replace nested subqueries with CTE blocks for better modularity and readability.",
+      "Verify output consistency by comparing results before and after refactoring."
+    ],
+    "hints": [
+      "Look for repeated join patterns and subqueries that compute partial aggregates—these can frequently be replaced by window functions over partitions.",
+      "Common window functions like ROW_NUMBER() and SUM() OVER(PARTITION BY ...) can often eliminate inefficient grouping and self-joins.",
+      "Ensure ORDER BY clauses inside window functions match the original query’s ordering to preserve ranking logic."
+    ],
+    "starterCode": "WITH sales_data AS (\n  SELECT \n    s.customer_id,\n    s.order_date,\n    s.amount,\n    c.region\n  FROM sales s\n  JOIN customers c ON s.customer_id = c.id\n),\nranked_sales AS (\n  SELECT \n    sd.customer_id,\n    sd.order_date,\n    sd.amount,\n    sd.region,\n    (SELECT COUNT(DISTINCT s2.order_date)\n     FROM sales_data s2\n     WHERE s2.customer_id = sd.customer_id\n       AND s2.order_date <= sd.order_date) AS order_rank\n  FROM sales_data sd\n),\naggregated_totals AS (\n  SELECT\n    customer_id,\n    MAX(order_rank) AS total_orders\n  FROM ranked_sales\n  GROUP BY customer_id\n),\nfinal_output AS (\n  SELECT\n    rs.customer_id,\n    rs.order_date,\n    rs.amount,\n    rs.region,\n    rs.order_rank,\n    at.total_orders,\n    (SELECT SUM(amount) FROM sales_data WHERE customer_id = rs.customer_id AND order_date <= rs.order_date) AS running_total\n  FROM ranked_sales rs\n  JOIN aggregated_totals at ON rs.customer_id = at.customer_id\n)\nSELECT * FROM final_output\nORDER BY customer_id, order_date;",
+    "expectedOutput": "The result table with columns: customer_id, order_date, amount, region, order_rank (rank of order_date per customer), total_orders (total number of orders per customer), running_total (cumulative amount per customer ordered by date). The rows should be ordered by customer_id then order_date, with the same values as the original nested-subquery output.",
+    "concepts": [
+      "Window Functions",
+      "Common Table Expressions (CTEs)",
+      "Query Optimization",
+      "SQL Joins",
+      "Aggregation"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
   }
 ];
