@@ -1,157 +1,223 @@
 [
   {
-    "slug": "mastering-javascript-proxy-for-advanced-object-manipulation-and-performance-optimization",
-    "title": "Mastering JavaScript Proxy for Advanced Object Manipulation and Performance Optimization",
+    "slug": "mastering-data-modeling-in-javascript-practical-tutorial",
+    "title": "Mastering Data Modeling in JavaScript: A Practical Tutorial for Real-World Applications",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to leverage JavaScript Proxy to intercept and customize object behavior for advanced manipulation and performance optimization. This beginner-friendly guide includes practical examples and clear explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=zO6CHvTErxE",
+    "description": "Learn the essentials of data modeling in JavaScript with this beginner-friendly tutorial, featuring practical examples for real-world projects.",
+    "videoUrl": "https://www.youtube.com/watch?v=I5_Gx3JNho8",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript's `Proxy` object is a powerful tool that allows you to intercept and redefine fundamental operations on objects, such as property lookup, assignment, enumeration, and function invocation. This makes it perfect for advanced object manipulation and optimizing performance by controlling exactly how objects behave."
+        "value": "Data modeling is a crucial skill for developers working with JavaScript, especially when managing complex data in applications. It helps organize, structure, and validate data so that your programs behave predictably and efficiently. In this tutorial, we'll introduce basic concepts of data modeling in JavaScript and guide you step-by-step through building a simple yet practical data model for an application."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll cover the basics of `Proxy`, explain its key traps, and show you practical examples where Proxy helps you manipulate objects more effectively and boost app performance."
+        "value": "### What is Data Modeling?\n\nData modeling means defining the structure and relationships of data in your program. In JavaScript, this often involves creating objects, classes, or schemas to describe what data looks like and how it should be used. This practice helps prevent bugs and makes your code easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "### What is a Proxy?"
-      },
-      {
-        "type": "paragraph",
-        "value": "A `Proxy` wraps around a target object and intercepts operations performed on that object. You define handler functions (called traps) that specify how to react when an operation occurs, such as property get or set."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here's the syntax to create a Proxy:"
+        "value": "### Step 1: Define the Data You Need\n\nLet's imagine you're building a simple app to manage books in a library. Each book has properties like title, author, year published, and whether it's checked out or not. First, let's define how this data will look."
       },
       {
         "type": "code",
-        "value": "const proxy = new Proxy(targetObject, handler);\n\n// targetObject: The original object to wrap\n// handler: An object containing traps like get, set, deleteProperty, and more"
+        "value": "// Define a simple book object\nconst book = {\n  title: 'The Great Gatsby',\n  author: 'F. Scott Fitzgerald',\n  yearPublished: 1925,\n  isCheckedOut: false\n};\n\nconsole.log(book);"
       },
       {
         "type": "paragraph",
-        "value": "### Basic Example: Logging Property Access"
+        "value": "While this object works, it's just a single instance. For multiple books, we want to structure data consistently, which leads us to modeling using classes."
       },
       {
         "type": "paragraph",
-        "value": "Let's create a simple proxy that logs every time a property is read or written."
+        "value": "### Step 2: Using JavaScript Classes for Data Models\n\nClasses in JavaScript let us create blueprints for objects, making it easy to create multiple book objects with the same structure."
       },
       {
         "type": "code",
-        "value": "const person = { name: 'Alice', age: 25 };\n\nconst handler = {\n  get(target, prop) {\n    console.log(`Getting property '${prop}'`);\n    return target[prop];\n  },\n  set(target, prop, value) {\n    console.log(`Setting property '${prop}' to '${value}'`);\n    target[prop] = value;\n    return true; // indicates success\n  }\n};\n\nconst proxyPerson = new Proxy(person, handler);\n\nconsole.log(proxyPerson.name);   // Logs: Getting property 'name'\nproxyPerson.age = 30;           // Logs: Setting property 'age' to '30'\nconsole.log(proxyPerson.age);   // Logs: Getting property 'age'\n"
+        "value": "class Book {\n  constructor(title, author, yearPublished) {\n    this.title = title;\n    this.author = author;\n    this.yearPublished = yearPublished;\n    this.isCheckedOut = false;\n  }\n\n  // Method to check out the book\n  checkOut() {\n    if (!this.isCheckedOut) {\n      this.isCheckedOut = true;\n      console.log(`${this.title} has been checked out.`);\n    } else {\n      console.log(`${this.title} is already checked out.`);\n    }\n  }\n\n  // Method to return the book\n  returnBook() {\n    if (this.isCheckedOut) {\n      this.isCheckedOut = false;\n      console.log(`${this.title} has been returned.`);\n    } else {\n      console.log(`${this.title} was not checked out.`);\n    }\n  }\n}\n\nconst book1 = new Book('1984', 'George Orwell', 1949);\nbook1.checkOut();\nbook1.returnBook();"
       },
       {
         "type": "paragraph",
-        "value": "### Advanced Manipulation: Virtual Properties"
+        "value": "This class creates a uniform data model for books and includes behavior (methods) related to a book's state."
       },
       {
         "type": "paragraph",
-        "value": "You can define properties that don't actually exist on the object but are calculated on the fly. For example, derive a person's full name without explicitly storing it:"
+        "value": "### Step 3: Managing Multiple Data Models\n\nUsually, you will handle collections of data. Let's create a Library class that manages multiple Book instances."
       },
       {
         "type": "code",
-        "value": "const user = { firstName: 'John', lastName: 'Doe' };\n\nconst handlerVirtual = {\n  get(target, prop) {\n    if (prop === 'fullName') {\n      return `${target.firstName} ${target.lastName}`;\n    }\n    return target[prop];\n  }\n};\n\nconst proxyUser = new Proxy(user, handlerVirtual);\nconsole.log(proxyUser.fullName); // Output: John Doe"
+        "value": "class Library {\n  constructor() {\n    this.books = [];\n  }\n\n  addBook(book) {\n    this.books.push(book);\n    console.log(`Added: ${book.title}`);\n  }\n\n  findBooksByAuthor(author) {\n    return this.books.filter(book => book.author === author);\n  }\n}\n\nconst myLibrary = new Library();\nconst bookA = new Book('The Hobbit', 'J.R.R. Tolkien', 1937);\nconst bookB = new Book('The Lord of the Rings', 'J.R.R. Tolkien', 1954);\nmyLibrary.addBook(bookA);\nmyLibrary.addBook(bookB);\n\nconst tolkienBooks = myLibrary.findBooksByAuthor('J.R.R. Tolkien');\nconsole.log('Books by Tolkien:', tolkienBooks);"
       },
       {
         "type": "paragraph",
-        "value": "### Performance Optimization: Lazy Property Initialization"
+        "value": "The Library class shows how models interact with each other to organize data better."
       },
       {
         "type": "paragraph",
-        "value": "Imagine a scenario where some object properties require heavy computation or data fetching. Using Proxy, we can delay this calculation until the property is actually accessed."
+        "value": "### Step 4: Validating Data\n\nEnsuring data validity is part of modeling. You can add simple validation inside constructors or methods to prevent invalid data."
       },
       {
         "type": "code",
-        "value": "const heavyComputationObject = {};\n\nconst handlerLazy = {\n  get(target, prop) {\n    if (!(prop in target)) {\n      console.log(`Calculating property '${prop}'...`);\n      // Simulate a costly calculation\n      if (prop === 'data') {\n        target[prop] = Array.from({ length: 1000000 }, (_, i) => i);\n      }\n    }\n    return target[prop];\n  }\n};\n\nconst proxyLazy = new Proxy(heavyComputationObject, handlerLazy);\n// The data property isn’t computed yet\n\nconsole.log(proxyLazy.data.length); // Calculation happens here\nconsole.log(proxyLazy.data.length); // Cached result used here, no recalculation"
+        "value": "class ValidatedBook {\n  constructor(title, author, yearPublished) {\n    if (!title || !author || !yearPublished) {\n      throw new Error('All fields are required');\n    }\n    if (typeof yearPublished !== 'number' || yearPublished < 0) {\n      throw new Error('Invalid year published');\n    }\n    this.title = title;\n    this.author = author;\n    this.yearPublished = yearPublished;\n    this.isCheckedOut = false;\n  }\n}\n\ntry {\n  const invalidBook = new ValidatedBook('', 'Unknown', 2023);\n} catch(e) {\n  console.error(e.message); // All fields are required\n}"
       },
       {
         "type": "paragraph",
-        "value": "### Common Proxy Traps to Know"
+        "value": "Validation helps catch errors early and maintain clean, reliable data."
       },
       {
         "type": "paragraph",
-        "value": "- `get(target, property, receiver)`: Intercepts property access\n- `set(target, property, value, receiver)`: Intercepts property assignment\n- `has(target, property)`: Intercepts the `in` operator\n- `deleteProperty(target, property)`: Intercepts `delete` operations\n- `ownKeys(target)`: Intercepts property enumeration like `Object.keys`"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion"
-      },
-      {
-        "type": "paragraph",
-        "value": "JavaScript Proxy opens up incredible opportunities for advanced object handling, allowing you to customize behavior and optimize performance elegantly. With a few lines of code, you can intercept interactions with objects, create virtual properties, implement lazy-loading, and more. Experiment with different traps to see how Proxy can improve your JavaScript applications."
+        "value": "### Final Thoughts\n\nMastering data modeling in JavaScript will help you build better applications. Start simple with objects, expand to classes, and then manage collections and validation as your app grows. Keep practicing these concepts and your code will become more organized, readable, and maintainable."
       }
     ]
   },
   {
-    "slug": "handling-floating-point-precision-edge-cases-in-javascript-calculations",
+    "slug": "handling-floating-point-precision-edge-cases-javascript",
     "title": "Handling Floating Point Precision Edge Cases in JavaScript Calculations",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to handle floating point precision issues in JavaScript with practical solutions for common edge cases.",
+    "description": "Learn how to handle common floating point precision issues in JavaScript calculations with beginner-friendly tips and practical code examples.",
     "videoUrl": "https://www.youtube.com/watch?v=0IOsF_N1DIs",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript uses the IEEE 754 standard for representing numbers, which means it stores numbers as floating point values. While this is efficient, it can sometimes lead to precision errors when performing arithmetic operations. For example, simple calculations like 0.1 + 0.2 don't always equal 0.3 as you might expect."
+        "value": "When working with numbers in JavaScript, you might notice strange results when performing arithmetic with decimal numbers. For example, 0.1 + 0.2 does not exactly equal 0.3. These small differences occur because JavaScript represents numbers using the IEEE 754 floating point standard, which cannot precisely represent some decimal numbers."
       },
       {
         "type": "paragraph",
-        "value": "Let's look at this common floating point precision issue in JavaScript:"
+        "value": "Understanding and handling these floating point precision errors is important, especially when dealing with financial calculations, user inputs, or any situation requiring high accuracy."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here’s an example showing the problem:"
       },
       {
         "type": "code",
-        "value": "console.log(0.1 + 0.2); // Output: 0.30000000000000004"
+        "value": "console.log(0.1 + 0.2 === 0.3); // false\nconsole.log(0.1 + 0.2); // 0.30000000000000004"
       },
       {
         "type": "paragraph",
-        "value": "Here, the result is slightly off due to how floating point numbers are stored internally. This might cause bugs, especially when comparing numbers or performing money calculations."
+        "value": "Because of this, direct comparisons or calculations can be unreliable. To handle this, there are a few common approaches:"
       },
       {
         "type": "paragraph",
-        "value": "### How to handle floating point precision issues"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Use the `toFixed()` method**: This method formats a number using fixed-point notation. It's useful to round the number to a specific number of decimal places."
+        "value": "1. **Rounding to a fixed number of decimal places:** Use `toFixed` or multiply and divide to round numbers before comparison."
       },
       {
         "type": "code",
-        "value": "const result = 0.1 + 0.2;\nconsole.log(result.toFixed(2)); // Output: \"0.30\""
+        "value": "const sum = 0.1 + 0.2;\nconst roundedSum = Number(sum.toFixed(2));\nconsole.log(roundedSum === 0.3); // true"
       },
       {
         "type": "paragraph",
-        "value": "Note that `toFixed` returns a string, so if you want a number, convert it back with `parseFloat()` or `Number()`."
+        "value": "2. **Using a small tolerance (epsilon) when comparing numbers:** Instead of strict equality, check if the difference is smaller than a tiny value."
       },
       {
         "type": "code",
-        "value": "const preciseResult = Number(result.toFixed(2));\nconsole.log(preciseResult); // Output: 0.3"
+        "value": "const epsilon = Number.EPSILON;\n\nfunction isEqual(a, b) {\n  return Math.abs(a - b) < epsilon;\n}\n\nconsole.log(isEqual(0.1 + 0.2, 0.3)); // true"
       },
       {
         "type": "paragraph",
-        "value": "2. **Multiply and divide to convert to integers**: When working with decimals, multiply numbers to convert them into integers, perform calculations, then divide back."
+        "value": "3. **Integer arithmetic when possible:** Multiply decimals to convert them to integers before calculations, then divide back."
       },
       {
         "type": "code",
-        "value": "const a = 0.1;\nconst b = 0.2;\nconst sum = (a * 10 + b * 10) / 10;\nconsole.log(sum); // Output: 0.3"
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst sumInt = (a * 10 + b * 10) / 10;\nconsole.log(sumInt === 0.3); // true"
       },
       {
         "type": "paragraph",
-        "value": "This approach works well for a fixed number of decimal places, like monetary values."
+        "value": "In summary, floating point precision issues are common but manageable in JavaScript. Using rounding, epsilon-based comparisons, or integer math helps ensure your calculations behave correctly in practical scenarios."
+      }
+    ]
+  },
+  {
+    "slug": "boosting-typescript-app-speed-efficient-memory-management",
+    "title": "Boosting TypeScript App Speed: In-Depth Guide to Efficient Memory Management",
+    "language": "typescript",
+    "type": "tutorials",
+    "description": "Learn how to boost your TypeScript application's speed with efficient memory management techniques. This beginner-friendly guide covers practical tips and coding examples to optimize performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=b4TpO9pYpqk",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When building applications with TypeScript, speed and performance matter—especially if your app handles lots of data or runs complex operations. One key area that affects performance is memory management. Efficient memory usage helps your app run faster and reduces the chance of crashes or slowdowns."
       },
       {
         "type": "paragraph",
-        "value": "3. **Use a small tolerance value when comparing floating point numbers**: Direct comparison might fail due to tiny precision differences."
+        "value": "This guide will introduce you to practical techniques for managing memory efficiently in your TypeScript apps. Whether you're just starting out or looking to optimize your existing project, these tips will improve your code's quality and speed."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 1. Understand Memory Allocation and Garbage Collection"
+      },
+      {
+        "type": "paragraph",
+        "value": "When your app creates variables, objects, or arrays, memory is allocated to store data. JavaScript (and TypeScript, as a superset) uses automatic garbage collection to free up memory that is no longer used. However, inefficient coding can keep memory occupied unnecessarily, leading to slower performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Use Primitive Types When Possible"
+      },
+      {
+        "type": "paragraph",
+        "value": "Primitive types like `number`, `string`, and `boolean` consume less memory than complex objects. Wherever possible, use primitives instead of objects or arrays for simple data."
       },
       {
         "type": "code",
-        "value": "const EPSILON = Number.EPSILON;\nfunction areEqual(a, b) {\n  return Math.abs(a - b) < EPSILON;\n}\n\nconsole.log(areEqual(0.1 + 0.2, 0.3)); // Output: true"
+        "value": "// Using primitive types\nlet age: number = 25;\nlet name: string = \"Alice\";\nlet isActive: boolean = true;"
       },
       {
         "type": "paragraph",
-        "value": "In this example, instead of `a === b`, we check if `a` and `b` are close enough using a very small value called an epsilon."
+        "value": "### 3. Avoid Unnecessary Object Creation"
+      },
+      {
+        "type": "paragraph",
+        "value": "Creating many objects inside loops or frequently called functions can consume a lot of memory. Reuse objects or variables where possible."
+      },
+      {
+        "type": "code",
+        "value": "function processItems(items: number[]) {\n  let sum = 0; // reuse this variable instead of creating new ones\n  for (let i = 0; i < items.length; i++) {\n    sum += items[i];\n  }\n  return sum;\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 4. Clear References to Unused Objects"
+      },
+      {
+        "type": "paragraph",
+        "value": "If you have variables holding objects or arrays that you no longer need, set them to `null` to help the garbage collector identify unused memory."
+      },
+      {
+        "type": "code",
+        "value": "let dataArray: number[] | null = [1, 2, 3, 4];\n// Use dataArray for operations\n// When done, clear the reference\n dataArray = null;"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 5. Use Efficient Data Structures"
+      },
+      {
+        "type": "paragraph",
+        "value": "Choosing the right data structure saves memory and speeds up access. For example, `Map` and `Set` can be more efficient than arrays for certain lookups."
+      },
+      {
+        "type": "code",
+        "value": "const uniqueValues = new Set<string>();\nuniqueValues.add(\"apple\");\nuniqueValues.add(\"banana\");\n// Set automatically handles duplicates"
+      },
+      {
+        "type": "paragraph",
+        "value": "### 6. Optimize Large Loops and Recursive Calls"
+      },
+      {
+        "type": "paragraph",
+        "value": "Avoid creating new variables or objects inside large loops or recursive functions when possible. This limits frequent memory allocations."
+      },
+      {
+        "type": "code",
+        "value": "function factorial(n: number): number {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}\n// For very deep recursion, consider iterative approaches to save memory."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 7. Use Tools to Monitor Memory Usage"
+      },
+      {
+        "type": "paragraph",
+        "value": "Modern browsers and Node.js provide tools to track memory usage and find potential leaks. Use Chrome DevTools or VSCode debugging to profile your TypeScript app and optimize accordingly."
       },
       {
         "type": "paragraph",
@@ -159,459 +225,259 @@
       },
       {
         "type": "paragraph",
-        "value": "Floating point precision errors are common in JavaScript due to how numbers are represented. To avoid these issues, consider rounding with `toFixed()`, converting decimals to integers during calculations, or using an epsilon tolerance for comparisons. These tips help make your code more reliable and bug-free when working with decimal numbers."
+        "value": "Efficient memory management in TypeScript involves understanding how memory is allocated and released, writing code that minimizes unnecessary object creation, and cleaning up references when data is no longer needed. Using appropriate data structures and monitoring tools further helps maintain app speed and performance."
+      },
+      {
+        "type": "paragraph",
+        "value": "Start applying these techniques today to make your TypeScript apps faster and more efficient!"
       }
     ]
   },
   {
-    "slug": "getting-started-with-typescript-a-beginners-tutorial-for-building-your-first-web-app",
-    "title": "Getting Started with TypeScript: A Beginner’s Tutorial for Building Your First Web App",
-    "language": "typescript",
-    "type": "tutorials",
-    "description": "Learn how to build your first web app using TypeScript with this beginner-friendly tutorial. Understand TypeScript basics, setup, and build a simple interactive web app step-by-step.",
-    "videoUrl": "https://www.youtube.com/watch?v=d56mG7DezGs",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a powerful, statically typed superset of JavaScript that compiles to plain JavaScript. It helps catch errors early and makes your code more maintainable. In this tutorial, we'll guide you through the basics of TypeScript and build a simple interactive web app using TypeScript."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 1: Setting Up Your Environment\nFirst, make sure you have Node.js installed. Then, install TypeScript globally using npm."
-      },
-      {
-        "type": "code",
-        "value": "npm install -g typescript"
-      },
-      {
-        "type": "paragraph",
-        "value": "Create a new folder for your project and navigate into it. Initialize a new Node.js project and install a simple HTTP server to serve your app locally."
-      },
-      {
-        "type": "code",
-        "value": "mkdir my-first-ts-app\ncd my-first-ts-app\nnpm init -y\nnpm install lite-server --save-dev"
-      },
-      {
-        "type": "paragraph",
-        "value": "Next, create a `tsconfig.json` file to configure the TypeScript compiler by running:"
-      },
-      {
-        "type": "code",
-        "value": "tsc --init"
-      },
-      {
-        "type": "paragraph",
-        "value": "This creates a config file with many options. The default settings are fine for this tutorial."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 2: Writing Your First TypeScript Code\nCreate a folder named `src`. Inside it, create a file `index.ts`."
-      },
-      {
-        "type": "code",
-        "value": "function greet(name: string): string {\n  return `Hello, ${name}! Welcome to TypeScript.`;\n}\n\nconst userName = 'Friend';\nconsole.log(greet(userName));"
-      },
-      {
-        "type": "paragraph",
-        "value": "This simple function takes a string `name` and returns a greeting. The type annotations (`: string`) help TypeScript catch errors before running the code."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 3: Compiling TypeScript\nRun the command below to compile your TypeScript file into JavaScript:"
-      },
-      {
-        "type": "code",
-        "value": "tsc"
-      },
-      {
-        "type": "paragraph",
-        "value": "This generates `index.js` in the same directory. You can run this JavaScript file using Node.js:"
-      },
-      {
-        "type": "code",
-        "value": "node src/index.js"
-      },
-      {
-        "type": "paragraph",
-        "value": "You should see the greeting printed in your terminal."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 4: Creating a Simple Web App\nNow, let's create an interactive web page.\nCreate an `index.html` file in the root folder:"
-      },
-      {
-        "type": "code",
-        "value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>My First TypeScript App</title>\n</head>\n<body>\n  <h1>Greeting App</h1>\n  <input type=\"text\" id=\"nameInput\" placeholder=\"Enter your name\" />\n  <button id=\"greetBtn\">Greet Me</button>\n  <p id=\"greeting\"></p>\n\n  <script src=\"dist/index.js\"></script>\n</body>\n</html>"
-      },
-      {
-        "type": "paragraph",
-        "value": "Update your TypeScript code in `src/index.ts` to handle user input and update the page dynamically:"
-      },
-      {
-        "type": "code",
-        "value": "function greet(name: string): string {\n  return `Hello, ${name}! Welcome to TypeScript.`;\n}\n\nconst button = document.getElementById('greetBtn') as HTMLButtonElement;\nconst input = document.getElementById('nameInput') as HTMLInputElement;\nconst greeting = document.getElementById('greeting') as HTMLParagraphElement;\n\nbutton.addEventListener('click', () => {\n  const name = input.value.trim();\n  if(name) {\n    greeting.textContent = greet(name);\n  } else {\n    greeting.textContent = 'Please enter your name.';\n  }\n});"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Step 5: Compiling and Running the App\nModify your `tsconfig.json` to output compiled files to a `dist` folder. Find the line `\"outDir\": \"./\",` or add it inside `compilerOptions` as below:"
-      },
-      {
-        "type": "code",
-        "value": "{\n  \"compilerOptions\": {\n    \"outDir\": \"./dist\",\n    \"target\": \"es5\",\n    \"module\": \"commonjs\",\n    \"strict\": true\n  }\n}"
-      },
-      {
-        "type": "paragraph",
-        "value": "Now compile your app again:"
-      },
-      {
-        "type": "code",
-        "value": "tsc"
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, start your local server:"
-      },
-      {
-        "type": "code",
-        "value": "npx lite-server"
-      },
-      {
-        "type": "paragraph",
-        "value": "Your browser should open `index.html`. Enter a name and click \"Greet Me\" to see your TypeScript-powered web app in action!"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Conclusion\nYou’ve just built your first web app using TypeScript! This tutorial introduced how to write typed code, compile it, and interact with the browser. As you continue learning, explore interfaces, classes, and advanced TypeScript features to build powerful applications. Happy coding!"
-      }
-    ]
-  },
-  {
-    "slug": "handling-unexpected-typescript-nullability-in-complex-api-responses",
-    "title": "Handling Unexpected TypeScript Nullability in Complex API Responses",
+    "slug": "mastering-typescripts-strict-null-checks-for-robust-error-handling",
+    "title": "Mastering TypeScript's Strict Null Checks for Robust Error Handling",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to manage unexpected null or undefined values in complex API responses when using TypeScript, with practical tips and examples for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=HDaPLwZWguo",
+    "description": "Learn how to use TypeScript's strict null checks to catch null and undefined errors early, making your code safer and easier to maintain.",
+    "videoUrl": "https://www.youtube.com/watch?v=5_kDRS3lrdA",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with APIs in TypeScript, one common challenge is handling null or undefined values, especially in complex nested responses. TypeScript often indicates values might be nullable, but sometimes these values unexpectedly appear as null or undefined, leading to runtime errors if not handled carefully. This article offers beginner-friendly strategies to safely manage such nullability."
+        "value": "TypeScript helps developers write safer code by catching errors during development before they become runtime bugs. One powerful feature for improving this safety is ‘strict null checks’. By enabling this setting, TypeScript forces you to handle null and undefined values explicitly, reducing common errors related to these types."
       },
       {
         "type": "paragraph",
-        "value": "For example, consider an API response with nested objects, where some fields can be null depending on the server state or input. TypeScript interfaces or types might mark these fields as optional or nullable, but in practice, the values can still cause problems if you try to use them directly."
+        "value": "When strict null checks are disabled, TypeScript allows variables to be null or undefined unless explicitly restricted. This can lead to unexpected runtime errors, like trying to access a property of null or undefined."
       },
       {
         "type": "paragraph",
-        "value": "Here's a simple example of a complex API response type:"
+        "value": "Let's see an example of how strict null checking works in practice. Consider the following code where strict null checks are disabled:"
       },
       {
         "type": "code",
-        "value": "interface UserProfile {\n  id: string;\n  name: string;\n  contact?: {\n    email: string | null;\n    phone?: string;\n  } | null;\n}\n\n// The response from the API might look like this:\nconst apiResponse: UserProfile = {\n  id: \"123\",\n  name: \"Alice\",\n  contact: null // could be null or an object\n};"
+        "value": "function greet(name: string) {\n  console.log(\"Hello, \" + name.toUpperCase());\n}\n\ngreet(null);  // Runtime error: Cannot read property 'toUpperCase' of null"
       },
       {
         "type": "paragraph",
-        "value": "If you try to access `apiResponse.contact.email` directly without checking, TypeScript might warn you — or worse, your code might throw an error at runtime if `contact` is null."
+        "value": "Here, passing null to greet causes a runtime error because the code attempts to call .toUpperCase() on null. TypeScript does not catch this since null is allowed."
       },
       {
         "type": "paragraph",
-        "value": "To handle this safely, you should always check if the nullable property exists before accessing deeper properties. One common pattern is to use optional chaining (`?.`):"
+        "value": "Now, let's enable strict null checks by adding the following to your tsconfig.json file:"
       },
       {
         "type": "code",
-        "value": "const email = apiResponse.contact?.email || \"No email provided\";\nconsole.log(email);"
+        "value": "{\n  \"compilerOptions\": {\n    \"strictNullChecks\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, `?.` safely checks if `contact` is not null or undefined before trying to access `email`. If `contact` is `null`, `email` will be `undefined`, and the fallback string will be used."
-      },
-      {
-        "type": "paragraph",
-        "value": "But what if you want to do something more complex, like calling a function with the email? Always handle the `undefined` case explicitly to avoid errors:"
+        "value": "With strict null checks enabled, the same function will produce a compile-time error if you try to pass null:"
       },
       {
         "type": "code",
-        "value": "function sendEmail(email: string) {\n  console.log(`Sending email to ${email}`);\n}\n\nif (apiResponse.contact?.email) {\n  sendEmail(apiResponse.contact.email);\n} else {\n  console.log(\"No valid email to send.\");\n}"
+        "value": "function greet(name: string) {\n  console.log(\"Hello, \" + name.toUpperCase());\n}\n\ngreet(null); // Error: Argument of type 'null' is not assignable to parameter of type 'string'."
       },
       {
         "type": "paragraph",
-        "value": "Sometimes API data is even more complex, with multiple nested nullable fields. In such cases, building helper functions or using TypeScript's type narrowing can help keep your code clean and safe."
+        "value": "This forces you to handle the possibility of null or undefined values explicitly. You can update the function to accept both string and null using a union type and handle the null case gracefully."
+      },
+      {
+        "type": "code",
+        "value": "function greet(name: string | null) {\n  if (name === null) {\n    console.log(\"Hello, guest!\");\n  } else {\n    console.log(\"Hello, \" + name.toUpperCase());\n  }\n}\n\ngreet(null); // Output: Hello, guest!"
       },
       {
         "type": "paragraph",
-        "value": "To summarize, when handling unexpected nullability in TypeScript API responses:\n\n- Use optional chaining (`?.`) to safely access nested nullable properties.\n- Provide fallback values when appropriate.\n- Explicitly check for `null` or `undefined` before calling functions.\n- Consider writing helper functions for repeated null checks.\n\nBy following these tips, you minimize runtime errors and make your code more robust and beginner-friendly."
+        "value": "Using strict null checks improves code robustness by making sure all null and undefined cases are thoughtfully considered and handled. This leads to fewer bugs and more maintainable code."
+      },
+      {
+        "type": "paragraph",
+        "value": "In summary, to master strict null checks in TypeScript:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- Enable strictNullChecks in your tsconfig.json.\n- Use union types to explicitly include null or undefined when necessary.\n- Use conditional checks or default values to safely handle nullable variables.\n- Benefit from compile-time errors that prevent common null-reference bugs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Embracing strict null checks in TypeScript is a simple but powerful step toward writing safer, more predictable applications."
       }
     ]
   },
   {
-    "slug": "handling-timezone-edge-cases-python",
-    "title": "Handling Timezone Edge Cases in Python Date and Time Operations",
+    "slug": "building-scalable-data-models-in-python-for-ecommerce",
+    "title": "Building Scalable Data Models in Python for E-commerce Platforms",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to handle timezone edge cases effectively in Python date and time operations with beginner-friendly explanations and examples.",
-    "videoUrl": "https://www.youtube.com/watch?v=9OkNEZKoPAo",
+    "description": "Learn how to create scalable and efficient data models in Python to support growing e-commerce platforms with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=NNeT-PhaLZk",
     "content": [
       {
         "type": "paragraph",
-        "value": "Working with dates and times in Python is straightforward with the built-in datetime module. However, handling timezones can introduce complexities, especially around edge cases like daylight saving time (DST) changes or ambiguous times. This tutorial will walk you through common timezone issues and how to manage them safely using Python’s pytz library."
+        "value": "E-commerce platforms handle a lot of data — from products and users to orders and reviews. As your platform grows, having scalable data models becomes essential to keep your application fast and maintainable. In this tutorial, we'll cover how to build scalable data models using Python, focusing on clarity, reusability, and organization."
       },
       {
         "type": "paragraph",
-        "value": "First, let's understand a key issue: daylight saving time causes clocks to move forward or backward by an hour, which creates ambiguous or non-existent times. For example, 2:30 AM might not exist when clocks jump forward, or there might be two 1:30 AMs when clocks fall back."
+        "value": "We'll use Python classes to represent entities such as Products, Users, and Orders. This approach helps us organize related data together and makes it easier to expand the system in the future."
       },
       {
         "type": "paragraph",
-        "value": "To handle timezones properly, you should always work with timezone-aware datetime objects. The pytz library lets you attach timezone info and handle DST transitions correctly."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here’s how to create a timezone-aware datetime object using pytz:"
+        "value": "Let's start by defining a simple Product model."
       },
       {
         "type": "code",
-        "value": "import datetime\nimport pytz\n\n# Create a naive datetime object\nnaive_dt = datetime.datetime(2024, 3, 10, 2, 30)\n\n# Define a timezone\neastern = pytz.timezone('US/Eastern')\n\n# Localize the naive datetime to the timezone\naware_dt = eastern.localize(naive_dt, is_dst=None)  # is_dst=None asks pytz to raise an error for ambiguous/nonexistent times\n\nprint(aware_dt)"
+        "value": "class Product:\n    def __init__(self, product_id, name, price, stock):\n        self.product_id = product_id\n        self.name = name\n        self.price = price\n        self.stock = stock\n\n    def update_stock(self, quantity):\n        self.stock += quantity\n\n    def __repr__(self):\n        return f\"Product({self.product_id}, {self.name}, ${self.price}, Stock: {self.stock})\""
       },
       {
         "type": "paragraph",
-        "value": "In the code above, `localize` is used to assign a timezone to a naive datetime. Setting `is_dst=None` makes pytz raise an exception if the time is ambiguous or does not exist due to DST changes. Handling these exceptions helps you identify edge cases."
+        "value": "In this simple Product class, we include an ID, a name, a price, and stock quantity. The update_stock method modifies the stock count, helping to manage inventory changes."
       },
       {
         "type": "paragraph",
-        "value": "Let's see how to catch these exceptions and resolve ambiguous times:"
+        "value": "Next, let’s model a User. Users can have basic attributes like an ID, name, and email."
       },
       {
         "type": "code",
-        "value": "from pytz.exceptions import AmbiguousTimeError, NonExistentTimeError\n\ntry:\n    aware_dt = eastern.localize(naive_dt, is_dst=None)\nexcept AmbiguousTimeError:\n    # When time is ambiguous, choose standard time (is_dst=False) or daylight time (is_dst=True)\n    aware_dt = eastern.localize(naive_dt, is_dst=False)\nexcept NonExistentTimeError:\n    # When time doesn't exist (e.g., during spring forward), adjust time as needed\n    naive_dt += datetime.timedelta(hours=1)\n    aware_dt = eastern.localize(naive_dt, is_dst=True)\n\nprint(aware_dt)"
+        "value": "class User:\n    def __init__(self, user_id, name, email):\n        self.user_id = user_id\n        self.name = name\n        self.email = email\n\n    def __repr__(self):\n        return f\"User({self.user_id}, {self.name}, {self.email})\""
       },
       {
         "type": "paragraph",
-        "value": "If you work with multiple timezones or want to convert between them, remember to always use aware datetimes. Here's an example converting from US Eastern to UTC:"
+        "value": "Now, we want to build an Order model that connects Users to the Products they buy. Orders typically include multiple products and track quantities."
       },
       {
         "type": "code",
-        "value": "utc = pytz.utc\n\n# Convert aware_dt from US Eastern to UTC\ndt_utc = aware_dt.astimezone(utc)\nprint(f\"US Eastern time: {aware_dt}\")\nprint(f\"UTC time: {dt_utc}\")"
+        "value": "class Order:\n    def __init__(self, order_id, user):\n        self.order_id = order_id\n        self.user = user\n        self.items = {}  # Dictionary to store product: quantity\n\n    def add_product(self, product, quantity):\n        if product in self.items:\n            self.items[product] += quantity\n        else:\n            self.items[product] = quantity\n\n    def total_amount(self):\n        total = 0\n        for product, qty in self.items.items():\n            total += product.price * qty\n        return total\n\n    def __repr__(self):\n        return f\"Order({self.order_id}, User: {self.user.name}, Items: {len(self.items)})\""
       },
       {
         "type": "paragraph",
-        "value": "In summary, always remember these key points when handling timezones in Python:\n\n1. Use the pytz library to attach timezone information.\n2. Use the `localize` method to convert naive datetime objects.\n3. Handle DST-related exceptions `AmbiguousTimeError` and `NonExistentTimeError`.\n4. Convert between timezones using `astimezone` on aware datetime objects.\n\nHandling these edge cases carefully ensures that your application manages date and time data correctly across different timezones and DST changes."
+        "value": "This Order class keeps track of which user placed the order and what products are included, along with their quantities. The add_product method allows adding multiple products to an order, and total_amount calculates the cost."
       },
       {
         "type": "paragraph",
-        "value": "To get started, install pytz if you haven't already using:\n\nbash\npip install pytz\n"
+        "value": "Let's see these models in action by creating some products, a user, and an order."
+      },
+      {
+        "type": "code",
+        "value": "if __name__ == '__main__':\n    # Create products\n    book = Product(1, 'Book', 12.99, 100)\n    laptop = Product(2, 'Laptop', 999.99, 50)\n\n    # Create a user\n    user = User(101, 'Alice', 'alice@example.com')\n\n    # Create an order\n    order = Order(5001, user)\n    order.add_product(book, 2)\n    order.add_product(laptop, 1)\n\n    print(order)  # Output: Order(5001, User: Alice, Items: 2)\n    print(f\"Total amount: ${order.total_amount():.2f}\")"
       },
       {
         "type": "paragraph",
-        "value": "Happy coding with Python and timezones!"
+        "value": "This simple example shows a scalable way to represent data models for an e-commerce platform. Each model has a clear purpose, and the code is easy to extend as the application grows."
+      },
+      {
+        "type": "paragraph",
+        "value": "For larger applications, consider using libraries like SQLAlchemy or Django ORM for database interactions, but understanding these building blocks in Python will give you a solid foundation."
+      },
+      {
+        "type": "paragraph",
+        "value": "To recap, focus on organizing your data models clearly, design methods that reflect real-world behaviors, and keep your code modular. This approach makes scaling your e-commerce platform manageable and less error-prone."
       }
     ]
   },
   {
-    "slug": "designing-resilient-python-systems-handling-complex-exception-scenarios-gracefully",
-    "title": "Designing Resilient Python Systems: Handling Complex Exception Scenarios Gracefully",
+    "slug": "handling-resource-exhaustion-errors-in-distributed-python-systems",
+    "title": "Handling Resource Exhaustion Errors in Distributed Python Systems",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to build resilient Python systems by effectively handling complex exception scenarios with clear, practical examples and beginner-friendly advice.",
-    "videoUrl": "https://www.youtube.com/watch?v=GZDVR-oDfTU",
+    "description": "Learn how to identify and handle resource exhaustion errors in distributed Python applications to improve system reliability and performance.",
+    "videoUrl": "https://www.youtube.com/watch?v=-VqAGZ_qm8Q",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing Python programs, especially larger systems, errors and exceptions are inevitable. Designing your system to handle these exceptions gracefully makes your program more reliable and easier to maintain. This article introduces you to best practices for managing complex exception scenarios in a way that is beginner-friendly."
+        "value": "Distributed Python systems often run multiple processes or nodes working together to complete tasks. While this setup is powerful, it can also use a lot of system resources such as memory, CPU, and open file descriptors. When these resources run out, your program may crash or behave unpredictably. This article will help beginners understand how to detect and handle resource exhaustion errors effectively."
       },
       {
         "type": "paragraph",
-        "value": "### Why Handle Exceptions Carefully?\n\nExceptions are Python's way of notifying you when something unexpected happens, like dividing by zero or reading a missing file. If uncaught, they cause your program to stop abruptly. Handling these exceptions properly ensures your program can recover or inform the user clearly without crashing."
+        "value": "Resource exhaustion typically happens when your program tries to use more than what the system allows. Common symptoms include MemoryError, OSError with \"Too many open files\", or timeouts due to overloaded CPU. Proper handling involves monitoring the usage, cleaning up resources promptly, and graceful error catching."
       },
       {
         "type": "paragraph",
-        "value": "### Basic Exception Handling\n\nLet’s start with the simplest way to catch exceptions using the `try-except` block."
+        "value": "Let's start with a simple example where a distributed system opens many files. If you don’t close files properly, you might hit the \"Too many open files\" error."
       },
       {
         "type": "code",
-        "value": "try:\n    result = 10 / 0  # This will raise a ZeroDivisionError\nexcept ZeroDivisionError:\n    print(\"Oops! You can't divide by zero.\")"
+        "value": "import os\n\nmax_files = 1024  # Typical default limit on many systems\nfiles = []\n\ntry:\n    for i in range(max_files + 10):  # Try to open more files than the system limit\n        f = open(f\"tempfile_{i}.txt\", \"w\")\n        files.append(f)\nexcept OSError as e:\n    if \"Too many open files\" in str(e):\n        print(\"Resource exhaustion detected: too many open files.\")\n    else:\n        raise\nfinally:\n    for f in files:\n        f.close()  # Always close files to free resources\n\nprint(\"File handles cleaned up properly.\")"
       },
       {
         "type": "paragraph",
-        "value": "This code handles the specific error `ZeroDivisionError` and prints a friendly message. But real-world applications often have multiple types of exceptions to manage."
+        "value": "In the example above, we open files until we hit the operating system limit and catch the specific error to handle it gracefully. Closing files in the finally block ensures resources are freed even when an error occurs."
       },
       {
         "type": "paragraph",
-        "value": "### Handling Multiple Exceptions\n\nYou can catch multiple exceptions in one `except` block by using a tuple or have multiple except blocks."
+        "value": "To handle memory exhaustion, catch the MemoryError exception. For example, when your distributed task tries to load large data, you can catch and handle failures like this:"
       },
       {
         "type": "code",
-        "value": "try:\n    value = int(input(\"Enter a number: \"))\n    result = 10 / value\nexcept ValueError:\n    print(\"That's not a valid number!\")\nexcept ZeroDivisionError:\n    print(\"You can't divide by zero!\")"
+        "value": "try:\n    large_list = [x for x in range(10**9)]  # This may cause MemoryError\nexcept MemoryError:\n    print(\"Memory exhausted! Consider processing data in smaller chunks.\")"
       },
       {
         "type": "paragraph",
-        "value": "Here, we handle both invalid input (`ValueError`) and division by zero separately."
+        "value": "Besides catching errors, the best practice is to prevent resource exhaustion by careful design: limit concurrent tasks, use resource pools (like thread or connection pools), and monitor your system’s resource usage using tools like psutil or built-in system monitors."
       },
       {
         "type": "paragraph",
-        "value": "### Using `else` and `finally`\n\nThe `else` block runs if no exceptions occur, and `finally` always runs, whether an exception occurred or not. This helps structure your code more cleanly."
+        "value": "Here is a simple example using the psutil library to monitor memory usage and warn when it exceeds a threshold in a distributed environment:"
       },
       {
         "type": "code",
-        "value": "try:\n    file = open('data.txt', 'r')\nexcept FileNotFoundError:\n    print(\"File not found. Please check the filename.\")\nelse:\n    print(\"File opened successfully.\")\n    content = file.read()\n    print(content)\nfinally:\n    if 'file' in locals():\n        file.close()\n        print(\"File closed.\")"
+        "value": "import psutil\n\nmemory_threshold = 80  # percent\n\nmemory = psutil.virtual_memory()\nif memory.percent > memory_threshold:\n    print(f\"Warning: Memory usage is high at {memory.percent}%. Consider scaling down.\")\nelse:\n    print(f\"Memory usage is normal at {memory.percent}%. Continue processing.\")"
       },
       {
         "type": "paragraph",
-        "value": "This way, you make sure to close the file no matter what, preventing resource leaks."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Creating Custom Exceptions\n\nFor more complex systems, you might want to define your own exceptions to make error handling clearer."
-      },
-      {
-        "type": "code",
-        "value": "class ValidationError(Exception):\n    pass\n\ndef validate_age(age):\n    if age < 0:\n        raise ValidationError(\"Age cannot be negative.\")\n\ntry:\n    validate_age(-5)\nexcept ValidationError as e:\n    print(f\"Validation error: {e}\")"
-      },
-      {
-        "type": "paragraph",
-        "value": "Custom exceptions can help distinguish between different error types in your application logic."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Best Practices for Exception Handling\n\n- **Catch specific exceptions:** Avoid using `except:` without specifying the error, as it can mask other bugs.\n- **Use logging:** Instead of just printing errors, use Python’s `logging` module to keep records.\n- **Fail gracefully:** Allow your program to handle recoverable errors and exit cleanly when necessary.\n- **Avoid silent failures:** Don’t just `pass` in an exception block; at least log or handle the error meaningfully."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Wrapping Up\n\nHandling complex exceptions gracefully is key to building resilient Python applications. By catching specific errors, structuring your `try-except-else-finally` blocks properly, and defining custom exceptions, you can make your code more robust and easier to maintain."
+        "value": "In summary, handling resource exhaustion involves: 1) catching relevant exceptions like MemoryError and OSError, 2) cleaning up resources promptly, and 3) monitoring system resources proactively. By doing so, your distributed Python systems become more robust and reliable."
       }
     ]
   },
   {
-    "slug": "building-a-real-time-inventory-management-system-with-sql",
-    "title": "Building a Real-Time Inventory Management System with SQL: A Beginner's Guide",
+    "slug": "comparing-window-functions-and-aggregate-functions-in-sql",
+    "title": "Comparing Window Functions and Aggregate Functions in SQL: When to Use Each",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to create a simple and effective real-time inventory management system using SQL. This beginner-friendly tutorial covers essential concepts and SQL commands to track and update inventory seamlessly.",
-    "videoUrl": "https://www.youtube.com/watch?v=oHvlray5q0E",
+    "description": "Learn the difference between window functions and aggregate functions in SQL, and understand when to use each to write efficient and effective queries.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "Managing inventory efficiently is crucial for any business that sells products. In this tutorial, we will build a straightforward real-time inventory management system using SQL. This system will help you track products, update stock quantities, and review inventory status with ease."
+        "value": "SQL provides powerful tools to summarize and analyze data. Two common approaches are using aggregate functions and window functions. While they may seem similar, each serves different purposes and is suited for particular tasks. Understanding their differences will help you write clearer and more efficient SQL queries."
       },
       {
         "type": "paragraph",
-        "value": "We'll start by creating tables to store product information and inventory updates. Then, we'll demonstrate how to insert, update, and query data to manage inventory in real time."
+        "value": "Aggregate functions perform calculations on a group of rows and return a single result per group. Examples include SUM(), COUNT(), AVG(), MIN(), and MAX(). When you use aggregate functions, you typically group data using the GROUP BY clause, which reduces the number of rows in the result."
       },
       {
         "type": "paragraph",
-        "value": "Let's begin by creating a `products` table that holds basic information, such as a unique product ID, product name, and current quantity in stock."
+        "value": "Window functions also perform calculations across a set of rows, but they do not reduce the number of rows returned. Instead, they return a value for each row while still considering the context of other rows. This allows you to calculate running totals, ranks, moving averages, and more, without grouping the result set."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's compare how aggregate and window functions work with a simple example. Suppose we have a sales table:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE products (\n    product_id INT PRIMARY KEY,\n    product_name VARCHAR(100),\n    quantity_in_stock INT DEFAULT 0\n);"
+        "value": "CREATE TABLE sales (\n  id INT,\n  salesperson VARCHAR(100),\n  amount DECIMAL(10,2)\n);\n\nINSERT INTO sales (id, salesperson, amount) VALUES\n(1, 'Alice', 100.00),\n(2, 'Bob', 150.00),\n(3, 'Alice', 200.00),\n(4, 'Bob', 50.00),\n(5, 'Alice', 300.00);"
       },
       {
         "type": "paragraph",
-        "value": "Next, we will insert some sample products into our table to start managing inventory."
+        "value": "Now, suppose you want to find the total sales amount per salesperson. Using aggregates with GROUP BY gives:"
       },
       {
         "type": "code",
-        "value": "INSERT INTO products (product_id, product_name, quantity_in_stock) VALUES\n(1, 'Laptop', 50),\n(2, 'Smartphone', 100),\n(3, 'Headphones', 200);"
+        "value": "SELECT salesperson, SUM(amount) AS total_sales\nFROM sales\nGROUP BY salesperson;"
       },
       {
         "type": "paragraph",
-        "value": "To keep track of inventory changes like sales or restocking, it's helpful to have a transaction log. Let's create a `inventory_log` table to record each change with the product ID, change quantity, type of transaction, and timestamp."
+        "value": "This query returns one row per salesperson, summarizing their total sales."
+      },
+      {
+        "type": "paragraph",
+        "value": "But what if you want to see each sale alongside the total sales the salesperson made? The aggregate approach won't work here because it collapses rows. Instead, you use a window function:"
       },
       {
         "type": "code",
-        "value": "CREATE TABLE inventory_log (\n    log_id INT PRIMARY KEY AUTO_INCREMENT,\n    product_id INT,\n    change_quantity INT,\n    transaction_type VARCHAR(50),\n    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (product_id) REFERENCES products(product_id)\n);"
+        "value": "SELECT\n  id,\n  salesperson,\n  amount,\n  SUM(amount) OVER (PARTITION BY salesperson) AS total_sales_per_person\nFROM sales;"
       },
       {
         "type": "paragraph",
-        "value": "Here, `change_quantity` will be positive for restocks and negative for sales. `transaction_type` describes the nature of the change."
-      },
-      {
-        "type": "paragraph",
-        "value": "When a product is sold, you need to reduce its quantity in stock and log the transaction. Here's how to do this with SQL commands:"
-      },
-      {
-        "type": "code",
-        "value": "-- Example: Selling 3 Laptops\nUPDATE products\nSET quantity_in_stock = quantity_in_stock - 3\nWHERE product_id = 1;\n\nINSERT INTO inventory_log (product_id, change_quantity, transaction_type)\nVALUES (1, -3, 'sale');"
-      },
-      {
-        "type": "paragraph",
-        "value": "Similarly, when you restock items, increase the quantity and record the restock:"
-      },
-      {
-        "type": "code",
-        "value": "-- Example: Restocking 20 Smartphones\nUPDATE products\nSET quantity_in_stock = quantity_in_stock + 20\nWHERE product_id = 2;\n\nINSERT INTO inventory_log (product_id, change_quantity, transaction_type)\nVALUES (2, 20, 'restock');"
-      },
-      {
-        "type": "paragraph",
-        "value": "Finally, to get a real-time snapshot of your inventory, run a simple query to see current stock levels:"
-      },
-      {
-        "type": "code",
-        "value": "SELECT product_id, product_name, quantity_in_stock\nFROM products\nORDER BY product_name;"
-      },
-      {
-        "type": "paragraph",
-        "value": "This system is a basic foundation you can expand by adding features like alerts for low stock, supplier management, or automated restocking using triggers and stored procedures. Starting with these simple SQL commands helps you understand and control your inventory data effectively."
-      },
-      {
-        "type": "paragraph",
-        "value": "Happy coding and happy inventory managing!"
-      }
-    ]
-  },
-  {
-    "slug": "comparing-null-handling-differences-across-popular-sql-databases",
-    "title": "Comparing NULL Handling Differences Across Popular SQL Databases",
-    "language": "sql",
-    "type": "errors",
-    "description": "Learn how different SQL databases handle NULL values and avoid common pitfalls with beginner-friendly examples and explanations.",
-    "videoUrl": "https://www.youtube.com/watch?v=RKUYYrmv6gw",
-    "content": [
-      {
-        "type": "paragraph",
-        "value": "When learning SQL, one of the most confusing topics is how NULL values are handled. NULL represents missing or unknown data, but its behavior can differ slightly between popular databases like MySQL, PostgreSQL, SQL Server, and SQLite. Understanding these differences will help you avoid errors and ensure your queries work as expected across platforms."
-      },
-      {
-        "type": "paragraph",
-        "value": "NULL is not the same as an empty string or zero. It means 'no value'. Most databases treat NULL specially in comparisons, meaning that NULL compared to anything—even NULL—is not TRUE, but UNKNOWN. This can lead to unexpected results in queries if you don't handle NULL correctly."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is an example that illustrates how NULL behaves in comparisons and how to properly check for NULL values in different SQL databases."
-      },
-      {
-        "type": "code",
-        "value": "-- Creating a sample table\nCREATE TABLE users (\n    id INT PRIMARY KEY,\n    name VARCHAR(50),\n    email VARCHAR(50) NULL\n);\n\n-- Inserting data including NULL\nINSERT INTO users (id, name, email) VALUES\n(1, 'Alice', 'alice@example.com'),\n(2, 'Bob', NULL),\n(3, 'Charlie', 'charlie@example.com');"
-      },
-      {
-        "type": "paragraph",
-        "value": "Suppose you want to select users who have a NULL email. Using a condition like email = NULL will not work correctly in any major SQL database."
-      },
-      {
-        "type": "code",
-        "value": "-- Incorrect way, will not return any rows in most databases\nSELECT * FROM users WHERE email = NULL;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Because NULL compared with anything (including NULL) results in UNKNOWN, the correct way to check for NULL is using IS NULL."
-      },
-      {
-        "type": "code",
-        "value": "-- Correct way to find users with NULL email\nSELECT * FROM users WHERE email IS NULL;"
-      },
-      {
-        "type": "paragraph",
-        "value": "Now let's see some differences in how databases treat NULL in sorting and unique constraints."
-      },
-      {
-        "type": "paragraph",
-        "value": "In PostgreSQL, NULL values sort as higher than any non-NULL value by default. In contrast, MySQL and SQL Server sort NULLs as lower values. You can also customize sorting in some databases using NULLS FIRST or NULLS LAST."
-      },
-      {
-        "type": "code",
-        "value": "-- PostgreSQL sorts NULLs last by default\nSELECT * FROM users ORDER BY email ASC;\n\n-- To change NULL sorting explicitly in PostgreSQL:\nSELECT * FROM users ORDER BY email ASC NULLS FIRST;"
-      },
-      {
-        "type": "paragraph",
-        "value": "For unique constraints, NULL handling also differs. Some databases allow multiple NULLs in columns with unique constraints (like PostgreSQL and SQL Server), while others (like older versions of MySQL with certain storage engines) might not."
+        "value": "Here, the window function SUM() OVER partitions the data by salesperson but does not reduce rows. Each row shows the individual sale and the total sales sum for that salesperson."
       },
       {
         "type": "paragraph",
@@ -619,11 +485,81 @@
       },
       {
         "type": "paragraph",
-        "value": "1. Always use IS NULL or IS NOT NULL to check for NULL values.\n2. Be aware of differences in sort order for NULL between databases.\n3. Understand how unique constraints treat NULL values in your chosen database.\n4. Test your queries across the databases you use when unsure."
+        "value": "- Use aggregate functions with GROUP BY when you want one summary row per group.\n- Use window functions when you want calculations relative to each row but still want to keep all rows in the result."
       },
       {
         "type": "paragraph",
-        "value": "Mastering NULL handling will improve your SQL skills and help you write cross-database compatible code that avoids common NULL-related errors."
+        "value": "Understanding these distinctions will help you decide which tool fits your analytical needs best."
+      }
+    ]
+  },
+  {
+    "slug": "understanding-sql-nulls-common-pitfalls-and-how-to-handle-them",
+    "title": "Understanding SQL NULLs: Common Pitfalls and How to Handle Them",
+    "language": "sql",
+    "type": "errors",
+    "description": "Learn the basics of SQL NULLs, why they cause common errors, and how to handle them effectively with practical examples.",
+    "videoUrl": "https://www.youtube.com/watch?v=RKUYYrmv6gw",
+    "content": [
+      {
+        "type": "paragraph",
+        "value": "When working with databases, you will often encounter NULLs. NULL represents missing or unknown data in SQL. Understanding how NULLs behave and how to work with them is essential for avoiding common mistakes and writing correct SQL queries."
+      },
+      {
+        "type": "paragraph",
+        "value": "One of the most important things to know about NULLs is that NULL is not the same as zero or an empty string. It means \"no value.\" Because of this, SQL treats NULL differently in comparisons."
+      },
+      {
+        "type": "paragraph",
+        "value": "For example, using the equals (=) operator with NULL does not work as you might expect. The comparison will not return TRUE, even if you compare NULL to NULL. Instead, it returns UNKNOWN."
+      },
+      {
+        "type": "code",
+        "value": "-- This query will NOT return rows where value is NULL\nSELECT * FROM my_table WHERE value = NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "The correct way to check for NULL is to use the IS NULL or IS NOT NULL operators."
+      },
+      {
+        "type": "code",
+        "value": "-- Find rows where value is NULL\nSELECT * FROM my_table WHERE value IS NULL;\n\n-- Find rows where value is NOT NULL\nSELECT * FROM my_table WHERE value IS NOT NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common pitfall is using aggregate functions like COUNT, SUM, or AVG. These functions often ignore NULLs in the columns they process."
+      },
+      {
+        "type": "code",
+        "value": "-- Suppose salary has NULL values\nSELECT COUNT(salary) AS count_non_null, COUNT(*) AS total_rows FROM employees;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In this example, COUNT(salary) counts only non-NULL salaries, while COUNT(*) counts all rows regardless of NULLs."
+      },
+      {
+        "type": "paragraph",
+        "value": "Additionally, NULL values affect logical operations. For example, when using AND, OR, or NOT, the presence of NULL can lead to UNKNOWN results that might filter out rows unintentionally."
+      },
+      {
+        "type": "code",
+        "value": "-- Example\nSELECT * FROM products WHERE price > 100 AND discount IS NULL;"
+      },
+      {
+        "type": "paragraph",
+        "value": "If discount is NULL, the condition discount = NULL will fail but discount IS NULL will work correctly."
+      },
+      {
+        "type": "paragraph",
+        "value": "To replace NULLs with a default value in query results, use the COALESCE function. It returns the first non-NULL value from its arguments."
+      },
+      {
+        "type": "code",
+        "value": "-- Replace NULL with 0 in sales column\nSELECT product_id, COALESCE(sales, 0) AS sales FROM sales_data;"
+      },
+      {
+        "type": "paragraph",
+        "value": "In conclusion, always remember: use IS NULL or IS NOT NULL to check for NULL values, handle NULLs carefully in conditions and aggregates, and use COALESCE to provide fallback values. This will help you avoid common SQL NULL pitfalls and write better queries."
       }
     ]
   }
