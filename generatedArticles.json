@@ -1,91 +1,75 @@
 [
   {
-    "slug": "handling-date-time-edge-cases-in-javascript-for-global-applications",
-    "title": "Handling Date and Time Edge Cases in JavaScript for Global Applications",
+    "slug": "handling-floating-point-precision-edge-cases-javascript",
+    "title": "Handling Floating Point Precision Edge Cases in JavaScript Math Operations",
     "language": "javascript",
     "type": "tutorials",
-    "description": "Learn how to handle date and time edge cases effectively in JavaScript to build reliable global applications that handle time zones, daylight saving time, and locale differences.",
-    "videoUrl": "https://www.youtube.com/watch?v=ZIITFSvhmkY",
+    "description": "Learn how to handle floating point precision issues in JavaScript math operations with practical tips and examples for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=0IOsF_N1DIs",
     "content": [
       {
         "type": "paragraph",
-        "value": "Working with dates and times in JavaScript can be tricky, especially when building applications that serve users worldwide. Different time zones, daylight saving time changes, and locale-based date formats can cause bugs if not handled properly. This tutorial will guide you through common date and time edge cases and provide practical solutions using JavaScript."
+        "value": "When working with decimal numbers in JavaScript, you might notice some unexpected behavior in math calculations. This is caused by floating point precision errors, which happen because computers represent decimal numbers in binary format. In this tutorial, we'll explore common precision problems and simple ways to handle them."
       },
       {
         "type": "paragraph",
-        "value": "### 1. Understanding Time Zones and UTC"
-      },
-      {
-        "type": "paragraph",
-        "value": "By default, JavaScript Date objects work with local time, which depends on the user's device settings. However, when working globally, it's often better to handle and store dates in Coordinated Universal Time (UTC) and convert them as needed."
+        "value": "For example, you may expect `0.1 + 0.2` to equal `0.3` exactly, but in JavaScript it returns a value slightly different from `0.3`."
       },
       {
         "type": "code",
-        "value": "const localDate = new Date();\nconsole.log('Local time:', localDate.toString());\n\nconst utcDate = new Date(localDate.toISOString());\nconsole.log('UTC time:', utcDate.toUTCString());"
+        "value": "console.log(0.1 + 0.2); // Output: 0.30000000000000004"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `toISOString()` converts the date to a standardized UTC string format, which is great for storing dates in databases or transmitting between systems."
+        "value": "This happens because numbers like 0.1 and 0.2 cannot be precisely represented in binary floating point. Let's learn some techniques to avoid issues caused by these tiny differences."
       },
       {
         "type": "paragraph",
-        "value": "### 2. Daylight Saving Time (DST) Issues"
+        "value": "### 1. Using `toFixed()` to Format Numbers"
       },
       {
         "type": "paragraph",
-        "value": "Some regions adjust clocks forward or backward during the year, which can cause ambiguities or skipped hours. For example, adding 24 hours to a date right before a DST change might not land on the expected time."
+        "value": "`toFixed()` converts a number to a string, rounding to a specified number of decimal places. You can then convert it back to a number if needed."
       },
       {
         "type": "code",
-        "value": "const beforeDST = new Date('2023-03-12T01:30:00');\nconst afterAdd = new Date(beforeDST.getTime() + 24 * 60 * 60 * 1000);\n\nconsole.log('Before DST:', beforeDST.toString());\nconsole.log('After adding 24 hours:', afterAdd.toString());"
+        "value": "const sum = 0.1 + 0.2;\nconst result = Number(sum.toFixed(2));\nconsole.log(result); // Output: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "Notice that adding a fixed number of milliseconds does not always give the expected local time change because of DST. To avoid such issues, rely on libraries like `date-fns-tz` or `moment-timezone` that understand DST rules."
+        "value": "This method is useful when you want to display a number with fixed decimal places, like currency values."
       },
       {
         "type": "paragraph",
-        "value": "### 3. Formatting Dates for Different Locales"
+        "value": "### 2. Multiplying to Work with Integers"
       },
       {
         "type": "paragraph",
-        "value": "Users expect dates in a format that matches their region and language. You can use the built-in `Intl.DateTimeFormat` API to display dates correctly."
+        "value": "Another common approach is to work with integers during calculations by scaling numbers. For example, multiply decimals by 100 to work with whole numbers, then divide the result back."
       },
       {
         "type": "code",
-        "value": "const date = new Date('2023-12-25T00:00:00Z');\n\nconst usaFormat = new Intl.DateTimeFormat('en-US').format(date);\nconst germanyFormat = new Intl.DateTimeFormat('de-DE').format(date);\nconst japanFormat = new Intl.DateTimeFormat('ja-JP').format(date);\n\nconsole.log('US:', usaFormat);\nconsole.log('Germany:', germanyFormat);\nconsole.log('Japan:', japanFormat);"
+        "value": "const a = 0.1;\nconst b = 0.2;\nconst sumInt = (a * 100 + b * 100) / 100;\nconsole.log(sumInt); // Output: 0.3"
       },
       {
         "type": "paragraph",
-        "value": "This outputs the same date in formats familiar to users in the US, Germany, and Japan respectively."
+        "value": "This technique avoids floating point errors during addition or subtraction."
       },
       {
         "type": "paragraph",
-        "value": "### 4. Avoid Parsing Ambiguous Date Strings"
+        "value": "### 3. Using a Custom Precision Function"
       },
       {
         "type": "paragraph",
-        "value": "Passing date strings in formats like `MM/DD/YYYY` or `DD/MM/YYYY` can be interpreted differently depending on the environment's locale. It's safer to use ISO 8601 date strings (`YYYY-MM-DDTHH:mm:ss.sssZ`) or parse components manually."
+        "value": "You can create a simple helper function to compare numbers within a small margin of error (called an epsilon) to check equality or do rounding safely."
       },
       {
         "type": "code",
-        "value": "const isoDate = new Date('2024-06-30T15:00:00Z');\n\nconsole.log('ISO Date:', isoDate.toUTCString());"
+        "value": "function areAlmostEqual(num1, num2, epsilon = 0.00001) {\n  return Math.abs(num1 - num2) < epsilon;\n}\n\nconsole.log(areAlmostEqual(0.1 + 0.2, 0.3)); // true\nconsole.log(areAlmostEqual(0.1 + 0.2, 0.3001)); // false"
       },
       {
         "type": "paragraph",
-        "value": "### 5. Using Libraries for Complex Date Handling"
-      },
-      {
-        "type": "paragraph",
-        "value": "For global applications, consider using libraries like `date-fns`, `luxon`, or `moment-timezone`. They simplify working with time zones, DST, and formatting."
-      },
-      {
-        "type": "code",
-        "value": "// Example with luxon (install via npm install luxon)\nconst { DateTime } = require('luxon');\n\nconst dt = DateTime.fromISO('2023-03-12T01:30:00', { zone: 'America/New_York' });\nconst dtPlusDay = dt.plus({ days: 1 });\n\nconsole.log('Original:', dt.toString());\nconsole.log('After 1 day:', dtPlusDay.toString());"
-      },
-      {
-        "type": "paragraph",
-        "value": "Luxon automatically handles DST transitions, making date calculations more accurate."
+        "value": "This function helps when you want to compare floating point results safely instead of relying on strict equality."
       },
       {
         "type": "paragraph",
@@ -93,163 +77,199 @@
       },
       {
         "type": "paragraph",
-        "value": "To handle date and time edge cases in JavaScript for global applications, always store and work with dates in UTC when possible, be cautious with adding fixed time intervals around daylight saving changes, prefer locale-aware formatting with `Intl.DateTimeFormat`, avoid ambiguous date string parsing, and use specialized libraries for complex needs. These practices will help you create robust apps that users worldwide can trust."
+        "value": "Floating point precision can cause unexpected results in JavaScript math operations, but by using formatting methods like `toFixed()`, scaling numbers, or precision helper functions, you can avoid most common issues. Understanding these edge cases will make your calculations more reliable and your code easier to maintain."
       }
     ]
   },
   {
-    "slug": "handling-asynchronous-state-updates-in-complex-react-applications",
-    "title": "Handling Asynchronous State Updates in Complex React Applications",
+    "slug": "mastering-asynchronous-error-handling-patterns-in-modern-javascript",
+    "title": "Mastering Asynchronous Error Handling Patterns in Modern JavaScript",
     "language": "javascript",
     "type": "errors",
-    "description": "Learn how to effectively manage asynchronous state updates in React apps to avoid common pitfalls and errors, ensuring smooth and predictable UI behavior.",
-    "videoUrl": "https://www.youtube.com/watch?v=Sxc-L094WQw",
+    "description": "Learn how to handle errors effectively in asynchronous JavaScript with practical examples covering callbacks, promises, and async/await.",
+    "videoUrl": "https://www.youtube.com/watch?v=670f71LTWpM",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building complex React applications, managing state updates that involve asynchronous operations can be tricky. React state updates don't happen immediately; they are scheduled and batched for performance. This can lead to unexpected behaviors, especially if your code depends on the current state. In this article, we'll cover best practices to handle asynchronous state updates to avoid common errors."
+        "value": "Handling errors gracefully is an essential skill for any JavaScript developer, especially when working with asynchronous code. Modern JavaScript offers several patterns to handle errors, each suited for different scenarios. In this article, we will explore common asynchronous error handling techniques with practical examples, helping you write more reliable and readable code."
       },
       {
         "type": "paragraph",
-        "value": "One common mistake is updating state based on the current state without using a function updater. Because state updates are asynchronous, referencing the state variable directly might result in stale or incorrect values."
+        "value": "### 1. Error Handling with Callbacks"
+      },
+      {
+        "type": "paragraph",
+        "value": "The classic approach to handling asynchronous operations in JavaScript is using callbacks. The standard pattern is to pass an error as the first parameter of the callback function if something goes wrong. Here's a simple example:"
       },
       {
         "type": "code",
-        "value": "const [count, setCount] = React.useState(0);\n\n// Risky: May cause wrong count if multiple updates happen quickly\nfunction incrementWrong() {\n  setCount(count + 1);\n  setCount(count + 1); // Both calls reference the same 'count' value\n}"
+        "value": "function fetchData(callback) {\n  setTimeout(() => {\n    const error = null;\n    const data = { id: 1, name: \"John\" };\n    // Simulate an error condition\n    if (!data) {\n      callback(new Error(\"No data found\"));\n      return;\n    }\n    callback(error, data);\n  }, 1000);\n}\n\nfetchData((err, result) => {\n  if (err) {\n    console.error(\"Error occurred:\", err.message);\n  } else {\n    console.log(\"Data received:\", result);\n  }\n});"
       },
       {
         "type": "paragraph",
-        "value": "To fix this, use the functional form of the `setState` updater, which receives the latest state as an argument. This guarantees you are updating the most recent state."
+        "value": "While callbacks work well, they can lead to \"callback hell\" in complex projects, which decreases readability and makes error handling cumbersome."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 2. Error Handling with Promises"
+      },
+      {
+        "type": "paragraph",
+        "value": "Promises provide a cleaner way to manage asynchronous code and errors. With promises, you can use `.catch()` to handle errors explicitly."
       },
       {
         "type": "code",
-        "value": "function incrementCorrect() {\n  setCount(prevCount => prevCount + 1);\n  setCount(prevCount => prevCount + 1); // Correctly increases count by 2\n}"
+        "value": "function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const data = { id: 1, name: \"Jane\" };\n      if (!data) {\n        reject(new Error(\"No data found\"));\n      } else {\n        resolve(data);\n      }\n    }, 1000);\n  });\n}\n\nfetchData()\n  .then(result => {\n    console.log(\"Data received:\", result);\n  })\n  .catch(err => {\n    console.error(\"Error occurred:\", err.message);\n  });"
       },
       {
         "type": "paragraph",
-        "value": "Another source of confusion is when you have asynchronous code, like fetching data, affecting state. Suppose you fetch user data and then update state based on the response."
+        "value": "This pattern separates success and error logic, making your code easier to follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "### 3. Error Handling with Async/Await"
+      },
+      {
+        "type": "paragraph",
+        "value": "Async/await syntax allows you to write asynchronous code that looks synchronous, improving readability. Use `try...catch` blocks to handle errors when using async/await."
       },
       {
         "type": "code",
-        "value": "React.useEffect(() => {\n  async function fetchUser() {\n    const response = await fetch('/api/user');\n    const data = await response.json();\n    setUser(data);\n  }\n  fetchUser();\n}, []);"
+        "value": "async function fetchData() {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const data = { id: 1, name: \"Alex\" };\n      if (!data) {\n        reject(new Error(\"No data found\"));\n      } else {\n        resolve(data);\n      }\n    }, 1000);\n  });\n}\n\nasync function main() {\n  try {\n    const result = await fetchData();\n    console.log(\"Data received:\", result);\n  } catch (err) {\n    console.error(\"Error occurred:\", err.message);\n  }\n}\n\nmain();"
       },
       {
         "type": "paragraph",
-        "value": "This is fine, but what if the component unmounts before the async operation is done? Attempting to update state on an unmounted component causes errors. To prevent this, use a flag to check if the component is mounted before setting state."
-      },
-      {
-        "type": "code",
-        "value": "React.useEffect(() => {\n  let isMounted = true;\n  async function fetchUser() {\n    const response = await fetch('/api/user');\n    const data = await response.json();\n    if (isMounted) {\n      setUser(data);\n    }\n  }\n  fetchUser();\n  return () => {\n    isMounted = false;\n  };\n}, []);"
+        "value": "This approach is very popular in modern JavaScript development as it combines clean syntax with robust error handling."
       },
       {
         "type": "paragraph",
-        "value": "Finally, complex applications often have multiple state variables or need to update deeply nested data. In these cases, consider using `useReducer` for clearer state management and to avoid stale closures."
-      },
-      {
-        "type": "code",
-        "value": "const initialState = { count: 0, loading: false };\n\nfunction reducer(state, action) {\n  switch(action.type) {\n    case 'increment':\n      return { ...state, count: state.count + 1 };\n    case 'setLoading':\n      return { ...state, loading: action.payload };\n    default:\n      return state;\n  }\n}\n\nfunction Counter() {\n  const [state, dispatch] = React.useReducer(reducer, initialState);\n\n  function increment() {\n    dispatch({ type: 'increment' });\n  }\n\n  return <div>\n    <p>Count: {state.count}</p>\n    <button onClick={increment}>Increment</button>\n  </div>;\n}"
+        "value": "### Best Practices for Asynchronous Error Handling"
       },
       {
         "type": "paragraph",
-        "value": "By following these guidelines, you can avoid common errors related to asynchronous state updates in React, making your applications more robust and easier to maintain."
+        "value": "- Always handle errors: Whether using callbacks, promises, or async/await, never ignore errors.\n- Use meaningful error messages: This helps in debugging.\n- Avoid mixing patterns: Stick to either callback-based or promise/async-await-based code to keep your codebase consistent.\n- Consider using utility libraries like `axios` or `fetch` with built-in error handling for API requests."
+      },
+      {
+        "type": "paragraph",
+        "value": "By mastering these error handling patterns, you'll be able to build more robust JavaScript applications that respond gracefully to unexpected conditions."
       }
     ]
   },
   {
-    "slug": "typescript-vs-javascript-key-differences-and-when-to-use-each",
-    "title": "TypeScript vs JavaScript: Key Differences and When to Use Each",
+    "slug": "beginners-guide-to-building-restful-apis-with-typescript-and-express",
+    "title": "A Beginner's Guide to Building RESTful APIs with TypeScript and Express",
     "language": "typescript",
     "type": "tutorials",
-    "description": "Explore the key differences between TypeScript and JavaScript, and learn when to use each language for your projects in this beginner-friendly tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=HCXPJmtV47I",
+    "description": "Learn how to build a simple RESTful API using TypeScript and Express, perfect for beginners who want to start backend development with modern tools.",
+    "videoUrl": "https://www.youtube.com/watch?v=b8ZUb_Okxro",
     "content": [
       {
         "type": "paragraph",
-        "value": "JavaScript is one of the most popular programming languages used primarily for web development. TypeScript is a superset of JavaScript that adds static types and other features to make coding easier and more reliable, especially for large projects."
+        "value": "Building RESTful APIs is a fundamental skill for backend development. In this tutorial, we'll learn how to set up a simple RESTful API using TypeScript and Express. TypeScript adds type safety and better developer experience over plain JavaScript, making our code more reliable and easier to maintain."
       },
       {
         "type": "paragraph",
-        "value": "In this article, we'll explore the main differences between TypeScript and JavaScript, and discuss when you might want to use each. By the end, you'll have a clearer understanding of these technologies and how to begin using TypeScript."
+        "value": "Before we start, make sure you have Node.js and npm installed on your computer. You can download it from the official Node.js website."
       },
       {
         "type": "paragraph",
-        "value": "### What is JavaScript?"
-      },
-      {
-        "type": "paragraph",
-        "value": "JavaScript is a dynamic scripting language that runs in web browsers and on servers using Node.js. It does not enforce types, meaning variables can hold any data type and types can change at runtime."
-      },
-      {
-        "type": "paragraph",
-        "value": "Example of basic JavaScript code:"
+        "value": "Let's begin by creating a new project folder and initializing it with npm:"
       },
       {
         "type": "code",
-        "value": "let message = 'Hello, world!';\n\nfunction greet(name) {\n  return message + ' ' + name + '!';\n}\n\nconsole.log(greet('Alice'));"
+        "value": "mkdir typescript-express-api\ncd typescript-express-api\nnpm init -y"
       },
       {
         "type": "paragraph",
-        "value": "### What is TypeScript?"
-      },
-      {
-        "type": "paragraph",
-        "value": "TypeScript is a language built on top of JavaScript that adds optional static typing. This means you can declare variable types and catch errors before running your code. TypeScript compiles down to regular JavaScript that can run anywhere JavaScript runs."
-      },
-      {
-        "type": "paragraph",
-        "value": "Here is the same example rewritten in TypeScript with types:"
+        "value": "Next, install the necessary dependencies. We'll need Express for the web server, TypeScript for typing, and some types packages for better TypeScript integration."
       },
       {
         "type": "code",
-        "value": "let message: string = 'Hello, world!';\n\nfunction greet(name: string): string {\n  return message + ' ' + name + '!';\n}\n\nconsole.log(greet('Alice'));"
+        "value": "npm install express\nnpm install --save-dev typescript @types/node @types/express ts-node nodemon"
       },
       {
         "type": "paragraph",
-        "value": "### Key Differences Between TypeScript and JavaScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "1. **Type Safety**: TypeScript lets you specify the types of variables, function parameters, and return values. JavaScript is dynamically typed and does not enforce types."
-      },
-      {
-        "type": "paragraph",
-        "value": "2. **Tooling Support**: Because of static typing, TypeScript offers better code completion, navigation, and error detection in code editors."
-      },
-      {
-        "type": "paragraph",
-        "value": "3. **Compilation Step**: TypeScript code must be compiled (transpiled) into JavaScript before running, whereas JavaScript runs directly."
-      },
-      {
-        "type": "paragraph",
-        "value": "4. **Learning Curve**: JavaScript is easier to start with because it has no extra syntax for types, but TypeScript's typing system can improve code quality as projects grow."
-      },
-      {
-        "type": "paragraph",
-        "value": "### When to Use JavaScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "- For small projects or quick scripts\n- When you want to prototype quickly without setting up any compilation\n- If you are working in an environment that only supports plain JavaScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "### When to Use TypeScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "- For medium to large projects where maintainability is important\n- When working in teams to reduce bugs and improve collaboration\n- If you want better tooling and earlier error detection"
-      },
-      {
-        "type": "paragraph",
-        "value": "### Getting Started with TypeScript"
-      },
-      {
-        "type": "paragraph",
-        "value": "To try TypeScript, you can install it via npm and compile your first file:"
+        "value": "Now, create a `tsconfig.json` file to configure TypeScript by running:"
       },
       {
         "type": "code",
-        "value": "npm install -g typescript\n\ntsc myFile.ts\n\nnode myFile.js"
+        "value": "npx tsc --init"
+      },
+      {
+        "type": "paragraph",
+        "value": "Open the `tsconfig.json` file and make sure the following options are set or add them if missing to enable modern JavaScript features and support for modules:"
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"target\": \"ES6\",\n    \"module\": \"commonjs\",\n    \"outDir\": \"dist\",\n    \"rootDir\": \"src\",\n    \"strict\": true,\n    \"esModuleInterop\": true\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Next, create a new folder named `src` and inside it, create a file called `index.ts`. This will be the entry point of our API."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's write some basic Express server code in `src/index.ts`:"
+      },
+      {
+        "type": "code",
+        "value": "import express, { Request, Response } from 'express';\n\nconst app = express();\nconst port = 3000;\n\n// Use JSON middleware to parse JSON bodies\napp.use(express.json());\n\n// A simple GET route\napp.get('/', (req: Request, res: Response) => {\n  res.send('Hello from TypeScript and Express!');\n});\n\n// Start the server\napp.listen(port, () => {\n  console.log(`Server is running at http://localhost:${port}`);\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "To run the server easily during development, add a start script to your `package.json` like this:"
+      },
+      {
+        "type": "code",
+        "value": "\"scripts\": {\n  \"start\": \"nodemon --exec ts-node src/index.ts\"\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "Now run the server with:"
+      },
+      {
+        "type": "code",
+        "value": "npm start"
+      },
+      {
+        "type": "paragraph",
+        "value": "Visit `http://localhost:3000` in your browser or use a tool like Postman to see the greeting message."
+      },
+      {
+        "type": "paragraph",
+        "value": "### Adding a RESTful Resource"
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's add a simple resource: a list of books. We'll create routes to GET all books, GET a book by ID, POST a new book, PUT to update a book, and DELETE a book."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, define a Book type for TypeScript:"
+      },
+      {
+        "type": "code",
+        "value": "type Book = {\n  id: number;\n  title: string;\n  author: string;\n};"
+      },
+      {
+        "type": "paragraph",
+        "value": "Create an in-memory array to act as our database:"
+      },
+      {
+        "type": "code",
+        "value": "let books: Book[] = [\n  { id: 1, title: '1984', author: 'George Orwell' },\n  { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee' }\n];"
+      },
+      {
+        "type": "paragraph",
+        "value": "Add the routes for the CRUD operations:"
+      },
+      {
+        "type": "code",
+        "value": "// GET all books\napp.get('/books', (req: Request, res: Response) => {\n  res.json(books);\n});\n\n// GET a book by ID\napp.get('/books/:id', (req: Request, res: Response) => {\n  const id = parseInt(req.params.id);\n  const book = books.find(b => b.id === id);\n  if (book) {\n    res.json(book);\n  } else {\n    res.status(404).json({ message: 'Book not found' });\n  }\n});\n\n// POST a new book\napp.post('/books', (req: Request, res: Response) => {\n  const { title, author } = req.body;\n  if (!title || !author) {\n    res.status(400).json({ message: 'Title and author are required' });\n    return;\n  }\n\n  const newBook: Book = {\n    id: books.length > 0 ? books[books.length - 1].id + 1 : 1,\n    title,\n    author\n  };\n\n  books.push(newBook);\n  res.status(201).json(newBook);\n});\n\n// PUT update a book\napp.put('/books/:id', (req: Request, res: Response) => {\n  const id = parseInt(req.params.id);\n  const { title, author } = req.body;\n  const bookIndex = books.findIndex(b => b.id === id);\n\n  if (bookIndex === -1) {\n    res.status(404).json({ message: 'Book not found' });\n    return;\n  }\n\n  if (!title || !author) {\n    res.status(400).json({ message: 'Title and author are required' });\n    return;\n  }\n\n  books[bookIndex] = { id, title, author };\n  res.json(books[bookIndex]);\n});\n\n// DELETE a book\napp.delete('/books/:id', (req: Request, res: Response) => {\n  const id = parseInt(req.params.id);\n  const bookIndex = books.findIndex(b => b.id === id);\n\n  if (bookIndex === -1) {\n    res.status(404).json({ message: 'Book not found' });\n    return;\n  }\n\n  books.splice(bookIndex, 1);\n  res.status(204).send();\n});"
+      },
+      {
+        "type": "paragraph",
+        "value": "This completes a simple RESTful API to manage books. You can test these routes using tools like Postman or curl."
       },
       {
         "type": "paragraph",
@@ -257,325 +277,345 @@
       },
       {
         "type": "paragraph",
-        "value": "JavaScript is a flexible, dynamic language suited for building web applications quickly. TypeScript builds on JavaScript by adding type safety and powerful tooling support, making it ideal for larger projects or teams. Choosing between them depends on your project needs and personal or team preferences."
+        "value": "In this tutorial, you learned how to build a basic RESTful API using TypeScript and Express. This foundation can be expanded with real databases, authentication, validation, and other backend features. Using TypeScript helps catch errors early and makes your code easier to understand."
       },
       {
         "type": "paragraph",
-        "value": "Start with JavaScript if you are new to coding or working on small scripts. Move to TypeScript when you want extra confidence in your code and better developer experience."
+        "value": "Keep practicing, and happy coding!"
       }
     ]
   },
   {
-    "slug": "mastering-typescript-type-guards-for-advanced-error-prevention",
-    "title": "Mastering TypeScript Type Guards for Advanced Error Prevention",
+    "slug": "optimizing-typescript-compiler-settings-for-faster-build-times",
+    "title": "Optimizing TypeScript Compiler Settings for Faster Build Times",
     "language": "typescript",
     "type": "errors",
-    "description": "Learn how to use TypeScript type guards to write safer, more reliable code by catching and preventing errors before they happen.",
-    "videoUrl": "https://www.youtube.com/watch?v=-Tr6dkOmTuc",
+    "description": "Learn beginner-friendly tips to tweak your TypeScript compiler settings and speed up your build process without sacrificing code quality.",
+    "videoUrl": "https://www.youtube.com/watch?v=_e4m4DjnBCE",
     "content": [
       {
         "type": "paragraph",
-        "value": "TypeScript is a powerful superset of JavaScript that adds static types, helping developers catch errors early. One advanced feature that enhances this is Type Guards. Type Guards allow you to narrow down the type of a variable inside conditional blocks, enabling safer code and preventing runtime errors. This article will introduce you to the basics of Type Guards and how to master them for better error prevention."
+        "value": "When working on TypeScript projects, slow build times can hinder productivity and cause frustration. Fortunately, optimizing your TypeScript compiler settings can significantly speed up build times. This article introduces simple, beginner-friendly changes you can make in your tsconfig.json file to improve compilation speed while still maintaining good error checking."
       },
       {
         "type": "paragraph",
-        "value": "At its core, a Type Guard is a runtime check that guarantees the type of a variable within a specific scope. By using Type Guards, you help TypeScript understand the type more precisely than just the declared type, reducing bugs caused by unexpected values."
+        "value": "The TypeScript compiler uses a configuration file called tsconfig.json to understand how to compile your code. By customizing this file, you can control features that affect build speed. Let's explore some practical settings together."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with a simple example using the `typeof` operator, a built-in Type Guard that checks primitive types."
+        "value": "1. Use Incremental Compilation\nIncremental compilation allows TypeScript to reuse information from previous compilations, reducing the amount of work needed with each build."
       },
       {
         "type": "code",
-        "value": "function formatValue(value: string | number) {\n  if (typeof value === \"string\") {\n    return value.toUpperCase(); // Safe because value is string here\n  } else {\n    return value.toFixed(2); // value is number here\n  }\n}\n\nconsole.log(formatValue(\"hello\")); // Outputs: HELLO\nconsole.log(formatValue(3.14159)); // Outputs: 3.14"
+        "value": "{\n  \"compilerOptions\": {\n    \"incremental\": true,\n    \"tsBuildInfoFile\": \"./buildcache/.tsbuildinfo\"\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "In the example above, TypeScript understands inside the `if` block that `value` is a `string`, and in the `else` block the type narrows down to `number`. This means you get proper autocompletion, error-checking, and safeguards against calling wrong methods."
+        "value": "The \"incremental\" option must be set to true. Optionally, you can specify \"tsBuildInfoFile\" to control where the build cache file is saved. This speeds up builds especially when you don't modify many files."
       },
       {
         "type": "paragraph",
-        "value": "Besides `typeof`, you can also use `instanceof` to guard against instances of classes or objects."
+        "value": "2. Enable Skip Lib Check\nIf you are confident about your dependencies (node_modules), you can skip type checking their declaration files to save time."
       },
       {
         "type": "code",
-        "value": "class Dog {\n  bark() {\n    console.log(\"Woof!\");\n  }\n}\n\nclass Cat {\n  meow() {\n    console.log(\"Meow!\");\n  }\n}\n\nfunction speak(pet: Dog | Cat) {\n  if (pet instanceof Dog) {\n    pet.bark();\n  } else {\n    pet.meow();\n  }\n}\n\nspeak(new Dog()); // Woof!\nspeak(new Cat()); // Meow!"
+        "value": "{\n  \"compilerOptions\": {\n    \"skipLibCheck\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Custom Type Guards are especially useful when you work with complex types or interfaces. By creating a function that returns a type predicate, TypeScript can narrow types correctly."
+        "value": "This option can greatly reduce build time by not checking all type declarations in your external libraries."
+      },
+      {
+        "type": "paragraph",
+        "value": "3. Use Isolated Modules for Faster Builds with Babel or ts-node\nIf you're using a tool like Babel or ts-node that compiles TypeScript files individually, enabling \"isolatedModules\" can speed things up."
       },
       {
         "type": "code",
-        "value": "interface Fish {\n  swim: () => void;\n}\n\ninterface Bird {\n  fly: () => void;\n}\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    pet.swim();\n  } else {\n    pet.fly();\n  }\n}"
+        "value": "{\n  \"compilerOptions\": {\n    \"isolatedModules\": true\n  }\n}"
       },
       {
         "type": "paragraph",
-        "value": "Here, `isFish` is a custom Type Guard function. The return type `pet is Fish` tells TypeScript that if the function returns true, `pet` should be treated as a `Fish`. This granular type checking prevents calling non-existent methods and eliminates potential runtime errors."
+        "value": "Be aware that this flag disables some type checking features (like const enums), but it helps with faster incremental builds."
       },
       {
         "type": "paragraph",
-        "value": "To summarize, mastering Type Guards lets you:"
+        "value": "4. Restrict Your Files and Exclude Unnecessary Ones\nConfigure the \"include\" and \"exclude\" arrays in tsconfig.json to only compile the files you need."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"include\": [\"src/**/*\"],\n  \"exclude\": [\"node_modules\", \"dist\", \"build\"]\n}"
       },
       {
         "type": "paragraph",
-        "value": "- Precisely narrow types within conditions\n- Avoid runtime errors from invalid method calls\n- Improve code readability and maintainability\n- Leverage TypeScript's powerful static analysis"
+        "value": "By excluding large folders or test files not needed during build, you can reduce compilation workload."
       },
       {
         "type": "paragraph",
-        "value": "Practice these techniques in your next TypeScript projects to write safer and more resilient applications. Type Guards provide advanced error prevention while keeping your code clean and intuitive."
+        "value": "5. Use Module Resolution Strategies\nIf your project structure is simple, set module resolution to \"node\" instead of \"classic\" for faster lookup."
+      },
+      {
+        "type": "code",
+        "value": "{\n  \"compilerOptions\": {\n    \"moduleResolution\": \"node\"\n  }\n}"
+      },
+      {
+        "type": "paragraph",
+        "value": "To wrap up, small changes in your TypeScript configuration can make a big difference. Start by enabling incremental builds and skipLibCheck. Then, refine includes and module resolution."
+      },
+      {
+        "type": "paragraph",
+        "value": "Remember to test your builds after changing any settings to ensure your code still compiles correctly without errors."
+      },
+      {
+        "type": "paragraph",
+        "value": "Happy coding, and enjoy your faster TypeScript builds!"
       }
     ]
   },
   {
-    "slug": "building-scalable-data-models-in-python-for-ecommerce-applications",
-    "title": "Building Scalable Data Models in Python for E-commerce Applications",
+    "slug": "building-scalable-data-models-in-python-with-sqlalchemy-orm",
+    "title": "Building Scalable Data Models in Python with SQLAlchemy ORM",
     "language": "python",
     "type": "tutorials",
-    "description": "Learn how to create scalable and efficient data models in Python tailored for e-commerce applications, suitable for beginners.",
-    "videoUrl": "https://www.youtube.com/watch?v=2EZMBq4gWOY",
+    "description": "Learn how to build scalable, maintainable data models in Python using SQLAlchemy ORM with this beginner-friendly tutorial.",
+    "videoUrl": "https://www.youtube.com/watch?v=Af6Zr0tNNdE",
     "content": [
       {
         "type": "paragraph",
-        "value": "When building an e-commerce application, designing scalable data models is crucial to handle large volumes of data efficiently. Python, combined with its popular libraries, offers powerful tools for creating these data structures. In this tutorial, we will explore how to build simple yet scalable data models for a basic e-commerce app focusing on products, customers, and orders."
+        "value": "When building applications that work with databases, structuring your data models carefully can make your project more maintainable and scalable. SQLAlchemy, a popular Object Relational Mapper (ORM) in Python, helps you define database schemas as Python classes while abstracting away complex SQL commands."
       },
       {
         "type": "paragraph",
-        "value": "We’ll start by defining our data models using Python classes. These models will represent real-world entities like Products, Customers, and Orders. This approach makes our code organized, reusable, and easy to maintain as the application grows."
+        "value": "This tutorial covers how to create scalable data models step-by-step using SQLAlchemy ORM, focusing on best practices that beginners can easily follow."
+      },
+      {
+        "type": "paragraph",
+        "value": "First, make sure you have SQLAlchemy installed. You can install it via pip:"
       },
       {
         "type": "code",
-        "value": "class Product:\n    def __init__(self, product_id, name, price, stock):\n        self.product_id = product_id\n        self.name = name\n        self.price = price\n        self.stock = stock\n\n    def update_stock(self, quantity):\n        if quantity <= self.stock:\n            self.stock -= quantity\n            return True\n        else:\n            return False"
+        "value": "pip install sqlalchemy"
       },
       {
         "type": "paragraph",
-        "value": "Here, the Product class stores product details such as product_id, name, price, and stock quantity. The update_stock method allows us to reduce the stock when an order is placed, ensuring we don’t sell more than available."
+        "value": "Next, let's start with a simple example of defining a database model. We will create a `User` model with fields like id, name, and email:"
       },
       {
         "type": "code",
-        "value": "class Customer:\n    def __init__(self, customer_id, name, email):\n        self.customer_id = customer_id\n        self.name = name\n        self.email = email\n\n    def update_email(self, new_email):\n        self.email = new_email"
+        "value": "from sqlalchemy import create_engine, Column, Integer, String\nfrom sqlalchemy.ext.declarative import declarative_base\nfrom sqlalchemy.orm import sessionmaker\n\n# Define the base class for models\nBase = declarative_base()\n\nclass User(Base):\n    __tablename__ = 'users'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(50), nullable=False)\n    email = Column(String(100), unique=True, nullable=False)\n\n    def __repr__(self):\n        return f\"<User(name='{self.name}', email='{self.email}')>\"\n\n# Setup an in-memory SQLite database\nengine = create_engine('sqlite:///:memory:', echo=True)\n\n# Create all tables defined by Base subclasses\nBase.metadata.create_all(engine)\n\n# Create a session to interact with the database\nSession = sessionmaker(bind=engine)\nsession = Session()"
       },
       {
         "type": "paragraph",
-        "value": "The Customer class holds essential customer information, with a method to update their email address. This keeps customer data modular and easy to extend."
+        "value": "Let's break down what this code does:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- `declarative_base()` creates a base class to define models.\n- The `User` class inherits from this base and maps to the `users` table.\n- Each attribute (like `id`, `name`, `email`) becomes a column in the table.\n- `primary_key=True` sets the primary key column.\n- `unique=True` on `email` ensures no duplicate emails.\n- We create an SQLite in-memory database for simplicity.\n- `sessionmaker` helps us create sessions to add, query, or update data."
+      },
+      {
+        "type": "paragraph",
+        "value": "Now let's add a user to the database and query it:"
       },
       {
         "type": "code",
-        "value": "class Order:\n    def __init__(self, order_id, customer, products):\n        self.order_id = order_id\n        self.customer = customer  # This should be a Customer instance\n        self.products = products  # List of tuples (Product, quantity)\n        self.status = 'Pending'\n\n    def calculate_total(self):\n        total = 0\n        for product, qty in self.products:\n            total += product.price * qty\n        return total\n\n    def place_order(self):\n        for product, qty in self.products:\n            if not product.update_stock(qty):\n                print(f\"Insufficient stock for {product.name}\")\n                return False\n        self.status = 'Completed'\n        return True"
+        "value": "# Create a new User instance\nnew_user = User(name='Alice', email='alice@example.com')\n\n# Add user to the session\nsession.add(new_user)\n\n# Commit the session to save the user to the database\nsession.commit()\n\n# Query all users\nusers = session.query(User).all()\nprint(users)"
       },
       {
         "type": "paragraph",
-        "value": "The Order class connects customers and products. It calculates the order total and manages stock updates when placing an order. If any product doesn’t have enough stock, the order fails gracefully."
+        "value": "Output should show the list with the Alice user object."
       },
       {
         "type": "paragraph",
-        "value": "Let's put it all together with an example simulating a simple order process."
+        "value": "To build scalable models, consider these tips:"
+      },
+      {
+        "type": "paragraph",
+        "value": "- **Modularize Your Models:** Keep models in separate files or modules to organize your code well.\n- **Use Relationships:** SQLAlchemy supports relationships between tables (one-to-many, many-to-many) to keep models normalized and scalable.\n- **Add Indexing:** For large tables, use indexes to optimize querying.\n- **Use Migrations:** Tools like Alembic allow you to manage database schema changes over time."
+      },
+      {
+        "type": "paragraph",
+        "value": "Here's an example of adding a relationship between `User` and a new `Post` model to demonstrate one-to-many relationships:"
       },
       {
         "type": "code",
-        "value": "# Create product instances\nproduct1 = Product(1, 'Laptop', 1000.00, 10)\nproduct2 = Product(2, 'Mouse', 25.00, 50)\n\n# Create a customer instance\ncustomer1 = Customer(101, 'Alice Smith', 'alice@example.com')\n\n# Create an order with products and their quantities\norder1 = Order(201, customer1, [(product1, 1), (product2, 2)])\n\n# Calculate total\nprint(f\"Order Total: ${order1.calculate_total():.2f}\")\n\n# Place the order\nif order1.place_order():\n    print(\"Order placed successfully!\")\nelse:\n    print(\"Order failed due to insufficient stock.\")\n\n# Check updated stock\nprint(f\"Remaining stock for Laptop: {product1.stock}\")\nprint(f\"Remaining stock for Mouse: {product2.stock}\")"
+        "value": "from sqlalchemy import ForeignKey\nfrom sqlalchemy.orm import relationship\n\nclass Post(Base):\n    __tablename__ = 'posts'\n\n    id = Column(Integer, primary_key=True)\n    title = Column(String(100), nullable=False)\n    content = Column(String)\n    user_id = Column(Integer, ForeignKey('users.id'))\n\n    # Define relationship to User\n    author = relationship('User', back_populates='posts')\n\n# Add reverse relationship in User\nUser.posts = relationship('Post', order_by=Post.id, back_populates='author')\n\n# Create tables including posts\nBase.metadata.create_all(engine)\n\n# Example usage\nnew_post = Post(title='First Post', content='Hello World!', author=new_user)\nsession.add(new_post)\nsession.commit()\n\n# Query posts of a user\nfor post in session.query(Post).filter(Post.user_id == new_user.id):\n    print(post.title, post.author.name)"
       },
       {
         "type": "paragraph",
-        "value": "This example demonstrates managing products, customers, and orders through classes and how they interact to reflect real-world e-commerce operations. You can easily expand these models by adding features like payment processing, shipment tracking, or discount systems."
+        "value": "By defining relationships like this, you keep data models clear and maintain easy access between related data."
       },
       {
         "type": "paragraph",
-        "value": "To scale this further, consider using databases with an ORM like SQLAlchemy or Django ORM to store persistent data, and adopt frameworks to handle web requests, user authentication, and more."
+        "value": "In conclusion, SQLAlchemy ORM provides a powerful, intuitive way to build and manage scalable data models in Python. Start simple, modularize your models, leverage relationships, and use migrations for evolving schemas. These habits help maintain clean, scalable, and efficient code as your project grows."
       }
     ]
   },
   {
-    "slug": "mastering-pythons-exception-hierarchy-custom-error-classes",
-    "title": "Mastering Python's Exception Hierarchy: A Deep Dive into Custom Error Classes",
+    "slug": "mastering-python-exception-hierarchy-for-robust-error-handling",
+    "title": "Mastering Python's Exception Hierarchy for Robust Error Handling",
     "language": "python",
     "type": "errors",
-    "description": "Learn how to create and use custom error classes in Python by understanding its exception hierarchy. A beginner-friendly guide to mastering error handling.",
-    "videoUrl": "https://www.youtube.com/watch?v=IqpOGtaClYg",
+    "description": "Learn how to use Python's exception hierarchy to handle errors effectively and make your programs more reliable.",
+    "videoUrl": "https://www.youtube.com/watch?v=WJMhHCEENxc",
     "content": [
       {
         "type": "paragraph",
-        "value": "When writing Python programs, errors are inevitable. Handling these errors gracefully is key to building robust applications. Python provides a rich set of built-in exceptions organized in a hierarchy. Understanding this hierarchy helps you create meaningful custom exceptions tailored to your program’s needs."
+        "value": "When writing Python programs, encountering errors is inevitable. To build reliable applications, you need to handle these errors gracefully. Python uses a built-in system called exceptions to manage errors, and mastering its hierarchy is key to robust error handling."
       },
       {
         "type": "paragraph",
-        "value": "At the top of Python’s exception hierarchy is the built-in class `BaseException`. All exceptions inherit, directly or indirectly, from it. However, for most custom exceptions, your class should inherit from `Exception`, which is a subclass of `BaseException`. This distinction helps separate normal exceptions from system-exiting exceptions like `SystemExit` or `KeyboardInterrupt`."
+        "value": "Exceptions are organized in a hierarchy, where more general exceptions are parent classes for specific error types. Understanding this hierarchy helps you catch errors precisely or broadly depending on your needs."
       },
       {
         "type": "paragraph",
-        "value": "Here's a simple way to create a custom error class:"
+        "value": "At the top of the hierarchy is the base class Exception. Catching Exception will handle most errors you will encounter, but sometimes you might want to catch specific exceptions like ValueError or FileNotFoundError to respond appropriately."
       },
       {
         "type": "code",
-        "value": "class MyCustomError(Exception):\n    \"\"\"Custom exception for specific error cases.\"\"\"\n    pass\n\ntry:\n    raise MyCustomError(\"Something went wrong!\")\nexcept MyCustomError as e:\n    print(f\"Caught an error: {e}\")"
+        "value": "try:\n    number = int(input('Enter a number: '))\n    result = 10 / number\n    print(f'Result is {result}')\nexcept ValueError:\n    print('Oops! That was not a valid number.')\nexcept ZeroDivisionError:\n    print('Cannot divide by zero, please enter a non-zero number.')\nexcept Exception as e:\n    print(f'Something went wrong: {e}')"
       },
       {
         "type": "paragraph",
-        "value": "In this example, `MyCustomError` inherits from `Exception`. We raise it deliberately and then catch it to handle the error specifically. This approach helps to differentiate between different error situations in your code."
+        "value": "In the example above, different exceptions are caught separately. ValueError occurs if the input can't be converted to an integer. ZeroDivisionError handles division by zero. The last except block with Exception catches any other unexpected errors."
       },
       {
         "type": "paragraph",
-        "value": "You can also add more functionality to your custom exceptions by overriding the `__init__` method. For example, include additional error details:"
+        "value": "You can also create your own custom exceptions by inheriting from Exception. This comes in handy when you want to handle specific errors unique to your program."
       },
       {
         "type": "code",
-        "value": "class ValidationError(Exception):\n    def __init__(self, field, message):\n        self.field = field\n        self.message = message\n        super().__init__(f\"Validation error on '{field}': {message}\")\n\ntry:\n    raise ValidationError(\"username\", \"Must be at least 5 characters\")\nexcept ValidationError as e:\n    print(e)\n    print(f\"Field: {e.field}\")\n    print(f\"Message: {e.message}\")"
+        "value": "class CustomError(Exception):\n    pass\n\ntry:\n    raise CustomError('This is a custom error!')\nexcept CustomError as ce:\n    print(ce)"
       },
       {
         "type": "paragraph",
-        "value": "This pattern is useful when your error needs to carry extra information. You can catch these exceptions and then fetch the details to respond accurately."
+        "value": "Remember, catching overly broad exceptions like the base Exception or even BaseException is generally discouraged unless you have a good reason because it can make debugging harder and hide bugs."
       },
       {
         "type": "paragraph",
-        "value": "Understanding the exception hierarchy also helps when catching exceptions. You can catch specific exceptions first, then catch more general ones later. This keeps your error handling precise and clear."
-      },
-      {
-        "type": "paragraph",
-        "value": "To sum up, mastering Python's exception hierarchy and using custom error classes improves the maintainability and readability of your code. It also provides better control over error handling, making your programs more robust and user-friendly."
+        "value": "To summarize, the key to robust error handling in Python is understanding the exception hierarchy. Catch specific exceptions when possible, use a catch-all sparingly, and consider custom exceptions for special cases. This approach makes your code more reliable and easier to maintain."
       }
     ]
   },
   {
-    "slug": "unlocking-performance-advanced-sql-window-functions-for-real-time-analytics",
-    "title": "Unlocking Performance: Advanced SQL Window Functions for Real-Time Analytics",
+    "slug": "optimizing-sql-queries-with-window-functions-step-by-step-tutorial",
+    "title": "Optimizing SQL Queries with Window Functions: A Step-by-Step Tutorial",
     "language": "sql",
     "type": "tutorials",
-    "description": "Learn how to use advanced SQL window functions to improve performance and derive powerful insights for real-time analytics in this beginner-friendly tutorial.",
-    "videoUrl": "https://www.youtube.com/watch?v=zbcoBi6VbwM",
+    "description": "Learn how to optimize your SQL queries using window functions with this easy-to-follow step-by-step tutorial. Perfect for beginners aiming to improve query efficiency and readability.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "SQL window functions are powerful tools that allow you to perform calculations across a set of table rows that are related to the current row. Unlike aggregate functions, window functions do not collapse rows—they return a value for every row in your result set. This makes them extremely useful for real-time analytics, where you need both detailed and aggregate data simultaneously."
+        "value": "SQL window functions are powerful tools that allow you to perform calculations across a set of table rows related to the current row. Unlike aggregate functions that group data into a single summary row, window functions retain the individual rows while providing aggregated information. This can help optimize your queries by reducing the need for joins or subqueries."
       },
       {
         "type": "paragraph",
-        "value": "In this tutorial, we'll cover some advanced yet beginner-friendly SQL window functions such as ROW_NUMBER(), RANK(), LAG(), LEAD(), and how they can enhance your queries to deliver fast, insightful real-time analytics."
+        "value": "In this tutorial, we'll cover the basics of window functions and show how they can be used to write more efficient and clear SQL queries using a sales data example."
       },
       {
         "type": "paragraph",
-        "value": "Let's start with an example dataset of online sales transactions:"
+        "value": "Imagine you have a sales table called `sales_data` with the following columns: `sales_id`, `salesperson`, `region`, `sale_amount`, and `sale_date`. You want to calculate the running total of sales for each salesperson while still seeing every sale."
+      },
+      {
+        "type": "paragraph",
+        "value": "A common approach without window functions might involve subqueries or self-joins, which can be costly and complicated."
+      },
+      {
+        "type": "paragraph",
+        "value": "Let's first look at the inefficient approach."
       },
       {
         "type": "code",
-        "value": "CREATE TABLE sales (\n    sale_id INT PRIMARY KEY,\n    customer_id INT,\n    sale_date DATE,\n    amount DECIMAL(10, 2)\n);\n\nINSERT INTO sales VALUES\n(1, 101, '2024-06-01', 250.00),\n(2, 102, '2024-06-01', 450.00),\n(3, 101, '2024-06-02', 130.00),\n(4, 103, '2024-06-02', 700.00),\n(5, 102, '2024-06-03', 300.00);\n"
+        "value": "-- Running total without window functions (using subquery)\nSELECT \n  s1.sales_id,\n  s1.salesperson,\n  s1.sale_amount,\n  (\n    SELECT SUM(s2.sale_amount) \n    FROM sales_data s2 \n    WHERE s2.salesperson = s1.salesperson \n      AND s2.sale_date <= s1.sale_date\n  ) AS running_total\nFROM sales_data s1\nORDER BY s1.salesperson, s1.sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "### 1. ROW_NUMBER(): Assigns a unique sequential integer to rows within a partition of the result set. Useful for ranking or identifying the first/last transaction per customer."
+        "value": "This query works but runs a subquery for every row, which becomes slow for large datasets. Now, let's optimize this using a window function called `SUM() OVER()`."
+      },
+      {
+        "type": "paragraph",
+        "value": "The `SUM() OVER()` function allows us to calculate the running total efficiently by defining a window that specifies how rows are grouped and ordered."
       },
       {
         "type": "code",
-        "value": "SELECT sale_id, customer_id, sale_date, amount,\n       ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY sale_date) AS transaction_rank\nFROM sales;\n"
+        "value": "-- Running total with window function\nSELECT \n  sales_id,\n  salesperson,\n  sale_amount,\n  SUM(sale_amount) OVER (PARTITION BY salesperson ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales_data\nORDER BY salesperson, sale_date;"
       },
       {
         "type": "paragraph",
-        "value": "This query ranks each customer's sales by date, giving you the order of their transactions."
+        "value": "Explanation of the window function syntax:\n- `PARTITION BY salesperson`: This divides the rows by each salesperson.\n- `ORDER BY sale_date`: This orders the rows within each partition by date.\n- `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`: This specifies the window frame, including all rows from the beginning until the current one for the running total."
       },
       {
         "type": "paragraph",
-        "value": "### 2. RANK(): Similar to ROW_NUMBER(), but rows with the same values receive the same rank, and gaps may appear in the ranking."
+        "value": "This approach is much faster and simpler to understand. You get the running total per salesperson with a single query scan."
+      },
+      {
+        "type": "paragraph",
+        "value": "Other useful window functions include `ROW_NUMBER()`, `RANK()`, `LEAD()`, and `LAG()`. For example, if you want to find the ranking of each sale by amount within the region, you can use:"
       },
       {
         "type": "code",
-        "value": "SELECT sale_id, customer_id, amount,\n       RANK() OVER (ORDER BY amount DESC) AS amount_rank\nFROM sales;\n"
+        "value": "-- Ranking sales by sale_amount within each region\nSELECT \n  sales_id,\n  salesperson,\n  region,\n  sale_amount,\n  RANK() OVER (PARTITION BY region ORDER BY sale_amount DESC) AS sales_rank\nFROM sales_data\nORDER BY region, sales_rank;"
       },
       {
         "type": "paragraph",
-        "value": "Here, sales are ranked by the amount, with ties receiving the same rank. This helps identify top sales."
+        "value": "In summary, window functions let you add powerful analytic capabilities directly in your SELECT queries. They are easy to learn and can significantly optimize your SQL queries by replacing complex joins and subqueries."
       },
       {
         "type": "paragraph",
-        "value": "### 3. LAG() and LEAD(): Retrieve values from a previous or next row without using self-joins. These are excellent for comparing current row data with prior/next events."
-      },
-      {
-        "type": "code",
-        "value": "SELECT sale_id, customer_id, sale_date, amount,\n       LAG(amount) OVER (PARTITION BY customer_id ORDER BY sale_date) AS previous_amount,\n       LEAD(amount) OVER (PARTITION BY customer_id ORDER BY sale_date) AS next_amount\nFROM sales;\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query lets you see the previous and next sale amounts for each customer, making it easy to detect trends or irregularities."
-      },
-      {
-        "type": "paragraph",
-        "value": "### 4. SUM() OVER(): Calculate cumulative sums, useful to track running totals."
-      },
-      {
-        "type": "code",
-        "value": "SELECT sale_id, customer_id, sale_date, amount,\n       SUM(amount) OVER (PARTITION BY customer_id ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;\n"
-      },
-      {
-        "type": "paragraph",
-        "value": "This query gives you a running total of sales per customer, updated in real time."
-      },
-      {
-        "type": "paragraph",
-        "value": "### Why Use Window Functions for Real-Time Analytics?"
-      },
-      {
-        "type": "paragraph",
-        "value": "Window functions allow for complex calculations without grouping or collapsing data, which maintains row-level detail alongside aggregate insights. This saves time and computational resources, unlocking high-performance queries essential for real-time decision-making."
-      },
-      {
-        "type": "paragraph",
-        "value": "Experiment with these window functions on your datasets to unlock rich, performant analytics that drive business intelligence."
+        "value": "Practice using window functions on your datasets to improve both query performance and readability."
       }
     ]
   },
   {
-    "slug": "how-to-handle-null-values-in-sql-for-beginner-developers",
-    "title": "How to Handle NULL Values in SQL for Beginner Developers",
+    "slug": "optimizing-sql-queries-with-window-functions",
+    "title": "Optimizing SQL Queries with Window Functions for Enhanced Performance",
     "language": "sql",
     "type": "errors",
-    "description": "Learn how to effectively handle NULL values in SQL to avoid common errors and write better queries.",
-    "videoUrl": "https://www.youtube.com/watch?v=RKUYYrmv6gw",
+    "description": "Learn how to optimize your SQL queries using window functions, avoiding common errors and improving database performance for beginners.",
+    "videoUrl": "https://www.youtube.com/watch?v=rIcB4zMYMas",
     "content": [
       {
         "type": "paragraph",
-        "value": "When working with SQL databases, encountering NULL values is very common. NULL represents missing or unknown data and can sometimes cause errors or unexpected results in your queries if not handled properly."
+        "value": "SQL window functions are a powerful tool that can greatly improve the performance and readability of your queries. Unlike aggregate functions that group rows, window functions perform calculations across a set of table rows related to the current row without collapsing the result set. Beginners often make errors when using these functions, so understanding proper usage is key to optimizing your database queries."
       },
       {
         "type": "paragraph",
-        "value": "This article will help beginner developers understand what NULL means in SQL and how to handle it correctly to avoid common pitfalls."
+        "value": "Common window functions include ROW_NUMBER(), RANK(), DENSE_RANK(), and SUM() OVER(). These functions allow you to perform advanced analytics directly in SQL, reducing the need for multiple subqueries or joins that can slow down query performance."
       },
       {
         "type": "paragraph",
-        "value": "Firstly, it is important to know that NULL is different from an empty string or zero. It means the absence of any value. Trying to compare a column with NULL using the usual '=' operator will not work because NULL is not equal to anything, not even itself."
+        "value": "One common error beginners encounter is forgetting the OVER() clause or using it incorrectly. The OVER() clause defines the window or set of rows the function should consider. It can include PARTITION BY to divide data into groups and ORDER BY to sort these groups. Without OVER(), the SQL engine throws an error because it doesn't know how to apply the window function."
       },
       {
         "type": "code",
-        "value": "-- This will NOT return rows where 'column_name' is NULL\nSELECT * FROM table_name WHERE column_name = NULL;"
+        "value": "-- Incorrect: Missing OVER() clause\nSELECT employee_id, ROW_NUMBER() FROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Instead, to check if a column is NULL, use the IS NULL or IS NOT NULL operators:"
+        "value": "Here’s the correct way to use ROW_NUMBER(), which assigns a unique rank number starting at 1 within each department based on salary:"
       },
       {
         "type": "code",
-        "value": "-- Select rows where 'column_name' is NULL\nSELECT * FROM table_name WHERE column_name IS NULL;\n\n-- Select rows where 'column_name' is NOT NULL\nSELECT * FROM table_name WHERE column_name IS NOT NULL;"
+        "value": "SELECT employee_id, department_id, salary,\n       ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY salary DESC) AS rank\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Another common scenario is when you want to replace NULL values with something else in your query results. SQL provides the COALESCE function that returns the first non-NULL value from its arguments."
+        "value": "Using this approach avoids the need for complex joins or grouping queries, reducing execution time and making your SQL easier to maintain."
+      },
+      {
+        "type": "paragraph",
+        "value": "Another common misuse is misunderstanding how window frames affect performance. By default, functions like SUM() OVER() compute over the entire partition, but you can limit this with ROWS or RANGE clauses for running totals or moving averages."
       },
       {
         "type": "code",
-        "value": "-- Replace NULLs in 'column_name' with a default value, e.g., 0\nSELECT COALESCE(column_name, 0) AS column_name FROM table_name;"
+        "value": "SELECT employee_id, department_id, salary,\n       SUM(salary) OVER(PARTITION BY department_id ORDER BY employee_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM employees;"
       },
       {
         "type": "paragraph",
-        "value": "Handling NULL correctly prevents errors in calculations or when filtering data. For example, adding NULL to a number results in NULL, so you might want to use COALESCE before sums or averages."
-      },
-      {
-        "type": "code",
-        "value": "-- Sum with NULL values handled\nSELECT SUM(COALESCE(column_name, 0)) FROM table_name;"
+        "value": "This query efficiently calculates a running total per department without additional joins. Remember, properly indexing your partition and order columns can further boost query performance."
       },
       {
         "type": "paragraph",
-        "value": "Remember, understanding NULL and how to work with it is a crucial skill for any SQL developer. Use IS NULL and IS NOT NULL for checks, and COALESCE to provide default values when needed."
-      },
-      {
-        "type": "paragraph",
-        "value": "Start practicing these techniques in your SQL queries to avoid common mistakes and improve your data handling skills."
+        "value": "In summary, to optimize SQL queries using window functions:\n- Always use the OVER() clause with appropriate PARTITION BY and ORDER BY\n- Avoid unnecessary subqueries by using window functions for ranking and aggregates\n- Fine-tune frame specifications for precise calculations\n- Index columns used in PARTITION BY and ORDER BY for better speed\n\nBy following these tips, you can write cleaner, faster SQL queries and avoid common errors that impact performance."
       }
     ]
   }
