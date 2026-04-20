@@ -1,172 +1,175 @@
 [
   {
-    "slug": "build-a-sql-function-to-calculate-the-total-price-of-an-order",
-    "title": "Build a SQL Function to Calculate the Total Price of an Order",
-    "language": "sql",
-    "difficulty": "beginner",
-    "category": "queries",
-    "description": "Write a SQL function that takes an order ID and returns the total price of that order by summing up the prices of its items.",
-    "prompt": "You have a table named OrderItems with columns: order_id, item_id, quantity, and price_per_item. Write a SQL function named calculate_order_total that takes an order_id as input and returns the total price, calculated as the sum of quantity * price_per_item for that order.",
+    "slug": "build-a-memoized-deep-clone-function-with-circular-reference-handling",
+    "title": "Build a Memoized Deep Clone Function with Circular Reference Handling",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an advanced JavaScript function that performs a deep clone of any given object, including nested objects and arrays, while efficiently handling circular references using memoization to avoid infinite loops.",
+    "prompt": "Write a JavaScript function named deepClone that takes an object or array of any depth, and returns a fully deep cloned copy of it. Your function must handle circular references gracefully by reusing previously cloned instances to prevent infinite recursion or stack overflow errors. The function should also correctly clone built-in JavaScript types such as Date and RegExp objects. Note that functions and DOM elements do not need to be cloned and may be left as-is in the output.\n\nExample usage:\nconst original = { a: 1 };\noriginal.self = original;\nconst cloned = deepClone(original);\nconsole.log(cloned !== original); // true\nconsole.log(cloned.self === cloned);   // true\n\nYour deepClone function should support cloning deeply nested structures and circular references without performance degradation caused by redundant cloning operations.",
     "guidance": [
-      "Use the SUM aggregate function to calculate the total.",
-      "Filter the rows by the given order_id before summing.",
-      "Make sure to multiply quantity by price_per_item for each item."
+      "Use a WeakMap or Map to keep track of objects that have already been cloned and their copies to manage circular references.",
+      "Implement recursive cloning and explicitly check object types such as Date and RegExp to clone them correctly.",
+      "Avoid cloning functions or DOM elements; simply copy their references as-is."
     ],
     "hints": [
-      "Remember to filter using a WHERE clause on order_id.",
-      "The function should return a numeric value representing the total price."
+      "Start by checking if the input is a primitive, return it directly if so.",
+      "Store each original object as a key in a Map associated with its cloned counterpart to reuse clones for circular references.",
+      "For arrays and general objects, iterate over their properties or indices recursively applying deepClone."
     ],
-    "starterCode": "CREATE FUNCTION calculate_order_total(p_order_id INT) RETURNS DECIMAL(10,2) BEGIN\n  -- Your code here\nEND;",
-    "expectedOutput": "If OrderItems contains rows with order_id = 101 like (item_id=1, quantity=2, price_per_item=10.50) and (item_id=2, quantity=1, price_per_item=5.00), then SELECT calculate_order_total(101); should return 26.00",
+    "starterCode": "function deepClone(obj, map = new Map()) {\n  // Your implementation here\n}",
+    "expectedOutput": "const original = { a: 1 };\noriginal.self = original;\nconst cloned = deepClone(original);\nconsole.log(cloned !== original); // true\nconsole.log(cloned.self === cloned);   // true\n\nconst regex = /test/g;\nconst obj = { d: new Date(), r: regex };\nconst clonedObj = deepClone(obj);\nconsole.log(clonedObj.d instanceof Date); // true\nconsole.log(clonedObj.r instanceof RegExp); // true",
     "concepts": [
-      "SQL functions",
-      "aggregate functions",
-      "basic arithmetic in SQL"
+      "deep cloning",
+      "circular references",
+      "memoization",
+      "JavaScript data types"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-sql-query-to-correctly-calculate-employee-department-averages",
+    "title": "Fix the Bug in SQL Query to Correctly Calculate Employee Department Averages",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "You are given a SQL query that attempts to calculate the average salary per department along with the department name. However, the query is not returning correct results due to a bug in the JOIN and GROUP BY clauses. Your task is to identify and fix the bug to ensure the query returns each department's name along with the average salary of its employees.",
+    "prompt": "The following SQL query aims to get the average salary of employees grouped by their department name. However, the output is either incorrect or throws an error. Fix the query to correctly return each department's name and the average employee salary for that department.",
+    "guidance": [
+      "Review the JOIN condition to ensure it matches the appropriate keys between the 'employees' and 'departments' tables.",
+      "Check the GROUP BY clause to verify that it includes all non-aggregated columns selected in the query.",
+      "Test the fixed query to make sure it returns one row per department with the correct average salary."
+    ],
+    "hints": [
+      "Remember that when using GROUP BY, all selected columns that are not part of an aggregate function must be included in the GROUP BY clause.",
+      "Ensure that the JOIN keys are properly specified, as mismatched keys could result in an empty or incorrect join."
+    ],
+    "starterCode": "SELECT d.department_name, AVG(e.salary) AS avg_salary\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nGROUP BY e.department_id;",
+    "expectedOutput": "A result set with two columns: department_name and avg_salary, where each row corresponds to a department with the correct average salary of its employees.",
+    "concepts": [
+      "JOIN operations",
+      "GROUP BY clause",
+      "Aggregate functions",
+      "SQL debugging"
     ],
     "estimatedTime": "10 minutes",
-    "isFeatured": false
+    "isFeatured": true
   },
   {
-    "slug": "build-a-deep-object-merger-function-in-javascript",
-    "title": "Build a Deep Object Merger Function in JavaScript",
-    "language": "javascript",
-    "difficulty": "intermediate",
-    "category": "functions",
-    "description": "Create a function that deeply merges two JavaScript objects, combining nested properties without overwriting entire sub-objects.",
-    "prompt": "Write a function named `deepMerge` that accepts two objects and returns a new object by deeply merging them. For any matching keys where the values are both objects, the merge should happen recursively. For other value types, the value from the second object should overwrite the first. Arrays should be replaced entirely by the second object's value. The function should not modify the original input objects.",
-    "guidance": [
-      "Use recursion to handle nested objects.",
-      "Check if a value is an object before merging deeper.",
-      "Avoid mutating the input objects; create new objects during merge."
-    ],
-    "hints": [
-      "You can use `typeof` and `Array.isArray()` to differentiate between objects and arrays.",
-      "Use `Object.keys()` to iterate through properties of objects.",
-      "Remember to create new objects instead of modifying existing ones to preserve immutability."
-    ],
-    "starterCode": "function deepMerge(obj1, obj2) {\n  // Your code here\n}",
-    "expectedOutput": "deepMerge({a: 1, b: {x: 1, y: 2}}, {b: {y: 3, z: 4}, c: 5}) // returns {a: 1, b: {x: 1, y: 3, z: 4}, c: 5}",
-    "concepts": [
-      "recursion",
-      "object manipulation",
-      "immutability"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-bug-in-advanced-memoized-recursive-fibonacci-implementation",
-    "title": "Fix Bug in Advanced Memoized Recursive Fibonacci Implementation",
-    "language": "python",
-    "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Identify and fix the bug in a recursive Fibonacci function optimized with memoization to achieve efficient performance for large input values.",
-    "prompt": "The following code is intended to compute the nth Fibonacci number efficiently using memoization (caching previously computed values). However, it currently produces incorrect results or runs inefficiently for larger inputs. Identify and fix the bug(s) so that it computes the correct Fibonacci number with optimal performance.",
-    "guidance": [
-      "Check the memoization dictionary usage and key handling to ensure cached values are stored and retrieved correctly.",
-      "Validate the base cases are correctly defined to prevent infinite recursion.",
-      "Test behavior on both small and large inputs to confirm correctness and efficiency."
-    ],
-    "hints": [
-      "Make sure all code paths update and return the cached results correctly.",
-      "Look closely at the base case return values and whether they correlate correctly with the Fibonacci sequence definition."
-    ],
-    "starterCode": "def fib(n, memo={}):\n    if n in memo:\n        return memo[n]\n    if n <= 1:\n        return n\n    memo[n] = fib(n-1, memo) + fib(n-2, memo-1)  # Bug here\n    return memo[n]",
-    "expectedOutput": "fib(10) should return 55\nfib(50) should return 12586269025",
-    "concepts": [
-      "memoization",
-      "recursion",
-      "debugging"
-    ],
-    "estimatedTime": "15 minutes",
-    "isFeatured": false
-  },
-  {
-    "slug": "fix-the-memory-leak-and-logical-errors-in-a-custom-smart-pointer-implementation",
-    "title": "Fix the Memory Leak and Logical Errors in a Custom Smart Pointer Implementation",
+    "slug": "advanced-file-system-simulation-with-c",
+    "title": "Advanced File System Simulation with C++",
     "language": "cpp",
     "difficulty": "advanced",
-    "category": "debugging",
-    "description": "Identify and fix memory management bugs and logical errors in a custom C++ shared pointer implementation to ensure proper resource deallocation and reference counting.",
-    "prompt": "The provided code is a basic implementation of a shared_ptr-like class in C++. However, it contains critical bugs that cause memory leaks, double-deletions, and incorrect reference counting. Your task is to identify and fix these bugs to make the smart pointer behave correctly and manage the resource safely with proper reference counting.",
+    "category": "mini-projects",
+    "description": "Create an advanced mini-project that simulates a hierarchical file system including files and folders with operations like add, delete, move, and search, using efficient data structures in C++.",
+    "prompt": "Build a C++ program that simulates a file system supporting folders and files in a hierarchical structure. Your program should allow users to create folders and files, delete them, move them between folders, and search files or folders by name. Implement the following: \n\n- A class structure representing folders and files, with appropriate inheritance or composition.\n- An efficient way to store and navigate the hierarchy (e.g., trees).\n- Functions to add a file or folder inside a given folder path.\n- Functions to delete a file or folder by path.\n- Functions to move items from one folder to another.\n- A search function to find all files/folders matching a name substring anywhere in the tree, returning their full paths.\n\nYour solution should handle edge cases such as duplicate names in different folders, invalid paths, and empty searches gracefully.",
     "guidance": [
-      "Examine the destructor and copy assignment operator for proper handling of reference counts.",
-      "Ensure that the resource is deleted only when the last shared_ptr pointing to it is destroyed or reset.",
-      "Check for unsafe usage of raw pointers and dangling pointer risks."
+      "Design a Node class that can represent both files and folders, with metadata and pointers to children for folders.",
+      "Use recursion or iterative methods with stacks/queues to traverse the file hierarchy for operations like search and delete.",
+      "Implement path parsing to convert string paths into navigable nodes within your structure."
     ],
     "hints": [
-      "Consider the rule of three: destructor, copy constructor, and copy assignment operator need to be consistent.",
-      "Reference count deletion and pointer nullification should happen atomically when count reaches zero.",
-      "Avoid deleting pointers multiple times; track ownership carefully."
+      "Consider using smart pointers or careful memory management to avoid leaks when deleting nodes.",
+      "Use a vector or list to hold children nodes within a folder for flexibility but optimize search by considering indexing or maps if needed.",
+      "When moving a node, ensure to unlink it from its current parent before linking it to the new parent."
     ],
-    "starterCode": "template <typename T>\nclass SharedPtr {\nprivate:\n    T* ptr;\n    int* count;\npublic:\n    SharedPtr(T* p = nullptr) : ptr(p), count(new int(1)) {}\n\n    ~SharedPtr() {\n        (*count)--;\n        if (*count == 0) {\n            delete ptr;\n            delete count;\n        }\n    }\n\n    SharedPtr(const SharedPtr& sp) {\n        ptr = sp.ptr;\n        count = sp.count;\n        (*count)++;\n    }\n\n    SharedPtr& operator=(const SharedPtr& sp) {\n        if (this != &sp) {\n            if (--(*count) == 0) {\n                delete ptr;\n                delete count;\n            }\n            ptr = sp.ptr;\n            count = sp.count;\n            (*count)++;\n        }\n        return *this;\n    }\n    T& operator*() { return *ptr; }\n    T* operator->() { return ptr; }\n};",
-    "expectedOutput": "Correct behavior is no memory leaks or double deletions during usage. The pointer resource should be deleted exactly once when no SharedPtr objects reference it anymore.",
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n#include <memory>\n\n// Define a base Node class with virtual functions, and derive File and Folder from it.\nclass Node {\npublic:\n    std::string name;\n    Node(std::string name) : name(name) {}\n    virtual ~Node() {}\n    virtual bool isFile() const = 0;\n};\n\n// Implement Folder class holding children\nclass Folder : public Node {\npublic:\n    std::vector<std::unique_ptr<Node>> children;\n    Folder(std::string name) : Node(name) {}\n    bool isFile() const override { return false; }\n    // TODO: add methods to add, delete, move, and search\n};\n\n// Implement File class\nclass File : public Node {\npublic:\n    File(std::string name) : Node(name) {}\n    bool isFile() const override { return true; }\n};\n\nint main() {\n    // Example root folder\n    Folder root(\"root\");\n    // TODO: implement user interaction or test cases\n    return 0;\n}",
+    "expectedOutput": "This project does not have a fixed output but should allow operations such as:\n- Adding folders/files under given paths\n- Removing them\n- Moving them between folders\n- Searching names and printing full paths\n\nExample: Searching \"doc\" may print:\n/root/docs\n/root/docs/file1.txt\n/root/projects/documentation\n\nIf user tries to delete a non-existing path, an error message should appear.",
     "concepts": [
-      "C++ pointers",
-      "memory management",
-      "reference counting",
-      "copy constructor and assignment",
-      "destructor"
+      "Object-Oriented Programming",
+      "Data Structures (Trees)",
+      "Recursion",
+      "Memory Management"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-off-by-one-error-in-a-loop-to-sum-integers",
+    "title": "Fix the Off-By-One Error in a Loop to Sum Integers",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple C++ function intended to sum integers from 1 to n contains a bug causing incorrect results. Identify and fix the off-by-one error.",
+    "prompt": "The following C++ function aims to compute the sum of all integers from 1 up to and including n. However, the returned result is incorrect due to a bug in the loop. Fix the bug so that the function returns the correct sum.",
+    "guidance": [
+      "Check the loop boundaries carefully to ensure the loop processes all values from 1 to n inclusive.",
+      "Consider how the loop counter advances and when the summation occurs.",
+      "Make sure the loop does not skip the final number or run an extra iteration."
+    ],
+    "hints": [
+      "Does the loop condition let i reach the value n?",
+      "Try printing i inside the loop to verify which values are being summed.",
+      "Remember, the sum of numbers from 1 to n is n*(n+1)/2; use this to check your answer."
+    ],
+    "starterCode": "int sumUpToN(int n) {\n    int sum = 0;\n    for (int i = 1; i < n; ++i) {\n        sum += i;\n    }\n    return sum;\n}",
+    "expectedOutput": "sumUpToN(5) should return 15",
+    "concepts": [
+      "loops",
+      "conditionals",
+      "off-by-one errors",
+      "basic arithmetic operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-infinite-loop-and-incorrect-state-updates-in-async-data-processor",
+    "title": "Fix Infinite Loop and Incorrect State Updates in Async Data Processor",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Debug and fix a complex asynchronous JavaScript function that processes data items in sequence but currently produces an infinite loop and incorrect state updates due to improper async handling and variable scope issues.",
+    "prompt": "You are given a function `processDataItems` designed to process an array of data items asynchronously in sequence. The function is meant to update a `results` array with processed values and track progress correctly. However, the current implementation results in an infinite loop and incorrect updates to the `results` array because of asynchronous handling and variable scoping bugs.\n\nFix the function so that:\n1. It processes each item in order.\n2. Correctly waits for async processing of each item to complete before moving to the next.\n3. Properly updates the `results` array.\n4. Terminates after processing all items without infinite looping.\n\nYou may only modify the code inside `processDataItems` and should keep the function signature intact.",
+    "guidance": [
+      "Carefully analyze the asynchronous flow and where `await` or Promise handling is missing or misplaced.",
+      "Check variable scopes, especially the loop index and state updates inside async functions.",
+      "Consider replacing `while` loops with for-loops or recursion to better control async operations."
+    ],
+    "hints": [
+      "The infinite loop arises because the loop continuation condition never becomes false due to no loop index increment.",
+      "The `await` keyword must be used correctly inside loops to ensure sequential processing.",
+      "State updates to `results` might be referencing stale closure variables; use proper scoping techniques."
+    ],
+    "starterCode": "async function processDataItems(items) {\n  let results = [];\n  let i = 0;\n  while (i < items.length) {\n    async function processItem() {\n      // Simulate async processing delay\n      await new Promise(resolve => setTimeout(resolve, 100));\n      results[i] = items[i] * 2; // Intended processing\n    }\n    processItem();\n    // Missing i++ or awaiting processItem causes bugs\n  }\n  return results;\n}",
+    "expectedOutput": "[4, 6, 8, 10]",
+    "concepts": [
+      "asynchronous programming",
+      "async/await",
+      "loop control",
+      "closure and variable scope"
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": false
   },
   {
-    "slug": "build-a-function-to-flatten-nested-lists-by-one-level",
-    "title": "Build a Function to Flatten Nested Lists by One Level",
-    "language": "python",
-    "difficulty": "intermediate",
-    "category": "functions",
-    "description": "Create a Python function that takes a list containing nested sublists and returns a new list flattened by exactly one level. This means only the first level of nested lists should be expanded, while deeper nested structures remain intact.",
-    "prompt": "Write a function named flatten_one_level that accepts one parameter: a list which may contain elements or nested lists at any depth. Your function should return a new list where only the first level of nested lists is flattened into the main list. Deeper nested lists inside those sublists should remain nested as they are.",
-    "guidance": [
-      "Iterate over each element in the input list and check whether it is a list.",
-      "If the element is a list, extend its items into the result list instead of adding the entire list as a single element.",
-      "If the element is not a list, append it normally to the result list."
-    ],
-    "hints": [
-      "Use Python's isinstance() function to check if an element is a list.",
-      "Using list.extend() is helpful when you want to add elements of a list rather than the list itself.",
-      "Avoid flattening recursively or using nested loops that go beyond one level."
-    ],
-    "starterCode": "def flatten_one_level(input_list):\n    # Your code here\n    pass",
-    "expectedOutput": "flatten_one_level([1, [2, 3], [4, [5, 6]], 7])  # returns [1, 2, 3, 4, [5, 6], 7]",
-    "concepts": [
-      "list manipulation",
-      "type checking",
-      "iteration"
-    ],
-    "estimatedTime": "10 minutes",
-    "isFeatured": true
-  },
-  {
-    "slug": "refactor-and-optimize-a-complex-sql-query-using-window-functions",
-    "title": "Refactor and Optimize a Complex SQL Query Using Window Functions",
-    "language": "sql",
+    "slug": "refactor-and-optimize-nested-loops-for-product-price-analysis",
+    "title": "Refactor and Optimize Nested Loops for Product Price Analysis",
+    "language": "javascript",
     "difficulty": "advanced",
-    "category": "optimization",
-    "description": "Given a complex SQL query with multiple nested subqueries and joins, refactor it to improve readability, performance, and maintainability while preserving the original output.",
-    "prompt": "You are provided with a SQL query that calculates rank, running totals, and aggregates from a sales dataset. The original query uses multiple nested subqueries and joins that cause inefficient execution and are hard to maintain. Your task is to refactor the SQL code to use window functions and CTEs (Common Table Expressions) to improve query performance and clarity without changing the output results. Ensure your refactored query produces the same dataset with the same order and columns.",
+    "category": "code-quality",
+    "description": "Improve the readability, maintainability, and performance of a deeply nested JavaScript function that analyzes product prices across multiple categories and regions.",
+    "prompt": "You are given a messy JavaScript function that takes an array of category objects. Each category contains multiple regions, and each region contains a list of product prices. The function computes the average price per region and returns an object with categories as keys and values as arrays of averages per region. Your task is to refactor this function to improve code clarity, reduce nesting, and optimize performance without changing its output or signature.",
     "guidance": [
-      "Use window functions such as ROW_NUMBER(), RANK(), SUM() OVER(), or others to simplify aggregation and ranking logic.",
-      "Replace nested subqueries with CTE blocks for better modularity and readability.",
-      "Verify output consistency by comparing results before and after refactoring."
+      "Focus on breaking down the nested loops by using helper functions or array methods like map and reduce.",
+      "Consider ways to eliminate unnecessary temporary variables and combine operations.",
+      "Keep the function's output structure identical to ensure no behavioral changes."
     ],
     "hints": [
-      "Look for repeated join patterns and subqueries that compute partial aggregates—these can frequently be replaced by window functions over partitions.",
-      "Common window functions like ROW_NUMBER() and SUM() OVER(PARTITION BY ...) can often eliminate inefficient grouping and self-joins.",
-      "Ensure ORDER BY clauses inside window functions match the original query’s ordering to preserve ranking logic."
+      "Use Array.prototype.map to transform arrays more declaratively.",
+      "Use Array.prototype.reduce to calculate sums and averages efficiently.",
+      "Avoid deeply nested for-loops by flattening the data processing steps."
     ],
-    "starterCode": "WITH sales_data AS (\n  SELECT \n    s.customer_id,\n    s.order_date,\n    s.amount,\n    c.region\n  FROM sales s\n  JOIN customers c ON s.customer_id = c.id\n),\nranked_sales AS (\n  SELECT \n    sd.customer_id,\n    sd.order_date,\n    sd.amount,\n    sd.region,\n    (SELECT COUNT(DISTINCT s2.order_date)\n     FROM sales_data s2\n     WHERE s2.customer_id = sd.customer_id\n       AND s2.order_date <= sd.order_date) AS order_rank\n  FROM sales_data sd\n),\naggregated_totals AS (\n  SELECT\n    customer_id,\n    MAX(order_rank) AS total_orders\n  FROM ranked_sales\n  GROUP BY customer_id\n),\nfinal_output AS (\n  SELECT\n    rs.customer_id,\n    rs.order_date,\n    rs.amount,\n    rs.region,\n    rs.order_rank,\n    at.total_orders,\n    (SELECT SUM(amount) FROM sales_data WHERE customer_id = rs.customer_id AND order_date <= rs.order_date) AS running_total\n  FROM ranked_sales rs\n  JOIN aggregated_totals at ON rs.customer_id = at.customer_id\n)\nSELECT * FROM final_output\nORDER BY customer_id, order_date;",
-    "expectedOutput": "The result table with columns: customer_id, order_date, amount, region, order_rank (rank of order_date per customer), total_orders (total number of orders per customer), running_total (cumulative amount per customer ordered by date). The rows should be ordered by customer_id then order_date, with the same values as the original nested-subquery output.",
+    "starterCode": "function analyzePrices(categories) {\n  let result = {};\n  for (let i = 0; i < categories.length; i++) {\n    let category = categories[i];\n    let regionAverages = [];\n    for (let j = 0; j < category.regions.length; j++) {\n      let region = category.regions[j];\n      let total = 0;\n      for (let k = 0; k < region.products.length; k++) {\n        total += region.products[k];\n      }\n      let avg = region.products.length > 0 ? total / region.products.length : 0;\n      regionAverages.push(avg);\n    }\n    result[category.name] = regionAverages;\n  }\n  return result;\n}",
+    "expectedOutput": "analyzePrices([{ name: 'Electronics', regions: [ { products: [100, 200, 300] }, { products: [400, 500] } ] }, { name: 'Books', regions: [ { products: [10, 20] }, { products: [] } ] }])\n// Output: { Electronics: [200, 450], Books: [15, 0] }",
     "concepts": [
-      "Window Functions",
-      "Common Table Expressions (CTEs)",
-      "Query Optimization",
-      "SQL Joins",
-      "Aggregation"
+      "array methods",
+      "functional programming",
+      "code readability",
+      "performance optimization"
     ],
     "estimatedTime": "15 minutes",
-    "isFeatured": true
+    "isFeatured": false
   }
 ]

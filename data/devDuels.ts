@@ -10136,5 +10136,178 @@ export const devDuels: DevDuelChallenge[] = [
     ],
     "estimatedTime": "15 minutes",
     "isFeatured": true
+  },
+  {
+    "slug": "build-a-memoized-deep-clone-function-with-circular-reference-handling",
+    "title": "Build a Memoized Deep Clone Function with Circular Reference Handling",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "functions",
+    "description": "Create an advanced JavaScript function that performs a deep clone of any given object, including nested objects and arrays, while efficiently handling circular references using memoization to avoid infinite loops.",
+    "prompt": "Write a JavaScript function named deepClone that takes an object or array of any depth, and returns a fully deep cloned copy of it. Your function must handle circular references gracefully by reusing previously cloned instances to prevent infinite recursion or stack overflow errors. The function should also correctly clone built-in JavaScript types such as Date and RegExp objects. Note that functions and DOM elements do not need to be cloned and may be left as-is in the output.\n\nExample usage:\nconst original = { a: 1 };\noriginal.self = original;\nconst cloned = deepClone(original);\nconsole.log(cloned !== original); // true\nconsole.log(cloned.self === cloned);   // true\n\nYour deepClone function should support cloning deeply nested structures and circular references without performance degradation caused by redundant cloning operations.",
+    "guidance": [
+      "Use a WeakMap or Map to keep track of objects that have already been cloned and their copies to manage circular references.",
+      "Implement recursive cloning and explicitly check object types such as Date and RegExp to clone them correctly.",
+      "Avoid cloning functions or DOM elements; simply copy their references as-is."
+    ],
+    "hints": [
+      "Start by checking if the input is a primitive, return it directly if so.",
+      "Store each original object as a key in a Map associated with its cloned counterpart to reuse clones for circular references.",
+      "For arrays and general objects, iterate over their properties or indices recursively applying deepClone."
+    ],
+    "starterCode": "function deepClone(obj, map = new Map()) {\n  // Your implementation here\n}",
+    "expectedOutput": "const original = { a: 1 };\noriginal.self = original;\nconst cloned = deepClone(original);\nconsole.log(cloned !== original); // true\nconsole.log(cloned.self === cloned);   // true\n\nconst regex = /test/g;\nconst obj = { d: new Date(), r: regex };\nconst clonedObj = deepClone(obj);\nconsole.log(clonedObj.d instanceof Date); // true\nconsole.log(clonedObj.r instanceof RegExp); // true",
+    "concepts": [
+      "deep cloning",
+      "circular references",
+      "memoization",
+      "JavaScript data types"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-bug-in-sql-query-to-correctly-calculate-employee-department-averages",
+    "title": "Fix the Bug in SQL Query to Correctly Calculate Employee Department Averages",
+    "language": "sql",
+    "difficulty": "intermediate",
+    "category": "debugging",
+    "description": "You are given a SQL query that attempts to calculate the average salary per department along with the department name. However, the query is not returning correct results due to a bug in the JOIN and GROUP BY clauses. Your task is to identify and fix the bug to ensure the query returns each department's name along with the average salary of its employees.",
+    "prompt": "The following SQL query aims to get the average salary of employees grouped by their department name. However, the output is either incorrect or throws an error. Fix the query to correctly return each department's name and the average employee salary for that department.",
+    "guidance": [
+      "Review the JOIN condition to ensure it matches the appropriate keys between the 'employees' and 'departments' tables.",
+      "Check the GROUP BY clause to verify that it includes all non-aggregated columns selected in the query.",
+      "Test the fixed query to make sure it returns one row per department with the correct average salary."
+    ],
+    "hints": [
+      "Remember that when using GROUP BY, all selected columns that are not part of an aggregate function must be included in the GROUP BY clause.",
+      "Ensure that the JOIN keys are properly specified, as mismatched keys could result in an empty or incorrect join."
+    ],
+    "starterCode": "SELECT d.department_name, AVG(e.salary) AS avg_salary\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nGROUP BY e.department_id;",
+    "expectedOutput": "A result set with two columns: department_name and avg_salary, where each row corresponds to a department with the correct average salary of its employees.",
+    "concepts": [
+      "JOIN operations",
+      "GROUP BY clause",
+      "Aggregate functions",
+      "SQL debugging"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "advanced-file-system-simulation-with-c",
+    "title": "Advanced File System Simulation with C++",
+    "language": "cpp",
+    "difficulty": "advanced",
+    "category": "mini-projects",
+    "description": "Create an advanced mini-project that simulates a hierarchical file system including files and folders with operations like add, delete, move, and search, using efficient data structures in C++.",
+    "prompt": "Build a C++ program that simulates a file system supporting folders and files in a hierarchical structure. Your program should allow users to create folders and files, delete them, move them between folders, and search files or folders by name. Implement the following: \n\n- A class structure representing folders and files, with appropriate inheritance or composition.\n- An efficient way to store and navigate the hierarchy (e.g., trees).\n- Functions to add a file or folder inside a given folder path.\n- Functions to delete a file or folder by path.\n- Functions to move items from one folder to another.\n- A search function to find all files/folders matching a name substring anywhere in the tree, returning their full paths.\n\nYour solution should handle edge cases such as duplicate names in different folders, invalid paths, and empty searches gracefully.",
+    "guidance": [
+      "Design a Node class that can represent both files and folders, with metadata and pointers to children for folders.",
+      "Use recursion or iterative methods with stacks/queues to traverse the file hierarchy for operations like search and delete.",
+      "Implement path parsing to convert string paths into navigable nodes within your structure."
+    ],
+    "hints": [
+      "Consider using smart pointers or careful memory management to avoid leaks when deleting nodes.",
+      "Use a vector or list to hold children nodes within a folder for flexibility but optimize search by considering indexing or maps if needed.",
+      "When moving a node, ensure to unlink it from its current parent before linking it to the new parent."
+    ],
+    "starterCode": "#include <iostream>\n#include <vector>\n#include <string>\n#include <memory>\n\n// Define a base Node class with virtual functions, and derive File and Folder from it.\nclass Node {\npublic:\n    std::string name;\n    Node(std::string name) : name(name) {}\n    virtual ~Node() {}\n    virtual bool isFile() const = 0;\n};\n\n// Implement Folder class holding children\nclass Folder : public Node {\npublic:\n    std::vector<std::unique_ptr<Node>> children;\n    Folder(std::string name) : Node(name) {}\n    bool isFile() const override { return false; }\n    // TODO: add methods to add, delete, move, and search\n};\n\n// Implement File class\nclass File : public Node {\npublic:\n    File(std::string name) : Node(name) {}\n    bool isFile() const override { return true; }\n};\n\nint main() {\n    // Example root folder\n    Folder root(\"root\");\n    // TODO: implement user interaction or test cases\n    return 0;\n}",
+    "expectedOutput": "This project does not have a fixed output but should allow operations such as:\n- Adding folders/files under given paths\n- Removing them\n- Moving them between folders\n- Searching names and printing full paths\n\nExample: Searching \"doc\" may print:\n/root/docs\n/root/docs/file1.txt\n/root/projects/documentation\n\nIf user tries to delete a non-existing path, an error message should appear.",
+    "concepts": [
+      "Object-Oriented Programming",
+      "Data Structures (Trees)",
+      "Recursion",
+      "Memory Management"
+    ],
+    "estimatedTime": "90 minutes",
+    "isFeatured": true
+  },
+  {
+    "slug": "fix-the-off-by-one-error-in-a-loop-to-sum-integers",
+    "title": "Fix the Off-By-One Error in a Loop to Sum Integers",
+    "language": "cpp",
+    "difficulty": "beginner",
+    "category": "debugging",
+    "description": "A simple C++ function intended to sum integers from 1 to n contains a bug causing incorrect results. Identify and fix the off-by-one error.",
+    "prompt": "The following C++ function aims to compute the sum of all integers from 1 up to and including n. However, the returned result is incorrect due to a bug in the loop. Fix the bug so that the function returns the correct sum.",
+    "guidance": [
+      "Check the loop boundaries carefully to ensure the loop processes all values from 1 to n inclusive.",
+      "Consider how the loop counter advances and when the summation occurs.",
+      "Make sure the loop does not skip the final number or run an extra iteration."
+    ],
+    "hints": [
+      "Does the loop condition let i reach the value n?",
+      "Try printing i inside the loop to verify which values are being summed.",
+      "Remember, the sum of numbers from 1 to n is n*(n+1)/2; use this to check your answer."
+    ],
+    "starterCode": "int sumUpToN(int n) {\n    int sum = 0;\n    for (int i = 1; i < n; ++i) {\n        sum += i;\n    }\n    return sum;\n}",
+    "expectedOutput": "sumUpToN(5) should return 15",
+    "concepts": [
+      "loops",
+      "conditionals",
+      "off-by-one errors",
+      "basic arithmetic operations"
+    ],
+    "estimatedTime": "10 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "fix-infinite-loop-and-incorrect-state-updates-in-async-data-processor",
+    "title": "Fix Infinite Loop and Incorrect State Updates in Async Data Processor",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "debugging",
+    "description": "Debug and fix a complex asynchronous JavaScript function that processes data items in sequence but currently produces an infinite loop and incorrect state updates due to improper async handling and variable scope issues.",
+    "prompt": "You are given a function `processDataItems` designed to process an array of data items asynchronously in sequence. The function is meant to update a `results` array with processed values and track progress correctly. However, the current implementation results in an infinite loop and incorrect updates to the `results` array because of asynchronous handling and variable scoping bugs.\n\nFix the function so that:\n1. It processes each item in order.\n2. Correctly waits for async processing of each item to complete before moving to the next.\n3. Properly updates the `results` array.\n4. Terminates after processing all items without infinite looping.\n\nYou may only modify the code inside `processDataItems` and should keep the function signature intact.",
+    "guidance": [
+      "Carefully analyze the asynchronous flow and where `await` or Promise handling is missing or misplaced.",
+      "Check variable scopes, especially the loop index and state updates inside async functions.",
+      "Consider replacing `while` loops with for-loops or recursion to better control async operations."
+    ],
+    "hints": [
+      "The infinite loop arises because the loop continuation condition never becomes false due to no loop index increment.",
+      "The `await` keyword must be used correctly inside loops to ensure sequential processing.",
+      "State updates to `results` might be referencing stale closure variables; use proper scoping techniques."
+    ],
+    "starterCode": "async function processDataItems(items) {\n  let results = [];\n  let i = 0;\n  while (i < items.length) {\n    async function processItem() {\n      // Simulate async processing delay\n      await new Promise(resolve => setTimeout(resolve, 100));\n      results[i] = items[i] * 2; // Intended processing\n    }\n    processItem();\n    // Missing i++ or awaiting processItem causes bugs\n  }\n  return results;\n}",
+    "expectedOutput": "[4, 6, 8, 10]",
+    "concepts": [
+      "asynchronous programming",
+      "async/await",
+      "loop control",
+      "closure and variable scope"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
+  },
+  {
+    "slug": "refactor-and-optimize-nested-loops-for-product-price-analysis",
+    "title": "Refactor and Optimize Nested Loops for Product Price Analysis",
+    "language": "javascript",
+    "difficulty": "advanced",
+    "category": "code-quality",
+    "description": "Improve the readability, maintainability, and performance of a deeply nested JavaScript function that analyzes product prices across multiple categories and regions.",
+    "prompt": "You are given a messy JavaScript function that takes an array of category objects. Each category contains multiple regions, and each region contains a list of product prices. The function computes the average price per region and returns an object with categories as keys and values as arrays of averages per region. Your task is to refactor this function to improve code clarity, reduce nesting, and optimize performance without changing its output or signature.",
+    "guidance": [
+      "Focus on breaking down the nested loops by using helper functions or array methods like map and reduce.",
+      "Consider ways to eliminate unnecessary temporary variables and combine operations.",
+      "Keep the function's output structure identical to ensure no behavioral changes."
+    ],
+    "hints": [
+      "Use Array.prototype.map to transform arrays more declaratively.",
+      "Use Array.prototype.reduce to calculate sums and averages efficiently.",
+      "Avoid deeply nested for-loops by flattening the data processing steps."
+    ],
+    "starterCode": "function analyzePrices(categories) {\n  let result = {};\n  for (let i = 0; i < categories.length; i++) {\n    let category = categories[i];\n    let regionAverages = [];\n    for (let j = 0; j < category.regions.length; j++) {\n      let region = category.regions[j];\n      let total = 0;\n      for (let k = 0; k < region.products.length; k++) {\n        total += region.products[k];\n      }\n      let avg = region.products.length > 0 ? total / region.products.length : 0;\n      regionAverages.push(avg);\n    }\n    result[category.name] = regionAverages;\n  }\n  return result;\n}",
+    "expectedOutput": "analyzePrices([{ name: 'Electronics', regions: [ { products: [100, 200, 300] }, { products: [400, 500] } ] }, { name: 'Books', regions: [ { products: [10, 20] }, { products: [] } ] }])\n// Output: { Electronics: [200, 450], Books: [15, 0] }",
+    "concepts": [
+      "array methods",
+      "functional programming",
+      "code readability",
+      "performance optimization"
+    ],
+    "estimatedTime": "15 minutes",
+    "isFeatured": false
   }
 ];
